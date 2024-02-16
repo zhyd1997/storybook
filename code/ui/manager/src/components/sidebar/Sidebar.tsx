@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { styled } from '@storybook/theming';
-import { ScrollArea, Spaced } from '@storybook/components';
+import { IconButton, ScrollArea, Spaced } from '@storybook/components';
+import { FilterIcon } from '@storybook/icons';
 import type { State } from '@storybook/manager-api';
 
 import type {
@@ -129,6 +130,17 @@ export const Sidebar = React.memo(function Sidebar({
   const dataset = useCombination({ index, indexError, previewInitialized, status }, refs);
   const isLoading = !index && !indexError;
   const lastViewedProps = useLastViewed(selected);
+  const [tagsActive, setTagsActive] = useState(false);
+  const toggleTags = () => {
+    setTagsActive(!tagsActive);
+    const url = new URL(window.location.href);
+    if (tagsActive) {
+      url.searchParams.delete('includeTags');
+    } else {
+      url.searchParams.set('includeTags', 'bar');
+    }
+    window.history.pushState({}, '', url);
+  };
 
   return (
     <Container className="container sidebar-container">
@@ -174,6 +186,9 @@ export const Sidebar = React.memo(function Sidebar({
               </Swap>
             )}
           </Search>
+          <IconButton key="tags" title="Tag filters" active={tagsActive} onClick={toggleTags}>
+            <FilterIcon />
+          </IconButton>
         </Top>
       </ScrollArea>
       {isLoading ? null : (
