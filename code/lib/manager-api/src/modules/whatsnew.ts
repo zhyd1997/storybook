@@ -57,10 +57,11 @@ export const init: ModuleFn = ({ fullAPI, store, provider }) => {
   function getLatestWhatsNewPost(): Promise<WhatsNewData> {
     provider.channel?.emit(REQUEST_WHATS_NEW_DATA);
 
-    return new Promise((resolve) =>
-      provider.channel?.once(RESULT_WHATS_NEW_DATA, ({ data }: { data: WhatsNewData }) =>
-        resolve(data)
-      )
+    return new Promise(
+      (resolve) =>
+        provider.channel?.once(RESULT_WHATS_NEW_DATA, ({ data }: { data: WhatsNewData }) =>
+          resolve(data)
+        )
     );
   }
 
@@ -91,10 +92,10 @@ export const init: ModuleFn = ({ fullAPI, store, provider }) => {
         id: WHATS_NEW_NOTIFICATION_ID,
         link: '/settings/whats-new',
         content: {
-          headline: whatsNewData.excerpt,
-          subHeadline: "Click to learn what's new in Storybook",
+          headline: whatsNewData.title,
+          subHeadline: "Learn what's new in Storybook",
         },
-        icon: { name: 'hearthollow' },
+        icon: { name: 'storybook' },
         onClear({ dismissed }: any) {
           if (dismissed) {
             setWhatsNewCache({ lastDismissedPost: whatsNewData.url });
