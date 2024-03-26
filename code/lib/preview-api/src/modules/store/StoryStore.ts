@@ -233,7 +233,10 @@ export class StoryStore<TRenderer extends Renderer> {
     return prepareContext({
       ...story,
       args: forceInitialArgs ? story.initialArgs : this.args.get(story.id),
-      globals: this.globals.get(),
+      globals: {
+        ...this.globals.get(),
+        ...story.globalOverrides,
+      },
       hooks: this.hooks[story.id] as unknown,
     });
   }
