@@ -2,6 +2,7 @@ import invariant from 'tiny-invariant';
 import {
   CURRENT_STORY_WAS_SET,
   DOCS_PREPARED,
+  GLOBALS_UPDATED,
   PRELOAD_ENTRIES,
   PREVIEW_KEYDOWN,
   SET_CURRENT_STORY,
@@ -44,6 +45,7 @@ import { MdxDocsRender } from './render/MdxDocsRender';
 import type { Selection, SelectionStore } from './SelectionStore';
 import type { View } from './View';
 import type { StorySpecifier } from '../store/StoryIndexStore';
+import { shallowEqual } from '../store';
 
 const globalWindow = globalThis;
 
@@ -120,7 +122,7 @@ export class PreviewWithSelection<TRenderer extends Renderer> extends Preview<TR
 
     const { globals } = this.selectionStore.selectionSpecifier || {};
     if (globals) {
-      this.storyStoreValue.globals.updateFromPersisted(globals);
+      this.storyStoreValue.userGlobals.updateFromPersisted(globals);
     }
     this.emitGlobals();
   }
@@ -237,7 +239,9 @@ export class PreviewWithSelection<TRenderer extends Renderer> extends Preview<TR
   }
 
   async onUpdateGlobals({ globals }: { globals: Globals }) {
-    super.onUpdateGlobals({ globals });
+    const currentStory =
+      (this.currentRender instanceof StoryRender && this.currentRender.story) || undefined;
+    super.onUpdateGlobals({ globals, currentStory });
     if (
       this.currentRender instanceof MdxDocsRender ||
       this.currentRender instanceof CsfDocsRender
@@ -389,8 +393,15 @@ export class PreviewWithSelection<TRenderer extends Renderer> extends Preview<TR
 
     if (isStoryRender(render)) {
       invariant(!!render.story);
-      const { parameters, initialArgs, argTypes, unmappedArgs } =
-        this.storyStoreValue.getStoryContext(render.story);
+      const {
+        parameters,
+        initialArgs,
+        argTypes,
+        unmappedArgs,
+        initialGlobals,
+        userGlobals,
+        globals,
+      } = this.storyStoreValue.getStoryContext(render.story);
 
       this.channel.emit(STORY_PREPARED, {
         id: storyId,
@@ -399,6 +410,10 @@ export class PreviewWithSelection<TRenderer extends Renderer> extends Preview<TR
         argTypes,
         args: unmappedArgs,
       });
+
+      if (!shallowEqual(userGlobals, globals)) {
+        this.channel.emit(GLOBALS_UPDATED, { userGlobals, globals, initialGlobals });
+      }
     } else {
       // Default to the project parameters for MDX docs
       let { parameters } = this.storyStoreValue.projectAnnotations;
