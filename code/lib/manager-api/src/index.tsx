@@ -499,7 +499,11 @@ export function useArgs(): [Args, (newArgs: Args) => void, (argNames?: string[])
   return [args!, updateArgs, resetArgs, initialArgs!];
 }
 
-export function useGlobals(): [Globals, (newGlobals: Globals) => void, Globals] {
+export function useGlobals(): [
+  globals: Globals,
+  updateGlobals: (newGlobals: Globals) => void,
+  userGlobals: Globals,
+] {
   const api = useStorybookApi();
   return [api.getGlobals(), api.updateGlobals, api.getUserGlobals()];
 }
