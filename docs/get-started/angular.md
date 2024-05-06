@@ -45,21 +45,21 @@ Storybook for Angular is an open-source tool that helps developers design and te
 ### Step 1: Install Storybook
 
 Run the following command in your Angular project directory to install Storybook:
-
-````bash
 npx sb init --type angular
 
 ### Step 2: Start Storybook
+
 npm run storybook
 
-### Step 3:  Create Your First Story
+### Step 3: Create Your First Story
+
 A "story" in Storybook is a single state of one of your components. Creating stories involves writing a small piece of code that configures exactly how you want to showcase a component in the Storybook UI, with props, slots, events, and more.
 
 Here's how to create a basic story for an Angular component called ButtonComponent. You'll define a story that demonstrates a button with a simple click event.
+
 1. Define the Story for Your Component:
 
 Navigate to your project's stories directory, which is usually under the .storybook folder, and create a new file named Button.stories.ts. Add the following content to define your story:
-
 
 2. Explanation of the Story Code:
 
@@ -177,7 +177,7 @@ Finally, update your `angular.json` to include the Storybook builder:
     }
   }
 }
-````
+```
 
 ## Run Storybook
 
