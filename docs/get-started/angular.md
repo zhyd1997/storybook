@@ -60,6 +60,22 @@ Here's how to create a basic story for an Angular component called ButtonCompone
 1. Define the Story for Your Component:
 
 Navigate to your project's stories directory, which is usually under the .storybook folder, and create a new file named Button.stories.ts. Add the following content to define your story:
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
 
 2. Explanation of the Story Code:
 
