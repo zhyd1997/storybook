@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
 
+  export let svelteVersion;
   export let decorator = undefined;
   export let Component;
   export let props = {};
@@ -9,16 +10,16 @@
   let instance;
   let decoratorInstance;
   
-  if (on) {
+  if (on && svelteVersion < 5) {
     // Attach Svelte event listeners in Svelte v4
     // In Svelte v5 this is not possible anymore as instances are no longer classes with $on() properties, so it will be a no-op
-    onMount(() => {
+      onMount(() => {
       Object.entries(on).forEach(([eventName, eventCallback]) => {
         // instance can be undefined if a decorator doesn't have <slot/>
         const inst = instance ?? decoratorInstance;
         inst?.$on?.(eventName, eventCallback)
       });
-    });
+    });    
   }
 </script>
 
