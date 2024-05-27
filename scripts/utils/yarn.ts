@@ -39,7 +39,6 @@ export const installYarn2 = async ({ cwd, dryRun, debug }: YarnOptions) => {
   const command = [
     touch('yarn.lock'),
     touch('.yarnrc.yml'),
-    `corepack enable`,
     `yarn set version berry`,
     // Use the global cache so we aren't re-caching dependencies each time we run sandbox
     `yarn config set enableGlobalCache true`,
