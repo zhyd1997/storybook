@@ -3,7 +3,7 @@ name: Trigger CircleCI workflow
 on:
   # Use pull_request_target, as we don't need to check out the actual code of the fork in this script.
   # And this is the only way to trigger the Circle CI API on forks as well.
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, labeled, reopened]
   push:
     branches:
@@ -60,6 +60,11 @@ jobs:
     needs: get-branch
     if: github.event_name == 'pull_request_target' && github.event.label.name == 'ci:docs'
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
       - name: Trigger docs tests
         run: >
           curl -X POST --location "https://circleci.com/api/v2/project/gh/storybookjs/storybook/pipeline" \
