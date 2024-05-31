@@ -145,7 +145,7 @@ export const doUpgrade = async ({
 
   if (!isCanary && eq(currentVersion, beforeVersion)) {
     // Not throwing, as the beforeVersion calculation doesn't always work in monorepos.
-    logger.error(new UpgradeStorybookToSameVersionError({ beforeVersion }));
+    logger.warn(new UpgradeStorybookToSameVersionError({ beforeVersion }).message);
   }
 
   const [latestVersion, packageJson] = await Promise.all([
