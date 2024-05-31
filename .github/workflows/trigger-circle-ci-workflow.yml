@@ -39,7 +39,7 @@ jobs:
   trigger-normal-tests:
     runs-on: ubuntu-latest
     needs: get-branch
-    if: github.event_name == 'pull_request' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:normal') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:normal')))
+    if: github.event_name == 'pull_request' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:normal') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:normal')))
     steps:
       - name: Trigger Normal tests
         run: >
@@ -58,7 +58,7 @@ jobs:
   trigger-docs-tests:
     runs-on: ubuntu-latest
     needs: get-branch
-    if: github.event_name == 'pull_request' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:docs') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:docs')))
+    if: github.event_name == 'pull_request' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:docs') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:docs')))
     steps:
       - name: Dump GitHub context
         env:
@@ -82,7 +82,7 @@ jobs:
   trigger-merged-tests:
     runs-on: ubuntu-latest
     needs: get-branch
-    if: github.event_name == 'push' || (github.event.type == 'labeled' && github.event.label.name == 'ci:merged') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:merged'))
+    if: github.event_name == 'push' || (github.event.action == 'labeled' && github.event.label.name == 'ci:merged') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:merged'))
     steps:
       - name: Trigger merged tests
         run: >
@@ -101,7 +101,7 @@ jobs:
   trigger-daily-tests:
     runs-on: ubuntu-latest
     needs: get-branch
-    if: github.event_name == 'pull_request' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:daily') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:daily')))
+    if: github.event_name == 'pull_request' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:daily') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:daily')))
     steps:
       - name: Trigger the daily tests
         run: >
