@@ -1,7 +1,7 @@
 name: Trigger CircleCI workflow
 
 on:
-  # Use pull_request_target, as we don't need to check out the actual code of the fork in this script.
+  # Use pull_request, as we don't need to check out the actual code of the fork in this script.
   # And this is the only way to trigger the Circle CI API on forks as well.
   pull_request:
     types: [opened, synchronize, labeled, reopened]
@@ -39,7 +39,7 @@ jobs:
   trigger-normal-tests:
     runs-on: ubuntu-latest
     needs: get-branch
-    if: github.event_name == 'pull_request_target' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:normal') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:normal')))
+    if: github.event_name == 'pull_request' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:normal') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:normal')))
     steps:
       - name: Trigger Normal tests
         run: >
@@ -58,7 +58,7 @@ jobs:
   trigger-docs-tests:
     runs-on: ubuntu-latest
     needs: get-branch
-    if: github.event_name == 'pull_request_target' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:docs') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:docs')))
+    if: github.event_name == 'pull_request' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:docs') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:docs')))
     steps:
       - name: Dump GitHub context
         env:
@@ -101,7 +101,7 @@ jobs:
   trigger-daily-tests:
     runs-on: ubuntu-latest
     needs: get-branch
-    if: github.event_name == 'pull_request_target' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:daily') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:daily')))
+    if: github.event_name == 'pull_request' && ((github.event.type == 'labeled' && github.event.label.name == 'ci:daily') || (github.event.type != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:daily')))
     steps:
       - name: Trigger the daily tests
         run: >
