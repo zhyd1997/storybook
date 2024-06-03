@@ -780,7 +780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.17.3":
+"express@npm:^4.19.2":
   version: 4.19.2
   resolution: "express@npm:4.19.2"
   dependencies:
@@ -2159,7 +2159,7 @@ __metadata:
     "@storybook/server-webpack5": "npm:7.2.0-alpha.0"
     concurrently: "npm:^5.3.0"
     cors: "npm:^2.8.5"
-    express: "npm:^4.17.3"
+    express: "npm:^4.19.2"
     morgan: "npm:^1.10.0"
     nodemon: "npm:^2.0.7"
     pug: "npm:^3.0.0"
