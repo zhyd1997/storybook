@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import type { EnrichCsfOptions } from '@storybook/csf-tools';
+import type { EnrichCsfOptions } from '@storybook/core/dist/csf-tools';
 import { loadCsf, formatCsf, enrichCsf } from '@storybook/core/dist/csf-tools';
 
 interface LoaderContext {
