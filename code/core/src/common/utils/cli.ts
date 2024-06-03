@@ -1,9 +1,62 @@
 import type { WriteStream } from 'fs-extra';
-import { move, remove, writeFile, readFile, createWriteStream } from 'fs-extra';
+import { move, remove, writeFile, readFile, createWriteStream, mkdirSync } from 'fs-extra';
 import { join } from 'node:path';
 import { rendererPackages } from './get-storybook-info';
 import type { JsPackageManager } from '../js-package-manager';
 import versions from '../versions';
+import uniqueString from 'unique-string';
+import os from 'node:os';
+import { realpath } from 'node:fs/promises';
+
+const tempDir = () => realpath(os.tmpdir());
+
+const getPath = async (prefix = '') => join(await tempDir(), prefix + uniqueString());
+
+export async function temporaryDirectory({ prefix = '' } = {}) {
+  const directory = await getPath(prefix);
+  await mkdirSync(directory);
+  return directory;
+}
+
+import { type MergeExclusive } from 'type-fest';
+
+export type FileOptions = MergeExclusive<
+  {
+    /**
+	File extension.
+
+	Mutually exclusive with the `name` option.
+
+	_You usually won't need this option. Specify it only when actually needed._
+	*/
+    readonly extension?: string;
+  },
+  {
+    /**
+	Filename.
+
+	Mutually exclusive with the `extension` option.
+
+	_You usually won't need this option. Specify it only when actually needed._
+	*/
+    readonly name?: string;
+  }
+>;
+
+export async function temporaryFile({ name, extension }: FileOptions = {}) {
+  if (name) {
+    if (extension !== undefined && extension !== null) {
+      throw new Error('The `name` and `extension` options are mutually exclusive');
+    }
+
+    return join(await temporaryDirectory(), name);
+  }
+
+  return (
+    (await getPath()) +
+    (extension === undefined || extension === null ? '' : '.' + extension.replace(/^\./, ''))
+  );
+}
 
 export function parseList(str: string): string[] {
   return str
@@ -85,8 +138,7 @@ export const createLogStream = async (
   logStream: WriteStream;
 }> => {
   const finalLogPath = join(process.cwd(), logFileName);
-  const { temporaryFile } = await import('tempy');
-  const temporaryLogPath = temporaryFile({ name: logFileName });
+  const temporaryLogPath = await temporaryFile({ name: logFileName });
 
   const logStream = createWriteStream(temporaryLogPath, { encoding: 'utf8' });
 
