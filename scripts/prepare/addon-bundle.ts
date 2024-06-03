@@ -10,7 +10,7 @@ import dedent from 'ts-dedent';
 import slash from 'slash';
 import { exec } from '../utils/exec';
 
-import { globalPackages as globalPreviewPackages } from '../../code/lib/preview/src/globals/globals';
+import { globalPackages as globalPreviewPackages } from '../../code/core/src/preview/globals/globals';
 import { globalPackages as globalManagerPackages } from '../../code/ui/manager/src/globals/globals';
 
 /* TYPES */
@@ -126,10 +126,8 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         platform: 'neutral',
         external: [...commonExternals, ...globalManagerPackages, ...globalPreviewPackages],
         esbuildOptions: (options) => {
-          /* eslint-disable no-param-reassign */
           options.platform = 'neutral';
           Object.assign(options, getESBuildOptions(optimized));
-          /* eslint-enable no-param-reassign */
         },
       })
     );
