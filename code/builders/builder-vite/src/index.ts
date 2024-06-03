@@ -59,8 +59,8 @@ export const start: ViteBuilder['start'] = async ({
 }) => {
   server = await createViteServer(options as Options, devServer);
 
-  const previewResolvedDir = getAbsolutePath('@storybook/preview');
-  const previewDirOrigin = join(previewResolvedDir, 'dist');
+  const previewResolvedDir = getAbsolutePath('@storybook/core/dist/preview');
+  const previewDirOrigin = previewResolvedDir;
 
   router.use(`/sb-preview`, express.static(previewDirOrigin, { immutable: true, maxAge: '5m' }));
 
@@ -81,8 +81,8 @@ export const start: ViteBuilder['start'] = async ({
 export const build: ViteBuilder['build'] = async ({ options }) => {
   const viteCompilation = viteBuild(options as Options);
 
-  const previewResolvedDir = getAbsolutePath('@storybook/preview');
-  const previewDirOrigin = join(previewResolvedDir, 'dist');
+  const previewResolvedDir = getAbsolutePath('@storybook/core/dist/preview');
+  const previewDirOrigin = previewResolvedDir;
   const previewDirTarget = join(options.outputDir || '', `sb-preview`);
 
   const previewFiles = fs.copy(previewDirOrigin, previewDirTarget, {

@@ -4,7 +4,7 @@ export const getEntries = (cwd: string) => {
   const define = defineEntry(cwd);
 
   return [
-    //
+    // empty, right now
     define('src/index.ts', ['node', 'browser'], true),
 
     define('src/node-logger/index.ts', ['node'], true),
@@ -27,5 +27,17 @@ export const getEntries = (cwd: string) => {
     define('src/theming/index.ts', ['browser', 'node'], true, ['react']),
     define('src/theming/create.ts', ['browser', 'node'], true, ['react']),
     define('src/docs-tools/index.ts', ['node'], true),
+
+    define('src/preview/globals.ts', ['node'], true),
+  ];
+};
+
+// these entries explicitly bundle everything INCLUDING `@storybook/core` itself.
+export const getBundles = (cwd: string) => {
+  const define = defineEntry(cwd);
+
+  return [
+    //
+    define('src/preview/runtime.ts', ['browser'], false),
   ];
 };

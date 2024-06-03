@@ -179,8 +179,8 @@ const starter: StarterFunction = async function* starterGeneratorFn({
 
   compilation = webpackDevMiddleware(compiler, middlewareOptions);
 
-  const previewResolvedDir = getAbsolutePath('@storybook/preview');
-  const previewDirOrigin = join(previewResolvedDir, 'dist');
+  const previewResolvedDir = getAbsolutePath('@storybook/core/dist/preview');
+  const previewDirOrigin = previewResolvedDir;
 
   router.use(`/sb-preview`, express.static(previewDirOrigin, { immutable: true, maxAge: '5m' }));
 
@@ -288,8 +288,8 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
     });
   });
 
-  const previewResolvedDir = getAbsolutePath('@storybook/preview');
-  const previewDirOrigin = join(previewResolvedDir, 'dist');
+  const previewResolvedDir = getAbsolutePath('@storybook/core/dist/preview');
+  const previewDirOrigin = previewResolvedDir;
   const previewDirTarget = join(options.outputDir || '', `sb-preview`);
 
   const previewFiles = fs.copy(previewDirOrigin, previewDirTarget, {

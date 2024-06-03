@@ -12,7 +12,7 @@ import {
   getBuilderOptions,
   resolvePathInStorybookCache,
 } from '@storybook/core/dist/common';
-import { globalsNameReferenceMap } from '@storybook/preview/globals';
+import { globalsNameReferenceMap } from '@storybook/core/dist/preview/globals';
 import type { Options } from '@storybook/core/dist/types';
 import {
   codeGeneratorPlugin,

@@ -16,7 +16,7 @@ import {
   limit,
   Bun,
 } from '../../../scripts/prepare/tools';
-import { getEntries } from './entries';
+import { getBundles, getEntries } from './entries';
 
 import pkg from '../package.json';
 import { generateSourceFiles } from './helpers/sourcefiles';
@@ -44,6 +44,7 @@ if (isReset) {
 }
 
 const entries = getEntries(cwd);
+const bundles = getBundles(cwd);
 
 type EsbuildContextOptions = Parameters<(typeof esbuild)['context']>[0];
 
@@ -141,6 +142,30 @@ async function generateDistFiles() {
         outExtension: { '.js': '.js' },
       })
     ),
+    ...bundles.flatMap((entry) => {
+      console.log({ entry });
+      const results = [];
+      results.push(
+        esbuild.context(
+          merge<EsbuildContextOptions>(esbuildDefaultOptions, {
+            format: 'esm',
+            target: 'chrome100',
+            splitting: true,
+            // platform: 'browser',
+            outdir: dirname(entry.file).replace('src', 'dist'),
+            entryPoints: [entry.file],
+            conditions: ['browser', 'module', 'import', 'default'],
+            outExtension: { '.js': '.js' },
+            alias: {
+              '@storybook/core/dist': join(cwd, 'src'),
+            },
+            external: [],
+          })
+        )
+      );
+
+      return results;
+    }),
     ...entries
       .filter((entry) => entry.externals.length > 0)
       .flatMap((entry) => {

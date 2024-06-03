@@ -116,6 +116,11 @@
       "require": "./dist/docs-tools/index.cjs",
       "import": "./dist/docs-tools/index.cjs"
     },
+    "./dist/preview/globals": {
+      "types": "./dist/preview/globals.d.ts",
+      "require": "./dist/preview/globals.cjs",
+      "import": "./dist/preview/globals.cjs"
+    },
     "./package.json": "./package.json"
   },
   "main": "dist/index.cjs",
@@ -179,6 +184,9 @@
       ],
       "dist/docs-tools": [
         "./dist/docs-tools/index.d.ts"
+      ],
+      "dist/preview/globals": [
+        "./dist/preview/globals.d.ts"
       ]
     }
   },
