@@ -6464,7 +6464,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/preview@workspace:*, @storybook/preview@workspace:deprecated/preview":
+"@storybook/preview@workspace:deprecated/preview":
   version: 0.0.0-use.local
   resolution: "@storybook/preview@workspace:deprecated/preview"
   peerDependencies:
@@ -6643,7 +6643,6 @@ __metadata:
     "@storybook/preset-server-webpack": "workspace:*"
     "@storybook/preset-svelte-webpack": "workspace:*"
     "@storybook/preset-vue3-webpack": "workspace:*"
-    "@storybook/preview": "workspace:*"
     "@storybook/react": "workspace:*"
     "@storybook/react-vite": "workspace:*"
     "@storybook/react-webpack5": "workspace:*"
