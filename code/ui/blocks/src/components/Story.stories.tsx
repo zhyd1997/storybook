@@ -86,6 +86,9 @@ export const ForceInitialArgs = {
     forceInitialArgs: true,
     renderStoryToElement,
   },
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   // test that it ignores updated args by emitting an arg update and assert that it isn't reflected in the DOM
   play: async ({ args, canvasElement, loaded }: PlayFunctionContext<WebRenderer>) => {
     const docsContext = loaded.docsContext as DocsContextProps;
