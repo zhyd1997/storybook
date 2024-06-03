@@ -67,6 +67,7 @@ orbs:
   discord: antonioned/discord@0.1.0
   codecov: codecov/codecov@3.2.4
   bun-orb: cmgriffing/bun-orb@0.0.28
+  node: circleci/node@5.2.0
   nx: nrwl/nx@1.6.2
 
 commands:
@@ -132,6 +133,7 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - bun-orb/setup:
           version: 1.1.1
+      - node/install:
       - restore_cache:
           name: Restore Yarn cache
           keys:
@@ -195,6 +197,7 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - bun-orb/setup:
           version: 1.1.1
+      - node/install:
       - attach_workspace:
           at: .
       - nx/set-shas:
@@ -347,6 +350,7 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - bun-orb/setup:
           version: 1.1.1
+      - node/install:
       - attach_workspace:
           at: .
       - run:
