@@ -77,10 +77,10 @@ export class StoryStore<TRenderer extends Renderer> {
     this.storyIndex = new StoryIndexStore(storyIndex);
 
     this.projectAnnotations = normalizeProjectAnnotations(projectAnnotations);
-    const { globals, globalTypes } = projectAnnotations;
+    const { globals, initialGlobals, globalTypes } = projectAnnotations;
 
     this.args = new ArgsStore();
-    this.globals = new GlobalsStore({ globals, globalTypes });
+    this.globals = new GlobalsStore({ globals: initialGlobals ?? globals, globalTypes });
     this.hooks = {};
     this.cleanupCallbacks = {};
 
