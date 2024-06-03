@@ -4,12 +4,12 @@ import React from 'react';
 import { render, waitFor, fireEvent, act, cleanup } from '@testing-library/react';
 
 import { ThemeProvider, themes, convert } from '@storybook/core/dist/theming';
-import * as api from '@storybook/manager-api';
+import * as api from '@storybook/core/dist/manager-api';
 
 import { A11YPanel } from './A11YPanel';
 import { EVENTS } from '../constants';
 
-vi.mock('@storybook/manager-api');
+vi.mock('@storybook/core/dist/manager-api');
 
 global.ResizeObserver = require('resize-observer-polyfill');
 

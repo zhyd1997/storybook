@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { ThemeProvider, ensure, themes } from '@storybook/core/dist/theming';
 
-import type { HashEntry, Refs } from '@storybook/manager-api';
+import type { HashEntry, Refs } from '@storybook/core/dist/manager-api';
 import type { Theme } from '@storybook/core/dist/theming';
 import type { RenderResult } from '@testing-library/react';
 import type { API_IndexHash } from '@storybook/core/dist/types';

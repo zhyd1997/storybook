@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import chalk from 'chalk';
 import path from 'path';
 import program from 'commander';
@@ -174,7 +173,7 @@ export const run = async (options: unknown) => {
   const currentVersion = await getCurrentVersion(verbose);
   const isAlreadyPublished = await isCurrentVersionPublished({
     currentVersion,
-    packageName: '@storybook/manager-api',
+    packageName: '@storybook/core',
     verbose,
   });
   if (isAlreadyPublished) {

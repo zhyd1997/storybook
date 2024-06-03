@@ -41,7 +41,6 @@
     "@storybook/html": "link:../../code/renderers/html",
     "@storybook/html-webpack5": "link:../../code/frameworks/html-webpack5",
     "@storybook/manager": "link:../../code/ui/manager",
-    "@storybook/manager-api": "link:../../code/lib/manager-api",
     "@storybook/nextjs": "link:../../code/frameworks/nextjs",
     "@storybook/preact": "link:../../code/renderers/preact",
     "@storybook/preact-webpack5": "link:../../code/frameworks/preact-webpack5",

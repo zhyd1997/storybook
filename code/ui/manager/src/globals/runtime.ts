@@ -3,7 +3,7 @@ import * as REACT_DOM from 'react-dom';
 
 import * as COMPONENTS from '@storybook/components';
 import * as ICONS from '@storybook/icons';
-import * as MANAGER_API from '@storybook/manager-api';
+import * as MANAGER_API from '@storybook/core/dist/manager-api';
 
 import * as CHANNELS from '@storybook/core/dist/channels';
 import * as EVENTS from '@storybook/core/dist/core-events';
@@ -23,6 +23,7 @@ export const globalsNameValueMap: Required<Record<keyof typeof globalsNameRefere
   '@storybook/components': COMPONENTS,
   '@storybook/icons': ICONS,
   '@storybook/manager-api': MANAGER_API,
+  '@storybook/core/dist/manager-api': MANAGER_API,
 
   '@storybook/router': ROUTER,
   '@storybook/core/dist/router': ROUTER,

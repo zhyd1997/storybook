@@ -48,7 +48,6 @@
     "@storybook/html": "portal:../../../code/renderers/html",
     "@storybook/html-webpack5": "portal:../../../code/frameworks/html-webpack5",
     "@storybook/manager": "portal:../../../code/ui/manager",
-    "@storybook/manager-api": "portal:../../../code/lib/manager-api",
     "@storybook/nextjs": "portal:../../../code/frameworks/nextjs",
     "@storybook/preact": "portal:../../../code/renderers/preact",
     "@storybook/preact-vite": "portal:../../../code/frameworks/preact-vite",

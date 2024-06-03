@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import { styled } from '@storybook/core/dist/theming';
 import { ScrollArea, Spaced } from '@storybook/components';
-import type { State } from '@storybook/manager-api';
+import type { State } from '@storybook/core/dist/manager-api';
 
 import type {
   Addon_SidebarBottomType,

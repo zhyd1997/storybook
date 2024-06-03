@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, EmptyTabContent } from '@storybook/components';
 import { DocumentIcon, VideoIcon } from '@storybook/icons';
-import { useStorybookApi } from '@storybook/manager-api';
+import { useStorybookApi } from '@storybook/core/dist/manager-api';
 import { styled } from '@storybook/core/dist/theming';
 
 import { DOCUMENTATION_LINK, TUTORIAL_VIDEO_LINK } from '../constants';

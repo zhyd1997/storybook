@@ -1,5 +1,5 @@
 import React from 'react';
-import { addons, types, useAddonState, useChannel } from '@storybook/manager-api';
+import { addons, types, useAddonState, useChannel } from '@storybook/core/dist/manager-api';
 import { STORY_CHANGED } from '@storybook/core/dist/core-events';
 import { Badge, Spaced } from '@storybook/components';
 import ActionLogger from './containers/ActionLogger';

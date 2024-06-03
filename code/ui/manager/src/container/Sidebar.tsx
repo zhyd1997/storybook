@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
-import type { Combo, StoriesHash } from '@storybook/manager-api';
-import { Consumer } from '@storybook/manager-api';
+import type { Combo, StoriesHash } from '@storybook/core/dist/manager-api';
+import { Consumer } from '@storybook/core/dist/manager-api';
 import { Addon_TypesEnum } from '@storybook/core/dist/types';
 
 import type { SidebarProps as SidebarComponentProps } from '../components/sidebar/Sidebar';

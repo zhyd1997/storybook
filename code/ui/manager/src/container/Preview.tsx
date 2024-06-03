@@ -10,8 +10,8 @@ import React from 'react';
 
 import memoizerific from 'memoizerific';
 
-import type { State, StoriesHash } from '@storybook/manager-api';
-import { Consumer } from '@storybook/manager-api';
+import type { State, StoriesHash } from '@storybook/core/dist/manager-api';
+import { Consumer } from '@storybook/core/dist/manager-api';
 
 import { Preview, createCanvasTab, filterTabs } from '../components/preview/Preview';
 import { defaultWrappers } from '../components/preview/Wrappers';

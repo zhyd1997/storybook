@@ -1,4 +1,4 @@
-import { addons } from '@storybook/manager-api';
+import { addons } from '@storybook/core/dist/manager-api';
 
 import EVENTS, { ADDON_ID } from './constants';
 

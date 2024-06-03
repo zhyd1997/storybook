@@ -1,8 +1,8 @@
 import { global } from '@storybook/global';
 
 import type { Channel } from '@storybook/core/dist/channels';
-import type { AddonStore } from '@storybook/manager-api';
-import { addons } from '@storybook/manager-api';
+import type { AddonStore } from '@storybook/core/dist/manager-api';
+import { addons } from '@storybook/core/dist/manager-api';
 import type { Addon_Types, Addon_Config } from '@storybook/core/dist/types';
 import { createBrowserChannel } from '@storybook/core/dist/channels';
 import { CHANNEL_CREATED } from '@storybook/core/dist/core-events';

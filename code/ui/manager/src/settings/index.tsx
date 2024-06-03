@@ -1,4 +1,4 @@
-import { useStorybookApi, useStorybookState, types } from '@storybook/manager-api';
+import { useStorybookApi, useStorybookState, types } from '@storybook/core/dist/manager-api';
 import { IconButton, TabBar, TabButton, ScrollArea } from '@storybook/components';
 import { Location, Route } from '@storybook/core/dist/router';
 import { styled } from '@storybook/core/dist/theming';

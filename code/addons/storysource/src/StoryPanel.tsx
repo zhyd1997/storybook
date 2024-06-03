@@ -1,5 +1,5 @@
 import React from 'react';
-import { type API, useParameter } from '@storybook/manager-api';
+import { type API, useParameter } from '@storybook/core/dist/manager-api';
 import { styled } from '@storybook/core/dist/theming';
 import { Link } from '@storybook/core/dist/router';
 import {

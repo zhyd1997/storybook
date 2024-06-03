@@ -223,7 +223,7 @@ async function generateTypesFiles() {
   await Promise.all(
     all.map(async (filePath) =>
       Bun.write(
-        filePath.replace('src', 'dist').replace('.ts', '.d.ts'),
+        filePath.replace('src', 'dist').replace(/\.tsx?/, '.d.ts'),
         await generateTypesMapperContent(filePath)
       )
     )
@@ -282,21 +282,21 @@ async function generatePackageJsonFile() {
 
     const content: Record<string, string> = {};
     if (entry.dts) {
-      content.types = main.replace('.ts', '.d.ts');
+      content.types = main.replace(/\.tsx?/, '.d.ts');
     }
     if (entry.node) {
-      content.require = main.replace('.ts', '.cjs');
+      content.require = main.replace(/\.tsx?/, '.cjs');
     }
     if (entry.browser) {
-      content.import = main.replace('.ts', '.js');
+      content.import = main.replace(/\.tsx?/, '.js');
     }
     if (entry.node && !entry.browser) {
-      content.import = main.replace('.ts', '.cjs');
+      content.import = main.replace(/\.tsx?/, '.cjs');
     }
-    if (main === './dist/index.ts') {
+    if (main === './dist/index.ts' || main === './dist/index.tsx') {
       main = '.';
     }
-    acc[main.replace('/index.ts', '').replace('.ts', '')] = content;
+    acc[main.replace(/\/index\.tsx?/, '').replace(/\.tsx?/, '')] = content;
     return acc;
   }, {});
 
@@ -307,16 +307,16 @@ async function generatePackageJsonFile() {
       '*': ['./dist/index.d.ts'],
       ...entries.reduce<Record<string, string[]>>((acc, entry) => {
         let main = relative(cwd, entry.file).replace('src', 'dist');
-        if (main === './dist/index.ts') {
+        if (main === './dist/index.ts' || main === './dist/index.tsx') {
           main = '.';
         }
-        const key = main.replace('/index.ts', '').replace('.ts', '');
+        const key = main.replace(/\/index\.tsx?/, '').replace(/\.tsx?/, '');
 
         if (key === 'dist') {
           return acc;
         }
 
-        const content = ['./' + main.replace('.ts', '.d.ts')];
+        const content = ['./' + main.replace(/\.tsx?/, '.d.ts')];
         acc[key] = content;
         return acc;
       }, {}),

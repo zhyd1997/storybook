@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ThemeProvider, convert } from '@storybook/core/dist/theming';
-import { addons, type API } from '@storybook/manager-api';
+import { addons, type API } from '@storybook/core/dist/manager-api';
 
 import { GuidedTour } from './features/GuidedTour/GuidedTour';
 import { WelcomeModal } from './features/WelcomeModal/WelcomeModal';

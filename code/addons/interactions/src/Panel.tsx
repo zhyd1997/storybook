@@ -1,7 +1,7 @@
 import { global } from '@storybook/global';
 import type { Dispatch, SetStateAction } from 'react';
 import React, { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
-import { useAddonState, useChannel, useParameter } from '@storybook/manager-api';
+import { useAddonState, useChannel, useParameter } from '@storybook/core/dist/manager-api';
 import {
   FORCE_REMOUNT,
   STORY_RENDER_PHASE_CHANGED,

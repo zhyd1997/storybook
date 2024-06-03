@@ -1,4 +1,4 @@
-import type { StoriesHash, State } from '@storybook/manager-api';
+import type { StoriesHash, State } from '@storybook/core/dist/manager-api';
 import type { ControllerStateAndHelpers } from 'downshift';
 import type { API_StatusState, API_StatusValue } from '@storybook/core/dist/types';
 

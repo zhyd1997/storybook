@@ -62,7 +62,6 @@
   "devDependencies": {
     "@storybook/components": "workspace:*",
     "@storybook/icons": "^1.2.5",
-    "@storybook/manager-api": "workspace:*",
     "typescript": "^5.3.2"
   },
   "peerDependencies": {

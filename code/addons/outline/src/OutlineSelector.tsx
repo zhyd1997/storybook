@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect } from 'react';
-import { useGlobals, useStorybookApi } from '@storybook/manager-api';
+import { useGlobals, useStorybookApi } from '@storybook/core/dist/manager-api';
 import { IconButton } from '@storybook/components';
 import { OutlineIcon } from '@storybook/icons';
 import { ADDON_ID, PARAM_KEY } from './constants';

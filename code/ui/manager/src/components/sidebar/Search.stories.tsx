@@ -1,7 +1,7 @@
 import React from 'react';
 import type { StoryFn, Meta } from '@storybook/react';
-import type { API } from '@storybook/manager-api';
-import { ManagerContext } from '@storybook/manager-api';
+import type { API } from '@storybook/core/dist/manager-api';
+import { ManagerContext } from '@storybook/core/dist/manager-api';
 import { action } from '@storybook/addon-actions';
 
 import { index } from './mockdata.large';

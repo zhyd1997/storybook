@@ -5,7 +5,7 @@ import {
   useGlobals,
   useParameter,
   addons,
-} from '@storybook/manager-api';
+} from '@storybook/core/dist/manager-api';
 import { styled } from '@storybook/core/dist/theming';
 import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/components';
 

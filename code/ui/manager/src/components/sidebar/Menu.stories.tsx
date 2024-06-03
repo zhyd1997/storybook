@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { TooltipLinkList } from '@storybook/components';
 import { styled } from '@storybook/core/dist/theming';
 import { screen, userEvent, within, expect } from '@storybook/test';
-import type { State } from '@storybook/manager-api';
+import type { State } from '@storybook/core/dist/manager-api';
 import { LinkIcon } from '@storybook/icons';
 import { SidebarMenu } from './Menu';
 import { useMenu } from '../../container/Menu';

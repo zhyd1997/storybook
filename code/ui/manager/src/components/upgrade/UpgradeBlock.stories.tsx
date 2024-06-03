@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ManagerContext } from '@storybook/manager-api';
+import { ManagerContext } from '@storybook/core/dist/manager-api';
 import React from 'react';
 import { UpgradeBlock } from './UpgradeBlock';
 import { fn } from '@storybook/test';

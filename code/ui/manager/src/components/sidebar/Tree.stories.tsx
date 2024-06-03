@@ -1,6 +1,6 @@
 // @TODO: use addon-interactions and remove the rule disable above
 import React, { useState } from 'react';
-import type { ComponentEntry, IndexHash } from '@storybook/manager-api';
+import type { ComponentEntry, IndexHash } from '@storybook/core/dist/manager-api';
 import { action } from '@storybook/addon-actions';
 
 import type { StoryObj, Meta } from '@storybook/react';

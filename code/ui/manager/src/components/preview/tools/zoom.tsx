@@ -3,7 +3,7 @@ import React, { Component, createContext, memo, useCallback } from 'react';
 
 import { IconButton, Separator } from '@storybook/components';
 import type { Addon_BaseType } from '@storybook/core/dist/types';
-import { types } from '@storybook/manager-api';
+import { types } from '@storybook/core/dist/manager-api';
 import { ZoomIcon, ZoomOutIcon, ZoomResetIcon } from '@storybook/icons';
 
 const initialZoom = 1 as const;

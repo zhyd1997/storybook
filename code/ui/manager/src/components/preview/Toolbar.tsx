@@ -13,7 +13,7 @@ import {
   type LeafEntry,
   addons,
   types,
-} from '@storybook/manager-api';
+} from '@storybook/core/dist/manager-api';
 
 import { Addon_TypesEnum, type Addon_BaseType } from '@storybook/core/dist/types';
 import { CloseIcon, ExpandIcon } from '@storybook/icons';

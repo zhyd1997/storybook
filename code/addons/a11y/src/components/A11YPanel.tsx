@@ -11,7 +11,7 @@ import {
   useParameter,
   useStorybookApi,
   useStorybookState,
-} from '@storybook/manager-api';
+} from '@storybook/core/dist/manager-api';
 
 import { Report } from './Report';
 

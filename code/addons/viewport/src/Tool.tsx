@@ -6,7 +6,7 @@ import { styled, Global, type Theme, withTheme } from '@storybook/core/dist/them
 
 import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/components';
 
-import { useStorybookApi, useParameter, useGlobals } from '@storybook/manager-api';
+import { useStorybookApi, useParameter, useGlobals } from '@storybook/core/dist/manager-api';
 import { GrowIcon, TransferIcon } from '@storybook/icons';
 import { registerShortcuts } from './shortcuts';
 import { PARAM_KEY } from './constants';

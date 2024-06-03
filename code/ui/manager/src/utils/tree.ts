@@ -1,7 +1,7 @@
 import memoize from 'memoizerific';
 import { global } from '@storybook/global';
 import type { SyntheticEvent } from 'react';
-import type { HashEntry, IndexHash } from '@storybook/manager-api';
+import type { HashEntry, IndexHash } from '@storybook/core/dist/manager-api';
 
 import { DEFAULT_REF_ID } from '../components/sidebar/Sidebar';
 import type { Item, RefType, Dataset, SearchItem } from '../components/sidebar/types';

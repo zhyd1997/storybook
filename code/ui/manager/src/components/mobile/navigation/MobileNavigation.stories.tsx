@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-import { ManagerContext } from '@storybook/manager-api';
+import { ManagerContext } from '@storybook/core/dist/manager-api';
 import { within } from '@storybook/test';
 import { startCase } from 'lodash';
 import { MobileNavigation } from './MobileNavigation';

@@ -2,8 +2,8 @@ import { global } from '@storybook/global';
 import React from 'react';
 import copy from 'copy-to-clipboard';
 import { getStoryHref, IconButton } from '@storybook/components';
-import { Consumer, types } from '@storybook/manager-api';
-import type { Combo } from '@storybook/manager-api';
+import { Consumer, types } from '@storybook/core/dist/manager-api';
+import type { Combo } from '@storybook/core/dist/manager-api';
 import type { Addon_BaseType } from '@storybook/core/dist/types';
 import { LinkIcon } from '@storybook/icons';
 

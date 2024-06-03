@@ -2210,7 +2210,7 @@ The previous package, `@storybook/addons`, is now deprecated and will be removed
 
 ```diff
 - import { addons } from '@storybook/addons';
-+ import { addons } from '@storybook/manager-api';
++ import { addons } from '@storybook/core/dist/manager-api';
 
 addons.setConfig({
   // ...

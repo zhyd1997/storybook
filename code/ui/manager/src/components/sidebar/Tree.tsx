@@ -1,4 +1,4 @@
-import { useStorybookApi } from '@storybook/manager-api';
+import { useStorybookApi } from '@storybook/core/dist/manager-api';
 import type {
   StoriesHash,
   GroupEntry,
@@ -6,7 +6,7 @@ import type {
   StoryEntry,
   State,
   API,
-} from '@storybook/manager-api';
+} from '@storybook/core/dist/manager-api';
 import { styled } from '@storybook/core/dist/theming';
 import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/components';
 import { transparentize } from 'polished';

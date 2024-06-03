@@ -62,7 +62,6 @@
     "@devtools-ds/object-inspector": "^1.1.2",
     "@storybook/components": "workspace:*",
     "@storybook/icons": "^1.2.5",
-    "@storybook/manager-api": "workspace:*",
     "@types/node": "^18.0.0",
     "formik": "^2.2.9",
     "react": "^18.2.0",

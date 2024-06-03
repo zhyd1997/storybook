@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import type { State, API, LeafEntry } from '@storybook/manager-api';
+import type { State, API, LeafEntry } from '@storybook/core/dist/manager-api';
 import type {
   Addon_BaseType,
   Addon_WrapperType,

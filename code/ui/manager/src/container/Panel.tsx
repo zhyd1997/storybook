@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React from 'react';
 import memoize from 'memoizerific';
-import { Consumer } from '@storybook/manager-api';
-import type { API, Combo } from '@storybook/manager-api';
+import { Consumer } from '@storybook/core/dist/manager-api';
+import type { API, Combo } from '@storybook/core/dist/manager-api';
 import { Addon_TypesEnum } from '@storybook/core/dist/types';
 
 import { AddonPanel } from '../components/panel/Panel';

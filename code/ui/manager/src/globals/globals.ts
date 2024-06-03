@@ -5,6 +5,7 @@ export const globalsNameReferenceMap = {
   '@storybook/components': '__STORYBOOK_COMPONENTS__',
   '@storybook/icons': '__STORYBOOK_ICONS__',
   '@storybook/manager-api': '__STORYBOOK_API__',
+  '@storybook/core/dist/manager-api': '__STORYBOOK_API__',
 
   '@storybook/channels': '__STORYBOOK_CHANNELS__',
   '@storybook/core/dist/channels': '__STORYBOOK_CHANNELS__',

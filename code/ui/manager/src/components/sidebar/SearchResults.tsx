@@ -5,7 +5,7 @@ import type { FC, MouseEventHandler, PropsWithChildren, ReactNode } from 'react'
 import React, { useCallback, useEffect } from 'react';
 import type { ControllerStateAndHelpers } from 'downshift';
 
-import { useStorybookApi } from '@storybook/manager-api';
+import { useStorybookApi } from '@storybook/core/dist/manager-api';
 import { PRELOAD_ENTRIES } from '@storybook/core/dist/core-events';
 import { transparentize } from 'polished';
 import { TrashIcon } from '@storybook/icons';

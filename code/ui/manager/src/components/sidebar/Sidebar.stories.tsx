@@ -1,7 +1,7 @@
 import React from 'react';
 
-import type { IndexHash, State } from '@storybook/manager-api';
-import { ManagerContext, types } from '@storybook/manager-api';
+import type { IndexHash, State } from '@storybook/core/dist/manager-api';
+import { ManagerContext, types } from '@storybook/core/dist/manager-api';
 import type { StoryObj, Meta } from '@storybook/react';
 import { within, userEvent, expect, fn } from '@storybook/test';
 import type { Addon_SidebarTopType } from '@storybook/core/dist/types';

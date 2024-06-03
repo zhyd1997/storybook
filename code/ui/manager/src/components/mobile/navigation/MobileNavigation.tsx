@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React from 'react';
 import { styled } from '@storybook/core/dist/theming';
 import { IconButton } from '@storybook/components';
-import { useStorybookApi, useStorybookState } from '@storybook/manager-api';
+import { useStorybookApi, useStorybookState } from '@storybook/core/dist/manager-api';
 import { BottomBarToggleIcon, MenuIcon } from '@storybook/icons';
 import { MobileMenuDrawer } from './MobileMenuDrawer';
 import { MobileAddonsDrawer } from './MobileAddonsDrawer';

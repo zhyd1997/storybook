@@ -1,4 +1,4 @@
-import { useStorybookApi, shortcutToHumanString } from '@storybook/manager-api';
+import { useStorybookApi, shortcutToHumanString } from '@storybook/core/dist/manager-api';
 import { styled } from '@storybook/core/dist/theming';
 import type { DownshiftState, StateChangeOptions } from 'downshift';
 import Downshift from 'downshift';

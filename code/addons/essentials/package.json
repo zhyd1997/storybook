@@ -98,7 +98,6 @@
     "@storybook/addon-outline": "workspace:*",
     "@storybook/addon-toolbars": "workspace:*",
     "@storybook/addon-viewport": "workspace:*",
-    "@storybook/manager-api": "workspace:*",
     "ts-dedent": "^2.0.0"
   },
   "devDependencies": {

@@ -48,7 +48,6 @@
     "@storybook/csf": "^0.1.7",
     "@storybook/global": "^5.0.0",
     "@storybook/icons": "^1.2.5",
-    "@storybook/manager-api": "workspace:*",
     "@types/lodash": "^4.14.167",
     "color-convert": "^2.0.1",
     "dequal": "^2.0.2",
