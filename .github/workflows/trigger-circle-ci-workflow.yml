@@ -60,11 +60,6 @@ jobs:
     needs: get-branch
     if: github.event_name == 'pull_request' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:docs') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:docs')))
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: |
-          echo "$GITHUB_CONTEXT"
       - name: Trigger docs tests
         run: >
           curl -X POST --location "https://circleci.com/api/v2/project/gh/storybookjs/storybook/pipeline" \
