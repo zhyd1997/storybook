@@ -5594,7 +5594,6 @@ __metadata:
   resolution: "@storybook/builder-vite@workspace:builders/builder-vite"
   dependencies:
     "@storybook/csf-plugin": "workspace:*"
-    "@storybook/preview": "workspace:*"
     "@types/express": "npm:^4.17.21"
     "@types/find-cache-dir": "npm:^3.2.1"
     "@types/node": "npm:^18.0.0"
@@ -5630,7 +5629,6 @@ __metadata:
   resolution: "@storybook/builder-webpack5@workspace:builders/builder-webpack5"
   dependencies:
     "@storybook/core-webpack": "workspace:*"
-    "@storybook/preview": "workspace:*"
     "@types/node": "npm:^18.0.0"
     "@types/pretty-hrtime": "npm:^1.0.0"
     "@types/semver": "npm:^7.3.4"
@@ -6466,14 +6464,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/preview@workspace:*, @storybook/preview@workspace:lib/preview":
+"@storybook/preview@workspace:*, @storybook/preview@workspace:deprecated/preview":
   version: 0.0.0-use.local
-  resolution: "@storybook/preview@workspace:lib/preview"
-  dependencies:
+  resolution: "@storybook/preview@workspace:deprecated/preview"
+  peerDependencies:
     "@storybook/core": "workspace:*"
-    "@storybook/global": "npm:^5.0.0"
-    browser-dtector: "npm:^3.4.0"
-    typescript: "npm:^5.3.2"
   languageName: unknown
   linkType: soft
 
