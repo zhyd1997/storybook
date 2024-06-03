@@ -24,7 +24,11 @@ import {
   SAVE_STORY_RESPONSE,
 } from '@storybook/core/dist/core-events';
 import type { RequestResponseError } from '@storybook/core/dist/manager-api';
-import { addons, experimental_requestResponse, useStorybookApi } from '@storybook/core/dist/manager-api';
+import {
+  addons,
+  experimental_requestResponse,
+  useStorybookApi,
+} from '@storybook/core/dist/manager-api';
 
 import { useDebounce } from '../../hooks/useDebounce';
 import type { NewStoryPayload, SearchResult } from './FileSearchList';
