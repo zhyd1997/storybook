@@ -3292,6 +3292,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@happy-dom/global-registrator@npm:^14.12.0":
+  version: 14.12.0
+  resolution: "@happy-dom/global-registrator@npm:14.12.0"
+  dependencies:
+    happy-dom: "npm:^14.12.0"
+  checksum: 10c0/dae4356c93343950aef2483f038aaad462dce178c2737268abfd1f7c5a6679c4907f384aca02e9dd746fd9f1779010aa2bd7b5c7fa7a5d7707f3df4a3798c415
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.14":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -6144,6 +6153,7 @@ __metadata:
   resolution: "@storybook/manager@workspace:ui/manager"
   dependencies:
     "@fal-works/esbuild-plugin-global-externals": "npm:^2.1.2"
+    "@happy-dom/global-registrator": "npm:^14.12.0"
     "@storybook/addon-designs": "npm:^7.0.4"
     "@storybook/core": "workspace:*"
     "@storybook/global": "npm:^5.0.0"
@@ -6158,6 +6168,7 @@ __metadata:
     downshift: "npm:^9.0.4"
     fs-extra: "npm:^11.1.0"
     fuse.js: "npm:^3.6.1"
+    happy-dom: "npm:^14.12.0"
     lodash: "npm:^4.17.21"
     markdown-to-jsx: "npm:^7.4.5"
     memoizerific: "npm:^1.11.3"
@@ -16340,6 +16351,17 @@ __metadata:
   bin:
     handlebars: bin/handlebars
   checksum: 10c0/7aff423ea38a14bb379316f3857fe0df3c5d66119270944247f155ba1f08e07a92b340c58edaa00cfe985c21508870ee5183e0634dcb53dd405f35c93ef7f10d
+  languageName: node
+  linkType: hard
+
+"happy-dom@npm:^14.12.0":
+  version: 14.12.0
+  resolution: "happy-dom@npm:14.12.0"
+  dependencies:
+    entities: "npm:^4.5.0"
+    webidl-conversions: "npm:^7.0.0"
+    whatwg-mimetype: "npm:^3.0.0"
+  checksum: 10c0/b844d7f3f16d2657a8650e0968ddd9272f152cfd9660e0dd4378215f153fc940509981d387e1e855f117baf0cf432918ff084f10c9b557192db5d7743d78302e
   languageName: node
   linkType: hard
 
@@ -29390,6 +29412,13 @@ __metadata:
   dependencies:
     iconv-lite: "npm:0.6.3"
   checksum: 10c0/273b5f441c2f7fda3368a496c3009edbaa5e43b71b09728f90425e7f487e5cef9eb2b846a31bd760dd8077739c26faf6b5ca43a5f24033172b003b72cf61a93e
+  languageName: node
+  linkType: hard
+
+"whatwg-mimetype@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "whatwg-mimetype@npm:3.0.0"
+  checksum: 10c0/323895a1cda29a5fb0b9ca82831d2c316309fede0365047c4c323073e3239067a304a09a1f4b123b9532641ab604203f33a1403b5ca6a62ef405bcd7a204080f
   languageName: node
   linkType: hard
 

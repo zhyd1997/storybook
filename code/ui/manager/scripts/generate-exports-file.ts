@@ -4,6 +4,10 @@ import { dedent } from 'ts-dedent';
 import { prettier } from '../../../../scripts/prepare/tools-esm';
 import { globalsNameReferenceMap } from '../src/globals/globals';
 
+import { GlobalRegistrator } from '@happy-dom/global-registrator';
+
+GlobalRegistrator.register({ url: 'http://localhost:3000', width: 1920, height: 1080 });
+
 const location = path.join(__dirname, '..', 'src', 'globals', 'exports.ts');
 
 function removeDefault(input: string) {
