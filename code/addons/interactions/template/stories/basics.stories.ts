@@ -7,7 +7,7 @@ import {
   waitFor,
   waitForElementToBeRemoved,
   within,
-} from '@storybook/test';
+} from '@storybook/core/dist/test';
 
 export default {
   component: globalThis.Components.Form,

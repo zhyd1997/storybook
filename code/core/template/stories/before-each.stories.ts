@@ -1,4 +1,4 @@
-import { expect, mocked, getByRole, spyOn, userEvent } from '@storybook/test';
+import { expect, mocked, getByRole, spyOn, userEvent } from '@storybook/core/dist/test';
 
 const meta = {
   component: globalThis.Components.Button,

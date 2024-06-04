@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { SaveStory } from './SaveStory';
-import { expect, fireEvent, fn, userEvent, within } from '@storybook/test';
+import { expect, fireEvent, fn, userEvent, within } from '@storybook/core/dist/test';
 
 const meta = {
   component: SaveStory,

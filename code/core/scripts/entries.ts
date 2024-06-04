@@ -29,6 +29,19 @@ export const getEntries = (cwd: string) => {
     define('src/docs-tools/index.ts', ['node'], true),
 
     define('src/preview/globals.ts', ['node'], true),
+    define(
+      'src/test/index.ts',
+      ['node', 'browser'],
+      true,
+      [],
+      [
+        '@testing-library/dom',
+        '@testing-library/jest-dom',
+        '@testing-library/user-event',
+        '@vitest/expect',
+        '@vitest/spy',
+      ]
+    ),
   ];
 };
 

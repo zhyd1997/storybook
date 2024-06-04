@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PulsatingEffect } from './PulsatingEffect';
 import React from 'react';
-import { within, expect } from '@storybook/test';
+import { within, expect } from '@storybook/core/dist/test';
 
 const meta: Meta<typeof PulsatingEffect> = {
   component: PulsatingEffect,
