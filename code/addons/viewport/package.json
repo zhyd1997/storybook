@@ -55,7 +55,6 @@
     "memoizerific": "^1.11.3"
   },
   "devDependencies": {
-    "@storybook/components": "workspace:*",
     "@storybook/global": "^5.0.0",
     "@storybook/icons": "^1.2.5",
     "react": "^18.2.0",

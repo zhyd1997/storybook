@@ -86,7 +86,7 @@ const config: StorybookConfig = {
       resolve: {
         alias: {
           ...(configType === 'DEVELOPMENT'
-            ? { '@storybook/components': path.resolve(__dirname, '../components/src') }
+            ? { '@storybook/components': path.resolve(__dirname, '../../core/src/components') }
             : {}),
         },
       },

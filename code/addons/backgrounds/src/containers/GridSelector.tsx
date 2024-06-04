@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React, { memo } from 'react';
 
 import { useGlobals, useParameter } from '@storybook/core/dist/manager-api';
-import { IconButton } from '@storybook/components';
+import { IconButton } from '@storybook/core/dist/components';
 
 import { GridIcon } from '@storybook/icons';
 import { PARAM_KEY as BACKGROUNDS_PARAM_KEY } from '../constants';

@@ -31,7 +31,7 @@ import { STORYBOOK_ADDON_ONBOARDING_CHANNEL } from '../../constants';
 import { useTheme } from '@storybook/core/dist/theming';
 import type { CodeSnippets } from './code/types';
 import { BookmarkHollowIcon, CrossIcon } from '@storybook/icons';
-import { Modal } from '@storybook/components';
+import { Modal } from '@storybook/core/dist/components';
 
 // TODO: Add warning if backdropBoundary && !warningButtonStatus?.data is not true.
 // backdropBoundary && !warningButtonStatus?.data

@@ -6,7 +6,7 @@ import {
   SyntaxHighlighter,
   type SyntaxHighlighterProps,
   type SyntaxHighlighterRendererProps,
-} from '@storybook/components';
+} from '@storybook/core/dist/components';
 import invariant from 'tiny-invariant';
 
 // @ts-expect-error Typedefs don't currently expose `createElement` even though it exists

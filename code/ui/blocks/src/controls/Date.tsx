@@ -1,7 +1,7 @@
 import type { FC, ChangeEvent, RefObject } from 'react';
 import React, { useState, useRef, useEffect } from 'react';
 import { styled } from '@storybook/core/dist/theming';
-import { Form } from '@storybook/components';
+import { Form } from '@storybook/core/dist/components';
 
 import type { ControlProps, DateValue, DateConfig } from './types';
 import { getControlId } from './helpers';

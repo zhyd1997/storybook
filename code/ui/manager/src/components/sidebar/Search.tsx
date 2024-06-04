@@ -7,7 +7,7 @@ import Fuse from 'fuse.js';
 import { global } from '@storybook/global';
 import React, { useRef, useState, useCallback } from 'react';
 import { CloseIcon, PlusIcon, SearchIcon } from '@storybook/icons';
-import { IconButton, TooltipNote, WithTooltip } from '@storybook/components';
+import { IconButton, TooltipNote, WithTooltip } from '@storybook/core/dist/components';
 import { DEFAULT_REF_ID } from './Sidebar';
 import type {
   CombinedDataset,

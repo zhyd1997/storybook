@@ -4,7 +4,7 @@ import { HexColorPicker, HslaStringColorPicker, RgbaStringColorPicker } from 're
 import convert from 'color-convert';
 import debounce from 'lodash/debounce.js';
 import { styled } from '@storybook/core/dist/theming';
-import { TooltipNote, WithTooltip, Form } from '@storybook/components';
+import { TooltipNote, WithTooltip, Form } from '@storybook/core/dist/components';
 
 import type { ControlProps, ColorValue, ColorConfig, PresetColor } from './types';
 import { getControlId } from './helpers';

@@ -38,7 +38,6 @@
     "@storybook/builder-webpack5": "file:../../../code/builders/builder-webpack5",
     "@storybook/cli": "file:../../../code/lib/cli",
     "@storybook/codemod": "file:../../../code/lib/codemod",
-    "@storybook/components": "file:../../../code/ui/components",
     "@storybook/core": "file:../../../code/core",
     "@storybook/core-server": "file:../../../code/lib/core-server",
     "@storybook/core-webpack": "file:../../../code/lib/core-webpack",

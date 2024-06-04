@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useTransition } from 'react';
-import { Modal, Form } from '@storybook/components';
+import { Modal, Form } from '@storybook/core/dist/components';
 import { styled } from '@storybook/core/dist/theming';
 import { CloseAltIcon, SearchIcon, SyncIcon } from '@storybook/icons';
 

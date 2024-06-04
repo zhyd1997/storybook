@@ -8,7 +8,7 @@ import {
   TooltipNote,
   WithTooltip,
   Bar,
-} from '@storybook/components';
+} from '@storybook/core/dist/components';
 import type { Call, ControlStates } from '@storybook/core/dist/instrumenter';
 import { CallStates } from '@storybook/core/dist/instrumenter';
 import { styled } from '@storybook/core/dist/theming';

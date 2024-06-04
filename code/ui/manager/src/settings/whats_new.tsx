@@ -1,7 +1,7 @@
 import type { ComponentProps, FC } from 'react';
 import React, { Fragment, useEffect, useState } from 'react';
 import { styled, useTheme } from '@storybook/core/dist/theming';
-import { Button, Loader } from '@storybook/components';
+import { Button, Loader } from '@storybook/core/dist/components';
 import { useStorybookApi, useStorybookState } from '@storybook/core/dist/manager-api';
 import { global } from '@storybook/global';
 import { EyeCloseIcon, EyeIcon, HeartIcon, AlertIcon as AlertIconSvg } from '@storybook/icons';

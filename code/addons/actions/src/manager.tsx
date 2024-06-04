@@ -1,7 +1,7 @@
 import React from 'react';
 import { addons, types, useAddonState, useChannel } from '@storybook/core/dist/manager-api';
 import { STORY_CHANGED } from '@storybook/core/dist/core-events';
-import { Badge, Spaced } from '@storybook/components';
+import { Badge, Spaced } from '@storybook/core/dist/components';
 import ActionLogger from './containers/ActionLogger';
 import { ADDON_ID, CLEAR_ID, EVENT_ID, PANEL_ID, PARAM_KEY } from './constants';
 

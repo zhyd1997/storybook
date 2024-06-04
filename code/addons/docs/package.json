@@ -101,7 +101,6 @@
     "@babel/core": "^7.24.4",
     "@mdx-js/react": "^3.0.0",
     "@storybook/blocks": "workspace:*",
-    "@storybook/components": "workspace:*",
     "@storybook/csf-plugin": "workspace:*",
     "@storybook/global": "^5.0.0",
     "@storybook/react-dom-shim": "workspace:*",

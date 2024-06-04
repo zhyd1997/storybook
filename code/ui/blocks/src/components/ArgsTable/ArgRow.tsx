@@ -4,7 +4,7 @@ import Markdown from 'markdown-to-jsx';
 import { transparentize } from 'polished';
 import type { CSSObject } from '@storybook/core/dist/theming';
 import { styled } from '@storybook/core/dist/theming';
-import { codeCommon } from '@storybook/components';
+import { codeCommon } from '@storybook/core/dist/components';
 import type { ArgType, Args, TableAnnotation } from './types';
 import { ArgJsDoc } from './ArgJsDoc';
 import { ArgValue } from './ArgValue';

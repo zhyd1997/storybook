@@ -4,8 +4,8 @@ import { darken } from 'polished';
 import { styled } from '@storybook/core/dist/theming';
 
 import { global } from '@storybook/global';
-import { ActionBar, Zoom } from '@storybook/components';
-import type { ActionItem } from '@storybook/components';
+import { ActionBar, Zoom } from '@storybook/core/dist/components';
+import type { ActionItem } from '@storybook/core/dist/components';
 
 import type { SourceProps } from '.';
 

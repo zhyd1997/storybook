@@ -27,7 +27,7 @@ import type {
   CreateNewStoryRequestPayload,
   FileComponentSearchResponsePayload,
 } from '@storybook/core/dist/core-events';
-import { WithTooltip, TooltipNote } from '@storybook/components';
+import { WithTooltip, TooltipNote } from '@storybook/core/dist/components';
 import { useArrowKeyNavigation } from './FIleSearchList.utils';
 
 export type SearchResult = FileComponentSearchResponsePayload['files'][0];

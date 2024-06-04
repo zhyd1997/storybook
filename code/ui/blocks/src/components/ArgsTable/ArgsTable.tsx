@@ -5,7 +5,7 @@ import { styled } from '@storybook/core/dist/theming';
 import { transparentize } from 'polished';
 import { includeConditionalArg } from '@storybook/csf';
 import { once } from '@storybook/core/dist/client-logger';
-import { IconButton, ResetWrapper, Link } from '@storybook/components';
+import { IconButton, ResetWrapper, Link } from '@storybook/core/dist/components';
 
 import { DocumentIcon, UndoIcon } from '@storybook/icons';
 import { ArgRow } from './ArgRow';

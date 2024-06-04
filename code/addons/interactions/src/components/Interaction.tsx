@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconButton, TooltipNote, WithTooltip } from '@storybook/components';
+import { IconButton, TooltipNote, WithTooltip } from '@storybook/core/dist/components';
 import { type Call, CallStates, type ControlStates } from '@storybook/core/dist/instrumenter';
 import { styled, typography } from '@storybook/core/dist/theming';
 import { transparentize } from 'polished';

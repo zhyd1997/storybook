@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResetWrapper } from '@storybook/components';
+import { ResetWrapper } from '@storybook/core/dist/components';
 import { ArgRow } from './ArgRow';
 import { TableWrapper } from './ArgsTable';
 

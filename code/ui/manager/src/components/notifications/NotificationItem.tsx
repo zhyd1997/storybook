@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { type State } from '@storybook/core/dist/manager-api';
 import { Link } from '@storybook/core/dist/router';
 import { keyframes, styled, useTheme } from '@storybook/core/dist/theming';
-import type { IconsProps } from '@storybook/components';
-import { IconButton, Icons } from '@storybook/components';
+import type { IconsProps } from '@storybook/core/dist/components';
+import { IconButton, Icons } from '@storybook/core/dist/components';
 import { transparentize } from 'polished';
 import { CloseAltIcon } from '@storybook/icons';
 

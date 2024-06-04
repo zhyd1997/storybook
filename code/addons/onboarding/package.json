@@ -50,7 +50,6 @@
   },
   "devDependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
-    "@storybook/components": "workspace:*",
     "@storybook/icons": "^1.2.5",
     "@storybook/react": "workspace:*",
     "framer-motion": "^11.0.3",

@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React, { useRef, Fragment } from 'react';
 import type { Combo } from '@storybook/core/dist/manager-api';
 import { Consumer } from '@storybook/core/dist/manager-api';
-import { Button, getStoryHref } from '@storybook/components';
+import { Button, getStoryHref } from '@storybook/core/dist/components';
 import { Global, styled } from '@storybook/core/dist/theming';
 import type { CSSObject } from '@storybook/core/dist/theming';
 import { IFrame } from './Iframe';

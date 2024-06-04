@@ -1,5 +1,5 @@
 import { styled } from '@storybook/core/dist/theming';
-import { Button, IconButton } from '@storybook/components';
+import { Button, IconButton } from '@storybook/core/dist/components';
 import { global } from '@storybook/global';
 import type { FC, MouseEventHandler, PropsWithChildren, ReactNode } from 'react';
 import React, { useCallback, useEffect } from 'react';

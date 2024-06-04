@@ -1,7 +1,7 @@
 import * as REACT from 'react';
 import * as REACT_DOM from 'react-dom';
 
-import * as COMPONENTS from '@storybook/components';
+import * as COMPONENTS from '@storybook/core/dist/components';
 import * as ICONS from '@storybook/icons';
 import * as MANAGER_API from '@storybook/core/dist/manager-api';
 
@@ -20,8 +20,11 @@ import type { globalsNameReferenceMap } from './globals';
 export const globalsNameValueMap: Required<Record<keyof typeof globalsNameReferenceMap, any>> = {
   react: REACT,
   'react-dom': REACT_DOM,
-  '@storybook/components': COMPONENTS,
   '@storybook/icons': ICONS,
+
+  '@storybook/components': COMPONENTS,
+  '@storybook/core/dist/components': COMPONENTS,
+
   '@storybook/manager-api': MANAGER_API,
   '@storybook/core/dist/manager-api': MANAGER_API,
 

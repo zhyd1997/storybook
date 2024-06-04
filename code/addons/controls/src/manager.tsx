@@ -1,6 +1,6 @@
 import React from 'react';
 import { dequal as deepEqual } from 'dequal';
-import { AddonPanel, Badge, Spaced } from '@storybook/components';
+import { AddonPanel, Badge, Spaced } from '@storybook/core/dist/components';
 import type {
   ResponseData,
   SaveStoryRequestPayload,

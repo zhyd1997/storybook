@@ -1,7 +1,7 @@
 import type { FC, ComponentProps } from 'react';
 import React from 'react';
 import { styled } from '@storybook/core/dist/theming';
-import { Button } from '@storybook/components';
+import { Button } from '@storybook/core/dist/components';
 
 import type { Addon_SidebarTopType } from '@storybook/core/dist/types';
 import { Brand } from './Brand';

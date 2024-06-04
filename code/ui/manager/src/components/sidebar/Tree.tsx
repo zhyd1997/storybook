@@ -8,7 +8,7 @@ import type {
   API,
 } from '@storybook/core/dist/manager-api';
 import { styled } from '@storybook/core/dist/theming';
-import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/components';
+import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/core/dist/components';
 import { transparentize } from 'polished';
 import type { MutableRefObject } from 'react';
 import React, { useCallback, useMemo, useRef } from 'react';

@@ -143,7 +143,6 @@ async function generateDistFiles() {
       })
     ),
     ...bundles.flatMap((entry) => {
-      console.log({ entry });
       const results = [];
       results.push(
         esbuild.context(

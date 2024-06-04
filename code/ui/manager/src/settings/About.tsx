@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React from 'react';
 import { styled } from '@storybook/core/dist/theming';
 
-import { Button, Link, StorybookLogo } from '@storybook/components';
+import { Button, Link, StorybookLogo } from '@storybook/core/dist/components';
 import { DocumentIcon, GithubIcon } from '@storybook/icons';
 import { UpgradeBlock } from '../components/upgrade/UpgradeBlock';
 

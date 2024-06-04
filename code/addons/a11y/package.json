@@ -60,7 +60,6 @@
     "axe-core": "^4.2.0"
   },
   "devDependencies": {
-    "@storybook/components": "workspace:*",
     "@storybook/global": "^5.0.0",
     "@storybook/icons": "^1.2.5",
     "@testing-library/react": "^14.0.0",

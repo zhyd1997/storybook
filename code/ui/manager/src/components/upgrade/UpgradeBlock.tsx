@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { styled } from '@storybook/core/dist/theming';
 import { useStorybookApi } from '@storybook/core/dist/manager-api';
-import { Link } from '@storybook/components';
+import { Link } from '@storybook/core/dist/components';
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
 
 interface UpgradeBlockProps {

@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React from 'react';
 import type { CSSObject } from '@storybook/core/dist/theming';
 import { styled } from '@storybook/core/dist/theming';
-import { codeCommon } from '@storybook/components';
+import { codeCommon } from '@storybook/core/dist/components';
 import type { JsDocTags } from './types';
 
 interface ArgJsDocArgs {

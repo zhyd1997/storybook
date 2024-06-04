@@ -2,10 +2,13 @@
 export const globalsNameReferenceMap = {
   react: '__REACT__',
   'react-dom': '__REACT_DOM__',
-  '@storybook/components': '__STORYBOOK_COMPONENTS__',
   '@storybook/icons': '__STORYBOOK_ICONS__',
+
   '@storybook/manager-api': '__STORYBOOK_API__',
   '@storybook/core/dist/manager-api': '__STORYBOOK_API__',
+
+  '@storybook/components': '__STORYBOOK_COMPONENTS__',
+  '@storybook/core/dist/components': '__STORYBOOK_COMPONENTS__',
 
   '@storybook/channels': '__STORYBOOK_CHANNELS__',
   '@storybook/core/dist/channels': '__STORYBOOK_CHANNELS__',

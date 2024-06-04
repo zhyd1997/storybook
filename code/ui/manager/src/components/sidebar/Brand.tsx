@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled, withTheme } from '@storybook/core/dist/theming';
 
-import { StorybookLogo } from '@storybook/components';
+import { StorybookLogo } from '@storybook/core/dist/components';
 
 export const StorybookLogoStyled = styled(StorybookLogo)(({ theme }) => ({
   width: 'auto',

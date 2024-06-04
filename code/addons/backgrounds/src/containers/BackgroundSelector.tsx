@@ -4,7 +4,7 @@ import memoize from 'memoizerific';
 
 import { useParameter, useGlobals } from '@storybook/core/dist/manager-api';
 import { logger } from '@storybook/core/dist/client-logger';
-import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/components';
+import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/core/dist/components';
 
 import { PhotoIcon } from '@storybook/icons';
 import { PARAM_KEY as BACKGROUNDS_PARAM_KEY } from '../constants';

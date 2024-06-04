@@ -2,7 +2,7 @@ import { global } from '@storybook/global';
 import type { FC } from 'react';
 import React, { useState, useCallback, Fragment } from 'react';
 
-import { WithTooltip, Spaced, Button, Link, ErrorFormatter } from '@storybook/components';
+import { WithTooltip, Spaced, Button, Link, ErrorFormatter } from '@storybook/core/dist/components';
 import { logger } from '@storybook/core/dist/client-logger';
 import { styled } from '@storybook/core/dist/theming';
 

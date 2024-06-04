@@ -4,7 +4,7 @@ import type { Theme } from '@storybook/core/dist/theming';
 import { styled, withTheme } from '@storybook/core/dist/theming';
 
 import { Inspector } from 'react-inspector';
-import { ActionBar, ScrollArea } from '@storybook/components';
+import { ActionBar, ScrollArea } from '@storybook/core/dist/components';
 
 import { Action, Counter, InspectorContainer } from './style';
 import type { ActionDisplay } from '../../models';

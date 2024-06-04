@@ -5,7 +5,7 @@ import { ManagerContext, types } from '@storybook/core/dist/manager-api';
 import type { StoryObj, Meta } from '@storybook/react';
 import { within, userEvent, expect, fn } from '@storybook/test';
 import type { Addon_SidebarTopType } from '@storybook/core/dist/types';
-import { Button, IconButton } from '@storybook/components';
+import { Button, IconButton } from '@storybook/core/dist/components';
 import { FaceHappyIcon } from '@storybook/icons';
 import { Sidebar, DEFAULT_REF_ID } from './Sidebar';
 import { standardData as standardHeaderData } from './Heading.stories';

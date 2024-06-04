@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, Separator } from '@storybook/components';
+import { IconButton, Separator } from '@storybook/core/dist/components';
 import { Consumer, types } from '@storybook/core/dist/manager-api';
 import type { Combo } from '@storybook/core/dist/manager-api';
 import type { Addon_BaseType } from '@storybook/core/dist/types';

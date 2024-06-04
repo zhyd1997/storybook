@@ -1,7 +1,7 @@
 import React from 'react';
 import { EmptyTabContent } from './EmptyTabContent';
 import { DocumentIcon } from '@storybook/icons';
-import { Link } from '@storybook/components';
+import { Link } from '@storybook/core/dist/components';
 import type { Meta, StoryObj } from '@storybook/react';
 
 export default {

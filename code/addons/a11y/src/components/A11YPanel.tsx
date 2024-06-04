@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import { styled } from '@storybook/core/dist/theming';
 
-import { ActionBar, ScrollArea } from '@storybook/components';
+import { ActionBar, ScrollArea } from '@storybook/core/dist/components';
 import { SyncIcon, CheckIcon } from '@storybook/icons';
 
 import type { AxeResults } from 'axe-core';

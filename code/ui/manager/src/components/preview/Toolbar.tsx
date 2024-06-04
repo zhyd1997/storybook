@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import { styled } from '@storybook/core/dist/theming';
 
-import { IconButton, Separator, TabButton, TabBar } from '@storybook/components';
+import { IconButton, Separator, TabButton, TabBar } from '@storybook/core/dist/components';
 import {
   shortcutToHumanString,
   Consumer,

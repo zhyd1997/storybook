@@ -6,7 +6,7 @@ import {
   Modal,
   TooltipNote,
   WithTooltip,
-} from '@storybook/components';
+} from '@storybook/core/dist/components';
 import { AddIcon, CheckIcon, UndoIcon } from '@storybook/icons';
 import { keyframes, styled } from '@storybook/core/dist/theming';
 import React from 'react';

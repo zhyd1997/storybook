@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 import React, { useState } from 'react';
-import { IconButton } from '@storybook/components';
+import { IconButton } from '@storybook/core/dist/components';
 import { Consumer, types } from '@storybook/core/dist/manager-api';
 import type { Combo } from '@storybook/core/dist/manager-api';
 import { styled } from '@storybook/core/dist/theming';

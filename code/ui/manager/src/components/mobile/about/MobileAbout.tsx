@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React, { useRef } from 'react';
 import { Transition, type TransitionStatus } from 'react-transition-group';
 import { styled } from '@storybook/core/dist/theming';
-import { Link } from '@storybook/components';
+import { Link } from '@storybook/core/dist/components';
 import { ArrowLeftIcon, GithubIcon, ShareAltIcon, StorybookIcon } from '@storybook/icons';
 import { UpgradeBlock } from '../../upgrade/UpgradeBlock';
 import { MOBILE_TRANSITION_DURATION } from '../../../constants';

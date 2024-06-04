@@ -64,3 +64,7 @@ declare class AnsiToHtml {
 
   toHtml: (ansi: string) => string;
 }
+
+declare module '*.md';
+declare module '*.mdx';
+declare module '*.png';

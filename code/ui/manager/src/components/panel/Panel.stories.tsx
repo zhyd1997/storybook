@@ -1,7 +1,7 @@
 import type { EventHandler, FocusEvent, MouseEvent } from 'react';
 import React, { useCallback, useRef, useState } from 'react';
 import { action } from '@storybook/addon-actions';
-import { Badge, Spaced } from '@storybook/components';
+import { Badge, Spaced } from '@storybook/core/dist/components';
 import type { Addon_BaseType, Addon_Collection } from '@storybook/core/dist/types';
 import { Addon_TypesEnum } from '@storybook/core/dist/types';
 import { BellIcon } from '@storybook/icons';

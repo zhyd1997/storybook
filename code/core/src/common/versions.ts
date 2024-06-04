@@ -24,6 +24,7 @@ export default {
   '@storybook/core': '8.2.0-alpha.1',
   '@storybook/channels': '8.2.0-alpha.1',
   '@storybook/client-logger': '8.2.0-alpha.1',
+  '@storybook/components': '8.2.0-alpha.5',
   '@storybook/core-common': '8.2.0-alpha.1',
   '@storybook/core-events': '8.2.0-alpha.1',
   '@storybook/csf-tools': '8.2.0-alpha.1',
@@ -79,6 +80,5 @@ export default {
   '@storybook/vue3': '8.2.0-alpha.5',
   '@storybook/web-components': '8.2.0-alpha.5',
   '@storybook/blocks': '8.2.0-alpha.5',
-  '@storybook/components': '8.2.0-alpha.5',
   '@storybook/manager': '8.2.0-alpha.5',
 };

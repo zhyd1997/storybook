@@ -4,7 +4,7 @@ import memoize from 'memoizerific';
 
 import { styled, Global, type Theme, withTheme } from '@storybook/core/dist/theming';
 
-import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/components';
+import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/core/dist/components';
 
 import { useStorybookApi, useParameter, useGlobals } from '@storybook/core/dist/manager-api';
 import { GrowIcon, TransferIcon } from '@storybook/icons';

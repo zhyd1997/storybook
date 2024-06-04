@@ -7,7 +7,7 @@ import {
   FormikProps,
 } from 'formik';
 import React, { FC, HTMLAttributes, useCallback, useState } from 'react';
-import { Icons, WithTooltip } from '@storybook/components';
+import { Icons, WithTooltip } from '@storybook/core/dist/components';
 
 const errorMap = {
   email: {

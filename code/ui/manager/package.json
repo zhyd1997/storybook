@@ -74,7 +74,6 @@
   "devDependencies": {
     "@fal-works/esbuild-plugin-global-externals": "^2.1.2",
     "@storybook/addon-designs": "^7.0.4",
-    "@storybook/components": "workspace:*",
     "@storybook/core": "workspace:*",
     "@storybook/global": "^5.0.0",
     "@storybook/icons": "^1.2.5",

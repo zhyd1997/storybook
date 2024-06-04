@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { styled } from '@storybook/core/dist/theming';
-import { Link, EmptyTabContent } from '@storybook/components';
+import { Link, EmptyTabContent } from '@storybook/core/dist/components';
 import { DocumentIcon, VideoIcon } from '@storybook/icons';
 
 interface EmptyProps {

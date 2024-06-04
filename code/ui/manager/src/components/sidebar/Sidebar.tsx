@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { styled } from '@storybook/core/dist/theming';
-import { ScrollArea, Spaced } from '@storybook/components';
+import { ScrollArea, Spaced } from '@storybook/core/dist/components';
 import type { State } from '@storybook/core/dist/manager-api';
 
 import type {

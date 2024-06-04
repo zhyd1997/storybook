@@ -7,7 +7,7 @@ import { Consumer, type Combo, merge, addons, types } from '@storybook/core/dist
 import type { Addon_BaseType, Addon_WrapperType } from '@storybook/core/dist/types';
 import { PREVIEW_BUILDER_PROGRESS, SET_CURRENT_STORY } from '@storybook/core/dist/core-events';
 
-import { Loader } from '@storybook/components';
+import { Loader } from '@storybook/core/dist/components';
 
 import * as S from './utils/components';
 import { ZoomProvider, ZoomConsumer } from './tools/zoom';

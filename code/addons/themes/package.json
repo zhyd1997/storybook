@@ -60,7 +60,6 @@
     "ts-dedent": "^2.0.0"
   },
   "devDependencies": {
-    "@storybook/components": "workspace:*",
     "@storybook/icons": "^1.2.5",
     "typescript": "^5.3.2"
   },
