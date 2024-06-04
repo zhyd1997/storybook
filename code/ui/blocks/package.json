@@ -84,6 +84,10 @@
   "bundler": {
     "entries": [
       "./src/index.ts"
+    ],
+    "noExternal": [
+      "@storybook/core/dist/components",
+      "@storybook/core/dist/theming"
     ]
   },
   "gitHead": "e6a7fd8a655c69780bc20b9749c2699e44beae17"
