@@ -9,10 +9,12 @@ export type IZoomIFrameProps = {
 };
 
 export class ZoomIFrame extends Component<IZoomIFrameProps> {
+  // @ts-expect-error (non strict)
   iframe: HTMLIFrameElement = null;
 
   componentDidMount() {
     const { iFrameRef } = this.props;
+    // @ts-expect-error (non strict)
     this.iframe = iFrameRef.current;
   }
 
@@ -35,6 +37,7 @@ export class ZoomIFrame extends Component<IZoomIFrameProps> {
 
   setIframeInnerZoom(scale: number) {
     try {
+      // @ts-expect-error (non strict)
       Object.assign(this.iframe.contentDocument.body.style, {
         width: `${scale * 100}%`,
         height: `${scale * 100}%`,

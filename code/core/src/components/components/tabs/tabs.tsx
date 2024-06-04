@@ -163,8 +163,10 @@ export const Tabs: FC<TabsProps> = memo(
     }
 
     return (
+      // @ts-expect-error (non strict)
       <Wrapper absolute={absolute} bordered={bordered} id={htmlId}>
         <FlexBar scrollable={false} border backgroundColor={backgroundColor}>
+          {/* @ts-expect-error (non strict) */}
           <TabBar style={{ whiteSpace: 'normal' }} ref={tabBarRef} role="tablist">
             {visibleList.map(({ title, id, active, color }, index) => {
               const indexId = `index-${index}`;
@@ -182,6 +184,7 @@ export const Tabs: FC<TabsProps> = memo(
                   textColor={color}
                   onClick={(e: SyntheticEvent) => {
                     e.preventDefault();
+                    // @ts-expect-error (non strict)
                     actions.onSelect(id);
                   }}
                   role="tab"
@@ -223,10 +226,12 @@ export interface TabsStateState {
 export class TabsState extends Component<TabsStateProps, TabsStateState> {
   static defaultProps: TabsStateProps = {
     children: [],
+    // @ts-expect-error (non strict)
     initial: null,
     absolute: false,
     bordered: false,
     backgroundColor: '',
+    // @ts-expect-error (non strict)
     menuName: undefined,
   };
 

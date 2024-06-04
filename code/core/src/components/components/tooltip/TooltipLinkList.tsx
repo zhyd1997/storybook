@@ -32,6 +32,7 @@ const Item = (props: ItemProps) => {
   const { title, href, active } = rest;
   const onClick = useCallback(
     (event: SyntheticEvent) => {
+      // @ts-expect-error (non strict)
       onClickFromProps(event, rest);
     },
     [onClickFromProps]
@@ -58,11 +59,13 @@ export interface TooltipLinkListProps {
   LinkWrapper?: LinkWrapperType;
 }
 
+// @ts-expect-error (non strict)
 export const TooltipLinkList = ({ links, LinkWrapper = null }: TooltipLinkListProps) => {
   const hasIcon = links.some((link) => link.icon);
   return (
     <List>
       {links.map(({ isGatsby, ...p }) => (
+        // @ts-expect-error (non strict)
         <Item key={p.id} LinkWrapper={isGatsby ? LinkWrapper : null} isIndented={hasIcon} {...p} />
       ))}
     </List>

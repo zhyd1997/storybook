@@ -40,6 +40,7 @@ export function useList(list: ChildrenListComplete) {
   const addonsRef = useRef<HTMLButtonElement>();
   const tabRefs = useRef(new Map<string, HTMLButtonElement>());
   const { width: tabBarWidth = 1 } = useResizeObserver<HTMLDivElement>({
+    // @ts-expect-error (non strict)
     ref: tabBarRef,
   });
 
@@ -77,6 +78,7 @@ export function useList(list: ChildrenListComplete) {
                     active,
                     onClick: (e) => {
                       e.preventDefault();
+                      // @ts-expect-error (non strict)
                       actions.onSelect(id);
                     },
                   } as Link;
@@ -85,6 +87,7 @@ export function useList(list: ChildrenListComplete) {
             }
           >
             <AddonButton
+              // @ts-expect-error (non strict)
               ref={addonsRef}
               active={isAddonsActive}
               preActive={isTooltipVisible}

@@ -1,6 +1,6 @@
-import type { HTMLProps, SelectHTMLAttributes } from 'react';
+import type { FC, HTMLProps, PropsWithChildren, SelectHTMLAttributes } from 'react';
 import React, { forwardRef } from 'react';
-import type { CSSObject, FunctionInterpolation } from '@storybook/core/dist/theming';
+import type { CSSObject, StorybookTheme } from '@storybook/core/dist/theming';
 import { styled } from '@storybook/core/dist/theming';
 
 import TextareaAutoResize from 'react-textarea-autosize';
@@ -38,7 +38,7 @@ const styleResets: CSSObject = {
   position: 'relative',
 };
 
-const styles: FunctionInterpolation = ({ theme }) => ({
+const styles = (({ theme }: { theme: StorybookTheme }) => ({
   ...(styleResets as any),
 
   transition: 'box-shadow 200ms ease-out, opacity 200ms ease-out',
@@ -71,13 +71,13 @@ const styles: FunctionInterpolation = ({ theme }) => ({
     color: theme.textMutedColor,
     opacity: 1,
   },
-});
+})) as any;
 
 export type Sizes = '100%' | 'flex' | 'auto';
 export type Alignments = 'end' | 'center' | 'start';
 export type ValidationStates = 'valid' | 'error' | 'warn';
 
-const sizes: FunctionInterpolation<{ size?: Sizes }> = ({ size }) => {
+const sizes = (({ size }: { size?: Sizes }) => {
   switch (size) {
     case '100%': {
       return { width: '100%' };
@@ -90,13 +90,15 @@ const sizes: FunctionInterpolation<{ size?: Sizes }> = ({ size }) => {
       return { display: 'inline' };
     }
   }
-};
-const alignment: FunctionInterpolation<{
+}) as any;
+const alignment = (({
+  align,
+}: {
   size?: Sizes;
   align?: Alignments;
   valid?: ValidationStates;
   height?: number;
-}> = ({ align }) => {
+}) => {
   switch (align) {
     case 'end': {
       return { textAlign: 'right' };
@@ -109,8 +111,8 @@ const alignment: FunctionInterpolation<{
       return { textAlign: 'left' };
     }
   }
-};
-const validation: FunctionInterpolation<{ valid: ValidationStates }> = ({ valid, theme }) => {
+}) as any;
+const validation = (({ valid, theme }: { valid: ValidationStates; theme: StorybookTheme }) => {
   switch (valid) {
     case 'valid': {
       return { boxShadow: `${theme.color.positive} 0 0 0 1px inset !important` };
@@ -129,7 +131,7 @@ const validation: FunctionInterpolation<{ valid: ValidationStates }> = ({ valid,
       return {};
     }
   }
-};
+}) as any;
 
 type InputProps = Omit<
   HTMLProps<HTMLInputElement>,
@@ -138,6 +140,7 @@ type InputProps = Omit<
     align?: Alignments;
     valid?: ValidationStates;
     height?: number;
+    ref: any;
   }
 > & {
   size?: Sizes;
@@ -145,17 +148,12 @@ type InputProps = Omit<
   valid?: ValidationStates;
   height?: number;
 };
-export const Input = Object.assign(
+export const Input: FC<PropsWithChildren<InputProps>> = Object.assign(
   styled(
     forwardRef<any, InputProps>(function Input({ size, valid, align, ...props }, ref) {
       return <input {...props} ref={ref} />;
     })
-  )<{
-    size?: Sizes;
-    align?: Alignments;
-    valid?: ValidationStates;
-    height?: number;
-  }>(styles, sizes, alignment, validation, {
+  )<InputProps>(styles, sizes, alignment, validation, {
     minHeight: 32,
   }),
   {

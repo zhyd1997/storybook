@@ -177,7 +177,10 @@ const defaultRenderer: SyntaxHighlighterRenderer = ({ rows, stylesheet, useInlin
   });
 };
 
-const wrapRenderer = (renderer: SyntaxHighlighterRenderer, showLineNumbers: boolean) => {
+const wrapRenderer = (
+  renderer: SyntaxHighlighterRenderer | undefined,
+  showLineNumbers: boolean
+) => {
   if (!showLineNumbers) {
     return renderer;
   }
@@ -201,8 +204,8 @@ export const SyntaxHighlighter = ({
   bordered = false,
   padded = false,
   format = true,
-  formatter = null,
-  className = null,
+  formatter = undefined,
+  className = undefined,
   showLineNumbers = false,
   ...rest
 }: SyntaxHighlighterProps) => {

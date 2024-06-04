@@ -14,11 +14,13 @@ const { document } = global;
 const TargetContainer = styled.div<{ trigger: ReactPopperTooltipConfig['trigger'] }>`
   display: inline-block;
   cursor: ${(props) =>
+    // @ts-expect-error (non strict)
     props.trigger === 'hover' || props.trigger.includes('hover') ? 'default' : 'pointer'};
 `;
 
 const TargetSvgContainer = styled.g<{ trigger: ReactPopperTooltipConfig['trigger'] }>`
   cursor: ${(props) =>
+    // @ts-expect-error (non strict)
     props.trigger === 'hover' || props.trigger.includes('hover') ? 'default' : 'pointer'};
 `;
 
@@ -125,6 +127,7 @@ const WithTooltipPure = ({
       withArrows={withArrows}
       {...getTooltipProps()}
     >
+      {/* @ts-expect-error (non strict) */}
       {typeof tooltip === 'function' ? tooltip({ onHide: () => onVisibleChange(false) }) : tooltip}
     </Tooltip>
   );
@@ -168,10 +171,13 @@ const WithToolTipState = ({
     iframes.forEach((iframe) => {
       const bind = () => {
         try {
+          // @ts-expect-error (non strict)
           if (iframe.contentWindow.document) {
+            // @ts-expect-error (non strict)
             iframe.contentWindow.document.addEventListener('click', hide);
             unbinders.push(() => {
               try {
+                // @ts-expect-error (non strict)
                 iframe.contentWindow.document.removeEventListener('click', hide);
               } catch (e) {
                 // logger.debug('Removing a click listener from iframe failed: ', e);

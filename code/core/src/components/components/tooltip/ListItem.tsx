@@ -194,10 +194,10 @@ const ListItem = ({
   active = false,
   disabled = false,
   isIndented,
-  href = null,
-  onClick = null,
+  href = undefined,
+  onClick = undefined,
   icon,
-  LinkWrapper = null,
+  LinkWrapper = undefined,
   ...rest
 }: ListItemProps) => {
   const itemProps = getItemProps(onClick, href, LinkWrapper);
@@ -207,7 +207,7 @@ const ListItem = ({
     <Item {...commonProps} {...rest} {...itemProps}>
       {icon && <Left {...commonProps}>{icon}</Left>}
       {title || center ? (
-        <Center isIndented={!icon && isIndented}>
+        <Center isIndented={!!(!icon && isIndented)}>
           {title && (
             <Title {...commonProps} loading={loading}>
               {title}

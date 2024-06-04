@@ -213,7 +213,7 @@ const StyledButton = styled('button', {
   flexShrink: 0,
 
   '&:hover': {
-    color: variant === 'ghost' ? theme.color.secondary : null,
+    color: variant === 'ghost' ? theme.color.secondary : undefined,
     background: (() => {
       let bgColor = theme.color.secondary;
       if (variant === 'solid') bgColor = theme.color.secondary;
@@ -225,7 +225,7 @@ const StyledButton = styled('button', {
   },
 
   '&:active': {
-    color: variant === 'ghost' ? theme.color.secondary : null,
+    color: variant === 'ghost' ? theme.color.secondary : undefined,
     background: (() => {
       let bgColor = theme.color.secondary;
       if (variant === 'solid') bgColor = theme.color.secondary;
@@ -243,6 +243,8 @@ const StyledButton = styled('button', {
 
   '> svg': {
     animation:
-      animating && animation !== 'none' ? `${theme.animation[animation]} 1000ms ease-out` : '',
+      animating && animation !== 'none'
+        ? `${theme.animation[animation as 'glow']} 1000ms ease-out`
+        : '',
   },
 }));

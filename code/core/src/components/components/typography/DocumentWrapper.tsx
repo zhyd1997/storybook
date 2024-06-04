@@ -305,6 +305,6 @@ export const DocumentWrapper = styled.div(({ theme }) => ({
     border: `1px solid ${theme.color.mediumlight}`,
     backgroundColor: theme.color.lighter,
     borderRadius: 3,
-    color: theme.base === 'dark' && theme.color.darkest,
+    color: theme.base === 'dark' ? theme.color.darkest : theme.color.dark,
   },
 }));

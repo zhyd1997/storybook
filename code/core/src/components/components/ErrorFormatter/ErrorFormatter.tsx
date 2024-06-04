@@ -70,7 +70,7 @@ export const ErrorFormatter = ({ error }: ErrorFormatterProps) => {
       <span>{type}</span>: <ErrorName>{name}</ErrorName>
       <br />
       {lines.map((l, i) =>
-        l.name ? (
+        l?.name ? (
           <Fragment key={i}>
             {'  '}at <ErrorImportant>{l.name}</ErrorImportant> (
             <ErrorDetail>{l.location}</ErrorDetail>)
@@ -78,7 +78,7 @@ export const ErrorFormatter = ({ error }: ErrorFormatterProps) => {
           </Fragment>
         ) : (
           <Fragment key={i}>
-            {'  '}at <ErrorDetail>{l.location}</ErrorDetail>
+            {'  '}at <ErrorDetail>{l?.location}</ErrorDetail>
             <br />
           </Fragment>
         )

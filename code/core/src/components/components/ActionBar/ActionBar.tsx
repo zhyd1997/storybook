@@ -69,6 +69,7 @@ export interface ActionBarProps {
 export const ActionBar = ({ actionItems, ...props }: ActionBarProps) => (
   <Container {...props}>
     {actionItems.map(({ title, className, onClick, disabled }, index: number) => (
+      // @ts-expect-error (non strict)
       <ActionButton key={index} className={className} onClick={onClick} disabled={disabled}>
         {title}
       </ActionButton>

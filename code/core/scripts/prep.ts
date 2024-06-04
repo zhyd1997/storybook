@@ -268,7 +268,7 @@ async function generateTypesFiles() {
     // I've had a few occasions where a entry that would normally be fast (node-logger) where the process would close without it being done
     // TODO: figure out if this is a bug in bun or in the script, or how to ensure the script actually fails in that case
     // TODO: figure out what the best number is, this is likely to be different on different machines (CI)
-    const limited = limit(5);
+    const limited = limit(3);
     let processes: ReturnType<(typeof Bun)['spawn']>[] = [];
     await Promise.all(
       all.map(async (fileName, index) => {

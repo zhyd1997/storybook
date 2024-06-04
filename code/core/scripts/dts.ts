@@ -19,8 +19,11 @@ const external = [
   '@storybook/core/dist/channels',
   '@storybook/core/dist/router',
   '@storybook/core/dist/preview-api',
+  '@storybook/core/dist/manager-api',
   '@storybook/core/dist/client-logger',
   '@storybook/core/dist/types',
+  '@storybook/core/dist/router',
+  '@storybook/core/dist/theming',
 ];
 
 const all = entries.filter((e) => e.dts);

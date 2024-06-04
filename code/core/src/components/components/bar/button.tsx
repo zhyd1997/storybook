@@ -66,7 +66,7 @@ type LinkLike<P = {}> = ForwardRefExoticComponent<
   Omit<LinkProps, 'ref'> & RefAttributes<HTMLAnchorElement> & P
 >;
 
-const ButtonOrLink: ButtonLike | LinkLike = forwardRef(ForwardRefFunction) as ButtonLike | LinkLike;
+const ButtonOrLink: ButtonLike | LinkLike = forwardRef(ForwardRefFunction);
 
 ButtonOrLink.displayName = 'ButtonOrLink';
 
