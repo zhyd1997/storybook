@@ -70,6 +70,7 @@ export const Labels = (args: ComponentProps<typeof Icons>) => (
     <List>
       {Object.keys(icons).map((key) => (
         <Item key={key}>
+          {/* @ts-expect-error (not strict) */}
           <Icons icon={key as IconType} aria-hidden {...args} />
           <Meta>{key}</Meta>
         </Item>
@@ -84,6 +85,7 @@ export const NoLabels = (args: ComponentProps<typeof Icons>) => (
     <List>
       {Object.keys(icons).map((key) => (
         <Item minimal key={key}>
+          {/* @ts-expect-error (not strict) */}
           <Icons icon={key as IconType} aria-label={key} {...args} />
         </Item>
       ))}
@@ -97,6 +99,7 @@ export const NoDeprecateWarning = (args: ComponentProps<typeof Icons>) => (
     <List>
       {Object.keys(icons).map((key) => (
         <Item minimal key={key}>
+          {/* @ts-expect-error (not strict) */}
           <Icons icon={key as IconType} aria-label={key} __suppressDeprecationWarning {...args} />
         </Item>
       ))}

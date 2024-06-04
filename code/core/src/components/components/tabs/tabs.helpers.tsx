@@ -14,6 +14,7 @@ export const VisuallyHidden = styled.div<VisuallyHiddenProps>(({ active }) =>
 
 export const childrenToList = (children: TabsProps['children']) =>
   Children.toArray(children).map(
+    // @ts-expect-error (non strict)
     ({
       props: { title, id, color, children: childrenOfChild },
     }: ReactElement<{

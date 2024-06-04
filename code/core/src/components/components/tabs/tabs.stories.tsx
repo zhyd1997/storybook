@@ -111,7 +111,7 @@ type Story = StoryObj<typeof TabsState>;
 
 export const StatefulStatic = {
   render: (args) => (
-    <TabsState initial="test2" {...args}>
+    <TabsState {...args} initial={args.initial || 'test2'}>
       <div id="test1" title="With a function">
         {
           (({ active, selected }: { active: boolean; selected: string }) =>
@@ -128,7 +128,7 @@ export const StatefulStatic = {
 export const StatefulStaticWithSetButtonTextColors = {
   render: (args) => (
     <div>
-      <TabsState initial="test2" {...args}>
+      <TabsState {...args} initial={args.initial || 'test2'}>
         <div id="test1" title="With a function" color="#e00000">
           {
             (({ active, selected }: { active: boolean; selected: string }) =>
@@ -146,7 +146,11 @@ export const StatefulStaticWithSetButtonTextColors = {
 export const StatefulStaticWithSetBackgroundColor = {
   render: (args) => (
     <div>
-      <TabsState initial="test2" backgroundColor="rgba(0,0,0,.05)" {...args}>
+      <TabsState
+        {...args}
+        initial={args.initial || 'test2'}
+        backgroundColor={args.backgroundColor || 'rgba(0,0,0,.05)'}
+      >
         <div id="test1" title="With a function" color="#e00000">
           {
             (({ active, selected }: { active: boolean; selected: string }) =>
@@ -204,7 +208,7 @@ export const StatefulDynamicWithOpenTooltip = {
     });
   },
   render: (args) => (
-    <TabsState initial="test1" {...args}>
+    <TabsState {...args} initial={args.initial || 'test1'}>
       {Object.entries(panels).map(([k, v]) => (
         <div key={k} id={k} title={v.title as any}>
           {/* @ts-expect-error (we know this is broken) */}
@@ -233,7 +237,7 @@ export const StatefulDynamicWithSelectedAddon = {
     await StatefulDynamicWithOpenTooltip.play(context);
   },
   render: (args) => (
-    <TabsState initial="test1" {...args}>
+    <TabsState {...args} initial={args.initial || 'test1'}>
       {Object.entries(panels).map(([k, v]) => (
         <div key={k} id={k} title={v.title as any}>
           {/* @ts-expect-error (we know this is broken) */}
@@ -251,14 +255,14 @@ export const StatefulNoInitial = {
 export const StatelessBordered = {
   render: (args) => (
     <Tabs
-      bordered
-      absolute={false}
+      {...args}
+      bordered={args.bordered || true}
+      absolute={args.absolute || false}
       selected="test3"
-      menuName="Addons"
+      menuName={args.menuName || 'Addons'}
       actions={{
         onSelect,
       }}
-      {...args}
     >
       {content}
     </Tabs>
@@ -388,7 +392,7 @@ export const StatefulWithStatefulPanel = {
     return (
       <div>
         <button onClick={() => setUpdate((prev) => prev + 1)}>Update</button>
-        <TabsState initial="test-1" {...args}>
+        <TabsState {...args} initial={args.initial || 'test-1'}>
           <div id="test-1" title="Test 1">
             <Counter key={update} />
           </div>

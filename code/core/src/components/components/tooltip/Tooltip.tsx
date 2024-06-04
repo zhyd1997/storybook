@@ -87,7 +87,7 @@ const Arrow = styled.div<ArrowProps>(
 );
 
 export interface WrapperProps {
-  color: keyof Color;
+  color: keyof Color | undefined;
   hidden?: boolean;
   hasChrome: boolean;
 }
@@ -101,7 +101,7 @@ const Wrapper = styled.div<WrapperProps>(
     hasChrome
       ? {
           background:
-            theme.color[color] || color || theme.base === 'light'
+            (color && theme.color[color]) || color || theme.base === 'light'
               ? lighten(theme.background.app)
               : theme.background.app,
           filter: `

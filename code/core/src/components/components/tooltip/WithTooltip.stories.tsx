@@ -66,7 +66,7 @@ export const SimpleHover: StoryObj<ComponentProps<typeof WithTooltip>> = {
     trigger: 'hover',
   },
   render: (args) => (
-    <WithTooltip tooltip={<Tooltip />} {...args}>
+    <WithTooltip {...args} tooltip={<Tooltip />}>
       <Trigger>Hover me!</Trigger>
     </WithTooltip>
   ),
@@ -78,7 +78,7 @@ export const SimpleHoverFunctional: StoryObj<ComponentProps<typeof WithTooltip>>
     trigger: 'hover',
   },
   render: (args) => (
-    <WithTooltip tooltip={Tooltip} {...args}>
+    <WithTooltip {...args} tooltip={Tooltip}>
       <Trigger>Hover me!</Trigger>
     </WithTooltip>
   ),
@@ -89,7 +89,7 @@ export const SimpleClick: StoryObj<ComponentProps<typeof WithTooltip>> = {
     placement: 'top',
   },
   render: (args) => (
-    <WithTooltip tooltip={<Tooltip />} {...args}>
+    <WithTooltip {...args} tooltip={<Tooltip />}>
       <Trigger>Click me!</Trigger>
     </WithTooltip>
   ),
@@ -101,7 +101,7 @@ export const SimpleClickStartOpen: StoryObj<ComponentProps<typeof WithTooltip>> 
     startOpen: true,
   },
   render: (args) => (
-    <WithTooltip tooltip={<Tooltip />} {...args}>
+    <WithTooltip {...args} tooltip={<Tooltip />}>
       <Trigger>Click me!</Trigger>
     </WithTooltip>
   ),
@@ -116,7 +116,7 @@ export const SimpleClickCloseOnClick: StoryObj<ComponentProps<typeof WithTooltip
     closeOnOutsideClick: true,
   },
   render: (args) => (
-    <WithTooltip tooltip={<Tooltip />} {...args}>
+    <WithTooltip {...args} tooltip={<Tooltip />}>
       <Trigger>Click me!</Trigger>
     </WithTooltip>
   ),
@@ -128,7 +128,7 @@ export const WithoutChrome: StoryObj<ComponentProps<typeof WithTooltip>> = {
     hasChrome: false,
   },
   render: (args) => (
-    <WithTooltip tooltip={<Tooltip />} {...args}>
+    <WithTooltip {...args} tooltip={<Tooltip />}>
       <Trigger>Click me!</Trigger>
     </WithTooltip>
   ),
