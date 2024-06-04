@@ -30,6 +30,7 @@ vi.mock('@storybook/core/dist/channels', async (importOriginal) => {
   };
 });
 vi.mock('@storybook/core/dist/client-logger');
+vi.mock('@storybook/core/dist/components');
 
 vi.mock('./WebView');
 

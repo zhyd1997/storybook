@@ -1607,12 +1607,6 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@storybook/components@link:../../code/ui/components::locator=%40storybook%2Fexternal-docs%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@storybook/components@link:../../code/ui/components::locator=%40storybook%2Fexternal-docs%40workspace%3A."
-  languageName: node
-  linkType: soft
-
 "@storybook/external-docs@workspace:.":
   version: 0.0.0-use.local
   resolution: "@storybook/external-docs@workspace:."
@@ -1621,7 +1615,6 @@ __metadata:
     "@storybook/addon-docs": "npm:7.2.0-alpha.0"
     "@storybook/addon-essentials": "npm:7.2.0-alpha.0"
     "@storybook/blocks": "npm:7.2.0-alpha.0"
-    "@storybook/components": "npm:7.2.0-alpha.0"
     "@storybook/react": "npm:7.2.0-alpha.0"
     "@storybook/react-webpack5": "npm:7.2.0-alpha.0"
     "@testing-library/dom": "npm:^7.31.2"

@@ -5750,7 +5750,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/components@workspace:*, @storybook/components@workspace:deprecated/components":
+"@storybook/components@workspace:deprecated/components":
   version: 0.0.0-use.local
   resolution: "@storybook/components@workspace:deprecated/components"
   peerDependencies:
@@ -6594,7 +6594,6 @@ __metadata:
     "@storybook/builder-webpack5": "workspace:*"
     "@storybook/cli": "workspace:*"
     "@storybook/codemod": "workspace:*"
-    "@storybook/components": "workspace:*"
     "@storybook/core": "workspace:*"
     "@storybook/core-server": "workspace:*"
     "@storybook/core-webpack": "workspace:*"

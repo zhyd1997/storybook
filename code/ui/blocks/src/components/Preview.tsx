@@ -207,7 +207,7 @@ export const Preview: FC<PreviewProps> = ({
   const { window: globalWindow } = global;
 
   const copyToClipboard = useCallback(async (text: string) => {
-    const { createCopyToClipboardFunction } = await import('@storybook/components');
+    const { createCopyToClipboardFunction } = await import('@storybook/core/dist/components');
     createCopyToClipboardFunction();
   }, []);
 

@@ -120,7 +120,6 @@
     "@storybook/builder-webpack5": "workspace:*",
     "@storybook/cli": "workspace:*",
     "@storybook/codemod": "workspace:*",
-    "@storybook/components": "workspace:*",
     "@storybook/core": "workspace:*",
     "@storybook/core-server": "workspace:*",
     "@storybook/core-webpack": "workspace:*",
