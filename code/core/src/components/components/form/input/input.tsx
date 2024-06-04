@@ -1,4 +1,4 @@
-import type { FC, HTMLProps, PropsWithChildren, SelectHTMLAttributes } from 'react';
+import type { HTMLProps, SelectHTMLAttributes } from 'react';
 import React, { forwardRef } from 'react';
 import type { CSSObject, StorybookTheme } from '@storybook/core/dist/theming';
 import { styled } from '@storybook/core/dist/theming';
@@ -140,7 +140,6 @@ type InputProps = Omit<
     align?: Alignments;
     valid?: ValidationStates;
     height?: number;
-    ref: any;
   }
 > & {
   size?: Sizes;
@@ -148,7 +147,7 @@ type InputProps = Omit<
   valid?: ValidationStates;
   height?: number;
 };
-export const Input: FC<PropsWithChildren<InputProps>> = Object.assign(
+export const Input = Object.assign(
   styled(
     forwardRef<any, InputProps>(function Input({ size, valid, align, ...props }, ref) {
       return <input {...props} ref={ref} />;
