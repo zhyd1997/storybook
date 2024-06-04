@@ -2,7 +2,7 @@ import React from 'react';
 import type { StoryObj, Meta } from '@storybook/react';
 import { CallStates } from '@storybook/core/dist/instrumenter';
 import { styled } from '@storybook/core/dist/theming';
-import { userEvent, within, waitFor, expect } from '@storybook/core/dist/test';
+import { userEvent, within, waitFor, expect } from '@storybook/test';
 import { isChromatic } from '../../../../ui/.storybook/isChromatic';
 
 import { getCalls, getInteractions } from '../mocks';

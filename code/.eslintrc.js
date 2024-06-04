@@ -23,8 +23,6 @@ module.exports = {
   },
   plugins: ['local-rules'],
   rules: {
-    'storybook/use-storybook-expect': 'off',
-
     'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
     'eslint-comments/no-unused-disable': 'error',
     'react-hooks/rules-of-hooks': 'off',

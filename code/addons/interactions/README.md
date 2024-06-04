@@ -28,7 +28,7 @@ Interactions relies on "instrumented" versions of Vitest and Testing Library, th
 
 ```js
 import { Button } from './Button';
-import { within, userEvent, expect, fn } from '@storybook/core/dist/test';
+import { within, userEvent, expect, fn } from '@storybook/test';
 
 export default {
   title: 'Button',
