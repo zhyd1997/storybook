@@ -102,7 +102,7 @@ async function generateTypesMapperContent(filePath: string) {
 }
 
 function noExternals(entry: ReturnType<typeof getEntries>[0]): boolean {
-  return entry.externals.length === 0;
+  return entry.externals.length === 0 && entry.internals.length === 0;
 }
 function isNode(entry: ReturnType<typeof getEntries>[0]): boolean {
   return !!entry.node;
@@ -167,7 +167,7 @@ async function generateDistFiles() {
       return results;
     }),
     ...entries
-      .filter((entry) => entry.externals.length > 0)
+      .filter((entry) => !noExternals(entry))
       .flatMap((entry) => {
         const results = [];
         if (entry.node) {
@@ -182,7 +182,11 @@ async function generateDistFiles() {
                 entryPoints: [entry.file],
                 outExtension: { '.js': '.cjs' },
                 conditions: ['node', 'module', 'import', 'require'],
-                external: [...nodeInternals, ...esbuildDefaultOptions.external, ...entry.externals],
+                external: [
+                  ...nodeInternals,
+                  ...esbuildDefaultOptions.external,
+                  ...entry.externals,
+                ].filter((e) => !entry.internals.includes(e)),
               })
             )
           );
@@ -199,7 +203,11 @@ async function generateDistFiles() {
                 entryPoints: [entry.file],
                 conditions: ['browser', 'module', 'import', 'default'],
                 outExtension: { '.js': '.js' },
-                external: [...nodeInternals, ...esbuildDefaultOptions.external, ...entry.externals],
+                external: [
+                  ...nodeInternals,
+                  ...esbuildDefaultOptions.external,
+                  ...entry.externals,
+                ].filter((e) => !entry.internals.includes(e)),
               })
             )
           );
