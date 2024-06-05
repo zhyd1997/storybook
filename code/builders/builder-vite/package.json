@@ -1,6 +1,6 @@
 {
   "name": "@storybook/builder-vite",
-  "version": "8.2.0-alpha.1",
+  "version": "8.2.0-alpha.5",
   "description": "A plugin to run and build Storybooks with Vite",
   "homepage": "https://github.com/storybookjs/storybook/tree/next/code/builders/builder-vite/#readme",
   "bugs": {
@@ -21,8 +21,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "node": "./dist/index.js",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./input/iframe.html": "./input/iframe.html",
     "./package.json": "./package.json"
