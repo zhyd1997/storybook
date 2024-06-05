@@ -74,11 +74,9 @@
   "devDependencies": {
     "@fal-works/esbuild-plugin-global-externals": "^2.1.2",
     "@happy-dom/global-registrator": "^14.12.0",
-    "@storybook/addon-designs": "^7.0.4",
     "@storybook/core": "workspace:*",
     "@storybook/global": "^5.0.0",
     "@storybook/icons": "^1.2.5",
-    "@storybook/test": "workspace:*",
     "@tanstack/react-virtual": "^3.3.0",
     "@testing-library/react": "^11.2.2",
     "@types/react-transition-group": "^4",

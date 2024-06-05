@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { findByText, fireEvent, fn, expect } from '@storybook/test';
+import { findByText, fireEvent, fn, expect } from '@storybook/core/dist/test';
 import { WithResults } from './FileSearchList.stories';
 import React, { useState } from 'react';
 

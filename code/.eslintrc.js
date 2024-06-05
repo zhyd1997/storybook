@@ -66,6 +66,13 @@ module.exports = {
       },
     },
     {
+      // this package depends on a lot of peerDependencies we don't want to specify, because npm would install them
+      files: ['**/ui/manager/**/*'],
+      rules: {
+        'storybook/use-storybook-expect': 'off',
+      },
+    },
+    {
       files: ['*.js', '*.jsx', '*.json', '*.html', '**/.storybook/*.ts', '**/.storybook/*.tsx'],
       parserOptions: {
         project: null,

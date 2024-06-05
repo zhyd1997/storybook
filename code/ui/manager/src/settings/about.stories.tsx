@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { AboutScreen } from './About';
 import UpgradeBlockStoriesMeta from '../components/upgrade/UpgradeBlock.stories';
-import { fn } from '@storybook/test';
+import { fn } from '@storybook/core/dist/test';
 
 const meta = {
   component: AboutScreen,
