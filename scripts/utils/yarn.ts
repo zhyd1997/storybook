@@ -75,6 +75,9 @@ export const addWorkaroundResolutions = async ({ cwd, dryRun }: YarnOptions) => 
     '@vitejs/plugin-react': '4.2.0',
     '@sveltejs/vite-plugin-svelte': '3.0.1',
     '@vitejs/plugin-vue': '4.5.0',
+    '@testing-library/dom': '^9.3.4',
+    '@testing-library/jest-dom': '^6.4.2',
+    '@testing-library/user-event': '^14.5.2',
   };
   await writeJSON(packageJsonPath, packageJson, { spaces: 2 });
 };

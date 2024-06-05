@@ -609,8 +609,8 @@ export async function setImportMap(cwd: string) {
 
   packageJson.imports = {
     '#utils': {
-      storybook: './template-stories/core/test/utils.mock.ts',
-      default: './template-stories/core/test/utils.ts',
+      storybook: './template-stories/core/utils.mock.ts',
+      default: './template-stories/core/utils.ts',
     },
   };
 
