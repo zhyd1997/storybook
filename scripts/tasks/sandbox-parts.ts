@@ -485,12 +485,6 @@ export const addStories: Task['run'] = async (
       cwd,
       disableDocs,
     });
-
-    await linkPackageStories(await workspacePath('test package', '@storybook/test'), {
-      mainConfig,
-      cwd,
-      disableDocs,
-    });
   }
 
   const mainAddons = (mainConfig.getSafeFieldValue(['addons']) || []).reduce(
