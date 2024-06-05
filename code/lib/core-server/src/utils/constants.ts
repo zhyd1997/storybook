@@ -4,7 +4,7 @@ export const DEBOUNCE = 100;
 
 export const defaultStaticDirs = [
   {
-    from: join(dirname(require.resolve('@storybook/manager/package.json')), 'static'),
+    from: join(dirname(require.resolve('@storybook/core/package.json')), 'assets', 'browser'),
     to: '/sb-common-assets',
   },
 ];
