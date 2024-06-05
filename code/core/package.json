@@ -24,23 +24,23 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./dist/node-logger": {
       "types": "./dist/node-logger/index.d.ts",
-      "require": "./dist/node-logger/index.cjs",
-      "import": "./dist/node-logger/index.cjs"
+      "import": "./dist/node-logger/index.cjs",
+      "require": "./dist/node-logger/index.cjs"
     },
     "./dist/client-logger": {
       "types": "./dist/client-logger/index.d.ts",
-      "require": "./dist/client-logger/index.cjs",
-      "import": "./dist/client-logger/index.js"
+      "import": "./dist/client-logger/index.js",
+      "require": "./dist/client-logger/index.cjs"
     },
     "./dist/core-events": {
       "types": "./dist/core-events/index.d.ts",
-      "require": "./dist/core-events/index.cjs",
-      "import": "./dist/core-events/index.js"
+      "import": "./dist/core-events/index.js",
+      "require": "./dist/core-events/index.cjs"
     },
     "./dist/manager-errors": {
       "types": "./dist/manager-errors.d.ts",
@@ -48,58 +48,58 @@
     },
     "./dist/preview-errors": {
       "types": "./dist/preview-errors.d.ts",
-      "require": "./dist/preview-errors.cjs",
-      "import": "./dist/preview-errors.js"
+      "import": "./dist/preview-errors.js",
+      "require": "./dist/preview-errors.cjs"
     },
     "./dist/server-errors": {
       "types": "./dist/server-errors.d.ts",
-      "require": "./dist/server-errors.cjs",
-      "import": "./dist/server-errors.cjs"
+      "import": "./dist/server-errors.cjs",
+      "require": "./dist/server-errors.cjs"
     },
     "./dist/channels": {
       "types": "./dist/channels/index.d.ts",
-      "require": "./dist/channels/index.cjs",
-      "import": "./dist/channels/index.js"
+      "import": "./dist/channels/index.js",
+      "require": "./dist/channels/index.cjs"
     },
     "./dist/types": {
       "types": "./dist/types/index.d.ts",
-      "require": "./dist/types/index.cjs",
-      "import": "./dist/types/index.js"
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.cjs"
     },
     "./dist/csf-tools": {
       "types": "./dist/csf-tools/index.d.ts",
-      "require": "./dist/csf-tools/index.cjs",
-      "import": "./dist/csf-tools/index.cjs"
+      "import": "./dist/csf-tools/index.cjs",
+      "require": "./dist/csf-tools/index.cjs"
     },
     "./dist/common": {
       "types": "./dist/common/index.d.ts",
-      "require": "./dist/common/index.cjs",
-      "import": "./dist/common/index.cjs"
+      "import": "./dist/common/index.cjs",
+      "require": "./dist/common/index.cjs"
     },
     "./dist/telemetry": {
       "types": "./dist/telemetry/index.d.ts",
-      "require": "./dist/telemetry/index.cjs",
-      "import": "./dist/telemetry/index.cjs"
+      "import": "./dist/telemetry/index.cjs",
+      "require": "./dist/telemetry/index.cjs"
     },
     "./dist/preview-api": {
       "types": "./dist/preview-api/index.d.ts",
-      "require": "./dist/preview-api/index.cjs",
-      "import": "./dist/preview-api/index.js"
+      "import": "./dist/preview-api/index.js",
+      "require": "./dist/preview-api/index.cjs"
     },
     "./dist/manager-api": {
       "types": "./dist/manager-api/index.d.ts",
-      "require": "./dist/manager-api/index.cjs",
-      "import": "./dist/manager-api/index.js"
+      "import": "./dist/manager-api/index.js",
+      "require": "./dist/manager-api/index.cjs"
     },
     "./dist/instrumenter": {
       "types": "./dist/instrumenter/index.d.ts",
-      "require": "./dist/instrumenter/index.cjs",
-      "import": "./dist/instrumenter/index.js"
+      "import": "./dist/instrumenter/index.js",
+      "require": "./dist/instrumenter/index.cjs"
     },
     "./dist/router": {
       "types": "./dist/router/index.d.ts",
-      "require": "./dist/router/index.cjs",
-      "import": "./dist/router/index.js"
+      "import": "./dist/router/index.js",
+      "require": "./dist/router/index.cjs"
     },
     "./dist/components": {
       "types": "./dist/components/index.d.ts",
@@ -107,28 +107,28 @@
     },
     "./dist/theming": {
       "types": "./dist/theming/index.d.ts",
-      "require": "./dist/theming/index.cjs",
-      "import": "./dist/theming/index.js"
+      "import": "./dist/theming/index.js",
+      "require": "./dist/theming/index.cjs"
     },
     "./dist/theming/create": {
       "types": "./dist/theming/create.d.ts",
-      "require": "./dist/theming/create.cjs",
-      "import": "./dist/theming/create.js"
+      "import": "./dist/theming/create.js",
+      "require": "./dist/theming/create.cjs"
     },
     "./dist/docs-tools": {
       "types": "./dist/docs-tools/index.d.ts",
-      "require": "./dist/docs-tools/index.cjs",
-      "import": "./dist/docs-tools/index.cjs"
+      "import": "./dist/docs-tools/index.cjs",
+      "require": "./dist/docs-tools/index.cjs"
     },
     "./dist/preview/globals": {
       "types": "./dist/preview/globals.d.ts",
-      "require": "./dist/preview/globals.cjs",
-      "import": "./dist/preview/globals.cjs"
+      "import": "./dist/preview/globals.cjs",
+      "require": "./dist/preview/globals.cjs"
     },
     "./dist/test": {
       "types": "./dist/test/index.d.ts",
-      "require": "./dist/test/index.cjs",
-      "import": "./dist/test/index.js"
+      "import": "./dist/test/index.js",
+      "require": "./dist/test/index.cjs"
     },
     "./package.json": "./package.json"
   },

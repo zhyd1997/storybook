@@ -316,14 +316,14 @@ async function generatePackageJsonFile() {
     if (entry.dts) {
       content.types = main.replace(/\.tsx?/, '.d.ts');
     }
-    if (entry.node) {
-      content.require = main.replace(/\.tsx?/, '.cjs');
-    }
     if (entry.browser) {
       content.import = main.replace(/\.tsx?/, '.js');
     }
     if (entry.node && !entry.browser) {
       content.import = main.replace(/\.tsx?/, '.cjs');
+    }
+    if (entry.node) {
+      content.require = main.replace(/\.tsx?/, '.cjs');
     }
     if (main === './dist/index.ts' || main === './dist/index.tsx') {
       main = '.';
