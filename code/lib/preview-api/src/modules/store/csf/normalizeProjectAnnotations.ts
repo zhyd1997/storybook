@@ -4,6 +4,8 @@ import type {
   ProjectAnnotations,
   NormalizedProjectAnnotations,
 } from '@storybook/types';
+import { once } from '@storybook/client-logger';
+import { dedent } from 'ts-dedent';
 
 import { inferArgTypes } from '../inferArgTypes';
 import { inferControls } from '../inferControls';
@@ -17,8 +19,18 @@ export function normalizeProjectAnnotations<TRenderer extends Renderer>({
   decorators,
   loaders,
   beforeEach,
+  globals,
+  initialGlobals,
   ...annotations
 }: ProjectAnnotations<TRenderer>): NormalizedProjectAnnotations<TRenderer> {
+  if (globals) {
+    once.warn(dedent`
+      The preview.js 'globals' field is deprecated and will be removed in Storybook 9.0.
+      Please use 'initialGlobals' instead. Learn more:
+
+      https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#previewjs-globals-renamed-to-initialglobals
+    `);
+  }
   return {
     ...(argTypes && { argTypes: normalizeInputTypes(argTypes as ArgTypes) }),
     ...(globalTypes && { globalTypes: normalizeInputTypes(globalTypes) }),
@@ -34,6 +46,7 @@ export function normalizeProjectAnnotations<TRenderer extends Renderer>({
       // compatibility reasons, we will leave this in the store until 7.0
       inferControls,
     ],
+    initialGlobals: initialGlobals ?? globals,
     ...annotations,
   };
 }
