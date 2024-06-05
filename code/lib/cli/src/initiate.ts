@@ -15,7 +15,7 @@ import {
 } from '@storybook/core/dist/common';
 import type { JsPackageManager } from '@storybook/core/dist/common';
 
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import boxen from 'boxen';
 import { lt, prerelease } from 'semver';
 import type { Builder } from './project_types';

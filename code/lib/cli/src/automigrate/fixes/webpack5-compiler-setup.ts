@@ -16,7 +16,7 @@ import {
   builderNameToCoreBuilder,
   compilerNameToCoreCompiler,
 } from '../../project_types';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import chalk from 'chalk';
 import { add } from '../../add';
 

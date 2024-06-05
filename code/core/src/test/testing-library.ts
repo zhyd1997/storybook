@@ -3,7 +3,7 @@ import { once } from '@storybook/core/dist/client-logger';
 import { instrument } from '@storybook/core/dist/instrumenter';
 import * as domTestingLibrary from '@testing-library/dom';
 import { userEvent as _userEvent } from '@testing-library/user-event';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import type { FireFunction, FireObject } from '@testing-library/dom/types/events';
 import type { Writable } from 'type-fest';
 import type { Promisify, PromisifyObject } from './utils';

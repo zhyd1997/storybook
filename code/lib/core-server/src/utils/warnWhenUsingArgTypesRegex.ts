@@ -4,7 +4,7 @@ import { readFile } from 'fs-extra';
 import * as babel from '@babel/core';
 import type { BabelFile } from '@babel/core';
 import { babelParse } from '@storybook/core/dist/csf-tools';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import chalk from 'chalk';
 
 export async function warnWhenUsingArgTypesRegex(

@@ -25,7 +25,7 @@ import {
   LOCAL_REGISTRY_URL,
 } from '../utils/constants';
 import * as ghActions from '@actions/core';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 
 const isCI = process.env.GITHUB_ACTIONS === 'true';
 

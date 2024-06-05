@@ -29,7 +29,7 @@ import { getStorybookData } from './helpers/mainConfigFile';
 import { doctor } from '../doctor';
 
 import { upgradeStorybookRelatedDependencies } from './fixes/upgrade-storybook-related-dependencies';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 
 const logger = console;
 const LOG_FILE_NAME = 'migration-storybook.log';

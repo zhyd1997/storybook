@@ -5,7 +5,7 @@ import semver from 'semver';
 import { z } from 'zod';
 import { readJson } from 'fs-extra';
 import fetch from 'node-fetch';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import pRetry from 'p-retry';
 import { execaCommand } from 'execa';
 import { esMain } from '../utils/esmain';

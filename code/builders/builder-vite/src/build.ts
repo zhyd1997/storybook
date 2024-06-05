@@ -1,6 +1,6 @@
 import type { Options } from '@storybook/core/dist/types';
 import { logger } from '@storybook/core/dist/node-logger';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 
 import { commonConfig } from './vite-config';
 import { sanitizeEnvVars } from './envs';

@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import execa from 'execa';
 import { readdirSync, remove } from 'fs-extra';
 import prompts from 'prompts';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 
 import { telemetry } from '@storybook/core/dist/telemetry';
 

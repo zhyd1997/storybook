@@ -11,7 +11,7 @@ import {
 } from '@storybook/core/dist/server-errors';
 
 import chalk from 'chalk';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import boxen from 'boxen';
 import type { JsPackageManager, PackageManagerName } from '@storybook/core/dist/common';
 import {

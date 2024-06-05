@@ -22,7 +22,7 @@ import { logger, once } from '@storybook/core/dist/node-logger';
 import { getStorySortParameter, loadConfig } from '@storybook/core/dist/csf-tools';
 import { storyNameFromExport, toId, combineTags } from '@storybook/csf';
 import { analyze } from '@storybook/docs-mdx';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import { autoName } from './autoName';
 import { IndexingError, MultipleIndexingError } from './IndexingError';
 

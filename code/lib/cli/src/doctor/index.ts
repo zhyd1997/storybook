@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import boxen from 'boxen';
 import { createWriteStream, move, remove } from 'fs-extra';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import { join } from 'path';
 
 import { JsPackageManagerFactory } from '@storybook/core/dist/common';

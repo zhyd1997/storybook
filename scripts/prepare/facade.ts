@@ -1,6 +1,6 @@
 import { join, parse } from 'path';
 import fs from 'fs-extra';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import { build } from 'tsup';
 import slash from 'slash';
 import { exec } from '../utils/exec';

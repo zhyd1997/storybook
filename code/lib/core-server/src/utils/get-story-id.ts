@@ -1,5 +1,5 @@
 import type { Options } from '@storybook/core/dist/types';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import { normalizeStories, normalizeStoryPath } from '@storybook/core/dist/common';
 import path from 'path';
 import { sanitize, storyNameFromExport, toId } from '@storybook/csf';
