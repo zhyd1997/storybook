@@ -1,3 +1,5 @@
+// @vitest-environment happy-dom
+
 import { describe, it, expect } from 'vitest';
 import { type Call, CallStates, type LogItem } from '@storybook/core/dist/instrumenter';
 import { getInteractions } from './Panel';

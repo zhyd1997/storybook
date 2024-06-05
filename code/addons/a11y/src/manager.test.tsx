@@ -1,3 +1,5 @@
+// @vitest-environment happy-dom
+
 import { describe, it, expect, vi } from 'vitest';
 import * as api from '@storybook/core/dist/manager-api';
 import type { Addon_BaseType } from '@storybook/core/dist/types';
