@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 /* eslint-disable import/namespace */
 import React from 'react';
 import { vi, it, expect, afterEach, describe } from 'vitest';

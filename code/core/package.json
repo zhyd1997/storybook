@@ -262,7 +262,7 @@
     "@storybook/icons": "^1.2.5",
     "@storybook/test": "workspace:*",
     "@tanstack/react-virtual": "^3.3.0",
-    "@testing-library/react": "^11.2.2",
+    "@testing-library/react": "^14.0.0",
     "@types/doctrine": "^0.0.3",
     "@types/find-cache-dir": "^5.0.0",
     "@types/fs-extra": "^11.0.1",

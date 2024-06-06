@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 /// <reference types="@testing-library/jest-dom" />;
 import { it, expect, vi, describe, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/svelte';

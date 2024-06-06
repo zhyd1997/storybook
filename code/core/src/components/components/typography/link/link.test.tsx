@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import { vi, describe, afterEach, it, expect } from 'vitest';
 import type { AnchorHTMLAttributes } from 'react';
 import React from 'react';

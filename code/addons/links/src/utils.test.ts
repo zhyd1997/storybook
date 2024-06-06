@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import { describe, beforeAll, beforeEach, it, expect, vi } from 'vitest';
 import { addons } from '@storybook/core/dist/preview-api';
 import { SELECT_STORY } from '@storybook/core/dist/core-events';

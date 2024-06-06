@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import { describe, it, test } from 'vitest';
 import { expect, fn, isMockFunction, traverseArgs } from '@storybook/core/dist/test';
 import { action } from '@storybook/addon-actions';

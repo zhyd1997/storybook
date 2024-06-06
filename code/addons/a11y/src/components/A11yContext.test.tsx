@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import * as React from 'react';
 import type { AxeResults } from 'axe-core';
