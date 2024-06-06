@@ -70,7 +70,7 @@ export const getConfig: ManagerBuilder['getConfig'] = async (options) => {
     target: ['chrome100', 'safari15', 'firefox91'],
     platform: 'browser',
     bundle: true,
-    minify: false,
+    minify: true,
     sourcemap: false,
     conditions: ['browser', 'module', 'default'],
 
