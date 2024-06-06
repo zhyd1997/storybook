@@ -115,20 +115,26 @@ async function generateExportsFile(prettierConfig: prettier.Options | null): Pro
       const l = await temporaryFile({ extension: 'js' });
       const all = await Promise.all(
         pkgs.map(async (pkg) => {
-          await esbuild.build({
-            entryPoints: [pkg],
-            bundle: true,
-            format: 'esm',
-            outfile: l,
-            alias: {
-              '@storybook/core/dist': join(import.meta.dirname, '..', '..', 'src'),
-            },
-            splitting: false,
-            platform: 'browser',
-            target: 'chrome100',
-          });
+          if (pkg.startsWith('@storybook/')) {
+            await esbuild.build({
+              entryPoints: [pkg],
+              bundle: true,
+              format: 'esm',
+              drop: ['console'],
+              outfile: l,
+              alias: {
+                '@storybook/core/dist': join(import.meta.dirname, '..', '..', 'src'),
+              },
+              legalComments: 'none',
+              splitting: false,
+              platform: 'browser',
+              target: 'chrome100',
+            });
 
-          const mod = await import(l);
+            const mod = await import(l);
+            return Object.keys(mod).filter(removeDefault);
+          }
+          const mod = await import(pkg);
           return Object.keys(mod).filter(removeDefault);
         })
       );
