@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import type { LoaderFunction } from '@storybook/core/dist/types';
 import { global } from '@storybook/global';
-import type { onMockCall as onMockCallType } from '@storybook/test';
+import type { onMockCall as onMockCallType } from '@storybook/core/dist/test';
 import { action } from './runtime';
 
 let subscribed = false;
