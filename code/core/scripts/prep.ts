@@ -357,6 +357,7 @@ async function generatePackageJsonFile() {
 
   await Bun.write(location, `${sortPackageJson(JSON.stringify(pkgJson, null, 2))}\n`, {});
 }
+
 async function modifyThemeTypes() {
   const target = join(import.meta.dirname, '..', 'dist', 'theming', 'index.d.ts');
   const contents = await Bun.file(target).text();

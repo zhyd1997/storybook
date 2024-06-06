@@ -45,7 +45,6 @@
     "@storybook/ember": "file:../../../code/frameworks/ember",
     "@storybook/html": "file:../../../code/renderers/html",
     "@storybook/html-webpack5": "file:../../../code/frameworks/html-webpack5",
-    "@storybook/manager": "file:../../../code/ui/manager",
     "@storybook/nextjs": "file:../../../code/frameworks/nextjs",
     "@storybook/preact": "file:../../../code/renderers/preact",
     "@storybook/preact-vite": "file:../../../code/frameworks/preact-vite",

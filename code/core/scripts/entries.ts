@@ -38,6 +38,7 @@ export const getEntries = (cwd: string) => {
     define('src/theming/create.ts', ['browser', 'node'], true, ['react']),
     define('src/docs-tools/index.ts', ['node'], true),
 
+    define('src/manager/globals-module-info.ts', ['node'], true),
     define('src/preview/globals.ts', ['node'], true),
     define(
       'src/test/index.ts',
@@ -62,5 +63,7 @@ export const getBundles = (cwd: string) => {
   return [
     //
     define('src/preview/runtime.ts', ['browser'], false),
+    define('src/manager/globals-runtime.ts', ['browser'], false),
+    define('src/manager/runtime.ts', ['browser'], false),
   ];
 };

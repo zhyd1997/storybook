@@ -1,4 +1,4 @@
-import type { State } from '../../../../core/src/manager-api';
+import type { State } from '../../manager-api';
 
 export const defaultShortcuts: State['shortcuts'] = {
   fullScreen: ['F'],
