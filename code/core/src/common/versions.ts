@@ -28,8 +28,9 @@ export default {
   '@storybook/core-common': '8.2.0-alpha.5',
   '@storybook/core-events': '8.2.0-alpha.5',
   '@storybook/csf-tools': '8.2.0-alpha.5',
-  '@storybook/docs-tools': '8.1.0-alpha.8',
+  '@storybook/docs-tools': '8.2.0-alpha.5',
   '@storybook/instrumenter': '8.2.0-alpha.5',
+  '@storybook/manager': '8.2.0-alpha.5',
   '@storybook/manager-api': '8.2.0-alpha.5',
   '@storybook/node-logger': '8.2.0-alpha.5',
   '@storybook/preview': '8.2.0-alpha.5',
@@ -80,5 +81,4 @@ export default {
   '@storybook/vue3': '8.2.0-alpha.5',
   '@storybook/web-components': '8.2.0-alpha.5',
   '@storybook/blocks': '8.2.0-alpha.5',
-  '@storybook/manager': '8.2.0-alpha.5',
 };
