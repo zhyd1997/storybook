@@ -54,6 +54,7 @@ export default {
     'unstable_renderSubtreeIntoContainer',
     'version',
   ],
+  'react-dom/client': ['createRoot', 'hydrateRoot'],
   '@storybook/icons': [
     'AccessibilityAltIcon',
     'AccessibilityIcon',

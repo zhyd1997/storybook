@@ -194,6 +194,10 @@ async function generateDistFiles() {
             alias: {
               '@storybook/core/dist': join(cwd, 'src'),
               react: dirname(require.resolve('react/package.json')),
+              'react-dom/client': join(
+                dirname(require.resolve('react-dom/package.json')),
+                'client'
+              ),
               'react-dom': dirname(require.resolve('react-dom/package.json')),
             },
             external: [],

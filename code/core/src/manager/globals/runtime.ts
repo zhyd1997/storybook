@@ -1,5 +1,6 @@
 import * as REACT from 'react';
-import * as REACT_DOM from 'react-dom/client';
+import * as REACT_DOM from 'react-dom';
+import * as REACT_DOM_CLIENT from 'react-dom/client';
 
 import * as COMPONENTS from '@storybook/core/dist/components';
 import * as ICONS from '@storybook/icons';
@@ -20,6 +21,7 @@ import type { globalsNameReferenceMap } from './globals';
 export const globalsNameValueMap: Required<Record<keyof typeof globalsNameReferenceMap, any>> = {
   react: REACT,
   'react-dom': REACT_DOM,
+  'react-dom/client': REACT_DOM_CLIENT,
   '@storybook/icons': ICONS,
 
   '@storybook/components': COMPONENTS,
