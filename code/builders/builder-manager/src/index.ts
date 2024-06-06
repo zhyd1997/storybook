@@ -41,8 +41,6 @@ export const getConfig: ManagerBuilder['getConfig'] = async (options) => {
     ? [...addonsEntryPoints, customManagerEntryPoint]
     : addonsEntryPoints;
 
-  console.log(globalExternals(globalsModuleInfoMap));
-
   return {
     entryPoints: await wrapManagerEntries(entryPoints, options.cacheKey),
     outdir: join(options.outputDir || './', 'sb-addons'),
@@ -72,7 +70,7 @@ export const getConfig: ManagerBuilder['getConfig'] = async (options) => {
     target: ['chrome100', 'safari15', 'firefox91'],
     platform: 'browser',
     bundle: true,
-    minify: true,
+    minify: false,
     sourcemap: false,
     conditions: ['browser', 'module', 'default'],
 

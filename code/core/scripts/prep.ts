@@ -15,8 +15,11 @@ import {
   sortPackageJson,
   limit,
   Bun,
+  globalExternals,
 } from '../../../scripts/prepare/tools';
-import { getBundles, getEntries } from './entries';
+import { getBundles, getEntries, getFinals } from './entries';
+
+import { globalsModuleInfoMap } from '../src/manager/globals-module-info';
 
 import pkg from '../package.json';
 import { generateSourceFiles } from './helpers/sourcefiles';
@@ -45,6 +48,7 @@ if (isReset) {
 
 const entries = getEntries(cwd);
 const bundles = getBundles(cwd);
+const finals = getFinals(cwd);
 
 type EsbuildContextOptions = Parameters<(typeof esbuild)['context']>[0];
 
@@ -149,14 +153,48 @@ async function generateDistFiles() {
           merge<EsbuildContextOptions>(esbuildDefaultOptions, {
             format: 'esm',
             target: 'chrome100',
-            splitting: true,
+            splitting: false,
             // platform: 'browser',
             outdir: dirname(entry.file).replace('src', 'dist'),
             entryPoints: [entry.file],
             conditions: ['browser', 'module', 'import', 'default'],
             outExtension: { '.js': '.js' },
+            // define: {
+            //   'process.env.NODE_ENV': JSON.stringify('production'),
+            // },
             alias: {
               '@storybook/core/dist': join(cwd, 'src'),
+              react: dirname(require.resolve('react/package.json')),
+              'react-dom': dirname(require.resolve('react-dom/package.json')),
+            },
+            external: [],
+          })
+        )
+      );
+
+      return results;
+    }),
+    ...finals.flatMap((entry) => {
+      const results = [];
+      results.push(
+        esbuild.context(
+          merge<EsbuildContextOptions>(esbuildDefaultOptions, {
+            format: 'esm',
+            target: 'chrome100',
+            splitting: false,
+            // platform: 'browser',
+            outdir: dirname(entry.file).replace('src', 'dist'),
+            entryPoints: [entry.file],
+            conditions: ['browser', 'module', 'import', 'default'],
+            outExtension: { '.js': '.js' },
+            define: {
+              'process.env.NODE_ENV': JSON.stringify('production'),
+            },
+            plugins: [globalExternals(globalsModuleInfoMap)],
+            alias: {
+              '@storybook/core/dist': join(cwd, 'src'),
+              react: dirname(require.resolve('react/package.json')),
+              'react-dom': dirname(require.resolve('react-dom/package.json')),
             },
             external: [],
           })

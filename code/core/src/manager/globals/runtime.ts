@@ -1,5 +1,5 @@
 import * as REACT from 'react';
-import * as REACT_DOM from 'react-dom';
+import * as REACT_DOM from 'react-dom/client';
 
 import * as COMPONENTS from '@storybook/core/dist/components';
 import * as ICONS from '@storybook/icons';

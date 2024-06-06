@@ -5,8 +5,12 @@ import Bun from 'bun';
 
 import slash from 'slash';
 
+import { globalExternals } from '@fal-works/esbuild-plugin-global-externals';
+
 import * as rpd from 'rollup-plugin-dts';
 import * as rollup from 'rollup';
+
+export { globalExternals };
 
 export const dts = async (entry: string, externals: string[], tsconfig: string) => {
   console.log(entry);

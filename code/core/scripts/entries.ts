@@ -56,7 +56,7 @@ export const getEntries = (cwd: string) => {
   ];
 };
 
-// these entries explicitly bundle everything INCLUDING `@storybook/core` itself.
+// entries for injecting globals into the preview and manager
 export const getBundles = (cwd: string) => {
   const define = defineEntry(cwd);
 
@@ -64,6 +64,15 @@ export const getBundles = (cwd: string) => {
     //
     define('src/preview/runtime.ts', ['browser'], false),
     define('src/manager/globals-runtime.ts', ['browser'], false),
+  ];
+};
+
+// the runtime for the manager
+export const getFinals = (cwd: string) => {
+  const define = defineEntry(cwd);
+
+  return [
+    //
     define('src/manager/runtime.ts', ['browser'], false),
   ];
 };
