@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   return mergeConfig(vitestCommonConfig, {
     test: {
       setupFiles: ['src/test-setup.ts'],
-      environment: 'jsdom',
+      environment: 'happy-dom',
     },
   });
 });
