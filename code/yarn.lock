@@ -5812,7 +5812,6 @@ __metadata:
     "@emotion/styled": "npm:^11.11.0"
     "@emotion/use-insertion-effect-with-fallbacks": "npm:^1.0.1"
     "@fal-works/esbuild-plugin-global-externals": "npm:^2.1.2"
-    "@happy-dom/global-registrator": "npm:^14.12.0"
     "@ndelangen/fs-extra-unified": "npm:^1.0.3"
     "@popperjs/core": "npm:^2.6.0"
     "@radix-ui/react-dialog": "npm:^1.0.5"
@@ -5877,7 +5876,6 @@ __metadata:
     fuse.js: "npm:^3.6.1"
     glob: "npm:^10.0.0"
     handlebars: "npm:^4.7.7"
-    happy-dom: "npm:^14.12.0"
     js-yaml: "npm:^4.1.0"
     lazy-universal-dotenv: "npm:^4.0.0"
     lodash: "npm:^4.17.21"
@@ -6503,6 +6501,7 @@ __metadata:
   resolution: "@storybook/root@workspace:."
   dependencies:
     "@chromatic-com/storybook": "npm:^1.3.2"
+    "@happy-dom/global-registrator": "npm:^14.12.0"
     "@nx/eslint": "npm:18.0.6"
     "@nx/vite": "npm:18.0.6"
     "@nx/workspace": "npm:18.0.6"

@@ -132,10 +132,10 @@ async function generateExportsFile(prettierConfig: prettier.Options | null): Pro
             });
 
             const mod = await import(l);
-            return Object.keys(mod).filter(removeDefault);
+            return Object.keys(mod).filter(removeDefault).sort();
           }
           const mod = await import(pkg);
-          return Object.keys(mod).filter(removeDefault);
+          return Object.keys(mod).filter(removeDefault).sort();
         })
       );
       return { pkgs, e: all.find((a) => a.length > 0) };
