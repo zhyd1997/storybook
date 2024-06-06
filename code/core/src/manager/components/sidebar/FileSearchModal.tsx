@@ -138,6 +138,7 @@ export const FileSearchModal = ({
   container,
 }: FileSearchModalProps) => {
   const [modalContentRef, modalContentDimensions] = useMeasure<HTMLDivElement>();
+  // @ts-expect-error (non strict)
   const [modalMaxHeight, setModalMaxHeight] = useState<number>(modalContentDimensions.height);
   const [, startTransition] = useTransition();
   // This internal state is used to maintain cursor position when the user types in the search input
@@ -145,7 +146,9 @@ export const FileSearchModal = ({
   const [searchInputValue, setSearchInputValue] = useState<string>(fileSearchQuery);
 
   useEffect(() => {
+    // @ts-expect-error (non strict)
     if (modalMaxHeight < modalContentDimensions.height) {
+      // @ts-expect-error (non strict)
       setModalMaxHeight(modalContentDimensions.height);
     }
   }, [modalContentDimensions.height, modalMaxHeight]);
@@ -164,6 +167,7 @@ export const FileSearchModal = ({
       }}
       container={container}
     >
+      {/* @ts-expect-error (non strict) */}
       <ModalChild height={fileSearchQuery === '' ? modalContentDimensions.height : modalMaxHeight}>
         <ModalContent ref={modalContentRef}>
           <Modal.Header>

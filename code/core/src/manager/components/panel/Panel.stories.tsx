@@ -90,9 +90,11 @@ export const JSXTitles = () => {
               if (timer.current) {
                 return;
               }
+              // @ts-expect-error (non strict)
               timer.current = setInterval(() => {
                 setCount((c) => {
                   if (c === MAX) {
+                    // @ts-expect-error (non strict)
                     clearInterval(timer.current);
                     timer.current = null;
                     return c;

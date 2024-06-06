@@ -83,6 +83,7 @@ const getDescription = (item: Item) => {
 const mapper = ({
   api,
   state,
+  // @ts-expect-error (non strict)
 }: Parameters<ComponentProps<typeof Consumer>['filter']>[0]): Omit<
   ComponentProps<typeof Preview>,
   'withLoader' | 'id'
@@ -102,11 +103,14 @@ const mapper = ({
     viewMode,
     location,
     path,
+    // @ts-expect-error (non strict)
+
     tabId,
   ]) as Addon_BaseType[];
   const toolsExtra = memoizedExtra(
     toolsExtraList.length,
     api.getElements(Addon_TypesEnum.TOOLEXTRA),
+    // @ts-expect-error (non strict)
     [entry, viewMode, location, path, tabId]
   ) as Addon_BaseType[];
 

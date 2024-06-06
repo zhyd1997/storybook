@@ -143,6 +143,7 @@ export const MenuOpen: Story = {
 
 export const MenuClosed: Story = {
   play: async (context) => {
+    // @ts-expect-error (non strict)
     await MenuOpen.play(context);
     await new Promise((resolve) => setTimeout(resolve, 500));
     const overlay = await within(context.canvasElement).getByLabelText('Close navigation menu');
@@ -159,6 +160,7 @@ export const PanelOpen: Story = {
 
 export const PanelClosed: Story = {
   play: async (context) => {
+    // @ts-expect-error (non strict)
     await PanelOpen.play(context);
     await new Promise((resolve) => setTimeout(resolve, 500));
     const closeButton = await within(context.canvasElement).getByTitle('Close addon panel');

@@ -95,6 +95,7 @@ const Preview = React.memo<PreviewProps>(function Preview(props) {
           <ToolbarComp
             key="tools"
             isShown={showToolbar}
+            // @ts-expect-error (non strict)
             tabId={tabId}
             tabs={tabs}
             tools={tools}
@@ -150,8 +151,10 @@ const Canvas: FC<{
           }
         }, []);
         // A ref simply depends on its readiness
+        // @ts-expect-error (non strict)
         const refLoading = !!refs[refId] && !refs[refId].previewInitialized;
         // The root also might need to wait on webpack
+        // @ts-expect-error (non strict)
         const isBuilding = !(progress?.value === 1 || progress === undefined);
         const rootLoading = !refId && (!previewInitialized || isBuilding);
         const isLoading = entry ? refLoading || rootLoading : rootLoading;
@@ -176,6 +179,7 @@ const Canvas: FC<{
                         scale={scale}
                         entry={entry}
                         viewMode={viewMode}
+                        // @ts-expect-error (non strict)
                         refId={refId}
                         queryParams={queryParams}
                         storyId={storyId}

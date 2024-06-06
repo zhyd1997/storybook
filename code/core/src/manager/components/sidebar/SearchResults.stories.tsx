@@ -43,9 +43,11 @@ const combinedDataset = (refs: Record<string, StoriesHash>): CombinedDataset => 
 // @ts-expect-error (invalid input)
 const dataset = combinedDataset({ internal: mockDataset.withRoot, composed: mockDataset.noRoot });
 
+// @ts-expect-error (non strict)
 const internal = Object.values(dataset.hash.internal.index).map((item) =>
   searchItem(item, dataset.hash.internal)
 );
+// @ts-expect-error (non strict)
 const composed = Object.values(dataset.hash.composed.index).map((item) =>
   searchItem(item, dataset.hash.composed)
 );

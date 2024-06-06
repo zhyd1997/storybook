@@ -145,6 +145,7 @@ const Version = styled.div(({ theme }) => ({
 
 const CurrentVersion: FC<CurrentVersionProps> = ({ url, versions }) => {
   const currentVersionId = useMemo(() => {
+    // @ts-expect-error (non strict)
     const c = Object.entries(versions).find(([k, v]) => v === url);
     return c && c[0] ? c[0] : 'current';
   }, [url, versions]);
@@ -208,6 +209,7 @@ export const RefIndicator = React.memo(
               closeOnOutsideClick
               tooltip={(tooltip) => (
                 <TooltipLinkList
+                  // @ts-expect-error (non strict)
                   links={Object.entries(ref.versions).map(([id, href]) => ({
                     icon: href === ref.url ? 'check' : undefined,
                     id,
@@ -215,6 +217,7 @@ export const RefIndicator = React.memo(
                     href,
                     onClick: (event, item) => {
                       event.preventDefault();
+                      // @ts-expect-error (non strict)
                       api.changeRefVersion(ref.id, item.href);
                       tooltip.onHide();
                     },

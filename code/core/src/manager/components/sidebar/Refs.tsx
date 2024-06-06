@@ -124,6 +124,7 @@ export const Ref: FC<RefType & RefProps & { status?: State['status'] }> = React.
     );
 
     const onSelectStoryId = useCallback(
+      // @ts-expect-error (non strict)
       (storyId: string) => api && api.selectStory(storyId, undefined, { ref: !isMain && refId }),
       [api, isMain, refId]
     );
@@ -144,7 +145,9 @@ export const Ref: FC<RefType & RefProps & { status?: State['status'] }> = React.
         )}
         {isExpanded && (
           <Wrapper data-title={title} isMain={isMain}>
+            {/* @ts-expect-error (non strict) */}
             {state === 'auth' && <AuthBlock id={refId} loginUrl={loginUrl} />}
+            {/* @ts-expect-error (non strict) */}
             {state === 'error' && <ErrorBlock error={indexError} />}
             {state === 'loading' && <LoaderBlock isMain={isMain} />}
             {state === 'empty' && <EmptyBlock isMain={isMain} />}
@@ -154,7 +157,9 @@ export const Ref: FC<RefType & RefProps & { status?: State['status'] }> = React.
                 isBrowsing={isBrowsing}
                 isMain={isMain}
                 refId={refId}
+                // @ts-expect-error (non strict)
                 data={index}
+                // @ts-expect-error (non strict)
                 docsMode={docsOptions.docsMode}
                 selectedStoryId={selectedStoryId}
                 onSelectStoryId={onSelectStoryId}

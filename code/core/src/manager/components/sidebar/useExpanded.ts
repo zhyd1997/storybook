@@ -50,6 +50,7 @@ const initializeExpanded = ({
       ? getAncestorIds(data, highlightedRef.current?.itemId)
       : [];
   return [...rootIds, ...highlightedAncestors].reduce<ExpandedState>(
+    // @ts-expect-error (non strict)
     (acc, id) => Object.assign(acc, { [id]: id in initialExpanded ? initialExpanded[id] : true }),
     {}
   );
@@ -85,6 +86,7 @@ export const useExpanded = ({
   >(
     (state, { ids, value }) =>
       ids.reduce((acc, id) => Object.assign(acc, { [id]: value }), { ...state }),
+    // @ts-expect-error (non strict)
     { refId, data, highlightedRef, rootIds, initialExpanded },
     initializeExpanded
   );
@@ -96,6 +98,7 @@ export const useExpanded = ({
 
   const highlightElement = useCallback(
     (element: Element) => {
+      // @ts-expect-error (non strict)
       setHighlightedItemId(element.getAttribute('data-item-id'));
       scrollIntoView(element);
     },
@@ -104,6 +107,7 @@ export const useExpanded = ({
 
   const updateExpanded = useCallback(
     ({ ids, value }: ExpandAction) => {
+      // @ts-expect-error (non strict)
       setExpanded({ ids, value });
       if (ids.length === 1) {
         const element = containerRef.current?.querySelector(
@@ -117,15 +121,18 @@ export const useExpanded = ({
 
   // Expand the whole ancestry of the currently selected story whenever it changes.
   useEffect(() => {
+    // @ts-expect-error (non strict)
     setExpanded({ ids: getAncestorIds(data, selectedStoryId), value: true });
   }, [data, selectedStoryId]);
 
   const collapseAll = useCallback(() => {
     const ids = Object.keys(data).filter((id) => !rootIds.includes(id));
+    // @ts-expect-error (non strict)
     setExpanded({ ids, value: false });
   }, [data, rootIds]);
 
   const expandAll = useCallback(() => {
+    // @ts-expect-error (non strict)
     setExpanded({ ids: Object.keys(data), value: true });
   }, [data]);
 
@@ -162,6 +169,7 @@ export const useExpanded = ({
       if (!highlightedElement || highlightedElement.getAttribute('data-ref-id') !== refId) return;
 
       const target = event.target as Element;
+      // @ts-expect-error (non strict)
       if (!isAncestor(menuElement, target) && !isAncestor(target, menuElement)) return;
       if (target.hasAttribute('data-action')) {
         if (isEnter || isSpace) return;
@@ -169,6 +177,7 @@ export const useExpanded = ({
       }
 
       const type = highlightedElement.getAttribute('data-nodetype');
+      // @ts-expect-error (non strict)
       if ((isEnter || isSpace) && ['component', 'story', 'document'].includes(type)) {
         onSelectStoryId(highlightedItemId);
       }
@@ -178,6 +187,7 @@ export const useExpanded = ({
       if (isArrowLeft) {
         if (isExpanded === 'true') {
           // The highlighted node is expanded, so we collapse it.
+          // @ts-expect-error (non strict)
           setExpanded({ ids: [highlightedItemId], value: false });
           return;
         }
@@ -192,6 +202,7 @@ export const useExpanded = ({
 
         // The parent can't be highlighted, which means it must be a root.
         // The highlighted node is already collapsed, so we collapse its descendants.
+        // @ts-expect-error (non strict)
         setExpanded({ ids: getDescendantIds(data, highlightedItemId, true), value: false });
         return;
       }

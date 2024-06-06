@@ -66,6 +66,7 @@ export const useHighlighted = ({
       const { itemId, refId } = highlight;
       setTimeout(() => {
         scrollIntoView(
+          // @ts-expect-error (non strict)
           containerRef.current?.querySelector(`[data-item-id="${itemId}"][data-ref-id="${refId}"]`),
           true // make sure it's clearly visible by centering it
         );
@@ -91,6 +92,7 @@ export const useHighlighted = ({
         lastRequestId = requestId;
 
         const target = event.target as Element;
+        // @ts-expect-error (non strict)
         if (!isAncestor(menuElement, target) && !isAncestor(target, menuElement)) return;
         if (target.hasAttribute('data-action')) (target as HTMLButtonElement).blur();
 
@@ -107,10 +109,13 @@ export const useHighlighted = ({
         highlightElement(highlightable[nextIndex], didRunAround);
 
         if (highlightable[nextIndex].getAttribute('data-nodetype') === 'component') {
+          // @ts-expect-error (non strict)
           const { itemId, refId } = highlightedRef.current;
           const item = api.resolveStory(itemId, refId === 'storybook_internal' ? undefined : refId);
+          // @ts-expect-error (non strict)
           if (item.type === 'component') {
             api.emit(PRELOAD_ENTRIES, {
+              // @ts-expect-error (non strict)
               ids: [item.children[0]],
               options: { target: refId },
             });
@@ -123,5 +128,6 @@ export const useHighlighted = ({
     return () => document.removeEventListener('keydown', navigateTree);
   }, [isLoading, isBrowsing, highlightedRef, highlightElement]);
 
+  // @ts-expect-error (non strict)
   return [highlighted, updateHighlighted, highlightedRef];
 };

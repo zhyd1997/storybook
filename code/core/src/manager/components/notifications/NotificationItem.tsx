@@ -187,14 +187,16 @@ const NotificationItem: FC<{
     if (onClear) onClear({ dismissed: false, timeout: true });
   }, [onDismissNotification, onClear]);
 
-  const timer = useRef<NodeJS.Timeout | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (!duration) return;
     timer.current = setTimeout(onTimeout, duration);
+    // @ts-expect-error (non strict)
     return () => clearTimeout(timer.current);
   }, [duration, onTimeout]);
 
   const onDismiss = useCallback(() => {
+    // @ts-expect-error (non strict)
     clearTimeout(timer.current);
     onDismissNotification(id);
     if (onClear) onClear({ dismissed: true, timeout: false });

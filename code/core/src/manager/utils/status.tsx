@@ -45,15 +45,18 @@ export function getGroupStatus(
 ): Record<string, API_StatusValue> {
   return Object.values(collapsedData).reduce<Record<string, API_StatusValue>>((acc, item) => {
     if (item.type === 'group' || item.type === 'component') {
+      // @ts-expect-error (non strict)
       const leafs = getDescendantIds(collapsedData as any, item.id, false)
         .map((id) => collapsedData[id])
         .filter((i) => i.type === 'story');
 
       const combinedStatus = getHighestStatus(
+        // @ts-expect-error (non strict)
         leafs.flatMap((story) => Object.values(status?.[story.id] || {})).map((s) => s.status)
       );
 
       if (combinedStatus) {
+        // @ts-expect-error (non strict)
         acc[item.id] = combinedStatus;
       }
     }

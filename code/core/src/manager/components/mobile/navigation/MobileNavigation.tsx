@@ -25,9 +25,12 @@ const useFullStoryName = () => {
   if (!currentStory) return '';
 
   let fullStoryName = currentStory.renderLabel?.(currentStory, api) || currentStory.name;
+  // @ts-expect-error (non strict)
   let node = index[currentStory.id];
 
+  // @ts-expect-error (non strict)
   while ('parent' in node && node.parent && index[node.parent] && fullStoryName.length < 24) {
+    // @ts-expect-error (non strict)
     node = index[node.parent];
     const parentName = node.renderLabel?.(node, api) || node.name;
     fullStoryName = `${parentName}/${fullStoryName}`;

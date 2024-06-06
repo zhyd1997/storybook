@@ -15,6 +15,7 @@ export const menuTool: Addon_BaseType = {
   title: 'menu',
   id: 'menu',
   type: types.TOOL,
+  // @ts-expect-error (non strict)
   match: ({ viewMode }) => ['story', 'docs'].includes(viewMode),
   render: () => (
     <Consumer filter={menuMapper}>

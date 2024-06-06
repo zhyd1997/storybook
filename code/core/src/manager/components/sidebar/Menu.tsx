@@ -88,8 +88,10 @@ export const SidebarMenu: FC<SidebarMenuProps> = ({ menu, isHighlighted, onClick
         <SidebarIconButton
           title="About Storybook"
           aria-label="About Storybook"
+          // @ts-expect-error (non strict)
           highlighted={isHighlighted}
           active={false}
+          // @ts-expect-error (non strict)
           onClick={onClick}
         >
           <CogIcon />
@@ -115,6 +117,7 @@ export const SidebarMenu: FC<SidebarMenuProps> = ({ menu, isHighlighted, onClick
       <SidebarIconButton
         title="Shortcuts"
         aria-label="Shortcuts"
+        // @ts-expect-error (non strict)
         highlighted={isHighlighted}
         active={isTooltipVisible}
       >

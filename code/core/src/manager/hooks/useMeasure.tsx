@@ -11,6 +11,7 @@ export function useMeasure<T extends Element>() {
 
   const customRef = React.useCallback((node: T) => {
     if (prevObserver.current) {
+      // @ts-expect-error (non strict)
       prevObserver.current.disconnect();
       prevObserver.current = null;
     }
@@ -20,11 +21,13 @@ export function useMeasure<T extends Element>() {
         if (entry && entry.borderBoxSize) {
           const { inlineSize: width, blockSize: height } = entry.borderBoxSize[0];
 
+          // @ts-expect-error (non strict)
           setDimensions({ width, height });
         }
       });
 
       observer.observe(node);
+      // @ts-expect-error (non strict)
       prevObserver.current = observer;
     }
   }, []);

@@ -10,6 +10,7 @@ const { PREVIEW_URL } = global;
 
 const ejectMapper = ({ state }: Combo) => {
   const { storyId, refId, refs } = state;
+  // @ts-expect-error (non strict)
   const ref = refs[refId];
 
   return {
@@ -31,6 +32,7 @@ export const ejectTool: Addon_BaseType = {
         storyId ? (
           <IconButton key="opener" asChild>
             <a
+              // @ts-expect-error (non strict)
               href={getStoryHref(baseUrl, storyId, queryParams)}
               target="_blank"
               rel="noopener noreferrer"

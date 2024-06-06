@@ -21,6 +21,7 @@ export const Default: Story = {
   args: {
     isLoading: true,
     searchResults: null,
+    // @ts-expect-error (non strict)
     errorItemId: null,
   },
 };
@@ -29,6 +30,7 @@ export const Empty: Story = {
   args: {
     isLoading: false,
     searchResults: [],
+    // @ts-expect-error (non strict)
     errorItemId: null,
   },
 };
@@ -90,6 +92,7 @@ export const WithResults: Story = {
   },
   args: {
     isLoading: false,
+    // @ts-expect-error (non strict)
     errorItemId: null,
     searchResults: [
       {

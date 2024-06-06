@@ -24,7 +24,9 @@ export const useArrowKeyNavigation = ({
 
       const maxIndex = rowVirtualizer.options.count;
       const activeElement = document.activeElement;
+      // @ts-expect-error (non strict)
       const rowIndex = parseInt(activeElement.getAttribute('data-index') || '-1', 10);
+      // @ts-expect-error (non strict)
       const isActiveElementInput = activeElement.tagName === 'INPUT';
 
       const getFirstElement = () =>

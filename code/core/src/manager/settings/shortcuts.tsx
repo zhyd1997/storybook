@@ -57,6 +57,7 @@ export const Description = styled.div({
 
 export type ValidationStates = 'valid' | 'error' | 'warn';
 
+// @ts-expect-error (non strict)
 export const TextInput: FC<ComponentProps<typeof Form.Input> & { valid: ValidationStates }> =
   styled(Form.Input)<{ valid: ValidationStates }>(
     ({ valid, theme }) =>
@@ -135,6 +136,7 @@ const fixedShortcuts = ['escape'];
 
 function toShortcutState(shortcutKeys: ShortcutsScreenProps['shortcutKeys']) {
   return Object.entries(shortcutKeys).reduce(
+    // @ts-expect-error (non strict)
     (acc, [feature, shortcut]: [Feature, string]) =>
       fixedShortcuts.includes(feature) ? acc : { ...acc, [feature]: { shortcut, error: false } },
     {} as Record<Feature, any>
@@ -160,11 +162,14 @@ class ShortcutsScreen extends Component<ShortcutsScreenProps, ShortcutsScreenSta
   constructor(props: ShortcutsScreenProps) {
     super(props);
     this.state = {
+      // @ts-expect-error (non strict)
       activeFeature: undefined,
+      // @ts-expect-error (non strict)
       successField: undefined,
       // The initial shortcutKeys that come from props are the defaults/what was saved
       // As the user interacts with the page, the state stores the temporary, unsaved shortcuts
       // This object also includes the error attached to each shortcut
+      // @ts-expect-error (non strict)
       shortcutKeys: toShortcutState(props.shortcutKeys),
       addonsShortcutLabels: props.addonsShortcutLabels,
     };
@@ -234,6 +239,7 @@ class ShortcutsScreen extends Component<ShortcutsScreenProps, ShortcutsScreenSta
     const { restoreAllDefaultShortcuts } = this.props;
 
     const defaultShortcuts = await restoreAllDefaultShortcuts();
+    // @ts-expect-error (non strict)
     return this.setState({ shortcutKeys: toShortcutState(defaultShortcuts) });
   };
 
@@ -260,6 +266,7 @@ class ShortcutsScreen extends Component<ShortcutsScreenProps, ShortcutsScreenSta
 
   displayError = (activeElement: Feature): ValidationStates => {
     const { activeFeature, shortcutKeys } = this.state;
+    // @ts-expect-error (non strict)
     return activeElement === activeFeature && shortcutKeys[activeElement].error === true
       ? 'error'
       : undefined;
@@ -267,8 +274,10 @@ class ShortcutsScreen extends Component<ShortcutsScreenProps, ShortcutsScreenSta
 
   renderKeyInput = () => {
     const { shortcutKeys, addonsShortcutLabels } = this.state;
+    // @ts-expect-error (non strict)
     const arr = Object.entries(shortcutKeys).map(([feature, { shortcut }]: [Feature, any]) => (
       <Row key={feature}>
+        {/* @ts-expect-error (non strict) */}
         <Description>{shortcutLabels[feature] || addonsShortcutLabels[feature]}</Description>
 
         <TextInput
@@ -284,6 +293,7 @@ class ShortcutsScreen extends Component<ShortcutsScreenProps, ShortcutsScreenSta
           readOnly
         />
 
+        {/* @ts-expect-error (non strict) */}
         <SuccessIcon valid={this.displaySuccessMessage(feature)} />
       </Row>
     ));

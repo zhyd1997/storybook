@@ -26,6 +26,7 @@ export function extractSeededRequiredArgs(argTypes: ArgTypes) {
         }
       }
 
+      // @ts-expect-error (non strict)
       setArgType(argType.type, acc, key);
       return acc;
     },

@@ -12,6 +12,7 @@ const { PREVIEW_URL, document } = global;
 const copyMapper = ({ state }: Combo) => {
   const { storyId, refId, refs } = state;
   const { location } = document;
+  // @ts-expect-error (non strict)
   const ref = refs[refId];
   let baseUrl = `${location.origin}${location.pathname}`;
   if (!baseUrl.endsWith('/')) baseUrl += '/';
@@ -35,6 +36,7 @@ export const copyTool: Addon_BaseType = {
         storyId ? (
           <IconButton
             key="copy"
+            // @ts-expect-error (non strict)
             onClick={() => copy(getStoryHref(baseUrl, storyId, queryParams))}
             title="Copy canvas link"
           >

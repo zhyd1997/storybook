@@ -186,6 +186,7 @@ export const CreateNewStoryFileModal = ({ open, onOpenChange }: CreateNewStoryFi
         switch (e?.payload?.type as CreateNewStoryErrorPayload['type']) {
           case 'STORY_FILE_EXISTS':
             const err = e as RequestResponseError<CreateNewStoryErrorPayload>;
+            // @ts-expect-error (non strict)
             await trySelectNewStory(api.selectStory, err.payload.kind);
             handleStoryAlreadyExists();
             break;

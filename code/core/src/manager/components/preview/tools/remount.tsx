@@ -13,11 +13,11 @@ interface AnimatedButtonProps {
 }
 
 const StyledAnimatedIconButton = styled(IconButton)<
-  AnimatedButtonProps & ComponentProps<typeof IconButton>
+  AnimatedButtonProps & Pick<ComponentProps<typeof IconButton>, 'disabled'>
 >(({ theme, animating, disabled }) => ({
   opacity: disabled ? 0.5 : 1,
   svg: {
-    animation: animating && `${theme.animation.rotate360} 1000ms ease-out`,
+    animation: animating ? `${theme.animation.rotate360} 1000ms ease-out` : 'unset',
   },
 }));
 

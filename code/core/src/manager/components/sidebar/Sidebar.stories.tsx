@@ -96,6 +96,7 @@ const indexError = new Error('Failed to load index');
 const refsError = {
   optimized: {
     ...refs.optimized,
+    // @ts-expect-error (non strict)
     index: undefined as IndexHash,
     indexError,
   },
@@ -295,6 +296,7 @@ export const Scrolled: Story = {
     });
     await wait(100);
     await step('scroll to bottom', async () => {
+      // @ts-expect-error (non strict)
       scrollable.scrollTo(0, scrollable.scrollHeight);
     });
     await step('toggle parent state', async () => {
@@ -304,6 +306,7 @@ export const Scrolled: Story = {
     await wait(100);
 
     // expect the scrollable to be scrolled to the bottom
+    // @ts-expect-error (non strict)
     await expect(scrollable.scrollTop).toBe(scrollable.scrollHeight - scrollable.clientHeight);
   },
 };

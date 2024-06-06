@@ -115,6 +115,7 @@ export const ComponentNode: FC<ComponentProps<typeof BranchNode>> = React.memo(
     return (
       <BranchNode isExpandable={isExpandable} tabIndex={-1} {...props}>
         <Wrapper>
+          {/* @ts-expect-error (non strict) */}
           {isExpandable && <CollapseIcon isExpanded={isExpanded} />}
           <TypeIcon viewBox="0 0 14 14" width="12" height="12" type="component">
             <UseSymbol type="component" />

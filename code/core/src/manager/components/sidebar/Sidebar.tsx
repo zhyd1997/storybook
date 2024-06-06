@@ -100,6 +100,7 @@ const useCombination = (
     }),
     [refs, index, indexError, previewInitialized, status]
   );
+  // @ts-expect-error (non strict)
   return useMemo(() => ({ hash, entries: Object.entries(hash) }), [hash]);
 };
 
@@ -118,6 +119,7 @@ export interface SidebarProps extends API_LoadedRefData {
 }
 
 export const Sidebar = React.memo(function Sidebar({
+  // @ts-expect-error (non strict)
   storyId = null,
   refId = DEFAULT_REF_ID,
   index,
@@ -133,6 +135,7 @@ export const Sidebar = React.memo(function Sidebar({
   onMenuClick,
   showCreateStoryButton,
 }: SidebarProps) {
+  // @ts-expect-error (non strict)
   const selected: Selection = useMemo(() => storyId && { storyId, refId }, [storyId, refId]);
   const dataset = useCombination(index, indexError, previewInitialized, status, refs);
   const isLoading = !index && !indexError;

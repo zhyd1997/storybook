@@ -245,8 +245,8 @@ const PanelContainer = styled.div<{ position: LayoutState['panelPosition'] }>(
     gridArea: 'panel',
     position: 'relative',
     backgroundColor: theme.background.content,
-    borderTop: position === 'bottom' ? `1px solid ${theme.color.border}` : null,
-    borderLeft: position === 'right' ? `1px solid ${theme.color.border}` : null,
+    borderTop: position === 'bottom' ? `1px solid ${theme.color.border}` : undefined,
+    borderLeft: position === 'right' ? `1px solid ${theme.color.border}` : undefined,
   })
 );
 
@@ -268,13 +268,13 @@ const Drag = styled.div<{ orientation?: 'horizontal' | 'vertical'; position?: 'l
     },
   }),
   ({ orientation = 'vertical', position = 'left' }) => {
-    if (orientation === 'vertical')
+    if (orientation === 'vertical') {
       return {
         width: position === 'left' ? 10 : 13,
         height: '100%',
         top: 0,
-        right: position === 'left' ? '-7px' : null,
-        left: position === 'right' ? '-7px' : null,
+        right: position === 'left' ? '-7px' : undefined,
+        left: position === 'right' ? '-7px' : undefined,
 
         '&:after': {
           width: 1,
@@ -286,6 +286,7 @@ const Drag = styled.div<{ orientation?: 'horizontal' | 'vertical'; position?: 'l
           cursor: 'col-resize',
         },
       };
+    }
     return {
       width: '100%',
       height: '13px',

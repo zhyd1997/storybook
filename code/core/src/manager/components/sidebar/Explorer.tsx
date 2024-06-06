@@ -24,6 +24,7 @@ export const Explorer: FC<ExplorerProps> = React.memo(function Explorer({
 
   // Track highlighted nodes, keep it in sync with props and enable keyboard navigation
   const [highlighted, setHighlighted, highlightedRef] = useHighlighted({
+    // @ts-expect-error (non strict)
     containerRef,
     isLoading,
     isBrowsing,

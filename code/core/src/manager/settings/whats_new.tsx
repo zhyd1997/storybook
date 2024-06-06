@@ -54,6 +54,7 @@ export const WhatsNewFooter = ({
   const theme = useTheme();
   const [copyText, setCopyText] = useState('Copy Link');
   const copyLink = () => {
+    // @ts-expect-error (non strict)
     onCopyLink();
     setCopyText('Copied!');
     setTimeout(() => setCopyText('Copy Link'), 4000);

@@ -30,6 +30,7 @@ const storyId = '1-12-121';
 export const simpleData = { menu, index, storyId };
 export const loadingData = { menu, index: {} };
 
+// @ts-expect-error (non strict)
 const indexError: Error = (() => {
   try {
     throw new Error('There was a severe problem');

@@ -208,6 +208,7 @@ const Node = React.memo<NodeProps>(function Node({
         className="sidebar-item"
       >
         <LeafNode
+          // @ts-expect-error (non strict)
           style={isSelected ? {} : { color: textColor }}
           key={id}
           href={getLink(item, refId)}
@@ -283,6 +284,7 @@ const Node = React.memo<NodeProps>(function Node({
             data-expanded={isFullyExpanded}
             onClick={(event) => {
               event.preventDefault();
+              // @ts-expect-error (non strict)
               setFullyExpanded();
             }}
           >
@@ -469,6 +471,7 @@ export const Tree = React.memo<{
 
   // Track expanded nodes, keep it in sync with props and enable keyboard shortcuts.
   const [expanded, setExpanded] = useExpanded({
+    // @ts-expect-error (non strict)
     containerRef,
     isBrowsing,
     refId,
@@ -481,6 +484,7 @@ export const Tree = React.memo<{
     onSelectStoryId,
   });
 
+  // @ts-expect-error (non strict)
   const groupStatus = useMemo(() => getGroupStatus(collapsedData, status), [collapsedData, status]);
 
   const treeItems = useMemo(() => {
@@ -517,8 +521,11 @@ export const Tree = React.memo<{
           api={api}
           key={id}
           item={item}
+          // @ts-expect-error (non strict)
+
           status={status?.[itemId]}
           refId={refId}
+          // @ts-expect-error (non strict)
           color={color}
           docsMode={docsMode}
           isOrphan={orphanIds.some((oid) => itemId === oid || itemId.startsWith(`${oid}-`))}

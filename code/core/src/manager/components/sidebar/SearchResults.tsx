@@ -265,6 +265,7 @@ export const SearchResults: FC<{
     const currentTarget = event.currentTarget as HTMLElement;
     const storyId = currentTarget.getAttribute('data-id');
     const refId = currentTarget.getAttribute('data-refid');
+    // @ts-expect-error (non strict)
     const item = api.resolveStory(storyId, refId === 'storybook_internal' ? undefined : refId);
 
     if (item?.type === 'component') {
@@ -277,6 +278,7 @@ export const SearchResults: FC<{
   }, []);
 
   const handleClearLastViewed = () => {
+    // @ts-expect-error (non strict)
     clearLastViewed();
     closeMenu();
   };
@@ -307,6 +309,7 @@ export const SearchResults: FC<{
         if (isExpandType(result)) {
           return (
             <MoreWrapper key="search-result-expand">
+              {/* @ts-expect-error (non strict) */}
               <Button
                 {...result}
                 {...getItemProps({ key: index, index, item: result })}
@@ -322,6 +325,7 @@ export const SearchResults: FC<{
         const key = `${item.refId}::${item.id}`;
         return (
           <Result
+            // @ts-expect-error (non strict)
             key={item.id}
             {...result}
             {...getItemProps({ key, index, item: result })}

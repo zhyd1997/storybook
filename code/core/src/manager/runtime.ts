@@ -47,5 +47,6 @@ const rootEl = document.getElementById('root');
 // We need to wait for the script tag containing the global objects
 // to be run by Webkit before rendering the UI. This is fine in most browsers.
 setTimeout(() => {
+  // @ts-expect-error (non strict)
   renderStorybookUI(rootEl, new ReactProvider());
 }, 0);

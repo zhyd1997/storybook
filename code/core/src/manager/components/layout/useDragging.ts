@@ -128,6 +128,7 @@ export function useDragging({
           }
           return {
             ...state,
+            // @ts-expect-error (non strict)
             navSize: clamp(sidebarDragX, 0, e.view.innerWidth),
           };
         }
@@ -136,8 +137,10 @@ export function useDragging({
             state.panelPosition === 'bottom' ? 'bottomPanelHeight' : 'rightPanelWidth';
           const panelDragSize =
             state.panelPosition === 'bottom'
-              ? e.view.innerHeight - e.clientY
-              : e.view.innerWidth - e.clientX;
+              ? // @ts-expect-error (non strict)
+                e.view.innerHeight - e.clientY
+              : // @ts-expect-error (non strict)
+                e.view.innerWidth - e.clientX;
 
           if (panelDragSize === state[sizeAxisState]) {
             return state;
@@ -161,6 +164,7 @@ export function useDragging({
           }
 
           const sizeAxisMax =
+            // @ts-expect-error (non strict)
             state.panelPosition === 'bottom' ? e.view.innerHeight : e.view.innerWidth;
           return {
             ...state,

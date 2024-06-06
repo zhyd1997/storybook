@@ -4,6 +4,7 @@ import React from 'react';
 import { Global } from '@storybook/core/dist/theming';
 import type { Highlight } from './types';
 
+// @ts-expect-error (non strict)
 export const HighlightStyles: FC<Highlight> = ({ refId, itemId }) => (
   <Global
     styles={({ color }) => {

@@ -30,7 +30,7 @@ import type {
 import { WithTooltip, TooltipNote } from '@storybook/core/dist/components';
 import { useArrowKeyNavigation } from './FIleSearchList.utils';
 
-export type SearchResult = FileComponentSearchResponsePayload['files'][0];
+export type SearchResult = NonNullable<FileComponentSearchResponsePayload['files']>[0];
 
 export interface NewStoryPayload extends CreateNewStoryRequestPayload {
   selectedItemId: string | number;
@@ -69,7 +69,7 @@ interface FileItemSelectionPayload {
 
 interface FileItemComponentSelectionPayload {
   searchResult: SearchResult;
-  component: SearchResult['exportedComponents'][0];
+  component: NonNullable<SearchResult['exportedComponents']>[0];
   id: string;
 }
 
@@ -115,6 +115,8 @@ export const FileSearchList = memo(function FileSearchList({
 
   const rowVirtualizer = useVirtualizer({
     count,
+    // @ts-expect-error (non strict)
+
     getScrollElement: () => parentRef.current,
     paddingStart: 16,
     paddingEnd: 40,
@@ -122,10 +124,12 @@ export const FileSearchList = memo(function FileSearchList({
     overscan: 2,
   });
 
+  // @ts-expect-error (non strict)
   useArrowKeyNavigation({ rowVirtualizer, parentRef, selectedItem });
 
   const handleFileItemSelection = useCallback(
     ({ virtualItem, searchResult, itemId }: FileItemSelectionPayload) => {
+      // @ts-expect-error (non strict)
       if (searchResult?.exportedComponents?.length > 1) {
         setSelectedItem((sItem) => {
           if (sItem === virtualItem.index) {
@@ -154,6 +158,7 @@ export const FileSearchList = memo(function FileSearchList({
         componentFilePath: searchResult.filepath,
         componentIsDefaultExport: component.default,
         selectedItemId: id,
+        // @ts-expect-error (non strict)
         componentExportCount: searchResult.exportedComponents.length,
       });
     },
@@ -191,6 +196,7 @@ export const FileSearchList = memo(function FileSearchList({
             </FileListItemContent>
             {itemSelected ? <ChevronDownIconStyled /> : <ChevronRightIconStyled />}
           </FileListItemContentWrapper>
+          {/* @ts-expect-error (non strict) */}
           {searchResult?.exportedComponents?.length > 1 && itemSelected && (
             <FileListExport
               role="region"
@@ -210,7 +216,8 @@ export const FileSearchList = memo(function FileSearchList({
                 const position =
                   itemExportId === 0
                     ? 'first'
-                    : itemExportId === searchResult.exportedComponents.length - 1
+                    : // @ts-expect-error (non strict)
+                      itemExportId === searchResult.exportedComponents.length - 1
                       ? 'last'
                       : 'middle';
 
@@ -280,6 +287,7 @@ export const FileSearchList = memo(function FileSearchList({
   if (sortedSearchResults?.length > 0) {
     return (
       <FileListWrapper>
+        {/* @ts-expect-error (non strict) */}
         <FileList ref={parentRef}>
           <FileListUl
             style={{
@@ -332,6 +340,7 @@ export const FileSearchList = memo(function FileSearchList({
                       closeOnOutsideClick={true}
                       tooltip={
                         <TooltipNote
+                          // @ts-expect-error (non strict)
                           note={
                             noExports
                               ? "We can't evaluate exports for this file. You can't create a story for it automatically"

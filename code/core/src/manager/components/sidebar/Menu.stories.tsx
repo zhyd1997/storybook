@@ -36,6 +36,7 @@ export const Real: Story = {
   args: {
     isHighlighted: true,
   },
+  // @ts-expect-error (non strict)
   render: (args) => <SidebarMenu menu={fakemenu} {...args} />,
 };
 
@@ -119,6 +120,7 @@ export const ExpandedWithoutWhatsNew: Story = {
     await new Promise((res) => {
       setTimeout(res, 500);
     });
+    // @ts-expect-error (non strict)
     await Expanded.play(context);
     const releaseNotes = await canvas.queryByText(/What's new/);
     await expect(releaseNotes).not.toBeInTheDocument();

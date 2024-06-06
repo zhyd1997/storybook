@@ -36,6 +36,7 @@ const meta = {
 
 export default meta;
 
+// @ts-expect-error (non strict)
 const storyId = Object.values(index).find((story) => story.type === 'story').id;
 
 type Story = StoryObj<typeof meta>;
@@ -79,6 +80,7 @@ export const SingleStoryComponents: Story = {
     return (
       <Tree
         {...args}
+        // @ts-expect-error (non strict)
         data={{
           ...{
             single: {
@@ -145,6 +147,7 @@ export const DocsOnlySingleStoryComponents = {
         isBrowsing
         isMain
         refId={DEFAULT_REF_ID}
+        // @ts-expect-error (non strict)
         data={{
           ...{
             single: {

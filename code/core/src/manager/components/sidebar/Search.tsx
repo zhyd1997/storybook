@@ -191,6 +191,7 @@ export const Search = React.memo<{
 
   const makeFuse = useCallback(() => {
     const list = dataset.entries.reduce<SearchItem[]>((acc, [refId, { index, status }]) => {
+      // @ts-expect-error (non strict)
       const groupStatus = getGroupStatus(index || {}, status);
 
       if (index) {
@@ -222,6 +223,7 @@ export const Search = React.memo<{
       const distinctResults = (fuse.search(input) as SearchResult[]).filter(({ item }) => {
         if (
           !(item.type === 'component' || item.type === 'docs' || item.type === 'story') ||
+          // @ts-expect-error (non strict)
           resultIds.has(item.parent)
         )
           return false;
@@ -249,7 +251,9 @@ export const Search = React.memo<{
     (selectedItem: DownshiftItem) => {
       if (isSearchResult(selectedItem)) {
         const { id, refId } = selectedItem.item;
+        // @ts-expect-error (non strict)
         api?.selectStory(id, undefined, { ref: refId !== DEFAULT_REF_ID && refId });
+        // @ts-expect-error (non strict)
         inputRef.current.blur();
         showAllComponents(false);
         return;
@@ -315,6 +319,7 @@ export const Search = React.memo<{
   const { isMobile } = useLayout();
 
   return (
+    // @ts-expect-error (non strict)
     <Downshift<DownshiftItem>
       initialInputValue={initialQuery}
       stateReducer={stateReducer}
@@ -342,13 +347,16 @@ export const Search = React.memo<{
 
         const lastViewed = !input && getLastViewed();
         if (lastViewed && lastViewed.length) {
+          // @ts-expect-error (non strict)
           results = lastViewed.reduce((acc, { storyId, refId }) => {
             const data = dataset.hash[refId];
             if (data && data.index && data.index[storyId]) {
               const story = data.index[storyId];
               const item = story.type === 'story' ? data.index[story.parent] : story;
               // prevent duplicates
+              // @ts-expect-error (non strict)
               if (!acc.some((res) => res.item.refId === refId && res.item.id === item.id)) {
+                // @ts-expect-error (non strict)
                 acc.push({ item: searchItem(item, dataset.hash[refId]), matches: [], score: 0 });
               }
             }
@@ -369,9 +377,11 @@ export const Search = React.memo<{
           },
           onBlur: () => setPlaceholder('Find components'),
           onKeyDown: (e) => {
+            // @ts-expect-error (non strict)
             if (e.key === 'Escape' && inputValue.length === 0) {
               // When pressing escape while the input is empty, blur the input
               // The stateReducer will handle returning to the tree view
+              // @ts-expect-error (non strict)
               inputRef.current.blur();
             }
           },
