@@ -59,6 +59,9 @@ const blocksOnlyStories = [
   '../blocks/src/@(blocks|controls|examples)/*.@(mdx|stories.@(js|jsx|mjs|ts|tsx))',
 ];
 
+const componentsPath = path.join(__dirname, '../../core/src/components');
+const managerApiPath = path.join(__dirname, '../../core/src/manager-api');
+
 const config: StorybookConfig = {
   stories: isBlocksOnly ? blocksOnlyStories : allStories,
   addons: [
@@ -91,11 +94,10 @@ const config: StorybookConfig = {
         alias: {
           ...(configType === 'DEVELOPMENT'
             ? {
-                '@storybook/components': path.resolve(__dirname, '../../core/src/components'),
-                '@storybook/core/dist/components': path.resolve(
-                  __dirname,
-                  '../../core/src/components'
-                ),
+                '@storybook/components': componentsPath,
+                '@storybook/core/dist/components': componentsPath,
+                '@storybook/manager-api': managerApiPath,
+                '@storybook/core/dist/manager-api': managerApiPath,
               }
             : {}),
         },
