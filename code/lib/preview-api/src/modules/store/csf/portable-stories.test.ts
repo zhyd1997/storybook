@@ -67,9 +67,7 @@ describe('composeStory', () => {
     expect(composedStory.parameters).toEqual(
       expect.objectContaining({ ...Story.parameters, ...meta.parameters })
     );
-    expect(composedStory.tags).toEqual(
-      expect.arrayContaining([...Story.tags!, ...projectAnnotations.tags, ...meta.tags!])
-    );
+    expect(composedStory.tags).toEqual(['dev', 'test', 'projectTag', 'metaTag', 'storyTag']);
 
     composedStory();
 
