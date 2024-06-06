@@ -121,7 +121,7 @@ export const Exception = ({ exception }: { exception: Call['exception'] }) => {
     return (
       <RowMessage>
         <MatcherResult
-          message={`${exception.message}\n${exception.diff ? exception.diff : ''}`}
+          message={`${exception.message}${exception.diff ? `\n\n${exception.diff}` : ''}`}
           style={{ padding: 0 }}
         />
         <p>See the full stack trace in the browser console.</p>
