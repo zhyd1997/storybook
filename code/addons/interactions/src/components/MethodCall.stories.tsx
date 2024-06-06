@@ -13,7 +13,7 @@ const StyledWrapper = styled.div(({ theme }) => ({
 }));
 
 export default {
-  title: 'Addons/Interactions/MethodCall',
+  title: 'MethodCall',
   component: MethodCall,
   decorators: [
     (Story: any) => (

@@ -12,7 +12,7 @@ const StyledWrapper = styled.div(({ theme }) => ({
 }));
 
 export default {
-  title: 'Addons/Interactions/MatcherResult',
+  title: 'MatcherResult',
   component: MatcherResult,
   decorators: [
     (Story: any) => (
