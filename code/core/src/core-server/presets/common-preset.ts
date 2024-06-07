@@ -30,7 +30,10 @@ import { initCreateNewStoryChannel } from '../server-channel/create-new-story-ch
 const interpolate = (string: string, data: Record<string, string> = {}) =>
   Object.entries(data).reduce((acc, [k, v]) => acc.replace(new RegExp(`%${k}%`, 'g'), v), string);
 
-const defaultFavicon = require.resolve('@storybook/core-server/public/favicon.svg');
+const defaultFavicon = join(
+  dirname(require.resolve('@storybook/core/package.json')),
+  '/assets/browser/favicon.svg'
+);
 
 export const staticDirs: PresetPropertyFn<'staticDirs'> = async (values = []) => [
   ...defaultStaticDirs,
@@ -278,5 +281,5 @@ export const tags = async (existing: any) => {
 };
 
 export const managerEntries = async (existing: any, options: Options) => {
-  return [require.resolve('./common-manager'), ...(existing || [])];
+  return ['@storybook/core/dist/core-server/presets/common-manager', ...(existing || [])];
 };

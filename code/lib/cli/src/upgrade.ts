@@ -2,7 +2,7 @@ import { sync as spawnSync } from 'cross-spawn';
 import { telemetry } from '@storybook/core/dist/telemetry';
 import semver, { eq, lt, prerelease } from 'semver';
 import { logger } from '@storybook/core/dist/node-logger';
-import { withTelemetry } from '@storybook/core-server';
+import { withTelemetry } from '@storybook/core/dist/core-server';
 import {
   UpgradeStorybookInWrongWorkingDirectory,
   UpgradeStorybookToLowerVersionError,

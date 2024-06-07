@@ -121,7 +121,6 @@
     "@storybook/cli": "workspace:*",
     "@storybook/codemod": "workspace:*",
     "@storybook/core": "workspace:*",
-    "@storybook/core-server": "workspace:*",
     "@storybook/core-webpack": "workspace:*",
     "@storybook/csf": "^0.1.7",
     "@storybook/csf-plugin": "workspace:*",

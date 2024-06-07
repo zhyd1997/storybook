@@ -18,7 +18,7 @@ import { CLIOptions } from '@storybook/core/dist/types';
 import { getEnvConfig, versions } from '@storybook/core/dist/common';
 import { addToGlobalContext } from '@storybook/core/dist/telemetry';
 
-import { buildStaticStandalone, withTelemetry } from '@storybook/core-server';
+import { buildStaticStandalone, withTelemetry } from '@storybook/core/dist/core-server';
 import {
   AssetPattern,
   SourceMapUnion,

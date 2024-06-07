@@ -14,7 +14,7 @@ import {
   versions,
   removeAddon as remove,
 } from '@storybook/core/dist/common';
-import { withTelemetry } from '@storybook/core-server';
+import { withTelemetry } from '@storybook/core/dist/core-server';
 
 import type { CommandOptions } from './generators/types';
 import { initiate } from './initiate';

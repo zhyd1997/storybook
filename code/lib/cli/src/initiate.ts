@@ -3,7 +3,7 @@ import findUp from 'find-up';
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { telemetry } from '@storybook/core/dist/telemetry';
-import { withTelemetry } from '@storybook/core-server';
+import { withTelemetry } from '@storybook/core/dist/core-server';
 import { NxProjectDetectedError } from '@storybook/core/dist/server-errors';
 import {
   versions,

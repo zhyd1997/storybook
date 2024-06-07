@@ -38,7 +38,6 @@
     "@storybook/cli": "file:../../../code/lib/cli",
     "@storybook/codemod": "file:../../../code/lib/codemod",
     "@storybook/core": "file:../../../code/core",
-    "@storybook/core-server": "file:../../../code/lib/core-server",
     "@storybook/core-webpack": "file:../../../code/lib/core-webpack",
     "@storybook/csf-plugin": "file:../../../code/lib/csf-plugin",
     "@storybook/ember": "file:../../../code/frameworks/ember",

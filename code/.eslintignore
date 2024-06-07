@@ -18,4 +18,4 @@ ember-output
 !.eslintrc-markdown.js
 !.storybook
 core/assets
-lib/core-server/src/utils/__search-files-tests__
+lib/core/src/core-server/utils/__search-files-tests__

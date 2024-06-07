@@ -16,7 +16,7 @@ const buildMock = {
   buildStaticStandalone: buildStaticStandaloneMock,
   withTelemetry: (_: string, __: any, fn: any) => fn(),
 };
-vi.doMock('@storybook/core-server', () => buildMock);
+vi.doMock('@storybook/core/dist/core-server', () => buildMock);
 vi.doMock('find-up', () => ({ sync: () => './storybook/tsconfig.ts' }));
 
 const mockRunScript = vi.fn();

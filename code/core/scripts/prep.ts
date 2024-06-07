@@ -23,6 +23,7 @@ import { globalsModuleInfoMap } from '../src/manager/globals-module-info';
 
 import pkg from '../package.json';
 import { generateSourceFiles } from './helpers/sourcefiles';
+import { assert } from 'node:console';
 
 const flags = process.argv.slice(2);
 const cwd = process.cwd();

@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import chalk from 'chalk';
 import { colors } from '@storybook/core/dist/node-logger';
 import semver from 'semver';

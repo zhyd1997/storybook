@@ -48,7 +48,6 @@
   },
   "dependencies": {
     "@storybook/builder-vite": "workspace:*",
-    "@storybook/core-server": "workspace:*",
     "@storybook/vue3": "workspace:*",
     "find-package-json": "^1.2.0",
     "magic-string": "^0.30.0",

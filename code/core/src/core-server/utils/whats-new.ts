@@ -4,7 +4,6 @@ import { telemetry } from '@storybook/core/dist/telemetry';
 import { findConfigFile } from '@storybook/core/dist/common';
 import type { CoreConfig, Options } from '@storybook/core/dist/types';
 import { printConfig, readConfig } from '@storybook/core/dist/csf-tools';
-import fetch from 'node-fetch';
 import type { Channel } from '@storybook/core/dist/channels';
 import type { WhatsNewCache, WhatsNewData } from '@storybook/core/dist/core-events';
 import {

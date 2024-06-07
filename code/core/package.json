@@ -37,6 +37,22 @@
       "import": "./dist/client-logger/index.js",
       "require": "./dist/client-logger/index.cjs"
     },
+    "./dist/core-server": {
+      "types": "./dist/core-server/index.d.ts",
+      "import": "./dist/core-server/index.js",
+      "require": "./dist/core-server/index.cjs"
+    },
+    "./dist/core-server/presets/common-preset": {
+      "import": "./dist/core-server/presets/common-preset.js",
+      "require": "./dist/core-server/presets/common-preset.cjs"
+    },
+    "./dist/core-server/presets/common-manager": {
+      "import": "./dist/core-server/presets/common-manager.js"
+    },
+    "./dist/core-server/presets/common-override-preset": {
+      "import": "./dist/core-server/presets/common-override-preset.js",
+      "require": "./dist/core-server/presets/common-override-preset.cjs"
+    },
     "./dist/core-events": {
       "types": "./dist/core-events/index.d.ts",
       "import": "./dist/core-events/index.js",
@@ -156,6 +172,18 @@
       "dist/client-logger": [
         "./dist/client-logger/index.d.ts"
       ],
+      "dist/core-server": [
+        "./dist/core-server/index.d.ts"
+      ],
+      "dist/core-server/presets/common-preset": [
+        "./dist/core-server/presets/common-preset.d.ts"
+      ],
+      "dist/core-server/presets/common-manager": [
+        "./dist/core-server/presets/common-manager.d.ts"
+      ],
+      "dist/core-server/presets/common-override-preset": [
+        "./dist/core-server/presets/common-override-preset.d.ts"
+      ],
       "dist/core-events": [
         "./dist/core-events/index.d.ts"
       ],
@@ -248,11 +276,14 @@
     "util": "^0.12.4"
   },
   "devDependencies": {
+    "@aw-web-design/x-default-browser": "1.4.126",
+    "@babel/core": "^7.24.4",
     "@babel/generator": "^7.24.4",
     "@babel/parser": "^7.24.4",
     "@babel/preset-react": "^7.24.1",
     "@babel/traverse": "^7.24.1",
     "@babel/types": "^7.24.0",
+    "@discoveryjs/json-ext": "^0.5.3",
     "@emotion/cache": "^11.11.0",
     "@emotion/is-prop-valid": "^1.2.2",
     "@emotion/react": "^11.11.4",
@@ -266,11 +297,15 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@storybook/core": "workspace:*",
     "@storybook/csf": "^0.1.7",
+    "@storybook/docs-mdx": "3.1.0-next.0",
     "@storybook/global": "^5.0.0",
     "@storybook/icons": "^1.2.5",
     "@storybook/test": "workspace:*",
     "@tanstack/react-virtual": "^3.3.0",
     "@testing-library/react": "^14.0.0",
+    "@types/compression": "^1.7.0",
+    "@types/detect-port": "^1.3.0",
+    "@types/diff": "^5.0.9",
     "@types/doctrine": "^0.0.3",
     "@types/ejs": "^3.1.1",
     "@types/find-cache-dir": "^5.0.0",
@@ -288,6 +323,7 @@
     "@types/react-transition-group": "^4",
     "@types/semver": "^7.3.4",
     "@types/util-deprecate": "^1.0.0",
+    "@types/ws": "^8",
     "@vitest/utils": "^1.3.1",
     "@yarnpkg/esbuild-plugin-pnp": "^3.0.0-rc.10",
     "@yarnpkg/fslib": "2.10.3",
@@ -295,15 +331,22 @@
     "ansi-to-html": "^0.7.2",
     "assert": "^2.1.0",
     "babel-plugin-react-docgen": "4.2.1",
+    "better-opn": "^3.0.2",
+    "boxen": "^7.1.1",
     "browser-dtector": "^3.4.0",
+    "camelcase": "^8.0.0",
     "chai": "^4.4.1",
     "chalk": "^5.3.0",
+    "cli-table3": "^0.6.1",
+    "compression": "^1.7.4",
     "copy-to-clipboard": "^3.3.1",
     "cross-spawn": "^7.0.3",
     "css": "^3.0.0",
     "deep-object-diff": "^1.1.0",
     "dequal": "^2.0.2",
     "detect-package-manager": "^3.0.2",
+    "detect-port": "^1.3.0",
+    "diff": "^5.2.0",
     "doctrine": "^3.0.0",
     "downshift": "^9.0.4",
     "ejs": "^3.1.10",
@@ -319,6 +362,7 @@
     "fs-extra": "^11.1.0",
     "fuse.js": "^3.6.1",
     "glob": "^10.0.0",
+    "globby": "^14.0.1",
     "handlebars": "^4.7.7",
     "js-yaml": "^4.1.0",
     "lazy-universal-dotenv": "^4.0.0",
@@ -328,12 +372,14 @@
     "mock-fs": "^5.2.0",
     "nanoid": "^4.0.2",
     "npmlog": "^7.0.0",
+    "open": "^8.4.0",
     "picomatch": "^2.3.0",
     "pkg-dir": "^8.0.0",
     "polished": "^4.2.2",
     "prettier": "^3.2.5",
     "pretty-hrtime": "^1.0.3",
     "process": "^0.11.10",
+    "prompts": "^2.4.0",
     "qs": "^6.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -360,7 +406,9 @@
     "unique-string": "^3.0.0",
     "use-resize-observer": "^9.1.0",
     "util": "^0.12.4",
-    "util-deprecate": "^1.0.2"
+    "util-deprecate": "^1.0.2",
+    "watchpack": "^2.2.0",
+    "ws": "^8.2.3"
   },
   "publishConfig": {
     "access": "public"
