@@ -14,15 +14,16 @@ vi.mock('fs', () => ({
   stat: vi.fn(),
   lstat: vi.fn(),
   access: vi.fn(),
+  realpathSync: vi.fn(),
+  lstatSync: vi.fn(),
+  readdir: vi.fn(),
+  readdirSync: vi.fn(),
+  readlinkSync: vi.fn(),
+  default: vi.fn(),
 }));
 
 vi.mock('fs-extra', () => ({
   pathExistsSync: vi.fn(() => true),
-}));
-
-vi.mock('path', () => ({
-  // make it return just the second path, for easier testing
-  join: vi.fn((_, p) => p),
 }));
 
 vi.mock('@storybook/core/dist/node-logger');

@@ -12,7 +12,7 @@ import {
   CREATE_NEW_STORYFILE_REQUEST,
   CREATE_NEW_STORYFILE_RESPONSE,
 } from '@storybook/core/dist/core-events';
-import fs from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { getNewStoryFile } from '../utils/get-new-story-file';
 import { getStoryId } from '../utils/get-story-id';
@@ -60,7 +60,7 @@ export function initCreateNewStoryChannel(
           return;
         }
 
-        await fs.writeFile(storyFilePath, storyFileContent, 'utf-8');
+        await writeFile(storyFilePath, storyFileContent, 'utf-8');
 
         channel.emit(CREATE_NEW_STORYFILE_RESPONSE, {
           success: true,

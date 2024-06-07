@@ -5,7 +5,8 @@ import { createBlocker } from './types';
 import { logger as loggerRaw } from '@storybook/core/dist/node-logger';
 import stripAnsi from 'strip-ansi';
 
-vi.mock('node:fs/promises', () => ({
+vi.mock('node:fs/promises', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
   writeFile: vi.fn(),
 }));
 vi.mock('boxen', () => ({

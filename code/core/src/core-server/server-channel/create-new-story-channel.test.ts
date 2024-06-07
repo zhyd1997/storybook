@@ -26,10 +26,8 @@ const mockFs = vi.hoisted(() => {
 vi.mock('node:fs/promises', async (importOriginal) => {
   const actual = await importOriginal<typeof import('node:fs/promises')>();
   return {
-    default: {
-      ...actual,
-      writeFile: mockFs.writeFile,
-    },
+    ...actual,
+    writeFile: mockFs.writeFile,
   };
 });
 
