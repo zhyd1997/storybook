@@ -5,7 +5,6 @@ import * as fsExtraImp from 'fs-extra';
 import { execaCommand } from 'execa';
 import { run as version } from '../version';
 
-// eslint-disable-next-line jest/no-mocks-import
 import type * as MockedFSToExtra from '../../../code/__mocks__/fs-extra';
 
 vi.mock('fs-extra', async () => import('../../../code/__mocks__/fs-extra'));

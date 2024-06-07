@@ -172,7 +172,6 @@ export function getOptions<TOptions extends OptionSpecifier>(
 
   const intermediate = command.opts();
   if (intermediate.task === undefined && argv[2] && !argv[2].startsWith('-')) {
-    // eslint-disable-next-line prefer-destructuring
     intermediate.task = argv[2];
   }
 
