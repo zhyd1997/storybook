@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/dist/node-logger');
+module.exports = require('@storybook/core/dist/builder-manager');

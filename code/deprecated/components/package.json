@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "types": "./shim.d.ts",
-      "require": "./shim.js",
-      "import": "./shim.mjs"
+      "import": "./shim.mjs",
+      "require": "./shim.js"
     },
     "./package.json": "./package.json"
   },

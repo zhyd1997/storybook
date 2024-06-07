@@ -24,8 +24,8 @@
     ".": {
       "types": "./shim.d.ts",
       "node": "./shim.js",
-      "require": "./shim.js",
-      "import": "./shim.mjs"
+      "import": "./shim.mjs",
+      "require": "./shim.js"
     },
     "./package.json": "./package.json"
   },

@@ -23,23 +23,23 @@
   "exports": {
     ".": {
       "types": "./shim.d.ts",
-      "require": "./shim.js",
-      "import": "./shim.mjs"
+      "import": "./shim.mjs",
+      "require": "./shim.js"
     },
     "./preview-errors": {
       "types": "./preview-errors.d.ts",
-      "require": "./preview-errors.js",
-      "import": "./preview-errors.mjs"
+      "import": "./preview-errors.mjs",
+      "require": "./preview-errors.js"
     },
     "./manager-errors": {
       "types": "./manager-errors.d.ts",
-      "require": "./manager-errors.js",
-      "import": "./manager-errors.mjs"
+      "import": "./manager-errors.mjs",
+      "require": "./manager-errors.js"
     },
     "./server-errors": {
       "types": "./server-errors.d.ts",
-      "require": "./server-errors.js",
-      "import": "./server-errors.mjs"
+      "import": "./server-errors.mjs",
+      "require": "./server-errors.js"
     },
     "./package.json": "./package.json"
   },

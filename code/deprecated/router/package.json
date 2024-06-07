@@ -24,13 +24,13 @@
     ".": {
       "types": "./shim.d.ts",
       "node": "./shim.js",
-      "require": "./shim.js",
-      "import": "./shim.mjs"
+      "import": "./shim.mjs",
+      "require": "./shim.js"
     },
     "./utils": {
       "types": "./utils.d.ts",
-      "require": "./utils.js",
-      "import": "./shim.mjs"
+      "import": "./shim.mjs",
+      "require": "./utils.js"
     },
     "./package.json": "./package.json"
   },
