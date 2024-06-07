@@ -7,9 +7,8 @@ Storybook 8 focuses on improving performance, compatibility, and stability. Key 
 - 🩻 A new visual testing workflow via [the Visual Tests addon](https://www.chromatic.com/docs/visual-tests-addon/)
 - 💨 [2-4x faster test builds](https://storybook.js.org/blog/optimize-storybook-7-6/#2-4x-faster-builds-with-thetest-flag), [25-50% faster React docgen](https://storybook.js.org/blog/optimize-storybook-7-6/#22x-faster-react-docgen), and [SWC support for Webpack projects](https://storybook.js.org/blog/optimize-storybook-7-6/#using-webpack-enable-swc)
 - 🧩 Improved framework support: you no longer need to install React as a peer dependency when using a non-React renderer
-- 🎛️ Strengthened control generation in [React](https://storybook.js.org/blog/storybook-8-beta/#major-performance-improvements
-) and [Vue](https://storybook.js.org/blog/first-class-vue-support-storybook-8/) projects
-- ⚡️ Improved Vite architecture, Vitest testing, and Vite 5 support 
+- 🎛️ Strengthened control generation in [React](https://storybook.js.org/blog/storybook-8-beta/#major-performance-improvements) and [Vue](https://storybook.js.org/blog/first-class-vue-support-storybook-8/) projects
+- ⚡️ Improved Vite architecture, Vitest testing, and Vite 5 support
 - 🌐 [Support for React Server Components (RSC)](https://storybook.js.org/blog/storybook-react-server-components/): our experimental solution renders async RSC in the browser and mocks Node code
 - ✨ A refreshed desktop UI & mobile UX
 - ➕ Much, much more
@@ -87,6 +86,27 @@ Storybook 8 uses MDX 3. If you're coming from MDX 1 (used by Storybook 6), there
 #### Missing `vite.config.js` file
 
 If you are using Vite, you may now need to create a `vite.config.js` file in your project root to allow newer versions of Vite to work with Storybook. Additionally, you may need to install and configure a Vite plugin for your framework. More information is available in the [full migration notes](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#framework-specific-vite-plugins-have-to-be-explicitly-added).
+
+## Package structure changes
+
+Migrating from 6.x to 8.x, the following packages are [removed](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#removed-deprecated-shim-packages):
+
+| Removal                          | Replacement                                           |
+| -------------------------------- | ----------------------------------------------------- |
+| `@storybook/addons`              | `@storybook/manager-api` or `@storyboook/preview-api` |
+| `@storybook/channel-postmessage` | `@storybook/channels`                                 |
+| `@storybook/channel-websocket`   | `@storybook/channels`                                 |
+| `@storybook/client-api`          | `@storybook/preview-api`                              |
+| `@storybook/core-client`         | `@storybook/preview-api`                              |
+| `@storybook/preview-web`         | `@storybook/preview-api`                              |
+| `@storybook/store`               | `@storybook/preview-api`                              |
+| `@storybook/api`                 | `@storybook/manager-api`                              |
+
+The following packages are [deprecated](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#deprecated-storybooktesting-library-package):
+
+| Deprecation                  | Replacement       |
+| ---------------------------- | ----------------- |
+| `@storybook/testing-library` | `@storybook/test` |
 
 ## Troubleshooting
 
