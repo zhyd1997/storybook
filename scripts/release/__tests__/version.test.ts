@@ -254,7 +254,6 @@ describe('Version', () => {
       await version({ releaseType, preId, exact, apply });
       expect(fsExtra.writeJson).toHaveBeenCalledTimes(apply ? 3 : 2);
       if (apply) {
-        // eslint-disable-next-line jest/no-conditional-expect -- guarded against problems with the assertion above
         expect(fsExtra.writeJson).toHaveBeenCalledWith(
           CODE_PACKAGE_JSON_PATH,
           // this call is the write that removes the "deferredNextVersion" property
