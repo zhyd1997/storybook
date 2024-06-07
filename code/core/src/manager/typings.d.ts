@@ -15,6 +15,7 @@ declare var LOGLEVEL: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'silent' |
 
 declare var __REACT__: any;
 declare var __REACT_DOM__: any;
+declare var __REACT_DOM_CLIENT__: any;
 declare var __STORYBOOK_COMPONENTS__: any;
 declare var __STORYBOOK_CHANNELS__: any;
 declare var __STORYBOOK_CORE_EVENTS__: any;
