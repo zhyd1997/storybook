@@ -55,7 +55,9 @@ export function composeConfigs<TRenderer extends Renderer>(
       ...allArgTypeEnhancers.filter((e) => !e.secondPass),
       ...allArgTypeEnhancers.filter((e) => e.secondPass),
     ],
-    globals: getObjectField(moduleExportList, 'globals'),
+    initialGlobals:
+      getObjectField(moduleExportList, 'initialGlobals') ??
+      getObjectField(moduleExportList, 'globals'),
     globalTypes: getObjectField(moduleExportList, 'globalTypes'),
     loaders: getArrayField(moduleExportList, 'loaders'),
     beforeEach: getArrayField(moduleExportList, 'beforeEach'),
