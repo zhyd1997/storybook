@@ -3,7 +3,7 @@ import { MissingBuilderError } from '@storybook/core/dist/server-errors';
 import { pathToFileURL } from 'node:url';
 
 export async function getManagerBuilder(): Promise<Builder<unknown>> {
-  return import('@storybook/builder-manager');
+  return import('@storybook/core/dist/builder-manager');
 }
 
 export async function getPreviewBuilder(

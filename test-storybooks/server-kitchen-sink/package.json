@@ -31,7 +31,6 @@
     "@storybook/addon-viewport": "link:../../code/addons/viewport",
     "@storybook/angular": "link:../../code/frameworks/angular",
     "@storybook/blocks": "link:../../code/lib/blocks",
-    "@storybook/builder-manager": "link:../../code/builders/builder-manager",
     "@storybook/builder-vite": "link:../../code/builders/builder-vite",
     "@storybook/builder-webpack5": "link:../../code/builders/builder-webpack5",
     "@storybook/cli": "link:../../code/lib/cli",

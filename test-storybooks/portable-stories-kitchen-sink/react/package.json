@@ -34,7 +34,6 @@
     "@storybook/addon-viewport": "portal:../../../code/addons/viewport",
     "@storybook/angular": "portal:../../../code/frameworks/angular",
     "@storybook/blocks": "portal:../../../code/ui/blocks",
-    "@storybook/builder-manager": "portal:../../../code/builders/builder-manager",
     "@storybook/builder-vite": "portal:../../../code/builders/builder-vite",
     "@storybook/builder-webpack5": "portal:../../../code/builders/builder-webpack5",
     "@storybook/cli": "portal:../../../code/lib/cli",
