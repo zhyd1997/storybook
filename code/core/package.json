@@ -273,7 +273,8 @@
     "esbuild-register": "^3.5.0",
     "express": "^4.19.2",
     "recast": "^0.23.5",
-    "util": "^0.12.4"
+    "util": "^0.12.4",
+    "ws": "^8.2.3"
   },
   "devDependencies": {
     "@aw-web-design/x-default-browser": "1.4.126",
@@ -407,8 +408,7 @@
     "use-resize-observer": "^9.1.0",
     "util": "^0.12.4",
     "util-deprecate": "^1.0.2",
-    "watchpack": "^2.2.0",
-    "ws": "^8.2.3"
+    "watchpack": "^2.2.0"
   },
   "publishConfig": {
     "access": "public"
