@@ -136,14 +136,42 @@ async function generateDistFiles() {
       merge<EsbuildContextOptions>(esbuildDefaultOptions, {
         format: 'esm',
         target: ['chrome100', 'safari15', 'firefox91'],
-        splitting: true,
+        splitting: false,
         entryPoints: entries
           .filter(isBrowser)
           .filter(noExternals)
           .map((entry) => entry.file),
         platform: 'browser',
+        alias: {
+          process: require.resolve('process/browser.js'),
+          assert: require.resolve('browser-assert'),
+          util: require.resolve('util/util.js'),
+        },
         conditions: ['browser', 'module', 'import', 'default'],
         outExtension: { '.js': '.js' },
+      })
+    ),
+    esbuild.context(
+      merge<EsbuildContextOptions>(esbuildDefaultOptions, {
+        format: 'esm',
+        target: 'node18',
+        splitting: false,
+        entryPoints: entries
+          .filter(isNode)
+          .filter(noExternals)
+          .filter((i) => !isBrowser(i))
+          .map((entry) => entry.file),
+        platform: 'neutral',
+        mainFields: ['main', 'module', 'node'],
+        outExtension: { '.js': '.js' },
+        conditions: ['node', 'module', 'import', 'require'],
+        banner: {
+          js: dedent`
+            import Module from "node:module";
+            const require = Module.createRequire(import.meta.url);
+          `,
+        },
+        external: [...nodeInternals, ...esbuildDefaultOptions.external],
       })
     ),
     ...bundles.flatMap((entry) => {
@@ -154,15 +182,14 @@ async function generateDistFiles() {
             format: 'esm',
             target: 'chrome100',
             splitting: false,
-            // platform: 'browser',
             outdir: dirname(entry.file).replace('src', 'dist'),
             entryPoints: [entry.file],
             conditions: ['browser', 'module', 'import', 'default'],
             outExtension: { '.js': '.js' },
-            // define: {
-            //   'process.env.NODE_ENV': JSON.stringify('production'),
-            // },
             alias: {
+              process: require.resolve('process/browser.js'),
+              assert: require.resolve('browser-assert'),
+              util: require.resolve('util/util.js'),
               '@storybook/core/dist': join(cwd, 'src'),
               react: dirname(require.resolve('react/package.json')),
               'react-dom': dirname(require.resolve('react-dom/package.json')),
@@ -182,7 +209,6 @@ async function generateDistFiles() {
             format: 'esm',
             target: 'chrome100',
             splitting: false,
-            // platform: 'browser',
             outdir: dirname(entry.file).replace('src', 'dist'),
             entryPoints: [entry.file],
             conditions: ['browser', 'module', 'import', 'default'],
@@ -239,11 +265,30 @@ async function generateDistFiles() {
                 format: 'esm',
                 target: 'chrome100',
                 splitting: true,
-                // platform: 'browser',
                 outdir: dirname(entry.file).replace('src', 'dist'),
                 entryPoints: [entry.file],
                 conditions: ['browser', 'module', 'import', 'default'],
                 outExtension: { '.js': '.js' },
+                external: [
+                  ...nodeInternals,
+                  ...esbuildDefaultOptions.external,
+                  ...entry.externals,
+                ].filter((e) => !entry.internals.includes(e)),
+              })
+            )
+          );
+        } else if (entry.node) {
+          results.push(
+            esbuild.context(
+              merge<EsbuildContextOptions>(esbuildDefaultOptions, {
+                format: 'esm',
+                outdir: dirname(entry.file).replace('src', 'dist'),
+                target: 'node18',
+                platform: 'neutral',
+                mainFields: ['main', 'module', 'node'],
+                entryPoints: [entry.file],
+                outExtension: { '.js': '.js' },
+                conditions: ['node', 'module', 'import', 'require'],
                 external: [
                   ...nodeInternals,
                   ...esbuildDefaultOptions.external,
@@ -362,7 +407,7 @@ async function generatePackageJsonFile() {
       content.import = main.replace(/\.tsx?/, '.js');
     }
     if (entry.node && !entry.browser) {
-      content.import = main.replace(/\.tsx?/, '.cjs');
+      content.import = main.replace(/\.tsx?/, '.js');
     }
     if (entry.node) {
       content.require = main.replace(/\.tsx?/, '.cjs');

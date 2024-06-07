@@ -37,13 +37,13 @@ export const getEntries = (cwd: string) => {
     ]),
     define('src/theming/index.ts', ['browser', 'node'], true, ['react']),
     define('src/theming/create.ts', ['browser', 'node'], true, ['react']),
-    define('src/docs-tools/index.ts', ['node'], true),
+    define('src/docs-tools/index.ts', ['browser', 'node'], true),
 
     define('src/manager/globals-module-info.ts', ['node'], true),
     define('src/preview/globals.ts', ['node'], true),
     define(
       'src/test/index.ts',
-      ['node', 'browser'],
+      ['browser', 'node'],
       true,
       [],
       [

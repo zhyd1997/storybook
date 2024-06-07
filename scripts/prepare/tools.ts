@@ -111,6 +111,8 @@ export {
 };
 
 export const nodeInternals = [
+  'module',
+  'node:module',
   ...require('module').builtinModules.flatMap((m: string) => [m, `node:${m}`]),
 ];
 
