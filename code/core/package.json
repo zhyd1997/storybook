@@ -333,6 +333,7 @@
     "polished": "^4.2.2",
     "prettier": "^3.2.5",
     "pretty-hrtime": "^1.0.3",
+    "process": "^0.11.10",
     "qs": "^6.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
