@@ -74,7 +74,10 @@
       "@testing-library/dom",
       "@testing-library/jest-dom",
       "@testing-library/user-event",
-      "chai"
+      "chai",
+      "@vitest/expect",
+      "@vitest/spy",
+      "@vitest/utils"
     ]
   },
   "gitHead": "e6a7fd8a655c69780bc20b9749c2699e44beae17"
