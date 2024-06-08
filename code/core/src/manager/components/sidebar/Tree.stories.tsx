@@ -4,7 +4,7 @@ import type { ComponentEntry, IndexHash } from '@storybook/core/dist/manager-api
 import { action } from '@storybook/addon-actions';
 
 import type { StoryObj, Meta } from '@storybook/react';
-import { within, expect } from '@storybook/core/dist/test';
+import { within, expect } from '@storybook/test';
 import { Tree } from './Tree';
 import { index } from './mockdata.large';
 import { DEFAULT_REF_ID } from './Sidebar';

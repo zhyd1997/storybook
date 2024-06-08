@@ -1,4 +1,4 @@
-import type { Call } from '@storybook/core/dist/instrumenter';
+import type { Call } from '@storybook/instrumenter';
 import React from 'react';
 import { styled, typography } from '@storybook/core/dist/theming';
 import { Node, MethodCall } from './MethodCall';

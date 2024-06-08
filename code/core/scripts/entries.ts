@@ -28,7 +28,6 @@ export const getEntries = (cwd: string) => {
     define('src/telemetry/index.ts', ['node'], true),
     define('src/preview-api/index.ts', ['browser', 'node'], true),
     define('src/manager-api/index.tsx', ['browser', 'node'], true, ['react']),
-    define('src/instrumenter/index.ts', ['browser', 'node'], true),
     define('src/router/index.ts', ['browser', 'node'], true, ['react']),
     define('src/components/index.ts', ['browser'], true, [
       'react',
@@ -46,19 +45,6 @@ export const getEntries = (cwd: string) => {
 
     define('src/manager/globals-module-info.ts', ['node'], true),
     define('src/preview/globals.ts', ['node'], true),
-    define(
-      'src/test/index.ts',
-      ['browser', 'node'],
-      true,
-      [],
-      [
-        '@testing-library/dom',
-        '@testing-library/jest-dom',
-        '@testing-library/user-event',
-        '@vitest/expect',
-        '@vitest/spy',
-      ]
-    ),
   ];
 };
 

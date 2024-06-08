@@ -1,8 +1,9 @@
-/// <reference path="../typings.d.ts" />
-
 /* eslint-disable no-underscore-dangle */
+import type { Channel } from '@storybook/core/dist/channels';
 import { addons } from '@storybook/core/dist/preview-api';
+import type { StoryId } from '@storybook/core/dist/types';
 import { once } from '@storybook/core/dist/client-logger';
+import './typings.d.ts';
 import {
   FORCE_REMOUNT,
   SET_CURRENT_STORY,
@@ -13,7 +14,6 @@ import { processError } from '@vitest/utils/error';
 
 import type { Call, CallRef, ControlStates, LogItem, Options, State, SyncPayload } from './types';
 import { CallStates } from './types';
-import type { StoryId } from '@storybook/core/dist/types';
 
 export const EVENTS = {
   CALL: 'storybook/instrumenter/call',
@@ -90,7 +90,7 @@ const getRetainedState = (state: State, isDebugging = false) => {
  * This class is not supposed to be used directly. Use the `instrument` function below instead.
  */
 export class Instrumenter {
-  channel: ReturnType<(typeof addons)['getChannel']>;
+  channel: Channel;
 
   initialized = false;
 

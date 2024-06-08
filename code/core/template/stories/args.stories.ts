@@ -1,6 +1,6 @@
 import { global as globalThis } from '@storybook/global';
 import type { PartialStoryFn, PlayFunctionContext, StoryContext } from '@storybook/core/dist/types';
-import { within, expect } from '@storybook/core/dist/test';
+import { within, expect } from '@storybook/test';
 import pick from 'lodash/pick';
 import {
   STORY_ARGS_UPDATED,

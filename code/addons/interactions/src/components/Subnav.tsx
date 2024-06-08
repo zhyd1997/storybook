@@ -9,8 +9,8 @@ import {
   WithTooltip,
   Bar,
 } from '@storybook/core/dist/components';
-import type { Call, ControlStates } from '@storybook/core/dist/instrumenter';
-import { CallStates } from '@storybook/core/dist/instrumenter';
+import type { Call, ControlStates } from '@storybook/instrumenter';
+import { CallStates } from '@storybook/instrumenter';
 import { styled } from '@storybook/core/dist/theming';
 
 import {

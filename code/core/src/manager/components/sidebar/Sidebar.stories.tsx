@@ -3,7 +3,7 @@ import React from 'react';
 import type { IndexHash, State } from '@storybook/core/dist/manager-api';
 import { ManagerContext, types } from '@storybook/core/dist/manager-api';
 import type { StoryObj, Meta } from '@storybook/react';
-import { within, userEvent, expect, fn } from '@storybook/core/dist/test';
+import { within, userEvent, expect, fn } from '@storybook/test';
 import type { Addon_SidebarTopType } from '@storybook/core/dist/types';
 import { Button, IconButton } from '@storybook/core/dist/components';
 import { FaceHappyIcon } from '@storybook/icons';

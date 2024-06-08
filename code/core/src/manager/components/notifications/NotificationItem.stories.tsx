@@ -8,7 +8,7 @@ import {
   BookIcon as BookIconIcon,
   FaceHappyIcon,
 } from '@storybook/icons';
-import { expect, fn, userEvent, waitFor, within } from '@storybook/core/dist/test';
+import { expect, fn, userEvent, waitFor, within } from '@storybook/test';
 
 const meta = {
   component: NotificationItem,

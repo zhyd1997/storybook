@@ -32,7 +32,7 @@ export const disallowList = [
   Object.keys(rendererPackages),
   Object.keys(frameworkPackages),
   '@storybook/core/dist/core-events',
-  '@storybook/core/dist/instrumenter',
+  '@storybook/instrumenter',
   '@storybook/core/dist/common',
   '@storybook/core-server',
   '@storybook/manager',

@@ -5,7 +5,7 @@ import type {
   PlayFunctionContext,
   StoryContext,
 } from '@storybook/core/dist/types';
-import { within, expect } from '@storybook/core/dist/test';
+import { within, expect } from '@storybook/test';
 import { useEffect } from '@storybook/core/dist/preview-api';
 import {
   STORY_ARGS_UPDATED,

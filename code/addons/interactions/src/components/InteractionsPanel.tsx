@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { type Call, CallStates, type ControlStates } from '@storybook/core/dist/instrumenter';
+import { type Call, CallStates, type ControlStates } from '@storybook/instrumenter';
 import { styled } from '@storybook/core/dist/theming';
 import { transparentize } from 'polished';
 

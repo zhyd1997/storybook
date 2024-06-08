@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import type { Combo } from '@storybook/core/dist/manager-api';
 import { addons, Consumer, types, useAddonState } from '@storybook/core/dist/manager-api';
 import { AddonPanel, Badge, Spaced } from '@storybook/core/dist/components';
-import { CallStates } from '@storybook/core/dist/instrumenter';
+import { CallStates } from '@storybook/instrumenter';
 import { ADDON_ID, PANEL_ID } from './constants';
 import { Panel } from './Panel';
 import { TabIcon } from './components/TabStatus';

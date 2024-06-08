@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import { styled } from '@storybook/core/dist/theming';
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/core/dist/test';
+import { fn } from '@storybook/test';
 import { Layout } from './Layout';
 import { LayoutProvider } from './LayoutProvider';
 import { LocationProvider } from '@storybook/core/dist/router';
