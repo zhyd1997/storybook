@@ -5,7 +5,7 @@ export default mergeConfig(
   vitestCommonConfig,
   defineConfig({
     test: {
-      environment: 'jsdom',
+      environment: 'happy-dom',
     },
   })
 );
