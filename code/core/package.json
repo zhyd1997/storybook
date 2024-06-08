@@ -112,11 +112,6 @@
       "import": "./dist/manager-api/index.js",
       "require": "./dist/manager-api/index.cjs"
     },
-    "./dist/instrumenter": {
-      "types": "./dist/instrumenter/index.d.ts",
-      "import": "./dist/instrumenter/index.js",
-      "require": "./dist/instrumenter/index.cjs"
-    },
     "./dist/router": {
       "types": "./dist/router/index.d.ts",
       "import": "./dist/router/index.js",
@@ -150,11 +145,6 @@
       "types": "./dist/preview/globals.d.ts",
       "import": "./dist/preview/globals.js",
       "require": "./dist/preview/globals.cjs"
-    },
-    "./dist/test": {
-      "types": "./dist/test/index.d.ts",
-      "import": "./dist/test/index.js",
-      "require": "./dist/test/index.cjs"
     },
     "./package.json": "./package.json"
   },
@@ -220,9 +210,6 @@
       "dist/manager-api": [
         "./dist/manager-api/index.d.ts"
       ],
-      "dist/instrumenter": [
-        "./dist/instrumenter/index.d.ts"
-      ],
       "dist/router": [
         "./dist/router/index.d.ts"
       ],
@@ -243,9 +230,6 @@
       ],
       "dist/preview/globals": [
         "./dist/preview/globals.d.ts"
-      ],
-      "dist/test": [
-        "./dist/test/index.d.ts"
       ]
     }
   },
@@ -292,12 +276,10 @@
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
-    "@storybook/core": "workspace:*",
     "@storybook/csf": "^0.1.7",
     "@storybook/docs-mdx": "3.1.0-next.0",
     "@storybook/global": "^5.0.0",
     "@storybook/icons": "^1.2.5",
-    "@storybook/test": "workspace:*",
     "@tanstack/react-virtual": "^3.3.0",
     "@testing-library/react": "^14.0.0",
     "@types/compression": "^1.7.0",
