@@ -5118,6 +5118,7 @@ __metadata:
     uuid: "npm:^9.0.0"
   peerDependencies:
     "@storybook/core": "workspace:*"
+    "@storybook/test": "workspace:*"
   languageName: unknown
   linkType: soft
 
