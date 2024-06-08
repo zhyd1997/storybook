@@ -121,6 +121,25 @@ child 2</template>
   expect(actualCode).toBe(expectedCode);
 });
 
+test('should generate source code for slots with bindings', () => {
+  type TestBindings = {
+    foo: string;
+    bar?: number;
+  };
+
+  const slots = {
+    a: ({ foo, bar }: TestBindings) => `Slot with bindings ${foo} and ${bar}`,
+    b: ({ foo }: TestBindings) => h('a', { href: foo, target: foo }, `Test link: ${foo}`),
+  };
+
+  const expectedCode = `<template #a="{ foo, bar }">Slot with bindings {{ foo }} and {{ bar }}</template>
+
+<template #b="{ foo }"><a :href="foo" :target="foo">Test link: {{ foo }}</a></template>`;
+
+  const actualCode = generateSlotSourceCode(slots, Object.keys(slots));
+  expect(actualCode).toBe(expectedCode);
+});
+
 test.each([
   { __docgenInfo: 'invalid-value', slotNames: [] },
   { __docgenInfo: {}, slotNames: [] },

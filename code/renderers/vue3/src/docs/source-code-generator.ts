@@ -36,7 +36,9 @@ export const sourceCodeDecorator: Decorator = (storyFn, ctx) => {
  * Generate Vue source code for the given Story.
  * @returns Source code or empty string if source code could not be generated.
  */
-export const generateSourceCode = (ctx: StoryContext): string => {
+export const generateSourceCode = (
+  ctx: Pick<StoryContext, 'title' | 'component' | 'args'>
+): string => {
   const componentName = ctx.component?.__name || ctx.title.split('/').at(-1)!;
 
   const slotNames = extractSlotNames(ctx.component);
@@ -183,15 +185,16 @@ export const generateSlotSourceCode = (args: Args, slotNames: string[]): string 
     const slotContent = generateSlotChildrenSourceCode([arg]);
     if (!slotContent) return; // do not generate source code for empty slots
 
-    // TODO: support generating bindings
-    const bindings = '';
+    const slotBindings = typeof arg === 'function' ? getFunctionParamNames(arg) : [];
 
-    if (slotName === 'default' && !bindings) {
+    if (slotName === 'default' && !slotBindings.length) {
       // do not add unnecessary "<template #default>" tag since the default slot content without bindings
       // can be put directly into the slot without need of "<template #default>"
       slotSourceCodes.push(slotContent);
     } else {
-      slotSourceCodes.push(`<template #${slotName}${bindings}>${slotContent}</template>`);
+      slotSourceCodes.push(
+        `<template ${slotBindingsToString(slotName, slotBindings)}>${slotContent}</template>`
+      );
     }
   });
 
@@ -231,8 +234,28 @@ const generateSlotChildrenSourceCode = (children: unknown[]): string => {
         return JSON.stringify(child);
 
       case 'function': {
-        const returnValue = child();
-        return generateSlotChildrenSourceCode([returnValue]);
+        const paramNames = getFunctionParamNames(child).filter(
+          (param) => !['{', '}'].includes(param)
+        );
+
+        const parameters = paramNames.reduce<Record<string, string>>((obj, param) => {
+          obj[param] = `{{ ${param} }}`;
+          return obj;
+        }, {});
+
+        const returnValue = child(parameters);
+        let slotSourceCode = generateSlotChildrenSourceCode([returnValue]);
+
+        // if slot bindings are used for properties of other components, our {{ paramName }} is incorrect because
+        // it would generate e.g. my-prop="{{ paramName }}", therefore, we replace it here to e.g. :my-prop="paramName"
+        paramNames.forEach((param) => {
+          slotSourceCode = slotSourceCode.replaceAll(
+            new RegExp(` (\\S+)="{{ ${param} }}"`, 'g'),
+            ` :$1="${param}"`
+          );
+        });
+
+        return slotSourceCode;
       }
 
       case 'bigint':
@@ -295,4 +318,42 @@ const generateVNodeSourceCode = (vnode: VNode): string => {
   if (childrenCode)
     return `<${componentName}${props ? ` ${props}` : ''}>${childrenCode}</${componentName}>`;
   return `<${componentName}${props ? ` ${props}` : ''} />`;
+};
+
+/**
+ * Gets a list of parameters for the given function since func.arguments can not be used since
+ * it throws a TypeError.
+ *
+ * If the arguments are destructured (e.g. "func({ foo, bar })"), the returned array will also
+ * include "{" and "}".
+ *
+ * @see Based on https://stackoverflow.com/a/9924463
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types
+const getFunctionParamNames = (func: Function): string[] => {
+  const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
+  const ARGUMENT_NAMES = /([^\s,]+)/g;
+
+  const fnStr = func.toString().replace(STRIP_COMMENTS, '');
+  const result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+  if (result === null) return [];
+  return result;
+};
+
+/**
+ * Converts the given slot bindings/parameters to a string.
+ *
+ * @example
+ * If no params: '#slotName'
+ * If params: '#slotName="{ foo, bar }"'
+ */
+const slotBindingsToString = (
+  slotName: string,
+  params: string[]
+): `#${string}` | `#${string}="${string}"` => {
+  if (!params.length) return `#${slotName}`;
+  if (params.length === 1) return `#${slotName}="${params[0]}"`;
+
+  // parameters might be destructured so remove duplicated brackets here
+  return `#${slotName}="{ ${params.filter((i) => !['{', '}'].includes(i)).join(', ')} }"`;
 };
