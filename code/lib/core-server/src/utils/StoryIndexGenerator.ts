@@ -3,6 +3,8 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import slash from 'slash';
 import invariant from 'tiny-invariant';
+import * as TsconfigPaths from 'tsconfig-paths';
+import findUp from 'find-up';
 
 import type {
   IndexEntry,
@@ -280,13 +282,22 @@ export class StoryIndexGenerator {
 
   /**
    * Try to find the component path from a raw import string and return it in
-   * the same format as `importPath`.
+   * the same format as `importPath`. Respect tsconfig paths if available.
    *
    * If no such file exists, assume that the import is from a package and
    * return the raw path.
    */
-  resolveComponentPath(rawComponentPath: Path, absolutePath: Path) {
-    const absoluteComponentPath = path.resolve(path.dirname(absolutePath), rawComponentPath);
+  resolveComponentPath(
+    rawComponentPath: Path,
+    absolutePath: Path,
+    matchPath: TsconfigPaths.MatchPath | undefined
+  ) {
+    let rawPath = rawComponentPath;
+    if (matchPath) {
+      rawPath = matchPath(rawPath) ?? rawPath;
+    }
+
+    const absoluteComponentPath = path.resolve(path.dirname(absolutePath), rawPath);
     const existing = ['', '.js', '.ts', '.jsx', '.tsx', '.mjs', '.mts']
       .map((ext) => `${absoluteComponentPath}${ext}`)
       .find((candidate) => fs.existsSync(candidate));
@@ -319,12 +330,23 @@ export class StoryIndexGenerator {
     invariant(indexer, `No matching indexer found for ${absolutePath}`);
 
     const indexInputs = await indexer.createIndex(absolutePath, { makeTitle: defaultMakeTitle });
+    const tsconfigPath = await findUp('tsconfig.json', { cwd: this.options.workingDir });
+    const tsconfig = TsconfigPaths.loadConfig(tsconfigPath);
+    let matchPath: TsconfigPaths.MatchPath | undefined;
+    if (tsconfig.resultType === 'success') {
+      matchPath = TsconfigPaths.createMatchPath(tsconfig.absoluteBaseUrl, tsconfig.paths, [
+        'browser',
+        'module',
+        'main',
+      ]);
+    }
 
     const entries: ((StoryIndexEntryWithMetaId | DocsCacheEntry) & { tags: Tag[] })[] =
       indexInputs.map((input) => {
         const name = input.name ?? storyNameFromExport(input.exportName);
         const componentPath =
-          input.rawComponentPath && this.resolveComponentPath(input.rawComponentPath, absolutePath);
+          input.rawComponentPath &&
+          this.resolveComponentPath(input.rawComponentPath, absolutePath, matchPath);
         const title = input.title ?? defaultMakeTitle();
 
         // eslint-disable-next-line no-underscore-dangle
