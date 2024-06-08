@@ -1,13 +1,13 @@
 import type {
-  BuilderOptions,
-  StorybookConfigWebpack,
-  TypescriptOptions as TypescriptOptionsBuilder,
-} from '@storybook/builder-webpack5';
-import type {
   ReactOptions,
   StorybookConfig as StorybookConfigBase,
   TypescriptOptions as TypescriptOptionsReact,
 } from '@storybook/preset-react-webpack';
+import type {
+  StorybookConfigWebpack,
+  BuilderOptions,
+  TypescriptOptions as TypescriptOptionsBuilder,
+} from '@storybook/builder-webpack5';
 import type { CompatibleString } from '@storybook/types';
 import type * as NextImage from 'next/image';
 

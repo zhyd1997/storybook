@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { Router } from 'express';
 import type { FileSystemCache } from 'file-system-cache';
-import type { Server } from 'http';
 import type { Options as TelejsonOptions } from 'telejson';
+import type { Router } from 'express';
+import type { Server } from 'http';
 import type { PackageJson as PackageJsonFromTypeFest } from 'type-fest';
 
-import type { Indexer, StoriesEntry } from './indexer';
+import type { StoriesEntry, Indexer } from './indexer';
 
 /**
  * ⚠️ This file contains internal WIP types they MUST NOT be exported outside this package for now!
