@@ -1,45 +1,79 @@
 /* eslint-disable no-underscore-dangle */
+import { SNIPPET_RENDERED, SourceType } from '@storybook/docs-tools';
 import { addons } from '@storybook/preview-api';
-import type { ArgTypes, Args, StoryContext } from '@storybook/types';
-
-import { SourceType, SNIPPET_RENDERED } from '@storybook/docs-tools';
-
-import type {
-  ElementNode,
-  AttributeNode,
-  DirectiveNode,
-  TextNode,
-  InterpolationNode,
-  TemplateChildNode,
-} from '@vue/compiler-core';
-import { baseParse } from '@vue/compiler-core';
-import type { ConcreteComponent, FunctionalComponent, VNode } from 'vue';
-import { h, isVNode, watch } from 'vue';
-import kebabCase from 'lodash/kebabCase';
-import {
-  attributeSource,
-  htmlEventAttributeToVueEventAttribute,
-  omitEvent,
-  evalExp,
-  replaceValueWithRef,
-  generateExpression,
-} from './utils';
-import type { VueRenderer } from '../types';
+import type { VNode } from 'vue';
+import { isVNode, watch } from 'vue';
+import type { Args, Decorator, StoryContext } from '../public-types';
 
 /**
- * Check if the sourcecode should be generated.
- *
- * @param context StoryContext
+ * Decorator to generate Vue source code for stories.
  */
-const skipSourceRender = (context: StoryContext<VueRenderer>) => {
-  const sourceParams = context?.parameters.docs?.source;
-  const isArgsStory = context?.parameters.__isArgsStory;
-  const isDocsViewMode = context?.viewMode === 'docs';
+export const sourceDecorator: Decorator = (storyFn, ctx) => {
+  const story = storyFn();
+  if (shouldSkipSourceCodeGeneration(ctx)) return story;
 
-  // always render if the user forces it
+  const channel = addons.getChannel();
+
+  watch(
+    () => ctx.args,
+    () => {
+      const sourceCode = generateSourceCode(ctx);
+
+      channel.emit(SNIPPET_RENDERED, {
+        id: ctx.id,
+        args: ctx.args,
+        source: sourceCode,
+        format: 'vue',
+      });
+    },
+    { immediate: true, deep: true }
+  );
+
+  return story;
+};
+
+/**
+ * Generate Vue source code for the given Story.
+ * @returns Source code or empty string if source code could not be generated.
+ */
+export const generateSourceCode = (
+  ctx: Pick<StoryContext, 'title' | 'component' | 'args'>
+): string => {
+  const componentName = ctx.component?.__name || ctx.title.split('/').at(-1)!;
+
+  const slotNames = extractSlotNames(ctx.component);
+  const slotSourceCode = generateSlotSourceCode(ctx.args, slotNames);
+  const propsSourceCode = generatePropsSourceCode(ctx.args, slotNames);
+
+  if (slotSourceCode) {
+    return `<template>
+    <${componentName} ${propsSourceCode}> ${slotSourceCode} </${componentName}>
+    </template>`;
+  }
+
+  // prefer self closing tag if no slot content exists
+  return `<template>
+  <${componentName} ${propsSourceCode} />
+  </template>`;
+};
+
+/**
+ * Checks if the source code generation should be skipped for the given Story context.
+ * Will be true if one of the following is true:
+ * - view mode is not "docs"
+ * - story is no arg story
+ * - story has set custom source code via parameters.docs.source.code
+ * - story has set source type to "code" via parameters.docs.source.type
+ */
+export const shouldSkipSourceCodeGeneration = (context: StoryContext): boolean => {
+  const sourceParams = context?.parameters.docs?.source;
   if (sourceParams?.type === SourceType.DYNAMIC) {
+    // always render if the user forces it
     return false;
   }
+
+  const isArgsStory = context?.parameters.__isArgsStory;
+  const isDocsViewMode = context?.viewMode === 'docs';
 
   // never render if the user is forcing the block to render code, or
   // if the user provides code, or if it's not an args story.
@@ -49,271 +83,277 @@ const skipSourceRender = (context: StoryContext<VueRenderer>) => {
 };
 
 /**
- *
- * @param _args
- * @param argTypes
- * @param byRef
+ * Gets all slot names from the `__docgenInfo` of the given component if available.
+ * Requires Storybook docs addon to be enabled.
+ * Default slot will always be sorted first, remaining slots are sorted alphabetically.
  */
-export function generateAttributesSource(
-  tempArgs: (AttributeNode | DirectiveNode)[],
-  args: Args,
-  argTypes: ArgTypes,
-  byRef?: boolean
-): string {
-  return Object.keys(tempArgs)
-    .map((key: any) => {
-      const source = tempArgs[key].loc.source.replace(/\$props/g, 'args');
-      const argKey = (tempArgs[key] as DirectiveNode).arg?.loc.source;
-      return byRef && argKey
-        ? replaceValueWithRef(source, args, argKey)
-        : evalExp(source, omitEvent(args));
-    })
-    .join(' ');
-}
-/**
- * map attributes and directives
- * @param props
- */
-function mapAttributesAndDirectives(props: Args) {
-  const tranformKey = (key: string) => (key.startsWith('on') ? key : kebabCase(key));
-  return Object.keys(props).map(
-    (key) =>
-      ({
-        name: 'bind',
-        type: ['v-', '@', 'v-on'].includes(key) ? 7 : 6, // 6 is attribute, 7 is directive
-        arg: { content: tranformKey(key), loc: { source: tranformKey(key) } }, // attribute name or directive name (v-bind, v-on, v-model)
-        loc: { source: attributeSource(tranformKey(key), props[key]) }, // attribute value or directive value
-        exp: { isStatic: false, loc: { source: props[key] } }, // directive expression
-        modifiers: [''],
-      }) as unknown as AttributeNode
-  );
-}
-/**
- *  map slots
- * @param slotsArgs
- */
-function mapSlots(
-  slotsArgs: Args,
-  generateComponentSource: any,
-  slots: { name: string; scoped?: boolean; bindings?: { name: string }[] }[]
-): TextNode[] {
-  return Object.keys(slotsArgs).map((key) => {
-    const slot = slotsArgs[key];
-    let slotContent = '';
+export const extractSlotNames = (
+  component?: StoryContext['component'] & { __docgenInfo?: unknown }
+): string[] => {
+  if (!component || !('__docgenInfo' in component)) return [];
 
-    const scropedArgs = slots
-      .find((s) => s.name === key && s.scoped)
-      ?.bindings?.map((b) => b.name)
-      .join(',');
-
-    if (typeof slot === 'string') {
-      slotContent = slot;
-    } else if (typeof slot === 'function') {
-      slotContent = generateExpression(slot);
-    } else if (isVNode(slot)) {
-      slotContent = generateComponentSource(slot);
-    } else if (typeof slot === 'object' && !isVNode(slot)) {
-      slotContent = JSON.stringify(slot);
-    }
-
-    const bindingsString = scropedArgs ? `="{${scropedArgs}}"` : '';
-    slotContent = slot ? `<template #${key}${bindingsString}>${slotContent}</template>` : ``;
-
-    return {
-      type: 2,
-      content: slotContent,
-      loc: {
-        source: slotContent,
-        start: { offset: 0, line: 1, column: 0 },
-        end: { offset: 0, line: 1, column: 0 },
-      },
-    };
-  });
-  // TODO: handle other cases (array, object, html,etc)
-}
-/**
- *
- * @param args generate script setup from args
- * @param argTypes
- */
-function generateScriptSetup(args: Args, argTypes: ArgTypes, components: any[]): string {
-  const scriptLines = Object.keys(args).map(
-    (key: any) =>
-      `const ${key} = ${
-        typeof args[key] === 'function' ? `()=>{}` : `ref(${JSON.stringify(args[key])});`
-      }`
-  );
-  scriptLines.unshift(`import { ref } from "vue";`);
-
-  return `<script lang='ts' setup>${scriptLines.join('\n')}</script>`;
-}
-/**
- * get template components one or more
- * @param renderFn
- */
-function getTemplateComponents(
-  renderFn: any,
-  context?: StoryContext<VueRenderer>
-): (TemplateChildNode | VNode)[] {
-  try {
-    const originalStoryFn = renderFn;
-
-    const storyFn = originalStoryFn ? originalStoryFn(context?.args, context) : context?.component;
-    const story = typeof storyFn === 'function' ? storyFn() : storyFn;
-
-    const { template } = story;
-
-    if (!template) return [h(story, context?.args)];
-    return getComponents(template);
-  } catch (e) {
+  // type check __docgenInfo to prevent errors
+  if (!component.__docgenInfo || typeof component.__docgenInfo !== 'object') return [];
+  if (
+    !('slots' in component.__docgenInfo) ||
+    !component.__docgenInfo.slots ||
+    !Array.isArray(component.__docgenInfo.slots)
+  ) {
     return [];
   }
-}
 
-function getComponents(template: string): (TemplateChildNode | VNode)[] {
-  const ast = baseParse(template, {
-    isNativeTag: () => true,
-    decodeEntities: (rawtext, asAttr) => rawtext,
-  });
-  const components = ast?.children;
-  if (!components) return [];
-  return components;
-}
-
-/**
- * Generate a vue3 template.
- *
- * @param component Component
- * @param args Args
- * @param argTypes ArgTypes
- * @param slotProp Prop used to simulate a slot
- */
-
-export function generateTemplateSource(
-  componentOrNodes: (ConcreteComponent | TemplateChildNode)[] | TemplateChildNode | VNode,
-  { args, argTypes }: { args: Args; argTypes: ArgTypes },
-  byRef = false
-) {
-  const isElementNode = (node: any) => node && node.type === 1;
-  const isInterpolationNode = (node: any) => node && node.type === 5;
-  const isTextNode = (node: any) => node && node.type === 2;
-
-  const generateComponentSource = (
-    componentOrNode: ConcreteComponent | TemplateChildNode | VNode
-  ) => {
-    if (isElementNode(componentOrNode)) {
-      const { tag: name, props: attributes, children } = componentOrNode as ElementNode;
-      const childSources: string =
-        typeof children === 'string'
-          ? children
-          : children.map((child: TemplateChildNode) => generateComponentSource(child)).join('');
-      const props = generateAttributesSource(attributes, args, argTypes, byRef);
-
-      return childSources === ''
-        ? `<${name} ${props} />`
-        : `<${name} ${props}>${childSources}</${name}>`;
-    }
-
-    if (isTextNode(componentOrNode)) {
-      const { content } = componentOrNode as TextNode;
-      return content;
-    }
-    if (isInterpolationNode(componentOrNode)) {
-      const { content } = componentOrNode as InterpolationNode;
-      const expValue = evalExp(content.loc.source, args);
-      if (expValue === content.loc.source) return `{{${expValue}}}`;
-      return eval(expValue);
-    }
-    if (isVNode(componentOrNode)) {
-      const vnode = componentOrNode as VNode;
-      const { props, type, children } = vnode;
-      const slotsProps = typeof children === 'string' ? undefined : (children as Args);
-      const componentSlots = (type as any)?.__docgenInfo?.slots;
-
-      const attrsProps = slotsProps
-        ? Object.fromEntries(
-            Object.entries(props ?? {})
-              .filter(([key, value]) => !slotsProps[key] && !['class', 'style'].includes(key))
-              .map(([key, value]) => [key, value])
-          )
-        : props;
-      const attributes = mapAttributesAndDirectives(attrsProps ?? {});
-      const slotArgs = Object.fromEntries(
-        Object.entries(props ?? {}).filter(([key, value]) => slotsProps?.[key])
-      );
-
-      const childSources: string = children
-        ? typeof children === 'string'
-          ? children
-          : mapSlots(slotArgs as Args, generateComponentSource, componentSlots ?? [])
-              .map((child) => child.content)
-              .join('')
-        : '';
-      const name =
-        typeof type === 'string'
-          ? type
-          : (type as FunctionalComponent).name ||
-            (type as ConcreteComponent).__name ||
-            (type as any).__docgenInfo?.displayName;
-      const propsSource = generateAttributesSource(attributes, args, argTypes, byRef);
-      return childSources.trim() === ''
-        ? `<${name} ${propsSource}/>`
-        : `<${name} ${propsSource}>${childSources}</${name}>`;
-    }
-
-    return null;
-  };
-
-  const componentsOrNodes = Array.isArray(componentOrNodes) ? componentOrNodes : [componentOrNodes];
-  const source = componentsOrNodes
-    .map((componentOrNode) => generateComponentSource(componentOrNode))
-    .join(' ');
-  return source || null;
-}
-
-/**
- *  source decorator.
- * @param storyFn Fn
- * @param context  StoryContext
- */
-export const sourceDecorator = (storyFn: any, context: StoryContext<VueRenderer>) => {
-  const skip = skipSourceRender(context);
-  const story = storyFn();
-
-  watch(
-    () => context.args,
-    () => {
-      if (!skip) {
-        generateSource(context);
-      }
-    },
-    { immediate: true, deep: true }
-  );
-  return story;
+  return component.__docgenInfo.slots
+    .map((slot) => slot.name)
+    .filter((i): i is string => typeof i === 'string')
+    .sort((a, b) => {
+      if (a === 'default') return -1;
+      if (b === 'default') return 1;
+      return a.localeCompare(b);
+    });
 };
 
-export function generateSource(context: StoryContext<VueRenderer>) {
-  const channel = addons.getChannel();
-  const { args = {}, argTypes = {}, id } = context || {};
-  const storyComponents = getTemplateComponents(context?.originalStoryFn, context);
+/**
+ * Generates the source code for the given Vue component properties.
+ *
+ * @param args Story args / property values.
+ * @param slotNames All slot names of the component. Needed to not generate code for args that are slots.
+ * Can be extracted using `extractSlotNames()`.
+ */
+export const generatePropsSourceCode = (
+  args: Record<string, unknown>,
+  slotNames: string[]
+): string => {
+  const props: string[] = [];
 
-  const withScript = context?.parameters?.docs?.source?.withScriptSetup || false;
-  const generatedScript = withScript ? generateScriptSetup(args, argTypes, storyComponents) : '';
-  const generatedTemplate = generateTemplateSource(storyComponents, context, withScript);
+  Object.entries(args).forEach(([propName, value]) => {
+    // ignore slots
+    if (slotNames.includes(propName)) return;
 
-  if (generatedTemplate) {
-    const source = `${generatedScript}\n <template>\n ${generatedTemplate} \n</template>`;
-    channel.emit(SNIPPET_RENDERED, { id, args, source, format: 'vue' });
-    return source;
+    switch (typeof value) {
+      case 'string':
+        if (value === '') return; // do not render empty strings
+
+        if (value.includes('"')) {
+          props.push(`${propName}='${value}'`);
+        } else {
+          props.push(`${propName}="${value}"`);
+        }
+
+        break;
+      case 'number':
+        props.push(`:${propName}="${value}"`);
+        break;
+      case 'bigint':
+        props.push(`:${propName}="BigInt(${value.toString()})"`);
+        break;
+      case 'boolean':
+        props.push(value === true ? propName : `:${propName}="false"`);
+        break;
+      case 'object':
+        if (value === null) return; // do not render null values
+        props.push(`:${propName}="${JSON.stringify(value).replaceAll('"', "'")}"`);
+        break;
+      case 'symbol': {
+        const symbol = `Symbol(${value.description ? `'${value.description}'` : ''})`;
+        props.push(`:${propName}="${symbol}"`);
+        break;
+      }
+      case 'function':
+        // TODO: check if functions should be rendered in source code
+        break;
+    }
+  });
+
+  return props.join(' ');
+};
+
+/**
+ * Generates the source code for the given Vue component slots.
+ *
+ * @param args Story args.
+ * @param slotNames All slot names of the component. Needed to only generate slots and ignore props etc.
+ * Can be extracted using `extractSlotNames()`.
+ */
+export const generateSlotSourceCode = (args: Args, slotNames: string[]): string => {
+  /** List of slot source codes (e.g. <template #slotName>Content</template>) */
+  const slotSourceCodes: string[] = [];
+
+  slotNames.forEach((slotName) => {
+    const arg = args[slotName];
+    if (!arg) return;
+
+    const slotContent = generateSlotChildrenSourceCode([arg]);
+    if (!slotContent) return; // do not generate source code for empty slots
+
+    const slotBindings = typeof arg === 'function' ? getFunctionParamNames(arg) : [];
+
+    if (slotName === 'default' && !slotBindings.length) {
+      // do not add unnecessary "<template #default>" tag since the default slot content without bindings
+      // can be put directly into the slot without need of "<template #default>"
+      slotSourceCodes.push(slotContent);
+    } else {
+      slotSourceCodes.push(
+        `<template ${slotBindingsToString(slotName, slotBindings)}>${slotContent}</template>`
+      );
+    }
+  });
+
+  return slotSourceCodes.join('\n\n');
+};
+
+/**
+ * Generates the source code for the given slot children (the code inside <template #slotName></template>).
+ */
+const generateSlotChildrenSourceCode = (children: unknown[]): string => {
+  const slotChildrenSourceCodes: string[] = [];
+
+  /**
+   * Recursively generates the source code for a single slot child and all its children.
+   * @returns Source code for child and all nested children or empty string if child is of a non-supported type.
+   */
+  const generateSingleChildSourceCode = (child: unknown): string => {
+    if (isVNode(child)) {
+      return generateVNodeSourceCode(child);
+    }
+
+    switch (typeof child) {
+      case 'string':
+      case 'number':
+      case 'boolean':
+        return child.toString();
+
+      case 'object':
+        if (child === null) return '';
+        if (Array.isArray(child)) {
+          // if child also has children, we generate them recursively
+          return child
+            .map(generateSingleChildSourceCode)
+            .filter((code) => code !== '')
+            .join('\n');
+        }
+        return JSON.stringify(child);
+
+      case 'function': {
+        const paramNames = getFunctionParamNames(child).filter(
+          (param) => !['{', '}'].includes(param)
+        );
+
+        const parameters = paramNames.reduce<Record<string, string>>((obj, param) => {
+          obj[param] = `{{ ${param} }}`;
+          return obj;
+        }, {});
+
+        const returnValue = child(parameters);
+        let slotSourceCode = generateSlotChildrenSourceCode([returnValue]);
+
+        // if slot bindings are used for properties of other components, our {{ paramName }} is incorrect because
+        // it would generate e.g. my-prop="{{ paramName }}", therefore, we replace it here to e.g. :my-prop="paramName"
+        paramNames.forEach((param) => {
+          slotSourceCode = slotSourceCode.replaceAll(
+            new RegExp(` (\\S+)="{{ ${param} }}"`, 'g'),
+            ` :$1="${param}"`
+          );
+        });
+
+        return slotSourceCode;
+      }
+
+      case 'bigint':
+        return `{{ BigInt(${child.toString()}) }}`;
+
+      // the only missing case here is "symbol"
+      // because rendering a symbol as slot / HTML does not make sense and is not supported by Vue
+      default:
+        return '';
+    }
+  };
+
+  children.forEach((child) => {
+    const sourceCode = generateSingleChildSourceCode(child);
+    if (sourceCode !== '') slotChildrenSourceCodes.push(sourceCode);
+  });
+
+  return slotChildrenSourceCodes.join('\n');
+};
+
+/**
+ * Generates source code for the given VNode and all its children (e.g. created using `h(MyComponent)` or `h("div")`).
+ */
+const generateVNodeSourceCode = (vnode: VNode): string => {
+  let componentName = 'component';
+  if (typeof vnode.type === 'string') {
+    // this is e.g. the case when rendering native HTML elements like, h("div")
+    componentName = vnode.type;
+  } else if (typeof vnode.type === 'object' && '__name' in vnode.type) {
+    // this is the case when using custom Vue components like h(MyComponent)
+    if ('name' in vnode.type && vnode.type.name) {
+      // prefer custom component name set by the developer
+      componentName = vnode.type.name;
+    } else if ('__name' in vnode.type && vnode.type.__name) {
+      // otherwise use name inferred by Vue from the file name
+      componentName = vnode.type.__name;
+    }
   }
-  return null;
-}
-// export local function for testing purpose
-export {
-  generateScriptSetup,
-  getTemplateComponents as getComponentsFromRenderFn,
-  getComponents as getComponentsFromTemplate,
-  mapAttributesAndDirectives,
-  attributeSource,
-  htmlEventAttributeToVueEventAttribute,
+
+  let childrenCode = '';
+
+  if (typeof vnode.children === 'string') {
+    childrenCode = vnode.children;
+  } else if (Array.isArray(vnode.children)) {
+    childrenCode = generateSlotChildrenSourceCode(vnode.children);
+  } else if (vnode.children) {
+    // children are an object, just like if regular Story args where used
+    // so we can generate the source code with the regular "generateSlotSourceCode()".
+    childrenCode = generateSlotSourceCode(
+      vnode.children,
+      // $stable is a default property in vnode.children so we need to filter it out
+      // to not generate source code for it
+      Object.keys(vnode.children).filter((i) => i !== '$stable')
+    );
+  }
+
+  const props = vnode.props ? generatePropsSourceCode(vnode.props, []) : '';
+
+  // prefer self closing tag if no children exist
+  if (childrenCode)
+    return `<${componentName}${props ? ` ${props}` : ''}>${childrenCode}</${componentName}>`;
+  return `<${componentName}${props ? ` ${props}` : ''} />`;
+};
+
+/**
+ * Gets a list of parameters for the given function since func.arguments can not be used since
+ * it throws a TypeError.
+ *
+ * If the arguments are destructured (e.g. "func({ foo, bar })"), the returned array will also
+ * include "{" and "}".
+ *
+ * @see Based on https://stackoverflow.com/a/9924463
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types
+const getFunctionParamNames = (func: Function): string[] => {
+  const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
+  const ARGUMENT_NAMES = /([^\s,]+)/g;
+
+  const fnStr = func.toString().replace(STRIP_COMMENTS, '');
+  const result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+  if (result === null) return [];
+  return result;
+};
+
+/**
+ * Converts the given slot bindings/parameters to a string.
+ *
+ * @example
+ * If no params: '#slotName'
+ * If params: '#slotName="{ foo, bar }"'
+ */
+const slotBindingsToString = (
+  slotName: string,
+  params: string[]
+): `#${string}` | `#${string}="${string}"` => {
+  if (!params.length) return `#${slotName}`;
+  if (params.length === 1) return `#${slotName}="${params[0]}"`;
+
+  // parameters might be destructured so remove duplicated brackets here
+  return `#${slotName}="{ ${params.filter((i) => !['{', '}'].includes(i)).join(', ')} }"`;
 };
