@@ -53,6 +53,7 @@
     "util": "^0.12.4"
   },
   "devDependencies": {
+    "@storybook/core": "workspace:*",
     "chai": "^4.4.1",
     "tinyspy": "^2.2.0",
     "ts-dedent": "^2.2.0",
