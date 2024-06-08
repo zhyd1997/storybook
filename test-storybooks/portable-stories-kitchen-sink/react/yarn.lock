@@ -2514,6 +2514,7 @@ __metadata:
     uuid: "npm:^9.0.0"
   peerDependencies:
     "@storybook/core": "workspace:*"
+    "@storybook/test": "workspace:*"
   languageName: node
   linkType: soft
 
@@ -2772,19 +2773,16 @@ __metadata:
   resolution: "@storybook/core@portal:../../../code/core::locator=portable-stories-react%40workspace%3A."
   dependencies:
     "@storybook/csf": "npm:^0.1.7"
-    "@testing-library/dom": "npm:^10.1.0"
-    "@testing-library/jest-dom": "npm:^6.4.5"
-    "@testing-library/user-event": "npm:^14.5.2"
     "@types/express": "npm:^4.17.21"
     "@types/node": "npm:^18.0.0"
-    "@vitest/expect": "npm:1.6.0"
-    "@vitest/spy": "npm:^1.6.0"
     browser-assert: "npm:^1.2.1"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0"
     esbuild-register: "npm:^3.5.0"
     express: "npm:^4.19.2"
+    process: "npm:^0.11.10"
     recast: "npm:^0.23.5"
     util: "npm:^0.12.4"
+    ws: "npm:^8.2.3"
   languageName: node
   linkType: soft
 
@@ -2832,6 +2830,12 @@ __metadata:
   checksum: 10/a9d0036d57028529e9a75981029446b9ca66036fc5020c1da192cd4394deb25fca3f1bbfd0e80cce37d1f726ca14bd0f0aa2508bd05471fa3859d3a4d4537f1f
   languageName: node
   linkType: hard
+
+"@storybook/instrumenter@link:../../code/lib/instrumenter::locator=portable-stories-react%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@storybook/instrumenter@link:../../code/lib/instrumenter::locator=portable-stories-react%40workspace%3A."
+  languageName: node
+  linkType: soft
 
 "@storybook/react-dom-shim@portal:../../../code/lib/react-dom-shim::locator=portable-stories-react%40workspace%3A.":
   version: 0.0.0-use.local
@@ -2896,9 +2900,17 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@storybook/test@portal:../../../code/deprecated/test::locator=portable-stories-react%40workspace%3A.":
+"@storybook/test@portal:../../../code/lib/test::locator=portable-stories-react%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "@storybook/test@portal:../../../code/deprecated/test::locator=portable-stories-react%40workspace%3A."
+  resolution: "@storybook/test@portal:../../../code/lib/test::locator=portable-stories-react%40workspace%3A."
+  dependencies:
+    "@storybook/instrumenter": "workspace:*"
+    "@testing-library/dom": "npm:10.1.0"
+    "@testing-library/jest-dom": "npm:6.4.5"
+    "@testing-library/user-event": "npm:14.5.2"
+    "@vitest/expect": "npm:1.6.0"
+    "@vitest/spy": "npm:1.6.0"
+    util: "npm:^0.12.4"
   peerDependencies:
     "@storybook/core": "workspace:*"
   languageName: node
@@ -3047,7 +3059,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^10.1.0":
+"@testing-library/dom@npm:10.1.0":
   version: 10.1.0
   resolution: "@testing-library/dom@npm:10.1.0"
   dependencies:
@@ -3079,7 +3091,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^6.4.5":
+"@testing-library/jest-dom@npm:6.4.5, @testing-library/jest-dom@npm:^6.4.5":
   version: 6.4.5
   resolution: "@testing-library/jest-dom@npm:6.4.5"
   dependencies:
@@ -3126,7 +3138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:^14.5.2":
+"@testing-library/user-event@npm:14.5.2":
   version: 14.5.2
   resolution: "@testing-library/user-event@npm:14.5.2"
   peerDependencies:
@@ -3791,7 +3803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/spy@npm:1.6.0, @vitest/spy@npm:^1.6.0":
+"@vitest/spy@npm:1.6.0":
   version: 1.6.0
   resolution: "@vitest/spy@npm:1.6.0"
   dependencies:
@@ -11457,6 +11469,21 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 10/7c511c59e979bd37b63c3aea4a8e4d4163204f00bd5633c053b05ed67835481995f61a523b0ad2b603566f9a89b34cb4965cb9fab9649fbfebd8f740cea57f17
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.2.3":
+  version: 8.17.0
+  resolution: "ws@npm:8.17.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 10/5e1dcb0ae70c6e2f158f5b446e0a72a2cd335b07aba73ee1872e9bae1285382286a10e53ed479db21bdd690a5dfd05641a768611ebb236253c62fefa43ef58b4
   languageName: node
   linkType: hard
 
