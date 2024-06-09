@@ -34,9 +34,9 @@ describe('Version', () => {
   const CODE_PACKAGE_JSON_PATH = path.join(CODE_DIR_PATH, 'package.json');
   const MANAGER_API_VERSION_PATH = path.join(
     CODE_DIR_PATH,
-    'lib',
-    'manager-api',
+    'core',
     'src',
+    'manager-api',
     'version.ts'
   );
   const VERSIONS_PATH = path.join(CODE_DIR_PATH, 'core', 'src', 'common', 'versions.ts');
