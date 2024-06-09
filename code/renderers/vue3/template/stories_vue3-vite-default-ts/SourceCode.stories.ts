@@ -21,7 +21,7 @@ export const Default = {
     },
     modelValue: 'Model value',
     default: 'Default slot content',
-    namedSlots: ({ foo }) => [
+    namedSlot: ({ foo }) => [
       'Plain text',
       h('div', { style: 'color:red' }, ['Div child', h('span', foo)]),
     ],

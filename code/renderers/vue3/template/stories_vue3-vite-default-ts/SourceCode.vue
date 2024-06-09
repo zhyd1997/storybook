@@ -13,7 +13,7 @@ const emit = defineEmits<{
 
 defineSlots<{
   default(): any;
-  namedSlots(props: { foo: string }): any;
+  namedSlot(props: { foo: string }): any;
 }>();
 </script>
 
@@ -22,8 +22,6 @@ defineSlots<{
     <pre>{{ props }}</pre>
 
     <slot></slot>
-    <slot name="namedSlots" foo="Hello World"></slot>
+    <slot name="namedSlot" foo="Hello World"></slot>
   </div>
 </template>
-
-<style lang="scss" scoped></style>
