@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import slash from 'slash';
 import invariant from 'tiny-invariant';
 import * as TsconfigPaths from 'tsconfig-paths';
-import findUp from 'find-up';
+import { findUp } from 'find-up';
 
 import type {
   IndexEntry,
