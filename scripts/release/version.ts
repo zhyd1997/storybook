@@ -126,7 +126,7 @@ const bumpCodeVersion = async (nextVersion: string) => {
 
 const bumpVersionSources = async (currentVersion: string, nextVersion: string) => {
   const filesToUpdate = [
-    path.join(CODE_DIR_PATH, 'lib', 'manager-api', 'src', 'version.ts'),
+    path.join(CODE_DIR_PATH, 'core', 'src', 'manager-api', 'version.ts'),
     path.join(CODE_DIR_PATH, 'core', 'src', 'common', 'versions.ts'),
   ];
   console.log(`🤜 Bumping versions in...:\n  ${chalk.cyan(filesToUpdate.join('\n  '))}`);
