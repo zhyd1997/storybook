@@ -110,7 +110,6 @@
     "@vitest/coverage-v8": "^1.2.2",
     "ansi-regex": "^5.0.0",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^9.1.2",
     "boxen": "^7.1.1",
     "browser-assert": "^1.2.1",
     "chalk": "^4.1.0",
@@ -193,7 +192,6 @@
   },
   "optionalDependencies": {
     "@verdaccio/types": "^10.2.0",
-    "ts-loader": "^9.4.2",
     "verdaccio": "^5.19.1",
     "verdaccio-auth-memory": "^10.2.0"
   },
