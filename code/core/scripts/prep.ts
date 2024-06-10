@@ -77,7 +77,7 @@ console.log(isWatch ? 'Watching...' : 'Bundling...');
 const files = measure(generateSourceFiles);
 const packageJson = measure(generatePackageJsonFile);
 const dist = files.then(() => measure(generateDistFiles));
-const types = measure(generateTypesFiles);
+const types = measure(() => generateTypesMapperFiles().then(() => generateTypesFiles()));
 
 const [filesTime, packageJsonTime, distTime, typesTime] = await Promise.all([
   files,
@@ -103,6 +103,7 @@ async function generateTypesMapperContent(filePath: string) {
   return dedent`
     // auto generated file from ${import.meta.filename}, do not edit
     export * from '${join(upwards, downwards)}';
+    export type * from '${join(upwards, downwards)}';
   `;
 }
 
@@ -170,6 +171,7 @@ async function generateDistFiles() {
           js: dedent`
             import Module from "node:module";
             const require = Module.createRequire(import.meta.url);
+            const __dirname = require('path').dirname(new URL(import.meta.url).pathname);
           `,
         },
         external: [...nodeInternals, ...esbuildDefaultOptions.external],
@@ -340,15 +342,6 @@ async function generateTypesFiles() {
   // normally this would not be possible, because there's there are interdependencies between the files.
   const all = entries.filter((e) => e.dts).map((e) => e.file);
 
-  await Promise.all(
-    all.map(async (filePath) =>
-      Bun.write(
-        filePath.replace('src', 'dist').replace(/\.tsx?/, '.d.ts'),
-        await generateTypesMapperContent(filePath)
-      )
-    )
-  );
-
   if (isOptimized) {
     // Spawn each entry in it's own separate process, because they are slow & synchronous
     // ...this way we do not bog down the main process/esbuild and can run them in parallel
@@ -392,6 +385,19 @@ async function generateTypesFiles() {
       })
     );
   }
+}
+
+async function generateTypesMapperFiles() {
+  const all = entries.filter((e) => e.dts).map((e) => e.file);
+
+  await Promise.all(
+    all.map(async (filePath) =>
+      Bun.write(
+        filePath.replace('src', 'dist').replace(/\.tsx?/, '.d.ts'),
+        await generateTypesMapperContent(filePath)
+      )
+    )
+  );
 }
 
 async function generatePackageJsonFile() {
