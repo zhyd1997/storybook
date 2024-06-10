@@ -80,7 +80,7 @@
     "vue-tsc": "latest"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:*",
+    "@storybook/core": "workspace:^",
     "vue": "^3.0.0"
   },
   "engines": {

@@ -83,7 +83,7 @@
     "vfile": "^5.3.7"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

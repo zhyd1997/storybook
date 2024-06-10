@@ -63,7 +63,7 @@
   },
   "peerDependencies": {
     "@preact/preset-vite": "*",
-    "@storybook/core": "workspace:*",
+    "@storybook/core": "workspace:^",
     "typescript": ">= 4.3.x",
     "vite": "^4.0.0 || ^5.0.0",
     "vite-plugin-glimmerx": "*"

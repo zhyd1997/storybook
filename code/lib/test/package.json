@@ -53,7 +53,7 @@
     "util": "^0.12.4"
   },
   "devDependencies": {
-    "@storybook/core": "workspace:*",
+    "@storybook/core": "workspace:^",
     "chai": "^4.4.1",
     "tinyspy": "^2.2.0",
     "ts-dedent": "^2.2.0",
@@ -61,7 +61,7 @@
     "typescript": "^5.3.2"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

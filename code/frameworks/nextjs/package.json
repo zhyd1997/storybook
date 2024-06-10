@@ -177,7 +177,7 @@
     "webpack": "^5.65.0"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:*",
+    "@storybook/core": "workspace:^",
     "next": "^13.5.0 || ^14.0.0",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta",

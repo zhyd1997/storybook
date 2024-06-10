@@ -53,7 +53,7 @@
     "webpack": "5"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   },
   "publishConfig": {
     "access": "public"
