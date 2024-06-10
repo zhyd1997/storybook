@@ -29,6 +29,7 @@ The rest of this guide will help you upgrade successfully, either automatically 
 
 - [`storiesOf` API has been removed](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#removal-of-storiesof-api)
 - [`*.stories.mdx` format has been removed](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#dropping-support-for-storiesmdx-csf-in-mdx-format-and-mdx1-support)
+- [Packages have been consolidated/removed](#package-structure-changes)
 - [Implicit actions (from `argTypesRegex`) can no longer be used during rendering (e.g. in a play function)](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#implicit-actions-can-not-be-used-during-rendering-for-example-in-the-play-function)
 - [`react-docgen` (instead of `react-docgen-typescript`) is the default for component analysis](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#react-docgen-component-analysis-by-default)
 - [Storyshots has been removed](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#storyshots-has-been-removed)
@@ -153,7 +154,7 @@ If you prefer to debug yourself, here are a few useful things you can do to help
 
 ## Package structure changes
 
-Migrating from 7.x to 8.x, the following packages are [removed](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#removed-deprecated-shim-packages):
+The following packages are **removed**. See the [full migration notes](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#removed-deprecated-shim-packages) for details.
 
 | Removal                          | Replacement                                           |
 | -------------------------------- | ----------------------------------------------------- |
@@ -166,7 +167,7 @@ Migrating from 7.x to 8.x, the following packages are [removed](https://github.c
 | `@storybook/store`               | `@storybook/preview-api`                              |
 | `@storybook/api`                 | `@storybook/manager-api`                              |
 
-The following packages are [deprecated](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#deprecated-storybooktesting-library-package):
+The following packages are **deprecated**. See the [full migration notes](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#deprecated-storybooktesting-library-package) for details.
 
 | Deprecation                  | Replacement       |
 | ---------------------------- | ----------------- |
