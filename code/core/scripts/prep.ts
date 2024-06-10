@@ -23,7 +23,6 @@ import { globalsModuleInfoMap } from '../src/manager/globals-module-info';
 
 import pkg from '../package.json';
 import { generateSourceFiles } from './helpers/sourcefiles';
-import { assert } from 'node:console';
 
 const flags = process.argv.slice(2);
 const cwd = process.cwd();
@@ -354,14 +353,20 @@ async function generateTypesFiles() {
     await Promise.all(
       all.map(async (fileName, index) => {
         return limited(async () => {
-          const dtsProcess = Bun.spawn(['bun', './scripts/dts.ts', index.toString()], {
-            cwd,
-            stdio: ['ignore', 'pipe', 'inherit'],
-          });
+          const getDtsProcess = () =>
+            Bun.spawn(['bun', './scripts/dts.ts', index.toString()], {
+              cwd,
+              stdio: ['ignore', 'pipe', 'inherit'],
+            });
           let timer: ReturnType<typeof setTimeout> | undefined;
+          let dtsProcess = getDtsProcess();
           processes.push(dtsProcess);
           await Promise.race([
-            dtsProcess.exited,
+            dtsProcess.exited.catch(async () => {
+              await dtsProcess.kill();
+              dtsProcess = getDtsProcess();
+              return dtsProcess.exited;
+            }),
             new Promise((_, reject) => {
               timer = setTimeout(() => {
                 console.log(index, fileName);
