@@ -94,6 +94,7 @@ If you're already using any of those flags in your project, you should be able t
 | `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                                          |
 | `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                                                        |
 | `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                                               |
+| `--testTimeout [amount]`        | Defines the maximum time in milliseconds that a test can run before it is automatically marked as failed. Useful for long-running tests <br/> `test-storybook --testTimeout=60000`                      |
 | `--no-cache`                    | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                                                      |
 | `--clearCache`                  | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                                                |
 | `--verbose`                     | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                                           |
@@ -207,7 +208,7 @@ Listed below are the available hooks and an overview of how to use them.
 | `prepare`   | Prepares the browser for tests<br/>`async prepare({ page, browserContext, testRunnerConfig }) {}`               |
 | `setup`     | Executes once before all the tests run<br/>`setup() {}`                                                         |
 | `preVisit`  | Executes before a story is initially visited and rendered in the browser<br/>`async preVisit(page, context) {}` |
-| `postVisit` | Executes after the story is is visited and fully rendered<br/>`async postVisit(page, context) {}`               |
+| `postVisit` | Executes after the story is visited and fully rendered<br/>`async postVisit(page, context) {}`                  |
 
 <Callout variant="info" icon="💡">
 
@@ -464,6 +465,16 @@ As the test runner is based on Playwright, you might need to use specific docker
 ### Tests filtered by tags are incorrectly executed
 
 If you've enabled filtering tests with tags and provided similar tags to the `include` and `exclude` lists, the test-runner will execute the tests based on the `exclude` list and ignore the `include` list. To avoid this, make sure the tags provided to the `include` and `exclude` lists differ.
+
+### The test runner doesn't support Yarn PnP out of the box
+
+If you've enabled the test-runner in a project running on a newer version of Yarn with Plug'n'Play (PnP) enabled, the test-runner might not work as expected and may generate the following error when running tests:
+
+```shell
+PlaywrightError: jest-playwright-preset: Cannot find playwright package to use chromium
+```
+
+This is due to the test-runner using the community-maintained package [jest-playwright-preset](https://github.com/playwright-community/jest-playwright) that still needs to support this feature. To solve this, you can either switch the [`nodeLinker`](https://yarnpkg.com/features/linkers) setting to `node-modules` or install Playwright as a direct dependency in your project, followed by adding the browser binaries via the [`install`](https://playwright.dev/docs/browsers#install-browsers) command.
 
 **Learn about other UI tests**
 

@@ -23,8 +23,11 @@ export async function build(options: Options) {
       outDir: options.outputDir,
       emptyOutDir: false, // do not clean before running Vite build - Storybook has already added assets in there!
       rollupOptions: {
-        // Do not try to bundle the storybook runtime, it is copied into the output dir after the build.
-        external: ['./sb-preview/runtime.js'],
+        external: [
+          // Do not try to bundle the Storybook runtime, it is copied into the output dir after the build.
+          './sb-preview/runtime.js',
+          /\.\/sb-common-assets\/.*\.woff2/,
+        ],
       },
       ...(options.test
         ? {
@@ -41,10 +44,10 @@ export async function build(options: Options) {
 
   const turbosnapPluginName = 'rollup-plugin-turbosnap';
   const hasTurbosnapPlugin =
-    finalConfig.plugins && hasVitePlugins(finalConfig.plugins, [turbosnapPluginName]);
+    finalConfig.plugins && (await hasVitePlugins(finalConfig.plugins, [turbosnapPluginName]));
   if (hasTurbosnapPlugin) {
     logger.warn(dedent`Found '${turbosnapPluginName}' which is now included by default in Storybook 8.
-      Removing from your plugins list. Ensure you pass \`--webpack-stats-json\` to generate stats.
+      Removing from your plugins list. Ensure you pass \`--stats-json\` to generate stats.
 
       For more information, see https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#turbosnap-vite-plugin-is-no-longer-needed`);
 
@@ -53,6 +56,9 @@ export async function build(options: Options) {
 
   await viteBuild(await sanitizeEnvVars(options, finalConfig));
 
-  const statsPlugin = findPlugin(finalConfig, 'rollup-plugin-webpack-stats') as WebpackStatsPlugin;
+  const statsPlugin = findPlugin(
+    finalConfig,
+    'storybook:rollup-plugin-webpack-stats'
+  ) as WebpackStatsPlugin;
   return statsPlugin?.storybookGetStats();
 }

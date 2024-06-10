@@ -97,6 +97,7 @@ Type:
   exportName: string;
   importPath: string;
   type: 'story';
+  rawComponentPath?: string;
   metaId?: string;
   name?: string;
   tags?: string[];
@@ -132,6 +133,12 @@ It is likely that the [`fileName`](#filename) being indexed is not CSF, in which
 Type: `'story'`
 
 The type of entry.
+
+##### `rawComponentPath`
+
+Type: `string`
+
+The raw path/package of the file that provides `meta.component`, if one exists.
 
 ##### `metaId`
 
@@ -351,9 +358,7 @@ function JsonStoriesPlugin(): PluginOption {
 
 <summary>Generating stories with an alternative API</summary>
 
-You can use a custom indexer and builder plugin to create your own API for defining stories, such as imperatively defining stories similar to the legacy [`storiesOf`](https://github.com/storybookjs/storybook/blob/main/code/lib/preview-api/docs/storiesOf.md) format.
-
-The [dynamic stories proof of concept](https://stackblitz.com/edit/github-h2rgfk?file=README.md) is an elaborate, functional example of doing just that. It contains everything needed to support such a feature, including the indexer, a Vite plugin and a Webpack loader.
+You can use a custom indexer and builder plugin to create your API to define stories extending the CSF format. To learn more, see the following [proof of concept](https://stackblitz.com/edit/github-h2rgfk?file=README.md) to set up a custom indexer to generate stories dynamically. It contains everything needed to support such a feature, including the indexer, a Vite plugin, and a Webpack loader.
 
 </details>
 

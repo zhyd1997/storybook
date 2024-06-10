@@ -92,13 +92,18 @@ async function loaderTransform(this: any, parentTrace: any, source?: string, inp
     swcCacheDir,
     relativeFilePathFromRoot,
     serverComponents,
+    // @ts-expect-error Relevant for Next.js < 14.1
+    // TODO: Remove this when Next.js < 14.1 is no longer supported
     isReactServerLayer,
   });
 
   const programmaticOptions = {
     ...swcOptions,
     filename,
-    inputSourceMap: inputSourceMap ? JSON.stringify(inputSourceMap) : undefined,
+    inputSourceMap:
+      inputSourceMap && typeof inputSourceMap === 'object'
+        ? JSON.stringify(inputSourceMap)
+        : undefined,
 
     // Set the default sourcemap behavior based on Webpack's mapping flag,
     sourceMaps: this.sourceMap,
@@ -164,20 +169,11 @@ export function pitch(this: any) {
   }, callback);
 }
 
-function sanitizeSourceMap(rawSourceMap: any): any {
-  const { sourcesContent, ...sourceMap } = rawSourceMap ?? {};
-
-  // JSON parse/stringify trick required for swc to accept the SourceMap
-  return JSON.parse(JSON.stringify(sourceMap));
-}
-
 export default function swcLoader(this: any, inputSource: string, inputSourceMap: any) {
   const loaderSpan = mockCurrentTraceSpan.traceChild('next-swc-loader');
   const callback = this.async();
   loaderSpan
-    .traceAsyncFn(() =>
-      loaderTransform.call(this, loaderSpan, inputSource, sanitizeSourceMap(inputSourceMap))
-    )
+    .traceAsyncFn(() => loaderTransform.call(this, loaderSpan, inputSource, inputSourceMap))
     .then(
       ([transformedSource, outputSourceMap]: any) => {
         callback(null, transformedSource, outputSourceMap || inputSourceMap);
