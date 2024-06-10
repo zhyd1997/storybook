@@ -21,8 +21,6 @@ import type { RenderContextCallbacks } from '@storybook/core/dist/types';
  *
  * Use cases:
  *  - Autodocs, where there is no story, and we fall back to the globally defined template.
- *  - *.stories.mdx files, where the MDX compiler produces a CSF file with a `.parameter.docs.page`
- *      parameter containing the compiled content of the MDX file.
  */
 export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRenderer> {
   public readonly type: RenderType = 'docs';

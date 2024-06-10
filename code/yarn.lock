@@ -5769,7 +5769,6 @@ __metadata:
     "@types/compression": "npm:^1.7.0"
     "@types/detect-port": "npm:^1.3.0"
     "@types/diff": "npm:^5.0.9"
-    "@types/doctrine": "npm:^0.0.3"
     "@types/ejs": "npm:^3.1.1"
     "@types/express": "npm:^4.17.21"
     "@types/find-cache-dir": "npm:^5.0.0"
@@ -5803,6 +5802,7 @@ __metadata:
     chai: "npm:^4.4.1"
     chalk: "npm:^5.3.0"
     cli-table3: "npm:^0.6.1"
+    comment-parser: "npm:^1.4.1"
     compression: "npm:^1.7.4"
     copy-to-clipboard: "npm:^3.3.1"
     cross-spawn: "npm:^7.0.3"
@@ -5812,7 +5812,6 @@ __metadata:
     detect-package-manager: "npm:^3.0.2"
     detect-port: "npm:^1.3.0"
     diff: "npm:^5.2.0"
-    doctrine: "npm:^3.0.0"
     downshift: "npm:^9.0.4"
     ejs: "npm:^3.1.10"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0"
@@ -5831,6 +5830,7 @@ __metadata:
     globby: "npm:^14.0.1"
     handlebars: "npm:^4.7.7"
     js-yaml: "npm:^4.1.0"
+    jsdoc-type-pratt-parser: "npm:^4.0.0"
     lazy-universal-dotenv: "npm:^4.0.0"
     lodash: "npm:^4.17.21"
     markdown-to-jsx: "npm:^7.4.5"
@@ -7410,13 +7410,6 @@ __metadata:
   version: 5.0.9
   resolution: "@types/diff@npm:5.0.9"
   checksum: 10c0/038e4d831f6d9826f0019fa07ec821a1f966160cd0d62aede6fc6ab269fc969ac6e665f7849fb2189fb92f7865488dcaabcb278c3df877d0d3581f2a7e1a67b2
-  languageName: node
-  linkType: hard
-
-"@types/doctrine@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@types/doctrine@npm:0.0.3"
-  checksum: 10c0/566dcdc988c97ff01d14493ceb2223643347f07cf0a88c86cd7cb7c2821cfc837fd39295e6809a29614fdfdc6c4e981408155ca909b2e5da5d947af939b6c966
   languageName: node
   linkType: hard
 
@@ -11841,6 +11834,13 @@ __metadata:
   version: 8.3.0
   resolution: "commander@npm:8.3.0"
   checksum: 10c0/8b043bb8322ea1c39664a1598a95e0495bfe4ca2fad0d84a92d7d1d8d213e2a155b441d2470c8e08de7c4a28cf2bc6e169211c49e1b21d9f7edc6ae4d9356060
+  languageName: node
+  linkType: hard
+
+"comment-parser@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "comment-parser@npm:1.4.1"
+  checksum: 10c0/d6c4be3f5be058f98b24f2d557f745d8fe1cc9eb75bebbdccabd404a0e1ed41563171b16285f593011f8b6a5ec81f564fb1f2121418ac5cbf0f49255bf0840dd
   languageName: node
   linkType: hard
 
@@ -18133,6 +18133,13 @@ __metadata:
   bin:
     jscodeshift: bin/jscodeshift.js
   checksum: 10c0/334de6ffa776a68b3f59f2f18a285ea977f3339d85e3517f3854761e65769ffa7e453c35cde320fc969106d573df39bd3fb08b23db54ae17c1b1516e5bf05742
+  languageName: node
+  linkType: hard
+
+"jsdoc-type-pratt-parser@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jsdoc-type-pratt-parser@npm:4.0.0"
+  checksum: 10c0/b23ef7bbbe2f56d72630d1c5a233dc9fecaff399063d373c57bef136908c1b05e723dac107177303c03ccf8d75aa51507510b282aa567600477479c5ea0c36d1
   languageName: node
   linkType: hard
 
