@@ -5912,7 +5912,6 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     type-fest: "npm:~2.19"
     typescript: "npm:^5.3.2"
-    util: "npm:^0.12.4"
   peerDependencies:
     prettier: ^2 || ^3
   peerDependenciesMeta:
