@@ -5098,7 +5098,7 @@ __metadata:
     resize-observer-polyfill: "npm:^1.5.1"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5117,7 +5117,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     uuid: "npm:^9.0.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     "@storybook/test": "workspace:*"
   languageName: unknown
   linkType: soft
@@ -5134,7 +5134,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5150,7 +5150,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     ts-dedent: "npm:^2.0.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5176,7 +5176,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     vite: "npm:^4.0.4"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5196,7 +5196,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5208,7 +5208,7 @@ __metadata:
     "@types/webpack-env": "npm:^1.16.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5227,7 +5227,7 @@ __metadata:
     ts-dedent: "npm:^2.2.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5245,7 +5245,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     upath: "npm:^2.0.1"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5259,7 +5259,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
   peerDependenciesMeta:
     react:
@@ -5275,7 +5275,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5290,7 +5290,7 @@ __metadata:
     tiny-invariant: "npm:^1.3.1"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5309,7 +5309,7 @@ __metadata:
     react-use-measure: "npm:^2.1.1"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5324,7 +5324,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5342,7 +5342,7 @@ __metadata:
     tiny-invariant: "npm:^1.3.1"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5354,7 +5354,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5366,7 +5366,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5381,7 +5381,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5436,7 +5436,7 @@ __metadata:
     "@angular/forms": ">=15.0.0 < 19.0.0"
     "@angular/platform-browser": ">=15.0.0 < 19.0.0"
     "@angular/platform-browser-dynamic": ">=15.0.0 < 19.0.0"
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     rxjs: ^6.0.0 || ^7.4.0
     typescript: ^4.0.0 || ^5.0.0
     zone.js: ">= 0.11.1 < 1.0.0"
@@ -5494,7 +5494,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     util-deprecate: "npm:^1.0.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
   peerDependenciesMeta:
@@ -5509,7 +5509,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/builder-manager@workspace:deprecated/builder-manager"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5534,7 +5534,7 @@ __metadata:
     vite: "npm:^4.0.4"
   peerDependencies:
     "@preact/preset-vite": "*"
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     typescript: ">= 4.3.x"
     vite: ^4.0.0 || ^5.0.0
     vite-plugin-glimmerx: "*"
@@ -5586,7 +5586,7 @@ __metadata:
     webpack-hot-middleware: "npm:^2.25.1"
     webpack-virtual-modules: "npm:^0.6.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   peerDependenciesMeta:
     typescript:
       optional: true
@@ -5597,7 +5597,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/channels@workspace:deprecated/channels"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5642,7 +5642,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   bin:
     getstorybook: ./bin/index.js
     sb: ./bin/index.js
@@ -5653,7 +5653,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/client-logger@workspace:deprecated/client-logger"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5687,7 +5687,7 @@ __metadata:
     util: "npm:^0.12.4"
     vfile: "npm:^5.3.7"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5695,7 +5695,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/components@workspace:deprecated/components"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5703,7 +5703,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/core-common@workspace:deprecated/core-common"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5711,7 +5711,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/core-events@workspace:deprecated/core-events"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5719,7 +5719,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/core-server@workspace:deprecated/core-server"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5733,11 +5733,11 @@ __metadata:
     typescript: "npm:^5.3.2"
     webpack: "npm:5"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
-"@storybook/core@workspace:*, @storybook/core@workspace:core":
+"@storybook/core@workspace:^, @storybook/core@workspace:core":
   version: 0.0.0-use.local
   resolution: "@storybook/core@workspace:core"
   dependencies:
@@ -5887,7 +5887,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     unplugin: "npm:^1.3.1"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5895,7 +5895,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/csf-tools@workspace:deprecated/csf-tools"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5928,7 +5928,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/docs-tools@workspace:deprecated/docs-tools"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5946,7 +5946,7 @@ __metadata:
     typescript: "npm:^5.3.2"
   peerDependencies:
     "@babel/core": "*"
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     babel-plugin-ember-modules-api-polyfill: ^3.5.0
     babel-plugin-htmlbars-inline-precompile: ^5.3.1
     ember-source: ~3.28.1 || ^4.0.0
@@ -5981,7 +5981,7 @@ __metadata:
     magic-string: "npm:^0.30.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -5996,7 +5996,7 @@ __metadata:
     "@types/node": "npm:^18.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6008,7 +6008,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6026,13 +6026,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/instrumenter@workspace:lib/instrumenter"
   dependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     "@storybook/global": "npm:^5.0.0"
     "@vitest/utils": "npm:^1.3.1"
     typescript: "npm:^5.3.2"
     util: "npm:^0.12.4"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6067,7 +6067,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/manager-api@workspace:deprecated/manager-api"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6075,7 +6075,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/manager@workspace:deprecated/manager"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6133,7 +6133,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     webpack: "npm:^5.65.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     next: ^13.5.0 || ^14.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
@@ -6153,7 +6153,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/node-logger@workspace:deprecated/node-logger"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6167,7 +6167,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     vite: "npm:^4.0.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     preact: ">=10"
   languageName: unknown
   linkType: soft
@@ -6183,7 +6183,7 @@ __metadata:
     preact: "npm:^10.5.13"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     preact: ">=10.0.0"
   languageName: unknown
   linkType: soft
@@ -6197,7 +6197,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     preact: ^8.0.0||^10.0.0
   languageName: unknown
   linkType: soft
@@ -6214,7 +6214,7 @@ __metadata:
     semver: "npm:^7.5.4"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     react-scripts: ">=5.0.0"
   languageName: unknown
   linkType: soft
@@ -6229,7 +6229,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     webpack: "npm:5"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6242,7 +6242,7 @@ __metadata:
     preact: "npm:^10.5.13"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     preact: ^8.0.0||^10.0.0
   languageName: unknown
   linkType: soft
@@ -6266,7 +6266,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     webpack: "npm:5"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
   peerDependenciesMeta:
@@ -6290,7 +6290,7 @@ __metadata:
     yaml: "npm:^2.3.1"
     yaml-loader: "npm:^0.8.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6305,7 +6305,7 @@ __metadata:
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     svelte: ^4.0.0 || ^5.0.0-next.65
     svelte-loader: "*"
   languageName: unknown
@@ -6326,7 +6326,7 @@ __metadata:
     vue-loader: "npm:^16.0.0"
     webpack: "npm:5"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     "@vue/compiler-sfc": ^3.0.0
     vue: ^3.0.0
   languageName: unknown
@@ -6336,7 +6336,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/preview-api@workspace:deprecated/preview-api"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6344,7 +6344,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/preview@workspace:deprecated/preview"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6372,7 +6372,7 @@ __metadata:
   dependencies:
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
   languageName: unknown
@@ -6395,7 +6395,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     vite: "npm:^4.0.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     vite: ^4.0.0 || ^5.0.0
@@ -6411,7 +6411,7 @@ __metadata:
     "@storybook/react": "workspace:*"
     "@types/node": "npm:^18.0.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     typescript: ">= 4.2.x"
@@ -6450,7 +6450,7 @@ __metadata:
     type-fest: "npm:~2.19"
     util-deprecate: "npm:^1.0.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     typescript: ">= 4.2.x"
@@ -6494,7 +6494,7 @@ __metadata:
     "@storybook/builder-webpack5": "workspace:*"
     "@storybook/cli": "workspace:*"
     "@storybook/codemod": "workspace:*"
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     "@storybook/core-webpack": "workspace:*"
     "@storybook/csf": "npm:^0.1.7"
     "@storybook/csf-plugin": "workspace:*"
@@ -6612,7 +6612,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/router@workspace:deprecated/router"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6626,7 +6626,7 @@ __metadata:
     "@types/node": "npm:^18.0.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6642,7 +6642,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     yaml: "npm:^2.3.1"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6656,7 +6656,7 @@ __metadata:
     prettier: "npm:^3.1.1"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6676,7 +6676,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     vite: "npm:^4.0.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     "@sveltejs/vite-plugin-svelte": ^2.0.0 || ^3.0.0
     svelte: ^4.0.0 || ^5.0.0-next.65
     vite: ^4.0.0 || ^5.0.0
@@ -6694,7 +6694,7 @@ __metadata:
     svelte-loader: "npm:^3.1.9"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     svelte: ^4.0.0 || ^5.0.0-next.65
     svelte-loader: "*"
   languageName: unknown
@@ -6717,7 +6717,7 @@ __metadata:
     type-fest: "npm:~2.19"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     svelte: ^4.0.0 || ^5.0.0-next.65
   languageName: unknown
   linkType: soft
@@ -6734,7 +6734,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     vite: "npm:^4.0.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     svelte: ^4.0.0 || ^5.0.0-next.65
     vite: ^4.0.0 || ^5.0.0
   languageName: unknown
@@ -6744,7 +6744,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/telemetry@workspace:deprecated/telemetry"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6752,7 +6752,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/test@workspace:lib/test"
   dependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     "@storybook/instrumenter": "workspace:*"
     "@testing-library/dom": "npm:10.1.0"
     "@testing-library/jest-dom": "npm:6.4.5"
@@ -6766,7 +6766,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     util: "npm:^0.12.4"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6785,7 +6785,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/theming@workspace:deprecated/theming"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6793,7 +6793,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/types@workspace:deprecated/types"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6812,7 +6812,7 @@ __metadata:
     vue-component-meta: "npm:^2.0.0"
     vue-docgen-api: "npm:^4.75.1"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     vite: ^4.0.0 || ^5.0.0
   languageName: unknown
   linkType: soft
@@ -6829,7 +6829,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     vue: "npm:3.0.0"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     "@vue/compiler-sfc": ^3.0.0
     vue: ^3.0.0
   languageName: unknown
@@ -6853,7 +6853,7 @@ __metadata:
     vue-component-type-helpers: "npm:latest"
     vue-tsc: "npm:latest"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     vue: ^3.0.0
   languageName: unknown
   linkType: soft
@@ -6868,7 +6868,7 @@ __metadata:
     magic-string: "npm:^0.30.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6882,7 +6882,7 @@ __metadata:
     lit: "npm:2.3.1"
     typescript: "npm:^5.3.2"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     lit: ^2.0.0 || ^3.0.0
   languageName: unknown
   linkType: soft
@@ -6901,7 +6901,7 @@ __metadata:
     typescript: "npm:^5.3.2"
     web-component-analyzer: "npm:^1.1.6"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
     lit: ^2.0.0 || ^3.0.0
   languageName: unknown
   linkType: soft
@@ -25117,7 +25117,7 @@ __metadata:
   dependencies:
     "@storybook/cli": "workspace:*"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   bin:
     sb: ./index.js
   languageName: unknown
@@ -26043,7 +26043,7 @@ __metadata:
   dependencies:
     "@storybook/cli": "workspace:*"
   peerDependencies:
-    "@storybook/core": "workspace:*"
+    "@storybook/core": "workspace:^"
   bin:
     sb: ./index.js
     storybook: ./index.js
