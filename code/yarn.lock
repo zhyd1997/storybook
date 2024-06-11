@@ -6862,7 +6862,7 @@ __metadata:
     semver: "npm:^7.3.7"
     serve-static: "npm:^1.14.1"
     svelte: "npm:^5.0.0-next.65"
-    trash: "npm:^7.0.0"
+    trash: "npm:^7.2.0"
     ts-dedent: "npm:^2.0.0"
     ts-node: "npm:^10.9.1"
     typescript: "npm:^5.4.3"
@@ -27471,7 +27471,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"trash@npm:^7.0.0":
+"trash@npm:^7.2.0":
   version: 7.2.0
   resolution: "trash@npm:7.2.0"
   dependencies:
