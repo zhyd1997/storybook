@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { vi, describe, expect, it } from 'vitest';
+import { vi, expect, it } from 'vitest';
 import path from 'path';
 import * as fsExtra from 'fs-extra';
 import { initialGlobals } from './initial-globals';
