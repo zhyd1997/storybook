@@ -54,7 +54,7 @@
   },
   "resolutions": {
     "@testing-library/jest-dom": "^5.11.9",
-    "esbuild": "^0.20.1",
+    "esbuild": "^0.21.5",
     "serialize-javascript": "^3.1.0",
     "type-fest": "~2.19"
   },
