@@ -42,6 +42,10 @@ export function composeConfigs<TRenderer extends Renderer>(
 ): ProjectAnnotations<TRenderer> {
   const allArgTypeEnhancers = getArrayField(moduleExportList, 'argTypesEnhancers');
   const stepRunners = getField(moduleExportList, 'runStep');
+  const initialGlobals = combineParameters(
+    getObjectField(moduleExportList, 'globals'),
+    getObjectField(moduleExportList, 'initialGlobals')
+  );
 
   return {
     parameters: combineParameters(...getField(moduleExportList, 'parameters')),
@@ -55,9 +59,8 @@ export function composeConfigs<TRenderer extends Renderer>(
       ...allArgTypeEnhancers.filter((e) => !e.secondPass),
       ...allArgTypeEnhancers.filter((e) => e.secondPass),
     ],
-    initialGlobals:
-      getObjectField(moduleExportList, 'initialGlobals') ??
-      getObjectField(moduleExportList, 'globals'),
+    globals: initialGlobals, // deprecated
+    initialGlobals,
     globalTypes: getObjectField(moduleExportList, 'globalTypes'),
     loaders: getArrayField(moduleExportList, 'loaders'),
     beforeEach: getArrayField(moduleExportList, 'beforeEach'),

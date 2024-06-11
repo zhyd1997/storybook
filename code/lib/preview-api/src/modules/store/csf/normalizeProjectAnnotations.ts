@@ -23,7 +23,7 @@ export function normalizeProjectAnnotations<TRenderer extends Renderer>({
   initialGlobals,
   ...annotations
 }: ProjectAnnotations<TRenderer>): NormalizedProjectAnnotations<TRenderer> {
-  if (globals) {
+  if (!initialGlobals && globals) {
     deprecate(dedent`
       The preview.js 'globals' field is deprecated and will be removed in Storybook 9.0.
       Please use 'initialGlobals' instead. Learn more:
