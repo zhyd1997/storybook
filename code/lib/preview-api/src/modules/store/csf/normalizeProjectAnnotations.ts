@@ -11,6 +11,7 @@ import { inferArgTypes } from '../inferArgTypes';
 import { inferControls } from '../inferControls';
 import { normalizeInputTypes } from './normalizeInputTypes';
 import { normalizeArrays } from './normalizeArrays';
+import { combineParameters } from '../parameters';
 
 export function normalizeProjectAnnotations<TRenderer extends Renderer>({
   argTypes,
@@ -23,7 +24,7 @@ export function normalizeProjectAnnotations<TRenderer extends Renderer>({
   initialGlobals,
   ...annotations
 }: ProjectAnnotations<TRenderer>): NormalizedProjectAnnotations<TRenderer> {
-  if (!initialGlobals && globals) {
+  if (globals && Object.keys(globals).length > 0) {
     deprecate(dedent`
       The preview.js 'globals' field is deprecated and will be removed in Storybook 9.0.
       Please use 'initialGlobals' instead. Learn more:
@@ -46,7 +47,7 @@ export function normalizeProjectAnnotations<TRenderer extends Renderer>({
       // compatibility reasons, we will leave this in the store until 7.0
       inferControls,
     ],
-    initialGlobals: initialGlobals ?? globals,
+    initialGlobals: combineParameters(initialGlobals, globals),
     ...annotations,
   };
 }
