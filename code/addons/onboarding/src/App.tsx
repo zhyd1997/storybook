@@ -9,19 +9,14 @@ import { Confetti } from './components/Confetti/Confetti';
 import { STORYBOOK_ADDON_ONBOARDING_CHANNEL } from './constants';
 import { useGetProject } from './features/WriteStoriesModal/hooks/useGetProject';
 
-type Step =
-  | '1:Welcome'
-  | '2:StorybookTour'
-  | '3:WriteYourStory'
-  | '4:VisitNewStory'
-  | '5:ConfigureYourProject';
+type Step = '1:Controls' | '2:CreateStory' | '3:StoryCreated' | '4:StoriesList' | '5:NextSteps';
 
 const theme = convert();
 
 export default function App({ api }: { api: API }) {
   const [enabled, setEnabled] = useState(true);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [step, setStep] = useState<Step>('1:Welcome');
+  const [step, setStep] = useState<Step>('1:Controls');
   const { data: codeSnippets } = useGetProject();
 
   const skipOnboarding = useCallback(() => {
@@ -36,51 +31,25 @@ export default function App({ api }: { api: API }) {
   }, [setEnabled, api]);
 
   useEffect(() => {
-    api.emit(STORYBOOK_ADDON_ONBOARDING_CHANNEL, {
-      step: '1:Welcome',
-      type: 'telemetry',
-    });
-  }, []);
-
-  useEffect(() => {
-    if (step !== '1:Welcome') {
-      api.emit(STORYBOOK_ADDON_ONBOARDING_CHANNEL, {
-        step,
-        type: 'telemetry',
-      });
-    }
+    setShowConfetti(step === '3:StoryCreated');
+    api.emit(STORYBOOK_ADDON_ONBOARDING_CHANNEL, { step, type: 'telemetry' });
   }, [api, step]);
 
   useEffect(() => {
-    let stepTimeout: number;
-    if (step === '4:VisitNewStory') {
-      setShowConfetti(true);
-      stepTimeout = window.setTimeout(() => {
-        setStep('5:ConfigureYourProject');
-      }, 2000);
-    }
-
-    return () => {
-      clearTimeout(stepTimeout);
-    };
-  }, [step]);
-
-  useEffect(() => {
-    const storyId = api.getCurrentStoryData()?.id;
+    console.log(api.getCurrentStoryData());
+    const { id: storyId, refId } = api.getCurrentStoryData() || {};
     api.setQueryParams({ onboarding: 'true' });
     // make sure the initial state is set correctly:
     // 1. Selected story is primary button
     // 2. The addon panel is opened, in the bottom and the controls tab is selected
-    if (storyId !== 'example-button--primary') {
+    if (storyId !== 'example-button--primary' || refId !== undefined) {
       try {
-        api.selectStory('example-button--primary', undefined, {
-          ref: undefined,
-        });
-      } catch (e) {
-        //
-      }
+        api.selectStory('example-button--primary', undefined, { ref: undefined });
+      } catch (e) {}
     }
-  }, []);
+  }, [api]);
+
+  console.log({ enabled, step });
 
   if (!enabled) {
     return null;
@@ -88,7 +57,7 @@ export default function App({ api }: { api: API }) {
 
   return (
     <ThemeProvider theme={theme}>
-      {enabled && showConfetti && (
+      {showConfetti && (
         <Confetti
           numberOfPieces={800}
           recycle={false}
@@ -99,28 +68,11 @@ export default function App({ api }: { api: API }) {
           }}
         />
       )}
-      {enabled && step === '1:Welcome' && (
-        <WelcomeModal
-          onProceed={() => {
-            setStep('2:StorybookTour');
-          }}
-          skipOnboarding={() => {
-            skipOnboarding();
-
-            api.emit(STORYBOOK_ADDON_ONBOARDING_CHANNEL, {
-              step: 'X:SkippedOnboarding',
-              where: 'WelcomeModal',
-              type: 'telemetry',
-            });
-          }}
-        />
-      )}
-      {enabled && (step === '2:StorybookTour' || step === '5:ConfigureYourProject') && (
+      {step !== '5:NextSteps' && (
         <GuidedTour
           api={api}
-          isFinalStep={step === '5:ConfigureYourProject'}
           onFirstTourDone={() => {
-            setStep('3:WriteYourStory');
+            // setStep('3:WriteYourStory');
           }}
           codeSnippets={codeSnippets || undefined}
           onLastTourDone={() => {
@@ -135,19 +87,6 @@ export default function App({ api }: { api: API }) {
             });
             skipOnboarding();
           }}
-        />
-      )}
-      {enabled && step === '3:WriteYourStory' && codeSnippets && (
-        <WriteStoriesModal
-          api={api}
-          codeSnippets={codeSnippets}
-          addonsStore={addons}
-          onFinish={() => {
-            api.selectStory('example-button--warning');
-
-            setStep('4:VisitNewStory');
-          }}
-          skipOnboarding={skipOnboarding}
         />
       )}
     </ThemeProvider>
