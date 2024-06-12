@@ -2269,7 +2269,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/blocks@portal:../../../code/ui/blocks::locator=portable-stories-svelte%40workspace%3A."
   dependencies:
-    "@storybook/csf": "npm:^0.1.7"
+    "@storybook/csf": "npm:^0.1.8"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.5"
     "@types/lodash": "npm:^4.14.167"
@@ -2373,7 +2373,7 @@ __metadata:
     "@babel/core": "npm:^7.24.4"
     "@babel/preset-env": "npm:^7.24.4"
     "@babel/types": "npm:^7.24.0"
-    "@storybook/csf": "npm:^0.1.7"
+    "@storybook/csf": "npm:^0.1.8"
     "@types/cross-spawn": "npm:^6.0.2"
     cross-spawn: "npm:^7.0.3"
     globby: "npm:^14.0.1"
@@ -2391,7 +2391,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/core@portal:../../../code/core::locator=portable-stories-svelte%40workspace%3A."
   dependencies:
-    "@storybook/csf": "npm:^0.1.7"
+    "@storybook/csf": "npm:^0.1.8"
     "@types/express": "npm:^4.17.21"
     "@types/node": "npm:^18.0.0"
     browser-assert: "npm:^1.2.1"
@@ -2415,12 +2415,12 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@storybook/csf@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "@storybook/csf@npm:0.1.7"
+"@storybook/csf@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "@storybook/csf@npm:0.1.8"
   dependencies:
     type-fest: "npm:^2.19.0"
-  checksum: 10/19dbd5c72a0c60e4b7cf0255fbbb74452172c03911d0236a0bd26c5e1d1453870800ebfbcd6afd455384fac30bbb5d261193ee2d455bd863344ceb96265139e3
+  checksum: 10/0cc01216a8888012bd1b33743cfeab83f16d028ba40ff02d39215a827e899451a39aef6b3a30342cdc4f87567d45f93074cfe05bdb8a34561c636ac7d8a13cfd
   languageName: node
   linkType: hard
 
@@ -2791,9 +2791,9 @@ __metadata:
   linkType: hard
 
 "@types/qs@npm:*":
-  version: 6.9.15
-  resolution: "@types/qs@npm:6.9.15"
-  checksum: 10/97d8208c2b82013b618e7a9fc14df6bd40a73e1385ac479b6896bafc7949a46201c15f42afd06e86a05e914f146f495f606b6fb65610cc60cf2e0ff743ec38a2
+  version: 6.9.12
+  resolution: "@types/qs@npm:6.9.12"
+  checksum: 10/76be8068091058987bb49aca59e9714ff856661cdc2340499f9d502c78950ac08e7ecbca256c8a72c4c83714bce30e6aaad13f9f739e8c0c436c0eedb2a2627c
   languageName: node
   linkType: hard
 
