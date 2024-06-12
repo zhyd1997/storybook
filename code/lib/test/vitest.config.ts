@@ -4,8 +4,6 @@ import { vitestCommonConfig } from '../../vitest.workspace';
 export default mergeConfig(
   vitestCommonConfig,
   defineConfig({
-    test: {
-      environment: 'happy-dom',
-    },
+    // Add custom config here
   })
 );

@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+
 import path from 'path';
 import { vi, describe, it, expect } from 'vitest';
 import fs from 'fs';
