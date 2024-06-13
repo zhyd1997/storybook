@@ -28,6 +28,8 @@ import { mdx1to3 } from './mdx-1-to-3';
 import { addonPostCSS } from './addon-postcss';
 import { vta } from './vta';
 import { upgradeStorybookRelatedDependencies } from './upgrade-storybook-related-dependencies';
+import { autodocsTags } from './autodocs-tags';
+import { initialGlobals } from './initial-globals';
 
 export * from '../types';
 
@@ -60,6 +62,8 @@ export const allFixes: Fix[] = [
   mdx1to3,
   upgradeStorybookRelatedDependencies,
   vta,
+  autodocsTags,
+  initialGlobals,
 ];
 
 export const initFixes: Fix[] = [eslintPlugin];

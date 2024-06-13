@@ -49,7 +49,7 @@ const projectAnnotations: ProjectAnnotations<any> = {
 };
 
 const storyIndex: StoryIndex = {
-  v: 4,
+  v: 5,
   entries: {
     'component-one--a': {
       type: 'story',
@@ -183,7 +183,7 @@ describe('StoryStore', () => {
       expect(prepareStory).toHaveBeenCalledTimes(1);
 
       // The stories are no longer in the index
-      await store.onStoriesChanged({ storyIndex: { v: 4, entries: {} } });
+      await store.onStoriesChanged({ storyIndex: { v: 5, entries: {} } });
 
       await expect(store.loadStory({ storyId: 'component-one--a' })).rejects.toThrow();
 
@@ -202,7 +202,7 @@ describe('StoryStore', () => {
       // Add a new story to the index that isn't different
       await store.onStoriesChanged({
         storyIndex: {
-          v: 4,
+          v: 5,
           entries: {
             ...storyIndex.entries,
             'new-component--story': {
@@ -233,7 +233,7 @@ describe('StoryStore', () => {
       await store.onStoriesChanged({
         importFn: newImportFn,
         storyIndex: {
-          v: 4,
+          v: 5,
           entries: {
             'component-one--a': {
               type: 'story',
@@ -262,7 +262,7 @@ describe('StoryStore', () => {
       await store.onStoriesChanged({
         importFn: newImportFn,
         storyIndex: {
-          v: 4,
+          v: 5,
           entries: {
             'component-one--a': {
               type: 'story',
@@ -311,7 +311,8 @@ describe('StoryStore', () => {
             "story": "A",
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component One",
           },
@@ -333,7 +334,7 @@ describe('StoryStore', () => {
 
     it('returns them in the order they are in the index, not the file', async () => {
       const reversedIndex = {
-        v: 4,
+        v: 5,
         entries: {
           'component-one--b': storyIndex.entries['component-one--b'],
           'component-one--a': storyIndex.entries['component-one--a'],
@@ -476,7 +477,8 @@ describe('StoryStore', () => {
             "story": "A",
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component One",
           },
@@ -514,7 +516,8 @@ describe('StoryStore', () => {
             "story": "B",
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component One",
           },
@@ -552,7 +555,8 @@ describe('StoryStore', () => {
             "story": "C",
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component Two",
           },
@@ -583,7 +587,7 @@ describe('StoryStore', () => {
 
     it('does not include (modern) docs entries ever', async () => {
       const unnattachedStoryIndex: StoryIndex = {
-        v: 4,
+        v: 5,
         entries: {
           ...storyIndex.entries,
           'introduction--docs': {
@@ -660,7 +664,8 @@ describe('StoryStore', () => {
             "storyFn": [Function],
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component One",
             "unboundStoryFn": [Function],
@@ -706,7 +711,8 @@ describe('StoryStore', () => {
             "storyFn": [Function],
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component One",
             "unboundStoryFn": [Function],
@@ -752,7 +758,8 @@ describe('StoryStore', () => {
             "storyFn": [Function],
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component Two",
             "unboundStoryFn": [Function],
@@ -813,7 +820,8 @@ describe('StoryStore', () => {
               "story": "A",
               "subcomponents": undefined,
               "tags": [
-                "story",
+                "dev",
+                "test",
               ],
               "title": "Component One",
             },
@@ -851,7 +859,8 @@ describe('StoryStore', () => {
               "story": "B",
               "subcomponents": undefined,
               "tags": [
-                "story",
+                "dev",
+                "test",
               ],
               "title": "Component One",
             },
@@ -889,7 +898,8 @@ describe('StoryStore', () => {
               "story": "C",
               "subcomponents": undefined,
               "tags": [
-                "story",
+                "dev",
+                "test",
               ],
               "title": "Component Two",
             },

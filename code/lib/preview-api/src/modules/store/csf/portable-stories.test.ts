@@ -23,6 +23,7 @@ describe('composeStory', () => {
       label: 'Hello World',
       primary: true,
     },
+    tags: ['metaTag'],
   };
 
   it('should compose project annotations in all module formats', () => {
@@ -40,15 +41,16 @@ describe('composeStory', () => {
   it('should return story with composed annotations from story, meta and project', () => {
     const decoratorFromProjectAnnotations = vi.fn((StoryFn) => StoryFn());
     const decoratorFromStoryAnnotations = vi.fn((StoryFn) => StoryFn());
-    setProjectAnnotations([
-      {
-        parameters: { injected: true },
-        globalTypes: {
-          locale: { defaultValue: 'en' },
-        },
-        decorators: [decoratorFromProjectAnnotations],
+    const projectAnnotations = {
+      parameters: { injected: true },
+      globalTypes: {
+        locale: { defaultValue: 'en' },
       },
-    ]);
+      decorators: [decoratorFromProjectAnnotations],
+      tags: ['projectTag'],
+    };
+
+    setProjectAnnotations(projectAnnotations);
 
     const Story: Story = {
       render: () => {},
@@ -57,6 +59,7 @@ describe('composeStory', () => {
         secondAddon: true,
       },
       decorators: [decoratorFromStoryAnnotations],
+      tags: ['storyTag'],
     };
 
     const composedStory = composeStory(Story, meta);
@@ -64,6 +67,7 @@ describe('composeStory', () => {
     expect(composedStory.parameters).toEqual(
       expect.objectContaining({ ...Story.parameters, ...meta.parameters })
     );
+    expect(composedStory.tags).toEqual(['dev', 'test', 'projectTag', 'metaTag', 'storyTag']);
 
     composedStory();
 
@@ -253,6 +257,48 @@ describe('composeStory', () => {
     await composedStory.load();
     expect(spyFn).toHaveBeenNthCalledWith(1, 'from loaders');
     expect(spyFn).toHaveBeenNthCalledWith(2, 'from beforeEach');
+  });
+
+  it('should warn when previous cleanups are still around when rendering a story', async () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const cleanupSpy = vi.fn();
+    const beforeEachSpy = vi.fn(() => {
+      return () => {
+        cleanupSpy();
+      };
+    });
+
+    const PreviousStory: Story = {
+      render: () => 'first',
+      beforeEach: beforeEachSpy,
+    };
+    const CurrentStory: Story = {
+      render: () => 'second',
+      args: {
+        firstArg: false,
+        secondArg: true,
+      },
+    };
+    const firstComposedStory = composeStory(PreviousStory, {});
+    await firstComposedStory.load();
+    firstComposedStory();
+
+    expect(beforeEachSpy).toHaveBeenCalled();
+    expect(cleanupSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+
+    const secondComposedStory = composeStory(CurrentStory, {});
+    secondComposedStory();
+
+    expect(cleanupSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).toHaveBeenCalledOnce();
+    expect(consoleWarnSpy.mock.calls[0][0]).toMatchInlineSnapshot(
+      `
+      "Some stories were not cleaned up before rendering 'Unnamed Story (firstArg, secondArg)'.
+
+      You should load the story with \`await Story.load()\` before rendering it."
+    `
+    );
   });
 
   it('should throw an error if Story is undefined', () => {

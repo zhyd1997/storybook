@@ -1,6 +1,4 @@
-/**
- * @vitest-environment jsdom
- */
+// @vitest-environment happy-dom
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import { global } from '@storybook/global';
@@ -314,7 +312,7 @@ describe('PreviewWeb', () => {
         preview.onStoriesChanged({
           importFn: newImportFn,
           storyIndex: {
-            v: 4,
+            v: 5,
             entries: {
               ...storyIndex.entries,
               'component-one--missing': {
@@ -369,7 +367,7 @@ describe('PreviewWeb', () => {
           preview.onStoriesChanged({
             importFn: newImportFn,
             storyIndex: {
-              v: 4,
+              v: 5,
               entries: {
                 ...storyIndex.entries,
                 'component-one--missing': {
@@ -2977,7 +2975,7 @@ describe('PreviewWeb', () => {
       const newImportFn = vi.fn(async (path) => ({ ...componentOneExports }));
 
       const newStoryIndex = {
-        v: 4,
+        v: 5,
         entries: {
           ...storyIndex.entries,
           'component-one--a': {
@@ -3174,7 +3172,7 @@ describe('PreviewWeb', () => {
       });
 
       const newStoryIndex = {
-        v: 4,
+        v: 5,
         entries: {
           'component-one--b': storyIndex.entries['component-one--b'],
         },
@@ -3353,7 +3351,7 @@ describe('PreviewWeb', () => {
       return {
         ...projectAnnotations,
         args: { global: 'added' },
-        globals: { a: 'edited' },
+        initialGlobals: { a: 'edited' },
         decorators: [newGlobalDecorator],
       };
     };
@@ -3625,7 +3623,8 @@ describe('PreviewWeb', () => {
             "story": "A",
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component One",
           },
@@ -3672,7 +3671,8 @@ describe('PreviewWeb', () => {
             "story": "B",
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component One",
           },
@@ -3697,7 +3697,8 @@ describe('PreviewWeb', () => {
             "story": "E",
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component One",
           },
@@ -3732,7 +3733,8 @@ describe('PreviewWeb', () => {
             "story": "C",
             "subcomponents": undefined,
             "tags": [
-              "story",
+              "dev",
+              "test",
             ],
             "title": "Component Two",
           },
