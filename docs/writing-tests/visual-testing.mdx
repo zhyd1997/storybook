@@ -32,11 +32,11 @@ Add visual tests to your project by installing `@chromatic-com/storybook`, the o
 
 When you start Storybook, you'll see a new addon panel for Visual Tests where you can run tests and view results.
 
-![Visual Tests addon enabled](./vta-enable.png)
+![Visual Tests addon enabled](../_assets/writing-tests/vta-enable.png)
 
 To enable visual testing, sign up for [Chromatic](https://www.chromatic.com/start?startWithSignup=true\&ref=storybook_site) and create a project. This will give you access to a fleet of cloud browsers.
 
-![Visual Tests addon project selection](./vta-select-project.png)
+![Visual Tests addon project selection](../_assets/writing-tests/vta-select-project.png)
 
 Select a project from your project list to finish setup. If you're setting up the addon for the first time, the configuration files and necessary project identifiers will be added for you automatically.
 
@@ -65,7 +65,7 @@ The addon includes configuration options covering most use cases by default. You
 
 Click the ▶️ Play button in the Storybook sidebar to run visual tests. This will send your stories to the cloud to take snapshots and detect visual changes.
 
-![Storybook running visual tests with the addon](./vta-run-tests.png)
+![Storybook running visual tests with the addon](../_assets/writing-tests/vta-run-tests.png)
 
 ### Review changes
 
@@ -73,11 +73,11 @@ If there are visual changes in your stories, they will be 🟡 highlighted in th
 
 If the changes are intentional, ✅ accept them as baselines locally. If the changes aren't intentional, fix the story and rerun the tests using the ▶️ Play button.
 
-![Confirm UI changes in Storybook](./vta-changes-found.png)
+![Confirm UI changes in Storybook](../_assets/writing-tests/vta-changes-found.png)
 
 When you finish accepting changes as baselines in the addon, you're ready to push the code to your remote repository. This will sync baselines to the cloud for anyone who checks out your branch.
 
-![Accept UI changes in Storybook](./vta-changes-accepted.png)
+![Accept UI changes in Storybook](../_assets/writing-tests/vta-changes-accepted.png)
 
 ### Automate with CI
 
@@ -102,7 +102,7 @@ Changes you accept as baselines in the addon will get auto-accepted as baselines
 
 Once you successfully set up Chromatic in CI, your pull/merge requests will be badged with a UI Tests check. The badge notifies you of test errors or UI changes that need to be verified by your team. Make the check required in your Git provider to prevent accidental UI bugs from being merged.
 
-![PR badge for visual tests](./vta-prbadge-test.png)
+![PR badge for visual tests](../_assets/writing-tests/vta-prbadge-test.png)
 
 ***
 

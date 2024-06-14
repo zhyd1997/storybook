@@ -13,7 +13,7 @@ Storybook provides a powerful way to organize your stories, giving you the neces
 
 When organizing your Storybook, there are two methods of structuring your stories: **implicit** and **explicit**. The [implicit method](../configure/sidebar-and-urls.md#csf-30-auto-titles) involves relying upon the physical location of your stories to position them in the sidebar, while the [explicit method](#naming-stories) involves utilizing the `title` parameter to place the story.
 
-![Storybook sidebar hierarchy](./naming-hierarchy-sidebar-anatomy.png)
+![Storybook sidebar hierarchy](../_assets/writing-stories/naming-hierarchy-sidebar-anatomy.png)
 
 Based on how you structure your Storybook, you can see that the story hierarchy is made up of various parts:
 
@@ -35,7 +35,7 @@ When creating your stories, you can explicitly use the `title` parameter to defi
 
 Yields this:
 
-![Stories hierarchy without paths](./naming-hierarchy-no-path.png)
+![Stories hierarchy without paths](../_assets/writing-stories/naming-hierarchy-no-path.png)
 
 ## Grouping
 
@@ -55,7 +55,7 @@ It is also possible to group related components in an expandable interface to he
 
 Yields this:
 
-![Stories hierarchy with paths](./naming-hierarchy-with-path.png)
+![Stories hierarchy with paths](../_assets/writing-stories/naming-hierarchy-with-path.png)
 
 ## Roots
 
@@ -71,7 +71,7 @@ Single-story components (i.e., component stories without **siblings**) whose **d
 
 {/* prettier-ignore-end */}
 
-![Stories hierarchy with single story hoisting](./naming-hierarchy-single-story-hoisting.png)
+![Stories hierarchy with single story hoisting](../_assets/writing-stories/naming-hierarchy-single-story-hoisting.png)
 
 Because story exports are automatically "start cased" (`myStory` becomes `"My Story"`), your component name should match that. Alternatively, you can override the story name using `myStory.storyName = '...'` to match the component name.
 

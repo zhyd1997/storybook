@@ -41,7 +41,7 @@ Update your Storybook configuration (in `.storybook/main.js|ts`) to include the 
 
 Start your Storybook, and you will see some noticeable differences in the UI. A new toolbar icon and the accessibility panel where you can inspect the results of the tests.
 
-![Storybook accessibility addon running](./storybook-a11y-addon-optimized.png)
+![Storybook accessibility addon running](../_assets/writing-tests/storybook-a11y-addon-optimized.png)
 
 ### How it works
 
@@ -55,7 +55,7 @@ Storybook's a11y addon runs [Axe](https://github.com/dequelabs/axe-core) on the 
 
 Cycling through both stories, you will see that the `Inaccessible` story contains some issues that need fixing. Opening the violations tab in the accessibility panel provides a clear description of the accessibility issue and guidelines for solving it.
 
-![Storybook accessibility addon running](./storybook-a11y-addon-optimized.png)
+![Storybook accessibility addon running](../_assets/writing-tests/storybook-a11y-addon-optimized.png)
 
 ### Configure
 
@@ -135,7 +135,7 @@ When you execute the test runner (for example, with `yarn test-storybook`), it w
 
 It starts checking for issues by traversing the DOM tree starting from the story's root element and generates a detailed report based on the issues it encountered.
 
-![Accessibility testing with the test runner](./test-runner-a11y-optimized.png)
+![Accessibility testing with the test runner](../_assets/writing-tests/test-runner-a11y-optimized.png)
 
 ### A11y config with the test runner
 

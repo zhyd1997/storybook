@@ -49,7 +49,7 @@ By default, Storybook's production build will encapsulate all stories and docume
 
 Once you've built your Storybook as a static web application, you can publish it to your web host. We recommend [Chromatic](https://www.chromatic.com/?utm_source=storybook_website\&utm_medium=link\&utm_campaign=storybook), a free publishing service made for Storybook that documents, versions, and indexes your UI components securely in the cloud.
 
-![Storybook publishing workflow](./workflow-publish.png)
+![Storybook publishing workflow](../_assets/sharing/workflow-publish.png)
 
 To get started, sign up with your GitHub, GitLab, Bitbucket, or email and generate a unique *project-token* for your project.
 
@@ -75,7 +75,7 @@ Build 1 published.
 View it online at https://www.chromatic.com/build?appId=...&number=1.
 ```
 
-![Chromatic publish build](./build-publish-only.png)
+![Chromatic publish build](../_assets/sharing/build-publish-only.png)
 
 ### Setup CI to publish automatically
 
@@ -95,7 +95,7 @@ In your project's root directory, add a new file called `chromatic.yml` inside t
 
 Commit and push the file. Congratulations, you've successfully automated publishing your Storybook. Now whenever you open a PR you’ll get a handy link to your published Storybook in your PR checks.
 
-![PR check publish](./prbadge-publish.png)
+![PR check publish](../_assets/sharing/prbadge-publish.png)
 
 ### Review with your team
 
@@ -105,13 +105,13 @@ A common method to ask for review is to paste a link to the published Storybook 
 
 If you publish your Storybook to Chromatic, you can use the [UI Review](https://www.chromatic.com/features/publish?utm_source=storybook_website\&utm_medium=link\&utm_campaign=storybook) feature to automatically scan your PRs for new and updated stories. That makes it easy to identify what changed and give feedback.
 
-![UI review in Chromatic](./workflow-uireview.png)
+![UI review in Chromatic](../_assets/sharing/workflow-uireview.png)
 
 ### Versioning and history
 
 When you publish Storybook, you also get component history and versioning down to the commit. That's useful during implementation review for comparing components between branches/commits to past versions.
 
-![Library history in Chromatic](./workflow-history-versioning.png)
+![Library history in Chromatic](../_assets/sharing/workflow-history-versioning.png)
 
 ## Publish Storybook to other services
 

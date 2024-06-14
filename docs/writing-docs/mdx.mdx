@@ -11,7 +11,7 @@ sidebar:
 
 In addition, you can write pure documentation pages in MDX and add them to Storybook alongside your stories.
 
-![MDX simple example result](./mdx-hero.png)
+![MDX simple example result](../_assets/writing-docs/mdx-hero.png)
 
 <Callout variant="info">
   Writing stories directly in MDX was removed in Storybook 8, and we're no longer supporting it. Please reference the [previous documentation](../../../release-6-5/docs/writing-docs/mdx.md) for guidance on that feature or [migrate](../migration-guide.md#storiesmdx-to-mdxcsf) to the new format.
@@ -37,7 +37,7 @@ This MDX file references a story file, `Checkbox.stories.js|ts`, that is written
 
 And here's how that's rendered in Storybook:
 
-![MDX simple example result](./mdx-simple.png)
+![MDX simple example result](../_assets/writing-docs/mdx-simple.png)
 
 There’s a lot going on here. We're writing Markdown, we're writing JSX, and we're also defining and referencing Storybook stories that are drop-in compatible with the entire Storybook ecosystem.
 
@@ -150,7 +150,7 @@ Suppose you're documenting an existing component and only provide the `Meta` Doc
 
 {/* prettier-ignore-end */}
 
-![MDX docs only story](./mdx-documentation-only.png)
+![MDX docs only story](../_assets/writing-docs/mdx-documentation-only.png)
 
 ### Using the File System
 
@@ -178,7 +178,7 @@ Writing standalone documentation pages is a common use case that applies not onl
 
 {/* prettier-ignore-end */}
 
-![MDX guidelines page](./mdx-standalone-page.png)
+![MDX guidelines page](../_assets/writing-docs/mdx-standalone-page.png)
 
 When Storybook loads the documentation, it will infer the placement of the page in the sidebar navigation menu using the file's physical location and render it as a `Docs` entry.
 
@@ -216,7 +216,7 @@ If you need to extend your documentation with additional content written in Mark
   The `Markdown` Doc Block provides additional configuration options to customize the rendering of your documentation. For more information, refer to the [API documentation](../api/doc-block-markdown.md).
 </Callout>
 
-![Changelog markdown in an MDX story](./mdx-markdown-docs-import.png)
+![Changelog markdown in an MDX story](../_assets/writing-docs/mdx-markdown-docs-import.png)
 
 ### Linking to other stories and pages
 
