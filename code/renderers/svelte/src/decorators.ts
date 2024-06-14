@@ -69,7 +69,8 @@ function prepareStory(
     };
   }
 
-  return preparedStory;
+  // no innerStory means this is the last story in the decorator chain, ie. the original story
+  return { ...preparedStory, isOriginalStory: true };
 }
 
 export function decorateStory(storyFn: any, decorators: any[]) {
