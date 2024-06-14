@@ -1,9 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { styled } from '@storybook/theming';
-import { IconButton, ScrollArea, Spaced } from '@storybook/components';
-import { FilterIcon } from '@storybook/icons';
-import type { State } from '@storybook/manager-api';
+import { ScrollArea, Spaced } from '@storybook/components';
+import { useStorybookApi, type State } from '@storybook/manager-api';
 
 import type {
   Addon_SidebarBottomType,
@@ -14,7 +13,7 @@ import type { HeadingProps } from './Heading';
 import { Heading } from './Heading';
 
 import { Explorer } from './Explorer';
-
+import { TagsFilter } from './TagsFilter';
 import { Search } from './Search';
 
 import { SearchResults } from './SearchResults';
@@ -138,17 +137,7 @@ export const Sidebar = React.memo(function Sidebar({
   const dataset = useCombination(index, indexError, previewInitialized, status, refs);
   const isLoading = !index && !indexError;
   const lastViewedProps = useLastViewed(selected);
-  const [tagsActive, setTagsActive] = useState(false);
-  const toggleTags = () => {
-    setTagsActive(!tagsActive);
-    const url = new URL(window.location.href);
-    if (tagsActive) {
-      url.searchParams.delete('includeTags');
-    } else {
-      url.searchParams.set('includeTags', 'bar');
-    }
-    window.history.pushState({}, '', url);
-  };
+  const api = useStorybookApi();
 
   return (
     <Container className="container sidebar-container">
@@ -163,6 +152,7 @@ export const Sidebar = React.memo(function Sidebar({
             isLoading={isLoading}
             onMenuClick={onMenuClick}
           />
+          <TagsFilter api={api} />
           <Search
             dataset={dataset}
             enableShortcuts={enableShortcuts}
@@ -199,9 +189,6 @@ export const Sidebar = React.memo(function Sidebar({
               </Swap>
             )}
           </Search>
-          <IconButton key="tags" title="Tag filters" active={tagsActive} onClick={toggleTags}>
-            <FilterIcon />
-          </IconButton>
         </Top>
       </ScrollArea>
       {isLoading ? null : (
