@@ -5,6 +5,7 @@ import { TagsFilter } from './TagsFilter';
 
 const meta = {
   component: TagsFilter,
+  tags: ['haha'],
 } satisfies Meta<typeof TagsFilter>;
 
 export default meta;

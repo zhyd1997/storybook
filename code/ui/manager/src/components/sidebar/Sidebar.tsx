@@ -152,21 +152,23 @@ export const Sidebar = React.memo(function Sidebar({
             isLoading={isLoading}
             onMenuClick={onMenuClick}
           />
-          <TagsFilter
-            api={api}
-            index={index}
-            updateQueryParams={(params) => {
-              const url = new URL(window.location.href);
-              Object.entries(params).forEach(([key, value]) => {
-                if (value) {
-                  url.searchParams.set(key, value);
-                } else {
-                  url.searchParams.delete(key);
-                }
-              });
-              window.history.pushState({}, '', url);
-            }}
-          />
+          {index && (
+            <TagsFilter
+              api={api}
+              index={index}
+              updateQueryParams={(params) => {
+                const url = new URL(window.location.href);
+                Object.entries(params).forEach(([key, value]) => {
+                  if (value) {
+                    url.searchParams.set(key, value);
+                  } else {
+                    url.searchParams.delete(key);
+                  }
+                });
+                window.history.pushState({}, '', url);
+              }}
+            />
+          )}
           <Search
             dataset={dataset}
             enableShortcuts={enableShortcuts}

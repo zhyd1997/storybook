@@ -47,7 +47,7 @@ export const TagsFilter = ({
 
   return (
     <WithTooltip
-      placement="top"
+      placement="bottom"
       trigger="click"
       onVisibleChange={setExpanded}
       tooltip={() => (

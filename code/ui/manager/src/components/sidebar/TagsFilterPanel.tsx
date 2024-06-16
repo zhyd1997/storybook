@@ -4,7 +4,14 @@ import { transparentize } from 'polished';
 import { styled } from '@storybook/theming';
 import { CollapseIcon } from './components/CollapseIcon';
 
-const BUILT_IN_TAGS = new Set(['dev', 'autodocs', 'test', 'attached-mdx', 'unattached-mdx']);
+const BUILT_IN_TAGS = new Set([
+  'dev',
+  'autodocs',
+  'test',
+  'attached-mdx',
+  'unattached-mdx',
+  'play-fn',
+]);
 
 const CollapseButton = styled.button(({ theme }) => ({
   all: 'unset',
