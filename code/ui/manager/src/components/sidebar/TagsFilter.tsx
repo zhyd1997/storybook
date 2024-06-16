@@ -1,60 +1,82 @@
 import React, { useState, useEffect } from 'react';
+import { IconButton, WithTooltip } from '@storybook/components';
+import { FilterIcon } from '@storybook/icons';
 import type { API } from '@storybook/manager-api';
 import type { Tag, API_IndexHash } from '@storybook/types';
-import { IconButton } from '@storybook/components';
-import { FilterIcon } from '@storybook/icons';
+import { TagsFilterPanel } from './TagsFilterPanel';
 
-interface TagsFilterProps {
+const TAGS_FILTER = 'tags-filter';
+
+export interface TagsFilterProps {
   api: API;
   index: API_IndexHash;
+  updateQueryParams: (params: Record<string, string | null>) => void;
+  initialSelectedTags?: Tag[];
 }
 
-const UI_FILTER = 'ui-filter';
-
-export const TagsFilter = ({ api }: TagsFilterProps) => {
-  const [includeTags, setIncludeTags] = useState([]);
-  const [excludeTags, setExcludeTags] = useState([]);
-  const tagsActive = includeTags.length + excludeTags.length > 0;
-
-  const updateTag = (tag: Tag, selected: boolean, include: boolean) => {
-    const [filter, setFilter, queryParam] = include
-      ? [includeTags, setIncludeTags, 'includeTags']
-      : [excludeTags, setExcludeTags, 'excludeTags'];
-
-    // no change needed for state/url if the tag is already in the correct state
-    if ((selected && filter.includes(tag)) || (!selected && !filter.includes(tag))) return;
-
-    // update state
-    const newFilter = selected ? [...filter, tag] : filter.filter((t) => t !== tag);
-    setFilter(newFilter);
-
-    // update URL
-    const url = new URL(window.location.href);
-    if (newFilter.length === 0) {
-      url.searchParams.delete(queryParam);
-    } else {
-      url.searchParams.set(queryParam, newFilter.join(','));
-    }
-    window.history.pushState({}, '', url);
-  };
-
-  const toggleTags = () => {
-    // updateTag('bar', !includeTags.includes('bar'), true);
-    updateTag('bar', !excludeTags.includes('bar'), false);
-  };
+export const TagsFilter = ({
+  api,
+  index,
+  updateQueryParams,
+  initialSelectedTags = [],
+}: TagsFilterProps) => {
+  const [selectedTags, setSelectedTags] = useState(initialSelectedTags);
+  const [exclude, setExclude] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const tagsActive = selectedTags.length > 0;
 
   useEffect(() => {
-    api.experimental_setFilter(UI_FILTER, (item) => {
+    api.experimental_setFilter(TAGS_FILTER, (item) => {
       const tags = item.tags ?? [];
-      if (excludeTags.some((tag) => tags.includes(tag))) return false;
-      if (!includeTags.every((tag) => tags.includes(tag))) return false;
-      return true;
+      return exclude
+        ? !selectedTags.some((tag) => tags.includes(tag))
+        : selectedTags.every((tag) => tags.includes(tag));
     });
-  }, [api, includeTags, excludeTags]);
+
+    const tagsParam = selectedTags.join(',');
+    const [includeTags, excludeTags] = exclude ? [null, tagsParam] : [tagsParam, null];
+    updateQueryParams({ includeTags, excludeTags });
+  }, [api, selectedTags, exclude, updateQueryParams]);
+
+  const allTags = Object.values(index).reduce((acc, entry) => {
+    if (entry.type === 'story') {
+      entry.tags.forEach((tag: Tag) => acc.add(tag));
+    }
+    return acc;
+  }, new Set<Tag>());
 
   return (
-    <IconButton key="tags" title="Tag filters" active={tagsActive} onClick={toggleTags}>
-      <FilterIcon />
-    </IconButton>
+    <WithTooltip
+      placement="top"
+      trigger="click"
+      onVisibleChange={setExpanded}
+      tooltip={() => (
+        <TagsFilterPanel
+          allTags={Array.from(allTags)}
+          selectedTags={selectedTags}
+          exclude={exclude}
+          toggleTag={(tag) => {
+            if (selectedTags.includes(tag)) {
+              setSelectedTags(selectedTags.filter((t) => t !== tag));
+            } else {
+              setSelectedTags([...selectedTags, tag]);
+            }
+          }}
+          toggleExclude={() => setExclude(!exclude)}
+        />
+      )}
+    >
+      <IconButton
+        key="tags"
+        title="Tag filters"
+        active={tagsActive}
+        onClick={(event) => {
+          event.preventDefault();
+          setExpanded(!expanded);
+        }}
+      >
+        <FilterIcon />
+      </IconButton>
+    </WithTooltip>
   );
 };
