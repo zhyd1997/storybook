@@ -13,7 +13,7 @@ UI-based addons allow you to customize Storybook's UI with the following element
 
 ### Panels
 
-Panel addons allow you to add your own UI in Storybook's addon panel. This is the most common type of addon in the ecosystem. For example, the official [`@storybook/actions`](../essentials/actions.md) and [`@storybook/a11y`](https://github.com/storybookjs/storybook/tree/next/code/addons/a11y) use this pattern.
+Panel addons allow you to add your own UI in Storybook's addon panel. This is the most common type of addon in the ecosystem. For example, the official [`@storybook/actions`](../essentials/actions.mdx) and [`@storybook/a11y`](https://github.com/storybookjs/storybook/tree/next/code/addons/a11y) use this pattern.
 
 ![Storybook panel](../_assets/addons/storybook-panel.png)
 
@@ -27,7 +27,7 @@ Use this boilerplate code to add a new `Panel` to Storybook's UI:
 
 ### Toolbars
 
-Toolbar addons allow you to add your own custom tools in Storybook's Toolbar. For example, the official [`@storybook/backgrounds`](../essentials/backgrounds.md) and the [`@storybook/addon-outline`](../essentials/measure-and-outline.md#outline-addon) use this pattern.
+Toolbar addons allow you to add your own custom tools in Storybook's Toolbar. For example, the official [`@storybook/backgrounds`](../essentials/backgrounds.mdx) and the [`@storybook/addon-outline`](../essentials/measure-and-outline.mdx#outline-addon) use this pattern.
 
 ![Storybook toolbar addon](../_assets/addons/storybook-toolbar.png)
 
@@ -40,16 +40,16 @@ Use this boilerplate code to add a new `button` to Storybook's Toolbar:
 {/* prettier-ignore-end */}
 
 <Callout variant="info">
-  The `match` property allows you to conditionally render your toolbar addon, [based on the current view](./writing-addons.md#conditionally-render-the-addon).
+  The `match` property allows you to conditionally render your toolbar addon, [based on the current view](./writing-addons.mdx#conditionally-render-the-addon).
 
   <hr style={{ margin: '-0.75em 0 0.75em' }} />
 
-  The `icon` element used in the example loads the icons from the `@storybook/components` package. See [here](../faq.md#what-icons-are-available-for-my-toolbar-or-my-addon) for the list of available icons that you can use.
+  The `icon` element used in the example loads the icons from the `@storybook/components` package. See [here](../faq.mdx#what-icons-are-available-for-my-toolbar-or-my-addon) for the list of available icons that you can use.
 </Callout>
 
 ### Tabs
 
-Tab addons allow you to create your own custom tabs in Storybook. For example, the official [@storybook/addon-docs](../writing-docs/index.md) uses this pattern.
+Tab addons allow you to create your own custom tabs in Storybook. For example, the official [@storybook/addon-docs](../writing-docs/index.mdx) uses this pattern.
 
 ![Storybook tab addon](../_assets/addons/storybook-tab.png)
 
@@ -62,7 +62,7 @@ Use this boilerplate code to add a new `Tab` to Storybook's UI:
 {/* prettier-ignore-end */}
 
 <Callout variant="info">
-  Learn how to write your own addon that includes these UI elements [here](./writing-addons.md).
+  Learn how to write your own addon that includes these UI elements [here](./writing-addons.mdx).
 </Callout>
 
 ## Preset addons
@@ -80,7 +80,7 @@ Use this boilerplate code while writing your own preset addon.
 **Learn more about the Storybook addon ecosystem**
 
 * Types of addons for other types of addons
-* [Writing addons](./writing-addons.md) for the basics of addon development
-* [Presets](./writing-presets.md) for preset development
-* [Integration catalog](./integration-catalog.md) for requirements and available recipes
-* [API reference](./addons-api.md) to learn about the available APIs
+* [Writing addons](./writing-addons.mdx) for the basics of addon development
+* [Presets](./writing-presets.mdx) for preset development
+* [Integration catalog](./integration-catalog.mdx) for requirements and available recipes
+* [API reference](./addons-api.mdx) to learn about the available APIs

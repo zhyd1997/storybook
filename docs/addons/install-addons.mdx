@@ -9,7 +9,7 @@ Storybook has [hundreds of reusable addons](https://storybook.js.org/integration
 
 ## Automatic installation
 
-Storybook includes a [`storybook add`](../api/cli-options.md#add) command to automate the setup of addons. Several community-led addons can be added using this command, except for preset addons. We encourage you to read the addon's documentation to learn more about its installation process.
+Storybook includes a [`storybook add`](../api/cli-options.mdx#add) command to automate the setup of addons. Several community-led addons can be added using this command, except for preset addons. We encourage you to read the addon's documentation to learn more about its installation process.
 
 Run the `storybook add` command using your chosen package manager, and the CLI will update your Storybook configuration to include the addon and install any necessary dependencies.
 
@@ -25,7 +25,7 @@ Run the `storybook add` command using your chosen package manager, and the CLI w
 
 ### Manual installation
 
-Storybook addons are always added through the [`addons`](../api/main-config-addons.md) configuration array in [`.storybook/main.js|ts`](../configure/index.md). The following example shows how to manually add the [Accessibility addon](https://storybook.js.org/addons/@storybook/addon-a11y) to Storybook.
+Storybook addons are always added through the [`addons`](../api/main-config/main-config-addons.mdx) configuration array in [`.storybook/main.js|ts`](../configure/index.mdx). The following example shows how to manually add the [Accessibility addon](https://storybook.js.org/addons/@storybook/addon-a11y) to Storybook.
 
 Run the following command with your package manager of choice to install the addon.
 
@@ -49,7 +49,7 @@ When you run Storybook, the accessibility testing addon will be enabled.
 
 ### Removing addons
 
-To remove an addon from Storybook, you can choose to manually uninstall it and remove it from the configuration file (i.e., [`.storybook/main.js|ts`](../configure/index.md)) or opt-in to do it automatically via the CLI with the [`remove`](../api/cli-options.md#remove) command. For example, to remove the [Accessibility addon](https://storybook.js.org/addons/@storybook/addon-a11y) from Storybook with the CLI, run the following command:
+To remove an addon from Storybook, you can choose to manually uninstall it and remove it from the configuration file (i.e., [`.storybook/main.js|ts`](../configure/index.mdx)) or opt-in to do it automatically via the CLI with the [`remove`](../api/cli-options.mdx#remove) command. For example, to remove the [Accessibility addon](https://storybook.js.org/addons/@storybook/addon-a11y) from Storybook with the CLI, run the following command:
 
 {/* prettier-ignore-start */}
 

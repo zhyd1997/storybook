@@ -8,7 +8,7 @@ sidebar:
 We sincerely appreciate the dedication and effort addon creators put into keeping the Storybook ecosystem vibrant and up-to-date. As Storybook evolves to version 8.0, bringing new features and improvements, this guide is here to assist you in migrating your addons from 7.x to 8.0. If you need to migrate your addon from an earlier version of Storybook, please first refer to the [Addon migration guide for Storybook 7.0](https://storybook.js.org/docs/7.6/addons/addon-migration-guide).
 
 <Callout variant="info">
-  As we gather feedback from the community, we’ll update this page. We also have a general [Storybook migration guide](../migration-guide.md) if you’re looking for that.
+  As we gather feedback from the community, we’ll update this page. We also have a general [Storybook migration guide](../migration-guide/index.mdx) if you’re looking for that.
 </Callout>
 
 ## Updating dependencies
@@ -33,7 +33,7 @@ Please upgrade your addon to Node.js 18, as support for Node.js 16 has ended.
 
 ### React 18 for manager UI
 
-UI-based addons (e.g., [panels](../addons/addon-types.md#panels), [toolbars](../addons/addon-types.md#toolbars), [tabs](../addons/addon-types.md#tabs)) rely on React 18 to render their elements in the Storybook UI. Also, note that the `key` prop is no longer passed to the render function.
+UI-based addons (e.g., [panels](../addons/addon-types.mdx#panels), [toolbars](../addons/addon-types.mdx#toolbars), [tabs](../addons/addon-types.mdx#tabs)) rely on React 18 to render their elements in the Storybook UI. Also, note that the `key` prop is no longer passed to the render function.
 
 ### React peer dependency is no longer required
 

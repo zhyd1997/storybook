@@ -13,7 +13,7 @@ Preset addons allow developers to compose various configuration options and plug
 
 ### Local presets
 
-This type of preset allows you to encapsulate and organize configurations specific to the addon, including [builder](../builders/index.md) support, [Babel](https://babeljs.io/), or third-party integrations. For example:
+This type of preset allows you to encapsulate and organize configurations specific to the addon, including [builder](../builders/index.mdx) support, [Babel](https://babeljs.io/), or third-party integrations. For example:
 
 {/* prettier-ignore-start */}
 
@@ -23,7 +23,7 @@ This type of preset allows you to encapsulate and organize configurations specif
 
 ### Root-level presets
 
-This type of preset is user-facing and responsible for registering the addon without any additional configuration from the user by bundling Storybook-related features (e.g., [parameters](../writing-stories/parameters.md)) via the [`previewAnnotations`](../api/main-config-preview-annotations.md) and UI related features (e.g., addons) via the `managerEntries` API. For example:
+This type of preset is user-facing and responsible for registering the addon without any additional configuration from the user by bundling Storybook-related features (e.g., [parameters](../writing-stories/parameters.mdx)) via the [`previewAnnotations`](../api/main-config/main-config-preview-annotations.mdx) and UI related features (e.g., addons) via the `managerEntries` API. For example:
 
 {/* prettier-ignore-start */}
 
@@ -37,7 +37,7 @@ When writing a preset, you can access a select set of APIs to interact with the 
 
 ### Babel
 
-To customize Storybook's Babel configuration and add support for additional features, you can use the [`babelDefault`](../api/main-config-babel-default.md) API. It will apply the provided configuration ahead of any other user presets, which can be further customized by the end user via the [`babel`](../api/main-config-babel.md) configuration option. For example:
+To customize Storybook's Babel configuration and add support for additional features, you can use the [`babelDefault`](../api/main-config/main-config-babel-default.mdx) API. It will apply the provided configuration ahead of any other user presets, which can be further customized by the end user via the [`babel`](../api/main-config/main-config-babel.mdx) configuration option. For example:
 
 {/* prettier-ignore-start */}
 
@@ -51,7 +51,7 @@ To customize Storybook's Babel configuration and add support for additional feat
 
 ### Builders
 
-By default, Storybook provides support for the leading industry builders, including [Webpack](../builders/webpack.md) and [Vite](../builders/vite.md). If you need additional features for any of these builders, you can use APIs to extend the builder configuration based on your specific needs.
+By default, Storybook provides support for the leading industry builders, including [Webpack](../builders/webpack.mdx) and [Vite](../builders/vite.mdx). If you need additional features for any of these builders, you can use APIs to extend the builder configuration based on your specific needs.
 
 #### Vite
 
@@ -85,7 +85,7 @@ If you're writing a preset that loads third-party addons, which you may not have
 
 ### PreviewAnnotations
 
-If you need additional settings to render stories for a preset, like [decorators](../writing-stories/decorators.md) or [parameters](../writing-stories/parameters.md), you can use the `previewAnnotations` API. For example, to apply a decorator to all stories, create a preview file that includes the decorator and make it available to the preset as follows:
+If you need additional settings to render stories for a preset, like [decorators](../writing-stories/decorators.mdx) or [parameters](../writing-stories/parameters.mdx), you can use the `previewAnnotations` API. For example, to apply a decorator to all stories, create a preview file that includes the decorator and make it available to the preset as follows:
 
 {/* prettier-ignore-start */}
 
@@ -105,7 +105,7 @@ The presets API is designed to be flexible and allow you to customize Storybook 
 
 ### Addons
 
-For addon consumers, the [`managerEntries`](#managerentries) API can be too technical, making it difficult to use. To make it easier to add addons to Storybook, the preset API provides the [`addons`](../api/main-config-addons.md) API, which accepts an array of addon names and will automatically load them for you. For example:
+For addon consumers, the [`managerEntries`](#managerentries) API can be too technical, making it difficult to use. To make it easier to add addons to Storybook, the preset API provides the [`addons`](../api/main-config/main-config-addons.mdx) API, which accepts an array of addon names and will automatically load them for you. For example:
 
 {/* prettier-ignore-start */}
 
@@ -121,7 +121,7 @@ Entries are the place to register entry points for the preview. This feature can
 
 ### UI configuration
 
-The Storybook preset API also provides access to the UI configuration, including the `head` and `body` HTML elements of the preview, configured by the [`previewHead`](../api/main-config-preview-head.md) and [`previewBody`](../api/main-config-preview-body.md) APIs. Both allow you to set up Storybook in a way that is similar to using the [`preview-head.html`](../configure/story-rendering.md#adding-to-head) and [`preview-body.html`](../configure/story-rendering.md#adding-to-body) files. These methods accept a string and return a modified version, injecting the provided content into the HTML element.
+The Storybook preset API also provides access to the UI configuration, including the `head` and `body` HTML elements of the preview, configured by the [`previewHead`](../api/main-config/main-config-preview-head.mdx) and [`previewBody`](../api/main-config/main-config-preview-body.mdx) APIs. Both allow you to set up Storybook in a way that is similar to using the [`preview-head.html`](../configure/story-rendering.mdx#adding-to-head) and [`preview-body.html`](../configure/story-rendering.mdx#adding-to-body) files. These methods accept a string and return a modified version, injecting the provided content into the HTML element.
 
 {/* prettier-ignore-start */}
 
@@ -129,7 +129,7 @@ The Storybook preset API also provides access to the UI configuration, including
 
 {/* prettier-ignore-end */}
 
-Additionally, if you need to customize the manager (i.e., where Storybook’s search, navigation, toolbars, and addons render), you can use the [`managerHead`](../api/main-config-manager-head.md) to modify the UI, similar to how you would do it with the `manager-head.html` file. For example:
+Additionally, if you need to customize the manager (i.e., where Storybook’s search, navigation, toolbars, and addons render), you can use the [`managerHead`](../api/main-config/main-config-manager-head.mdx) to modify the UI, similar to how you would do it with the `manager-head.html` file. For example:
 
 {/* prettier-ignore-start */}
 
@@ -147,8 +147,8 @@ As Storybook relies on [esbuild](https://esbuild.github.io/) instead of Webpack 
 
 **Learn more about the Storybook addon ecosystem**
 
-* [Types of addons](./addon-types.md) for other types of addons
-* [Writing addons](./writing-addons.md) for the basics of addon development
+* [Types of addons](./addon-types.mdx) for other types of addons
+* [Writing addons](./writing-addons.mdx) for the basics of addon development
 * Presets for preset development
-* [Integration catalog](./integration-catalog.md) for requirements and available recipes
-* [API reference](./addons-api.md) to learn about the available APIs
+* [Integration catalog](./integration-catalog.mdx) for requirements and available recipes
+* [API reference](./addons-api.mdx) to learn about the available APIs

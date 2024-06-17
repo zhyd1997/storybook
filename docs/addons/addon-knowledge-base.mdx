@@ -32,7 +32,7 @@ Then when adding a story, you can pass a disabled parameter.
 Storybook uses [Emotion](https://emotion.sh/docs/introduction) for styling. Alongside with a theme that you can customize!
 
 We recommend using Emotion to style your addon’s UI components. That allows you to use the active Storybook theme to deliver a seamless developer experience.
-If you don’t want to use Emotion, you can use inline styles or another css-in-js lib. You can receive the theme as a prop by using Emotion's `withTheme` HOC. [Read more about theming](../configure/theming.md).
+If you don’t want to use Emotion, you can use inline styles or another css-in-js lib. You can receive the theme as a prop by using Emotion's `withTheme` HOC. [Read more about theming](../configure/user-interface/theming.mdx).
 
 ### Storybook components
 
@@ -119,4 +119,4 @@ If you're working on a preset that loads third-party addons, which you don't hav
 
 {/* prettier-ignore-end */}
 
-If you have control over the addons you want to customize. In that case, you can update your preset and implement a custom function to load any additional presets and provide the necessary configuration, similar to how it's implemented in the [Essentials](../../addons/essentials/src/index.ts) addon.
+If you have control over the addons you want to customize. In that case, you can update your preset and implement a custom function to load any additional presets and provide the necessary configuration, similar to how it's implemented in the [Essentials](../essentials/index.mdx) addon.

@@ -80,7 +80,7 @@ The `makeDecorator` API requires the following arguments:
 
 * `name`: Unique name to identify the custom addon decorator.
 * `parameterName`: Sets a unique parameter to be consumed by the addon.
-* `skipIfNoParametersOrOptions`: (Optional) Doesn't run the decorator if the user hasn't options either via [decorators](../writing-stories/decorators.md) or [parameters](../writing-stories/parameters.md).
+* `skipIfNoParametersOrOptions`: (Optional) Doesn't run the decorator if the user hasn't options either via [decorators](../writing-stories/decorators.mdx) or [parameters](../writing-stories/parameters.mdx).
 * `wrapper`: your decorator function. Takes the `getStory`, `context`, and both the `options` and `parameters` (as defined in `skipIfNoParametersOrOptions` above).
 
 ***
@@ -167,7 +167,7 @@ This method allows you to register a handler function called whenever the user n
 
 ### addons.setConfig(config)
 
-This method allows you to override the default Storybook UI configuration (e.g., set up a [theme](../configure/theming.md) or hide UI elements):
+This method allows you to override the default Storybook UI configuration (e.g., set up a [theme](../configure/user-interface/theming.mdx) or hide UI elements):
 
 {/* prettier-ignore-start */}
 
@@ -265,7 +265,7 @@ The `useParameter` retrieves the current story's parameters. If the parameter's 
 
 ### useGlobals
 
-Extremely useful hook for addons that rely on Storybook [Globals](../essentials/toolbars-and-globals.md). It allows you to obtain and update `global` values. We also recommend optimizing your addon to rely on [`React.memo`](https://react.dev/reference/react/memo), or the following hooks; [`useMemo`](https://react.dev/reference/react/useMemo), [`useCallback`](https://react.dev/reference/react/useCallback) to prevent a high volume of re-render cycles.
+Extremely useful hook for addons that rely on Storybook [Globals](../essentials/toolbars-and-globals.mdx). It allows you to obtain and update `global` values. We also recommend optimizing your addon to rely on [`React.memo`](https://react.dev/reference/react/memo), or the following hooks; [`useMemo`](https://react.dev/reference/react/useMemo), [`useCallback`](https://react.dev/reference/react/useCallback) to prevent a high volume of re-render cycles.
 
 {/* prettier-ignore-start */}
 
@@ -275,7 +275,7 @@ Extremely useful hook for addons that rely on Storybook [Globals](../essentials/
 
 ### useArgs
 
-Hook that allows you to retrieve or update a story's [`args`](../writing-stories/args.md).
+Hook that allows you to retrieve or update a story's [`args`](../writing-stories/args.mdx).
 
 {/* prettier-ignore-start */}
 
@@ -285,8 +285,8 @@ Hook that allows you to retrieve or update a story's [`args`](../writing-stories
 
 **Learn more about the Storybook addon ecosystem**
 
-* [Types of addons](./addon-types.md) for other types of addons
-* [Writing addons](./writing-addons.md) for the basics of addon development
-* [Presets](./writing-presets.md) for preset development
-* [Integration catalog](./integration-catalog.md) for requirements and available recipes
+* [Types of addons](./addon-types.mdx) for other types of addons
+* [Writing addons](./writing-addons.mdx) for the basics of addon development
+* [Presets](./writing-presets.mdx) for preset development
+* [Integration catalog](./integration-catalog.mdx) for requirements and available recipes
 * API reference to learn about the available APIs
