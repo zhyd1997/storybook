@@ -8,6 +8,7 @@ import type {
   Addon_SidebarBottomType,
   Addon_SidebarTopType,
   API_LoadedRefData,
+  StoryIndex,
 } from '@storybook/types';
 import type { HeadingProps } from './Heading';
 import { Heading } from './Heading';
@@ -126,12 +127,14 @@ export interface SidebarProps extends API_LoadedRefData {
   enableShortcuts?: boolean;
   onMenuClick?: HeadingProps['onMenuClick'];
   showCreateStoryButton?: boolean;
+  indexJson?: StoryIndex;
 }
 
 export const Sidebar = React.memo(function Sidebar({
   storyId = null,
   refId = DEFAULT_REF_ID,
   index,
+  indexJson,
   indexError,
   status,
   previewInitialized,
@@ -163,7 +166,9 @@ export const Sidebar = React.memo(function Sidebar({
             isLoading={isLoading}
             onMenuClick={onMenuClick}
           />
-          {index && <TagsFilter api={api} index={index} updateQueryParams={updateQueryParams} />}
+          {index && (
+            <TagsFilter api={api} indexJson={indexJson} updateQueryParams={updateQueryParams} />
+          )}
           <Search
             dataset={dataset}
             enableShortcuts={enableShortcuts}

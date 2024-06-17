@@ -3,7 +3,7 @@ import { Badge, IconButton, WithTooltip } from '@storybook/components';
 import { FilterIcon } from '@storybook/icons';
 import type { API } from '@storybook/manager-api';
 import { styled } from '@storybook/theming';
-import type { Tag, API_IndexHash } from '@storybook/types';
+import type { Tag, StoryIndex } from '@storybook/types';
 import { TagsFilterPanel } from './TagsFilterPanel';
 
 const TAGS_FILTER = 'tags-filter';
@@ -31,14 +31,14 @@ const Count = styled(Badge)(({ theme }) => ({
 
 export interface TagsFilterProps {
   api: API;
-  index: API_IndexHash;
+  indexJson: StoryIndex;
   updateQueryParams: (params: Record<string, string | null>) => void;
   initialSelectedTags?: Tag[];
 }
 
 export const TagsFilter = ({
   api,
-  index,
+  indexJson,
   updateQueryParams,
   initialSelectedTags = [],
 }: TagsFilterProps) => {
@@ -49,10 +49,10 @@ export const TagsFilter = ({
 
   useEffect(() => {
     api.experimental_setFilter(TAGS_FILTER, (item) => {
-      const tags = item.tags ?? [];
-      return exclude
-        ? !selectedTags.some((tag) => tags.includes(tag))
-        : selectedTags.every((tag) => tags.includes(tag));
+      if (selectedTags.length === 0) return true;
+
+      const hasSelectedTags = selectedTags.some((tag) => item.tags?.includes(tag));
+      return exclude ? !hasSelectedTags : hasSelectedTags;
     });
 
     const tagsParam = selectedTags.join(',');
@@ -60,10 +60,8 @@ export const TagsFilter = ({
     updateQueryParams({ includeTags, excludeTags });
   }, [api, selectedTags, exclude, updateQueryParams]);
 
-  const allTags = Object.values(index).reduce((acc, entry) => {
-    if (entry.type === 'story') {
-      entry.tags.forEach((tag: Tag) => acc.add(tag));
-    }
+  const allTags = Object.values(indexJson.entries).reduce((acc, entry) => {
+    entry.tags?.forEach((tag: Tag) => acc.add(tag));
     return acc;
   }, new Set<Tag>());
 

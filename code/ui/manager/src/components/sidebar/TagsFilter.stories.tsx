@@ -17,8 +17,11 @@ export const Closed: Story = {
     api: {
       experimental_setFilter: fn(),
     } as any,
-    index: {
-      story1: { type: 'story', tags: ['A', 'B', 'C', 'dev'] } as any,
+    indexJson: {
+      v: 6,
+      entries: {
+        'c1-s1': { tags: ['A', 'B', 'C', 'dev'] } as any,
+      },
     },
     updateQueryParams: fn(),
   },

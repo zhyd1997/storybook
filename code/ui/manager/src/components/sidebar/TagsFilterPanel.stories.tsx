@@ -10,6 +10,7 @@ const meta = {
     toggleTag: fn(),
     toggleExclude: fn(),
   },
+  tags: ['hoho'],
 } satisfies Meta<typeof TagsFilterPanel>;
 
 export default meta;
