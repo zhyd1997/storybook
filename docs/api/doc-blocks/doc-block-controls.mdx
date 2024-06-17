@@ -7,10 +7,10 @@ sidebar:
 
 <YouTubeCallout id="uAA1JvLcl-w" title="Avoid Documentation Nightmares with Storybook's Controls Doc Block" params="start=240" />
 
-The `Controls` block can be used to show a dynamic table of args for a given story, as a way to document its interface, and to allow you to change the args for a (separately) rendered story (via the [`Story`](./doc-block-story.md) or [`Canvas`](./doc-block-canvas.md) blocks).
+The `Controls` block can be used to show a dynamic table of args for a given story, as a way to document its interface, and to allow you to change the args for a (separately) rendered story (via the [`Story`](./doc-block-story.mdx) or [`Canvas`](./doc-block-canvas.mdx) blocks).
 
 <Callout variant="info" icon="💡">
-  If you’re looking for a static table that shows a component's arg types with no controls, see the [`ArgTypes`](./doc-block-argtypes.md) block instead.
+  If you’re looking for a static table that shows a component's arg types with no controls, see the [`ArgTypes`](./doc-block-argtypes.mdx) block instead.
 </Callout>
 
 ![Screenshot of Controls block](../_assets/doc-blocks/doc-block-controls.png)
@@ -33,7 +33,7 @@ import * as ButtonStories from './Button.stories'
 {/* prettier-ignore-end */}
 
 <Callout variant="warning">
-  The Controls doc block will only have functioning UI controls if you have also installed and registered [`@storybook/addon-controls`](../essentials/controls.md) (included in [`@storybook/addon-essentials`](../essentials/index.md)) and haven't turned off inline stories with the [`inline`](./doc-block-story.md#inline) configuration option.
+  The Controls doc block will only have functioning UI controls if you have also installed and registered [`@storybook/addon-controls`](../essentials/controls.mdx) (included in [`@storybook/addon-essentials`](../essentials/index.mdx)) and haven't turned off inline stories with the [`inline`](./doc-block-story.md#inline) configuration option.
 </Callout>
 
 ## Controls
@@ -45,7 +45,7 @@ import { Controls } from '@storybook/blocks';
 <details>
   <summary>Configuring with props <strong>and</strong> parameters</summary>
 
-  ℹ️ Like most blocks, the `Controls` block is configured with props in MDX. Many of those props derive their default value from a corresponding [parameter](../writing-stories/parameters.md) in the block's namespace, `parameters.docs.controls`.
+  ℹ️ Like most blocks, the `Controls` block is configured with props in MDX. Many of those props derive their default value from a corresponding [parameter](../writing-stories/parameters.mdx) in the block's namespace, `parameters.docs.controls`.
 
   The following `exclude` configurations are equivalent:
 
@@ -69,7 +69,7 @@ import { Controls } from '@storybook/blocks';
 </details>
 
 <Callout variant="info" icon="💡">
-  This API configures Controls blocks used within docs pages. To configure the Controls addon panel, see the [Controls addon docs](../essentials/controls.md). To configure individual controls, you can specify [argTypes](./arg-types.md#control) for each.
+  This API configures Controls blocks used within docs pages. To configure the Controls addon panel, see the [Controls addon docs](../../essentials/controls.mdx). To configure individual controls, you can specify [argTypes](../arg-types.mdx#control) for each.
 </Callout>
 
 ### `exclude`

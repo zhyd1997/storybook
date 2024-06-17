@@ -7,7 +7,7 @@ sidebar:
 
 The default blocks supplied by Storybook do not fit all use cases, so you might want to write your own blocks.
 
-If your own doc blocks need to interface with annotations from Storybook—that is stories, meta or components—you can use the `useOf` hook. Pass in a module export of a story, meta, or component and it will return its annotated form (with applied parameters, args, loaders, decorators, play function) that you can then use for anything you like. In fact, most of the existing blocks like [`Description`](./doc-block-description.md) and [`Canvas`](./doc-block-canvas.md) use `useOf` under the hood.
+If your own doc blocks need to interface with annotations from Storybook—that is stories, meta or components—you can use the `useOf` hook. Pass in a module export of a story, meta, or component and it will return its annotated form (with applied parameters, args, loaders, decorators, play function) that you can then use for anything you like. In fact, most of the existing blocks like [`Description`](./doc-block-description.mdx) and [`Canvas`](./doc-block-canvas.mdx) use `useOf` under the hood.
 
 Here’s an example of how the`useOf` hook could be used to create a custom block that displays the name of the story:
 
@@ -94,7 +94,7 @@ When the custom block is in an [attached doc](./doc-block-meta.md#attached-vs-un
 
 Type: `Array<'story' | 'meta' | 'component'>`
 
-Optionally specify an array of valid types that your block accepts. Passing anything other than the valid type(s) will result in an error. For example, the [`Canvas`](./doc-block-canvas.md) block uses `useOf(of, ['story'])`, which ensures it only accepts a reference to a story, not a meta or component.
+Optionally specify an array of valid types that your block accepts. Passing anything other than the valid type(s) will result in an error. For example, the [`Canvas`](./doc-block-canvas.mdx) block uses `useOf(of, ['story'])`, which ensures it only accepts a reference to a story, not a meta or component.
 
 ### Return
 
