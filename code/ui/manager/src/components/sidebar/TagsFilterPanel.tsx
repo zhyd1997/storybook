@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { transparentize } from 'polished';
 import { styled } from '@storybook/theming';
 import { CollapseIcon } from './components/CollapseIcon';
+import type { Tag } from '@storybook/types';
 
 const BUILT_IN_TAGS = new Set([
   'dev',
@@ -88,6 +89,7 @@ const TagsList = ({ tags, selectedTags, toggleTag }: TagsListProps) => {
 };
 
 const Wrapper = styled.div({
+  padding: 10,
   label: {
     display: 'flex',
   },
