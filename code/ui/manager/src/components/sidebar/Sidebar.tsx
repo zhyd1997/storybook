@@ -103,6 +103,17 @@ const useCombination = (
   return useMemo(() => ({ hash, entries: Object.entries(hash) }), [hash]);
 };
 
+const updateQueryParams = (params: Record<string, string>) => {
+  const url = new URL(window.location.href);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      url.searchParams.set(key, value);
+    } else {
+      url.searchParams.delete(key);
+    }
+  });
+  window.history.pushState({}, '', url);
+};
 export interface SidebarProps extends API_LoadedRefData {
   refs: State['refs'];
   status: State['status'];
@@ -152,23 +163,7 @@ export const Sidebar = React.memo(function Sidebar({
             isLoading={isLoading}
             onMenuClick={onMenuClick}
           />
-          {index && (
-            <TagsFilter
-              api={api}
-              index={index}
-              updateQueryParams={(params) => {
-                const url = new URL(window.location.href);
-                Object.entries(params).forEach(([key, value]) => {
-                  if (value) {
-                    url.searchParams.set(key, value);
-                  } else {
-                    url.searchParams.delete(key);
-                  }
-                });
-                window.history.pushState({}, '', url);
-              }}
-            />
-          )}
+          {index && <TagsFilter api={api} index={index} updateQueryParams={updateQueryParams} />}
           <Search
             dataset={dataset}
             enableShortcuts={enableShortcuts}
