@@ -72,6 +72,8 @@ export class Preview<TRenderer extends Renderer> {
   // project annotations. Once the index loads, it is stored on the store and this will get unset.
   private projectAnnotationsBeforeInitialization?: ProjectAnnotations<TRenderer>;
 
+  private beforeAllCleanup?: (() => MaybePromise<void>) | void;
+
   protected storeInitializationPromise: Promise<void>;
 
   protected resolveStoreInitializationPromise!: () => void;
@@ -160,9 +162,23 @@ export class Preview<TRenderer extends Renderer> {
   }
 
   // If initialization gets as far as project annotations, this function runs.
-  async initializeWithProjectAnnotations(projectAnnotations: ProjectAnnotations<TRenderer>) {
-    this.projectAnnotationsBeforeInitialization = projectAnnotations;
+  async initializeWithProjectAnnotations(
+    projectAnnotations: ProjectAnnotations<TRenderer>,
+    storyStore?: StoryStore<TRenderer>
+  ) {
     try {
+      await this.beforeAllCleanup?.();
+      this.beforeAllCleanup = await projectAnnotations.beforeAll?.();
+    } catch (err) {
+      this.renderPreviewEntryError('Error in beforeAll hook:', err as Error);
+      throw err;
+    }
+
+    // Don't reinitialize story store if it's already been set.
+    if (storyStore) return;
+
+    try {
+      this.projectAnnotationsBeforeInitialization = projectAnnotations;
       const storyIndex = await this.getStoryIndexFromServer();
       return this.initializeWithStoryIndex(storyIndex);
     } catch (err) {
@@ -226,13 +242,12 @@ export class Preview<TRenderer extends Renderer> {
     this.getProjectAnnotations = getProjectAnnotations;
 
     const projectAnnotations = await this.getProjectAnnotationsOrRenderError();
-    if (!this.storyStoreValue) {
-      await this.initializeWithProjectAnnotations(projectAnnotations);
-      return;
-    }
+    await this.initializeWithProjectAnnotations(projectAnnotations, this.storyStoreValue);
 
-    this.storyStoreValue.setProjectAnnotations(projectAnnotations);
-    this.emitGlobals();
+    if (this.storyStoreValue) {
+      this.storyStoreValue.setProjectAnnotations(projectAnnotations);
+      this.emitGlobals();
+    }
   }
 
   async onStoryIndexChanged() {

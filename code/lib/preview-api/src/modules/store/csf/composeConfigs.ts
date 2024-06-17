@@ -59,6 +59,7 @@ export function composeConfigs<TRenderer extends Renderer>(
     initialGlobals: getObjectField(moduleExportList, 'initialGlobals'),
     globalTypes: getObjectField(moduleExportList, 'globalTypes'),
     loaders: getArrayField(moduleExportList, 'loaders'),
+    beforeAll: getSingletonField(moduleExportList, 'beforeAll'),
     beforeEach: getArrayField(moduleExportList, 'beforeEach'),
     render: getSingletonField(moduleExportList, 'render'),
     renderToCanvas: getSingletonField(moduleExportList, 'renderToCanvas'),
