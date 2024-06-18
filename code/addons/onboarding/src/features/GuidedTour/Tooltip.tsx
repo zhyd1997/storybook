@@ -66,6 +66,7 @@ type TooltipProps = {
       | 'title'
       | 'content'
       | 'target'
+      | 'offset'
       | 'placement'
       | 'disableOverlay'
       | 'disableBeacon'
@@ -77,6 +78,7 @@ type TooltipProps = {
       onNextButtonClick: () => void;
     }
   >;
+  closeProps: TooltipRenderProps['closeProps'];
   primaryProps: TooltipRenderProps['primaryProps'];
   tooltipProps: TooltipRenderProps['tooltipProps'];
 };
@@ -85,10 +87,9 @@ export const Tooltip: FC<TooltipProps> = ({
   index,
   size,
   step,
+  closeProps,
   primaryProps,
   tooltipProps,
-  closeProps,
-  ...rest
 }) => {
   useEffect(() => {
     const style = document.createElement('style');
@@ -119,11 +120,10 @@ export const Tooltip: FC<TooltipProps> = ({
 
   return (
     <TooltipBody {...tooltipProps} style={step.styles?.tooltip}>
-      {console.log({ step, primaryProps, closeProps, rest })}
       <Wrapper>
         <TooltipHeader>
           {step.title && <TooltipTitle>{step.title}</TooltipTitle>}
-          <IconButton {...closeProps} variant="solid">
+          <IconButton {...closeProps} onClick={closeProps.onClick as any} variant="solid">
             <CloseAltIcon />
           </IconButton>
         </TooltipHeader>
@@ -134,8 +134,12 @@ export const Tooltip: FC<TooltipProps> = ({
           {index + 1} of {size}
         </Count>
         {!step.hideNextButton && (
-          <Button {...primaryProps} variant="outline">
-            Next
+          <Button
+            {...primaryProps}
+            onClick={step.onNextButtonClick || primaryProps.onClick}
+            variant="white"
+          >
+            {index + 1 === size ? 'Done' : 'Next'}
           </Button>
         )}
       </TooltipFooter>
