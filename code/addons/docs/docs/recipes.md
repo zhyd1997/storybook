@@ -2,22 +2,22 @@
 
 [Storybook Docs](../README.md) consists of two basic mechanisms, [DocsPage](docspage.md) and [MDX](mdx.md). But how should you use them in your project?
 
-1. [Component Story Format (CSF) with DocsPage](#component-story-format-csf-with-docspage)
-2. [Pure MDX Stories](#pure-mdx-stories)
-3. [CSF Stories with MDX Docs](#csf-stories-with-mdx-docs)
-4. [CSF Stories with arbitrary MDX](#csf-stories-with-arbitrary-mdx)
-5. [Mixing storiesOf with CSF/MDX](#mixing-storiesof-with-csfmdx)
-6. [Migrating from notes/info addons](#migrating-from-notesinfo-addons)
-7. [Exporting documentation](#exporting-documentation)
-8. [Disabling docs stories](#disabling-docs-stories)
-   1. [DocsPage](#docspage)
-   2. [MDX Stories](#mdx-stories)
-9. [Controlling a story's view mode](#controlling-a-storys-view-mode)
-10. [Reordering Docs tab first](#reordering-docs-tab-first)
-11. [Customizing source snippets](#customizing-source-snippets)
-12. [Overwriting docs container](#overwriting-docs-container)
-13. [Add description to individual stories](#add-description-to-individual-stories)
-14. [More resources](#more-resources)
+- [Component Story Format (CSF) with DocsPage](#component-story-format-csf-with-docspage)
+- [Pure MDX Stories](#pure-mdx-stories)
+- [CSF Stories with MDX Docs](#csf-stories-with-mdx-docs)
+- [CSF Stories with arbitrary MDX](#csf-stories-with-arbitrary-mdx)
+- [Mixing storiesOf with CSF/MDX](#mixing-storiesof-with-csfmdx)
+- [Migrating from notes/info addons](#migrating-from-notesinfo-addons)
+- [Exporting documentation](#exporting-documentation)
+- [Disabling docs stories](#disabling-docs-stories)
+  - [DocsPage](#docspage)
+  - [MDX Stories](#mdx-stories)
+- [Controlling a story's view mode](#controlling-a-storys-view-mode)
+- [Reordering Docs tab first](#reordering-docs-tab-first)
+- [Customizing source snippets](#customizing-source-snippets)
+- [Overwriting docs container](#overwriting-docs-container)
+- [Add description to individual stories](#add-description-to-individual-stories)
+- [More resources](#more-resources)
 
 ## Component Story Format (CSF) with DocsPage
 
