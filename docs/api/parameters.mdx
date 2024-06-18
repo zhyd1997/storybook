@@ -5,7 +5,7 @@ sidebar:
   title: Parameters
 ---
 
-Parameters are static metadata used to configure your [stories](../get-started/whats-a-story.md) and [addons](../addons/index.md) in Storybook. They are specified at the story, meta (component), project (global) levels.
+Parameters are static metadata used to configure your [stories](../get-started/whats-a-story.mdx) and [addons](../addons/index.mdx) in Storybook. They are specified at the story, meta (component), project (global) levels.
 
 ## Story parameters
 
@@ -27,7 +27,7 @@ Parameters specified at the story level apply to that story only. They are defin
   ℹ️ Parameters specified at the meta (component) level will [override](#parameter-inheritance) those specified at the project level.
 </div>
 
-Parameter's specified in a [CSF](../writing-stories/index.md#component-story-format-csf) file's meta configuration apply to all stories in that file. They are defined in the `parameters` property of the `meta` (default export):
+Parameter's specified in a [CSF](../writing-stories/index.mdx#component-story-format-csf) file's meta configuration apply to all stories in that file. They are defined in the `parameters` property of the `meta` (default export):
 
 {/* prettier-ignore-start */}
 
@@ -55,7 +55,7 @@ Type: `'centered' | 'fullscreen' | 'padded'`
 
 Default: `'padded'`
 
-Specifies how the canvas should [lay out the story](../configure/story-layout.md).
+Specifies how the canvas should [lay out the story](../configure/story-layout.mdx).
 
 * **centered**: Center the story within the canvas
 * **padded**: (default) Add padding to the story
@@ -115,7 +115,7 @@ When specifying a custom sorting function, the function behaves like a typical J
 (a, b) => (a.id === b.id ? 0 : a.id.localeCompare(b.id, undefined, { numeric: true }));
 ```
 
-See [the guide](../writing-stories/naming-components-and-hierarchy/#sorting-stories) for usage examples.
+See [the guide](../writing-stories/naming-components-and-hierarchy.mdx#sorting-stories) for usage examples.
 
 ### `test`
 
@@ -160,21 +160,21 @@ Type: `boolean`
 
 Default: `false`
 
-Unhandled errors might cause false positive assertions. Setting this to `true` will prevent the [play function](../writing-stories/play-function.md) from failing and showing a warning when unhandled errors are thrown during execution.
+Unhandled errors might cause false positive assertions. Setting this to `true` will prevent the [play function](../writing-stories/play-function.mdx) from failing and showing a warning when unhandled errors are thrown during execution.
 
 ***
 
 ### Essential addons
 
-All other parameters are contributed by addons. The [essential addon's](../essentials/index.md) parameters are documented on their individual pages:
+All other parameters are contributed by addons. The [essential addon's](../essentials/index.mdx) parameters are documented on their individual pages:
 
-* [Actions](../essentials/actions.md#parameters)
-* [Backgrounds](../essentials/backgrounds.md#parameters)
-* [Controls](../essentials/controls.md#parameters)
-* [Highlight](../essentials/highlight.md#parameters)
-* [Interactions](../essentials/interactions.md#parameters)
-* [Measure & Outline](../essentials/measure-and-outline.md#parameters)
-* [Viewport](../essentials/viewport.md#parameters)
+* [Actions](../essentials/actions.mdx#parameters)
+* [Backgrounds](../essentials/backgrounds.mdx#parameters)
+* [Controls](../essentials/controls.mdx#parameters)
+* [Highlight](../essentials/highlight.mdx#parameters)
+* [Interactions](../essentials/interactions.mdx#parameters)
+* [Measure & Outline](../essentials/measure-and-outline.mdx#parameters)
+* [Viewport](../essentials/viewport.mdx#parameters)
 
 ## Parameter inheritance
 
