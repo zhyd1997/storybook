@@ -26,6 +26,39 @@ describe('composeStory', () => {
     tags: ['metaTag'],
   };
 
+  it('should return beforeAll as part of project annotations', async () => {
+    const spy = vi.fn();
+    const annotations = {
+      beforeAll: async () => {
+        spy();
+      },
+    };
+    const finalAnnotations = setProjectAnnotations(annotations);
+    await finalAnnotations.beforeAll?.();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should return composed project annotations via setProjectAnnotations', () => {
+    const firstAnnotations = {
+      parameters: { foo: 'bar' },
+      tags: ['autodocs'],
+    };
+
+    const secondAnnotations = {
+      args: {
+        foo: 'bar',
+      },
+    };
+    const finalAnnotations = setProjectAnnotations([firstAnnotations, secondAnnotations]);
+    expect(finalAnnotations).toEqual(
+      expect.objectContaining({
+        parameters: { foo: 'bar' },
+        args: { foo: 'bar' },
+        tags: ['autodocs'],
+      })
+    );
+  });
+
   it('should compose project annotations in all module formats', () => {
     setProjectAnnotations([defaultExportAnnotations, namedExportAnnotations]);
 

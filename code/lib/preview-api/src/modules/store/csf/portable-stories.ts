@@ -35,8 +35,10 @@ const DEFAULT_STORY_NAME = 'Unnamed Story';
 function extractAnnotation<TRenderer extends Renderer = Renderer>(
   annotation: NamedOrDefaultProjectAnnotations<TRenderer>
 ) {
+  if (!annotation) return {};
   // support imports such as
   // import * as annotations from '.storybook/preview'
+  // import annotations from '.storybook/preview'
   // in both cases: 1 - the file has a default export; 2 - named exports only
   return 'default' in annotation ? annotation.default : annotation;
 }
@@ -45,9 +47,11 @@ export function setProjectAnnotations<TRenderer extends Renderer = Renderer>(
   projectAnnotations:
     | NamedOrDefaultProjectAnnotations<TRenderer>
     | NamedOrDefaultProjectAnnotations<TRenderer>[]
-) {
+): ProjectAnnotations<TRenderer> {
   const annotations = Array.isArray(projectAnnotations) ? projectAnnotations : [projectAnnotations];
   globalProjectAnnotations = composeConfigs(annotations.map(extractAnnotation));
+
+  return globalProjectAnnotations;
 }
 
 const cleanups: { storyName: string; callback: CleanupCallback }[] = [];
@@ -165,7 +169,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
         cleanups.push(
           ...(await story.applyBeforeEach(context))
             .filter(Boolean)
-            .map((callback) => ({ storyName, callback }))
+            .map((callback: () => void) => ({ storyName, callback }))
         );
       },
       args: story.initialArgs as Partial<TArgs>,
