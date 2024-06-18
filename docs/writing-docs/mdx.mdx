@@ -7,14 +7,14 @@ sidebar:
 
 <YouTubeCallout id="YeIvFke5_5Y" title="MDX Storybook Quick Tips" />
 
-[MDX](https://mdxjs.com/) files mix Markdown and Javascript/JSX to create rich interactive documentation. You can use Markdown’s readable syntax (such as `# heading`) for your documentation, include stories defined in [Component Story Format (CSF)](../api/csf.md), and freely embed JSX component blocks at any point in the file. All at once.
+[MDX](https://mdxjs.com/) files mix Markdown and Javascript/JSX to create rich interactive documentation. You can use Markdown’s readable syntax (such as `# heading`) for your documentation, include stories defined in [Component Story Format (CSF)](../api/csf.mdx), and freely embed JSX component blocks at any point in the file. All at once.
 
 In addition, you can write pure documentation pages in MDX and add them to Storybook alongside your stories.
 
 ![MDX simple example result](../_assets/writing-docs/mdx-hero.png)
 
 <Callout variant="info">
-  Writing stories directly in MDX was removed in Storybook 8, and we're no longer supporting it. Please reference the [previous documentation](../../../release-6-5/docs/writing-docs/mdx.md) for guidance on that feature or [migrate](../migration-guide.md#storiesmdx-to-mdxcsf) to the new format.
+  Writing stories directly in MDX was removed in Storybook 8, and we're no longer supporting it. Please reference the [previous documentation](../../../release-6-5/docs/writing-docs/mdx.mdx) for guidance on that feature or [migrate](../migration-guide.md#storiesmdx-to-mdxcsf) to the new format.
 </Callout>
 
 ## Basic example
@@ -27,7 +27,7 @@ Let's start with an example, `Checkbox.mdx`, combining Markdown with a single st
 
 {/* prettier-ignore-end */}
 
-This MDX file references a story file, `Checkbox.stories.js|ts`, that is written in [Component Story Format (CSF)](../api/csf.md):
+This MDX file references a story file, `Checkbox.stories.js|ts`, that is written in [Component Story Format (CSF)](../api/csf.mdx):
 
 {/* prettier-ignore-start */}
 
@@ -52,7 +52,7 @@ The first thing you'll notice is that the component documentation is divided int
 
 ### Anatomy of MDX
 
-Assuming you’re already familiar with writing stories with [CSF](../writing-stories/index.md), we can dissect the MDX side of things in greater detail.
+Assuming you’re already familiar with writing stories with [CSF](../writing-stories/index.mdx), we can dissect the MDX side of things in greater detail.
 
 The document consists of a number of blocks separated by blank lines. Since MDX mixes a few different languages together, it uses those blank lines to help distinguish where one starts, and the next begins. Failing to separate blocks by whitespace can cause (sometimes cryptic) parse errors.
 
@@ -132,7 +132,7 @@ Create an MDX file to add your custom documentation. Depending on how you want y
 
 ### Using the `Meta` Doc Block
 
-If you need to match the component documentation to an existing story, you can configure the [`Meta`](../api/doc-block-meta.md) Doc Block to control how the documentation gets rendered. Out of the box, it allows you to define a custom title or a reference to the story you need to document (i.e., via the `of` prop). For example:
+If you need to match the component documentation to an existing story, you can configure the [`Meta`](../api/doc-blocks/doc-block-meta.mdx) Doc Block to control how the documentation gets rendered. Out of the box, it allows you to define a custom title or a reference to the story you need to document (i.e., via the `of` prop). For example:
 
 {/* prettier-ignore-start */}
 
@@ -154,7 +154,7 @@ Suppose you're documenting an existing component and only provide the `Meta` Doc
 
 ### Using the File System
 
-However, providing the `Meta` Doc Block may not be required for certain use cases, such as standalone pages or even as guidelines for testing your components. In that case, you can safely omit it. Storybook will instead rely on the file's physical location to place the documentation in the sidebar, overriding any pre-existent [auto-generated](./autodocs.md) documentation with your own. For example:
+However, providing the `Meta` Doc Block may not be required for certain use cases, such as standalone pages or even as guidelines for testing your components. In that case, you can safely omit it. Storybook will instead rely on the file's physical location to place the documentation in the sidebar, overriding any pre-existent [auto-generated](./autodocs.mdx) documentation with your own. For example:
 
 {/* prettier-ignore-start */}
 
@@ -213,7 +213,7 @@ If you need to extend your documentation with additional content written in Mark
 {/* prettier-ignore-end */}
 
 <Callout variant="info">
-  The `Markdown` Doc Block provides additional configuration options to customize the rendering of your documentation. For more information, refer to the [API documentation](../api/doc-block-markdown.md).
+  The `Markdown` Doc Block provides additional configuration options to customize the rendering of your documentation. For more information, refer to the [API documentation](../api/doc-block-markdown.mdx).
 </Callout>
 
 ![Changelog markdown in an MDX story](../_assets/writing-docs/mdx-markdown-docs-import.png)
@@ -250,7 +250,7 @@ However, cross-linking documentation isn't restricted to documentation pages. Yo
 
 ### Markdown tables aren't rendering correctly
 
-If you're extending your documentation to include specific features (e.g., tables, footnotes), you may run into some issues rendering them correctly using the current MDX version supported by Storybook. We recommend enabling the [`remark-gfm`](https://github.com/remarkjs/remark-gfm) plugin in your configuration file (i.e., [`.storybook/main.js|ts`](../configure/index.md)) to render them correctly.
+If you're extending your documentation to include specific features (e.g., tables, footnotes), you may run into some issues rendering them correctly using the current MDX version supported by Storybook. We recommend enabling the [`remark-gfm`](https://github.com/remarkjs/remark-gfm) plugin in your configuration file (i.e., [`.storybook/main.js|ts`](../configure/index.mdx)) to render them correctly.
 
 {/* prettier-ignore-start */}
 
@@ -272,7 +272,7 @@ If you run into a situation where Storybook is not able to detect and render the
 
 ### The migration seems flaky and keeps failing
 
-By default, running the [migration](../configure/upgrading.md) command will prompt you to update the existing MDX files in your project according to the MDX version supported by Storybook. However, this might be a disruptive process, specifically if you're upgrading from a previous version of Storybook where you were using the legacy MDX format. To help you troubleshoot those issues, we've prepared some recommendations that might help you.
+By default, running the [migration](../configure/upgrading.mdx) command will prompt you to update the existing MDX files in your project according to the MDX version supported by Storybook. However, this might be a disruptive process, specifically if you're upgrading from a previous version of Storybook where you were using the legacy MDX format. To help you troubleshoot those issues, we've prepared some recommendations that might help you.
 
 Start by running the following command inside your project directory:
 
@@ -311,7 +311,7 @@ If you're having issues with the React version used, you may need to re-create y
 
 **Learn more about Storybook documentation**
 
-* [Autodocs](./autodocs.md) for creating documentation for your stories
+* [Autodocs](./autodocs.mdx) for creating documentation for your stories
 * MDX for customizing your documentation
-* [Doc Blocks](./doc-blocks.md) for authoring your documentation
-* [Publishing docs](./build-documentation.md) to automate the process of publishing your documentation
+* [Doc Blocks](./doc-blocks.mdx) for authoring your documentation
+* [Publishing docs](./build-documentation.mdx) to automate the process of publishing your documentation
