@@ -11,7 +11,7 @@ A story is a component with a set of arguments that define how the component sho
 
 When an arg’s value changes, the component re-renders, allowing you to interact with components in Storybook’s UI via addons that affect args.
 
-Learn how and why to write stories in [the introduction](./index.md#using-args). For details on how args work, read on.
+Learn how and why to write stories in [the introduction](./index.mdx#using-args). For details on how args work, read on.
 
 ## Args object
 
@@ -58,7 +58,7 @@ You can also define args at the global level; they will apply to every component
 {/* prettier-ignore-end */}
 
 <Callout variant="info" icon="💡">
-  For most uses of global args, [globals](../essentials/toolbars-and-globals.md) are a better tool for defining globally-applied settings, such as a theme. Using globals enables users to change the value with the toolbar menu.
+  For most uses of global args, [globals](../essentials/toolbars-and-globals.mdx) are a better tool for defining globally-applied settings, such as a theme. Using globals enables users to change the value with the toolbar menu.
 </Callout>
 
 ## Args composition
@@ -99,7 +99,7 @@ Args are useful when writing stories for composite components that are assembled
 
 ## Setting args through the URL
 
-You can also override the set of initial args for the active story by adding an `args` query parameter to the URL. Typically you would use the [Controls addon](../essentials/controls.md) to handle this. For example, here's how you could set a `size` and `style` arg in the Storybook's URL:
+You can also override the set of initial args for the active story by adding an `args` query parameter to the URL. Typically you would use the [Controls addon](../essentials/controls.mdx) to handle this. For example, here's how you could set a `size` and `style` arg in the Storybook's URL:
 
 ```
 ?path=/story/avatar--default&args=style:rounded;size:100
@@ -146,7 +146,7 @@ Note that `mapping` does not have to be exhaustive. If the arg value is not a pr
 <details>
   <summary>Using args in addons</summary>
 
-  If you are [writing an addon](../addons/writing-addons.md) that wants to read or update args, use the `useArgs` hook exported by `@storybook/manager-api`:
+  If you are [writing an addon](../addons/writing-addons.mdx) that wants to read or update args, use the `useArgs` hook exported by `@storybook/manager-api`:
 
   {/* prettier-ignore-start */}
 

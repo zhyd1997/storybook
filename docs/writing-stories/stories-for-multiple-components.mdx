@@ -5,7 +5,7 @@ sidebar:
   title: Stories for multiple components
 ---
 
-It's useful to write stories that [render two or more components](./index.md#stories-for-two-or-more-components) at once if those components are designed to work together. For example, `ButtonGroup`, `List`, and `Page` components.
+It's useful to write stories that [render two or more components](./index.mdx#stories-for-two-or-more-components) at once if those components are designed to work together. For example, `ButtonGroup`, `List`, and `Page` components.
 
 ## Subcomponents
 
@@ -19,14 +19,14 @@ Here's an example with `List` and `ListItem` components:
 
 {/* prettier-ignore-end */}
 
-Note that by adding a `subcomponents` property to the default export, we get an extra panel on the [ArgTypes](../writing-docs/doc-blocks.md#argtypes) and [Controls](../essentials/controls.md#) tables, listing the props of `ListItem`:
+Note that by adding a `subcomponents` property to the default export, we get an extra panel on the [ArgTypes](../writing-docs/doc-blocks.mdx#argtypes) and [Controls](../essentials/controls.mdx#) tables, listing the props of `ListItem`:
 
 ![Subcomponents in ArgTypes doc block](../_assets/writing-stories/doc-block-arg-types-subcomponents-for-list.png)
 
 Subcomponents are only intended for documentation purposes and have some limitations:
 
-1. The [argTypes](../api/arg-types.md) of subcomponents are [inferred (for the renderers that support that feature)](../api/arg-types.md#automatic-argtype-inference) and cannot be manually defined or overridden.
-2. The table for each documented subcomponent does *not* include [controls](../essentials/controls.md) to change the value of the props, because controls always apply to the main component's args.
+1. The [argTypes](../api/arg-types.mdx) of subcomponents are [inferred (for the renderers that support that feature)](../api/arg-types.mdx#automatic-argtype-inference) and cannot be manually defined or overridden.
+2. The table for each documented subcomponent does *not* include [controls](../essentials/controls.mdx) to change the value of the props, because controls always apply to the main component's args.
 
 Let's talk about some techniques you can use to mitigate the above, which are especially useful in more complicated situations.
 
@@ -62,7 +62,7 @@ By rendering the `Unchecked` story with its args, we are able to reuse the input
   The `children` arg, just like all args, needs to be JSON serializable. To avoid errors with your Storybook, you should:
 
   * Avoid using empty values
-  * Use [mapping](../essentials/controls.md#dealing-with-complex-values) if you want to adjust the value with [controls](../essentials/controls.md)
+  * Use [mapping](../essentials/controls.mdx#dealing-with-complex-values) if you want to adjust the value with [controls](../essentials/controls.mdx)
   * Use caution with components that include third party libraries
 
   <Callout variant="info">

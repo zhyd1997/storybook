@@ -21,7 +21,7 @@ It's straightforward to write components to be fully presentational up to the sc
 The benefits:
 
 * Easy to write stories once components are in this form.
-* All the data for the story is encoded in the args of the story, which works well with other parts of Storybook's tooling (e.g. [controls](../essentials/controls.md)).
+* All the data for the story is encoded in the args of the story, which works well with other parts of Storybook's tooling (e.g. [controls](../essentials/controls.mdx)).
 
 The downsides:
 
@@ -41,7 +41,7 @@ When you are building screens in this way, it is typical that the inputs of a co
 
 {/* prettier-ignore-end */}
 
-In such cases, it is natural to use [args composition](./args.md#args-composition) to build the stories for the page based on the stories of the sub-components:
+In such cases, it is natural to use [args composition](./args.mdx#args-composition) to build the stories for the page based on the stories of the sub-components:
 
 {/* prettier-ignore-start */}
 
@@ -55,15 +55,15 @@ This approach is beneficial when the various subcomponents export a complex list
 
 Connected components are components that depend on external data or services. For example, a full page component is often a connected component. When you render a connected component in Storybook, you need to mock the data or modules that the component depends on. There are various layers in which you can do that.
 
-### [Mocking imports](./mocking-modules.md)
+### [Mocking imports](./mocking-data-and-modules/mocking-modules.mdx)
 
 Components can depend on modules that are imported into the component file. These can be from external packages or internal to your project. When rendering those components in Storybook or testing them, you may want to mock those modules to control their behavior.
 
-### [Mocking API Services](./mocking-network-requests.md)
+### [Mocking API Services](./mocking-data-and-modules/mocking-network-requests.mdx)
 
 For components that make network requests (e.g., fetching data from a REST or GraphQL API), you can mock those requests in your stories.
 
-### [Mocking providers](./mocking-providers.md)
+### [Mocking providers](./mocking-data-and-modules/mocking-providers.mdx)
 
 Components can receive data or configuration from context providers. For example, a styled component might access its theme from a ThemeProvider or Redux uses React context to provide components access to app data. You can mock a provider and the value it's providing and wrap your component with it in your stories.
 
@@ -118,7 +118,7 @@ Components can receive data or configuration from context providers. For example
   {/* prettier-ignore-end */}
 
   <Callout variant="info">
-    If the same context applies to all `ProfilePage` stories, we can use a [decorator](./decorators.md).
+    If the same context applies to all `ProfilePage` stories, we can use a [decorator](./decorators.mdx).
   </Callout>
 
   #### Providing containers to your application

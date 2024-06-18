@@ -33,7 +33,7 @@ If you're not already using MSW, generate the service worker file necessary for 
   </Callout>
 </If>
 
-Then ensure the [`staticDirs`](../api/main-config-static-dirs.md) property in your Storybook configuration will include the generated service worker file (in `/public`, by default):
+Then ensure the [`staticDirs`](../../api/main-config/main-config-static-dirs.mdx) property in your Storybook configuration will include the generated service worker file (in `/public`, by default):
 
 {/* prettier-ignore-start */}
 
@@ -41,7 +41,7 @@ Then ensure the [`staticDirs`](../api/main-config-static-dirs.md) property in yo
 
 {/* prettier-ignore-end */}
 
-Finally, initialize the addon and apply it to all stories with a [project-level loader](./loaders.md#global-loaders):
+Finally, initialize the addon and apply it to all stories with a [project-level loader](../loaders.mdx#global-loaders):
 
 {/* prettier-ignore-start */}
 
@@ -95,4 +95,4 @@ The MSW addon allows you to write stories that use MSW to mock the GraphQL reque
 
 ## Configuring MSW for stories
 
-In the examples above, note how each story is configured with `parameters.msw` to define the request handlers for the mock server. Because it uses parameters in this way, it can also be configured at the [component](./parameters.md#component-parameters) or even [project](./parameters.md#global-parameters) level, allowing you to share the same mock server configuration across multiple stories.
+In the examples above, note how each story is configured with `parameters.msw` to define the request handlers for the mock server. Because it uses parameters in this way, it can also be configured at the [component](../parameters.mdx#component-parameters) or even [project](../parameters.mdx#global-parameters) level, allowing you to share the same mock server configuration across multiple stories.

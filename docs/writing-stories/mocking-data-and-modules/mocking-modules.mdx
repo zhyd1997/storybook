@@ -60,7 +60,7 @@ export const uuidv4 = fn(actual.uuidv4).mockName('uuidv4');
 
 ## Subpath imports
 
-The recommended method for mocking modules is to use [subpath imports](https://nodejs.org/api/packages.html#subpath-imports), a feature of Node packages that is supported by both [Vite](../builders/vite.md) and [Webpack](../builders/webpack.md).
+The recommended method for mocking modules is to use [subpath imports](https://nodejs.org/api/packages.html#subpath-imports), a feature of Node packages that is supported by both [Vite](../builders/vite.mdx) and [Webpack](../../builders/webpack.mdx).
 
 To configure subpath imports, you define the `imports` property in your project's `package.json` file. This property maps the subpath to the actual file path. The example below configures subpath imports for four internal modules:
 
@@ -119,12 +119,12 @@ Here, we define `beforeEach` on a story (which will run before the story is rend
 {/* prettier-ignore-end */}
 
 <Callout variant="info">
-  If you are [writing your stories in TypeScript](./typescript.md), you must import your mock modules using the full mocked file name to have the functions correctly typed in your stories. You do **not** need to do this in your component files. That's what the [subpath import](#subpath-imports) or [builder alias](#builder-aliases) is for.
+  If you are [writing your stories in TypeScript](../typescript.mdx), you must import your mock modules using the full mocked file name to have the functions correctly typed in your stories. You do **not** need to do this in your component files. That's what the [subpath import](#subpath-imports) or [builder alias](#builder-aliases) is for.
 </Callout>
 
 ### Spying on mocked modules
 
-The `fn` utility also spies on the original module's functions, which you can use to assert their behavior in your tests. For example, you can use [interaction tests](../writing-tests/interaction-testing.md) to verify that a function was called with specific arguments.
+The `fn` utility also spies on the original module's functions, which you can use to assert their behavior in your tests. For example, you can use [interaction tests](../../writing-tests/interaction-testing.mdx) to verify that a function was called with specific arguments.
 
 For example, this story checks that the `saveNote` function was called when the user clicks the save button:
 
@@ -141,7 +141,7 @@ Before the story renders, you can use the asynchronous `beforeEach` function to 
 You can also return a cleanup function from `beforeEach` which will be called after your story unmounts. This is useful for tasks like unsubscribing observers, etc.
 
 <Callout variant="info">
-  It is *not* necessary to restore `fn()` mocks with the cleanup function, as Storybook will already do that automatically before rendering a story. See the [`parameters.test.restoreMocks` API](../api/parameters.md#restoremocks) for more information.
+  It is *not* necessary to restore `fn()` mocks with the cleanup function, as Storybook will already do that automatically before rendering a story. See the [`parameters.test.restoreMocks` API](../../api/parameters.mdx#restoremocks) for more information.
 </Callout>
 
 Here's an example of using the [`mockdate`](https://github.com/boblauer/MockDate) package to mock the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) and reset it when the story unmounts.

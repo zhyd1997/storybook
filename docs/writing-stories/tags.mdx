@@ -5,7 +5,7 @@ sidebar:
   title: Tags
 ---
 
-Tags allow you to control which stories are included in your Storybook, enabling many different uses of the same total set of stories. For example, you can use tags to include/exclude tests from the [test runner](../writing-tests/test-runner.md#run-tests-for-a-subset-of-stories). For more complex use cases, see the [recipes](#recipes) section, below.
+Tags allow you to control which stories are included in your Storybook, enabling many different uses of the same total set of stories. For example, you can use tags to include/exclude tests from the [test runner](../writing-tests/test-runner.mdx#run-tests-for-a-subset-of-stories). For more complex use cases, see the [recipes](#recipes) section, below.
 
 ## Built-in tags
 
@@ -13,9 +13,9 @@ The following tags are available in every Storybook project:
 
 | Tag        | Applied by default? | Description                                                                                                                                                                                                              |
 | ---------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `autodocs` | No                            | Stories tagged with `autodocs` will be included in the [docs page](../writing-docs/autodocs.md). If a CSF file does not contain at least one story tagged with `autodocs`, that component will not generate a docs page. |
+| `autodocs` | No                            | Stories tagged with `autodocs` will be included in the [docs page](../writing-docs/autodocs.mdx). If a CSF file does not contain at least one story tagged with `autodocs`, that component will not generate a docs page. |
 | `dev`      | Yes                           | Stories tagged with `dev` are rendered in Storybook's sidebar.                                                                                                                                                           |
-| `test`     | Yes                           | Stories tagged with `test` do not currently affect Storybook's UI, but can be used to filter the [test runner](../writing-tests/test-runner.md#run-tests-for-a-subset-of-stories).                                       |
+| `test`     | Yes                           | Stories tagged with `test` do not currently affect Storybook's UI, but can be used to filter the [test runner](../writing-tests/test-runner.mdx#run-tests-for-a-subset-of-stories).                                       |
 
 The `dev` and `test` tags are automatically, implicitly applied to every story in your Storybook project.
 
@@ -55,7 +55,7 @@ Tags can be removed for all stories in your project (in `.storybook/preview.js|t
 
 ### Docs-only stories
 
-It can sometimes be helpful to provide example stories for documentation purposes, but you want to keep the sidebar navigation more focused on stories useful for development. By enabling the `autodocs` tag and removing the `dev` tag, a story becomes docs-only: appearing only in the [docs page](../writing-docs/autodocs.md) and not in Storybook's sidebar.
+It can sometimes be helpful to provide example stories for documentation purposes, but you want to keep the sidebar navigation more focused on stories useful for development. By enabling the `autodocs` tag and removing the `dev` tag, a story becomes docs-only: appearing only in the [docs page](../writing-docs/autodocs.mdx) and not in Storybook's sidebar.
 
 {/* prettier-ignore-start */}
 
