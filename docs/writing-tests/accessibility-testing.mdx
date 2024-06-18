@@ -61,7 +61,7 @@ Out of the box, Storybook's accessibility addon includes a set of accessibility 
 
 #### Global a11y configuration
 
-If you need to dismiss an accessibility rule or modify its settings across all stories, you can add the following to your [`storybook/preview.js|ts`](../configure/index.md#configure-story-rendering):
+If you need to dismiss an accessibility rule or modify its settings across all stories, you can add the following to your [`storybook/preview.js|ts`](../configure/index.mdx#configure-story-rendering):
 
 {/* prettier-ignore-start */}
 
@@ -107,7 +107,7 @@ These tools work by auditing the rendered DOM against heuristics based on [WCAG]
 
 ### Setup
 
-To enable accessibility testing with the test runner, you will need to take additional steps to set it up properly. We recommend you go through the [test runner documentation](./test-runner.md) before proceeding with the rest of the required configuration.
+To enable accessibility testing with the test runner, you will need to take additional steps to set it up properly. We recommend you go through the [test runner documentation](./test-runner.mdx) before proceeding with the rest of the required configuration.
 
 Run the following command to install the required dependencies.
 
@@ -117,7 +117,7 @@ Run the following command to install the required dependencies.
 
 {/* prettier-ignore-end */}
 
-Add a new [configuration file](./test-runner.md#test-hook-api) inside your Storybook directory with the following inside:
+Add a new [configuration file](./test-runner.mdx#test-hook-api) inside your Storybook directory with the following inside:
 
 {/* prettier-ignore-start */}
 
@@ -126,10 +126,10 @@ Add a new [configuration file](./test-runner.md#test-hook-api) inside your Story
 {/* prettier-ignore-end */}
 
 <Callout variant="info" icon="💡">
-  `preVisit` and `postVisit` are convenient hooks that allow you to extend the test runner's default configuration. Read more about them [here](./test-runner.md#test-hook-api).
+  `preVisit` and `postVisit` are convenient hooks that allow you to extend the test runner's default configuration. Read more about them [here](./test-runner.mdx#test-hook-api).
 </Callout>
 
-When you execute the test runner (for example, with `yarn test-storybook`), it will run the accessibility audit and any [interaction tests](./interaction-testing.md) you might have configured for each component story.
+When you execute the test runner (for example, with `yarn test-storybook`), it will run the accessibility audit and any [interaction tests](./interaction-testing.mdx) you might have configured for each component story.
 
 It starts checking for issues by traversing the DOM tree starting from the story's root element and generates a detailed report based on the issues it encountered.
 
@@ -137,7 +137,7 @@ It starts checking for issues by traversing the DOM tree starting from the story
 
 ### A11y config with the test runner
 
-The test runner provides [helper methods](./test-runner.md#helpers), allowing access to the story's information. You can use them to extend the test runner's configuration and provide additional options you may have for a specific story. For example:
+The test runner provides [helper methods](./test-runner.mdx#helpers), allowing access to the story's information. You can use them to extend the test runner's configuration and provide additional options you may have for a specific story. For example:
 
 {/* prettier-ignore-start */}
 
@@ -163,11 +163,11 @@ Browser-based accessibility tests, like those found in Storybook, evaluate the r
 
 **Learn about other UI tests**
 
-* [Test runner](./test-runner.md) to automate test execution
-* [Visual tests](./visual-testing.md) for appearance
+* [Test runner](./test-runner.mdx) to automate test execution
+* [Visual tests](./visual-testing.mdx) for appearance
 * Accessibility tests for accessibility
-* [Interaction tests](./interaction-testing.md) for user behavior simulation
-* [Coverage tests](./test-coverage.md) for measuring code coverage
-* [Snapshot tests](./snapshot-testing.md) for rendering errors and warnings
-* [End-to-end tests](./stories-in-end-to-end-tests.md) for simulating real user scenarios
-* [Unit tests](./stories-in-unit-tests.md) for functionality
+* [Interaction tests](./interaction-testing.mdx) for user behavior simulation
+* [Coverage tests](./test-coverage.mdx) for measuring code coverage
+* [Snapshot tests](./snapshot-testing/snapshot-testing.mdx) for rendering errors and warnings
+* [End-to-end tests](./import-stories-in-tests/stories-in-end-to-end-tests.mdx) for simulating real user scenarios
+* [Unit tests](./import-stories-in-tests/stories-in-unit-tests.mdx) for functionality

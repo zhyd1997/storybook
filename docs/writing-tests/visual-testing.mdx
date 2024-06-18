@@ -23,7 +23,7 @@ Add visual tests to your project by installing `@chromatic-com/storybook`, the o
 {/* prettier-ignore-end */}
 
 <Callout variant="info">
-  Storybook 7.6 or higher is required. Read the [migration guide](../migration-guide.md) to upgrade your project.
+  Storybook 7.6 or higher is required. Read the [migration guide](../migration-guide/index.mdx) to upgrade your project.
 </Callout>
 
 ### Enable visual tests
@@ -106,17 +106,17 @@ Once you successfully set up Chromatic in CI, your pull/merge requests will be b
 
 ### What’s the difference between visual tests and snapshot tests?
 
-[Snapshot tests](./snapshot-testing.md) compare the rendered markup of every story against known baselines. This means the test compares blobs of HTML and not what the user actually sees. Which in turn, can lead to an increase in false positives as code changes don’t always yield visual changes in the component.
+[Snapshot tests](./snapshot-testing/snapshot-testing.mdx) compare the rendered markup of every story against known baselines. This means the test compares blobs of HTML and not what the user actually sees. Which in turn, can lead to an increase in false positives as code changes don’t always yield visual changes in the component.
 
 Visual tests compare the rendered pixels of every story against known baselines. Because you're testing the same thing your users actually experience, your tests will be richer and easier to maintain.
 
 **Learn about other UI tests**
 
-* [Test runner](./test-runner.md) to automate test execution
+* [Test runner](./test-runner.mdx) to automate test execution
 * Visual tests for appearance
-* [Accessibility tests](./accessibility-testing.md) for accessibility
-* [Interaction tests](./interaction-testing.md) for user behavior simulation
-* [Coverage tests](./test-coverage.md) for measuring code coverage
-* [Snapshot tests](./snapshot-testing.md) for rendering errors and warnings
-* [End-to-end tests](./stories-in-end-to-end-tests.md) for simulating real user scenarios
-* [Unit tests](./stories-in-unit-tests.md) for functionality
+* [Accessibility tests](./accessibility-testing.mdx) for accessibility
+* [Interaction tests](./interaction-testing.mdx) for user behavior simulation
+* [Coverage tests](./test-coverage.mdx) for measuring code coverage
+* [Snapshot tests](./snapshot-testing/snapshot-testing.mdx) for rendering errors and warnings
+* [End-to-end tests](./import-stories-in-tests/stories-in-end-to-end-tests.mdx) for simulating real user scenarios
+* [Unit tests](./import-stories-in-tests/stories-in-unit-tests.mdx) for functionality

@@ -15,16 +15,16 @@ In Storybook, this familiar workflow happens in your browser. That makes it easi
 
 ## How does component testing in Storybook work?
 
-You start by writing a [**story**](../writing-stories/index.md) to set up the component's initial state. Then simulate user behavior using the **play** function. Finally, use the **test-runner** to confirm that the component renders correctly and that your interaction tests with the **play** function pass. Additionally, you can automate test execution via the [command line](./test-runner.md#cli-options) or in your [CI environment](./test-runner.md#set-up-ci-to-run-tests).
+You start by writing a [**story**](../writing-stories/index.mdx) to set up the component's initial state. Then simulate user behavior using the **play** function. Finally, use the **test-runner** to confirm that the component renders correctly and that your interaction tests with the **play** function pass. Additionally, you can automate test execution via the [command line](./test-runner.mdx#cli-options) or in your [CI environment](./test-runner.mdx#set-up-ci-to-run-tests).
 
-* The [`play`](../writing-stories/play-function.md) function is a small snippet of code that runs after a story finishes rendering. You can use this to test user workflows.
+* The [`play`](../writing-stories/play-function.mdx) function is a small snippet of code that runs after a story finishes rendering. You can use this to test user workflows.
 * The test is written using Storybook-instrumented versions of [Vitest](https://vitest.dev/) and [Testing Library](https://testing-library.com/) coming from the [`@storybook/test`](https://npmjs.com/package/@storybook/test) package.
 * [`@storybook/addon-interactions`](https://storybook.js.org/addons/@storybook/addon-interactions/) visualizes the test in Storybook and provides a playback interface for convenient browser-based debugging.
 * [`@storybook/test-runner`](https://github.com/storybookjs/test-runner) is a standalone utility—powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/)—that executes all of your interactions tests and catches broken stories.
 
 ## Set up the interactions addon
 
-To enable interaction testing with Storybook, you'll need to take additional steps to set it up properly. We recommend you go through the [test runner documentation](./test-runner.md) before proceeding with the rest of the required configuration.
+To enable interaction testing with Storybook, you'll need to take additional steps to set it up properly. We recommend you go through the [test runner documentation](./test-runner.mdx) before proceeding with the rest of the required configuration.
 
 Run the following command to install the interactions addon and related dependencies.
 
@@ -63,7 +63,7 @@ It can be helpful to run code before each test to set up the initial state of th
 Additionally, if you return a cleanup function from the `beforeEach` function, it will run **after** each test, when the story is remounted or navigated away from.
 
 <Callout variant="info">
-  It is *not* necessary to restore `fn()` mocks with the cleanup function, as Storybook will already do that automatically before rendering a story. See the [`parameters.test.restoreMocks` API](../api/parameters.md#restoremocks) for more information.
+  It is *not* necessary to restore `fn()` mocks with the cleanup function, as Storybook will already do that automatically before rendering a story. See the [`parameters.test.restoreMocks` API](../api/parameters.mdx#restoremocks) for more information.
 </Callout>
 
 Here's an example of using the [`mockdate`](https://github.com/boblauer/MockDate) package to mock the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) and reset it when the story unmounts.
@@ -118,7 +118,7 @@ This will show your interactions nested in a collapsible group:
 
 ### Mocked modules
 
-If your component depends on modules that are imported into the component file, you can mock those modules to control and assert on their behavior. This is detailed in the [mocking modules](./mocking-modules.md) guide.
+If your component depends on modules that are imported into the component file, you can mock those modules to control and assert on their behavior. This is detailed in the [mocking modules](../writing-stories/mocking-data-and-modules/mocking-modules.mdx) guide.
 
 You can then import the mocked module (which has all of the helpful methods of a [Vitest mocked function](https://vitest.dev/api/mock.html)) into your story and use it to assert on the behavior of your component:
 
@@ -142,7 +142,7 @@ Since Storybook is a webapp, anyone with the URL can reproduce the error with th
 
 ![Interaction testing with a component](../_assets/writing-tests/storybook-addon-interactions-error-optimized.png)
 
-Streamline interaction testing further by automatically [publishing Storybook](../sharing/publish-storybook.md) in pull requests. That gives teams a universal reference point to test and debug stories.
+Streamline interaction testing further by automatically [publishing Storybook](../sharing/publish-storybook.mdx) in pull requests. That gives teams a universal reference point to test and debug stories.
 
 ## Execute tests with the test-runner
 
@@ -157,12 +157,12 @@ Storybook only runs the interaction test when you're viewing a story. Therefore,
 ![Interaction test with test runner](../_assets/writing-tests/storybook-interaction-test-runner-loginform-optimized.png)
 
 <Callout variant="info" icon="💡">
-  If you need, you can provide additional flags to the test-runner. Read the [documentation](./test-runner.md#cli-options) to learn more.
+  If you need, you can provide additional flags to the test-runner. Read the [documentation](./test-runner.mdx#cli-options) to learn more.
 </Callout>
 
 ## Automate
 
-Once you're ready to push your code into a pull request, you'll want to automatically run all your checks using a Continuous Integration (CI) service before merging it. Read our [documentation](./test-runner.md#set-up-ci-to-run-tests) for a detailed guide on setting up a CI environment to run tests.
+Once you're ready to push your code into a pull request, you'll want to automatically run all your checks using a Continuous Integration (CI) service before merging it. Read our [documentation](./test-runner.mdx#set-up-ci-to-run-tests) for a detailed guide on setting up a CI environment to run tests.
 
 ## Troubleshooting
 
@@ -189,11 +189,11 @@ Interaction tests integrate Jest and Testing Library into Storybook. The biggest
 
 **Learn about other UI tests**
 
-* [Test runner](./test-runner.md) to automate test execution
-* [Visual tests](./visual-testing.md) for appearance
-* [Accessibility tests](./accessibility-testing.md) for accessibility
+* [Test runner](./test-runner.mdx) to automate test execution
+* [Visual tests](./visual-testing.mdx) for appearance
+* [Accessibility tests](./accessibility-testing.mdx) for accessibility
 * Interaction tests for user behavior simulation
-* [Coverage tests](./test-coverage.md) for measuring code coverage
-* [Snapshot tests](./snapshot-testing.md) for rendering errors and warnings
-* [End-to-end tests](./stories-in-end-to-end-tests.md) for simulating real user scenarios
-* [Unit tests](./stories-in-unit-tests.md) for functionality
+* [Coverage tests](./test-coverage.mdx) for measuring code coverage
+* [Snapshot tests](./snapshot-testing/snapshot-testing.mdx) for rendering errors and warnings
+* [End-to-end tests](./import-stories-in-tests/stories-in-end-to-end-tests.mdx) for simulating real user scenarios
+* [Unit tests](./import-stories-in-tests/stories-in-unit-tests.mdx) for functionality

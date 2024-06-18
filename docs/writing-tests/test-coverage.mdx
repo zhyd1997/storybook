@@ -19,7 +19,7 @@ Storybook provides an official [test coverage addon](https://storybook.js.org/ad
 
 ### Set up the coverage addon
 
-Engineered to work alongside modern testing tools (e.g., [Playwright](https://playwright.dev/)), the coverage addon automatically instruments your code and generates code coverage data. For an optimal experience, we recommend using the [test runner](./test-runner.md) alongside the coverage addon to run your tests.
+Engineered to work alongside modern testing tools (e.g., [Playwright](https://playwright.dev/)), the coverage addon automatically instruments your code and generates code coverage data. For an optimal experience, we recommend using the [test runner](./test-runner.mdx) alongside the coverage addon to run your tests.
 
 Run the following command to install the addon.
 
@@ -119,7 +119,7 @@ If you intend on running coverage tests in frameworks with special files like Vu
 
 ### The coverage addon doesn't support optimized builds
 
-If you generated a production build optimized for performance with the [`--test`](../sharing/publish-storybook.md#customizing-the-build-for-performance) flag, and you're using the coverage addon to run tests against your Storybook, you may run into a situation where the coverage addon doesn't instrument your code. This is due to how the flag works, as it removes addons that have an impact on performance (e.g., [`Docs`](../writing-docs/index.md), [coverage addon](https://storybook.js.org/addons/@storybook/addon-coverage)). To resolve this issue, you'll need to adjust your Storybook configuration file (i.e., `.storybook/main.js|ts`) and include the [`disabledAddons`](../api/main-config-build.md#testdisabledaddons) option to allow the addon to run tests at the expense of a slower build.
+If you generated a production build optimized for performance with the [`--test`](../sharing/publish-storybook.md#customizing-the-build-for-performance) flag, and you're using the coverage addon to run tests against your Storybook, you may run into a situation where the coverage addon doesn't instrument your code. This is due to how the flag works, as it removes addons that have an impact on performance (e.g., [`Docs`](../writing-docs/index.mdx), [coverage addon](https://storybook.js.org/addons/@storybook/addon-coverage)). To resolve this issue, you'll need to adjust your Storybook configuration file (i.e., `.storybook/main.js|ts`) and include the [`disabledAddons`](../api/main-config/main-config-build.mdx#testdisabledaddons) option to allow the addon to run tests at the expense of a slower build.
 
 {/* prettier-ignore-start */}
 
@@ -133,11 +133,11 @@ As the [coverage addon](https://storybook.js.org/addons/@storybook/addon-coverag
 
 **Learn about other UI tests**
 
-* [Test runner](./test-runner.md) to automate test execution
-* [Visual tests](./visual-testing.md) for appearance
-* [Accessibility tests](./accessibility-testing.md) for accessibility
-* [Interaction tests](./interaction-testing.md) for user behavior simulation
+* [Test runner](./test-runner.mdx) to automate test execution
+* [Visual tests](./visual-testing.mdx) for appearance
+* [Accessibility tests](./accessibility-testing.mdx) for accessibility
+* [Interaction tests](./interaction-testing.mdx) for user behavior simulation
 * Coverage tests for measuring code coverage
-* [Snapshot tests](./snapshot-testing.md) for rendering errors and warnings
-* [End-to-end tests](./stories-in-end-to-end-tests.md) for simulating real user scenarios
-* [Unit tests](./stories-in-unit-tests.md) for functionality
+* [Snapshot tests](./snapshot-testing/snapshot-testing.mdx) for rendering errors and warnings
+* [End-to-end tests](./import-stories-in-tests/stories-in-end-to-end-tests.mdx) for simulating real user scenarios
+* [Unit tests](./import-stories-in-tests/stories-in-unit-tests.mdx) for functionality

@@ -20,16 +20,16 @@ title: 'Storyshots migration guide'
 
 Before you begin the migration process, ensure that you have:
 
-* A fully functional Storybook configured with one of the [supported frameworks](../configure/frameworks.md) running the latest stable version (i.e., 7.6 or higher).
+* A fully functional Storybook configured with one of the [supported frameworks](../../configure/integration/frameworks.mdx) running the latest stable version (i.e., 7.6 or higher).
 * Familiarity with your current Storybook and its testing setup.
 
 ### With the test-runner
 
-Storybook test-runner turns all of your stories into executable tests. Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/). It's a standalone, framework-agnostic utility that runs parallel to your Storybook. It enables you to run multiple testing patterns in a multi-browser environment, including interaction testing with the [play function](./interaction-testing.md), DOM snapshot, and [accessibility testing](./accessibility-testing.md).
+Storybook test-runner turns all of your stories into executable tests. Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/). It's a standalone, framework-agnostic utility that runs parallel to your Storybook. It enables you to run multiple testing patterns in a multi-browser environment, including interaction testing with the [play function](../interaction-testing.mdx), DOM snapshot, and [accessibility testing](../accessibility-testing.mdx).
 
 #### Setup
 
-To get started with the migration process from the Storyshots addon to the test-runner, we recommend that you remove the Storyshots addon and similar packages (i.e., `storybook/addon-storyshots-puppeteer` ) from your project, including any related configuration files. Then, follow the test-runner's [setup instructions](./test-runner#setup) to install, configure and run it.
+To get started with the migration process from the Storyshots addon to the test-runner, we recommend that you remove the Storyshots addon and similar packages (i.e., `storybook/addon-storyshots-puppeteer` ) from your project, including any related configuration files. Then, follow the test-runner's [setup instructions](../test-runner.mdx#setup) to install, configure and run it.
 
 #### Extend your test coverage
 
@@ -37,7 +37,7 @@ The Storyshots addon offered a highly customizable testing solution, allowing us
 
 #### Enable DOM snapshot testing with the test-runner
 
-To enable DOM snapshot testing with the test-runner, you can extend the test-runner's configuration file and use the available [hooks](./test-runner.md#test-hook-api) and combine them with Playwright's built-in [`APIs`](https://playwright.dev/docs/test-snapshots) to generate DOM snapshots for each story in your project. For example:
+To enable DOM snapshot testing with the test-runner, you can extend the test-runner's configuration file and use the available [hooks](../test-runner.mdx#test-hook-api) and combine them with Playwright's built-in [`APIs`](https://playwright.dev/docs/test-snapshots) to generate DOM snapshots for each story in your project. For example:
 
 {/* prettier-ignore-start */}
 
@@ -46,12 +46,12 @@ To enable DOM snapshot testing with the test-runner, you can extend the test-run
 {/* prettier-ignore-end */}
 
 <Callout variant="info" icon="💡">
-  If you've set up DOM snapshot tests in your project with the test-runner and enabled the [`index.json` mode](./test-runner#indexjson-mode) via CLI flag, tests are generated in a temporary folder outside your project, and snapshots get stored alongside them. You'll need to extend the test-runner's configuration and provide a custom snapshot resolver to allow a different location for the snapshots. See the [Troubleshooting](#the-test-runner-does-not-generate-snapshot-files-in-the-expected-directory) section for more information.
+  If you've set up DOM snapshot tests in your project with the test-runner and enabled the [`index.json` mode](../test-runner.mdx#indexjson-mode) via CLI flag, tests are generated in a temporary folder outside your project, and snapshots get stored alongside them. You'll need to extend the test-runner's configuration and provide a custom snapshot resolver to allow a different location for the snapshots. See the [Troubleshooting](#the-test-runner-does-not-generate-snapshot-files-in-the-expected-directory) section for more information.
 </Callout>
 
 #### Run image snapshot tests with the test-runner
 
-By default, the test-runner provides you with the option to run multiple testing patterns (e.g., DOM snapshot testing, [accessibility](./accessibility-testing.md#a11y-config-with-the-test-runner)) with minimal configuration. However, if you want, you can extend it to run visual regression testing alongside your other tests. For example:
+By default, the test-runner provides you with the option to run multiple testing patterns (e.g., DOM snapshot testing, [accessibility](../accessibility-testing.mdx#a11y-config-with-the-test-runner)) with minimal configuration. However, if you want, you can extend it to run visual regression testing alongside your other tests. For example:
 
 {/* prettier-ignore-start */}
 
@@ -62,7 +62,7 @@ By default, the test-runner provides you with the option to run multiple testing
 <IfRenderer renderer={['react', 'vue' ]}>
   ### With Portable Stories
 
-  Storybook provides a `composeStories` utility that helps convert stories from a story file into renderable elements that can be reused in your Node tests with JSDOM. It also allows you to apply other Storybook features that you have enabled in your project (e.g., [decorators](../writing-stories/decorators.md), [args](../writing-stories/args.md)), which allows your component to render correctly. This is what is known as portable stories.
+  Storybook provides a `composeStories` utility that helps convert stories from a story file into renderable elements that can be reused in your Node tests with JSDOM. It also allows you to apply other Storybook features that you have enabled in your project (e.g., [decorators](../../writing-stories/decorators.mdx), [args](../../writing-stories/args.mdx)), which allows your component to render correctly. This is what is known as portable stories.
 
   #### Setup
 
@@ -70,7 +70,7 @@ By default, the test-runner provides you with the option to run multiple testing
 
   #### Import project-level annotations from Storybook
 
-  If you need project-level annotations (e.g., [decorators](../writing-stories/decorators.md), [args](../writing-stories/args.md), styles) enabled in your `./storybook/preview.js|ts` included in your tests, adjust your test set up file to import the annotations as follows:
+  If you need project-level annotations (e.g., [decorators](../../writing-stories/decorators.mdx), [args](../../writing-stories/args.mdx), styles) enabled in your `./storybook/preview.js|ts` included in your tests, adjust your test set up file to import the annotations as follows:
 
   {/* prettier-ignore-start */}
 
@@ -145,7 +145,7 @@ As running snapshot tests with Storybook and the test-runner can lead to some te
 
 ### The test-runner reports an error when running snapshot tests
 
-If you're experiencing intermittent test failures with the test-runner, uncaught errors may occur when your tests run in the browser. These errors might not have been caught if you were using the Storyshots addons previously. The test-runner will, by default, consider these uncaught errors as failed tests. However, if these errors are expected, you can ignore them by enabling custom story tags in your stories and test-runner configuration files. For more information, please refer to the [test-runner documentation](./test-runner.md#experimental-filter-tests).
+If you're experiencing intermittent test failures with the test-runner, uncaught errors may occur when your tests run in the browser. These errors might not have been caught if you were using the Storyshots addons previously. The test-runner will, by default, consider these uncaught errors as failed tests. However, if these errors are expected, you can ignore them by enabling custom story tags in your stories and test-runner configuration files. For more information, please refer to the [test-runner documentation](../test-runner.mdx#experimental-filter-tests).
 
 ### The test-runner does not generate snapshot files in the expected directory
 
