@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { IconButton, Icons, TooltipNote, WithTooltip } from '@storybook/components';
+import { IconButton, TooltipNote, WithTooltip } from '@storybook/components';
 import { type Call, CallStates, type ControlStates } from '@storybook/instrumenter';
 import { styled, typography } from '@storybook/theming';
 import { transparentize } from 'polished';
 
-import { Expected, MatcherResult, Received } from './MatcherResult';
+import { ListUnorderedIcon } from '@storybook/icons';
+import { MatcherResult } from './MatcherResult';
 import { MethodCall } from './MethodCall';
 import { StatusIcon } from './StatusIcon';
 
 import type { Controls } from './InteractionsPanel';
+import { isChaiError, isJestError } from '../utils';
 
 const MethodCallWrapper = styled.div(() => ({
   fontFamily: typography.fonts.mono,
@@ -111,38 +113,27 @@ const RowMessage = styled('div')(({ theme }) => ({
   },
 }));
 
-const Exception = ({ exception }: { exception: Call['exception'] }) => {
-  if (exception.message.startsWith('expect(')) {
+export const Exception = ({ exception }: { exception: Call['exception'] }) => {
+  if (isJestError(exception)) {
     return <MatcherResult {...exception} />;
   }
+  if (isChaiError(exception)) {
+    return (
+      <RowMessage>
+        <MatcherResult
+          message={`${exception.message}${exception.diff ? `\n\n${exception.diff}` : ''}`}
+          style={{ padding: 0 }}
+        />
+        <p>See the full stack trace in the browser console.</p>
+      </RowMessage>
+    );
+  }
+
   const paragraphs = exception.message.split('\n\n');
   const more = paragraphs.length > 1;
   return (
     <RowMessage>
       <pre>{paragraphs[0]}</pre>
-
-      {exception.showDiff && exception.diff ? (
-        <>
-          <br />
-          <MatcherResult message={exception.diff} style={{ padding: 0 }} />
-        </>
-      ) : (
-        <pre>
-          <br />
-          {exception.expected && (
-            <>
-              Expected: <Expected value={exception.expected} />
-              <br />
-            </>
-          )}
-          {exception.actual && (
-            <>
-              Received: <Received value={exception.actual} />
-              <br />
-            </>
-          )}
-        </pre>
-      )}
       {more && <p>See the full stack trace in the browser console.</p>}
     </RowMessage>
   );
@@ -196,8 +187,8 @@ export const Interaction = ({
               hasChrome={false}
               tooltip={<Note note={`${isCollapsed ? 'Show' : 'Hide'} interactions`} />}
             >
-              <StyledIconButton containsIcon onClick={toggleCollapsed}>
-                <Icons icon="listunordered" />
+              <StyledIconButton onClick={toggleCollapsed}>
+                <ListUnorderedIcon />
               </StyledIconButton>
             </WithTooltip>
           )}

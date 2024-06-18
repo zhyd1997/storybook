@@ -3,6 +3,7 @@ import { global } from '@storybook/global';
 
 import { combineParameters } from '../parameters';
 import { composeStepRunners } from './stepRunners';
+import { normalizeArrays } from './normalizeArrays';
 
 export function getField<TFieldType = any>(
   moduleExportList: ModuleExports[],
@@ -16,10 +17,10 @@ export function getArrayField<TFieldType = any>(
   field: string,
   options: { reverseFileOrder?: boolean } = {}
 ): TFieldType[] {
-  return getField(moduleExportList, field).reduce(
-    (a: any, b: any) => (options.reverseFileOrder ? [...b, ...a] : [...a, ...b]),
-    []
-  );
+  return getField(moduleExportList, field).reduce((prev: any, cur: any) => {
+    const normalized = normalizeArrays(cur);
+    return options.reverseFileOrder ? [...normalized, ...prev] : [...prev, ...normalized];
+  }, []);
 }
 
 export function getObjectField<TFieldType = Record<string, any>>(
@@ -55,12 +56,15 @@ export function composeConfigs<TRenderer extends Renderer>(
       ...allArgTypeEnhancers.filter((e) => e.secondPass),
     ],
     globals: getObjectField(moduleExportList, 'globals'),
+    initialGlobals: getObjectField(moduleExportList, 'initialGlobals'),
     globalTypes: getObjectField(moduleExportList, 'globalTypes'),
     loaders: getArrayField(moduleExportList, 'loaders'),
+    beforeEach: getArrayField(moduleExportList, 'beforeEach'),
     render: getSingletonField(moduleExportList, 'render'),
     renderToCanvas: getSingletonField(moduleExportList, 'renderToCanvas'),
     renderToDOM: getSingletonField(moduleExportList, 'renderToDOM'), // deprecated
     applyDecorators: getSingletonField(moduleExportList, 'applyDecorators'),
     runStep: composeStepRunners<TRenderer>(stepRunners),
+    tags: getArrayField(moduleExportList, 'tags'),
   };
 }

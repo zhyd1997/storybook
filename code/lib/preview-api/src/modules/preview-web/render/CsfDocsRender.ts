@@ -25,8 +25,6 @@ import { DocsContext } from '../docs-context/DocsContext';
  *
  * Use cases:
  *  - Autodocs, where there is no story, and we fall back to the globally defined template.
- *  - *.stories.mdx files, where the MDX compiler produces a CSF file with a `.parameter.docs.page`
- *      parameter containing the compiled content of the MDX file.
  */
 export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRenderer> {
   public readonly type: RenderType = 'docs';
@@ -95,7 +93,7 @@ export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRender
     );
   }
 
-  docsContext(renderStoryToElement: DocsContextProps['renderStoryToElement']) {
+  docsContext(renderStoryToElement: DocsContextProps<TRenderer>['renderStoryToElement']) {
     if (!this.csfFiles) throw new Error('Cannot render docs before preparing');
     const docsContext = new DocsContext<TRenderer>(
       this.channel,
@@ -112,7 +110,7 @@ export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRender
 
   async renderToElement(
     canvasElement: TRenderer['canvasElement'],
-    renderStoryToElement: DocsContextProps['renderStoryToElement']
+    renderStoryToElement: DocsContextProps<TRenderer>['renderStoryToElement']
   ) {
     if (!this.story || !this.csfFiles) throw new Error('Cannot render docs before preparing');
 

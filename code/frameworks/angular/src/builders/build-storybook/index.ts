@@ -15,7 +15,7 @@ import { sync as readUpSync } from 'read-pkg-up';
 import { BrowserBuilderOptions, StylePreprocessorOptions } from '@angular-devkit/build-angular';
 
 import { CLIOptions } from '@storybook/types';
-import { getEnvConfig, versions } from '@storybook/cli';
+import { getEnvConfig, versions } from '@storybook/core-common';
 import { addToGlobalContext } from '@storybook/telemetry';
 
 import { buildStaticStandalone, withTelemetry } from '@storybook/core-server';
@@ -40,6 +40,7 @@ export type StorybookBuilderOptions = JsonObject & {
   enableProdMode?: boolean;
   styles?: StyleElement[];
   stylePreprocessorOptions?: StylePreprocessorOptions;
+  preserveSymlinks?: boolean;
   assets?: AssetPattern[];
   sourceMap?: SourceMapUnion;
 } & Pick<
@@ -49,7 +50,9 @@ export type StorybookBuilderOptions = JsonObject & {
     | 'configDir'
     | 'loglevel'
     | 'quiet'
+    | 'test'
     | 'webpackStatsJson'
+    | 'statsJson'
     | 'disableTelemetry'
     | 'debugWebpack'
     | 'previewUrl'
@@ -65,10 +68,12 @@ const commandBuilder: BuilderHandlerFn<StorybookBuilderOptions> = (
 ): BuilderOutputLike => {
   const builder = from(setup(options, context)).pipe(
     switchMap(({ tsConfig }) => {
+      const docTSConfig = findUpSync('tsconfig.doc.json', { cwd: options.configDir });
       const runCompodoc$ = options.compodoc
-        ? runCompodoc({ compodocArgs: options.compodocArgs, tsconfig: tsConfig }, context).pipe(
-            mapTo({ tsConfig })
-          )
+        ? runCompodoc(
+            { compodocArgs: options.compodocArgs, tsconfig: docTSConfig ?? tsConfig },
+            context
+          ).pipe(mapTo({ tsConfig }))
         : of({});
 
       return runCompodoc$.pipe(mapTo({ tsConfig }));
@@ -87,15 +92,18 @@ const commandBuilder: BuilderHandlerFn<StorybookBuilderOptions> = (
         configDir,
         docs,
         loglevel,
+        test,
         outputDir,
         quiet,
         enableProdMode = true,
         webpackStatsJson,
+        statsJson,
         debugWebpack,
         disableTelemetry,
         assets,
         previewUrl,
         sourceMap = false,
+        preserveSymlinks = false,
       } = options;
 
       const standaloneOptions: StandaloneBuildOptions = {
@@ -104,6 +112,7 @@ const commandBuilder: BuilderHandlerFn<StorybookBuilderOptions> = (
         ...(docs ? { docs } : {}),
         loglevel,
         outputDir,
+        test,
         quiet,
         enableProdMode,
         disableTelemetry,
@@ -114,9 +123,11 @@ const commandBuilder: BuilderHandlerFn<StorybookBuilderOptions> = (
           ...(styles ? { styles } : {}),
           ...(assets ? { assets } : {}),
           sourceMap,
+          preserveSymlinks,
         },
         tsConfig,
         webpackStatsJson,
+        statsJson,
         debugWebpack,
         previewUrl,
       };

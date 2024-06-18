@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, ReactRenderer, StoryObj } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { within } from '@storybook/test';
 import type { PlayFunctionContext } from '@storybook/csf';
 import type { WebRenderer, ModuleExport } from '@storybook/types';
 import { RESET_STORY_ARGS, STORY_ARGS_UPDATED, UPDATE_STORY_ARGS } from '@storybook/core-events';
@@ -81,6 +81,9 @@ export const ForceInitialArgs = {
     autoplay: true,
     forceInitialArgs: true,
     renderStoryToElement,
+  },
+  parameters: {
+    chromatic: { disableSnapshot: true },
   },
   // test that it ignores updated args by emitting an arg update and assert that it isn't reflected in the DOM
   play: async ({ args, canvasElement, loaded }: PlayFunctionContext<WebRenderer>) => {

@@ -106,11 +106,9 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         external: externals,
 
         esbuildOptions: (c) => {
-          /* eslint-disable no-param-reassign */
           c.conditions = ['module'];
           c.platform = platform || 'browser';
           Object.assign(c, getESBuildOptions(optimized));
-          /* eslint-enable no-param-reassign */
         },
       })
     );
@@ -126,17 +124,15 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         outDir,
         sourcemap: false,
         format: ['cjs'],
-        target: 'node16',
+        target: 'node18',
         ...(dtsBuild === 'cjs' ? dtsConfig : {}),
         platform: 'node',
         clean: false,
         external: externals,
 
         esbuildOptions: (c) => {
-          /* eslint-disable no-param-reassign */
           c.platform = 'node';
           Object.assign(c, getESBuildOptions(optimized));
-          /* eslint-enable no-param-reassign */
         },
       })
     );
@@ -156,7 +152,9 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
     );
   }
 
-  console.log('done');
+  if (process.env.CI !== 'true') {
+    console.log('done');
+  }
 };
 
 /* UTILS */

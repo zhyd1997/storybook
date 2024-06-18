@@ -1,24 +1,28 @@
-import type { Annotation } from 'doctrine';
-import doctrine from 'doctrine';
+import type { Block, Spec } from 'comment-parser';
+import type { RootResult as JSDocType } from 'jsdoc-type-pratt-parser';
+import { parse as parseJSDoc } from 'comment-parser';
+import {
+  parse as parseJSDocType,
+  transform as transformJSDocType,
+  stringifyRules,
+} from 'jsdoc-type-pratt-parser';
+import type { JsDocParam, JsDocReturns } from './docgen';
 
-export interface ExtractedJsDocParam {
-  name: string;
+export interface ExtractedJsDocParam extends JsDocParam {
   type?: any;
-  description?: string;
-  getPrettyName: () => string;
-  getTypeName: () => string;
+  getPrettyName: () => string | undefined;
+  getTypeName: () => string | null;
 }
 
-export interface ExtractedJsDocReturns {
+export interface ExtractedJsDocReturns extends JsDocReturns {
   type?: any;
-  description?: string;
-  getTypeName: () => string;
+  getTypeName: () => string | null;
 }
 
 export interface ExtractedJsDoc {
-  params?: ExtractedJsDocParam[];
-  deprecated?: string;
-  returns?: ExtractedJsDocReturns;
+  params?: ExtractedJsDocParam[] | null;
+  deprecated?: string | null;
+  returns?: ExtractedJsDocReturns | null;
   ignore: boolean;
 }
 
@@ -33,38 +37,41 @@ export interface JsDocParsingResult {
   extractedTags?: ExtractedJsDoc;
 }
 
-export type ParseJsDoc = (value?: string, options?: JsDocParsingOptions) => JsDocParsingResult;
+export type ParseJsDoc = (
+  value: string | null,
+  options?: JsDocParsingOptions
+) => JsDocParsingResult;
 
-function containsJsDoc(value?: string): boolean {
+function containsJsDoc(value?: string | null): boolean {
   return value != null && value.includes('@');
 }
 
-function parse(content: string, tags: string[]): Annotation {
-  let ast;
+function parse(content: string | null): Block {
+  const contentString = content ?? '';
+  const mappedLines = contentString
+    .split('\n')
+    .map((line) => ` * ${line}`)
+    .join('\n');
+  const normalisedContent = '/**\n' + mappedLines + '\n*/';
 
-  try {
-    ast = doctrine.parse(content, {
-      tags,
-      sloppy: true,
-    });
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(e);
+  const ast = parseJSDoc(normalisedContent, {
+    spacing: 'preserve',
+  });
 
+  if (!ast || ast.length === 0) {
     throw new Error('Cannot parse JSDoc tags.');
   }
 
-  return ast;
+  // Return the first block, since we shouldn't ever really encounter
+  // multiple blocks of JSDoc
+  return ast[0];
 }
 
 const DEFAULT_OPTIONS = {
   tags: ['param', 'arg', 'argument', 'returns', 'ignore', 'deprecated'],
 };
 
-export const parseJsDoc: ParseJsDoc = (
-  value?: string,
-  options: JsDocParsingOptions = DEFAULT_OPTIONS
-) => {
+export const parseJsDoc: ParseJsDoc = (value, options = DEFAULT_OPTIONS) => {
   if (!containsJsDoc(value)) {
     return {
       includesJsDoc: false,
@@ -72,9 +79,9 @@ export const parseJsDoc: ParseJsDoc = (
     };
   }
 
-  const jsDocAst = parse(value, options.tags);
+  const jsDocAst = parse(value);
 
-  const extractedTags = extractJsDocTags(jsDocAst);
+  const extractedTags = extractJsDocTags(jsDocAst, options.tags);
 
   if (extractedTags.ignore) {
     // There is no point in doing other stuff since this prop will not be rendered.
@@ -88,12 +95,12 @@ export const parseJsDoc: ParseJsDoc = (
     includesJsDoc: true,
     ignore: false,
     // Always use the parsed description to ensure JSDoc is removed from the description.
-    description: jsDocAst.description,
+    description: jsDocAst.description.trim(),
     extractedTags,
   };
 };
 
-function extractJsDocTags(ast: doctrine.Annotation): ExtractedJsDoc {
+function extractJsDocTags(ast: Block, tags?: string[]): ExtractedJsDoc {
   const extractedTags: ExtractedJsDoc = {
     params: null,
     deprecated: null,
@@ -101,20 +108,23 @@ function extractJsDocTags(ast: doctrine.Annotation): ExtractedJsDoc {
     ignore: false,
   };
 
-  for (let i = 0; i < ast.tags.length; i += 1) {
-    const tag = ast.tags[i];
+  for (const tagSpec of ast.tags) {
+    // Skip any tags we don't care about
+    if (tags !== undefined && !tags.includes(tagSpec.tag)) {
+      continue;
+    }
 
-    if (tag.title === 'ignore') {
+    if (tagSpec.tag === 'ignore') {
       extractedTags.ignore = true;
       // Once we reach an @ignore tag, there is no point in parsing the other tags since we will not render the prop.
       break;
     } else {
-      switch (tag.title) {
+      switch (tagSpec.tag) {
         // arg & argument are aliases for param.
         case 'param':
         case 'arg':
         case 'argument': {
-          const paramTag = extractParam(tag);
+          const paramTag = extractParam(tagSpec);
           if (paramTag != null) {
             if (extractedTags.params == null) {
               extractedTags.params = [];
@@ -124,14 +134,14 @@ function extractJsDocTags(ast: doctrine.Annotation): ExtractedJsDoc {
           break;
         }
         case 'deprecated': {
-          const deprecatedTag = extractDeprecated(tag);
+          const deprecatedTag = extractDeprecated(tagSpec);
           if (deprecatedTag != null) {
             extractedTags.deprecated = deprecatedTag;
           }
           break;
         }
         case 'returns': {
-          const returnsTag = extractReturns(tag);
+          const returnsTag = extractReturns(tagSpec);
           if (returnsTag != null) {
             extractedTags.returns = returnsTag;
           }
@@ -146,27 +156,61 @@ function extractJsDocTags(ast: doctrine.Annotation): ExtractedJsDoc {
   return extractedTags;
 }
 
-function extractParam(tag: doctrine.Tag): ExtractedJsDocParam {
-  const paramName = tag.name;
+function normaliseParamName(name: string): string {
+  return name.replace(/[\.-]$/, '');
+}
 
-  // When the @param doesn't have a name but have a type and a description, "null-null" is returned.
-  if (paramName != null && paramName !== 'null-null') {
+function extractParam(tag: Spec): ExtractedJsDocParam | null {
+  // Ignore tags with empty names or `-`.
+  // We ignore `-` since it means a comment was likely missing a name but
+  // using separators. For example: `@param {foo} - description`
+  if (!tag.name || tag.name === '-') {
+    return null;
+  }
+
+  const type = extractType(tag.type);
+
+  return {
+    name: tag.name,
+    type: type,
+    description: normaliseDescription(tag.description),
+    getPrettyName: () => {
+      return normaliseParamName(tag.name);
+    },
+    getTypeName: () => {
+      return type ? extractTypeName(type) : null;
+    },
+  };
+}
+
+function extractDeprecated(tag: Spec): string | null {
+  if (tag.name) {
+    return joinNameAndDescription(tag.name, tag.description);
+  }
+
+  return null;
+}
+
+function joinNameAndDescription(name: string, desc: string): string | null {
+  const joined = name === '' ? desc : `${name} ${desc}`;
+  return normaliseDescription(joined);
+}
+
+function normaliseDescription(text: string): string | null {
+  const normalised = text.replace(/^- /g, '').trim();
+
+  return normalised === '' ? null : normalised;
+}
+
+function extractReturns(tag: Spec): ExtractedJsDocReturns | null {
+  const type = extractType(tag.type);
+
+  if (type) {
     return {
-      name: tag.name,
-      type: tag.type,
-      description: tag.description,
-      getPrettyName: () => {
-        if (paramName.includes('null')) {
-          // There is a few cases in which the returned param name contains "null".
-          // - @param {SyntheticEvent} event- Original SyntheticEvent
-          // - @param {SyntheticEvent} event.\n@returns {string}
-          return paramName.replace('-null', '').replace('.null', '');
-        }
-
-        return tag.name;
-      },
+      type: type,
+      description: joinNameAndDescription(tag.name, tag.description),
       getTypeName: () => {
-        return tag.type != null ? extractTypeName(tag.type) : null;
+        return extractTypeName(type);
       },
     };
   }
@@ -174,79 +218,25 @@ function extractParam(tag: doctrine.Tag): ExtractedJsDocParam {
   return null;
 }
 
-function extractDeprecated(tag: doctrine.Tag): string {
-  if (tag.title != null) {
-    return tag.description;
-  }
+const jsdocStringifyRules = stringifyRules();
+const originalJsdocStringifyObject = jsdocStringifyRules.JsdocTypeObject;
+jsdocStringifyRules.JsdocTypeAny = () => 'any';
+jsdocStringifyRules.JsdocTypeObject = (result, transform) =>
+  `(${originalJsdocStringifyObject(result, transform)})`;
+jsdocStringifyRules.JsdocTypeOptional = (result, transform) => transform(result.element);
+jsdocStringifyRules.JsdocTypeNullable = (result, transform) => transform(result.element);
+jsdocStringifyRules.JsdocTypeNotNullable = (result, transform) => transform(result.element);
+jsdocStringifyRules.JsdocTypeUnion = (result, transform) =>
+  result.elements.map(transform).join('|');
 
-  return null;
+function extractType(typeString: string): JSDocType | null {
+  try {
+    return parseJSDocType(typeString, 'typescript');
+  } catch (_err) {
+    return null;
+  }
 }
 
-function extractReturns(tag: doctrine.Tag): ExtractedJsDocReturns {
-  if (tag.type != null) {
-    return {
-      type: tag.type,
-      description: tag.description,
-      getTypeName: () => {
-        return extractTypeName(tag.type);
-      },
-    };
-  }
-
-  return null;
-}
-
-function extractTypeName(type: doctrine.Type): string {
-  if (type.type === 'NameExpression') {
-    return type.name;
-  }
-
-  if (type.type === 'RecordType') {
-    const recordFields = type.fields.map((field: doctrine.type.FieldType) => {
-      if (field.value != null) {
-        const valueTypeName = extractTypeName(field.value);
-
-        return `${field.key}: ${valueTypeName}`;
-      }
-
-      return field.key;
-    });
-
-    return `({${recordFields.join(', ')}})`;
-  }
-
-  if (type.type === 'UnionType') {
-    const unionElements = type.elements.map(extractTypeName);
-
-    return `(${unionElements.join('|')})`;
-  }
-
-  // Only support untyped array: []. Might add more support later if required.
-  if (type.type === 'ArrayType') {
-    return '[]';
-  }
-
-  if (type.type === 'TypeApplication') {
-    if (type.expression != null) {
-      if ((type.expression as doctrine.type.NameExpression).name === 'Array') {
-        const arrayType = extractTypeName(type.applications[0]);
-
-        return `${arrayType}[]`;
-      }
-    }
-  }
-
-  if (
-    type.type === 'NullableType' ||
-    type.type === 'NonNullableType' ||
-    type.type === 'OptionalType'
-  ) {
-    return extractTypeName(type.expression);
-  }
-
-  if (type.type === 'AllLiteral') {
-    return 'any';
-  }
-
-  return null;
+function extractTypeName(type: JSDocType): string {
+  return transformJSDocType(jsdocStringifyRules, type);
 }

@@ -69,6 +69,34 @@ export const computeStorybookMetadata = async ({
     };
   }
 
+  const testPackages = [
+    'playwright',
+    'vitest',
+    'jest',
+    'cypress',
+    'nightwatch',
+    'webdriver',
+    '@web/test-runner',
+    'puppeteer',
+    'karma',
+    'jasmine',
+    'chai',
+    'testing-library',
+    '@ngneat/spectator',
+    'wdio',
+    'msw',
+    'miragejs',
+    'sinon',
+  ];
+  const testPackageDeps = Object.keys(allDependencies).filter((dep) =>
+    testPackages.find((pkg) => dep.includes(pkg))
+  );
+  metadata.testPackages = Object.fromEntries(
+    await Promise.all(
+      testPackageDeps.map(async (dep) => [dep, (await getActualPackageVersion(dep))?.version])
+    )
+  );
+
   const monorepoType = getMonorepoType();
   if (monorepoType) {
     metadata.monorepo = monorepoType;
@@ -84,24 +112,23 @@ export const computeStorybookMetadata = async ({
     };
     // Better be safe than sorry, some codebases/paths might end up breaking with something like "spawn pnpm ENOENT"
     // so we just set the package manager if the detection is successful
-    // eslint-disable-next-line no-empty
   } catch (err) {}
 
   metadata.hasCustomBabel = !!mainConfig.babel;
   metadata.hasCustomWebpack = !!mainConfig.webpackFinal;
   metadata.hasStaticDirs = !!mainConfig.staticDirs;
 
-  if (mainConfig.typescript) {
+  if (typeof mainConfig.typescript === 'object') {
     metadata.typescriptOptions = mainConfig.typescript;
   }
 
   const frameworkInfo = await getFrameworkInfo(mainConfig);
 
-  if (mainConfig.refs) {
+  if (typeof mainConfig.refs === 'object') {
     metadata.refCount = Object.keys(mainConfig.refs).length;
   }
 
-  if (mainConfig.features) {
+  if (typeof mainConfig.features === 'object') {
     metadata.features = mainConfig.features;
   }
 

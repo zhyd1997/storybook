@@ -18,10 +18,16 @@ async function run() {
         helpText: `build only the ${pkg.name} package`,
       };
     })
-    .reduce((acc, next) => {
-      acc[next.name] = next;
-      return acc;
-    }, {} as Record<string, { name: string; defaultValue: boolean; suffix: string; helpText: string }>);
+    .reduce(
+      (acc, next) => {
+        acc[next.name] = next;
+        return acc;
+      },
+      {} as Record<
+        string,
+        { name: string; defaultValue: boolean; suffix: string; helpText: string }
+      >
+    );
 
   const tasks: Record<
     string,
@@ -115,13 +121,13 @@ async function run() {
   }
 
   selection?.filter(Boolean).forEach(async (v) => {
-    const commmand = (await readJSON(resolve('../code', v.location, 'package.json'))).scripts.prep
+    const command = (await readJSON(resolve('../code', v.location, 'package.json'))).scripts.prep
       .split(posix.sep)
       .join(sep);
 
     const cwd = resolve(__dirname, '..', 'code', v.location);
     const sub = execaCommand(
-      `${commmand}${watchMode ? ' --watch' : ''}${prodMode ? ' --optimized' : ''}`,
+      `${command}${watchMode ? ' --watch' : ''}${prodMode ? ' --optimized' : ''}`,
       {
         cwd,
         buffer: false,
@@ -143,7 +149,6 @@ async function run() {
 }
 
 run().catch((e) => {
-  // eslint-disable-next-line no-console
   console.log(e);
   process.exit(1);
 });

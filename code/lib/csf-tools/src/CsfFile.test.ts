@@ -1,13 +1,12 @@
-/// <reference types="@types/jest" />;
-
 /* eslint-disable no-underscore-dangle */
 import { dedent } from 'ts-dedent';
+import { describe, it, expect, vi } from 'vitest';
 import yaml from 'js-yaml';
 import { loadCsf } from './CsfFile';
 
 expect.addSnapshotSerializer({
   print: (val: any) => yaml.dump(val).trimEnd(),
-  test: (val) => typeof val !== 'string',
+  test: (val) => typeof val !== 'string' && !(val instanceof Error),
 });
 
 const makeTitle = (userTitle?: string) => {
@@ -443,7 +442,7 @@ describe('CsfFile', () => {
             export const TestControl = () => _jsx("p", {
               children: "Hello"
             });
-            export default { title: 'foo/bar', tags: ['stories-mdx'], includeStories: ["__page"] };
+            export default { title: 'foo/bar', includeStories: ["__page"] };
             export const __page = () => {};
             __page.parameters = { docsOnly: true };
           `,
@@ -452,8 +451,6 @@ describe('CsfFile', () => {
       ).toMatchInlineSnapshot(`
         meta:
           title: foo/bar
-          tags:
-            - stories-mdx
           includeStories:
             - __page
         stories:
@@ -587,10 +584,10 @@ describe('CsfFile', () => {
         }
       `)
       ).toMatchInlineSnapshot(`
-              meta:
-                title: Chip
-              stories: []
-            `);
+        meta:
+          title: Chip
+        stories: []
+      `);
     });
   });
 
@@ -620,7 +617,7 @@ describe('CsfFile', () => {
     });
 
     it('no metadata', () => {
-      expect(() =>
+      expect(
         parse(
           dedent`
           export default { foo: '5' };
@@ -628,7 +625,15 @@ describe('CsfFile', () => {
           export const B = () => {};
       `
         )
-      ).toThrow('CSF: missing title/component');
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: Default Title
+        stories:
+          - id: default-title--a
+            name: A
+          - id: default-title--b
+            name: B
+      `);
     });
 
     it('dynamic titles', () => {
@@ -813,7 +818,7 @@ describe('CsfFile', () => {
     });
 
     it('Object export with storyName', () => {
-      const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation();
+      const consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       parse(
         dedent`
@@ -845,7 +850,6 @@ describe('CsfFile', () => {
         - ./Check
       `);
     });
-    // eslint-disable-next-line jest/no-disabled-tests
     it.skip('dynamic imports', () => {
       const input = dedent`
         const Button = await import('./Button');
@@ -854,7 +858,6 @@ describe('CsfFile', () => {
       const csf = loadCsf(input, { makeTitle }).parse();
       expect(csf.imports).toMatchInlineSnapshot();
     });
-    // eslint-disable-next-line jest/no-disabled-tests
     it.skip('requires', () => {
       const input = dedent`
         const Button = require('./Button');
@@ -1167,9 +1170,12 @@ describe('CsfFile', () => {
           tags:
             - component-tag
             - component-tag-dup
+            - component-tag-dup
             - inherit-tag-dup
             - story-tag
             - story-tag-dup
+            - story-tag-dup
+            - inherit-tag-dup
           __id: custom-foo-title--a
       `);
     });
@@ -1190,8 +1196,120 @@ describe('CsfFile', () => {
       ).parse();
 
       expect(() => csf.indexInputs).toThrowErrorMatchingInlineSnapshot(`
-        "Cannot automatically create index inputs with CsfFile.indexInputs because the CsfFile instance was created without a the fileName option.
-        Either add the fileName option when creating the CsfFile instance, or create the index inputs manually."
+        [Error: Cannot automatically create index inputs with CsfFile.indexInputs because the CsfFile instance was created without a the fileName option.
+        Either add the fileName option when creating the CsfFile instance, or create the index inputs manually.]
+      `);
+    });
+  });
+
+  describe('componenent paths', () => {
+    it('no component', () => {
+      const { indexInputs } = loadCsf(
+        dedent`
+          import { Component } from '../src/Component.js';
+          export default {
+            title: 'custom foo title',
+          };
+
+          export const A = {
+            render: () => {},
+          };
+        `,
+        { makeTitle, fileName: 'foo/bar.stories.js' }
+      ).parse();
+
+      expect(indexInputs).toMatchInlineSnapshot(`
+        - type: story
+          importPath: foo/bar.stories.js
+          exportName: A
+          name: A
+          title: custom foo title
+          tags: []
+          __id: custom-foo-title--a
+      `);
+    });
+
+    it('local component', () => {
+      const { indexInputs } = loadCsf(
+        dedent`
+          const Component = (props) => <div>hello</div>;
+          
+          export default {
+            title: 'custom foo title',
+            component: Component,
+          };
+
+          export const A = {
+            render: () => {},
+          };
+        `,
+        { makeTitle, fileName: 'foo/bar.stories.js' }
+      ).parse();
+
+      expect(indexInputs).toMatchInlineSnapshot(`
+        - type: story
+          importPath: foo/bar.stories.js
+          exportName: A
+          name: A
+          title: custom foo title
+          tags: []
+          __id: custom-foo-title--a
+      `);
+    });
+
+    it('imported component from file', () => {
+      const { indexInputs } = loadCsf(
+        dedent`
+          import { Component } from '../src/Component.js';
+          export default {
+            title: 'custom foo title',
+            component: Component,
+          };
+
+          export const A = {
+            render: () => {},
+          };
+        `,
+        { makeTitle, fileName: 'foo/bar.stories.js' }
+      ).parse();
+
+      expect(indexInputs).toMatchInlineSnapshot(`
+        - type: story
+          importPath: foo/bar.stories.js
+          rawComponentPath: ../src/Component.js
+          exportName: A
+          name: A
+          title: custom foo title
+          tags: []
+          __id: custom-foo-title--a
+      `);
+    });
+
+    it('imported component from library', () => {
+      const { indexInputs } = loadCsf(
+        dedent`
+          import { Component } from 'some-library';
+          export default {
+            title: 'custom foo title',
+            component: Component,
+          };
+
+          export const A = {
+            render: () => {},
+          };
+        `,
+        { makeTitle, fileName: 'foo/bar.stories.js' }
+      ).parse();
+
+      expect(indexInputs).toMatchInlineSnapshot(`
+        - type: story
+          importPath: foo/bar.stories.js
+          rawComponentPath: some-library
+          exportName: A
+          name: A
+          title: custom foo title
+          tags: []
+          __id: custom-foo-title--a
       `);
     });
   });

@@ -72,7 +72,6 @@ const isArgsStory = (init: t.Node, parent: t.Node, csf: CsfFile) => {
       const boundIdentifier = callee.object.name;
       const template = findVarInitialization(boundIdentifier, parent);
       if (template) {
-        // eslint-disable-next-line no-param-reassign
         csf._templates[boundIdentifier] = template;
         storyFn = template;
       }
@@ -100,11 +99,14 @@ const parseExportsOrder = (init: t.Expression) => {
 };
 
 const sortExports = (exportByName: Record<string, any>, order: string[]) => {
-  return order.reduce((acc, name) => {
-    const namedExport = exportByName[name];
-    if (namedExport) acc[name] = namedExport;
-    return acc;
-  }, {} as Record<string, any>);
+  return order.reduce(
+    (acc, name) => {
+      const namedExport = exportByName[name];
+      if (namedExport) acc[name] = namedExport;
+      return acc;
+    },
+    {} as Record<string, any>
+  );
 };
 
 export interface CsfOptions {
@@ -117,7 +119,7 @@ export class NoMetaError extends Error {
     super(dedent`
       CSF: ${message} ${formatLocation(ast, fileName)}
 
-      More info: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
+      More info: https://storybook.js.org/docs/react/writing-stories#default-export
     `);
     this.name = this.constructor.name;
   }
@@ -139,6 +141,8 @@ export class CsfFile {
   _ast: t.File;
 
   _fileName: string;
+
+  _rawComponentPath?: string;
 
   _makeTitle: (title: string) => string;
 
@@ -200,6 +204,21 @@ export class CsfFile {
         } else if (['includeStories', 'excludeStories'].includes(p.key.name)) {
           (meta as any)[p.key.name] = parseIncludeExclude(p.value);
         } else if (p.key.name === 'component') {
+          const n = p.value;
+          if (t.isIdentifier(n)) {
+            const id = n.name;
+            const importStmt = program.body.find(
+              (stmt) =>
+                t.isImportDeclaration(stmt) &&
+                stmt.specifiers.find((spec) => spec.local.name === id)
+            ) as t.ImportDeclaration;
+            if (importStmt) {
+              const { source } = importStmt;
+              if (t.isStringLiteral(source)) {
+                this._rawComponentPath = source.value;
+              }
+            }
+          }
           const { code } = recast.print(p.value, {});
           meta.component = code;
         } else if (p.key.name === 'tags') {
@@ -455,8 +474,7 @@ export class CsfFile {
             throw new Error(dedent`
               Unexpected \`storiesOf\` usage: ${formatLocation(node, self._fileName)}.
 
-              In SB7, we use the next-generation \`storyStoreV7\` by default, which does not support \`storiesOf\`. 
-              More info, with details about how to opt-out here: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#storystorev7-enabled-by-default
+              SB8 does not support \`storiesOf\`. 
             `);
           }
         },
@@ -477,49 +495,44 @@ export class CsfFile {
       throw new NoMetaError('missing default export', self._ast, self._fileName);
     }
 
-    if (!self._meta.title && !self._meta.component) {
-      throw new Error(dedent`
-        CSF: missing title/component ${formatLocation(self._ast, self._fileName)}
-
-        More info: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-      `);
-    }
-
     // default export can come at any point in the file, so we do this post processing last
     const entries = Object.entries(self._stories);
     self._meta.title = this._makeTitle(self._meta?.title as string);
     if (self._metaAnnotations.play) {
       self._meta.tags = [...(self._meta.tags || []), 'play-fn'];
     }
-    self._stories = entries.reduce((acc, [key, story]) => {
-      if (!isExportStory(key, self._meta as StaticMeta)) {
-        return acc;
-      }
-      const id =
-        story.parameters?.__id ??
-        toId((self._meta?.id || self._meta?.title) as string, storyNameFromExport(key));
-      const parameters: Record<string, any> = { ...story.parameters, __id: id };
+    self._stories = entries.reduce(
+      (acc, [key, story]) => {
+        if (!isExportStory(key, self._meta as StaticMeta)) {
+          return acc;
+        }
+        const id =
+          story.parameters?.__id ??
+          toId((self._meta?.id || self._meta?.title) as string, storyNameFromExport(key));
+        const parameters: Record<string, any> = { ...story.parameters, __id: id };
 
-      const { includeStories } = self._meta || {};
-      if (
-        key === '__page' &&
-        (entries.length === 1 || (Array.isArray(includeStories) && includeStories.length === 1))
-      ) {
-        parameters.docsOnly = true;
-      }
-      acc[key] = { ...story, id, parameters };
-      const { tags, play } = self._storyAnnotations[key];
-      if (tags) {
-        const node = t.isIdentifier(tags)
-          ? findVarInitialization(tags.name, this._ast.program)
-          : tags;
-        acc[key].tags = parseTags(node);
-      }
-      if (play) {
-        acc[key].tags = [...(acc[key].tags || []), 'play-fn'];
-      }
-      return acc;
-    }, {} as Record<string, StaticStory>);
+        const { includeStories } = self._meta || {};
+        if (
+          key === '__page' &&
+          (entries.length === 1 || (Array.isArray(includeStories) && includeStories.length === 1))
+        ) {
+          parameters.docsOnly = true;
+        }
+        acc[key] = { ...story, id, parameters };
+        const { tags, play } = self._storyAnnotations[key];
+        if (tags) {
+          const node = t.isIdentifier(tags)
+            ? findVarInitialization(tags.name, this._ast.program)
+            : tags;
+          acc[key].tags = parseTags(node);
+        }
+        if (play) {
+          acc[key].tags = [...(acc[key].tags || []), 'play-fn'];
+        }
+        return acc;
+      },
+      {} as Record<string, StaticStory>
+    );
 
     Object.keys(self._storyExports).forEach((key) => {
       if (!isExportStory(key, self._meta as StaticMeta)) {
@@ -561,12 +574,14 @@ export class CsfFile {
         Either add the fileName option when creating the CsfFile instance, or create the index inputs manually.`
       );
     }
+
     return Object.entries(this._stories).map(([exportName, story]) => {
-      // combine meta and story tags, removing any duplicates
-      const tags = Array.from(new Set([...(this._meta?.tags ?? []), ...(story.tags ?? [])]));
+      // don't remove any duplicates or negations -- tags will be combined in the index
+      const tags = [...(this._meta?.tags ?? []), ...(story.tags ?? [])];
       return {
         type: 'story',
         importPath: this._fileName,
+        rawComponentPath: this._rawComponentPath,
         exportName,
         name: story.name,
         title: this.meta?.title,
@@ -586,15 +601,19 @@ export const loadCsf = (code: string, options: CsfOptions) => {
 interface FormatOptions {
   sourceMaps?: boolean;
   preserveStyle?: boolean;
+  inputSourceMap?: any;
 }
 
-export const formatCsf = (csf: CsfFile, options: FormatOptions = { sourceMaps: false }) => {
-  const result = generate.default(csf._ast, options);
+export const formatCsf = (
+  csf: CsfFile,
+  options: FormatOptions = { sourceMaps: false },
+  code?: string
+) => {
+  const result = generate.default(csf._ast, options, code);
   if (options.sourceMaps) {
     return result;
   }
-  const { code } = result;
-  return code;
+  return result.code;
 };
 
 /**

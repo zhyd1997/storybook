@@ -53,18 +53,16 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
       entry: entries.map((e: string) => slash(join(cwd, e))),
       outDir: join(process.cwd(), 'dist'),
       format: ['cjs'],
-      target: 'node16',
+      target: 'node18',
       platform: 'node',
       external: [name, ...Object.keys(dependencies || {}), ...Object.keys(peerDependencies || {})],
 
       esbuildOptions: (c) => {
-        /* eslint-disable no-param-reassign */
         c.platform = 'node';
         c.legalComments = 'none';
         c.minifyWhitespace = optimized;
         c.minifyIdentifiers = optimized;
         c.minifySyntax = optimized;
-        /* eslint-enable no-param-reassign */
       },
     }),
   ]);

@@ -78,10 +78,12 @@ const _getPathProperties = (path: string[], node: t.Node): t.ObjectProperty[] | 
   }
   return undefined;
 };
-
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _findVarInitialization = (identifier: string, program: t.Program) => {
-  let init: t.Expression | null | undefined = null;
+const _findVarDeclarator = (
+  identifier: string,
+  program: t.Program
+): t.VariableDeclarator | null | undefined => {
+  let declarator: t.VariableDeclarator | null | undefined = null;
   let declarations: t.VariableDeclarator[] | null = null;
   program.body.find((node: t.Node) => {
     if (t.isVariableDeclaration(node)) {
@@ -92,20 +94,26 @@ const _findVarInitialization = (identifier: string, program: t.Program) => {
 
     return (
       declarations &&
-      declarations.find((decl: t.Node) => {
+      declarations.find((decl: t.VariableDeclarator) => {
         if (
           t.isVariableDeclarator(decl) &&
           t.isIdentifier(decl.id) &&
           decl.id.name === identifier
         ) {
-          init = decl.init;
+          declarator = decl;
           return true; // stop looking
         }
         return false;
       })
     );
   });
-  return init;
+  return declarator;
+};
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const _findVarInitialization = (identifier: string, program: t.Program) => {
+  const declarator = _findVarDeclarator(identifier, program);
+  return declarator?.init;
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -213,6 +221,21 @@ export class ConfigFile {
                 self._exportDecls[exportName] = decl;
               }
             });
+          } else if (node.specifiers) {
+            // export { X };
+            node.specifiers.forEach((spec) => {
+              if (
+                t.isExportSpecifier(spec) &&
+                t.isIdentifier(spec.local) &&
+                t.isIdentifier(spec.exported)
+              ) {
+                const { name: localName } = spec.local;
+                const { name: exportName } = spec.exported;
+                const decl = _findVarDeclarator(localName, parent as t.Program) as any;
+                self._exports[exportName] = decl.init;
+                self._exportDecls[exportName] = decl;
+              }
+            });
           } else {
             logger.warn(
               getCsfParsingErrorMessage({
@@ -295,7 +318,6 @@ export class ConfigFile {
     if (node) {
       const { code } = generate.default(node, {});
 
-      // eslint-disable-next-line no-eval
       const value = (0, eval)(`(() => (${code}))()`);
       return value;
     }
@@ -390,6 +412,16 @@ export class ConfigFile {
     return pathNames;
   }
 
+  _getPnpWrappedValue(node: t.Node) {
+    if (t.isCallExpression(node)) {
+      const arg = node.arguments[0];
+      if (t.isStringLiteral(arg)) {
+        return arg.value;
+      }
+    }
+    return undefined;
+  }
+
   /**
    * Given a node and a fallback property, returns a **non-evaluated** string value of the node.
    * 1. { node: 'value' }
@@ -409,6 +441,8 @@ export class ConfigFile {
         ) {
           if (t.isStringLiteral(prop.value)) {
             value = prop.value.value;
+          } else {
+            value = this._getPnpWrappedValue(prop.value);
           }
         }
 
@@ -459,10 +493,19 @@ export class ConfigFile {
           }
         }
         // default export
-        if (t.isExportDefaultDeclaration(node) && t.isObjectExpression(node.declaration)) {
-          const properties = node.declaration.properties as t.ObjectProperty[];
-          removeProperty(properties, path[0]);
-          removedRootProperty = true;
+        if (t.isExportDefaultDeclaration(node)) {
+          let decl: t.Expression | undefined | null = node.declaration as t.Expression;
+          if (t.isIdentifier(decl)) {
+            decl = _findVarInitialization(decl.name, this._ast.program);
+          }
+          if (t.isTSAsExpression(decl) || t.isTSSatisfiesExpression(decl)) {
+            decl = decl.expression;
+          }
+          if (t.isObjectExpression(decl)) {
+            const properties = decl.properties as t.ObjectProperty[];
+            removeProperty(properties, path[0]);
+            removedRootProperty = true;
+          }
         }
         // module.exports
         if (
@@ -501,6 +544,34 @@ export class ConfigFile {
       this.setFieldNode(path, t.arrayExpression([node]));
     } else if (t.isArrayExpression(current)) {
       current.elements.push(node);
+    } else {
+      throw new Error(`Expected array at '${path.join('.')}', got '${current.type}'`);
+    }
+  }
+
+  /**
+   * Specialized helper to remove addons or other array entries
+   * that can either be strings or objects with a name property.
+   */
+  removeEntryFromArray(path: string[], value: string) {
+    const current = this.getFieldNode(path);
+    if (!current) return;
+    if (t.isArrayExpression(current)) {
+      const index = current.elements.findIndex((element) => {
+        if (t.isStringLiteral(element)) {
+          return element.value === value;
+        }
+        if (t.isObjectExpression(element)) {
+          const name = this._getPresetValue(element, 'name');
+          return name === value;
+        }
+        return this._getPnpWrappedValue(element as t.Node) === value;
+      });
+      if (index >= 0) {
+        current.elements.splice(index, 1);
+      } else {
+        throw new Error(`Could not find '${value}' in array at '${path.join('.')}'`);
+      }
     } else {
       throw new Error(`Expected array at '${path.join('.')}', got '${current.type}'`);
     }

@@ -13,13 +13,13 @@ export const loaders = [async () => ({ projectValue: 2 })];
 
 export const decorators = [
   (storyFn: PartialStoryFn, context: StoryContext) => {
-    if (context.parameters['useProjectDecorator'])
+    if (context.parameters.useProjectDecorator)
       return storyFn({ args: { ...context.args, text: `project ${context.args.text}` } });
     return storyFn();
   },
 ];
 
-export const globals = {
+export const initialGlobals = {
   foo: 'fooValue',
 };
 

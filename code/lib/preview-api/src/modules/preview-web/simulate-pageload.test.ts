@@ -1,6 +1,5 @@
-/**
- * @jest-environment jsdom
- */
+// @vitest-environment happy-dom
+import { describe, it, expect } from 'vitest';
 
 import { global } from '@storybook/global';
 import { simulatePageLoad } from './simulate-pageload';

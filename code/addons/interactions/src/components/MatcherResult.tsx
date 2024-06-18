@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { styled, typography } from '@storybook/theming';
 import { Node } from './MethodCall';
@@ -86,7 +85,7 @@ export const MatcherResult = ({
         if (line.match(/^\s*- /)) {
           return [<Expected key={line + index} value={line} />, <br key={`br${index}`} />];
         }
-        if (line.match(/^\s*\+ /)) {
+        if (line.match(/^\s*\+ /) || line.match(/^Received: $/)) {
           return [<Received key={line + index} value={line} />, <br key={`br${index}`} />];
         }
 

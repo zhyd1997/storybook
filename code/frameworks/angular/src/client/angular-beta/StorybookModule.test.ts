@@ -1,4 +1,7 @@
-import { NgModule, Type, Component, EventEmitter, Input, Output } from '@angular/core';
+// @vitest-environment happy-dom
+
+import { NgModule, Component, EventEmitter, Input, Output } from '@angular/core';
+import { describe, expect, it } from 'vitest';
 
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';

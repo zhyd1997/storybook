@@ -67,21 +67,7 @@ export type Indexer = BaseIndexer & {
    * @returns A promise that resolves to an array of {@link IndexInput} objects.
    */
   createIndex: (fileName: string, options: IndexerOptions) => Promise<IndexInput[]>;
-  /**
-   * @deprecated Use {@link index} instead
-   */
-  indexer?: never;
 };
-
-export type DeprecatedIndexer = BaseIndexer & {
-  indexer: (fileName: string, options: IndexerOptions) => Promise<IndexedCSFFile>;
-  createIndex?: never;
-};
-
-/**
- * @deprecated Use {@link Indexer} instead
- */
-export type StoryIndexer = Indexer | DeprecatedIndexer;
 
 export interface BaseIndexEntry {
   id: StoryId;
@@ -107,6 +93,8 @@ export type IndexEntry = StoryIndexEntry | DocsIndexEntry;
 export type BaseIndexInput = {
   /** The file to import from e.g. the story file. */
   importPath: Path;
+  /** The raw path/package of the file that provides meta.component, if one exists */
+  rawComponentPath?: Path;
   /** The name of the export to import. */
   exportName: ExportName;
   /** The name of the entry, auto-generated from {@link exportName} if unspecified. */
