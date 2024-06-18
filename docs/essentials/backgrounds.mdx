@@ -13,7 +13,7 @@ The backgrounds toolbar addon allows you to set the background color in which th
 
 By default, the backgrounds toolbar includes a light and dark background.
 
-But you're not restricted to these backgrounds, you can configure your own set of colors with the `parameters.backgrounds` [parameter](../writing-stories/parameters.md) in your [`.storybook/preview.js`](../configure/index.md#configure-story-rendering):
+But you're not restricted to these backgrounds, you can configure your own set of colors with the `parameters.backgrounds` [parameter](../writing-stories/parameters.mdx) in your [`.storybook/preview.js`](../configure/index.mdx#configure-story-rendering):
 
 {/* prettier-ignore-start */}
 
@@ -25,7 +25,7 @@ If you define the `default` property, the addon will apply it to all stories. Ot
 
 ### Extending the configuration
 
-You can also define backgrounds per-component or per-story basis through [parameter inheritance](../writing-stories/parameters.md#component-parameters):
+You can also define backgrounds per-component or per-story basis through [parameter inheritance](../writing-stories/parameters.mdx#component-parameters):
 
 {/* prettier-ignore-start */}
 
@@ -77,7 +77,7 @@ If you need to disable the grid for a specific story, set the `backgrounds` para
 
 ### Parameters
 
-This addon contributes the following [parameters](../writing-stories/parameters.md) to Storybook, under the `backgrounds` namespace:
+This addon contributes the following [parameters](../writing-stories/parameters.mdx) to Storybook, under the `backgrounds` namespace:
 
 #### `default`
 
@@ -89,7 +89,7 @@ Default background color. Must match the `name` property of one of the [availabl
 
 Type: `boolean`
 
-Disable this addon's behavior. If you wish to disable this addon for the entire Storybook, you should do so when registering `addon-essentials`. See the [essential addon's docs](../essentials/index.md#disabling-addons) for more information.
+Disable this addon's behavior. If you wish to disable this addon for the entire Storybook, you should do so when registering `addon-essentials`. See the [essential addon's docs](../essentials/index.mdx#disabling-addons) for more information.
 
 This parameter is most useful to allow overriding at more specific levels. For example, if this parameter is set to `true` at the project level, it could then be re-enabled by setting it to `false` at the meta (component) or story level.
 
@@ -134,7 +134,7 @@ Disable the grid.
 
 Type: `number`
 
-Default: `0` if [story layout](../api/parameters.md#layout) is `'fullscreen'`; `16` if story layout is `'padded'`
+Default: `0` if [story layout](../api/parameters.mdx#layout) is `'fullscreen'`; `16` if story layout is `'padded'`
 
 Horizontal offset of the grid.
 
@@ -142,7 +142,7 @@ Horizontal offset of the grid.
 
 Type: `number`
 
-Default: `0` if [story layout](../api/parameters.md#layout) is `'fullscreen'`; `16` if story layout is `'padded'`
+Default: `0` if [story layout](../api/parameters.mdx#layout) is `'fullscreen'`; `16` if story layout is `'padded'`
 
 Vertical offset of the grid.
 

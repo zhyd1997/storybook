@@ -13,7 +13,7 @@ The Viewport toolbar item allows you to adjust the dimensions of the iframe your
 
 ## Configuration
 
-Out of the box, the Viewport addon offers you a standard set of viewports that you can use. If you want to change the default set of viewports, you can set the global `parameters.viewport` [parameter](../writing-stories/parameters.md) in your [`.storybook/preview.js`](../configure/index.md#configure-story-rendering):
+Out of the box, the Viewport addon offers you a standard set of viewports that you can use. If you want to change the default set of viewports, you can set the global `parameters.viewport` [parameter](../writing-stories/parameters.mdx) in your [`.storybook/preview.js`](../configure/index.md#configure-story-rendering):
 
 {/* prettier-ignore-start */}
 
@@ -122,7 +122,7 @@ Both viewports (`Kindle Fire 2` and `Kindle Fire HD`) will feature in the list o
 
 In some cases, it's not practical for you to use a specific visual viewport on a global scale, and you need to adjust it to an individual story.
 
-Update your story through [parameters](../writing-stories/parameters.md) to include your viewports at a component level or for a specific story:
+Update your story through [parameters](../writing-stories/parameters.mdx) to include your viewports at a component level or for a specific story:
 
 {/* prettier-ignore-start */}
 
@@ -142,7 +142,7 @@ If you need, you can edit them on the shortcuts page.
 
 ### Parameters
 
-This addon contributes the following [parameters](../writing-stories/parameters.md) to Storybook, under the `viewport` namespace:
+This addon contributes the following [parameters](../writing-stories/parameters.mdx) to Storybook, under the `viewport` namespace:
 
 #### `defaultOrientation`
 
@@ -162,7 +162,7 @@ Specifies the default viewport used when viewing a story. Must match a key in th
 
 Type: `boolean`
 
-Disable this addon's behavior. If you wish to disable this addon for the entire Storybook, you should do so when registering `addon-essentials`. See the [essential addon's docs](../essentials/index.md#disabling-addons) for more information.
+Disable this addon's behavior. If you wish to disable this addon for the entire Storybook, you should do so when registering `addon-essentials`. See the [essential addon's docs](../essentials/index.mdx#disabling-addons) for more information.
 
 This parameter is most useful to allow overriding at more specific levels. For example, if this parameter is set to `true` at the project level, it could then be re-enabled by setting it to `false` at the meta (component) or story level.
 
