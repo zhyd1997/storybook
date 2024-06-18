@@ -6538,7 +6538,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^1.2.2"
     cross-env: "npm:^7.0.3"
     danger: "npm:^11.2.6"
-    esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0"
+    esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0"
     esbuild-loader: "npm:^3.0.0"
     esbuild-plugin-alias: "npm:^0.2.1"
     eslint: "npm:^8.56.0"
