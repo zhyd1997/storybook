@@ -42,7 +42,7 @@ When Storybook loads, it automatically merges the configuration into its own. Ho
 
 {/* prettier-ignore-end */}
 
-The asynchronous function [`viteFinal`](../api/main-config-vite-final.md) receives a `config` object with the default builder configuration and returns the updated configuration.
+The asynchronous function [`viteFinal`](../api/main-config/main-config-vite-final.mdx) receives a `config` object with the default builder configuration and returns the updated configuration.
 
 ### Environment-based configuration
 
@@ -89,7 +89,7 @@ If you need to override it, you can use the `viteFinal` function and adjust it.
 
 ### ArgTypes are not generated automatically
 
-Currently, [automatic argType inference](../api/arg-types.md#automatic-argtype-inference) is only available for React, Vue 3, and Svelte (JSDocs only). With React, the Vite builder defaults to `react-docgen`, a faster alternative to `react-docgen-typescript` for parsing React components. If you run into any issues, you can revert to `react-docgen-typescript` by updating your Storybook configuration file as follows:
+Currently, [automatic argType inference](../api/arg-types.mdx#automatic-argtype-inference) is only available for React, Vue 3, and Svelte (JSDocs only). With React, the Vite builder defaults to `react-docgen`, a faster alternative to `react-docgen-typescript` for parsing React components. If you run into any issues, you can revert to `react-docgen-typescript` by updating your Storybook configuration file as follows:
 
 {/* prettier-ignore-start */}
 
@@ -110,5 +110,5 @@ If you are migrating from a Webpack-based project, such as [CRA](https://create-
 **Learn more about builders**
 
 * Vite builder for bundling with Vite
-* [Webpack builder](./webpack.md) for bundling with Webpack
-* [Builder API](./builder-api.md) for building a Storybook builder
+* [Webpack builder](./webpack.mdx) for bundling with Webpack
+* [Builder API](./builder-api.mdx) for building a Storybook builder
