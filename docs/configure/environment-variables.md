@@ -105,7 +105,7 @@ You can also use specific files for specific modes. Add a `.env.development` or 
 
 </Callout>
 
-You can also pass these environment variables when you are [building your Storybook](../sharing/publish-storybook.md) with `build-storybook`.
+You can also pass these environment variables when you are [building your Storybook](../sharing/publish-storybook.md) with `storybook build`.
 
 Then they'll be hardcoded to the static version of your Storybook.
 
