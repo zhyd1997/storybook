@@ -5,7 +5,7 @@ sidebar:
   title: SvelteKit
 ---
 
-Storybook for SvelteKit is a [framework](../contribute/framework.md) that makes it easy to develop and test UI components in isolation for [SvelteKit](https://kit.svelte.dev/) applications. It includes:
+Storybook for SvelteKit is a [framework](../../contribute/framework.mdx) that makes it easy to develop and test UI components in isolation for [SvelteKit](https://kit.svelte.dev/) applications. It includes:
 
 * 🪄 Zero config
 * 🧩 Easily mock many Kit modules
@@ -38,7 +38,7 @@ Storybook for SvelteKit is a [framework](../contribute/framework.md) that makes 
 
   {/* prettier-ignore-end */}
 
-  [More on getting started with Storybook.](./install.md)
+  [More on getting started with Storybook.](../install.mdx)
 
   ### In a project with Storybook
 
@@ -130,7 +130,7 @@ Storybook for SvelteKit is a [framework](../contribute/framework.md) that makes 
 
   ### Mocking links
 
-  The default link-handling behavior (e.g. when clicking an `<a href="..." />` element) is to log an action to the [Actions panel](../essentials/actions.md).
+  The default link-handling behavior (e.g. when clicking an `<a href="..." />` element) is to log an action to the [Actions panel](../../essentials/actions.mdx).
 
   You can override this by assigning an object to `parameters.sveltekit_experimental.hrefs`, where the keys are strings representing an href and the values define your mock. For example:
 
@@ -177,7 +177,7 @@ Storybook for SvelteKit is a [framework](../contribute/framework.md) that makes 
 
   ### Parameters
 
-  This framework contributes the following [parameters](../writing-stories/parameters.md) to Storybook, under the `sveltekit_experimental` namespace:
+  This framework contributes the following [parameters](../../writing-stories/parameters.mdx) to Storybook, under the `sveltekit_experimental` namespace:
 
   #### `forms`
 
@@ -195,7 +195,7 @@ Storybook for SvelteKit is a [framework](../contribute/framework.md) that makes 
 
   Type: `Record<[path: string], (to: string, event: MouseEvent) => void | { callback: (to: string, event: MouseEvent) => void, asRegex?: boolean }>`
 
-  If you have an `<a />` tag inside your code with the `href` attribute that matches one or more of the links defined (treated as regex based if the `asRegex` property is `true`) the corresponding `callback` will be called. If no matching `hrefs` are defined, an action will be logged to the [Actions panel](../essentials/actions.md). See [Mocking links](#mocking-links) for an example.
+  If you have an `<a />` tag inside your code with the `href` attribute that matches one or more of the links defined (treated as regex based if the `asRegex` property is `true`) the corresponding `callback` will be called. If no matching `hrefs` are defined, an action will be logged to the [Actions panel](../../essentials/actions.mdx). See [Mocking links](#mocking-links) for an example.
 
   #### `navigation`
 
@@ -207,31 +207,31 @@ Storybook for SvelteKit is a [framework](../contribute/framework.md) that makes 
 
   Type: See [SvelteKit docs](https://kit.svelte.dev/docs/modules#$app-navigation-goto)
 
-  A callback that will be called whenever [`goto`](https://kit.svelte.dev/docs/modules#$app-navigation-goto) is called. If no function is provided, an action will be logged to the [Actions panel](../essentials/actions.md).
+  A callback that will be called whenever [`goto`](https://kit.svelte.dev/docs/modules#$app-navigation-goto) is called. If no function is provided, an action will be logged to the [Actions panel](../essentials/actions.mdx).
 
   ##### `navigation.pushState`
 
   Type: See [SvelteKit docs](https://kit.svelte.dev/docs/modules#$app-navigation-pushstate)
 
-  A callback that will be called whenever [`pushState`](https://kit.svelte.dev/docs/modules#$app-navigation-pushstate) is called. If no function is provided, an action will be logged to the [Actions panel](../essentials/actions.md).
+  A callback that will be called whenever [`pushState`](https://kit.svelte.dev/docs/modules#$app-navigation-pushstate) is called. If no function is provided, an action will be logged to the [Actions panel](../essentials/actions.mdx).
 
   ##### `navigation.replaceState`
 
   Type: See [SvelteKit docs](https://kit.svelte.dev/docs/modules#$app-navigation-replacestate)
 
-  A callback that will be called whenever [`replaceState`](https://kit.svelte.dev/docs/modules#$app-navigation-replacestate) is called. If no function is provided, an action will be logged to the [Actions panel](../essentials/actions.md).
+  A callback that will be called whenever [`replaceState`](https://kit.svelte.dev/docs/modules#$app-navigation-replacestate) is called. If no function is provided, an action will be logged to the [Actions panel](../../essentials/actions.mdx).
 
   ##### `navigation.invalidate`
 
   Type: See [SvelteKit docs](https://kit.svelte.dev/docs/modules#$app-navigation-invalidate)
 
-  A callback that will be called whenever [`invalidate`](https://kit.svelte.dev/docs/modules#$app-navigation-invalidate) is called. If no function is provided, an action will be logged to the [Actions panel](../essentials/actions.md).
+  A callback that will be called whenever [`invalidate`](https://kit.svelte.dev/docs/modules#$app-navigation-invalidate) is called. If no function is provided, an action will be logged to the [Actions panel](../../essentials/actions.mdx).
 
   ##### `navigation.invalidateAll`
 
   Type: See [SvelteKit docs](https://kit.svelte.dev/docs/modules#$app-navigation-invalidateall)
 
-  A callback that will be called whenever [`invalidateAll`](https://kit.svelte.dev/docs/modules#$app-navigation-invalidateall) is called. If no function is provided, an action will be logged to the [Actions panel](../essentials/actions.md).
+  A callback that will be called whenever [`invalidateAll`](https://kit.svelte.dev/docs/modules#$app-navigation-invalidateall) is called. If no function is provided, an action will be logged to the [Actions panel](../../essentials/actions.mdx).
 
   ##### `navigation.afterNavigate`
 
@@ -288,7 +288,7 @@ Storybook for SvelteKit is a [framework](../contribute/framework.md) that makes 
 
   Type: `Record<string, any>`
 
-  Configure options for the [framework's builder](../api/main-config-framework.md#optionsbuilder). For Sveltekit, available options can be found in the [Vite builder docs](../builders/vite.md).
+  Configure options for the [framework's builder](../../api/main-config/main-config-framework.mdx#optionsbuilder). For Sveltekit, available options can be found in the [Vite builder docs](../../builders/vite.mdx).
 
   ## Troubleshooting
 

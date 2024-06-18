@@ -5,7 +5,7 @@ sidebar:
   title: Angular
 ---
 
-Storybook for Angular is a [framework](../contribute/framework.md) that makes it easy to develop and test UI components in isolation for [Angular](https://angular.io/) applications. It includes:
+Storybook for Angular is a [framework](../../contribute/framework.mdx) that makes it easy to develop and test UI components in isolation for [Angular](https://angular.io/) applications. It includes:
 
 * 🧱 Uses Angular builders
 * 🎛️ Compodoc integration
@@ -38,7 +38,7 @@ Storybook for Angular is a [framework](../contribute/framework.md) that makes it
 
   {/* prettier-ignore-end */}
 
-  [More on getting started with Storybook.](./install.md)
+  [More on getting started with Storybook.](../install.mdx)
 
   ### In a project with Storybook
 
@@ -131,7 +131,7 @@ Storybook for Angular is a [framework](../contribute/framework.md) that makes it
 
   ## Setup Compodoc
 
-  You can include JSDoc comments above components, directives, and other parts of your Angular code to include documentation for those elements. Compodoc uses these comments to [generate documentation](../writing-docs/autodocs.md) for your application. In Storybook, it is useful to add explanatory comments above `@Inputs` and `@Outputs`, since these are the main elements that Storybook displays in its user interface. The `@Inputs` and `@Outputs` are the elements that you can interact with in Storybook, such as [controls](../essentials/controls.md).
+  You can include JSDoc comments above components, directives, and other parts of your Angular code to include documentation for those elements. Compodoc uses these comments to [generate documentation](../../writing-docs/autodocs.mdx) for your application. In Storybook, it is useful to add explanatory comments above `@Inputs` and `@Outputs`, since these are the main elements that Storybook displays in its user interface. The `@Inputs` and `@Outputs` are the elements that you can interact with in Storybook, such as [controls](../../essentials/controls.mdx).
 
   ### Automatic setup
 
@@ -208,7 +208,7 @@ Storybook for Angular is a [framework](../contribute/framework.md) that makes it
 
   ## `applicationConfig` decorator
 
-  If your component relies on application-wide providers, like the ones defined by BrowserAnimationsModule or any other modules which use the forRoot pattern to provide a ModuleWithProviders, you can apply the `applicationConfig` [decorator](../writing-stories/decorators.md) to all stories for that component. This will provide them to the [bootstrapApplication function](https://angular.io/guide/standalone-components#configuring-dependency-injection), which is used to bootstrap the component in Storybook.
+  If your component relies on application-wide providers, like the ones defined by BrowserAnimationsModule or any other modules which use the forRoot pattern to provide a ModuleWithProviders, you can apply the `applicationConfig` [decorator](../../writing-stories/decorators.mdx) to all stories for that component. This will provide them to the [bootstrapApplication function](https://angular.io/guide/standalone-components#configuring-dependency-injection), which is used to bootstrap the component in Storybook.
 
   ```ts
   // ChipsModule.stories.ts
@@ -252,7 +252,7 @@ Storybook for Angular is a [framework](../contribute/framework.md) that makes it
 
   ## `moduleMetadata` decorator
 
-  If your component has dependencies on other Angular directives and modules, these can be supplied using the `moduleMetadata` [decorator](../writing-stories/decorators.md) either for all stories of a component or for individual stories.
+  If your component has dependencies on other Angular directives and modules, these can be supplied using the `moduleMetadata` [decorator](../../writing-stories/decorators.mdx) either for all stories of a component or for individual stories.
 
   ```ts
   // YourComponent.stories.ts
@@ -411,7 +411,7 @@ Storybook for Angular is a [framework](../contribute/framework.md) that makes it
 
   Type: `Record<string, any>`
 
-  Configure options for the [framework's builder](../api/main-config-framework.md#optionsbuilder). For Angular, , available options can be found in the [Webpack builder docs](../builders/webpack.md).
+  Configure options for the [framework's builder](../../api/main-config/main-config-framework.mdx#optionsbuilder). For Angular, , available options can be found in the [Webpack builder docs](../../builders/webpack.mdx).
 
   {/* End supported renderers */}
 </If>

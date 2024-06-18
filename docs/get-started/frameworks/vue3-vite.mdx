@@ -5,7 +5,7 @@ sidebar:
   title: Vue & Vite
 ---
 
-Storybook for Vue & Vite is a [framework](../contribute/framework.md) that makes it easy to develop and test UI components in isolation for [Vue](https://vuejs.org/) applications built with [Vite](https://vitejs.dev/). It includes:
+Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that makes it easy to develop and test UI components in isolation for [Vue](https://vuejs.org/) applications built with [Vite](https://vitejs.dev/). It includes:
 
 * 🏎️ Pre-bundled for performance
 * 🪄 Zero config
@@ -39,7 +39,7 @@ Storybook for Vue & Vite is a [framework](../contribute/framework.md) that makes
 
   {/* prettier-ignore-end */}
 
-  [More on getting started with Storybook.](./install.md)
+  [More on getting started with Storybook.](../install.mdx)
 
   ### In a project with Storybook
 
@@ -101,7 +101,7 @@ Storybook for Vue & Vite is a [framework](../contribute/framework.md) that makes
     `vue-component-meta` is only available in Storybook ≥ 8. It is currently opt-in, but will become the default in a future version of Storybook.
   </Callout>
 
-  [`vue-component-meta`](https://github.com/vuejs/language-tools/tree/master/packages/component-meta) is a tool maintained by the Vue team that extracts metadata from Vue components. Storybook can use it to generate the [controls](../essentials/controls.md) for your stories and documentation. It's a more full-featured alternative to `vue-docgen-api` and is recommended for most projects.
+  [`vue-component-meta`](https://github.com/vuejs/language-tools/tree/master/packages/component-meta) is a tool maintained by the Vue team that extracts metadata from Vue components. Storybook can use it to generate the [controls](../../essentials/controls.mdx) for your stories and documentation. It's a more full-featured alternative to `vue-docgen-api` and is recommended for most projects.
 
   If you want to use `vue-component-meta`, you can configure it in your `.storybook/main.js|ts` file:
 
@@ -248,7 +248,7 @@ Storybook for Vue & Vite is a [framework](../contribute/framework.md) that makes
 
   ### Override the default configuration
 
-  If you're working with a project that relies on [`tsconfig references`](https://www.typescriptlang.org/docs/handbook/project-references.html) to link to other existing configuration files (e.g. `tsconfig.app.json`, `tsconfig.node.json`), we recommend that you update your [`.storybook/main.js|ts`](../configure/index.md) configuration file and add the following:
+  If you're working with a project that relies on [`tsconfig references`](https://www.typescriptlang.org/docs/handbook/project-references.html) to link to other existing configuration files (e.g. `tsconfig.app.json`, `tsconfig.node.json`), we recommend that you update your [`.storybook/main.js|ts`](../../configure/index.mdx) configuration file and add the following:
 
   ```ts
   // .storybook/main.ts
@@ -313,7 +313,7 @@ Storybook for Vue & Vite is a [framework](../contribute/framework.md) that makes
 
   Type: `Record<string, any>`
 
-  Configure options for the [framework's builder](../api/main-config-framework.md#optionsbuilder). For this framework, available options can be found in the [Vite builder docs](../builders/vite.md).
+  Configure options for the [framework's builder](../../api/main-config/main-config-framework.md#optionsbuilder). For this framework, available options can be found in the [Vite builder docs](../../builders/vite.mdx).
 
   #### `docgen`
 
