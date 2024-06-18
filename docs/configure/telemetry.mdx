@@ -37,7 +37,7 @@ Specifically, we track the following information in our telemetry events:
   * Supported view layers (e.g., React, Vue 3, Angular, Svelte).
   * Builder (e.g., Webpack5, Vite).
   * Meta framework (e.g., [Next](https://nextjs.org/), [Gatsby](https://www.gatsbyjs.com/), [CRA](https://create-react-app.dev/)).
-  * [Addons](https://storybook.js.org/integrations) (e.g., [Essentials](../essentials/index.md), [Accessibility](https://storybook.js.org/addons/@storybook/addon-a11y/)).
+  * [Addons](https://storybook.js.org/integrations) (e.g., [Essentials](../essentials/index.mdx), [Accessibility](https://storybook.js.org/addons/@storybook/addon-a11y/)).
   * Testing tools (e.g. [Jest](https://jestjs.io/), [Vitest](https://vitest.dev/), [Playwright](https://playwright.dev/)).
 * Package manager information (e.g., `npm`, `yarn`).
 * Monorepo information (e.g., [NX](https://nx.dev/), [Turborepo](https://turborepo.org/)).
@@ -164,7 +164,7 @@ You may opt-out of the telemetry by setting Storybook's configuration element `d
 {/* prettier-ignore-end */}
 
 <Callout variant="info" icon="💡">
-  There is a `boot` event containing no metadata (used to ensure the telemetry is working). It is sent prior to evaluating your [Storybook configuration file](../api/main-config.md) (i.e., `main.js|ts`), so it is unaffected by the `disableTelemetry` option. If you want to ensure that the event is not sent, use the `STORYBOOK_DISABLE_TELEMETRY` environment variable.
+  There is a `boot` event containing no metadata (used to ensure the telemetry is working). It is sent prior to evaluating your [Storybook configuration file](../api/main-config/main-config.mdx) (i.e., `main.js|ts`), so it is unaffected by the `disableTelemetry` option. If you want to ensure that the event is not sent, use the `STORYBOOK_DISABLE_TELEMETRY` environment variable.
 </Callout>
 
 ## Crash reports (disabled by default)

@@ -59,7 +59,7 @@ Then you can access this environment variable anywhere, even within your stories
 <IfRenderer renderer={['html', 'react', 'qwik', 'preact','svelte', 'solid', 'vue', 'web-components' ]}>
   #### With Vite
 
-  Out of the box, Storybook provides a [Vite builder](../builders/vite.md), which does not output Node.js globals like `process.env`. To access environment variables in Storybook (e.g., `STORYBOOK_`, `VITE_`), you can use `import.meta.env`. For example:
+  Out of the box, Storybook provides a [Vite builder](../builders/vite.mdx), which does not output Node.js globals like `process.env`. To access environment variables in Storybook (e.g., `STORYBOOK_`, `VITE_`), you can use `import.meta.env`. For example:
 
   {/* prettier-ignore-start */}
 
@@ -72,13 +72,13 @@ Then you can access this environment variable anywhere, even within your stories
   You can also use specific files for specific modes. Add a `.env.development` or `.env.production` to apply different values to your environment variables.
 </Callout>
 
-You can also pass these environment variables when you are [building your Storybook](../sharing/publish-storybook.md) with `build-storybook`.
+You can also pass these environment variables when you are [building your Storybook](../sharing/publish-storybook.mdx) with `build-storybook`.
 
 Then they'll be hardcoded to the static version of your Storybook.
 
 ### Using Storybook configuration
 
-Additionally, you can extend your Storybook configuration file (i.e., [`.storybook/main.js|.ts`](../configure/index.md#configure-story-rendering)) and provide a configuration field that you can use to define specific variables (e.g., API URLs). For example:
+Additionally, you can extend your Storybook configuration file (i.e., [`.storybook/main.js|.ts`](../configure/index.mdx#configure-story-rendering)) and provide a configuration field that you can use to define specific variables (e.g., API URLs). For example:
 
 {/* prettier-ignore-start */}
 

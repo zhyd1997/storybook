@@ -105,7 +105,7 @@ When you're done coding, add documentation and tests as appropriate. That simpli
 
 Adding a story or set of generic stories to our suite helps you test your work.
 
-Assuming you're working on one of the [Essential addons](../essentials/index.md), there's a chance that a complete set of stories already exists. Check the addon's `template/stories` directory that documents how it's supposed to work and add your stories there.
+Assuming you're working on one of the [Essential addons](../essentials/index.mdx), there's a chance that a complete set of stories already exists. Check the addon's `template/stories` directory that documents how it's supposed to work and add your stories there.
 
 If you're modifying something related to a specific renderer (e.g., React, Vue 3, etc.), it will also have a similar `template/stories` directory in which you'll need to add your stories.
 
@@ -195,7 +195,7 @@ npx storybook@next link --local /path/to/local-repro-directory
 ```
 
 <Callout variant="info" icon="💡">
-  The `storybook link` command relies on [Yarn linking](https://yarnpkg.com/cli/link/) under the hood. It requires your local reproduction to be using [Yarn 2 or higher](https://yarnpkg.com/) as well, which is the case if you've already enabled it with the [`storybook sandbox`](./how-to-reproduce.md) command per our contribution guidelines. The process will fail if you're trying to link a non-Yarn 2 project.
+  The `storybook link` command relies on [Yarn linking](https://yarnpkg.com/cli/link/) under the hood. It requires your local reproduction to be using [Yarn 2 or higher](https://yarnpkg.com/) as well, which is the case if you've already enabled it with the [`storybook sandbox`](./how-to-reproduce.mdx) command per our contribution guidelines. The process will fail if you're trying to link a non-Yarn 2 project.
 </Callout>
 
 ## Developing a template
@@ -254,8 +254,8 @@ Once the PR is merged, the template will be generated on a nightly cadence and y
 
 **Learn more about contributing to Storybook**
 
-* [RFC process](./RFC.md) for authoring feature requests
+* [RFC process](./RFC.mdx) for authoring feature requests
 * Code for features and bug fixes
-* [Frameworks](./framework.md) to get started with a new framework
-* [Documentation](./documentation-updates.md) for documentation improvements, typos, and clarifications
-* [Examples](./new-snippets.md) for new snippets and examples
+* [Frameworks](./framework.mdx) to get started with a new framework
+* [Documentation](./documentation-updates.mdx) for documentation improvements, typos, and clarifications
+* [Examples](./new-snippets.mdx) for new snippets and examples

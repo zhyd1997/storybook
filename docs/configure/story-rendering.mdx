@@ -5,7 +5,7 @@ sidebar:
   title: Story rendering
 ---
 
-In Storybook, your stories render in a particular “preview” iframe (also called the Canvas) inside the larger Storybook web application. The JavaScript build configuration of the preview is controlled by a [builder](../builders/index.md) config, but you also may want to run some code for every story or directly control the rendered HTML to help your stories render correctly.
+In Storybook, your stories render in a particular “preview” iframe (also called the Canvas) inside the larger Storybook web application. The JavaScript build configuration of the preview is controlled by a [builder](../builders/index.mdx) config, but you also may want to run some code for every story or directly control the rendered HTML to help your stories render correctly.
 
 ## Running code for every story
 
@@ -43,7 +43,7 @@ Code executed in the preview file (`.storybook/preview.js|ts`) runs for every st
 
 ## Adding to \<head>
 
-If you need to add extra elements to the `head` of the preview iframe, for instance, to load static stylesheets, font files, or similar, you can create a file called [`.storybook/preview-head.html`](./index.md#configure-story-rendering) and add tags like this:
+If you need to add extra elements to the `head` of the preview iframe, for instance, to load static stylesheets, font files, or similar, you can create a file called [`.storybook/preview-head.html`](./index.mdx#configure-story-rendering) and add tags like this:
 
 {/* prettier-ignore-start */}
 
@@ -55,7 +55,7 @@ If you need to add extra elements to the `head` of the preview iframe, for insta
   Storybook will inject these tags into the *preview iframe* where your components render, not the Storybook application UI.
 </Callout>
 
-However, it's also possible to modify the preview head HTML programmatically using a preset defined in the `main.js` file. Read the [presets documentation](../addons/writing-presets.md#ui-configuration) for more information.
+However, it's also possible to modify the preview head HTML programmatically using a preset defined in the `main.js` file. Read the [presets documentation](../addons/writing-presets.mdx#ui-configuration) for more information.
 
 ## Adding to \<body>
 
@@ -81,4 +81,4 @@ If using relative sizing in your project (like `rem` or `em`), you may update th
   Storybook will inject these tags into the *preview iframe* where your components render, not the Storybook application UI.
 </Callout>
 
-Just like how you have the ability to customize the preview `head` HTML tag, you can also follow the same steps to customize the preview `body` with a preset. To obtain more information on how to do this, refer to the [presets documentation](../addons/writing-presets.md#ui-configuration).
+Just like how you have the ability to customize the preview `head` HTML tag, you can also follow the same steps to customize the preview `body` with a preset. To obtain more information on how to do this, refer to the [presets documentation](../addons/writing-presets.mdx#ui-configuration).
