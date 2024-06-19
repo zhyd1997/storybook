@@ -1,12 +1,12 @@
 import { global } from '@storybook/global';
-import { logger } from '@storybook/core/dist/client-logger';
+import { logger } from '@storybook/core/client-logger';
 import {
   FORCE_RE_RENDER,
   STORY_RENDERED,
   UPDATE_STORY_ARGS,
   RESET_STORY_ARGS,
   UPDATE_GLOBALS,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import { addons } from './main';
 import type {
   Args,
@@ -16,7 +16,7 @@ import type {
   Renderer,
   StoryContext,
   StoryId,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 interface Hook {
   name: string;

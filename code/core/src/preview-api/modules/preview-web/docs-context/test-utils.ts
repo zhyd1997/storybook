@@ -1,4 +1,4 @@
-import type { CSFFile, PreparedStory } from '@storybook/core/dist/types';
+import type { CSFFile, PreparedStory } from '@storybook/core/types';
 
 export function csfFileParts(storyId = 'meta--story', metaId = 'meta') {
   // These compose the raw exports of the CSF file

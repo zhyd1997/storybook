@@ -1,5 +1,5 @@
-import { UnknownArgTypesError } from '@storybook/core/dist/preview-errors';
-import type { SBType } from '@storybook/core/dist/types';
+import { UnknownArgTypesError } from '@storybook/core/preview-errors';
+import type { SBType } from '@storybook/core/types';
 import type { FlowType, FlowSigType, FlowLiteralType } from './types';
 
 const isLiteral = (type: FlowType): type is FlowLiteralType => type.name === 'literal';

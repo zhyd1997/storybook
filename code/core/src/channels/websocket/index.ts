@@ -4,7 +4,7 @@ import { global } from '@storybook/global';
 import { isJSON, parse, stringify } from 'telejson';
 import invariant from 'tiny-invariant';
 
-import * as EVENTS from '@storybook/core/dist/core-events';
+import * as EVENTS from '@storybook/core/core-events';
 import type { ChannelTransport, ChannelHandler, Config } from '../types';
 
 const { WebSocket } = global;

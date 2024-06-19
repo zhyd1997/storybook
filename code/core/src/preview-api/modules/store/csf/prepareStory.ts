@@ -12,7 +12,7 @@ import type {
   StoryContextForEnhancers,
   StoryContextForLoaders,
   StrictArgTypes,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import { type CleanupCallback, includeConditionalArg, combineTags } from '@storybook/csf';
 import { global as globalThis } from '@storybook/global';
 
@@ -28,7 +28,7 @@ import type {
   NormalizedStoryAnnotations,
   PreparedMeta,
   PreparedStory,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 // Combine all the metadata about a story (both direct and inherited from the component/global scope)
 // into a "render-able" story function, with all decorators applied, parameters passed as context etc

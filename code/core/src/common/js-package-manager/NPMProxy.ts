@@ -4,7 +4,7 @@ import { dedent } from 'ts-dedent';
 import { findUpSync } from 'find-up';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import { JsPackageManager } from './JsPackageManager';
 import type { PackageJson } from './PackageJson';
 import type { InstallationMetadata, PackageMetadata } from './types';

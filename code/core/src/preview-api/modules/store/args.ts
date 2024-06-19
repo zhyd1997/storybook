@@ -1,5 +1,5 @@
 import { dequal as deepEqual } from 'dequal';
-import { once } from '@storybook/core/dist/client-logger';
+import { once } from '@storybook/core/client-logger';
 import isPlainObject from 'lodash/isPlainObject.js';
 import { dedent } from 'ts-dedent';
 import type {
@@ -9,7 +9,7 @@ import type {
   Renderer,
   SBType,
   StoryContext,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 const INCOMPATIBLE = Symbol('incompatible');
 const map = (arg: unknown, argType: InputType): any => {

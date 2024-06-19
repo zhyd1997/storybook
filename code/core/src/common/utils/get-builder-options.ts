@@ -1,4 +1,4 @@
-import type { Options } from '@storybook/core/dist/types';
+import type { Options } from '@storybook/core/types';
 
 /**
  * Builder options can be specified in `core.builder.options` or `framework.options.builder`.

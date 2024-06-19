@@ -9,7 +9,7 @@ import type {
   API_IndexHash,
   API_StoryMapper,
   StoryIndex,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 import {
   transformSetStoriesStoryDataToPreparedStoryIndex,

@@ -1,7 +1,7 @@
 import { dedent } from 'ts-dedent';
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import { join, parse } from 'node:path';
-import { CriticalPresetLoadError } from '@storybook/core/dist/server-errors';
+import { CriticalPresetLoadError } from '@storybook/core/server-errors';
 import { loadCustomPresets } from './utils/load-custom-presets';
 import { safeResolve, safeResolveFrom } from './utils/safeResolve';
 import { interopRequireDefault } from './utils/interpret-require';
@@ -16,7 +16,7 @@ import type {
   PresetConfig,
   Presets,
   StorybookConfigRaw,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 type InterPresetOptions = Omit<
   CLIOptions &

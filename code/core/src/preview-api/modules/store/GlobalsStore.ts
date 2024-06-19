@@ -1,8 +1,8 @@
-import { logger } from '@storybook/core/dist/client-logger';
+import { logger } from '@storybook/core/client-logger';
 
 import { deepDiff, DEEPLY_EQUAL } from './args';
 import { getValuesFromArgTypes } from './csf/getValuesFromArgTypes';
-import type { Globals, GlobalTypes } from '@storybook/core/dist/types';
+import type { Globals, GlobalTypes } from '@storybook/core/types';
 
 export class GlobalsStore {
   // We use ! here because TS doesn't analyse the .set() function to see if it actually get set

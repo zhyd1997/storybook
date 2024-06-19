@@ -1,6 +1,6 @@
 import os from 'os';
 
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import detectFreePort from 'detect-port';
 
 export function getServerAddresses(

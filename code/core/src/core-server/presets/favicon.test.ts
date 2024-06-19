@@ -2,7 +2,7 @@ import { expect, vi, it } from 'vitest';
 
 import { dirname, join } from 'node:path';
 import * as fs from 'fs-extra';
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import * as m from './common-preset';
 
 const defaultFavicon = join(
@@ -38,7 +38,7 @@ vi.mock('fs-extra', () => {
   };
 });
 
-vi.mock('@storybook/core/dist/node-logger', () => {
+vi.mock('@storybook/core/node-logger', () => {
   return {
     logger: {
       warn: vi.fn(() => {}),

@@ -2,10 +2,10 @@ import { dedent } from 'ts-dedent';
 import { glob } from 'glob';
 import path from 'node:path';
 import slash from 'slash';
-import { once } from '@storybook/core/dist/node-logger';
+import { once } from '@storybook/core/node-logger';
 
 import { boost } from './interpret-files';
-import { MainFileMissingError } from '@storybook/core/dist/server-errors';
+import { MainFileMissingError } from '@storybook/core/server-errors';
 
 export async function validateConfigurationFiles(configDir: string) {
   const extensionsPattern = `{${Array.from(boost).join(',')}}`;

@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 
-import { styled } from '@storybook/core/dist/theming';
-import { ScrollArea, Spaced } from '@storybook/core/dist/components';
-import type { State } from '@storybook/core/dist/manager-api';
+import { styled } from '@storybook/core/theming';
+import { ScrollArea, Spaced } from '@storybook/core/components';
+import type { State } from '@storybook/core/manager-api';
 
 import type {
   Addon_SidebarBottomType,
   Addon_SidebarTopType,
   API_LoadedRefData,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import type { HeadingProps } from './Heading';
 import { Heading } from './Heading';
 

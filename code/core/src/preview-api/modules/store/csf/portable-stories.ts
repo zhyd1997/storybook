@@ -11,7 +11,7 @@ import type {
   Parameters,
   StrictArgTypes,
   PlayFunctionContext,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 import { HooksContext } from '../../../addons';
 import { composeConfigs } from './composeConfigs';
@@ -20,16 +20,13 @@ import { normalizeStory } from './normalizeStory';
 import { normalizeComponentAnnotations } from './normalizeComponentAnnotations';
 import { getValuesFromArgTypes } from './getValuesFromArgTypes';
 import { normalizeProjectAnnotations } from './normalizeProjectAnnotations';
-import type {
-  NamedOrDefaultProjectAnnotations,
-  ProjectAnnotations,
-} from '@storybook/core/dist/types';
+import type { NamedOrDefaultProjectAnnotations, ProjectAnnotations } from '@storybook/core/types';
 import type {
   ComposeStoryFn,
   ComposedStoryFn,
   ComposedStoryPlayFn,
   Store_CSFExports,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 let globalProjectAnnotations: ProjectAnnotations<any> = {};
 

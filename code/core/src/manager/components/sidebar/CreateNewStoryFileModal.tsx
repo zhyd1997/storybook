@@ -12,7 +12,7 @@ import type {
   ResponseData,
   SaveStoryRequestPayload,
   SaveStoryResponsePayload,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import {
   ARGTYPES_INFO_REQUEST,
   ARGTYPES_INFO_RESPONSE,
@@ -22,13 +22,9 @@ import {
   FILE_COMPONENT_SEARCH_RESPONSE,
   SAVE_STORY_REQUEST,
   SAVE_STORY_RESPONSE,
-} from '@storybook/core/dist/core-events';
-import type { RequestResponseError } from '@storybook/core/dist/manager-api';
-import {
-  addons,
-  experimental_requestResponse,
-  useStorybookApi,
-} from '@storybook/core/dist/manager-api';
+} from '@storybook/core/core-events';
+import type { RequestResponseError } from '@storybook/core/manager-api';
+import { addons, experimental_requestResponse, useStorybookApi } from '@storybook/core/manager-api';
 
 import { useDebounce } from '../../hooks/useDebounce';
 import type { NewStoryPayload, SearchResult } from './FileSearchList';

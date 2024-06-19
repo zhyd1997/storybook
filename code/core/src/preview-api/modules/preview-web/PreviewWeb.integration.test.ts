@@ -3,7 +3,7 @@ import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 import React from 'react';
 import { global } from '@storybook/global';
-import type { RenderContext } from '@storybook/core/dist/types';
+import type { RenderContext } from '@storybook/core/types';
 import { addons } from '../addons';
 
 import { PreviewWeb } from './PreviewWeb';
@@ -23,14 +23,14 @@ import {
 //   - ie. from`renderToCanvas()` (stories) or`ReactDOM.render()` (docs) in.
 // This file lets them rip.
 
-vi.mock('@storybook/core/dist/channels', async (importOriginal) => {
+vi.mock('@storybook/core/channels', async (importOriginal) => {
   return {
-    ...(await importOriginal<typeof import('@storybook/core/dist/channels')>()),
+    ...(await importOriginal<typeof import('@storybook/core/channels')>()),
     createBrowserChannel: () => mockChannel,
   };
 });
-vi.mock('@storybook/core/dist/client-logger');
-vi.mock('@storybook/core/dist/components');
+vi.mock('@storybook/core/client-logger');
+vi.mock('@storybook/core/components');
 
 vi.mock('./WebView');
 

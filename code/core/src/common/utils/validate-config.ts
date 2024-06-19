@@ -3,7 +3,7 @@ import {
   CouldNotEvaluateFrameworkError,
   MissingFrameworkFieldError,
   InvalidFrameworkNameError,
-} from '@storybook/core/dist/server-errors';
+} from '@storybook/core/server-errors';
 import { frameworkPackages } from './get-storybook-info';
 
 const renderers = ['html', 'preact', 'react', 'server', 'svelte', 'vue', 'vue3', 'web-components'];

@@ -1,9 +1,9 @@
-import type { Builder, Options } from '@storybook/core/dist/types';
-import { MissingBuilderError } from '@storybook/core/dist/server-errors';
+import type { Builder, Options } from '@storybook/core/types';
+import { MissingBuilderError } from '@storybook/core/server-errors';
 import { pathToFileURL } from 'node:url';
 
 export async function getManagerBuilder(): Promise<Builder<unknown>> {
-  return import('@storybook/core/dist/builder-manager');
+  return import('@storybook/core/builder-manager');
 }
 
 export async function getPreviewBuilder(

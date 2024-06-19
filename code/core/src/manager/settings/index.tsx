@@ -1,12 +1,12 @@
-import { useStorybookApi, useStorybookState, types } from '@storybook/core/dist/manager-api';
-import { IconButton, TabBar, TabButton, ScrollArea } from '@storybook/core/dist/components';
-import { Location, Route } from '@storybook/core/dist/router';
-import { styled } from '@storybook/core/dist/theming';
+import { useStorybookApi, useStorybookState, types } from '@storybook/core/manager-api';
+import { IconButton, TabBar, TabButton, ScrollArea } from '@storybook/core/components';
+import { Location, Route } from '@storybook/core/router';
+import { styled } from '@storybook/core/theming';
 import { global } from '@storybook/global';
 import type { FC, SyntheticEvent } from 'react';
 import React, { Fragment } from 'react';
 
-import type { Addon_PageType } from '@storybook/core/dist/types';
+import type { Addon_PageType } from '@storybook/core/types';
 import { CloseIcon } from '@storybook/icons';
 import { AboutPage } from './AboutPage';
 import { ShortcutsPage } from './ShortcutsPage';

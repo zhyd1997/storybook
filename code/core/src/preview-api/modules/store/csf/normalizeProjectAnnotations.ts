@@ -3,8 +3,8 @@ import type {
   ArgTypes,
   ProjectAnnotations,
   NormalizedProjectAnnotations,
-} from '@storybook/core/dist/types';
-import { deprecate } from '@storybook/core/dist/client-logger';
+} from '@storybook/core/types';
+import { deprecate } from '@storybook/core/client-logger';
 import { dedent } from 'ts-dedent';
 
 import { inferArgTypes } from '../inferArgTypes';

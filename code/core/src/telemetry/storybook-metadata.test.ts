@@ -1,6 +1,6 @@
 import type { MockInstance } from 'vitest';
 import { describe, beforeEach, afterEach, expect, vi, it } from 'vitest';
-import type { PackageJson, StorybookConfig } from '@storybook/core/dist/types';
+import type { PackageJson, StorybookConfig } from '@storybook/core/types';
 
 import path from 'node:path';
 import { computeStorybookMetadata, metaFrameworks, sanitizeAddonName } from './storybook-metadata';
@@ -49,9 +49,9 @@ vi.mock('detect-package-manager', () => ({
   getNpmVersion: () => '3.1.1',
 }));
 
-vi.mock('@storybook/core/dist/common', async (importOriginal) => {
+vi.mock('@storybook/core/common', async (importOriginal) => {
   return {
-    ...(await importOriginal<typeof import('@storybook/core/dist/common')>()),
+    ...(await importOriginal<typeof import('@storybook/core/common')>()),
     getProjectRoot: () => process.cwd(),
   };
 });

@@ -1,6 +1,6 @@
-import type { StoriesHash, State } from '@storybook/core/dist/manager-api';
+import type { StoriesHash, State } from '@storybook/core/manager-api';
 import type { ControllerStateAndHelpers } from 'downshift';
-import type { API_StatusState, API_StatusValue } from '@storybook/core/dist/types';
+import type { API_StatusState, API_StatusValue } from '@storybook/core/types';
 
 export type Refs = State['refs'];
 export type RefType = Refs[keyof Refs] & { status?: API_StatusState };

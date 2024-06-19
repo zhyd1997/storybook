@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { Renderer, StoryContext } from '@storybook/core/dist/types';
+import type { Renderer, StoryContext } from '@storybook/core/types';
 
 import { defaultDecorateStory } from './decorators';
 

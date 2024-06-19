@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 
-import { styled } from '@storybook/core/dist/theming';
+import { styled } from '@storybook/core/theming';
 
-import { IconButton, Separator, TabButton, TabBar } from '@storybook/core/dist/components';
+import { IconButton, Separator, TabButton, TabBar } from '@storybook/core/components';
 import {
   shortcutToHumanString,
   Consumer,
@@ -13,9 +13,9 @@ import {
   type LeafEntry,
   addons,
   types,
-} from '@storybook/core/dist/manager-api';
+} from '@storybook/core/manager-api';
 
-import { Addon_TypesEnum, type Addon_BaseType } from '@storybook/core/dist/types';
+import { Addon_TypesEnum, type Addon_BaseType } from '@storybook/core/types';
 import { CloseIcon, ExpandIcon } from '@storybook/icons';
 import { zoomTool } from './tools/zoom';
 

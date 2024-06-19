@@ -1,5 +1,5 @@
 import React from 'react';
-import { color, styled, typography } from '@storybook/core/dist/theming';
+import { color, styled, typography } from '@storybook/core/theming';
 
 const Code = styled.pre`
   line-height: 18px;

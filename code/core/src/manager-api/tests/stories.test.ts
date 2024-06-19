@@ -13,11 +13,11 @@ import {
   CURRENT_STORY_WAS_SET,
   STORY_MISSING,
   DOCS_PREPARED,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import { EventEmitter } from 'events';
 import { global } from '@storybook/global';
 
-import type { API_StoryEntry } from '@storybook/core/dist/types';
+import type { API_StoryEntry } from '@storybook/core/types';
 import { getEventMetadata as getEventMetadataOriginal } from '../lib/events';
 
 import { init as initStories } from '../modules/stories';

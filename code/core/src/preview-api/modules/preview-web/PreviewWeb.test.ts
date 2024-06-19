@@ -27,9 +27,9 @@ import {
   UPDATE_GLOBALS,
   UPDATE_STORY_ARGS,
   DOCS_PREPARED,
-} from '@storybook/core/dist/core-events';
-import { logger } from '@storybook/core/dist/client-logger';
-import type { Renderer, ModuleImportFn, ProjectAnnotations } from '@storybook/core/dist/types';
+} from '@storybook/core/core-events';
+import { logger } from '@storybook/core/client-logger';
+import type { Renderer, ModuleImportFn, ProjectAnnotations } from '@storybook/core/types';
 import { addons } from '../addons';
 
 import { PreviewWeb } from './PreviewWeb';
@@ -72,7 +72,7 @@ vi.mock('@storybook/global', async (importOriginal) => ({
   },
 }));
 
-vi.mock('@storybook/core/dist/client-logger');
+vi.mock('@storybook/core/client-logger');
 vi.mock('react-dom');
 vi.mock('./WebView');
 

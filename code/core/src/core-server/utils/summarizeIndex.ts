@@ -1,4 +1,4 @@
-import type { IndexEntry, StoryIndex } from '@storybook/core/dist/types';
+import type { IndexEntry, StoryIndex } from '@storybook/core/types';
 
 import { isMdxEntry, AUTODOCS_TAG, PLAY_FN_TAG } from './StoryIndexGenerator';
 

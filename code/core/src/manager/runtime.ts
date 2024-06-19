@@ -1,11 +1,11 @@
 import { global } from '@storybook/global';
 
-import type { Channel } from '@storybook/core/dist/channels';
-import type { AddonStore } from '@storybook/core/dist/manager-api';
-import { addons } from '@storybook/core/dist/manager-api';
-import type { Addon_Types, Addon_Config } from '@storybook/core/dist/types';
-import { createBrowserChannel } from '@storybook/core/dist/channels';
-import { CHANNEL_CREATED } from '@storybook/core/dist/core-events';
+import type { Channel } from '@storybook/core/channels';
+import type { AddonStore } from '@storybook/core/manager-api';
+import { addons } from '@storybook/core/manager-api';
+import type { Addon_Types, Addon_Config } from '@storybook/core/types';
+import { createBrowserChannel } from '@storybook/core/channels';
+import { CHANNEL_CREATED } from '@storybook/core/core-events';
 import Provider from './provider';
 import { renderStorybookUI } from './index';
 

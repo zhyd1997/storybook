@@ -1,10 +1,10 @@
-import type { Channel } from '@storybook/core/dist/channels';
+import type { Channel } from '@storybook/core/channels';
 import {
   STORY_RENDER_PHASE_CHANGED,
   STORY_RENDERED,
   PLAY_FUNCTION_THREW_EXCEPTION,
   UNHANDLED_ERRORS_WHILE_PLAYING,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import type { StoryStore } from '../../store';
 import type { Render, RenderType } from './Render';
 import { PREPARE_ABORTED } from './Render';
@@ -14,14 +14,14 @@ import type {
   StoryContextForLoaders,
   StoryId,
   ViewMode,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import type {
   PreparedStory,
   RenderContext,
   RenderToCanvas,
   TeardownRenderToCanvas,
-} from '@storybook/core/dist/types';
-import type { RenderContextCallbacks, StoryRenderOptions } from '@storybook/core/dist/types';
+} from '@storybook/core/types';
+import type { RenderContextCallbacks, StoryRenderOptions } from '@storybook/core/types';
 
 const { AbortController } = globalThis;
 

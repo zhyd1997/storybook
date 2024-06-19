@@ -1,18 +1,18 @@
 import fs from 'fs-extra';
-import { logger } from '@storybook/core/dist/node-logger';
-import { telemetry } from '@storybook/core/dist/telemetry';
-import { findConfigFile } from '@storybook/core/dist/common';
-import type { CoreConfig, Options } from '@storybook/core/dist/types';
-import { printConfig, readConfig } from '@storybook/core/dist/csf-tools';
-import type { Channel } from '@storybook/core/dist/channels';
-import type { WhatsNewCache, WhatsNewData } from '@storybook/core/dist/core-events';
+import { logger } from '@storybook/core/node-logger';
+import { telemetry } from '@storybook/core/telemetry';
+import { findConfigFile } from '@storybook/core/common';
+import type { CoreConfig, Options } from '@storybook/core/types';
+import { printConfig, readConfig } from '@storybook/core/csf-tools';
+import type { Channel } from '@storybook/core/channels';
+import type { WhatsNewCache, WhatsNewData } from '@storybook/core/core-events';
 import {
   REQUEST_WHATS_NEW_DATA,
   RESULT_WHATS_NEW_DATA,
   TELEMETRY_ERROR,
   SET_WHATS_NEW_CACHE,
   TOGGLE_WHATS_NEW_NOTIFICATIONS,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import invariant from 'tiny-invariant';
 import { sendTelemetryError } from '../withTelemetry';
 

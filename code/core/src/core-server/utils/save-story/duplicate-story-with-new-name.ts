@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import type { CsfFile } from '@storybook/core/dist/csf-tools';
+import type { CsfFile } from '@storybook/core/csf-tools';
 import * as t from '@babel/types';
 import bt from '@babel/traverse';
 import { SaveStoryError } from './utils';

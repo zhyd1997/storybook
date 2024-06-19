@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { ArgTypes, StrictInputType } from '@storybook/core/dist/types';
+import type { ArgTypes, StrictInputType } from '@storybook/core/types';
 import { enhanceArgTypes } from './enhanceArgTypes';
 
 expect.addSnapshotSerializer({

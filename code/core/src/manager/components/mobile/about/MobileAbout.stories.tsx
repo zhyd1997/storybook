@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ManagerContext } from '@storybook/core/dist/manager-api';
+import { ManagerContext } from '@storybook/core/manager-api';
 import React, { useEffect } from 'react';
 import { within } from '@storybook/test';
 import { MobileAbout } from './MobileAbout';

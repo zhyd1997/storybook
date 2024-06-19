@@ -1,12 +1,12 @@
-import { styled } from '@storybook/core/dist/theming';
-import { Button, IconButton } from '@storybook/core/dist/components';
+import { styled } from '@storybook/core/theming';
+import { Button, IconButton } from '@storybook/core/components';
 import { global } from '@storybook/global';
 import type { FC, MouseEventHandler, PropsWithChildren, ReactNode } from 'react';
 import React, { useCallback, useEffect } from 'react';
 import type { ControllerStateAndHelpers } from 'downshift';
 
-import { useStorybookApi } from '@storybook/core/dist/manager-api';
-import { PRELOAD_ENTRIES } from '@storybook/core/dist/core-events';
+import { useStorybookApi } from '@storybook/core/manager-api';
+import { PRELOAD_ENTRIES } from '@storybook/core/core-events';
 import { transparentize } from 'polished';
 import { TrashIcon } from '@storybook/icons';
 import { TypeIcon } from './TreeNode';

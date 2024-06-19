@@ -1,4 +1,4 @@
-import { Channel } from '@storybook/core/dist/channels';
+import { Channel } from '@storybook/core/channels';
 
 export function mockChannel() {
   const transport = {

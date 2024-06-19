@@ -1,4 +1,4 @@
-import type { API_Notification } from '@storybook/core/dist/types';
+import type { API_Notification } from '@storybook/core/types';
 import partition from 'lodash/partition.js';
 import type { ModuleFn } from '../lib/types';
 

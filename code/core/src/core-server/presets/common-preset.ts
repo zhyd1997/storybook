@@ -1,13 +1,13 @@
 import { pathExists, readFile } from 'fs-extra';
-import { logger } from '@storybook/core/dist/node-logger';
-import { telemetry } from '@storybook/core/dist/telemetry';
+import { logger } from '@storybook/core/node-logger';
+import { telemetry } from '@storybook/core/telemetry';
 import {
   getDirectoryFromWorkingDir,
   getPreviewBodyTemplate,
   getPreviewHeadTemplate,
   loadEnvs,
   removeAddon as removeAddonBase,
-} from '@storybook/core/dist/common';
+} from '@storybook/core/common';
 import type {
   CLIOptions,
   CoreConfig,
@@ -15,11 +15,11 @@ import type {
   Options,
   PresetPropertyFn,
   PresetProperty,
-} from '@storybook/core/dist/types';
-import { readCsf } from '@storybook/core/dist/csf-tools';
+} from '@storybook/core/types';
+import { readCsf } from '@storybook/core/csf-tools';
 import { join, dirname, isAbsolute } from 'path';
 import { dedent } from 'ts-dedent';
-import type { Channel } from '@storybook/core/dist/channels';
+import type { Channel } from '@storybook/core/channels';
 import { parseStaticDir } from '../utils/server-statics';
 import { defaultStaticDirs } from '../utils/constants';
 import { initializeWhatsNew, type OptionsWithRequiredCache } from '../utils/whats-new';
@@ -281,5 +281,5 @@ export const tags = async (existing: any) => {
 };
 
 export const managerEntries = async (existing: any, options: Options) => {
-  return ['@storybook/core/dist/core-server/presets/common-manager', ...(existing || [])];
+  return ['@storybook/core/core-server/presets/common-manager', ...(existing || [])];
 };

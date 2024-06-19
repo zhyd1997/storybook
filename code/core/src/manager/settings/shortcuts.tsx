@@ -1,13 +1,13 @@
 import type { ComponentProps, FC } from 'react';
 import React, { Component } from 'react';
-import { styled, keyframes } from '@storybook/core/dist/theming';
+import { styled, keyframes } from '@storybook/core/theming';
 
 import {
   eventToShortcut,
   shortcutToHumanString,
   shortcutMatchesShortcut,
-} from '@storybook/core/dist/manager-api';
-import { Button, Form } from '@storybook/core/dist/components';
+} from '@storybook/core/manager-api';
+import { Button, Form } from '@storybook/core/components';
 import SettingsFooter from './SettingsFooter';
 import { CheckIcon } from '@storybook/icons';
 

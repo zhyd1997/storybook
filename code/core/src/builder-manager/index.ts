@@ -2,14 +2,14 @@ import { dirname, join, parse } from 'path';
 import fs from 'fs-extra';
 import express from 'express';
 
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 
 import { globalExternals } from '@fal-works/esbuild-plugin-global-externals';
 import { pnpPlugin } from '@yarnpkg/esbuild-plugin-pnp';
 import aliasPlugin from 'esbuild-plugin-alias';
 
-import { stringifyProcessEnvs } from '@storybook/core/dist/common';
-import { globalsModuleInfoMap } from '@storybook/core/dist/manager/globals-module-info';
+import { stringifyProcessEnvs } from '@storybook/core/common';
+import { globalsModuleInfoMap } from '@storybook/core/manager/globals-module-info';
 import { getTemplatePath, renderHTML } from './utils/template';
 import { wrapManagerEntries } from './utils/managerEntries';
 import type {

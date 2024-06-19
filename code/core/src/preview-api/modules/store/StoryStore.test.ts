@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import type { Renderer, ProjectAnnotations, StoryIndex } from '@storybook/core/dist/types';
+import type { Renderer, ProjectAnnotations, StoryIndex } from '@storybook/core/types';
 
 import { prepareStory } from './csf/prepareStory';
 import { processCSFFile } from './csf/processCSFFile';
@@ -26,7 +26,7 @@ vi.mock('@storybook/global', async (importOriginal) => ({
   },
 }));
 
-vi.mock('@storybook/core/dist/client-logger');
+vi.mock('@storybook/core/client-logger');
 
 const componentOneExports = {
   default: { title: 'Component One' },

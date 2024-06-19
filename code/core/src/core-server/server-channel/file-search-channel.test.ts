@@ -1,13 +1,10 @@
-import type { ChannelTransport } from '@storybook/core/dist/channels';
-import { Channel } from '@storybook/core/dist/channels';
-import type {
-  RequestData,
-  FileComponentSearchRequestPayload,
-} from '@storybook/core/dist/core-events';
+import type { ChannelTransport } from '@storybook/core/channels';
+import { Channel } from '@storybook/core/channels';
+import type { RequestData, FileComponentSearchRequestPayload } from '@storybook/core/core-events';
 import {
   FILE_COMPONENT_SEARCH_RESPONSE,
   FILE_COMPONENT_SEARCH_REQUEST,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import { beforeEach, describe, expect, vi, it } from 'vitest';
 
 import { initFileSearchChannel } from './file-search-channel';
@@ -24,8 +21,8 @@ vi.mock('../utils/search-files', () => {
   };
 });
 
-vi.mock('@storybook/core/dist/common', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@storybook/core/dist/common')>();
+vi.mock('@storybook/core/common', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@storybook/core/common')>();
   return {
     ...actual,
     getFrameworkName: vi.fn().mockResolvedValue('@storybook/react'),

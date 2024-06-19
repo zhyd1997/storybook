@@ -1,4 +1,4 @@
-import type { Addon_Types } from '@storybook/core/dist/types';
+import type { Addon_Types } from '@storybook/core/types';
 
 export default class Provider {
   getElements(_type: Addon_Types) {

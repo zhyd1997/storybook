@@ -2,8 +2,8 @@ import type { ComponentProps } from 'react';
 import React, { memo } from 'react';
 
 import * as StorybookIcons from '@storybook/icons';
-import { styled } from '@storybook/core/dist/theming';
-import { deprecate, logger } from '@storybook/core/dist/client-logger';
+import { styled } from '@storybook/core/theming';
+import { deprecate, logger } from '@storybook/core/client-logger';
 
 export type IconType = keyof typeof icons;
 type NewIconTypes = (typeof icons)[IconType];

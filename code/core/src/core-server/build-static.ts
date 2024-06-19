@@ -2,16 +2,16 @@ import chalk from 'chalk';
 import { copy, emptyDir, ensureDir } from 'fs-extra';
 import { dirname, join, relative, resolve } from 'path';
 import { global } from '@storybook/global';
-import { logger } from '@storybook/core/dist/node-logger';
-import { getPrecedingUpgrade, telemetry } from '@storybook/core/dist/telemetry';
-import type { BuilderOptions, CLIOptions, LoadOptions, Options } from '@storybook/core/dist/types';
+import { logger } from '@storybook/core/node-logger';
+import { getPrecedingUpgrade, telemetry } from '@storybook/core/telemetry';
+import type { BuilderOptions, CLIOptions, LoadOptions, Options } from '@storybook/core/types';
 import {
   loadAllPresets,
   loadMainConfig,
   logConfig,
   normalizeStories,
   resolveAddonName,
-} from '@storybook/core/dist/common';
+} from '@storybook/core/common';
 
 import { outputStats } from './utils/output-stats';
 import { copyAllStaticFilesRelativeToMain } from './utils/copy-all-static-files';
@@ -57,11 +57,11 @@ export async function buildStaticStandalone(options: BuildStaticStandaloneOption
   logger.info('=> Loading presets');
   let presets = await loadAllPresets({
     corePresets: [
-      require.resolve('@storybook/core/dist/core-server/presets/common-preset'),
+      require.resolve('@storybook/core/core-server/presets/common-preset'),
       ...corePresets,
     ],
     overridePresets: [
-      require.resolve('@storybook/core/dist/core-server/presets/common-override-preset'),
+      require.resolve('@storybook/core/core-server/presets/common-override-preset'),
     ],
     isCritical: true,
     ...options,
@@ -76,7 +76,7 @@ export async function buildStaticStandalone(options: BuildStaticStandaloneOption
     : undefined;
   presets = await loadAllPresets({
     corePresets: [
-      require.resolve('@storybook/core/dist/core-server/presets/common-preset'),
+      require.resolve('@storybook/core/core-server/presets/common-preset'),
       ...(managerBuilder.corePresets || []),
       ...(previewBuilder.corePresets || []),
       ...(resolvedRenderer ? [resolvedRenderer] : []),
@@ -84,7 +84,7 @@ export async function buildStaticStandalone(options: BuildStaticStandaloneOption
     ],
     overridePresets: [
       ...(previewBuilder.overridePresets || []),
-      require.resolve('@storybook/core/dist/core-server/presets/common-override-preset'),
+      require.resolve('@storybook/core/core-server/presets/common-override-preset'),
     ],
     ...options,
     build,

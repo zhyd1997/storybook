@@ -1,7 +1,7 @@
 import WebSocket, { WebSocketServer } from 'ws';
 import { isJSON, parse, stringify } from 'telejson';
-import type { ChannelHandler } from '@storybook/core/dist/channels';
-import { Channel } from '@storybook/core/dist/channels';
+import type { ChannelHandler } from '@storybook/core/channels';
+import { Channel } from '@storybook/core/channels';
 
 type Server = NonNullable<NonNullable<ConstructorParameters<typeof WebSocketServer>[0]>['server']>;
 

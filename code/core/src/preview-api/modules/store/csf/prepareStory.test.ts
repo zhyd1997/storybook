@@ -5,7 +5,7 @@ import type {
   ArgsEnhancer,
   PlayFunctionContext,
   SBScalarType,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import { addons, HooksContext } from '../../addons';
 
 import { UNTARGETED } from '../args';

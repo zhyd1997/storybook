@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React from 'react';
-import { styled } from '@storybook/core/dist/theming';
+import { styled } from '@storybook/core/theming';
 
-import { Button, Link, StorybookLogo } from '@storybook/core/dist/components';
+import { Button, Link, StorybookLogo } from '@storybook/core/components';
 import { DocumentIcon, GithubIcon } from '@storybook/icons';
 import { UpgradeBlock } from '../components/upgrade/UpgradeBlock';
 

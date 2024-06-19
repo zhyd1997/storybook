@@ -1,5 +1,5 @@
-import { useStorybookApi, shortcutToHumanString } from '@storybook/core/dist/manager-api';
-import { styled } from '@storybook/core/dist/theming';
+import { useStorybookApi, shortcutToHumanString } from '@storybook/core/manager-api';
+import { styled } from '@storybook/core/theming';
 import type { DownshiftState, StateChangeOptions } from 'downshift';
 import Downshift from 'downshift';
 import type { FuseOptions } from 'fuse.js';
@@ -7,7 +7,7 @@ import Fuse from 'fuse.js';
 import { global } from '@storybook/global';
 import React, { useRef, useState, useCallback } from 'react';
 import { CloseIcon, PlusIcon, SearchIcon } from '@storybook/icons';
-import { IconButton, TooltipNote, WithTooltip } from '@storybook/core/dist/components';
+import { IconButton, TooltipNote, WithTooltip } from '@storybook/core/components';
 import { DEFAULT_REF_ID } from './Sidebar';
 import type {
   CombinedDataset,

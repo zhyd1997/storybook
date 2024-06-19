@@ -1,9 +1,9 @@
 import prompts from 'prompts';
-import type { CLIOptions } from '@storybook/core/dist/types';
-import { loadAllPresets, cache } from '@storybook/core/dist/common';
-import { telemetry, getPrecedingUpgrade, oneWayHash } from '@storybook/core/dist/telemetry';
-import type { EventType } from '@storybook/core/dist/telemetry';
-import { logger } from '@storybook/core/dist/node-logger';
+import type { CLIOptions } from '@storybook/core/types';
+import { loadAllPresets, cache } from '@storybook/core/common';
+import { telemetry, getPrecedingUpgrade, oneWayHash } from '@storybook/core/telemetry';
+import type { EventType } from '@storybook/core/telemetry';
+import { logger } from '@storybook/core/node-logger';
 
 type TelemetryOptions = {
   cliOptions: CLIOptions;

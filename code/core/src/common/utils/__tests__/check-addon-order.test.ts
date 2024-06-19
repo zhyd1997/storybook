@@ -1,10 +1,10 @@
 import { afterEach, it, expect, vi, describe } from 'vitest';
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import type {
   CoreCommon_AddonEntry,
   CoreCommon_AddonInfo,
   CoreCommon_OptionsEntry,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import { checkAddonOrder } from '../check-addon-order';
 
 const configFile = './main.js';

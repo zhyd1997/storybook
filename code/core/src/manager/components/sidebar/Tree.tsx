@@ -1,4 +1,4 @@
-import { useStorybookApi } from '@storybook/core/dist/manager-api';
+import { useStorybookApi } from '@storybook/core/manager-api';
 import type {
   StoriesHash,
   GroupEntry,
@@ -6,14 +6,14 @@ import type {
   StoryEntry,
   State,
   API,
-} from '@storybook/core/dist/manager-api';
-import { styled } from '@storybook/core/dist/theming';
-import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/core/dist/components';
+} from '@storybook/core/manager-api';
+import { styled } from '@storybook/core/theming';
+import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/core/components';
 import { transparentize } from 'polished';
 import type { MutableRefObject } from 'react';
 import React, { useCallback, useMemo, useRef } from 'react';
 
-import { PRELOAD_ENTRIES } from '@storybook/core/dist/core-events';
+import { PRELOAD_ENTRIES } from '@storybook/core/core-events';
 import { ExpandAltIcon, CollapseIcon as CollapseIconSvg } from '@storybook/icons';
 import { ComponentNode, DocumentNode, GroupNode, RootNode, StoryNode } from './TreeNode';
 

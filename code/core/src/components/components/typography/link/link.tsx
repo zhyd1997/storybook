@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes, MouseEvent } from 'react';
 import React from 'react';
-import { styled } from '@storybook/core/dist/theming';
+import { styled } from '@storybook/core/theming';
 import { darken } from 'polished';
 import { ChevronRightIcon } from '@storybook/icons';
 

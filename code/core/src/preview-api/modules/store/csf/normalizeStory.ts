@@ -5,17 +5,17 @@ import type {
   StoryAnnotations,
   StoryFn,
   StoryId,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import { storyNameFromExport, toId } from '@storybook/csf';
 import { dedent } from 'ts-dedent';
-import { logger } from '@storybook/core/dist/client-logger';
+import { logger } from '@storybook/core/client-logger';
 import deprecate from 'util-deprecate';
 import { normalizeInputTypes } from './normalizeInputTypes';
 import { normalizeArrays } from './normalizeArrays';
 import type {
   NormalizedComponentAnnotations,
   NormalizedStoryAnnotations,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 const deprecatedStoryAnnotation = dedent`
 CSF .story annotations deprecated; annotate story functions directly:

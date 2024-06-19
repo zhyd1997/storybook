@@ -2,11 +2,11 @@ import { global } from '@storybook/global';
 import type { FC, MouseEventHandler } from 'react';
 import React, { useMemo, useCallback, forwardRef } from 'react';
 
-import type { TooltipLinkListLink } from '@storybook/core/dist/components';
-import { WithTooltip, Spaced, TooltipLinkList } from '@storybook/core/dist/components';
-import { styled, useTheme } from '@storybook/core/dist/theming';
+import type { TooltipLinkListLink } from '@storybook/core/components';
+import { WithTooltip, Spaced, TooltipLinkList } from '@storybook/core/components';
+import { styled, useTheme } from '@storybook/core/theming';
 import { transparentize } from 'polished';
-import { useStorybookApi } from '@storybook/core/dist/manager-api';
+import { useStorybookApi } from '@storybook/core/manager-api';
 
 import {
   AlertIcon,

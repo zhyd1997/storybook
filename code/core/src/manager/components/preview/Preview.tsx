@@ -3,11 +3,11 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { global } from '@storybook/global';
 
-import { Consumer, type Combo, merge, addons, types } from '@storybook/core/dist/manager-api';
-import type { Addon_BaseType, Addon_WrapperType } from '@storybook/core/dist/types';
-import { PREVIEW_BUILDER_PROGRESS, SET_CURRENT_STORY } from '@storybook/core/dist/core-events';
+import { Consumer, type Combo, merge, addons, types } from '@storybook/core/manager-api';
+import type { Addon_BaseType, Addon_WrapperType } from '@storybook/core/types';
+import { PREVIEW_BUILDER_PROGRESS, SET_CURRENT_STORY } from '@storybook/core/core-events';
 
-import { Loader } from '@storybook/core/dist/components';
+import { Loader } from '@storybook/core/components';
 
 import * as S from './utils/components';
 import { ZoomProvider, ZoomConsumer } from './tools/zoom';

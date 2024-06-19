@@ -5,7 +5,7 @@ Any node logging that is done through storybook should be done through this pack
 Examples:
 
 ```js
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 
 logger.info('Info message');
 logger.warn('Warning message');

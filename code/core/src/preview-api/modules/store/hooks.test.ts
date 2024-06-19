@@ -5,8 +5,8 @@ import {
   UPDATE_STORY_ARGS,
   RESET_STORY_ARGS,
   UPDATE_GLOBALS,
-} from '@storybook/core/dist/core-events';
-import type { DecoratorFunction, StoryContext } from '@storybook/core/dist/types';
+} from '@storybook/core/core-events';
+import type { DecoratorFunction, StoryContext } from '@storybook/core/types';
 import {
   addons,
   applyHooks,
@@ -26,7 +26,7 @@ import {
 
 import { defaultDecorateStory } from './decorators';
 
-vi.mock('@storybook/core/dist/client-logger', () => ({
+vi.mock('@storybook/core/client-logger', () => ({
   logger: { warn: vi.fn(), log: vi.fn() },
 }));
 

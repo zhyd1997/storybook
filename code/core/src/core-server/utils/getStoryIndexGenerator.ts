@@ -1,5 +1,5 @@
-import type { DocsOptions, Options } from '@storybook/core/dist/types';
-import { normalizeStories } from '@storybook/core/dist/common';
+import type { DocsOptions, Options } from '@storybook/core/types';
+import { normalizeStories } from '@storybook/core/common';
 import { useStoriesJson } from './stories-json';
 import type { ServerChannel } from './get-server-channel';
 import { StoryIndexGenerator } from './StoryIndexGenerator';

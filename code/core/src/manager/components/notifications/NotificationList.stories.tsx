@@ -1,5 +1,5 @@
 import React from 'react';
-import { LocationProvider } from '@storybook/core/dist/router';
+import { LocationProvider } from '@storybook/core/router';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { NotificationList } from './NotificationList';

@@ -1,4 +1,4 @@
-import { once } from '@storybook/core/dist/client-logger';
+import { once } from '@storybook/core/client-logger';
 import { dequal as deepEqual } from 'dequal';
 import isPlainObject from 'lodash/isPlainObject.js';
 import memoize from 'memoizerific';

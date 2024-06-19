@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type {
-  StoryIndexV2,
-  StoryIndexV3,
-  API_PreparedStoryIndex,
-} from '@storybook/core/dist/types';
+import type { StoryIndexV2, StoryIndexV3, API_PreparedStoryIndex } from '@storybook/core/types';
 import {
   transformStoryIndexV2toV3,
   transformStoryIndexV3toV4,

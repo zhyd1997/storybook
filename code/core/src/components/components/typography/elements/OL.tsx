@@ -1,5 +1,5 @@
-import { styled } from '@storybook/core/dist/theming';
-import type { Interpolation } from '@storybook/core/dist/theming';
+import { styled } from '@storybook/core/theming';
+import type { Interpolation } from '@storybook/core/theming';
 import { withReset, withMargin } from '../lib/common';
 
 const listCommon: Interpolation = {

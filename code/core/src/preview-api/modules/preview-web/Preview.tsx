@@ -1,11 +1,11 @@
 import { global } from '@storybook/global';
-import { deprecate, logger } from '@storybook/core/dist/client-logger';
+import { deprecate, logger } from '@storybook/core/client-logger';
 import type {
   ArgTypesRequestPayload,
   ArgTypesResponsePayload,
   RequestData,
   ResponseData,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import {
   ARGTYPES_INFO_REQUEST,
   ARGTYPES_INFO_RESPONSE,
@@ -19,30 +19,30 @@ import {
   STORY_INDEX_INVALIDATED,
   UPDATE_GLOBALS,
   UPDATE_STORY_ARGS,
-} from '@storybook/core/dist/core-events';
-import type { Channel } from '@storybook/core/dist/channels';
+} from '@storybook/core/core-events';
+import type { Channel } from '@storybook/core/channels';
 import {
   CalledPreviewMethodBeforeInitializationError,
   MissingRenderToCanvasError,
   StoryIndexFetchError,
   StoryStoreAccessedBeforeInitializationError,
-} from '@storybook/core/dist/preview-errors';
+} from '@storybook/core/preview-errors';
 import { addons } from '../addons';
 import { StoryStore } from '../../store';
 
 import { StoryRender } from './render/StoryRender';
 import type { CsfDocsRender } from './render/CsfDocsRender';
 import type { MdxDocsRender } from './render/MdxDocsRender';
-import type { Args, Globals, Renderer, StoryId } from '@storybook/core/dist/types';
+import type { Args, Globals, Renderer, StoryId } from '@storybook/core/types';
 import type {
   ModuleImportFn,
   PreparedStory,
   ProjectAnnotations,
   RenderToCanvas,
-} from '@storybook/core/dist/types';
-import type { RenderContextCallbacks, StoryRenderOptions } from '@storybook/core/dist/types';
-import type { StoryIndex } from '@storybook/core/dist/types';
-import type { SetGlobalsPayload } from '@storybook/core/dist/types';
+} from '@storybook/core/types';
+import type { RenderContextCallbacks, StoryRenderOptions } from '@storybook/core/types';
+import type { StoryIndex } from '@storybook/core/types';
+import type { SetGlobalsPayload } from '@storybook/core/types';
 
 const { fetch } = global;
 

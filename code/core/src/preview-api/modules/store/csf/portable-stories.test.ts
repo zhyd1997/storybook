@@ -4,7 +4,7 @@ import type {
   ComponentAnnotations as Meta,
   StoryAnnotationsOrFn as Story,
   Store_CSFExports,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 import { composeStory, composeStories, setProjectAnnotations } from './portable-stories';
 import * as defaultExportAnnotations from './__mocks__/defaultExportAnnotations.mockfile';

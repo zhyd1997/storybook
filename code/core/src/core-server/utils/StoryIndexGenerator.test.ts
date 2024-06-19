@@ -3,11 +3,11 @@
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 import path from 'path';
-import { normalizeStoriesEntry } from '@storybook/core/dist/common';
-import type { NormalizedStoriesSpecifier, StoryIndexEntry } from '@storybook/core/dist/types';
-import { readCsf, getStorySortParameter } from '@storybook/core/dist/csf-tools';
+import { normalizeStoriesEntry } from '@storybook/core/common';
+import type { NormalizedStoriesSpecifier, StoryIndexEntry } from '@storybook/core/types';
+import { readCsf, getStorySortParameter } from '@storybook/core/csf-tools';
 import { toId } from '@storybook/csf';
-import { logger, once } from '@storybook/core/dist/node-logger';
+import { logger, once } from '@storybook/core/node-logger';
 
 import type { StoryIndexGeneratorOptions } from './StoryIndexGenerator';
 import { StoryIndexGenerator } from './StoryIndexGenerator';
@@ -21,11 +21,11 @@ vi.mock('@storybook/csf', async (importOriginal) => {
   };
 });
 
-vi.mock('@storybook/core/dist/node-logger');
+vi.mock('@storybook/core/node-logger');
 
 const toIdMock = vi.mocked(toId);
-vi.mock('@storybook/core/dist/csf-tools', async (importOriginal) => {
-  const csfTools = await importOriginal<typeof import('@storybook/core/dist/csf-tools')>();
+vi.mock('@storybook/core/csf-tools', async (importOriginal) => {
+  const csfTools = await importOriginal<typeof import('@storybook/core/csf-tools')>();
   return {
     ...csfTools,
     readCsf: vi.fn(csfTools.readCsf),

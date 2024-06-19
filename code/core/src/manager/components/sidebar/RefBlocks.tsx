@@ -2,9 +2,9 @@ import { global } from '@storybook/global';
 import type { FC } from 'react';
 import React, { useState, useCallback, Fragment } from 'react';
 
-import { WithTooltip, Spaced, Button, Link, ErrorFormatter } from '@storybook/core/dist/components';
-import { logger } from '@storybook/core/dist/client-logger';
-import { styled } from '@storybook/core/dist/theming';
+import { WithTooltip, Spaced, Button, Link, ErrorFormatter } from '@storybook/core/components';
+import { logger } from '@storybook/core/client-logger';
+import { styled } from '@storybook/core/theming';
 
 import { ChevronDownIcon, LockIcon, SyncIcon } from '@storybook/icons';
 import { Loader, Contained } from './Loader';

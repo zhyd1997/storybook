@@ -9,11 +9,11 @@ import {
   STORY_RENDERED,
   STORY_RENDER_PHASE_CHANGED,
   STORY_THREW_EXCEPTION,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 
 import type { RenderPhase } from './render/StoryRender';
-import type { ModuleImportFn, TeardownRenderToCanvas } from '@storybook/core/dist/types';
-import type { StoryIndex } from '@storybook/core/dist/types';
+import type { ModuleImportFn, TeardownRenderToCanvas } from '@storybook/core/types';
+import type { StoryIndex } from '@storybook/core/types';
 
 export const componentOneExports = {
   default: {

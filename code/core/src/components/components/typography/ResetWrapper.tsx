@@ -1,4 +1,4 @@
-import { styled } from '@storybook/core/dist/theming';
+import { styled } from '@storybook/core/theming';
 import { withReset } from './lib/common';
 
 /**

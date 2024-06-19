@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import { dedent } from 'ts-dedent';
 
 import { getInterpretedFile } from './interpret-files';

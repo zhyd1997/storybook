@@ -3,8 +3,8 @@ import slash from 'slash';
 import fs from 'fs';
 import path from 'path';
 
-import type { NormalizedStoriesSpecifier, Path } from '@storybook/core/dist/types';
-import { commonGlobOptions } from '@storybook/core/dist/common';
+import type { NormalizedStoriesSpecifier, Path } from '@storybook/core/types';
+import { commonGlobOptions } from '@storybook/core/common';
 
 const isDirectory = (directory: Path) => {
   try {

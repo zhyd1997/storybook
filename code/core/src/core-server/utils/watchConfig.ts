@@ -1,5 +1,5 @@
 import Watchpack from 'watchpack';
-import type { Path } from '@storybook/core/dist/types';
+import type { Path } from '@storybook/core/types';
 
 // copied from './watch-story-specifiers.ts'
 /** Watch the .storybook dir for changes */

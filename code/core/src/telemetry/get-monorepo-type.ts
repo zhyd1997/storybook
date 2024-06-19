@@ -1,7 +1,7 @@
 import { existsSync, readJsonSync } from 'fs-extra';
 import path from 'node:path';
-import type { PackageJson } from '@storybook/core/dist/types';
-import { getProjectRoot } from '@storybook/core/dist/common';
+import type { PackageJson } from '@storybook/core/types';
+import { getProjectRoot } from '@storybook/core/common';
 
 export const monorepoConfigs = {
   Nx: 'nx.json',

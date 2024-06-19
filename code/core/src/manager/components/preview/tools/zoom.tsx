@@ -1,9 +1,9 @@
 import type { SyntheticEvent, MouseEventHandler, PropsWithChildren } from 'react';
 import React, { Component, createContext, memo, useCallback } from 'react';
 
-import { IconButton, Separator } from '@storybook/core/dist/components';
-import type { Addon_BaseType } from '@storybook/core/dist/types';
-import { types } from '@storybook/core/dist/manager-api';
+import { IconButton, Separator } from '@storybook/core/components';
+import type { Addon_BaseType } from '@storybook/core/types';
+import { types } from '@storybook/core/manager-api';
 import { ZoomIcon, ZoomOutIcon, ZoomResetIcon } from '@storybook/icons';
 
 const initialZoom = 1 as const;

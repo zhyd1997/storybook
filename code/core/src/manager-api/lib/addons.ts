@@ -1,7 +1,7 @@
 import { global } from '@storybook/global';
 
-import type { Channel } from '@storybook/core/dist/channels';
-import { SET_CONFIG } from '@storybook/core/dist/core-events';
+import type { Channel } from '@storybook/core/channels';
+import { SET_CONFIG } from '@storybook/core/core-events';
 import type {
   Addon_Collection,
   Addon_Config,
@@ -15,9 +15,9 @@ import type {
   Addon_WrapperType,
   Addon_SidebarBottomType,
   Addon_SidebarTopType,
-} from '@storybook/core/dist/types';
-import { Addon_TypesEnum } from '@storybook/core/dist/types';
-import { logger } from '@storybook/core/dist/client-logger';
+} from '@storybook/core/types';
+import { Addon_TypesEnum } from '@storybook/core/types';
+import { logger } from '@storybook/core/client-logger';
 import type { API } from '../index';
 import { mockChannel } from './storybook-channel-mock';
 

@@ -1,17 +1,17 @@
-import type { CoreConfig, Options } from '@storybook/core/dist/types';
-import type { Channel } from '@storybook/core/dist/channels';
-import { telemetry } from '@storybook/core/dist/telemetry';
+import type { CoreConfig, Options } from '@storybook/core/types';
+import type { Channel } from '@storybook/core/channels';
+import { telemetry } from '@storybook/core/telemetry';
 import type {
   CreateNewStoryErrorPayload,
   CreateNewStoryRequestPayload,
   CreateNewStoryResponsePayload,
   RequestData,
   ResponseData,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import {
   CREATE_NEW_STORYFILE_REQUEST,
   CREATE_NEW_STORYFILE_RESPONSE,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import { writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { getNewStoryFile } from '../utils/get-new-story-file';

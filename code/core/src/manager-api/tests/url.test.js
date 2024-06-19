@@ -4,12 +4,12 @@ import {
   SET_CURRENT_STORY,
   GLOBALS_UPDATED,
   UPDATE_QUERY_PARAMS,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 
 import EventEmitter from 'events';
 import { init as initURL } from '../modules/url';
 
-vi.mock('@storybook/core/dist/client-logger');
+vi.mock('@storybook/core/client-logger');
 vi.useFakeTimers();
 
 describe('initial state', () => {

@@ -32,6 +32,22 @@ const external = [
   '@storybook/core/dist/telemetry',
   '@storybook/core/dist/theming',
   '@storybook/core/dist/types',
+  '@storybook/core/builder-manager',
+  '@storybook/core/channels',
+  '@storybook/core/client-logger',
+  '@storybook/core/common',
+  '@storybook/core/components',
+  '@storybook/core/core-events',
+  '@storybook/core/core-server',
+  '@storybook/core/csf-tools',
+  '@storybook/core/docs-tools',
+  '@storybook/core/manager-api',
+  '@storybook/core/node-logger',
+  '@storybook/core/preview-api',
+  '@storybook/core/router',
+  '@storybook/core/telemetry',
+  '@storybook/core/theming',
+  '@storybook/core/types',
 ];
 
 const all = entries.filter((e) => e.dts);

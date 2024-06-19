@@ -14,15 +14,15 @@ import {
   STORY_THREW_EXCEPTION,
   STORY_UNCHANGED,
   UPDATE_QUERY_PARAMS,
-} from '@storybook/core/dist/core-events';
-import { logger } from '@storybook/core/dist/client-logger';
+} from '@storybook/core/core-events';
+import { logger } from '@storybook/core/client-logger';
 
 import {
   CalledPreviewMethodBeforeInitializationError,
   EmptyIndexError,
   MdxFileWithNoCsfReferencesError,
   NoStoryMatchError,
-} from '@storybook/core/dist/preview-errors';
+} from '@storybook/core/preview-errors';
 import type { MaybePromise } from './Preview';
 import { Preview } from './Preview';
 
@@ -33,9 +33,9 @@ import { MdxDocsRender } from './render/MdxDocsRender';
 import type { Selection, SelectionStore } from './SelectionStore';
 import type { View } from './View';
 import type { StorySpecifier } from '../store/StoryIndexStore';
-import type { DocsIndexEntry, StoryIndex } from '@storybook/core/dist/types';
-import type { Args, Globals, Renderer, StoryId, ViewMode } from '@storybook/core/dist/types';
-import type { ModuleImportFn, ProjectAnnotations } from '@storybook/core/dist/types';
+import type { DocsIndexEntry, StoryIndex } from '@storybook/core/types';
+import type { Args, Globals, Renderer, StoryId, ViewMode } from '@storybook/core/types';
+import type { ModuleImportFn, ProjectAnnotations } from '@storybook/core/types';
 
 const globalWindow = globalThis;
 

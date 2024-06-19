@@ -1,4 +1,4 @@
-import type { PackageJson } from '@storybook/core/dist/types';
+import type { PackageJson } from '@storybook/core/types';
 
 export type PackageJsonWithDepsAndDevDeps = PackageJson &
   Required<Pick<PackageJson, 'dependencies' | 'devDependencies'>>;

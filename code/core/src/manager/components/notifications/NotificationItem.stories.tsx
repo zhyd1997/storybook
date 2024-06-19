@@ -1,6 +1,6 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
-import { LocationProvider } from '@storybook/core/dist/router';
+import { LocationProvider } from '@storybook/core/router';
 import type { Meta, StoryObj } from '@storybook/react';
 import NotificationItem from './NotificationItem';
 import {

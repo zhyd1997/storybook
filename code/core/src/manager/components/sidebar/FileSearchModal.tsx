@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useTransition } from 'react';
-import { Modal, Form } from '@storybook/core/dist/components';
-import { styled } from '@storybook/core/dist/theming';
+import { Modal, Form } from '@storybook/core/components';
+import { styled } from '@storybook/core/theming';
 import { CloseAltIcon, SearchIcon, SyncIcon } from '@storybook/icons';
 
 import type { NewStoryPayload, SearchResult } from './FileSearchList';

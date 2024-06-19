@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { cache } from '@storybook/core/dist/common';
+import { cache } from '@storybook/core/common';
 
 export const SESSION_TIMEOUT = 1000 * 60 * 60 * 2; // 2h
 

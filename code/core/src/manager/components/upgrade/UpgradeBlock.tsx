@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React, { useState } from 'react';
-import { styled } from '@storybook/core/dist/theming';
-import { useStorybookApi } from '@storybook/core/dist/manager-api';
-import { Link } from '@storybook/core/dist/components';
+import { styled } from '@storybook/core/theming';
+import { useStorybookApi } from '@storybook/core/manager-api';
+import { Link } from '@storybook/core/components';
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
 
 interface UpgradeBlockProps {

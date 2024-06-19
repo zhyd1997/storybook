@@ -2,11 +2,8 @@ import path, { relative } from 'node:path';
 import { serverRequire, serverResolve } from './interpret-require';
 import { validateConfigurationFiles } from './validate-configuration-files';
 import { readFile } from 'fs/promises';
-import {
-  MainFileESMOnlyImportError,
-  MainFileEvaluationError,
-} from '@storybook/core/dist/server-errors';
-import type { StorybookConfig } from '@storybook/core/dist/types';
+import { MainFileESMOnlyImportError, MainFileEvaluationError } from '@storybook/core/server-errors';
+import type { StorybookConfig } from '@storybook/core/types';
 
 export async function loadMainConfig({
   configDir = '.storybook',

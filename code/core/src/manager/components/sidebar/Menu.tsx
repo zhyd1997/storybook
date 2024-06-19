@@ -1,10 +1,10 @@
 import type { ComponentProps, FC } from 'react';
 import React, { useMemo, useState } from 'react';
 
-import { styled } from '@storybook/core/dist/theming';
+import { styled } from '@storybook/core/theming';
 import { transparentize } from 'polished';
-import type { Button, TooltipLinkListLink } from '@storybook/core/dist/components';
-import { WithTooltip, TooltipLinkList, IconButton } from '@storybook/core/dist/components';
+import type { Button, TooltipLinkListLink } from '@storybook/core/components';
+import { WithTooltip, TooltipLinkList, IconButton } from '@storybook/core/components';
 import { CloseIcon, CogIcon } from '@storybook/icons';
 import { useLayout } from '../layout/LayoutProvider';
 

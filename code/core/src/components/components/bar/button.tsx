@@ -8,7 +8,7 @@ import type {
   RefAttributes,
 } from 'react';
 import React, { forwardRef } from 'react';
-import { styled, isPropValid } from '@storybook/core/dist/theming';
+import { styled, isPropValid } from '@storybook/core/theming';
 
 interface ButtonProps
   extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {

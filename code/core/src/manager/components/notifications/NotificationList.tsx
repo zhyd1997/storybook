@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React from 'react';
-import type { State } from '@storybook/core/dist/manager-api';
-import { styled } from '@storybook/core/dist/theming';
-import type { CSSObject } from '@storybook/core/dist/theming';
+import type { State } from '@storybook/core/manager-api';
+import { styled } from '@storybook/core/theming';
+import type { CSSObject } from '@storybook/core/theming';
 import NotificationItem from './NotificationItem';
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
 

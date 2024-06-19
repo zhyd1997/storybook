@@ -5,9 +5,9 @@ import {
   getStorybookInfo,
   getStorybookConfiguration,
   getProjectRoot,
-} from '@storybook/core/dist/common';
-import type { StorybookConfig, PackageJson } from '@storybook/core/dist/types';
-import { readConfig } from '@storybook/core/dist/csf-tools';
+} from '@storybook/core/common';
+import type { StorybookConfig, PackageJson } from '@storybook/core/types';
+import { readConfig } from '@storybook/core/csf-tools';
 
 import type { StorybookMetadata, Dependency, StorybookAddon } from './types';
 import { getActualPackageVersion, getActualPackageVersions } from './package-json';

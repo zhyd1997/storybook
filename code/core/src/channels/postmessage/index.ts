@@ -1,8 +1,8 @@
 /// <reference path="../../typings.d.ts" />
 
 import { global } from '@storybook/global';
-import * as EVENTS from '@storybook/core/dist/core-events';
-import { logger, pretty } from '@storybook/core/dist/client-logger';
+import * as EVENTS from '@storybook/core/core-events';
+import { logger, pretty } from '@storybook/core/client-logger';
 import { isJSON, parse, stringify } from 'telejson';
 import invariant from 'tiny-invariant';
 import type {

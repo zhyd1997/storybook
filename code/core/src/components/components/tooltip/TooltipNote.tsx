@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '@storybook/core/dist/theming';
+import { styled } from '@storybook/core/theming';
 
 const Note = styled.div(({ theme }) => ({
   padding: '2px 6px',

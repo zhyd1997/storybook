@@ -1,5 +1,5 @@
 import mapValues from 'lodash/mapValues.js';
-import { logger } from '@storybook/core/dist/client-logger';
+import { logger } from '@storybook/core/client-logger';
 import { filterArgTypes } from './filterArgTypes';
 import { combineParameters } from './parameters';
 import type {
@@ -7,7 +7,7 @@ import type {
   Renderer,
   SBEnumType,
   StrictInputType,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 export type ControlsMatchers = {
   date: RegExp;

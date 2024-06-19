@@ -8,15 +8,15 @@ import type {
   StoryContextForEnhancers,
   StoryContextForLoaders,
   StoryId,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import mapValues from 'lodash/mapValues.js';
 import pick from 'lodash/pick.js';
 
 import {
   CalledExtractOnStoreError,
   MissingStoryFromCsfFileError,
-} from '@storybook/core/dist/preview-errors';
-import { deprecate } from '@storybook/core/dist/client-logger';
+} from '@storybook/core/preview-errors';
+import { deprecate } from '@storybook/core/client-logger';
 import { HooksContext } from '../addons';
 import { StoryIndexStore } from './StoryIndexStore';
 import { ArgsStore } from './ArgsStore';
@@ -38,13 +38,13 @@ import type {
   PreparedMeta,
   PreparedStory,
   ProjectAnnotations,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import type {
   IndexEntry,
   StoryIndex,
   StoryIndexV3,
   V3CompatIndexEntry,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 // TODO -- what are reasonable values for these?
 const CSF_CACHE_SIZE = 1000;

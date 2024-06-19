@@ -1,5 +1,5 @@
 import { expect, describe, it } from 'vitest';
-import type { StoryId, StoryIndexEntry } from '@storybook/core/dist/types';
+import type { StoryId, StoryIndexEntry } from '@storybook/core/types';
 
 import { storySort } from './storySort';
 

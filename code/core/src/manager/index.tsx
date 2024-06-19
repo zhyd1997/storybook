@@ -3,15 +3,15 @@ import type { ComponentProps, FC } from 'react';
 import { createRoot } from 'react-dom/client';
 import React, { useCallback, useMemo } from 'react';
 
-import { Location, LocationProvider, useNavigate } from '@storybook/core/dist/router';
-import { Provider as ManagerProvider, types } from '@storybook/core/dist/manager-api';
-import type { Combo } from '@storybook/core/dist/manager-api';
-import { ThemeProvider, ensure as ensureTheme } from '@storybook/core/dist/theming';
-import { ProviderDoesNotExtendBaseProviderError } from '@storybook/core/dist/manager-errors';
+import { Location, LocationProvider, useNavigate } from '@storybook/core/router';
+import { Provider as ManagerProvider, types } from '@storybook/core/manager-api';
+import type { Combo } from '@storybook/core/manager-api';
+import { ThemeProvider, ensure as ensureTheme } from '@storybook/core/theming';
+import { ProviderDoesNotExtendBaseProviderError } from '@storybook/core/manager-errors';
 
 import { HelmetProvider } from 'react-helmet-async';
 
-import type { Addon_PageType } from '@storybook/core/dist/types';
+import type { Addon_PageType } from '@storybook/core/types';
 import { App } from './App';
 
 import Provider from './provider';

@@ -9,12 +9,12 @@ import bt from '@babel/traverse';
 import * as recast from 'recast';
 
 import { toId, isExportStory, storyNameFromExport } from '@storybook/csf';
-import type { ComponentAnnotations, StoryAnnotations, Tag } from '@storybook/core/dist/types';
+import type { ComponentAnnotations, StoryAnnotations, Tag } from '@storybook/core/types';
 import type { Options } from 'recast';
 import { babelParse } from './babelParse';
 import { findVarInitialization } from './findVarInitialization';
 import type { PrintResultType } from './PrintResultType';
-import type { IndexInput, IndexedCSFFile } from '@storybook/core/dist/types';
+import type { IndexInput, IndexedCSFFile } from '@storybook/core/types';
 
 // @ts-expect-error (needed due to it's use of `exports.default`)
 const traverse = (bt.default || bt) as typeof bt;
