@@ -4,6 +4,7 @@ import { global } from '@storybook/global';
 import { combineParameters } from '../parameters';
 import { composeStepRunners } from './stepRunners';
 import { normalizeArrays } from './normalizeArrays';
+import { composeBeforeHooks } from './beforeAll';
 
 export function getField<TFieldType = any>(
   moduleExportList: ModuleExports[],
@@ -42,6 +43,7 @@ export function composeConfigs<TRenderer extends Renderer>(
 ): ProjectAnnotations<TRenderer> {
   const allArgTypeEnhancers = getArrayField(moduleExportList, 'argTypesEnhancers');
   const stepRunners = getField(moduleExportList, 'runStep');
+  const beforeAllFns = getArrayField(moduleExportList, 'beforeAll');
 
   return {
     parameters: combineParameters(...getField(moduleExportList, 'parameters')),
@@ -59,7 +61,7 @@ export function composeConfigs<TRenderer extends Renderer>(
     initialGlobals: getObjectField(moduleExportList, 'initialGlobals'),
     globalTypes: getObjectField(moduleExportList, 'globalTypes'),
     loaders: getArrayField(moduleExportList, 'loaders'),
-    beforeAll: getSingletonField(moduleExportList, 'beforeAll'),
+    beforeAll: composeBeforeHooks(beforeAllFns),
     beforeEach: getArrayField(moduleExportList, 'beforeEach'),
     render: getSingletonField(moduleExportList, 'render'),
     renderToCanvas: getSingletonField(moduleExportList, 'renderToCanvas'),
