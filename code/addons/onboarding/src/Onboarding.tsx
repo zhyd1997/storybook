@@ -1,6 +1,7 @@
+import { SyntaxHighlighter } from '@storybook/components';
 import { SAVE_STORY_RESPONSE } from '@storybook/core-events';
 import { type API } from '@storybook/manager-api';
-import { ThemeProvider, convert, styled } from '@storybook/theming';
+import { ThemeProvider, convert, styled, themes } from '@storybook/theming';
 import React, { useCallback, useEffect, useState } from 'react';
 import type { Step } from 'react-joyride';
 
@@ -25,6 +26,17 @@ const SpanHighlight = styled.span(({ theme }) => ({
   backgroundColor: theme.base === 'dark' ? 'black' : theme.color.light,
   boxSizing: 'border-box',
   lineHeight: '17px',
+}));
+
+const CodeWrapper = styled.div(({ theme }) => ({
+  background: theme.background.content,
+  borderRadius: 3,
+  marginTop: 15,
+  padding: 10,
+  fontSize: theme.typography.size.s1,
+  '.linenumber': {
+    opacity: 0.5,
+  },
 }));
 
 const theme = convert();
@@ -63,6 +75,7 @@ export default function Onboarding({ api }: { api: API }) {
   const [createNewStoryForm, setCreateNewStoryForm] = useState<HTMLElement | null>();
   const [createdStory, setCreatedStory] = useState<{
     newStoryName: string;
+    newStorySource: string;
     sourceFileName: string;
   } | null>();
 
@@ -144,6 +157,11 @@ export default function Onboarding({ api }: { api: API }) {
     return null;
   }
 
+  const source = createdStory?.newStorySource;
+  const startIndex = source?.lastIndexOf(`export const ${createdStory?.newStoryName}`);
+  const snippet = source?.slice(startIndex);
+  const startingLineNumber = source?.slice(0, startIndex).split('\n').length;
+
   const steps: StepDefinition[] = [
     {
       key: '2:Controls',
@@ -203,6 +221,19 @@ export default function Onboarding({ api }: { api: API }) {
           Well done! You just created your first story from the Storybook manager. This
           automatically added a few lines of code in{' '}
           <SpanHighlight>{createdStory?.sourceFileName}</SpanHighlight>.
+          {snippet && (
+            <ThemeProvider theme={convert(themes.dark)}>
+              <CodeWrapper>
+                <SyntaxHighlighter
+                  language="jsx"
+                  showLineNumbers
+                  startingLineNumber={startingLineNumber}
+                >
+                  {snippet}
+                </SyntaxHighlighter>
+              </CodeWrapper>
+            </ThemeProvider>
+          )}
         </>
       ),
       offset: 12,
