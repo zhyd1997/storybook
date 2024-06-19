@@ -1,11 +1,11 @@
 /* eslint-disable react/destructuring-assignment */
 import type { Renderer, Parameters, StrictArgTypes } from '@storybook/csf';
-import type { ModuleExports } from '@storybook/core/dist/types';
+import type { ModuleExports } from '@storybook/core/types';
 import type { FC } from 'react';
 import React, { useContext } from 'react';
-import { filterArgTypes } from '@storybook/core/dist/preview-api';
-import type { PropDescriptor } from '@storybook/core/dist/preview-api';
-import type { ArgTypesExtractor } from '@storybook/core/dist/docs-tools';
+import { filterArgTypes } from '@storybook/core/preview-api';
+import type { PropDescriptor } from '@storybook/core/preview-api';
+import type { ArgTypesExtractor } from '@storybook/core/docs-tools';
 
 import type { SortType } from '../components';
 import { ArgsTable as PureArgsTable, ArgsTableError, TabbedArgsTable } from '../components';

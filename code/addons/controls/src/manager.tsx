@@ -1,19 +1,19 @@
 import React from 'react';
 import { dequal as deepEqual } from 'dequal';
-import { AddonPanel, Badge, Spaced } from '@storybook/core/dist/components';
+import { AddonPanel, Badge, Spaced } from '@storybook/core/components';
 import type {
   ResponseData,
   SaveStoryRequestPayload,
   SaveStoryResponsePayload,
-} from '@storybook/core/dist/core-events';
-import { SAVE_STORY_REQUEST, SAVE_STORY_RESPONSE } from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
+import { SAVE_STORY_REQUEST, SAVE_STORY_RESPONSE } from '@storybook/core/core-events';
 import {
   addons,
   experimental_requestResponse,
   types,
   useArgTypes,
-} from '@storybook/core/dist/manager-api';
-import { color } from '@storybook/core/dist/theming';
+} from '@storybook/core/manager-api';
+import { color } from '@storybook/core/theming';
 import { ControlsPanel } from './ControlsPanel';
 import { ADDON_ID, PARAM_KEY } from './constants';
 import type { Args } from '@storybook/csf';

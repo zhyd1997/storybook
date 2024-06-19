@@ -2,7 +2,7 @@ import {
   composeStory as originalComposeStory,
   composeStories as originalComposeStories,
   setProjectAnnotations as originalSetProjectAnnotations,
-} from '@storybook/core/dist/preview-api';
+} from '@storybook/core/preview-api';
 import type {
   Args,
   ProjectAnnotations,
@@ -10,7 +10,7 @@ import type {
   Store_CSFExports,
   StoriesWithPartialProps,
   ComposedStoryFn,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 
 import * as svelteProjectAnnotations from './entry-preview';
 import type { Meta } from './public-types';

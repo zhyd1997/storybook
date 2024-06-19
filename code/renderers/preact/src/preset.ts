@@ -1,4 +1,4 @@
-import type { PresetProperty } from '@storybook/core/dist/types';
+import type { PresetProperty } from '@storybook/core/types';
 import { join } from 'path';
 
 export const previewAnnotations: PresetProperty<'previewAnnotations'> = async (

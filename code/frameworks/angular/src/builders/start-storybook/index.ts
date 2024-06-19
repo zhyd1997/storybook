@@ -13,10 +13,10 @@ import { map, switchMap, mapTo } from 'rxjs/operators';
 import { sync as findUpSync } from 'find-up';
 import { sync as readUpSync } from 'read-pkg-up';
 
-import { CLIOptions } from '@storybook/core/dist/types';
-import { getEnvConfig, versions } from '@storybook/core/dist/common';
-import { addToGlobalContext } from '@storybook/core/dist/telemetry';
-import { buildDevStandalone, withTelemetry } from '@storybook/core/dist/core-server';
+import { CLIOptions } from '@storybook/core/types';
+import { getEnvConfig, versions } from '@storybook/core/common';
+import { addToGlobalContext } from '@storybook/core/telemetry';
+import { buildDevStandalone, withTelemetry } from '@storybook/core/core-server';
 import {
   AssetPattern,
   SourceMapUnion,

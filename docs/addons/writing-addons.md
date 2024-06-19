@@ -96,7 +96,7 @@ Going through the code blocks in sequence:
 ```ts
 // src/Tool.tsx
 
-import { useGlobals, useStorybookApi } from '@storybook/core/dist/manager-api';
+import { useGlobals, useStorybookApi } from '@storybook/core/manager-api';
 import { IconButton } from '@storybook/components';
 import { LightningIcon } from '@storybook/icons';
 ```

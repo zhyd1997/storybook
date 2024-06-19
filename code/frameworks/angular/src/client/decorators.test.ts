@@ -1,4 +1,4 @@
-import { Addon_StoryContext } from '@storybook/core/dist/types';
+import { Addon_StoryContext } from '@storybook/core/types';
 
 import { vi, expect, describe, it } from 'vitest';
 import { Component } from '@angular/core';

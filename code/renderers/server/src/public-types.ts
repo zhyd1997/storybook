@@ -8,10 +8,10 @@ import type {
   LoaderFunction,
   StrictArgs,
   ProjectAnnotations,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import type { ServerRenderer } from './types';
 
-export type { Args, ArgTypes, Parameters, StrictArgs } from '@storybook/core/dist/types';
+export type { Args, ArgTypes, Parameters, StrictArgs } from '@storybook/core/types';
 
 /**
  * Metadata to configure the stories for a component.

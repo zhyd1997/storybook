@@ -1,8 +1,8 @@
 import type { FC, ChangeEvent } from 'react';
 import React from 'react';
-import { styled } from '@storybook/core/dist/theming';
-import type { CSSObject } from '@storybook/core/dist/theming';
-import { logger } from '@storybook/core/dist/client-logger';
+import { styled } from '@storybook/core/theming';
+import type { CSSObject } from '@storybook/core/theming';
+import { logger } from '@storybook/core/client-logger';
 
 import type { ControlProps, OptionsSelection, NormalizedOptionsConfig } from '../types';
 

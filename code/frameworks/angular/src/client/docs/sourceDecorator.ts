@@ -1,6 +1,6 @@
-import { addons, useEffect } from '@storybook/core/dist/preview-api';
-import { PartialStoryFn } from '@storybook/core/dist/types';
-import { SNIPPET_RENDERED, SourceType } from '@storybook/core/dist/docs-tools';
+import { addons, useEffect } from '@storybook/core/preview-api';
+import { PartialStoryFn } from '@storybook/core/types';
+import { SNIPPET_RENDERED, SourceType } from '@storybook/core/docs-tools';
 import { StoryContext, AngularRenderer } from '../types';
 import { computesTemplateSourceFromComponent } from '../../renderer';
 

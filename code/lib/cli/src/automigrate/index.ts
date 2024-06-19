@@ -11,7 +11,7 @@ import {
   type JsPackageManager,
   getCoercedStorybookVersion,
   getStorybookInfo,
-} from '@storybook/core/dist/common';
+} from '@storybook/core/common';
 
 import type {
   Fix,

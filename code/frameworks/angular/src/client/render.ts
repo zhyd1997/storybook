@@ -1,6 +1,6 @@
 import '@angular/compiler';
 
-import { RenderContext, ArgsStoryFn } from '@storybook/core/dist/types';
+import { RenderContext, ArgsStoryFn } from '@storybook/core/types';
 
 import { AngularRenderer } from './types';
 

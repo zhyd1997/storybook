@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider, convert, themes } from '@storybook/core/dist/theming';
+import { ThemeProvider, convert, themes } from '@storybook/core/theming';
 
 export const parameters = {
   options: {

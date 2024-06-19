@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import mapValues from 'lodash/mapValues.js';
 import { PureArgsTable as ArgsTable } from '@storybook/blocks';
 import type { StoryObj } from '@storybook/react';
-import type { Args, Parameters, StoryContext } from '@storybook/core/dist/types';
-import { inferControls } from '@storybook/core/dist/preview-api';
-import { ThemeProvider, themes, convert } from '@storybook/core/dist/theming';
+import type { Args, Parameters, StoryContext } from '@storybook/core/types';
+import { inferControls } from '@storybook/core/preview-api';
+import { ThemeProvider, themes, convert } from '@storybook/core/theming';
 
 import { component as TsFunctionComponentComponent } from './docgen-components/ts-function-component/input';
 import { component as TsFunctionComponentInlineDefaultsComponent } from './docgen-components/ts-function-component-inline-defaults/input';

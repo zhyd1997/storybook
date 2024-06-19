@@ -1,1 +1,1 @@
-export { createPlaywrightTest as createTest } from '@storybook/core/dist/preview-api';
+export { createPlaywrightTest as createTest } from '@storybook/core/preview-api';

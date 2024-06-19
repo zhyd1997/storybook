@@ -4,7 +4,7 @@ import {
   STORY_ARGS_UPDATED,
   RESET_STORY_ARGS,
   UPDATE_STORY_ARGS,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import { h } from 'vue';
 import type { Meta, StoryObj } from '@storybook/vue3';
 import BaseLayout from './BaseLayout.vue';

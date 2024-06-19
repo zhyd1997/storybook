@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
-import { addons } from '@storybook/core/dist/preview-api';
-import type { ArgTypes, Args, StoryContext } from '@storybook/core/dist/types';
+import { addons } from '@storybook/core/preview-api';
+import type { ArgTypes, Args, StoryContext } from '@storybook/core/types';
 
-import { SourceType, SNIPPET_RENDERED } from '@storybook/core/dist/docs-tools';
+import { SourceType, SNIPPET_RENDERED } from '@storybook/core/docs-tools';
 
 import type {
   ElementNode,

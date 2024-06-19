@@ -5,9 +5,9 @@ import {
   useGlobals,
   useParameter,
   addons,
-} from '@storybook/core/dist/manager-api';
-import { styled } from '@storybook/core/dist/theming';
-import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/core/dist/components';
+} from '@storybook/core/manager-api';
+import { styled } from '@storybook/core/theming';
+import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/core/components';
 
 import { PaintBrushIcon } from '@storybook/icons';
 import type { ThemeAddonState, ThemeParameters } from './constants';

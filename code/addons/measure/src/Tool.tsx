@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { useGlobals, useStorybookApi } from '@storybook/core/dist/manager-api';
-import { IconButton } from '@storybook/core/dist/components';
+import { useGlobals, useStorybookApi } from '@storybook/core/manager-api';
+import { IconButton } from '@storybook/core/components';
 import { RulerIcon } from '@storybook/icons';
 import { TOOL_ID, ADDON_ID } from './constants';
 

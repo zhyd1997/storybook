@@ -95,9 +95,9 @@ const config: StorybookConfig = {
           ...(configType === 'DEVELOPMENT'
             ? {
                 '@storybook/components': componentsPath,
-                '@storybook/core/dist/components': componentsPath,
+                '@storybook/core/components': componentsPath,
                 '@storybook/manager-api': managerApiPath,
-                '@storybook/core/dist/manager-api': managerApiPath,
+                '@storybook/core/manager-api': managerApiPath,
               }
             : {}),
         },

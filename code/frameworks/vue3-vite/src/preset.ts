@@ -1,4 +1,4 @@
-import type { PresetProperty } from '@storybook/core/dist/types';
+import type { PresetProperty } from '@storybook/core/types';
 import { dirname, join } from 'path';
 import type { PluginOption } from 'vite';
 import { vueComponentMeta } from './plugins/vue-component-meta';

@@ -14,9 +14,9 @@ Storybook theming is the **recommended way** to theme your docs. Docs uses the s
 Supposing you have a Storybook theme defined for the main UI in `.storybook/manager.js`:
 
 ```js
-import { addons } from '@storybook/core/dist/manager-api';
+import { addons } from '@storybook/core/manager-api';
 // or a custom theme
-import { themes } from '@storybook/core/dist/theming';
+import { themes } from '@storybook/core/theming';
 
 addons.setConfig({
   theme: themes.dark,
@@ -26,7 +26,7 @@ addons.setConfig({
 Here's how you'd specify the same theme for docs in `.storybook/preview.js`:
 
 ```js
-import { themes } from '@storybook/core/dist/theming';
+import { themes } from '@storybook/core/theming';
 
 // or global addParameters
 export const parameters = {

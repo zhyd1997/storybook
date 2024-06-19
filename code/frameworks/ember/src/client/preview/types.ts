@@ -1,6 +1,6 @@
-import type { WebRenderer } from '@storybook/core/dist/types';
+import type { WebRenderer } from '@storybook/core/types';
 
-export type { RenderContext } from '@storybook/core/dist/types';
+export type { RenderContext } from '@storybook/core/types';
 
 export interface ShowErrorArgs {
   title: string;

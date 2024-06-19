@@ -1,5 +1,5 @@
 import { createUnplugin } from 'unplugin';
-import type { EnrichCsfOptions } from '@storybook/core/dist/csf-tools';
+import type { EnrichCsfOptions } from '@storybook/core/csf-tools';
 import { rollupBasedPlugin } from './rollup-based-plugin';
 import { STORIES_REGEX } from './constants';
 

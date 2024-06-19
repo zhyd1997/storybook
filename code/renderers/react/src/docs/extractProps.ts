@@ -4,7 +4,7 @@ import {
   hasDocgen,
   extractComponentProps,
   TypeSystem,
-} from '@storybook/core/dist/docs-tools';
+} from '@storybook/core/docs-tools';
 import { enhancePropTypesProps } from './propTypes/handleProp';
 import { enhanceTypeScriptProps } from './typeScript/handleProp';
 import { isMemo } from './lib';

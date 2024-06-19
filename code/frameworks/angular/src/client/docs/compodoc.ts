@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { global } from '@storybook/global';
 
-import { InputType, ArgTypes, SBType } from '@storybook/core/dist/types';
-import { logger } from '@storybook/core/dist/client-logger';
+import { InputType, ArgTypes, SBType } from '@storybook/core/types';
+import { logger } from '@storybook/core/client-logger';
 import {
   Argument,
   Class,

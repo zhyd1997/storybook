@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import type { ChangeEvent, FC } from 'react';
-import { styled } from '@storybook/core/dist/theming';
-import { Form } from '@storybook/core/dist/components';
+import { styled } from '@storybook/core/theming';
+import { Form } from '@storybook/core/components';
 
 import type { ControlProps } from './types';
 import { getControlId } from './helpers';

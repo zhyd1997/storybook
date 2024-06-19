@@ -2,9 +2,9 @@ import { dirname, join, isAbsolute } from 'path';
 import rehypeSlug from 'rehype-slug';
 import rehypeExternalLinks from 'rehype-external-links';
 
-import type { DocsOptions, Options, PresetProperty } from '@storybook/core/dist/types';
+import type { DocsOptions, Options, PresetProperty } from '@storybook/core/types';
 import type { CsfPluginOptions } from '@storybook/csf-plugin';
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import type { CompileOptions } from './compiler';
 
 /**
@@ -163,10 +163,10 @@ export const viteFinal = async (config: any, options: Options) => {
            * The following aliases are used to ensure a single instance of these packages are used in situations where they are duplicated
            * The packages will be duplicated by the package manager when the user has react installed with another version than 18.2.0
            */
-          '@storybook/core/dist/theming': themingPath,
+          '@storybook/core/theming': themingPath,
           '@storybook/theming': themingPath,
           '@storybook/components': componentsPath,
-          '@storybook/core/dist/components': componentsPath,
+          '@storybook/core/components': componentsPath,
           '@storybook/blocks': dirname(require.resolve('@storybook/blocks')),
         },
       },

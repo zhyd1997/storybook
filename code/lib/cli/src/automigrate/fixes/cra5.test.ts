@@ -1,6 +1,6 @@
 import { describe, afterEach, it, expect, vi } from 'vitest';
-import type { StorybookConfigRaw } from '@storybook/core/dist/types';
-import type { JsPackageManager } from '@storybook/core/dist/common';
+import type { StorybookConfigRaw } from '@storybook/core/types';
+import type { JsPackageManager } from '@storybook/core/common';
 import { cra5 } from './cra5';
 
 const checkCra5 = async ({

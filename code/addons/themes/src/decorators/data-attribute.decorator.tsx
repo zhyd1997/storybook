@@ -1,5 +1,5 @@
-import { useEffect } from '@storybook/core/dist/preview-api';
-import type { DecoratorFunction, Renderer } from '@storybook/core/dist/types';
+import { useEffect } from '@storybook/core/preview-api';
+import type { DecoratorFunction, Renderer } from '@storybook/core/types';
 import { initializeThemeState, pluckThemeFromContext, useThemeParameters } from './helpers';
 
 export interface DataAttributeStrategyConfiguration {

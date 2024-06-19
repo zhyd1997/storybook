@@ -2,9 +2,9 @@ import type { ComponentProps } from 'react';
 import React, { useEffect, useMemo, useState } from 'react';
 import type { CallBackProps } from 'react-joyride';
 import Joyride, { STATUS } from 'react-joyride';
-import type { API } from '@storybook/core/dist/manager-api';
-import { UPDATE_STORY_ARGS } from '@storybook/core/dist/core-events';
-import { useTheme } from '@storybook/core/dist/theming';
+import type { API } from '@storybook/core/manager-api';
+import { UPDATE_STORY_ARGS } from '@storybook/core/core-events';
+import { useTheme } from '@storybook/core/theming';
 
 import { PulsatingEffect } from '../../components/PulsatingEffect/PulsatingEffect';
 import { Confetti } from '../../components/Confetti/Confetti';

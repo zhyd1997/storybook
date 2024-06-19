@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
-import * as sbcc from '@storybook/core/dist/common';
-import { UpgradeStorybookToLowerVersionError } from '@storybook/core/dist/server-errors';
+import * as sbcc from '@storybook/core/common';
+import { UpgradeStorybookToLowerVersionError } from '@storybook/core/server-errors';
 import { doUpgrade, getStorybookVersion } from './upgrade';
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 
 const findInstallationsMock = vi.fn<string[], Promise<sbcc.InstallationMetadata | undefined>>();
 
-vi.mock('@storybook/core/dist/telemetry');
-vi.mock('@storybook/core/dist/common', async (importOriginal) => {
+vi.mock('@storybook/core/telemetry');
+vi.mock('@storybook/core/common', async (importOriginal) => {
   const originalModule = (await importOriginal()) as typeof sbcc;
   return {
     ...originalModule,
@@ -32,8 +32,8 @@ vi.mock('@storybook/core/dist/common', async (importOriginal) => {
 describe.each([
   ['│ │ │ ├── @babel/code-frame@7.10.3 deduped', null],
   [
-    '│ ├── "@storybook/core/dist/theming@6.0.0-beta.37 extraneous',
-    { package: '@storybook/core/dist/theming', version: '6.0.0-beta.37' },
+    '│ ├── "@storybook/core/theming@6.0.0-beta.37 extraneous',
+    { package: '@storybook/core/theming', version: '6.0.0-beta.37' },
   ],
   [
     '├─┬ @storybook/preset-create-react-app@3.1.2',

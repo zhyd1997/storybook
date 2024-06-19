@@ -1,4 +1,4 @@
-import { addons, types } from '@storybook/core/dist/manager-api';
+import { addons, types } from '@storybook/core/manager-api';
 
 import { ADDON_ID, PARAM_KEY, THEME_SWITCHER_ID } from './constants';
 import { ThemeSwitcher } from './theme-switcher';

@@ -1,5 +1,5 @@
 import { global as globalThis } from '@storybook/global';
-import type { PartialStoryFn, StoryContext } from '@storybook/core/dist/types';
+import type { PartialStoryFn, StoryContext } from '@storybook/core/types';
 
 export default {
   component: globalThis.Components.Pre,

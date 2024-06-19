@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React, { useCallback, useState, useEffect } from 'react';
 
-import { Link } from '@storybook/core/dist/components';
+import { Link } from '@storybook/core/components';
 import {
   BooleanControl,
   ColorControl,

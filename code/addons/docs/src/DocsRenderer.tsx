@@ -6,7 +6,7 @@ import type {
   Parameters,
   DocsContextProps,
   DocsRenderFunction,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import { Docs, CodeOrSourceMdx, AnchorMdx, HeadersMdx } from '@storybook/blocks';
 
 // TS doesn't like that we export a component with types that it doesn't know about (TS4203)

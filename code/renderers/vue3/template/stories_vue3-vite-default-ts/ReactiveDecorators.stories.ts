@@ -6,7 +6,7 @@ import {
   RESET_STORY_ARGS,
   STORY_ARGS_UPDATED,
   UPDATE_STORY_ARGS,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import Reactivity from './Reactivity.vue';
 
 const meta = {

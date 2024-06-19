@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Addon_StoryContext } from '@storybook/core/dist/types';
+import type { Addon_StoryContext } from '@storybook/core/types';
 import { AppRouterProvider } from './app-router-provider';
 import { PageRouterProvider } from './page-router-provider';
 import type { RouteParams, NextAppDirectory } from './types';

@@ -2,7 +2,7 @@ import {
   composeStory as originalComposeStory,
   composeStories as originalComposeStories,
   setProjectAnnotations as originalSetProjectAnnotations,
-} from '@storybook/core/dist/preview-api';
+} from '@storybook/core/preview-api';
 import type {
   Args,
   NamedOrDefaultProjectAnnotations,
@@ -10,7 +10,7 @@ import type {
   StoryAnnotationsOrFn,
   Store_CSFExports,
   StoriesWithPartialProps,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import { h } from 'vue';
 
 import * as defaultProjectAnnotations from './entry-preview';

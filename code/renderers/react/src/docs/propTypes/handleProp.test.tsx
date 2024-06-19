@@ -8,7 +8,7 @@ import {
   extractComponentProps,
   type DocgenInfo,
   type DocgenPropDefaultValue,
-} from '@storybook/core/dist/docs-tools';
+} from '@storybook/core/docs-tools';
 import { enhancePropTypesProp, enhancePropTypesProps } from './handleProp';
 
 type Component = any;

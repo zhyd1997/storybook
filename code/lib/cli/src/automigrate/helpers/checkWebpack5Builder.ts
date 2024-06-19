@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import semver from 'semver';
 import { dedent } from 'ts-dedent';
-import type { StorybookConfigRaw } from '@storybook/core/dist/types';
+import type { StorybookConfigRaw } from '@storybook/core/types';
 import { getBuilderPackageName } from './mainConfigFile';
 
 const logger = console;

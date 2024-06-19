@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Addon_StoryContext } from '@storybook/core/dist/types';
+import type { Addon_StoryContext } from '@storybook/core/types';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-error (this only errors during compilation for production)

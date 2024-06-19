@@ -1,9 +1,9 @@
 import { describe, afterEach, it, expect, vi } from 'vitest';
 import * as fs from 'fs';
-import { logger } from '@storybook/core/dist/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import { detect, detectFrameworkPreset, detectLanguage } from './detect';
 import { ProjectType, SupportedLanguage } from './project_types';
-import type { JsPackageManager, PackageJsonWithMaybeDeps } from '@storybook/core/dist/common';
+import type { JsPackageManager, PackageJsonWithMaybeDeps } from '@storybook/core/common';
 
 vi.mock('./helpers', () => ({
   isNxProject: vi.fn(),
@@ -26,7 +26,7 @@ vi.mock('fs-extra', () => ({
   pathExistsSync: vi.fn(() => true),
 }));
 
-vi.mock('@storybook/core/dist/node-logger');
+vi.mock('@storybook/core/node-logger');
 
 const MOCK_FRAMEWORK_FILES: {
   name: string;

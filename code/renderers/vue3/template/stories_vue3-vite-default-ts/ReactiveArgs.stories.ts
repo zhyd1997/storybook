@@ -5,7 +5,7 @@ import {
   UPDATE_STORY_ARGS,
   STORY_ARGS_UPDATED,
   RESET_STORY_ARGS,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 
 import ReactiveArgs from './ReactiveArgs.vue';
 

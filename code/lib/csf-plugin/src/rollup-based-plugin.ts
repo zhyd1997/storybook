@@ -1,5 +1,5 @@
-import type { EnrichCsfOptions } from '@storybook/core/dist/csf-tools';
-import { enrichCsf, formatCsf, loadCsf } from '@storybook/core/dist/csf-tools';
+import type { EnrichCsfOptions } from '@storybook/core/csf-tools';
+import { enrichCsf, formatCsf, loadCsf } from '@storybook/core/csf-tools';
 import type { RollupPlugin } from 'unplugin';
 import fs from 'fs/promises';
 import { STORIES_REGEX } from './constants';

@@ -1,4 +1,4 @@
-import type { Conditional } from '@storybook/core/dist/types';
+import type { Conditional } from '@storybook/core/types';
 
 // TODO ?
 export interface JsDocParam {

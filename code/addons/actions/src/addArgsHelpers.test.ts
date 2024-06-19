@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { StoryContext } from '@storybook/core/dist/types';
+import type { StoryContext } from '@storybook/core/types';
 import { inferActionsFromArgTypesRegex, addActionsFromArgTypes } from './addArgsHelpers';
 
 describe('actions parameter enhancers', () => {

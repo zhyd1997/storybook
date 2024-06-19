@@ -1,5 +1,5 @@
 import React from 'react';
-import { addons, types } from '@storybook/core/dist/manager-api';
+import { addons, types } from '@storybook/core/manager-api';
 
 import { ADDON_ID } from './constants';
 import { OutlineSelector } from './OutlineSelector';

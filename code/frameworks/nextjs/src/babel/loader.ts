@@ -1,6 +1,6 @@
-import { getProjectRoot, resolvePathInStorybookCache } from '@storybook/core/dist/common';
+import { getProjectRoot, resolvePathInStorybookCache } from '@storybook/core/common';
 import { getVirtualModules } from '@storybook/builder-webpack5';
-import type { Options } from '@storybook/core/dist/types';
+import type { Options } from '@storybook/core/types';
 
 export const configureBabelLoader = async (baseConfig: any, options: Options) => {
   const { virtualModules } = await getVirtualModules(options);

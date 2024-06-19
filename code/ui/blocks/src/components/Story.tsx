@@ -1,8 +1,8 @@
 import { global } from '@storybook/global';
 import type { FunctionComponent } from 'react';
 import React, { useRef, useEffect, useState } from 'react';
-import type { DocsContextProps, PreparedStory } from '@storybook/core/dist/types';
-import { Loader, getStoryHref, ErrorFormatter } from '@storybook/core/dist/components';
+import type { DocsContextProps, PreparedStory } from '@storybook/core/types';
+import { Loader, getStoryHref, ErrorFormatter } from '@storybook/core/components';
 import { IFrame } from './IFrame';
 import { ZoomContext } from './ZoomContext';
 

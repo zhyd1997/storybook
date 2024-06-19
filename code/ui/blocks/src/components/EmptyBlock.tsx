@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React from 'react';
 import { transparentize } from 'polished';
-import { styled } from '@storybook/core/dist/theming';
-import { withReset } from '@storybook/core/dist/components';
+import { styled } from '@storybook/core/theming';
+import { withReset } from '@storybook/core/components';
 
 const Wrapper = styled.div(withReset, ({ theme }) => ({
   backgroundColor: theme.base === 'light' ? 'rgba(0,0,0,.01)' : 'rgba(255,255,255,.01)',

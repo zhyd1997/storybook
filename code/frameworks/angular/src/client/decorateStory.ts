@@ -1,5 +1,5 @@
-import { DecoratorFunction, LegacyStoryFn, StoryContext } from '@storybook/core/dist/types';
-import { sanitizeStoryContextUpdate } from '@storybook/core/dist/preview-api';
+import { DecoratorFunction, LegacyStoryFn, StoryContext } from '@storybook/core/types';
+import { sanitizeStoryContextUpdate } from '@storybook/core/preview-api';
 import { computesTemplateFromComponent } from './angular-beta/ComputesTemplateFromComponent';
 
 import { AngularRenderer } from './types';

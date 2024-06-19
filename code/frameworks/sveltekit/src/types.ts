@@ -2,7 +2,7 @@ import type { BuilderOptions, StorybookConfigVite } from '@storybook/builder-vit
 import type {
   CompatibleString,
   StorybookConfig as StorybookConfigBase,
-} from '@storybook/core/dist/types';
+} from '@storybook/core/types';
 import type { enhance } from './mocks/app/forms';
 import type { goto, invalidate, invalidateAll } from './mocks/app/navigation';
 

@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React, { useState, useCallback } from 'react';
-import { useGlobals } from '@storybook/core/dist/manager-api';
-import { WithTooltip, TooltipLinkList } from '@storybook/core/dist/components';
+import { useGlobals } from '@storybook/core/manager-api';
+import { WithTooltip, TooltipLinkList } from '@storybook/core/components';
 import { ToolbarMenuButton } from './ToolbarMenuButton';
 import type { WithKeyboardCycleProps } from '../hoc/withKeyboardCycle';
 import { withKeyboardCycle } from '../hoc/withKeyboardCycle';

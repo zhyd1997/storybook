@@ -1,5 +1,5 @@
 import { SvelteRenderer, setProjectAnnotations } from '@storybook/svelte'
-import type { ProjectAnnotations } from '@storybook/core/dist/types';
+import type { ProjectAnnotations } from '@storybook/core/types';
 import sbAnnotations from '../.storybook/preview'
 import * as addonInteractions from '@storybook/addon-interactions/preview';
 import * as addonActions from '@storybook/addon-essentials/actions/preview';

@@ -1,4 +1,4 @@
-import type { StorybookConfigRaw } from '@storybook/core/dist/types';
+import type { StorybookConfigRaw } from '@storybook/core/types';
 
 export type SkippableTask =
   | 'smoke-test'

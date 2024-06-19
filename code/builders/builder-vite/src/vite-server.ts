@@ -1,5 +1,5 @@
 import type { Server } from 'http';
-import type { Options } from '@storybook/core/dist/types';
+import type { Options } from '@storybook/core/types';
 import { commonConfig } from './vite-config';
 import { getOptimizeDeps } from './optimizeDeps';
 import { sanitizeEnvVars } from './envs';

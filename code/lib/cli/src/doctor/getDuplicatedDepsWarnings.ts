@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { frameworkPackages, rendererPackages } from '@storybook/core/dist/common';
-import type { InstallationMetadata } from '@storybook/core/dist/common';
+import { frameworkPackages, rendererPackages } from '@storybook/core/common';
+import type { InstallationMetadata } from '@storybook/core/common';
 import { hasMultipleVersions } from './hasMultipleVersions';
 
 export const messageDivider = '\n\n';
@@ -13,16 +13,16 @@ export const allowList = [
   '@storybook/channel-postmessage',
   '@storybook/channel-websocket',
   '@storybook/client-api',
-  '@storybook/core/dist/client-logger',
+  '@storybook/core/client-logger',
   '@storybook/core-client',
   '@storybook/preview-web',
-  '@storybook/core/dist/preview-api',
+  '@storybook/core/preview-api',
   '@storybook/store',
 
   // see this file for more info: code/ui/manager/src/globals/types.ts
   '@storybook/components',
-  '@storybook/core/dist/router',
-  '@storybook/core/dist/theming',
+  '@storybook/core/router',
+  '@storybook/core/theming',
   '@storybook/api',
   '@storybook/manager-api',
 ];
@@ -31,9 +31,9 @@ export const allowList = [
 export const disallowList = [
   Object.keys(rendererPackages),
   Object.keys(frameworkPackages),
-  '@storybook/core/dist/core-events',
+  '@storybook/core/core-events',
   '@storybook/instrumenter',
-  '@storybook/core/dist/common',
+  '@storybook/core/common',
   '@storybook/core-server',
   '@storybook/manager',
   '@storybook/preview',

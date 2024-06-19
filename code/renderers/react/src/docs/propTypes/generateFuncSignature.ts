@@ -1,4 +1,4 @@
-import type { ExtractedJsDocParam, ExtractedJsDocReturns } from '@storybook/core/dist/docs-tools';
+import type { ExtractedJsDocParam, ExtractedJsDocReturns } from '@storybook/core/docs-tools';
 
 export function generateFuncSignature(
   params: ExtractedJsDocParam[],

@@ -1,14 +1,14 @@
 /* eslint-disable no-underscore-dangle */
-import type { Channel } from '@storybook/core/dist/channels';
-import { addons } from '@storybook/core/dist/preview-api';
-import type { StoryId } from '@storybook/core/dist/types';
-import { once } from '@storybook/core/dist/client-logger';
+import type { Channel } from '@storybook/core/channels';
+import { addons } from '@storybook/core/preview-api';
+import type { StoryId } from '@storybook/core/types';
+import { once } from '@storybook/core/client-logger';
 import './typings.d.ts';
 import {
   FORCE_REMOUNT,
   SET_CURRENT_STORY,
   STORY_RENDER_PHASE_CHANGED,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 import { global } from '@storybook/global';
 import { processError } from '@vitest/utils/error';
 

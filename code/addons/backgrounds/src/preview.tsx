@@ -1,4 +1,4 @@
-import type { Addon_DecoratorFunction } from '@storybook/core/dist/types';
+import type { Addon_DecoratorFunction } from '@storybook/core/types';
 import { withBackground } from './decorators/withBackground';
 import { withGrid } from './decorators/withGrid';
 import { PARAM_KEY } from './constants';
