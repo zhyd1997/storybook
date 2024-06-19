@@ -1,1 +1,1 @@
-export * from '@storybook/core/dist/types';
+export * from '@storybook/core/types';

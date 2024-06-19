@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/dist/builder-manager');
+module.exports = require('@storybook/core/builder-manager');

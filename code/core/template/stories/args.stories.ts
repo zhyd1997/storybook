@@ -1,12 +1,12 @@
 import { global as globalThis } from '@storybook/global';
-import type { PartialStoryFn, PlayFunctionContext, StoryContext } from '@storybook/core/dist/types';
+import type { PartialStoryFn, PlayFunctionContext, StoryContext } from '@storybook/core/types';
 import { within, expect } from '@storybook/test';
 import pick from 'lodash/pick';
 import {
   STORY_ARGS_UPDATED,
   UPDATE_STORY_ARGS,
   RESET_STORY_ARGS,
-} from '@storybook/core/dist/core-events';
+} from '@storybook/core/core-events';
 
 export default {
   component: globalThis.Components.Pre,

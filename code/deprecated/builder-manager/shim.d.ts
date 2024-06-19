@@ -1,2 +1,2 @@
-export * from '@storybook/core/dist/builder-manager';
-export type * from '@storybook/core/dist/builder-manager';
+export * from '@storybook/core/builder-manager';
+export type * from '@storybook/core/builder-manager';

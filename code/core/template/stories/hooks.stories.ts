@@ -1,6 +1,6 @@
 import { global as globalThis } from '@storybook/global';
-import type { PartialStoryFn, PlayFunctionContext } from '@storybook/core/dist/types';
-import { useEffect, useState } from '@storybook/core/dist/preview-api';
+import type { PartialStoryFn, PlayFunctionContext } from '@storybook/core/types';
+import { useEffect, useState } from '@storybook/core/preview-api';
 import { within, userEvent } from '@storybook/test';
 
 export default {

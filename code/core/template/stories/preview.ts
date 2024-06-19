@@ -1,4 +1,4 @@
-import type { PartialStoryFn, StoryContext } from '@storybook/core/dist/types';
+import type { PartialStoryFn, StoryContext } from '@storybook/core/types';
 
 export const parameters = {
   projectParameter: 'projectParameter',

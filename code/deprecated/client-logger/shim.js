@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/dist/client-logger');
+module.exports = require('@storybook/core/client-logger');

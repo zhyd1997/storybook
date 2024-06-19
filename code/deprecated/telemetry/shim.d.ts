@@ -1,2 +1,2 @@
-export * from '@storybook/core/dist/telemetry';
-export type * from '@storybook/core/dist/telemetry';
+export * from '@storybook/core/telemetry';
+export type * from '@storybook/core/telemetry';

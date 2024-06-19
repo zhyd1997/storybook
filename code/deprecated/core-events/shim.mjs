@@ -1,1 +1,1 @@
-export * from '@storybook/core/dist/core-events';
+export * from '@storybook/core/core-events';

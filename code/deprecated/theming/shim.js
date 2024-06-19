@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/dist/theming');
+module.exports = require('@storybook/core/theming');

@@ -1,1 +1,1 @@
-export * from '@storybook/core/dist/channels';
+export * from '@storybook/core/channels';

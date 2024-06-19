@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/dist/components');
+module.exports = require('@storybook/core/components');

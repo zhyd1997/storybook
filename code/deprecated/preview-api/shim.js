@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/dist/preview-api');
+module.exports = require('@storybook/core/preview-api');

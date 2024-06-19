@@ -1,2 +1,2 @@
-export * from '@storybook/core/dist/core-server';
-export type * from '@storybook/core/dist/core-server';
+export * from '@storybook/core/core-server';
+export type * from '@storybook/core/core-server';

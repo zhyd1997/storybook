@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/dist/types');
+module.exports = require('@storybook/core/types');

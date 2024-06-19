@@ -1,1 +1,1 @@
-export * from '@storybook/core/dist/theming/create';
+export * from '@storybook/core/theming/create';

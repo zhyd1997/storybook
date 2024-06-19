@@ -1,1 +1,1 @@
-export * from '@storybook/core/dist/telemetry';
+export * from '@storybook/core/telemetry';

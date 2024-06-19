@@ -1,2 +1,2 @@
-export * from '@storybook/core/dist/channels';
-export type * from '@storybook/core/dist/channels';
+export * from '@storybook/core/channels';
+export type * from '@storybook/core/channels';

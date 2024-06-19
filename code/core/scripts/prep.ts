@@ -193,7 +193,6 @@ async function generateDistFiles() {
               assert: require.resolve('browser-assert'),
               util: require.resolve('util/util.js'),
               '@storybook/core': join(cwd, 'src'),
-              '@storybook/core/dist': join(cwd, 'src'),
               react: dirname(require.resolve('react/package.json')),
               'react-dom': dirname(require.resolve('react-dom/package.json')),
             },
@@ -221,7 +220,6 @@ async function generateDistFiles() {
             },
             plugins: [globalExternals(globalsModuleInfoMap)],
             alias: {
-              '@storybook/core/dist': join(cwd, 'src'),
               '@storybook/core': join(cwd, 'src'),
               react: dirname(require.resolve('react/package.json')),
               'react-dom/client': join(
