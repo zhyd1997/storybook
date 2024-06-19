@@ -2,8 +2,11 @@ import { ArrowRightIcon } from '@storybook/icons';
 import { keyframes, styled } from '@storybook/theming';
 import { Modal } from '@storybook/components';
 
-export const ModalWrapper = styled(Modal)`
+export const ModalWrapper = styled(Modal)<{ visible?: boolean }>`
   background: white;
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  transition: opacity 0.2s;
+  z-index: 10;
 `;
 
 export const ModalContentWrapper = styled.div`

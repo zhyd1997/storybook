@@ -10,6 +10,7 @@ import type { STORYBOOK_ADDON_ONBOARDING_STEPS } from './constants';
 import { STORYBOOK_ADDON_ONBOARDING_CHANNEL } from './constants';
 
 import { HighlightElement } from './components/HighlightElement/HighlightElement';
+import { WelcomeModal } from './features/WelcomeModal/WelcomeModal';
 
 const SpanHighlight = styled.span(({ theme }) => ({
   display: 'inline-flex',
@@ -75,7 +76,7 @@ export default function Onboarding({ api }: { api: API }) {
     [api]
   );
 
-  const skipOnboarding = useCallback(() => {
+  const disableOnboarding = useCallback(() => {
     // remove onboarding query parameter from current url
     const url = new URL(window.location.href);
     // @ts-expect-error (not strict)
@@ -87,13 +88,13 @@ export default function Onboarding({ api }: { api: API }) {
   }, [api, setEnabled]);
 
   const completeOnboarding = useCallback(() => {
-    selectStory('configure-your-project--docs');
     api.emit(STORYBOOK_ADDON_ONBOARDING_CHANNEL, {
       step: '6:FinishedOnboarding' satisfies StepKey,
       type: 'telemetry',
     });
-    skipOnboarding();
-  }, [api, selectStory, skipOnboarding]);
+    selectStory('configure-your-project--docs');
+    disableOnboarding();
+  }, [api, selectStory, disableOnboarding]);
 
   useEffect(() => {
     api.setQueryParams({ onboarding: 'true' });
@@ -128,16 +129,16 @@ export default function Onboarding({ api }: { api: API }) {
     return api.on(SAVE_STORY_RESPONSE, ({ payload, success }) => {
       if (!success) return;
       setCreatedStory(payload);
+      setShowConfetti(true);
       setStep('5:StoryCreated');
       setTimeout(() => api.clearNotification('save-story-success'));
     });
   }, [api]);
 
-  useEffect(() => {
-    if (step === '1:Intro') setTimeout(() => setStep('2:Controls'), 3000);
-    if (step === '5:StoryCreated') setShowConfetti(true);
-    api.emit(STORYBOOK_ADDON_ONBOARDING_CHANNEL, { step, type: 'telemetry' });
-  }, [api, step]);
+  useEffect(
+    () => api.emit(STORYBOOK_ADDON_ONBOARDING_CHANNEL, { step, type: 'telemetry' }),
+    [api, step]
+  );
 
   if (!enabled) {
     return null;
@@ -229,10 +230,15 @@ export default function Onboarding({ api }: { api: API }) {
           }}
         />
       )}
+      <WelcomeModal
+        step={step}
+        onProceed={() => setStep('2:Controls')}
+        onSkip={disableOnboarding}
+      />
       <GuidedTour
         step={step}
         steps={steps}
-        onClose={skipOnboarding}
+        onClose={disableOnboarding}
         onComplete={completeOnboarding}
       />
     </ThemeProvider>
