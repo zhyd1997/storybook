@@ -10,10 +10,10 @@ export const composeBeforeHooks = (hooks: BeforeAllHook[]): BeforeAllHook => {
     const cleanups: CleanupFn[] = [];
     for (const hook of hooks) {
       const cleanup = await hook();
-      if (cleanup) cleanups.push(cleanup);
+      if (cleanup) cleanups.unshift(cleanup);
     }
     return async () => {
-      for (const cleanup of cleanups.reverse()) {
+      for (const cleanup of cleanups) {
         await cleanup();
       }
     };
