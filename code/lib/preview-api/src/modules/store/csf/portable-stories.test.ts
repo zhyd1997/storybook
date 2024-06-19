@@ -26,16 +26,20 @@ describe('composeStory', () => {
     tags: ['metaTag'],
   };
 
-  it('should return beforeAll as part of project annotations', async () => {
-    const spy = vi.fn();
-    const annotations = {
-      beforeAll: async () => {
-        spy();
-      },
-    };
-    const finalAnnotations = setProjectAnnotations(annotations);
-    await finalAnnotations.beforeAll?.();
-    expect(spy).toHaveBeenCalled();
+  it('should return composed beforeAll as part of project annotations', async () => {
+    const after = vi.fn();
+    const before = vi.fn((n) => () => after(n));
+    const finalAnnotations = setProjectAnnotations([
+      { beforeAll: () => before(1) },
+      { beforeAll: () => before(2) },
+      { beforeAll: () => before(3) },
+    ]);
+
+    const cleanup = await finalAnnotations.beforeAll?.();
+    expect(before.mock.calls).toEqual([[1], [2], [3]]);
+
+    await cleanup?.();
+    expect(after.mock.calls).toEqual([[3], [2], [1]]);
   });
 
   it('should return composed project annotations via setProjectAnnotations', () => {
