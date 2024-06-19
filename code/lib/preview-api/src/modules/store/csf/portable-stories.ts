@@ -145,7 +145,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
         }
         console.warn(
           dedent`Some stories were not cleaned up before rendering '${humanReadableIdentifier}'.
-          
+
           You should load the story with \`await Story.load()\` before rendering it.`
         );
         // TODO: Add a link to the docs when they are ready
@@ -169,7 +169,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
         cleanups.push(
           ...(await story.applyBeforeEach(context))
             .filter(Boolean)
-            .map((callback: () => void) => ({ storyName, callback }))
+            .map((callback) => ({ storyName, callback }))
         );
       },
       args: story.initialArgs as Partial<TArgs>,
@@ -237,10 +237,10 @@ export function createPlaywrightTest<TFixture extends { extend: any }>(
           throw new Error(dedent`
               Portable stories in Playwright CT only work when referencing JSX elements.
               Please use JSX format for your components such as:
-              
+
               instead of:
               await mount(MyComponent, { props: { foo: 'bar' } })
-              
+
               do:
               await mount(<MyComponent foo="bar"/>)
 
