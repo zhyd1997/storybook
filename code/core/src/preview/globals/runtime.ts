@@ -14,20 +14,26 @@ export const globalsNameValueMap: Required<Record<keyof typeof globalsNameRefere
   '@storybook/global': GLOBAL,
 
   '@storybook/channels': CHANNELS,
+  '@storybook/core/channels': CHANNELS,
   '@storybook/core/dist/channels': CHANNELS,
 
   '@storybook/client-logger': CLIENT_LOGGER,
+  '@storybook/core/client-logger': CLIENT_LOGGER,
   '@storybook/core/dist/client-logger': CLIENT_LOGGER,
 
   '@storybook/core-events': CORE_EVENTS,
+  '@storybook/core/core-events': CORE_EVENTS,
   '@storybook/core/dist/core-events': CORE_EVENTS,
 
   '@storybook/core-events/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
+  '@storybook/core/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
   '@storybook/core/dist/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
 
   '@storybook/preview-api': PREVIEW_API,
+  '@storybook/core/preview-api': PREVIEW_API,
   '@storybook/core/dist/preview-api': PREVIEW_API,
 
   '@storybook/types': TYPES,
+  '@storybook/core/types': TYPES,
   '@storybook/core/dist/types': TYPES,
 };

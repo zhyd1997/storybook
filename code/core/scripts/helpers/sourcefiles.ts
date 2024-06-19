@@ -124,6 +124,7 @@ async function generateExportsFile(prettierConfig: prettier.Options | null): Pro
               outfile: l,
               alias: {
                 '@storybook/core/dist': join(import.meta.dirname, '..', '..', 'src'),
+                '@storybook/core': join(import.meta.dirname, '..', '..', 'src'),
               },
               legalComments: 'none',
               splitting: false,

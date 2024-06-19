@@ -25,31 +25,41 @@ export const globalsNameValueMap: Required<Record<keyof typeof globalsNameRefere
   '@storybook/icons': ICONS,
 
   '@storybook/components': COMPONENTS,
+  '@storybook/core/components': COMPONENTS,
   '@storybook/core/dist/components': COMPONENTS,
 
   '@storybook/manager-api': MANAGER_API,
+  '@storybook/core/manager-api': MANAGER_API,
   '@storybook/core/dist/manager-api': MANAGER_API,
 
   '@storybook/router': ROUTER,
+  '@storybook/core/router': ROUTER,
   '@storybook/core/dist/router': ROUTER,
 
   '@storybook/theming': THEMING,
+  '@storybook/core/theming': THEMING,
   '@storybook/core/dist/theming': THEMING,
   '@storybook/theming/create': THEMINGCREATE,
+  '@storybook/core/theming/create': THEMINGCREATE,
   '@storybook/core/dist/theming/create': THEMINGCREATE,
 
   '@storybook/channels': CHANNELS,
+  '@storybook/core/channels': CHANNELS,
   '@storybook/core/dist/channels': CHANNELS,
 
   '@storybook/core-events': EVENTS,
+  '@storybook/core/core-events': EVENTS,
   '@storybook/core/dist/core-events': EVENTS,
 
   '@storybook/types': TYPES,
+  '@storybook/core/types': TYPES,
   '@storybook/core/dist/types': TYPES,
 
   '@storybook/core-events/manager-errors': EVENTS_MANAGER_ERRORS,
+  '@storybook/core/manager-errors': EVENTS_MANAGER_ERRORS,
   '@storybook/core/dist/manager-errors': EVENTS_MANAGER_ERRORS,
 
   '@storybook/client-logger': CLIENT_LOGGER,
+  '@storybook/core/client-logger': CLIENT_LOGGER,
   '@storybook/core/dist/client-logger': CLIENT_LOGGER,
 };
