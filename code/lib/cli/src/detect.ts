@@ -114,7 +114,7 @@ export async function detectBuilder(packageManager: JsPackageManager, projectTyp
   const webpackConfig = findUp.sync(webpackConfigFiles);
   const dependencies = await packageManager.getAllDependencies();
 
-  if (viteConfig || (dependencies['vite'] && dependencies['webpack'] === undefined)) {
+  if (viteConfig || (dependencies.vite && dependencies.webpack === undefined)) {
     commandLog('Detected Vite project. Setting builder to Vite')();
     return CoreBuilder.Vite;
   }
@@ -122,8 +122,8 @@ export async function detectBuilder(packageManager: JsPackageManager, projectTyp
   // REWORK
   if (
     webpackConfig ||
-    ((dependencies['webpack'] || dependencies['@nuxt/webpack-builder']) &&
-      dependencies['vite'] !== undefined)
+    ((dependencies.webpack || dependencies['@nuxt/webpack-builder']) &&
+      dependencies.vite !== undefined)
   ) {
     commandLog('Detected webpack project. Setting builder to webpack')();
     return CoreBuilder.Webpack5;
@@ -179,7 +179,7 @@ export async function detectLanguage(packageManager: JsPackageManager) {
 
   const isTypescriptDirectDependency = await packageManager
     .getAllDependencies()
-    .then((deps) => Boolean(deps['typescript']));
+    .then((deps) => Boolean(deps.typescript));
 
   const typescriptVersion = await packageManager.getPackageVersion('typescript');
   const prettierVersion = await packageManager.getPackageVersion('prettier');
