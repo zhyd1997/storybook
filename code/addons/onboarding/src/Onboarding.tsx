@@ -11,7 +11,7 @@ import type { STORYBOOK_ADDON_ONBOARDING_STEPS } from './constants';
 import { STORYBOOK_ADDON_ONBOARDING_CHANNEL } from './constants';
 
 import { HighlightElement } from './components/HighlightElement/HighlightElement';
-import { WelcomeModal } from './features/WelcomeModal/WelcomeModal';
+import { SplashScreen } from './features/SplashScreen/SplashScreen';
 
 const SpanHighlight = styled.span(({ theme }) => ({
   display: 'inline-flex',
@@ -261,17 +261,16 @@ export default function Onboarding({ api }: { api: API }) {
           }}
         />
       )}
-      <WelcomeModal
-        step={step}
-        onProceed={() => setStep('2:Controls')}
-        onSkip={disableOnboarding}
-      />
-      <GuidedTour
-        step={step}
-        steps={steps}
-        onClose={disableOnboarding}
-        onComplete={completeOnboarding}
-      />
+      {step === '1:Intro' ? (
+        <SplashScreen onDismiss={() => setStep('2:Controls')} />
+      ) : (
+        <GuidedTour
+          step={step}
+          steps={steps}
+          onClose={disableOnboarding}
+          onComplete={completeOnboarding}
+        />
+      )}
     </ThemeProvider>
   );
 }
