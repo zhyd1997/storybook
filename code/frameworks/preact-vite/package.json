@@ -56,7 +56,7 @@
     "vite": "^4.0.0"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:^",
+    "storybook": "workspace:^",
     "preact": ">=10"
   },
   "engines": {

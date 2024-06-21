@@ -82,7 +82,7 @@
     "typescript": "^5.3.2"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:^",
+    "storybook": "workspace:^",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta"
   },

@@ -63,7 +63,7 @@
     "vite": "^4.0.0"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:^",
+    "storybook": "workspace:^",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta",
     "vite": "^4.0.0 || ^5.0.0"

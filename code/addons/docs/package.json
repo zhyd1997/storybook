@@ -121,7 +121,7 @@
     "vite": "^4.0.4"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:^"
+    "storybook": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

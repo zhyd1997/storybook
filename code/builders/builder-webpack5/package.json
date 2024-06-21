@@ -100,7 +100,7 @@
     "typescript": "^5.3.2"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:^"
+    "storybook": "workspace:^"
   },
   "peerDependenciesMeta": {
     "typescript": {

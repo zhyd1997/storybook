@@ -62,7 +62,7 @@
     "react-dom": "^18.2.0"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:^"
+    "storybook": "workspace:^"
   },
   "publishConfig": {
     "access": "public"
