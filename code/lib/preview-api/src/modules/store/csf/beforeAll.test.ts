@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { composeBeforeHooks } from './beforeAll';
+import { composeBeforeAllHooks } from './beforeAll';
 
 const calls: string[] = [];
 
@@ -28,14 +28,14 @@ const asyncCleanupHook = (label: string, delay: number) => () => {
   };
 };
 
-describe('composeBeforeHooks', () => {
+describe('composeBeforeAllHooks', () => {
   it('should return a composed hook function', async () => {
-    await composeBeforeHooks([basicHook('one'), basicHook('two'), basicHook('three')])();
+    await composeBeforeAllHooks([basicHook('one'), basicHook('two'), basicHook('three')])();
     expect(calls).toEqual(['one', 'two', 'three']);
   });
 
   it('should execute cleanups in reverse order', async () => {
-    const cleanup = await composeBeforeHooks([
+    const cleanup = await composeBeforeAllHooks([
       cleanupHook('one'),
       cleanupHook('two'),
       cleanupHook('three'),
@@ -47,7 +47,7 @@ describe('composeBeforeHooks', () => {
   });
 
   it('should execute async hooks in sequence', async () => {
-    await composeBeforeHooks([
+    await composeBeforeAllHooks([
       asyncHook('one', 10),
       asyncHook('two', 100),
       asyncHook('three', 10),
@@ -62,7 +62,7 @@ describe('composeBeforeHooks', () => {
       asyncCleanupHook('three', 10),
     ];
 
-    const cleanup = await composeBeforeHooks(hooks)();
+    const cleanup = await composeBeforeAllHooks(hooks)();
     expect(calls).toEqual(['one', 'two', 'three']);
 
     await cleanup?.();

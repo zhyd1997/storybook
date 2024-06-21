@@ -5,7 +5,7 @@ type CleanupFn = () => Awaitable<void>;
 export type BeforeAllHook = () => Awaitable<void | CleanupFn>;
 
 // Execute all the hooks in sequence, and return a function that will execute cleanups in reverse order
-export const composeBeforeHooks = (hooks: BeforeAllHook[]): BeforeAllHook => {
+export const composeBeforeAllHooks = (hooks: BeforeAllHook[]): BeforeAllHook => {
   return async () => {
     const cleanups: CleanupFn[] = [];
     for (const hook of hooks) {
