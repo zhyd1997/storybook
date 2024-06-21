@@ -35,7 +35,7 @@
     "@storybook/blocks": "file:../../../code/ui/blocks",
     "@storybook/builder-vite": "file:../../../code/builders/builder-vite",
     "@storybook/builder-webpack5": "file:../../../code/builders/builder-webpack5",
-    "@storybook/cli": "file:../../../code/lib/cli",
+    "@storybook/cli": "file:../../../code/lib/cli-storybook",
     "@storybook/codemod": "file:../../../code/lib/codemod",
     "@storybook/core": "file:../../../code/core",
     "@storybook/core-webpack": "file:../../../code/lib/core-webpack",
@@ -74,7 +74,7 @@
     "@storybook/web-components-vite": "file:../../../code/frameworks/web-components-vite",
     "@storybook/web-components-webpack5": "file:../../../code/frameworks/web-components-webpack5",
     "sb": "file:../../../code/lib/cli-sb",
-    "storybook": "file:../../../code/lib/cli-storybook"
+    "storybook": "file:../../../code/lib/cli"
   },
   "dependencies": {
     "next": "^14.2.0",
@@ -86,7 +86,6 @@
     "@storybook/addon-actions": "^8.0.0",
     "@storybook/addon-essentials": "^8.0.0",
     "@storybook/addon-interactions": "^8.0.0",
-    "@storybook/core": "^8.0.0",
     "@storybook/instrumenter": "^8.0.0",
     "@storybook/nextjs": "^8.0.0",
     "@storybook/react": "^8.0.0",

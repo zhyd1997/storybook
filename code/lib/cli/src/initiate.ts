@@ -2,7 +2,7 @@ import { appendFile, readFile } from 'fs/promises';
 import findUp from 'find-up';
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { telemetry } from '@storybook/core/telemetry';
+import { telemetry } from 'storybook/telemetry';
 import { withTelemetry } from '@storybook/core/core-server';
 import { NxProjectDetectedError } from '@storybook/core/server-errors';
 import {

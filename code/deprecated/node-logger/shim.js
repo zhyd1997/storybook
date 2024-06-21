@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/node-logger');
+module.exports = require('storybook/node-logger');

@@ -1,11 +1,11 @@
-import type { ExtractedProp } from '@storybook/core/docs-tools';
+import type { ExtractedProp } from 'storybook/docs-tools';
 import {
   convert,
   extractComponentProps,
   hasDocgen,
   type ArgTypesExtractor,
-} from '@storybook/core/docs-tools';
-import type { SBType, StrictArgTypes, StrictInputType } from '@storybook/core/types';
+} from 'storybook/docs-tools';
+import type { SBType, StrictArgTypes, StrictInputType } from 'storybook/types';
 import type { VueDocgenInfo, VueDocgenInfoEntry, VueDocgenPlugin } from '@storybook/vue3-vite';
 
 type PropertyMetaSchema = VueDocgenInfoEntry<'vue-component-meta', 'props'>['schema'];

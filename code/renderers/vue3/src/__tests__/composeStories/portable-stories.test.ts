@@ -3,7 +3,7 @@
 /// <reference types="@testing-library/jest-dom" />;
 import { it, expect, vi, describe } from 'vitest';
 import { render, screen } from '@testing-library/vue';
-import { addons } from '@storybook/core/preview-api';
+import { addons } from 'storybook/preview-api';
 import { expectTypeOf } from 'expect-type';
 import type { Meta } from '@storybook/vue3';
 

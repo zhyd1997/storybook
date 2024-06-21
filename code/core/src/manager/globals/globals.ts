@@ -5,32 +5,42 @@ export const globalsNameReferenceMap = {
   'react-dom/client': '__REACT_DOM_CLIENT__',
   '@storybook/icons': '__STORYBOOK_ICONS__',
 
+  'storybook/manager-api': '__STORYBOOK_API__',
   '@storybook/manager-api': '__STORYBOOK_API__',
   '@storybook/core/manager-api': '__STORYBOOK_API__',
 
+  'storybook/components': '__STORYBOOK_COMPONENTS__',
   '@storybook/components': '__STORYBOOK_COMPONENTS__',
   '@storybook/core/components': '__STORYBOOK_COMPONENTS__',
 
+  'storybook/channels': '__STORYBOOK_CHANNELS__',
   '@storybook/channels': '__STORYBOOK_CHANNELS__',
   '@storybook/core/channels': '__STORYBOOK_CHANNELS__',
 
+  'storybook/core-events': '__STORYBOOK_CORE_EVENTS__',
   '@storybook/core-events': '__STORYBOOK_CORE_EVENTS__',
   '@storybook/core/core-events': '__STORYBOOK_CORE_EVENTS__',
 
+  'storybook/core-events/manager-errors': '__STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__',
   '@storybook/core-events/manager-errors': '__STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__',
   '@storybook/core/manager-errors': '__STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__',
 
+  'storybook/router': '__STORYBOOK_ROUTER__',
   '@storybook/router': '__STORYBOOK_ROUTER__',
   '@storybook/core/router': '__STORYBOOK_ROUTER__',
 
+  'storybook/theming': '__STORYBOOK_THEMING__',
   '@storybook/theming': '__STORYBOOK_THEMING__',
   '@storybook/core/theming': '__STORYBOOK_THEMING__',
+  'storybook/theming/create': '__STORYBOOK_THEMING_CREATE__',
   '@storybook/theming/create': '__STORYBOOK_THEMING_CREATE__',
   '@storybook/core/theming/create': '__STORYBOOK_THEMING_CREATE__',
 
+  'storybook/client-logger': '__STORYBOOK_CLIENT_LOGGER__',
   '@storybook/client-logger': '__STORYBOOK_CLIENT_LOGGER__',
   '@storybook/core/client-logger': '__STORYBOOK_CLIENT_LOGGER__',
 
+  'storybook/types': '__STORYBOOK_TYPES__',
   '@storybook/types': '__STORYBOOK_TYPES__',
   '@storybook/core/types': '__STORYBOOK_TYPES__',
 } as const;

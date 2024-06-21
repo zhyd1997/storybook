@@ -35,7 +35,7 @@ const generateMapperContent = (input: string) => {
   if (input.endsWith('.d.ts')) {
     return dedent`
       export * from '@storybook/core/${value}';
-      export type * from '@storybook/core/${value}';
+      export type * from '@storybook/core/${value}';\n
     `;
   }
   // eslint-disable-next-line local-rules/no-uncategorized-errors
@@ -73,6 +73,22 @@ async function run() {
       }
     })
   );
+
+  selfPackageJson.typesVersions = {
+    '*': {
+      ...Object.entries(corePackageJson.typesVersions['*']).reduce<Record<string, string[]>>(
+        (acc, [key, value]) => {
+          acc[key] = value.map((v) => v.replace('./dist/', './core/'));
+          return acc;
+        },
+        {}
+      ),
+      '*': ['./dist/index.d.ts'],
+      'core-path': ['./dist/core-path.d.ts'],
+
+      core: ['./core/index.d.ts'],
+    },
+  };
 
   await write(
     join(__dirname, '../package.json'),

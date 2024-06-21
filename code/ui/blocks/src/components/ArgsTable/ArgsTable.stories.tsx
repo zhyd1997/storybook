@@ -1,6 +1,6 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
-import { styled } from '@storybook/core/theming';
+import { styled } from 'storybook/theming';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ArgsTable, ArgsTableError } from './ArgsTable';
 import * as ArgRow from './ArgRow.stories';

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseJsDoc } from '@storybook/core/docs-tools';
+import { parseJsDoc } from 'storybook/docs-tools';
 import { generateFuncSignature, generateShortFuncSignature } from './generateFuncSignature';
 
 describe('generateFuncSignature', () => {

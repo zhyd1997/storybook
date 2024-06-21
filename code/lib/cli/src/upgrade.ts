@@ -1,14 +1,14 @@
 import { sync as spawnSync } from 'cross-spawn';
-import { telemetry } from '@storybook/core/telemetry';
+import { telemetry } from 'storybook/telemetry';
 import semver, { eq, lt, prerelease } from 'semver';
 import { logger } from '@storybook/core/node-logger';
-import { withTelemetry } from '@storybook/core/core-server';
+import { withTelemetry } from 'storybook/core-server';
 import {
   UpgradeStorybookInWrongWorkingDirectory,
   UpgradeStorybookToLowerVersionError,
   UpgradeStorybookToSameVersionError,
   UpgradeStorybookUnknownCurrentVersionError,
-} from '@storybook/core/server-errors';
+} from 'storybook/server-errors';
 
 import chalk from 'chalk';
 import { dedent } from 'ts-dedent';

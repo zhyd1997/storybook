@@ -4,14 +4,14 @@ import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import * as React from 'react';
 import type { AxeResults } from 'axe-core';
 import { render, act, cleanup } from '@testing-library/react';
-import * as api from '@storybook/core/manager-api';
-import { STORY_CHANGED } from '@storybook/core/core-events';
+import * as api from 'storybook/manager-api';
+import { STORY_CHANGED } from 'storybook/core-events';
 import { HIGHLIGHT } from '@storybook/addon-highlight';
 
 import { A11yContextProvider, useA11yContext } from './A11yContext';
 import { EVENTS } from '../constants';
 
-vi.mock('@storybook/core/manager-api');
+vi.mock('storybook/manager-api');
 const mockedApi = vi.mocked(api);
 
 const storyId = 'jest';

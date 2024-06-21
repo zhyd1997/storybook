@@ -1,7 +1,7 @@
 import { global } from '@storybook/global';
 import { dedent } from 'ts-dedent';
 
-import { logger } from '@storybook/core/client-logger';
+import { logger } from 'storybook/client-logger';
 
 import type { Background } from '../types';
 

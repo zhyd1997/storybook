@@ -1,8 +1,8 @@
 import React, { createRef, useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { Backdrop, Code, Container, SnippetWrapperFirst } from './SyntaxHighlighter.styled';
 import { Snippet } from './Snippet/Snippet';
-import { ThemeProvider, ensure, themes } from '@storybook/core/theming';
-import { SyntaxHighlighter as StorybookSyntaxHighlighter } from '@storybook/core/components';
+import { ThemeProvider, ensure, themes } from 'storybook/theming';
+import { SyntaxHighlighter as StorybookSyntaxHighlighter } from 'storybook/components';
 
 type SyntaxHighlighterProps = {
   data: { snippet: string; toggle?: boolean }[][];

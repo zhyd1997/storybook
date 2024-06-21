@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 
-import { SNIPPET_RENDERED, SourceType } from '@storybook/core/docs-tools';
-import { addons, useEffect } from '@storybook/core/preview-api';
-import type { DecoratorFunction } from '@storybook/core/types';
+import { SNIPPET_RENDERED, SourceType } from 'storybook/docs-tools';
+import { addons, useEffect } from 'storybook/preview-api';
+import type { DecoratorFunction } from 'storybook/types';
 
 import type { HtmlRenderer } from '../types';
 

@@ -10,12 +10,12 @@ import type {
   StoryContext as GenericStoryContext,
   StrictArgs,
   ProjectAnnotations,
-} from '@storybook/core/types';
+} from 'storybook/types';
 import type { ComponentProps, ComponentType } from 'react';
 import type { SetOptional, Simplify } from 'type-fest';
 import type { ReactRenderer } from './types';
 
-export type { Args, ArgTypes, Parameters, StrictArgs } from '@storybook/core/types';
+export type { Args, ArgTypes, Parameters, StrictArgs } from 'storybook/types';
 export type { ReactRenderer };
 
 /**

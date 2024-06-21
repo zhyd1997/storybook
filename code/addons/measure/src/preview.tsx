@@ -1,4 +1,4 @@
-import type { Addon_DecoratorFunction } from '@storybook/core/types';
+import type { Addon_DecoratorFunction } from 'storybook/types';
 import { withMeasure } from './withMeasure';
 import { PARAM_KEY } from './constants';
 

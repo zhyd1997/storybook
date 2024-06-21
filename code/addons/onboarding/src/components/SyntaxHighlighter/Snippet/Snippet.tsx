@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Fragment, forwardRef } from 'react';
 import { SnippetWrapper } from './Snippet.styled';
 import React from 'react';
-import { SyntaxHighlighter as StorybookSyntaxHighlighter } from '@storybook/core/components';
+import { SyntaxHighlighter as StorybookSyntaxHighlighter } from 'storybook/components';
 
 interface Props {
   content: { snippet: string; toggle?: boolean }[];

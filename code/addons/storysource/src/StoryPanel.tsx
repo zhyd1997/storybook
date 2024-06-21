@@ -1,12 +1,12 @@
 import React from 'react';
-import { type API, useParameter } from '@storybook/core/manager-api';
-import { styled } from '@storybook/core/theming';
-import { Link } from '@storybook/core/router';
+import { type API, useParameter } from 'storybook/manager-api';
+import { styled } from 'storybook/theming';
+import { Link } from 'storybook/router';
 import {
   SyntaxHighlighter,
   type SyntaxHighlighterProps,
   type SyntaxHighlighterRendererProps,
-} from '@storybook/core/components';
+} from 'storybook/components';
 import invariant from 'tiny-invariant';
 
 // @ts-expect-error Typedefs don't currently expose `createElement` even though it exists

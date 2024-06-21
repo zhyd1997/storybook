@@ -1,10 +1,10 @@
 import type { ElementRef, ReactNode } from 'react';
 import React, { forwardRef, Fragment, useEffect, useRef } from 'react';
-import type { Theme } from '@storybook/core/theming';
-import { styled, withTheme } from '@storybook/core/theming';
+import type { Theme } from 'storybook/theming';
+import { styled, withTheme } from 'storybook/theming';
 
 import { Inspector } from 'react-inspector';
-import { ActionBar, ScrollArea } from '@storybook/core/components';
+import { ActionBar, ScrollArea } from 'storybook/components';
 
 import { Action, Counter, InspectorContainer } from './style';
 import type { ActionDisplay } from '../../models';

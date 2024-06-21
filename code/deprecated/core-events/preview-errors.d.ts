@@ -1,2 +1,2 @@
-export * from '@storybook/core/preview-errors';
-export type * from '@storybook/core/preview-errors';
+export * from 'storybook/preview-errors';
+export type * from 'storybook/preview-errors';

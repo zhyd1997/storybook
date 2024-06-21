@@ -7,10 +7,10 @@ import {
   useArgTypes,
   useParameter,
   useStorybookState,
-} from '@storybook/core/manager-api';
+} from 'storybook/manager-api';
 import { PureArgsTable as ArgsTable, type PresetColor, type SortType } from '@storybook/blocks';
-import { styled } from '@storybook/core/theming';
-import type { ArgTypes } from '@storybook/core/types';
+import { styled } from 'storybook/theming';
+import type { ArgTypes } from 'storybook/types';
 
 import { PARAM_KEY } from './constants';
 import { SaveStory } from './SaveStory';

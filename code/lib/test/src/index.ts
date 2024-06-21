@@ -11,7 +11,7 @@ import {
   resetAllMocks,
   restoreAllMocks,
 } from './spy';
-import type { Renderer } from '@storybook/core/types';
+import type { Renderer } from 'storybook/types';
 
 export * from './spy';
 

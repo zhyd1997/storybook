@@ -2,7 +2,7 @@ import {
   composeStory as originalComposeStory,
   composeStories as originalComposeStories,
   setProjectAnnotations as originalSetProjectAnnotations,
-} from '@storybook/core/preview-api';
+} from 'storybook/preview-api';
 import type {
   Args,
   NamedOrDefaultProjectAnnotations,
@@ -10,7 +10,7 @@ import type {
   Store_CSFExports,
   StoriesWithPartialProps,
   ProjectAnnotations,
-} from '@storybook/core/types';
+} from 'storybook/types';
 
 import * as reactProjectAnnotations from './entry-preview';
 import type { Meta } from './public-types';

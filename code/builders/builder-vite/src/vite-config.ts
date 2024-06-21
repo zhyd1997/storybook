@@ -11,9 +11,9 @@ import {
   getFrameworkName,
   getBuilderOptions,
   resolvePathInStorybookCache,
-} from '@storybook/core/common';
-import { globalsNameReferenceMap } from '@storybook/core/preview/globals';
-import type { Options } from '@storybook/core/types';
+} from 'storybook/common';
+import { globalsNameReferenceMap } from 'storybook/preview/globals';
+import type { Options } from 'storybook/types';
 import {
   codeGeneratorPlugin,
   csfPlugin,

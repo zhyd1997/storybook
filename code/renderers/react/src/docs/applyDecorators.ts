@@ -1,5 +1,5 @@
-import { defaultDecorateStory } from '@storybook/core/preview-api';
-import type { LegacyStoryFn, DecoratorFunction } from '@storybook/core/types';
+import { defaultDecorateStory } from 'storybook/preview-api';
+import type { LegacyStoryFn, DecoratorFunction } from 'storybook/types';
 
 import type { ReactRenderer } from '../types';
 import { jsxDecorator } from './jsxDecorator';

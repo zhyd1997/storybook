@@ -1,5 +1,5 @@
-import { normalizeStories } from '@storybook/core/common';
-import type { DocsOptions, TagsOptions, Options } from '@storybook/core/types';
+import { normalizeStories } from 'storybook/common';
+import type { DocsOptions, TagsOptions, Options } from 'storybook/types';
 
 export type PreviewHtml = string | undefined;
 

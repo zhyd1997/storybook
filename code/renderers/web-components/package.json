@@ -63,8 +63,8 @@
     "web-component-analyzer": "^1.1.6"
   },
   "peerDependencies": {
-    "storybook": "workspace:^",
-    "lit": "^2.0.0 || ^3.0.0"
+    "lit": "^2.0.0 || ^3.0.0",
+    "storybook": "workspace:^"
   },
   "engines": {
     "node": ">=18.0.0"

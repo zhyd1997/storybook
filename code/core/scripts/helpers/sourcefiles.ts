@@ -86,6 +86,10 @@ async function generateFrameworksFile(prettierConfig: prettier.Options | null): 
   );
 }
 
+const localAlias = {
+  '@storybook/core': join(import.meta.dirname, '..', '..', 'src'),
+  storybook: join(import.meta.dirname, '..', '..', 'src'),
+};
 async function generateExportsFile(prettierConfig: prettier.Options | null): Promise<void> {
   function removeDefault(input: string) {
     return input !== 'default';
@@ -93,60 +97,31 @@ async function generateExportsFile(prettierConfig: prettier.Options | null): Pro
 
   const location = join(import.meta.dirname, '..', '..', 'src', 'manager', 'globals', 'exports.ts');
 
-  const { globalsNameReferenceMap } = await import('../../src/manager/globals/globals');
+  const i = join(import.meta.dirname, '..', '..', 'src', 'manager', 'globals', 'runtime.ts');
+  const l = await temporaryFile({ extension: 'js' });
 
-  const grouped = Object.entries(globalsNameReferenceMap).reduce<Record<string, string[]>>(
-    (acc, [key, value]) => {
-      acc[value] = [...(acc[value] || []), key];
-      return acc;
-    },
-    {}
-  );
+  await esbuild.build({
+    entryPoints: [i],
+    bundle: true,
+    format: 'esm',
+    drop: ['console'],
+    outfile: l,
+    alias: localAlias,
+    legalComments: 'none',
+    splitting: false,
+    platform: 'browser',
+    target: 'chrome100',
+  });
 
-  const r = await Promise.all(
-    Object.values(grouped).map(async (pkgs) => {
-      // We bundle the target, into a single file to a temporary location
-      // then we import the file and get the named exports of the module
-      // we need to ensure to have happy-dom globally registered before running this
-      // we do this so we can get the named exports of the module and generating those, independently from anything else.
-      // due to esbuild being so fast, this is fine.
-      // we can't load the module directly, because we'd need to compile things from @storybook/core first, which creates a cyclical dependence
-      // esbuild allows us to alias anything from @storybook/core to the local source
-      const l = await temporaryFile({ extension: 'js' });
-      const all = await Promise.all(
-        pkgs.map(async (pkg) => {
-          if (pkg.startsWith('@storybook/')) {
-            await esbuild.build({
-              entryPoints: [pkg],
-              bundle: true,
-              format: 'esm',
-              drop: ['console'],
-              outfile: l,
-              alias: {
-                '@storybook/core': join(import.meta.dirname, '..', '..', 'src'),
-              },
-              legalComments: 'none',
-              splitting: false,
-              platform: 'browser',
-              target: 'chrome100',
-            });
+  const { globalsNameValueMap: data } = await import(l);
 
-            const mod = await import(l);
-            return Object.keys(mod).filter(removeDefault).sort();
-          }
-          const mod = await import(pkg);
-          return Object.keys(mod).filter(removeDefault).sort();
-        })
-      );
-      return { pkgs, e: all.find((a) => a.length > 0) };
-    })
-  );
-
-  const data: Record<string, string[]> = {};
-
-  for (const { pkgs, e } of r) {
-    for (const pkg of pkgs) {
-      data[pkg] = e || [];
+  // loop over all values of the keys of the data object and remove the default key
+  for (const key in data) {
+    const value = data[key];
+    if (typeof value === 'object') {
+      data[key] = Object.keys(
+        Object.fromEntries(Object.entries(value).filter(([k]) => removeDefault(k)))
+      ).sort();
     }
   }
 

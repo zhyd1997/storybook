@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React from 'react';
-import { styled } from '@storybook/core/theming';
+import { styled } from 'storybook/theming';
 import type { Step, TooltipRenderProps } from 'react-joyride';
 import { Button } from '../../components/Button/Button';
 

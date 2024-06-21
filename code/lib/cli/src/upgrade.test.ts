@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import * as sbcc from '@storybook/core/common';
-import { UpgradeStorybookToLowerVersionError } from '@storybook/core/server-errors';
+import { UpgradeStorybookToLowerVersionError } from 'storybook/server-errors';
 import { doUpgrade, getStorybookVersion } from './upgrade';
 import { logger } from '@storybook/core/node-logger';
 

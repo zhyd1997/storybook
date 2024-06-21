@@ -1,2 +1,2 @@
-export * from '@storybook/core/node-logger';
-export type * from '@storybook/core/node-logger';
+export * from 'storybook/node-logger';
+export type * from 'storybook/node-logger';
