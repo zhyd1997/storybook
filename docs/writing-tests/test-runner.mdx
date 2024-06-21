@@ -100,13 +100,19 @@ If you're already using any of those flags in your project, you should be able t
 
 ### Run tests against a deployed Storybook
 
-By default, the test-runner assumes that you're running it against a locally served Storybook on port `6006`. If you want to define a target URL to run against deployed Storybooks, you can use the `--url` flag or set the `TARGET_URL` environment variable. For example:
+By default, the test-runner assumes that you're running it against a locally served Storybook on port `6006`. If you want to define a target URL to run against deployed Storybooks, you can use the `--url` flag:
 
 {/* prettier-ignore-start */}
 
 <CodeSnippets path="test-runner-execute-with-url.md" />
 
 {/* prettier-ignore-end */}
+
+Alternatively, you can set the `TARGET_URL` environment variable and run the test-runner:
+
+```sh
+TARGET_URL=https://the-storybook-url-here.com yarn test-storybook
+```
 
 ## Set up CI to run tests
 
