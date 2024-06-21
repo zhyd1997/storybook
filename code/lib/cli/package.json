@@ -1,5 +1,5 @@
 {
-  "name": "@storybook/cli",
+  "name": "storybook",
   "version": "8.2.0-alpha.10",
   "description": "Storybook's CLI - install, dev, build, upgrade, and more",
   "keywords": [
@@ -32,7 +32,130 @@
       "require": "./dist/index.js"
     },
     "./package.json": "./package.json",
-    "./bin/index": "./bin/index.js"
+    "./core": {
+      "types": "./core/index.d.ts",
+      "import": "./core/index.mjs",
+      "require": "./core/index.js"
+    },
+    "./node-logger": {
+      "types": "./core/node-logger/index.d.ts",
+      "import": "./core/node-logger/index.mjs",
+      "require": "./core/node-logger/index.js"
+    },
+    "./client-logger": {
+      "types": "./core/client-logger/index.d.ts",
+      "import": "./core/client-logger/index.mjs",
+      "require": "./core/client-logger/index.js"
+    },
+    "./core-server": {
+      "types": "./core/core-server/index.d.ts",
+      "import": "./core/core-server/index.mjs",
+      "require": "./core/core-server/index.js"
+    },
+    "./core-server/presets/common-preset": {
+      "import": "./core/core-server/presets/common-preset.mjs",
+      "require": "./core/core-server/presets/common-preset.js"
+    },
+    "./core-server/presets/common-manager": {
+      "import": "./core/core-server/presets/common-manager.mjs"
+    },
+    "./core-server/presets/common-override-preset": {
+      "import": "./core/core-server/presets/common-override-preset.mjs",
+      "require": "./core/core-server/presets/common-override-preset.js"
+    },
+    "./core-events": {
+      "types": "./core/core-events/index.d.ts",
+      "import": "./core/core-events/index.mjs",
+      "require": "./core/core-events/index.js"
+    },
+    "./manager-errors": {
+      "types": "./core/manager-errors.d.ts",
+      "import": "./core/manager-errors.mjs"
+    },
+    "./preview-errors": {
+      "types": "./core/preview-errors.d.ts",
+      "import": "./core/preview-errors.mjs",
+      "require": "./core/preview-errors.js"
+    },
+    "./server-errors": {
+      "types": "./core/server-errors.d.ts",
+      "import": "./core/server-errors.mjs",
+      "require": "./core/server-errors.js"
+    },
+    "./channels": {
+      "types": "./core/channels/index.d.ts",
+      "import": "./core/channels/index.mjs",
+      "require": "./core/channels/index.js"
+    },
+    "./types": {
+      "types": "./core/types/index.d.ts",
+      "import": "./core/types/index.mjs",
+      "require": "./core/types/index.js"
+    },
+    "./csf-tools": {
+      "types": "./core/csf-tools/index.d.ts",
+      "import": "./core/csf-tools/index.mjs",
+      "require": "./core/csf-tools/index.js"
+    },
+    "./common": {
+      "types": "./core/common/index.d.ts",
+      "import": "./core/common/index.mjs",
+      "require": "./core/common/index.js"
+    },
+    "./builder-manager": {
+      "types": "./core/builder-manager/index.d.ts",
+      "import": "./core/builder-manager/index.mjs",
+      "require": "./core/builder-manager/index.js"
+    },
+    "./telemetry": {
+      "types": "./core/telemetry/index.d.ts",
+      "import": "./core/telemetry/index.mjs",
+      "require": "./core/telemetry/index.js"
+    },
+    "./preview-api": {
+      "types": "./core/preview-api/index.d.ts",
+      "import": "./core/preview-api/index.mjs",
+      "require": "./core/preview-api/index.js"
+    },
+    "./manager-api": {
+      "types": "./core/manager-api/index.d.ts",
+      "import": "./core/manager-api/index.mjs",
+      "require": "./core/manager-api/index.js"
+    },
+    "./router": {
+      "types": "./core/router/index.d.ts",
+      "import": "./core/router/index.mjs",
+      "require": "./core/router/index.js"
+    },
+    "./components": {
+      "types": "./core/components/index.d.ts",
+      "import": "./core/components/index.mjs"
+    },
+    "./theming": {
+      "types": "./core/theming/index.d.ts",
+      "import": "./core/theming/index.mjs",
+      "require": "./core/theming/index.js"
+    },
+    "./theming/create": {
+      "types": "./core/theming/create.d.ts",
+      "import": "./core/theming/create.mjs",
+      "require": "./core/theming/create.js"
+    },
+    "./docs-tools": {
+      "types": "./core/docs-tools/index.d.ts",
+      "import": "./core/docs-tools/index.mjs",
+      "require": "./core/docs-tools/index.js"
+    },
+    "./manager/globals-module-info": {
+      "types": "./core/manager/globals-module-info.d.ts",
+      "import": "./core/manager/globals-module-info.mjs",
+      "require": "./core/manager/globals-module-info.js"
+    },
+    "./preview/globals": {
+      "types": "./core/preview/globals.d.ts",
+      "import": "./core/preview/globals.mjs",
+      "require": "./core/preview/globals.js"
+    }
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -60,6 +183,7 @@
     "@babel/types": "^7.24.0",
     "@ndelangen/get-tarball": "^3.0.7",
     "@storybook/codemod": "workspace:*",
+    "@storybook/core": "workspace:^",
     "@types/semver": "^7.3.4",
     "@yarnpkg/fslib": "2.10.3",
     "@yarnpkg/libzip": "2.3.0",
@@ -96,13 +220,11 @@
     "strip-json-comments": "^3.1.1",
     "typescript": "^5.3.2"
   },
-  "peerDependencies": {
-    "@storybook/core": "workspace:^"
-  },
   "publishConfig": {
     "access": "public"
   },
   "bundler": {
+    "pre": "./scripts/update-core-portal.ts",
     "entries": [
       "./src/generate.ts",
       "./src/index.ts"
