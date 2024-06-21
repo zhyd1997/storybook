@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/channels');
+export * from '@storybook/core/channels';

@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/index');
+export * from '@storybook/core/index';

@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/preview-errors');
+export * from '@storybook/core/preview-errors';

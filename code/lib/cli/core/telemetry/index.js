@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/telemetry');
+export * from '@storybook/core/telemetry';

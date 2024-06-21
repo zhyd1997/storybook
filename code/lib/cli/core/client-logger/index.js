@@ -1,1 +1,1 @@
-module.exports = require('@storybook/core/client-logger');
+export * from '@storybook/core/client-logger';
