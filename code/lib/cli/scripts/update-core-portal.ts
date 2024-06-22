@@ -92,7 +92,7 @@ async function run() {
 
   await write(
     join(__dirname, '../package.json'),
-    JSON.stringify(sortPackageJson(selfPackageJson), null, 2)
+    JSON.stringify(sortPackageJson(selfPackageJson), null, 2) + '\n'
   );
 }
 
