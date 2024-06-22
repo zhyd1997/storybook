@@ -54,7 +54,7 @@ describe('Upgrade errors', () => {
   it('should throw an error when upgrading to a lower version number', async () => {
     findInstallationsMock.mockResolvedValue({
       dependencies: {
-        '@storybook/cli': [
+        storybook: [
           {
             version: '8.1.0',
           },
@@ -71,7 +71,7 @@ describe('Upgrade errors', () => {
   it('should show a warning when upgrading to the same version number', async () => {
     findInstallationsMock.mockResolvedValue({
       dependencies: {
-        '@storybook/cli': [
+        storybook: [
           {
             version: '8.0.0',
           },

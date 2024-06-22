@@ -24,7 +24,7 @@
     "storybook": "./index.js"
   },
   "dependencies": {
-    "@storybook/cli": "workspace:*"
+    "storybook": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

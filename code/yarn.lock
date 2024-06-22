@@ -5636,11 +5636,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/cli@workspace:*, @storybook/cli@workspace:lib/cli-storybook":
+"@storybook/cli@workspace:lib/cli-storybook":
   version: 0.0.0-use.local
   resolution: "@storybook/cli@workspace:lib/cli-storybook"
   dependencies:
-    "@storybook/cli": "workspace:*"
+    storybook: "workspace:*"
   bin:
     sb: ./index.js
     storybook: ./index.js

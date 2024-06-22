@@ -130,7 +130,7 @@ export const doUpgrade = async ({
   // If we can't determine the existing version fallback to v0.0.0 to not block the upgrade
   const beforeVersion = (await getInstalledStorybookVersion(packageManager)) ?? '0.0.0';
 
-  const currentCLIVersion = versions['@storybook/cli'];
+  const currentCLIVersion = versions.storybook;
   const isCanary =
     currentCLIVersion.startsWith('0.0.0') ||
     beforeVersion.startsWith('portal:') ||
@@ -152,7 +152,7 @@ export const doUpgrade = async ({
   }
 
   const [latestCLIVersionOnNPM, packageJson] = await Promise.all([
-    packageManager.latestVersion('@storybook/cli'),
+    packageManager.latestVersion('storybook'),
     packageManager.retrievePackageJson(),
   ]);
 

@@ -36,7 +36,6 @@
     "@storybook/blocks": "portal:../../../code/ui/blocks",
     "@storybook/builder-vite": "portal:../../../code/builders/builder-vite",
     "@storybook/builder-webpack5": "portal:../../../code/builders/builder-webpack5",
-    "@storybook/cli": "portal:../../../code/lib/cli-storybook",
     "@storybook/codemod": "portal:../../../code/lib/codemod",
     "@storybook/core": "portal:../../../code/core",
     "@storybook/core-webpack": "portal:../../../code/lib/core-webpack",

@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require('@storybook/cli/bin/index.cjs');
+require('storybook/bin/index.cjs');

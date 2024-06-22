@@ -15,7 +15,7 @@ import '@storybook/addon-storyshots';
 import 'storybook/channels';
 import '@storybook/channel-postmessage';
 import '@storybook/channel-websocket';
-import '@storybook/cli';
+import 'storybook';
 import '@storybook/react';
 import '@storybook/react-native';
 import '@storybook/manager';

@@ -242,8 +242,8 @@ export async function doInitiate(options: CommandOptions): Promise<
     force: pkgMgr,
   });
 
-  const latestVersion = await packageManager.latestVersion('@storybook/cli');
-  const currentVersion = versions['@storybook/cli'];
+  const latestVersion = await packageManager.latestVersion('storybook');
+  const currentVersion = versions.storybook;
   const isPrerelease = prerelease(currentVersion);
   const isOutdated = lt(currentVersion, latestVersion);
   const borderColor = isOutdated ? '#FC521F' : '#F1618C';

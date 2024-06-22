@@ -38,7 +38,7 @@ vi.mock('fs', async (importOriginal) => {
 vi.mock('./dirs', () => ({
   getRendererDir: (_: JsPackageManager, renderer: string) =>
     normalizePath(`@storybook/${renderer}`),
-  getCliDir: () => normalizePath('@storybook/cli'),
+  getCliDir: () => normalizePath('storybook'),
 }));
 
 vi.mock('fs-extra', async (importOriginal) => {
@@ -127,7 +127,7 @@ describe('Helpers', () => {
 
       expect(fse.copy).toHaveBeenNthCalledWith(
         1,
-        normalizePath('@storybook/cli/rendererAssets/common'),
+        normalizePath('storybook/rendererAssets/common'),
         './stories',
         expect.anything()
       );
