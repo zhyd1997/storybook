@@ -188,6 +188,7 @@ const run = async () => {
 
   if (!program.open) {
     verdaccioServer.close();
+    process.exit(0);
   }
 };
 
