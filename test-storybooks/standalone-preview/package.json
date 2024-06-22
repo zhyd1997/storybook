@@ -69,7 +69,6 @@
     "@storybook/web-components": "file:../../code/renderers/web-components",
     "@storybook/web-components-vite": "file:../../code/frameworks/web-components-vite",
     "@storybook/web-components-webpack5": "file:../../code/frameworks/web-components-webpack5",
-    "sb": "file:../../code/lib/cli-sb",
     "storybook": "file:../../code/lib/cli"
   },
   "devDependencies": {
