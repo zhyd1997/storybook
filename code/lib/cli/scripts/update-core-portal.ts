@@ -74,15 +74,16 @@ async function run() {
     })
   );
 
+  type RecordOfStrings = Record<string, string[]>;
+
   selfPackageJson.typesVersions = {
     '*': {
-      ...Object.entries(corePackageJson.typesVersions['*']).reduce<Record<string, string[]>>(
-        (acc, [key, value]) => {
-          acc[key] = value.map((v) => v.replace('./dist/', './core/'));
-          return acc;
-        },
-        {}
-      ),
+      ...Object.entries(
+        corePackageJson.typesVersions['*'] as RecordOfStrings
+      ).reduce<RecordOfStrings>((acc, [key, value]) => {
+        acc[key] = value.map((v) => v.replace('./dist/', './core/'));
+        return acc;
+      }, {}),
       '*': ['./dist/index.d.ts'],
       'core-path': ['./dist/core-path.d.ts'],
 
