@@ -21,7 +21,6 @@ declare var __STORYBOOK_PREVIEW__: import('./preview-api/modules/preview-web/Pre
 declare var __STORYBOOK_STORY_STORE__: any;
 
 declare module '@aw-web-design/x-default-browser';
-declare module '@storybook/manager/paths';
 declare module 'ansi-to-html';
 declare module 'better-opn';
 declare module 'lazy-universal-dotenv';

@@ -142,6 +142,7 @@ export const viteFinal = async (config: any, options: Options) => {
 
   const cliRootPath = dirname(require.resolve('storybook/package.json'));
   const componentsPath = join(cliRootPath, 'components');
+  // const docsToolsPath = join(cliRootPath, 'docs-tools');
   const themingPath = join(cliRootPath, 'theming');
   const packageDeduplicationPlugin = {
     name: 'storybook:package-deduplication',
@@ -160,9 +161,10 @@ export const viteFinal = async (config: any, options: Options) => {
            */
           'storybook/theming': themingPath,
           '@storybook/theming': themingPath,
-          '@storybook/components': componentsPath,
           'storybook/components': componentsPath,
-          storybook: cliRootPath,
+          '@storybook/components': componentsPath,
+          // 'storybook/docs-tools': docsToolsPath,
+          // storybook: cliRootPath,
           '@storybook/blocks': dirname(require.resolve('@storybook/blocks/package.json')),
         },
       },

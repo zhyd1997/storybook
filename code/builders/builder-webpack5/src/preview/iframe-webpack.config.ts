@@ -31,25 +31,27 @@ const maybeGetAbsolutePath = <I extends string>(input: I): I | false => {
   }
 };
 
-const managerAPIPath = maybeGetAbsolutePath(`@storybook/manager-api`);
-const componentsPath = maybeGetAbsolutePath(`@storybook/components`);
 const globalPath = maybeGetAbsolutePath(`@storybook/global`);
-const routerPath = maybeGetAbsolutePath(`@storybook/router`);
-const themingPath = maybeGetAbsolutePath(`@storybook/theming`);
+
+const cliRootPath = dirname(require.resolve('storybook/package.json'));
+const managerAPIPath = join(cliRootPath, `manager-api`);
+const componentsPath = join(cliRootPath, `components`);
+const routerPath = join(cliRootPath, `router`);
+const themingPath = join(cliRootPath, `theming`);
 
 // these packages are not pre-bundled because of react dependencies.
 // these are not dependencies of the builder anymore, thus resolving them can fail.
 // we should remove the aliases in 8.0, I'm not sure why they are here in the first place.
 const storybookPaths: Record<string, string> = {
-  ...(managerAPIPath
-    ? {
-        [`@storybook/manager-api`]: managerAPIPath,
-      }
-    : {}),
-  ...(componentsPath ? { [`@storybook/components`]: componentsPath } : {}),
   ...(globalPath ? { [`@storybook/global`]: globalPath } : {}),
-  ...(routerPath ? { [`@storybook/router`]: routerPath } : {}),
-  ...(themingPath ? { [`@storybook/theming`]: themingPath } : {}),
+  [`storybook/manager-api`]: managerAPIPath,
+  [`@storybook/manager-api`]: managerAPIPath,
+  [`storybook/components`]: componentsPath,
+  [`@storybook/components`]: componentsPath,
+  [`storybook/router`]: routerPath,
+  [`@storybook/router`]: routerPath,
+  [`storybook/theming`]: themingPath,
+  [`@storybook/theming`]: themingPath,
 };
 
 export default async (
