@@ -26,6 +26,6 @@ jobs:
           node-version-file: ".nvmrc"
 
       - name: install and compile
-        run: yarn task --task compile --start-from=auto --no-link
+        run: yarn task --task compile --start-from=auto
       - name: test
         run: yarn test
