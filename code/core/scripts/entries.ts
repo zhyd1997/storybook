@@ -2,7 +2,6 @@ import { defineEntry } from '../../../scripts/prepare/tools';
 
 export const getEntries = (cwd: string) => {
   const define = defineEntry(cwd);
-
   return [
     // empty, right now
     define('src/index.ts', ['node', 'browser'], true),
@@ -32,8 +31,8 @@ export const getEntries = (cwd: string) => {
     define('src/components/index.ts', ['browser'], true, [
       'react',
       'react-dom',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-slot',
+      // '@radix-ui/react-dialog',
+      // '@radix-ui/react-slot',
       '@storybook/csf',
       '@storybook/global',
       'memoizerific',
