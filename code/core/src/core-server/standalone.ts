@@ -1,10 +1,10 @@
-import { findPackageSync } from 'fd-package-json';
 import { buildStaticStandalone } from './build-static';
 import { buildDevStandalone } from './build-dev';
+import { dirname } from 'node:path';
 
 async function build(options: any = {}, frameworkOptions: any = {}) {
   const { mode = 'dev' } = options;
-  const packageJson = findPackageSync(__dirname);
+  const packageJson = dirname(require.resolve('@storybook/core/package.json'));
 
   const commonOptions = {
     ...options,

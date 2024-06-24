@@ -1,5 +1,4 @@
 import { dirname, resolve } from 'node:path';
-import { findPackagePathSync } from 'fd-package-json';
 import { existsSync, readFileSync } from 'node:fs';
 
 const interpolate = (string: string, data: Record<string, string> = {}) =>
@@ -9,8 +8,7 @@ export function getPreviewBodyTemplate(
   configDirPath: string,
   interpolations?: Record<string, string>
 ) {
-  const packagePath = findPackagePathSync(__dirname);
-  const packageDir = packagePath ? dirname(packagePath) : undefined;
+  const packageDir = dirname(require.resolve('@storybook/core/package.json'));
   const base = readFileSync(`${packageDir}/templates/base-preview-body.html`, 'utf8');
 
   const bodyHtmlPath = resolve(configDirPath, 'preview-body.html');
@@ -27,8 +25,7 @@ export function getPreviewHeadTemplate(
   configDirPath: string,
   interpolations?: Record<string, string>
 ) {
-  const packagePath = findPackagePathSync(__dirname);
-  const packageDir = packagePath ? dirname(packagePath) : undefined;
+  const packageDir = dirname(require.resolve('@storybook/core/package.json'));
   const base = readFileSync(`${packageDir}/templates/base-preview-head.html`, 'utf8');
   const headHtmlPath = resolve(configDirPath, 'preview-head.html');
 
