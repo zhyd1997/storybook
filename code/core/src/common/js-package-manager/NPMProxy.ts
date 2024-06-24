@@ -2,8 +2,8 @@ import sort from 'semver/functions/sort';
 import { platform } from 'os';
 import dedent from 'ts-dedent';
 import { findUpSync } from 'find-up';
-import { existsSync, readFileSync } from 'fs';
-import path from 'path';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import { logger } from '@storybook/core/node-logger';
 import { FindPackageVersionsError } from '@storybook/core/server-errors';
 

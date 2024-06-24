@@ -1,7 +1,7 @@
 import Watchpack from 'watchpack';
 import slash from 'slash';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import type { NormalizedStoriesSpecifier, Path } from '@storybook/core/types';
 import { commonGlobOptions } from '@storybook/core/common';

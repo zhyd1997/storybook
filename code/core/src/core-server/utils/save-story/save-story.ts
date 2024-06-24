@@ -18,7 +18,7 @@ import { logger } from '@storybook/core/node-logger';
 import type { CoreConfig, Options } from '@storybook/core/types';
 import { telemetry } from '@storybook/core/telemetry';
 
-import { basename, join } from 'path';
+import { basename, join } from 'node:path';
 import { updateArgsInCsfFile } from './update-args-in-csf-file';
 import { duplicateStoryWithNewName } from './duplicate-story-with-new-name';
 import { formatFileContent } from '@storybook/core/common';

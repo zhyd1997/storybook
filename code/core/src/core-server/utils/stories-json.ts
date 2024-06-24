@@ -1,4 +1,4 @@
-import { basename } from 'path';
+import { basename } from 'node:path';
 import type { Router, Request, Response } from 'express';
 import { writeJSON } from 'fs-extra';
 

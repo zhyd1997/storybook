@@ -2,7 +2,7 @@ import { pathExistsSync } from 'fs-extra';
 import dedent from 'ts-dedent';
 import { existsSync, readFileSync } from 'node:fs';
 import { findUpSync } from 'find-up';
-import path from 'path';
+import path from 'node:path';
 import { FindPackageVersionsError } from '@storybook/core-events/server-errors';
 
 import { JsPackageManager } from './JsPackageManager';

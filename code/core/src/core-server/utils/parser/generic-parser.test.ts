@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import path from 'path';
+import path from 'node:path';
 import { GenericParser } from './generic-parser';
-import fs from 'fs';
+import fs from 'node:fs';
 
 const genericParser = new GenericParser();
 

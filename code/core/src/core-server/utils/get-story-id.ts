@@ -1,7 +1,7 @@
 import type { Options } from '@storybook/core/types';
 import { dedent } from 'ts-dedent';
 import { normalizeStories, normalizeStoryPath } from '@storybook/core/common';
-import path from 'path';
+import path from 'node:path';
 import { sanitize, storyNameFromExport, toId } from '@storybook/csf';
 import { userOrAutoTitleFromSpecifier } from '@storybook/core/preview-api';
 import { posix } from './posix';
