@@ -55,7 +55,7 @@ export const globalsNameValueMap: Required<Record<keyof typeof globalsNameRefere
   '@storybook/types': TYPES,
   '@storybook/core/types': TYPES,
 
-  'storybook/core-events/manager-errors': EVENTS_MANAGER_ERRORS,
+  'storybook/manager-errors': EVENTS_MANAGER_ERRORS,
   '@storybook/core-events/manager-errors': EVENTS_MANAGER_ERRORS,
   '@storybook/core/manager-errors': EVENTS_MANAGER_ERRORS,
 

@@ -15,7 +15,7 @@ export const globalsNameReferenceMap = {
   '@storybook/core-events': '__STORYBOOK_MODULE_CORE_EVENTS__',
   '@storybook/core/core-events': '__STORYBOOK_MODULE_CORE_EVENTS__',
 
-  'storybook/core-events/preview-errors': '__STORYBOOK_MODULE_CORE_EVENTS_PREVIEW_ERRORS__',
+  'storybook/preview-errors': '__STORYBOOK_MODULE_CORE_EVENTS_PREVIEW_ERRORS__',
   '@storybook/core-events/preview-errors': '__STORYBOOK_MODULE_CORE_EVENTS_PREVIEW_ERRORS__',
   '@storybook/core/preview-errors': '__STORYBOOK_MODULE_CORE_EVENTS_PREVIEW_ERRORS__',
 

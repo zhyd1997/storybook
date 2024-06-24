@@ -21,7 +21,7 @@ export const globalsNameReferenceMap = {
   '@storybook/core-events': '__STORYBOOK_CORE_EVENTS__',
   '@storybook/core/core-events': '__STORYBOOK_CORE_EVENTS__',
 
-  'storybook/core-events/manager-errors': '__STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__',
+  'storybook/manager-errors': '__STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__',
   '@storybook/core-events/manager-errors': '__STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__',
   '@storybook/core/manager-errors': '__STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__',
 

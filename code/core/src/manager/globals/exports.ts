@@ -918,7 +918,7 @@ export default {
   'storybook/types': ['Addon_TypesEnum'],
   '@storybook/types': ['Addon_TypesEnum'],
   '@storybook/core/types': ['Addon_TypesEnum'],
-  'storybook/core-events/manager-errors': [
+  'storybook/manager-errors': [
     'Category',
     'ProviderDoesNotExtendBaseProviderError',
     'UncaughtManagerError',

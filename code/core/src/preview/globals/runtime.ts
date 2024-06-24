@@ -25,7 +25,7 @@ export const globalsNameValueMap: Required<Record<keyof typeof globalsNameRefere
   '@storybook/core-events': CORE_EVENTS,
   '@storybook/core/core-events': CORE_EVENTS,
 
-  'storybook/core-events/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
+  'storybook/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
   '@storybook/core-events/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
   '@storybook/core/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
 
