@@ -46,8 +46,6 @@ export type ProjectAnnotations<TRenderer extends Renderer> = CsfProjectAnnotatio
 
   /* @deprecated use renderToCanvas */
   renderToDOM?: RenderToCanvas<TRenderer>;
-
-  beforeAll?: () => MaybePromise<void | (() => MaybePromise<void>)>;
 };
 
 type NamedExportsOrDefault<TExport> = TExport | { default: TExport };
