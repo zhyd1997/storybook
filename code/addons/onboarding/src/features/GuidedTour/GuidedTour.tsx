@@ -76,12 +76,12 @@ export function GuidedTour({
         tooltip: {
           width: 280,
           color: theme.color.lightest,
-          background: theme.base === 'dark' ? '#292A2C' : theme.color.secondary,
+          background: theme.color.secondary,
         },
         options: {
           zIndex: 9998,
           primaryColor: theme.color.secondary,
-          arrowColor: theme.base === 'dark' ? '#292A2C' : theme.color.secondary,
+          arrowColor: theme.color.secondary,
         },
       }}
     />
