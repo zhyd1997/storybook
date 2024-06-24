@@ -1,10 +1,10 @@
-import { readPackageUpSync } from 'read-pkg-up';
+import { findPackageSync } from 'fd-package-json';
 import { buildStaticStandalone } from './build-static';
 import { buildDevStandalone } from './build-dev';
 
 async function build(options: any = {}, frameworkOptions: any = {}) {
   const { mode = 'dev' } = options;
-  const packageJson = readPackageUpSync({ cwd: __dirname })?.packageJson;
+  const packageJson = findPackageSync(__dirname);
 
   const commonOptions = {
     ...options,

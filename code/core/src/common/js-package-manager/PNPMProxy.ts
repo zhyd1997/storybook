@@ -1,8 +1,10 @@
 import { pathExistsSync } from 'fs-extra';
-import { dedent } from 'ts-dedent';
-import { findUpSync } from 'find-up';
-import path from 'node:path';
+import dedent from 'ts-dedent';
 import { existsSync, readFileSync } from 'node:fs';
+import { findUpSync } from 'find-up';
+import path from 'path';
+import { FindPackageVersionsError } from '@storybook/core-events/server-errors';
+
 import { JsPackageManager } from './JsPackageManager';
 import type { PackageJson } from './PackageJson';
 import type { InstallationMetadata, PackageMetadata } from './types';
@@ -222,22 +224,26 @@ export class PNPMProxy extends JsPackageManager {
   ): Promise<T extends true ? string[] : string> {
     const args = [fetchAllVersions ? 'versions' : 'version', '--json'];
 
-    const commandResult = await this.executeCommand({
-      command: 'pnpm',
-      args: ['info', packageName, ...args],
-    });
-
     try {
+      const commandResult = await this.executeCommand({
+        command: 'pnpm',
+        args: ['info', packageName, ...args],
+      });
+
       const parsedOutput = JSON.parse(commandResult);
 
-      if (parsedOutput.error) {
-        // FIXME: improve error handling
-        throw new Error(parsedOutput.error.summary);
-      } else {
-        return parsedOutput;
+      if (parsedOutput.error?.summary) {
+        // this will be handled in the catch block below
+        throw parsedOutput.error.summary;
       }
-    } catch (e) {
-      throw new Error(`Unable to find versions of ${packageName} using pnpm`);
+
+      return parsedOutput;
+    } catch (error) {
+      throw new FindPackageVersionsError({
+        error,
+        packageManager: 'PNPM',
+        packageName,
+      });
     }
   }
 
