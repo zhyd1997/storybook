@@ -20,6 +20,7 @@ import {
   UPDATE_GLOBALS,
   UPDATE_STORY_ARGS,
 } from '@storybook/core-events';
+import type { CleanupCallback } from '@storybook/csf';
 import type { Channel } from '@storybook/channels';
 import type {
   Renderer,
@@ -47,7 +48,6 @@ import { StoryStore } from '../../store';
 import { StoryRender } from './render/StoryRender';
 import type { CsfDocsRender } from './render/CsfDocsRender';
 import type { MdxDocsRender } from './render/MdxDocsRender';
-import type { CleanupCallback } from '@storybook/csf';
 
 const { fetch } = global;
 
@@ -126,6 +126,7 @@ export class Preview<TRenderer extends Renderer> {
 
     try {
       const projectAnnotations = await this.getProjectAnnotationsOrRenderError();
+      await this.runBeforeAllHook(projectAnnotations);
       await this.initializeWithProjectAnnotations(projectAnnotations);
     } catch (err) {
       this.rejectStoreInitializationPromise(err as Error);
@@ -163,27 +164,23 @@ export class Preview<TRenderer extends Renderer> {
   }
 
   // If initialization gets as far as project annotations, this function runs.
-  async initializeWithProjectAnnotations(
-    projectAnnotations: ProjectAnnotations<TRenderer>,
-    storyStore?: StoryStore<TRenderer>
-  ) {
+  async initializeWithProjectAnnotations(projectAnnotations: ProjectAnnotations<TRenderer>) {
+    this.projectAnnotationsBeforeInitialization = projectAnnotations;
+    try {
+      const storyIndex = await this.getStoryIndexFromServer();
+      return this.initializeWithStoryIndex(storyIndex);
+    } catch (err) {
+      this.renderPreviewEntryError('Error loading story index:', err as Error);
+      throw err;
+    }
+  }
+
+  async runBeforeAllHook(projectAnnotations: ProjectAnnotations<TRenderer>) {
     try {
       await this.beforeAllCleanup?.();
       this.beforeAllCleanup = await projectAnnotations.beforeAll?.();
     } catch (err) {
       this.renderPreviewEntryError('Error in beforeAll hook:', err as Error);
-      throw err;
-    }
-
-    // Don't reinitialize story store if it's already been set.
-    if (storyStore) return;
-
-    try {
-      this.projectAnnotationsBeforeInitialization = projectAnnotations;
-      const storyIndex = await this.getStoryIndexFromServer();
-      return this.initializeWithStoryIndex(storyIndex);
-    } catch (err) {
-      this.renderPreviewEntryError('Error loading story index:', err as Error);
       throw err;
     }
   }
@@ -243,12 +240,15 @@ export class Preview<TRenderer extends Renderer> {
     this.getProjectAnnotations = getProjectAnnotations;
 
     const projectAnnotations = await this.getProjectAnnotationsOrRenderError();
-    await this.initializeWithProjectAnnotations(projectAnnotations, this.storyStoreValue);
+    await this.runBeforeAllHook(projectAnnotations);
 
-    if (this.storyStoreValue) {
-      this.storyStoreValue.setProjectAnnotations(projectAnnotations);
-      this.emitGlobals();
+    if (!this.storyStoreValue) {
+      await this.initializeWithProjectAnnotations(projectAnnotations);
+      return;
     }
+
+    this.storyStoreValue.setProjectAnnotations(projectAnnotations);
+    this.emitGlobals();
   }
 
   async onStoryIndexChanged() {
