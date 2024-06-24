@@ -11,7 +11,7 @@ const write = async (location: string, data: string) => {
 
 const mapCoreExportToSelf = (map: Record<string, string>) => {
   return Object.entries(map).reduce<Record<string, string>>((acc, [key, input]) => {
-    const value = input.replace('./dist/', './');
+    const value = input.replace('./dist/', './core/');
     acc[key] = value;
 
     return acc;
@@ -20,7 +20,7 @@ const mapCoreExportToSelf = (map: Record<string, string>) => {
 
 const generateMapperContent = (input: string) => {
   const value = input
-    .replace('./', '')
+    .replace('./core/', '')
     .replace('/index', '')
     .replace('.cjs', '')
     .replace('.d.ts', '')
@@ -58,11 +58,11 @@ async function run() {
       if (key === '.') {
         selfPackageJson.exports['./core'] = value;
 
-        await Promise.all([
-          ...Object.values(value).map(async (v) => {
+        await Promise.all(
+          Object.values(value).map(async (v) => {
             await write(join(__dirname, '..', v), generateMapperContent(v));
-          }),
-        ]);
+          })
+        );
       } else {
         selfPackageJson.exports[key] = value;
         await Promise.all(
@@ -81,13 +81,13 @@ async function run() {
       ...Object.entries(
         corePackageJson.typesVersions['*'] as RecordOfStrings
       ).reduce<RecordOfStrings>((acc, [key, value]) => {
-        acc[key] = value.map((v) => v.replace('./dist/', './'));
+        acc[key] = value.map((v) => v.replace('./dist/', './core/'));
         return acc;
       }, {}),
       '*': ['./dist/index.d.ts'],
       'core-path': ['./dist/core-path.d.ts'],
 
-      core: ['./core.d.ts'],
+      core: ['./core/index.d.ts'],
     },
   };
 

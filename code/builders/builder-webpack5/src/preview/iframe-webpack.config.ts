@@ -33,25 +33,11 @@ const maybeGetAbsolutePath = <I extends string>(input: I): I | false => {
 
 const globalPath = maybeGetAbsolutePath(`@storybook/global`);
 
-const cliRootPath = dirname(require.resolve('storybook/package.json'));
-const managerAPIPath = join(cliRootPath, `manager-api`);
-const componentsPath = join(cliRootPath, `components`);
-const routerPath = join(cliRootPath, `router`);
-const themingPath = join(cliRootPath, `theming`);
-
 // these packages are not pre-bundled because of react dependencies.
 // these are not dependencies of the builder anymore, thus resolving them can fail.
 // we should remove the aliases in 8.0, I'm not sure why they are here in the first place.
 const storybookPaths: Record<string, string> = {
   ...(globalPath ? { [`@storybook/global`]: globalPath } : {}),
-  [`storybook/manager-api`]: managerAPIPath,
-  [`@storybook/manager-api`]: managerAPIPath,
-  [`storybook/components`]: componentsPath,
-  [`@storybook/components`]: componentsPath,
-  [`storybook/router`]: routerPath,
-  [`@storybook/router`]: routerPath,
-  [`storybook/theming`]: themingPath,
-  [`@storybook/theming`]: themingPath,
 };
 
 export default async (
