@@ -342,6 +342,7 @@
     "rendererAssets/**/*",
     "templates/**/*",
     "README.md",
+    "*.cjs",
     "*.js",
     "*.d.ts",
     "!src/**/*"
