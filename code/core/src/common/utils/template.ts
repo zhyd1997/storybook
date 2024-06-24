@@ -9,7 +9,7 @@ export function getPreviewBodyTemplate(
   interpolations?: Record<string, string>
 ) {
   const packageDir = dirname(require.resolve('@storybook/core/package.json'));
-  const base = readFileSync(`${packageDir}/templates/base-preview-body.html`, 'utf8');
+  const base = readFileSync(`${packageDir}/assets/server/base-preview-body.html`, 'utf8');
 
   const bodyHtmlPath = resolve(configDirPath, 'preview-body.html');
   let result = base;
@@ -26,7 +26,7 @@ export function getPreviewHeadTemplate(
   interpolations?: Record<string, string>
 ) {
   const packageDir = dirname(require.resolve('@storybook/core/package.json'));
-  const base = readFileSync(`${packageDir}/templates/base-preview-head.html`, 'utf8');
+  const base = readFileSync(`${packageDir}/assets/server/base-preview-head.html`, 'utf8');
   const headHtmlPath = resolve(configDirPath, 'preview-head.html');
 
   let result = base;
