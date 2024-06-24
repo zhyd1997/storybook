@@ -47,6 +47,7 @@ import { StoryStore } from '../../store';
 import { StoryRender } from './render/StoryRender';
 import type { CsfDocsRender } from './render/CsfDocsRender';
 import type { MdxDocsRender } from './render/MdxDocsRender';
+import type { CleanupCallback } from '@storybook/csf';
 
 const { fetch } = global;
 
@@ -72,7 +73,7 @@ export class Preview<TRenderer extends Renderer> {
   // project annotations. Once the index loads, it is stored on the store and this will get unset.
   private projectAnnotationsBeforeInitialization?: ProjectAnnotations<TRenderer>;
 
-  private beforeAllCleanup?: (() => MaybePromise<void>) | void;
+  private beforeAllCleanup?: CleanupCallback | void;
 
   protected storeInitializationPromise: Promise<void>;
 
