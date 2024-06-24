@@ -137,12 +137,12 @@ describe('buildArgsParam', () => {
 
   it('builds arrays', () => {
     const param = buildArgsParam({}, { arr: ['1', '2', '3'] });
-    expect(param).toEqual('arr[0]:1;arr[1]:2;arr[2]:3');
+    expect(param).toEqual('arr%5B0%5D:1;arr%5B1%5D:2;arr%5B2%5D:3');
   });
 
   it('builds sparse arrays', () => {
     const param = buildArgsParam({}, { arr: ['1', , '3'] });
-    expect(param).toEqual('arr[0]:1;arr[2]:3');
+    expect(param).toEqual('arr%5B0%5D:1;arr%5B2%5D:3');
   });
 
   it('builds simple objects', () => {
@@ -157,22 +157,22 @@ describe('buildArgsParam', () => {
 
   it('builds arrays in objects', () => {
     const param = buildArgsParam({}, { obj: { foo: ['1', , '3'] } });
-    expect(param).toEqual('obj.foo[0]:1;obj.foo[2]:3');
+    expect(param).toEqual('obj.foo%5B0%5D:1;obj.foo%5B2%5D:3');
   });
 
   it('builds single object in array', () => {
     const param = buildArgsParam({}, { arr: [{ one: '1', two: '2' }] });
-    expect(param).toEqual('arr[0].one:1;arr[0].two:2');
+    expect(param).toEqual('arr%5B0%5D.one:1;arr%5B0%5D.two:2');
   });
 
   it('builds multiple objects in array', () => {
     const param = buildArgsParam({}, { arr: [{ one: '1' }, { two: '2' }] });
-    expect(param).toEqual('arr[0].one:1;arr[1].two:2');
+    expect(param).toEqual('arr%5B0%5D.one:1;arr%5B1%5D.two:2');
   });
 
   it('builds nested object in array', () => {
     const param = buildArgsParam({}, { arr: [{ foo: { bar: 'val' } }] });
-    expect(param).toEqual('arr[0].foo.bar:val');
+    expect(param).toEqual('arr%5B0%5D.foo.bar:val');
   });
 
   it('encodes space as +', () => {
@@ -187,7 +187,7 @@ describe('buildArgsParam', () => {
 
   it('encodes nested null values as !null', () => {
     const param = buildArgsParam({}, { foo: { bar: [{ key: null }], baz: null } });
-    expect(param).toEqual('foo.bar[0].key:!null;foo.baz:!null');
+    expect(param).toEqual('foo.bar%5B0%5D.key:!null;foo.baz:!null');
   });
 
   it('encodes hex color values as !hex(value)', () => {
@@ -197,17 +197,17 @@ describe('buildArgsParam', () => {
 
   it('encodes rgba color values by prefixing and compacting', () => {
     const param = buildArgsParam({}, { rgb: 'rgb(255, 71, 133)', rgba: 'rgba(255, 71, 133, 0.5)' });
-    expect(param).toEqual('rgb:!rgb(255,71,133);rgba:!rgba(255,71,133,0.5)');
+    expect(param).toEqual('rgb:!rgb(255%2C71%2C133);rgba:!rgba(255%2C71%2C133%2C0.5)');
   });
 
   it('encodes hsla color values by prefixing and compacting', () => {
     const param = buildArgsParam({}, { hsl: 'hsl(45, 99%, 70%)', hsla: 'hsla(45, 99%, 70%, 0.5)' });
-    expect(param).toEqual('hsl:!hsl(45,99,70);hsla:!hsla(45,99,70,0.5)');
+    expect(param).toEqual('hsl:!hsl(45%2C99%2C70);hsla:!hsla(45%2C99%2C70%2C0.5)');
   });
 
   it('encodes Date objects as !date(ISO string)', () => {
     const param = buildArgsParam({}, { key: new Date('2001-02-03T04:05:06.789Z') });
-    expect(param).toEqual('key:!date(2001-02-03T04:05:06.789Z)');
+    expect(param).toEqual('key:!date(2001-02-03T04%3A05%3A06.789Z)');
   });
 
   describe('with initial state', () => {
@@ -223,7 +223,7 @@ describe('buildArgsParam', () => {
 
     it('sets !undefined for removed array values', () => {
       const param = buildArgsParam({ arr: [1] }, { arr: [] });
-      expect(param).toEqual('arr[0]:!undefined');
+      expect(param).toEqual('arr%5B0%5D:!undefined');
     });
 
     it('sets !undefined for removed object properties', () => {
@@ -233,7 +233,7 @@ describe('buildArgsParam', () => {
 
     it('omits unchanged array values (yielding sparse arrays)', () => {
       const param = buildArgsParam({ arr: [1, 2, 3] }, { arr: [1, 3, 4] });
-      expect(param).toEqual('arr[1]:3;arr[2]:4');
+      expect(param).toEqual('arr%5B1%5D:3;arr%5B2%5D:4');
     });
 
     it('omits nested unchanged object properties and array values', () => {
@@ -241,7 +241,7 @@ describe('buildArgsParam', () => {
         { obj: { nested: [{ one: 1 }, { two: 2 }] } },
         { obj: { nested: [{ one: 1 }, { two: 2, three: 3 }] } }
       );
-      expect(param).toEqual('obj.nested[1].three:3');
+      expect(param).toEqual('obj.nested%5B1%5D.three:3');
     });
   });
 });
