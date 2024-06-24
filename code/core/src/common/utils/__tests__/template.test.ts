@@ -1,6 +1,7 @@
 import { describe, beforeEach, afterEach, it, expect } from 'vitest';
 import mock from 'mock-fs';
 import { getPreviewHeadTemplate, getPreviewBodyTemplate } from '../template';
+import { dirname } from 'node:path';
 
 const HEAD_HTML_CONTENTS = '<script>console.log("custom script!");</script>';
 const BASE_HTML_CONTENTS = '<script>console.log("base script!");</script>';
@@ -8,11 +9,13 @@ const BASE_HTML_CONTENTS = '<script>console.log("base script!");</script>';
 const BASE_BODY_HTML_CONTENTS = '<div>story contents</div>';
 const BODY_HTML_CONTENTS = '<div>custom body contents</div>';
 
+const base = dirname(require.resolve('@storybook/core/package.json'));
+
 describe('server.getPreviewHeadHtml', () => {
   describe('when .storybook/preview-head.html does not exist', () => {
     beforeEach(() => {
       mock({
-        [`undefined/assets/server/base-preview-head.html`]: BASE_HTML_CONTENTS,
+        [`${base}/assets/server/base-preview-head.html`]: BASE_HTML_CONTENTS,
         config: {},
       });
     });
@@ -30,7 +33,7 @@ describe('server.getPreviewHeadHtml', () => {
   describe('when .storybook/preview-head.html exists', () => {
     beforeEach(() => {
       mock({
-        [`undefined/assets/server/base-preview-head.html`]: BASE_HTML_CONTENTS,
+        [`${base}/assets/server/base-preview-head.html`]: BASE_HTML_CONTENTS,
         config: {
           'preview-head.html': HEAD_HTML_CONTENTS,
         },
@@ -52,7 +55,7 @@ describe('server.getPreviewBodyHtml', () => {
   describe('when .storybook/preview-body.html does not exist', () => {
     beforeEach(() => {
       mock({
-        [`undefined/assets/server/base-preview-body.html`]: BASE_BODY_HTML_CONTENTS,
+        [`${base}/assets/server/base-preview-body.html`]: BASE_BODY_HTML_CONTENTS,
         config: {},
       });
     });
@@ -70,7 +73,7 @@ describe('server.getPreviewBodyHtml', () => {
   describe('when .storybook/preview-body.html exists', () => {
     beforeEach(() => {
       mock({
-        [`undefined/assets/server/base-preview-body.html`]: BASE_BODY_HTML_CONTENTS,
+        [`${base}/assets/server/base-preview-body.html`]: BASE_BODY_HTML_CONTENTS,
         config: {
           'preview-body.html': BODY_HTML_CONTENTS,
         },
