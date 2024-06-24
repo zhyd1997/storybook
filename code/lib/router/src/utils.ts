@@ -92,6 +92,9 @@ const validateArgs = (key = '', value: unknown): boolean => {
   return false;
 };
 
+// Note this isn't a picoquery serializer because pq will turn any object
+// into a nested key internally. So we need to deal witth things like `Date`
+// up front.
 const encodeSpecialValues = (value: unknown): any => {
   if (value === undefined) return '!undefined';
   if (value === null) return '!null';
