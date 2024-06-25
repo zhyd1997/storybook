@@ -62,6 +62,10 @@ async function webpack(
   const { react, reactDom, mdx } = await getResolvedReact(options);
 
   let alias;
+  const cliPath = require.resolve('storybook/package.json');
+  const themingPath = join(cliPath, '..', 'core', 'theming', 'index.js');
+  const componentsPath = join(cliPath, '..', 'core', 'components', 'index.js');
+  const blocksPath = dirname(require.resolve('@storybook/blocks/package.json'));
   if (Array.isArray(webpackConfig.resolve?.alias)) {
     alias = [...webpackConfig.resolve?.alias];
     alias.push(
@@ -76,12 +80,28 @@ async function webpack(
       {
         name: '@mdx-js/react',
         alias: mdx,
+      },
+      {
+        name: '@storybook/theming',
+        alias: themingPath,
+      },
+      {
+        name: '@storybook/components',
+        alias: componentsPath,
+      },
+      {
+        name: '@storybook/blocks',
+        alias: blocksPath,
       }
     );
   } else {
     alias = {
       ...webpackConfig.resolve?.alias,
       react,
+      '@storybook/theming': themingPath,
+      '@storybook/components': componentsPath,
+      '@storybook/blocks': blocksPath,
+
       'react-dom': reactDom,
       '@mdx-js/react': mdx,
     };
