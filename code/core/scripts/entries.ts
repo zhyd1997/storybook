@@ -32,8 +32,6 @@ export const getEntries = (cwd: string) => {
     define('src/components/index.ts', ['browser'], true, [
       'react',
       'react-dom',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-slot',
       '@storybook/csf',
       '@storybook/global',
       'memoizerific',
