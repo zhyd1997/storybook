@@ -44,10 +44,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   } = (await fs.readJson(join(cwd, 'package.json'))) as PackageJsonWithBundlerConfig;
 
   if (pre) {
-    await exec(
-      `node --loader ${__dirname}/../node_modules/esbuild-register/loader.js -r ${__dirname}/../node_modules/esbuild-register/register.js ${pre}`,
-      { cwd }
-    );
+    await exec(`bun ${pre}`, { cwd });
   }
 
   const reset = hasFlag(flags, 'reset');
@@ -151,11 +148,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   await Promise.all(tasks);
 
   if (post) {
-    await exec(
-      `node -r ${__dirname}/../node_modules/esbuild-register/register.js ${post}`,
-      { cwd },
-      { debug: true }
-    );
+    await exec(`bun ${post}`, { cwd }, { debug: true });
   }
 
   if (process.env.CI !== 'true') {
