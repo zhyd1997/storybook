@@ -127,6 +127,28 @@ const QS_OPTIONS: Partial<QueryOptions> = {
   nesting: true,
   nestingSyntax: 'js', // encode objects using dot notation: obj.key=val
 };
+
+// Replaces some url-encoded characters with their decoded equivalents.
+// The URI RFC specifies these should be encoded, but all browsers will
+// tolerate them being decoded, so we opt to go with it for cleaner looking
+// URIs.
+const decodeKnownQueryChar = (chr: string) => {
+  switch (chr) {
+    case '%20':
+      return '+';
+    case '%5B':
+      return '[';
+    case '%5D':
+      return ']';
+    case '%2C':
+      return ',';
+    case '%3A':
+      return ':';
+  }
+  return chr;
+};
+const knownQueryChar = /%[0-9A-F]{2}/g;
+
 export const buildArgsParam = (initialArgs: Args | undefined, args: Args): string => {
   const update = deepDiff(initialArgs, args);
   if (!update || update === DEEPLY_EQUAL) return '';
@@ -142,7 +164,7 @@ export const buildArgsParam = (initialArgs: Args | undefined, args: Args): strin
   }, {} as Args);
 
   return stringify(encodeSpecialValues(object), QS_OPTIONS)
-    .replace(/%20/g, '+')
+    .replace(knownQueryChar, decodeKnownQueryChar)
     .split(';')
     .map((part: string) => part.replace('=', ':'))
     .join(';');

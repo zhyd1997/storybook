@@ -22,19 +22,14 @@ const getQueryString = ({
   selection?: Selection;
   extraParams?: Record<PropertyKey, unknown>;
 }) => {
-  const search =
-    typeof document !== 'undefined' && document.location.search
-      ? document.location.search.slice(1)
-      : '';
+  const search = document?.location.search.slice(1);
   const { path, selectedKind, selectedStory, ...rest } = parse(search);
-  return (
-    '?' +
-    stringify({
-      ...rest,
-      ...extraParams,
-      ...(selection && { id: selection.storyId, viewMode: selection.viewMode }),
-    })
-  );
+  const queryStr = stringify({
+    ...rest,
+    ...extraParams,
+    ...(selection && { id: selection.storyId, viewMode: selection.viewMode }),
+  });
+  return `?${queryStr}`;
 };
 
 export const setPath = (selection?: Selection) => {
@@ -69,7 +64,7 @@ const getFirstString = (v: ValueOf<Record<PropertyKey, unknown>>): string | void
 
 export const getSelectionSpecifierFromPath: () => SelectionSpecifier | null = () => {
   if (typeof document !== 'undefined') {
-    const queryStr = document.location.search ? document.location.search.slice(1) : '';
+    const queryStr = document.location.search.slice(1);
     const query = parse(queryStr);
     const args = typeof query.args === 'string' ? parseArgsParam(query.args) : undefined;
     const globals = typeof query.globals === 'string' ? parseArgsParam(query.globals) : undefined;
