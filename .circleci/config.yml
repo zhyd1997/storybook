@@ -653,7 +653,7 @@ workflows:
       - script-checks:
           requires:
             - build
-      - chromatic-internal-storybooks:
+      - chromatic-internal-storybook:
           requires:
             - build
       - coverage:
@@ -715,7 +715,7 @@ workflows:
       - script-checks:
           requires:
             - build
-      - chromatic-internal-storybooks:
+      - chromatic-internal-storybook:
           requires:
             - build
       - coverage:
@@ -778,7 +778,7 @@ workflows:
       - script-checks:
           requires:
             - build
-      - chromatic-internal-storybooks:
+      - chromatic-internal-storybook:
           requires:
             - build
       - create-sandboxes:
