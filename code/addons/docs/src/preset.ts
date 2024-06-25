@@ -140,6 +140,11 @@ export const viteFinal = async (config: any, options: Options) => {
   // Use the resolvedReact preset to alias react and react-dom to either the users version or the version shipped with addon-docs
   const { react, reactDom, mdx } = await getResolvedReact(options);
 
+  const cliPath = require.resolve('storybook/package.json');
+  const themingPath = join(cliPath, '..', 'core', 'theming', 'index.js');
+  const componentsPath = join(cliPath, '..', 'core', 'components', 'index.js');
+  const blocksPath = dirname(require.resolve('@storybook/blocks/package.json'));
+
   const packageDeduplicationPlugin = {
     name: 'storybook:package-deduplication',
     enforce: 'pre',
@@ -155,7 +160,9 @@ export const viteFinal = async (config: any, options: Options) => {
            * The following aliases are used to ensure a single instance of these packages are used in situations where they are duplicated
            * The packages will be duplicated by the package manager when the user has react installed with another version than 18.2.0
            */
-          '@storybook/blocks': dirname(require.resolve('@storybook/blocks/package.json')),
+          '@storybook/theming': themingPath,
+          '@storybook/components': componentsPath,
+          '@storybook/blocks': blocksPath,
         },
       },
     }),
