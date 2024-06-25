@@ -9,10 +9,6 @@ const addonsPackages = fs
 const libPackages = fs
   .readdirSync(path.join(__dirname, 'lib'))
   .filter((p) => fs.statSync(path.join(__dirname, 'lib', p)).isDirectory());
-const uiPackages = fs
-  .readdirSync(path.join(__dirname, 'ui'))
-  .filter((p) => fs.statSync(path.join(__dirname, 'ui', p)).isDirectory())
-  .filter((p) => !p.startsWith('.'));
 
 module.exports = {
   root: true,
@@ -104,7 +100,7 @@ module.exports = {
       },
     },
     {
-      files: ['**/ui/.storybook/**'],
+      files: ['**/.storybook/**'],
       rules: {
         'import/no-extraneous-dependencies': [
           'error',
@@ -120,19 +116,6 @@ module.exports = {
           {
             packageDir: [__dirname, path.join(__dirname, 'addons', directory)],
             devDependencies: true,
-          },
-        ],
-      },
-    })),
-    ...uiPackages.map((directory) => ({
-      files: [path.join('**', 'ui', directory, '**', '*.*')],
-      rules: {
-        'import/no-extraneous-dependencies': [
-          'error',
-          {
-            packageDir: [__dirname, path.join(__dirname, 'ui', directory)],
-            devDependencies: true,
-            peerDependencies: true,
           },
         ],
       },

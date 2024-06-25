@@ -17,7 +17,7 @@ import type { Channel } from 'storybook/channels';
 
 import { DocsContext } from '@storybook/blocks';
 
-import { DocsPageWrapper } from '../blocks/src/components';
+import { DocsPageWrapper } from '../lib/blocks/src/components';
 
 const { document } = global;
 
@@ -107,7 +107,7 @@ export const loaders = [
     if (!relativeCsfPaths) return {};
     const csfFiles = await Promise.all(
       (relativeCsfPaths as string[]).map(async (blocksRelativePath) => {
-        const projectRelativePath = `./ui/blocks/src/${blocksRelativePath.replace(
+        const projectRelativePath = `./lib/blocks/src/${blocksRelativePath.replace(
           /^..\//,
           ''
         )}.tsx`;

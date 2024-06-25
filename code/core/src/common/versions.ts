@@ -56,6 +56,7 @@ export default {
   '@storybook/vue3-webpack5': '8.2.0-alpha.10',
   '@storybook/web-components-vite': '8.2.0-alpha.10',
   '@storybook/web-components-webpack5': '8.2.0-alpha.10',
+  '@storybook/blocks': '8.2.0-alpha.10',
   storybook: '8.2.0-alpha.10',
   sb: '8.2.0-alpha.10',
   '@storybook/cli': '8.2.0-alpha.10',
@@ -80,5 +81,4 @@ export default {
   '@storybook/svelte': '8.2.0-alpha.10',
   '@storybook/vue3': '8.2.0-alpha.10',
   '@storybook/web-components': '8.2.0-alpha.10',
-  '@storybook/blocks': '8.2.0-alpha.10',
 };

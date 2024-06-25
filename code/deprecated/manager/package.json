@@ -5,14 +5,14 @@
   "keywords": [
     "storybook"
   ],
-  "homepage": "https://github.com/storybookjs/storybook/tree/next/code/ui/manager",
+  "homepage": "https://github.com/storybookjs/storybook/tree/next/code/deprecated/manager",
   "bugs": {
     "url": "https://github.com/storybookjs/storybook/issues"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/storybookjs/storybook.git",
-    "directory": "code/ui/manager"
+    "directory": "code/deprecated/manager"
   },
   "funding": {
     "type": "opencollective",

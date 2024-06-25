@@ -30,7 +30,7 @@ vi.mock('@storybook/core/channels', async (importOriginal) => {
   };
 });
 vi.mock('@storybook/blocks', async () => {
-  const { CodeOrSourceMdx } = await import('../../../../../ui/blocks/src/blocks/mdx');
+  const { CodeOrSourceMdx } = await import('../../../../../lib/blocks/src/blocks/mdx');
   return {
     Docs: vi.fn(() => 'Docs'),
     CodeOrSourceMdx: CodeOrSourceMdx,
