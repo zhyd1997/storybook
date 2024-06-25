@@ -288,10 +288,11 @@ export class Preview<TRenderer extends Renderer> {
     this.storyStoreValue.userGlobals.update(updatedGlobals);
 
     if (currentStory) {
-      const { initialGlobals, userGlobals, globals } =
+      const { initialGlobals, storyGlobals, userGlobals, globals } =
         this.storyStoreValue.getStoryContext(currentStory);
       this.channel.emit(GLOBALS_UPDATED, {
         globals,
+        storyGlobals,
         userGlobals,
         initialGlobals,
       });
@@ -301,6 +302,7 @@ export class Preview<TRenderer extends Renderer> {
       const { initialGlobals, globals } = this.storyStoreValue.userGlobals;
       this.channel.emit(GLOBALS_UPDATED, {
         globals,
+        storyGlobals: {},
         userGlobals: globals,
         initialGlobals,
       });
