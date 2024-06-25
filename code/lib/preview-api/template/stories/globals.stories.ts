@@ -5,6 +5,9 @@ import { within, expect } from '@storybook/test';
 export default {
   component: globalThis.Components.Pre,
   tags: ['autodocs'],
+  globals: {
+    baz: 'bazComponentValue',
+  },
 };
 
 export const Inheritance = {
@@ -17,6 +20,7 @@ export const Inheritance = {
     await expect(JSON.parse(within(canvasElement).getByTestId('pre').innerText)).toMatchObject({
       foo: 'fooValue',
       bar: 'barDefaultValue',
+      baz: 'bazComponentValue',
     });
   },
 };
@@ -48,14 +52,15 @@ export const Overrides1 = {
     (storyFn: PartialStoryFn, context: StoryContext) =>
       storyFn({ args: { object: context.globals } }),
   ],
-  globalOverrides: {
+  globals: {
     foo: 'fooOverridden1',
-    bar: 'barOverridden1',
+    baz: 'bazOverridden1',
   },
   play: async ({ canvasElement }: PlayFunctionContext<any>) => {
     await expect(JSON.parse(within(canvasElement).getByTestId('pre').innerText)).toMatchObject({
       foo: 'fooOverridden1',
-      bar: 'barOverridden1',
+      bar: 'barDefaultValue',
+      baz: 'bazOverridden1',
     });
   },
 };
@@ -66,14 +71,15 @@ export const Overrides2 = {
     (storyFn: PartialStoryFn, context: StoryContext) =>
       storyFn({ args: { object: context.globals } }),
   ],
-  globalOverrides: {
+  globals: {
     foo: 'fooOverridden2',
-    bar: 'barOverridden2',
+    baz: 'bazOverridden2',
   },
   play: async ({ canvasElement }: PlayFunctionContext<any>) => {
     await expect(JSON.parse(within(canvasElement).getByTestId('pre').innerText)).toMatchObject({
       foo: 'fooOverridden2',
-      bar: 'barOverridden2',
+      bar: 'barDefaultValue',
+      baz: 'bazOverridden2',
     });
   },
 };

@@ -34,6 +34,7 @@ import type {
   StoryId,
   StoryRenderOptions,
   SetGlobalsPayload,
+  GlobalsUpdatedPayload,
 } from '@storybook/types';
 import {
   CalledPreviewMethodBeforeInitializationError,
@@ -47,6 +48,7 @@ import { StoryStore } from '../../store';
 import { StoryRender } from './render/StoryRender';
 import type { CsfDocsRender } from './render/CsfDocsRender';
 import type { MdxDocsRender } from './render/MdxDocsRender';
+import { satisfies } from '@storybook/core-common';
 
 const { fetch } = global;
 
@@ -291,21 +293,21 @@ export class Preview<TRenderer extends Renderer> {
       const { initialGlobals, storyGlobals, userGlobals, globals } =
         this.storyStoreValue.getStoryContext(currentStory);
       this.channel.emit(GLOBALS_UPDATED, {
-        globals,
-        storyGlobals,
-        userGlobals,
         initialGlobals,
-      });
+        userGlobals,
+        storyGlobals,
+        globals,
+      } satisfies GlobalsUpdatedPayload);
     } else {
       // If there is no known selected story (e.g. if we are in docs mode), the userGlobals
       // are not overridden.
       const { initialGlobals, globals } = this.storyStoreValue.userGlobals;
       this.channel.emit(GLOBALS_UPDATED, {
-        globals,
-        storyGlobals: {},
-        userGlobals: globals,
         initialGlobals,
-      });
+        userGlobals: globals,
+        storyGlobals: {},
+        globals,
+      } satisfies GlobalsUpdatedPayload);
     }
 
     await Promise.all(this.storyRenders.map((r) => r.rerender()));

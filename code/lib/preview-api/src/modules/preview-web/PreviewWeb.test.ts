@@ -168,6 +168,11 @@ describe('PreviewWeb', () => {
     it('emits the SET_GLOBALS event', async () => {
       await createAndRenderPreview();
 
+      expect(mockChannel.emit.mock.calls[0][1]).toMatchObject({
+        globals: { a: 'b' },
+        globalTypes: {},
+      });
+
       expect(mockChannel.emit).toHaveBeenCalledWith(SET_GLOBALS, {
         globals: { a: 'b' },
         globalTypes: {},
@@ -772,8 +777,10 @@ describe('PreviewWeb', () => {
 
       await waitForEvents([GLOBALS_UPDATED]);
       expect(mockChannel.emit).toHaveBeenCalledWith(GLOBALS_UPDATED, {
-        globals: { a: 'c' },
         initialGlobals: { a: 'b' },
+        userGlobals: { a: 'c' },
+        storyGlobals: {},
+        globals: { a: 'c' },
       });
     });
 
@@ -3623,6 +3630,7 @@ describe('PreviewWeb', () => {
               "fileName": "./src/ComponentOne.stories.js",
             },
             "story": "A",
+            "storyGlobals": {},
             "subcomponents": undefined,
             "tags": [
               "dev",
@@ -3671,6 +3679,7 @@ describe('PreviewWeb', () => {
               "fileName": "./src/ComponentOne.stories.js",
             },
             "story": "B",
+            "storyGlobals": {},
             "subcomponents": undefined,
             "tags": [
               "dev",
@@ -3697,6 +3706,7 @@ describe('PreviewWeb', () => {
             },
             "playFunction": undefined,
             "story": "E",
+            "storyGlobals": {},
             "subcomponents": undefined,
             "tags": [
               "dev",
@@ -3733,6 +3743,7 @@ describe('PreviewWeb', () => {
             },
             "playFunction": undefined,
             "story": "C",
+            "storyGlobals": {},
             "subcomponents": undefined,
             "tags": [
               "dev",

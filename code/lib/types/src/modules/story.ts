@@ -87,10 +87,6 @@ export type NormalizedStoryAnnotations<TRenderer extends Renderer = Renderer> = 
   userStoryFn?: StoryFn<TRenderer>;
   decorators?: DecoratorFunction<TRenderer>[];
   loaders?: LoaderFunction<TRenderer>[];
-  // Proof of concept
-  globalOverrides?: {
-    [name: string]: any;
-  };
 };
 
 export type CSFFile<TRenderer extends Renderer = Renderer> = {

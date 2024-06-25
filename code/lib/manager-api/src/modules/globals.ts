@@ -1,7 +1,12 @@
 import { SET_GLOBALS, UPDATE_GLOBALS, GLOBALS_UPDATED } from '@storybook/core-events';
 import { logger } from '@storybook/client-logger';
 import { dequal as deepEqual } from 'dequal';
-import type { SetGlobalsPayload, Globals, GlobalTypes } from '@storybook/types';
+import type {
+  SetGlobalsPayload,
+  Globals,
+  GlobalTypes,
+  GlobalsUpdatedPayload,
+} from '@storybook/types';
 
 import type { ModuleFn } from '../lib/types';
 
@@ -102,11 +107,7 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI, provider }) =
     GLOBALS_UPDATED,
     function handleGlobalsUpdated(
       this: any,
-      {
-        globals,
-        storyGlobals,
-        userGlobals,
-      }: { globals: Globals; storyGlobals: Globals; userGlobals: Globals }
+      { globals, storyGlobals, userGlobals }: GlobalsUpdatedPayload
     ) {
       const { ref } = getEventMetadata(this, fullAPI)!;
 

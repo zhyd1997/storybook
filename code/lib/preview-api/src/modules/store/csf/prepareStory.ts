@@ -3,6 +3,7 @@ import { global } from '@storybook/global';
 import type {
   Args,
   ArgsStoryFn,
+  Globals,
   ModuleExport,
   NormalizedComponentAnnotations,
   NormalizedProjectAnnotations,
@@ -41,7 +42,7 @@ export function prepareStory<TRenderer extends Renderer>(
   // NOTE: in the current implementation we are doing everything once, up front, rather than doing
   // anything at render time. The assumption is that as we don't load all the stories at once, this
   // will have a limited cost. If this proves misguided, we can refactor it.
-  const { moduleExport, id, name, globalOverrides } = storyAnnotations || {};
+  const { moduleExport, id, name } = storyAnnotations || {};
 
   const partialAnnotations = preparePartialAnnotations(
     storyAnnotations,
@@ -133,7 +134,6 @@ export function prepareStory<TRenderer extends Renderer>(
     applyLoaders,
     applyBeforeEach,
     playFunction,
-    globalOverrides,
   };
 }
 export function prepareMeta<TRenderer extends Renderer>(
@@ -201,6 +201,11 @@ function preparePartialAnnotations<TRenderer extends Renderer>(
     ...storyAnnotations?.args,
   } as Args;
 
+  const storyGlobals: Globals = {
+    ...componentAnnotations.globals,
+    ...storyAnnotations?.globals,
+  };
+
   const contextForEnhancers: StoryContextForEnhancers<TRenderer> = {
     componentId: componentAnnotations.id,
     title: componentAnnotations.title,
@@ -215,6 +220,7 @@ function preparePartialAnnotations<TRenderer extends Renderer>(
     parameters,
     initialArgs: passedArgs,
     argTypes: passedArgTypes,
+    storyGlobals,
   };
 
   contextForEnhancers.argTypes = argTypesEnhancers.reduce(
