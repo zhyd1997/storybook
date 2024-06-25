@@ -1,3 +1,5 @@
+// @vitest-environment happy-dom
+
 import type { ChannelTransport } from '@storybook/core/channels';
 import { Channel } from '@storybook/core/channels';
 import type { RequestData, FileComponentSearchRequestPayload } from '@storybook/core/core-events';
