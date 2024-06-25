@@ -75,7 +75,7 @@ export default function Onboarding({ api }: { api: API }) {
   const [createNewStoryForm, setCreateNewStoryForm] = useState<HTMLElement | null>();
   const [createdStory, setCreatedStory] = useState<{
     newStoryName: string;
-    newStorySource: string;
+    sourceFileContent: string;
     sourceFileName: string;
   } | null>();
 
@@ -157,7 +157,7 @@ export default function Onboarding({ api }: { api: API }) {
     return null;
   }
 
-  const source = createdStory?.newStorySource;
+  const source = createdStory?.sourceFileContent;
   const startIndex = source?.lastIndexOf(`export const ${createdStory?.newStoryName}`);
   const snippet = source?.slice(startIndex);
   const startingLineNumber = source?.slice(0, startIndex).split('\n').length;
