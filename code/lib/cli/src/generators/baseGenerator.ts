@@ -212,7 +212,6 @@ export async function baseGenerator(
     storybookConfigFolder,
     componentsDestinationPath,
     webpackCompiler,
-    installStorybookPackage,
     installFrameworkPackages,
   } = {
     ...defaultOptions,
