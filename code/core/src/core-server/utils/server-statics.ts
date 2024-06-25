@@ -34,7 +34,7 @@ export async function useStatics(router: Router, options: Options) {
           // Don't log for the internal static dir
           if (!targetEndpoint.startsWith('/sb-')) {
             logger.info(
-              chalk`=> Serving static files from {cyan ${staticDir}} at {cyan ${targetEndpoint}}`
+              `=> Serving static files from ${chalk.cyan(staticDir)} at ${chalk.cyan(targetEndpoint)}`
             );
           }
 
@@ -67,10 +67,10 @@ export const parseStaticDir = async (arg: string) => {
 
   if (!(await pathExists(staticPath))) {
     throw new Error(
-      dedent(chalk`
-        Failed to load static files, no such directory: {cyan ${staticPath}}
+      dedent`
+        Failed to load static files, no such directory: ${chalk.cyan(staticPath)}
         Make sure this directory exists.
-      `)
+      `
     );
   }
 

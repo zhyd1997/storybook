@@ -15,11 +15,9 @@ export async function copyAllStaticFiles(staticDirs: any[] | undefined, outputDi
 
           // we copy prebuild static files from node_modules/@storybook/manager & preview
           if (!staticDir.includes('node_modules')) {
-            logger.info(
-              chalk`=> Copying static files: {cyan ${print(staticDir)}} => {cyan ${print(
-                targetDir
-              )}}`
-            );
+            const from = chalk.cyan(print(staticDir));
+            const to = chalk.cyan(print(targetDir));
+            logger.info(`=> Copying static files: ${from} => ${to}`);
           }
 
           // Storybook's own files should not be overwritten, so we skip such files if we find them
@@ -61,7 +59,7 @@ export async function copyAllStaticFilesRelativeToMain(
     const skipPaths = ['index.html', 'iframe.html'].map((f) => join(targetPath, f));
     if (!from.includes('node_modules')) {
       logger.info(
-        chalk`=> Copying static files: {cyan ${print(from)}} at {cyan ${print(targetPath)}}`
+        `=> Copying static files: ${chalk.cyan(print(from))} at ${chalk.cyan(print(targetPath))}`
       );
     }
     await fs.copy(from, targetPath, {

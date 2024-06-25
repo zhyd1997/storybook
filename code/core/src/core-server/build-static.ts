@@ -36,7 +36,7 @@ export async function buildStaticStandalone(options: BuildStaticStandaloneOption
   options.outputDir = resolve(options.outputDir);
   options.configDir = resolve(options.configDir);
 
-  logger.info(chalk`=> Cleaning outputDir: {cyan ${relative(process.cwd(), options.outputDir)}}`);
+  logger.info(`=> Cleaning outputDir: ${chalk.cyan(relative(process.cwd(), options.outputDir))}`);
   if (options.outputDir === '/') {
     throw new Error("Won't remove directory '/'. Check your outputDir!");
   }
