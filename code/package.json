@@ -50,7 +50,7 @@
     "storybook:blocks:chromatic": "STORYBOOK_BLOCKS_ONLY=true yarn storybook:ui:chromatic --project-token=${CHROMATIC_TOKEN_STORYBOOK_BLOCKS:-MISSING_PROJECT_TOKEN}",
     "storybook:ui": "NODE_OPTIONS=\"--preserve-symlinks --preserve-symlinks-main\" ./lib/cli/bin/index.cjs dev --port 6006 --config-dir ./.storybook",
     "storybook:ui:build": "NODE_OPTIONS=\"--preserve-symlinks --preserve-symlinks-main\" ./lib/cli/bin/index.cjs build --config-dir ./.storybook --webpack-stats-json",
-    "storybook:ui:chromatic": "storybook:ui:build && ../scripts/node_modules/.bin/chromatic --storybook-build-dir ./storybook-static --project-token=${CHROMATIC_TOKEN_STORYBOOK_UI:-MISSING_PROJECT_TOKEN} --exit-zero-on-changes --exit-once-uploaded",
+    "storybook:ui:chromatic": "yarn storybook:ui:build && ../scripts/node_modules/.bin/chromatic --storybook-build-dir ./storybook-static --project-token=${CHROMATIC_TOKEN_STORYBOOK_UI:-MISSING_PROJECT_TOKEN} --exit-zero-on-changes --exit-once-uploaded",
     "task": "yarn --cwd ../scripts task",
     "test": "NODE_OPTIONS=--max_old_space_size=4096 vitest run",
     "test:watch": "NODE_OPTIONS=--max_old_space_size=4096 vitest watch"
