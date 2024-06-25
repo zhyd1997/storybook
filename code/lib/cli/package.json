@@ -32,6 +32,10 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./bin/index.cjs": {
+      "node": "./bin/index.cjs",
+      "require": "./bin/index.cjs"
+    },
     "./core-path": {
       "types": "./dist/core-path.d.ts",
       "node": "./dist/core-path.cjs",
