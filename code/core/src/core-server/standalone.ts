@@ -1,10 +1,10 @@
-import { readPackageUpSync } from 'read-pkg-up';
 import { buildStaticStandalone } from './build-static';
 import { buildDevStandalone } from './build-dev';
+import { dirname } from 'node:path';
 
 async function build(options: any = {}, frameworkOptions: any = {}) {
   const { mode = 'dev' } = options;
-  const packageJson = readPackageUpSync({ cwd: __dirname })?.packageJson;
+  const packageJson = dirname(require.resolve('@storybook/core/package.json'));
 
   const commonOptions = {
     ...options,

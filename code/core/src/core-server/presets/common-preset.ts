@@ -17,7 +17,7 @@ import type {
   PresetProperty,
 } from '@storybook/core/types';
 import { readCsf } from '@storybook/core/csf-tools';
-import { join, dirname, isAbsolute } from 'path';
+import { join, dirname, isAbsolute } from 'node:path';
 import { dedent } from 'ts-dedent';
 import type { Channel } from '@storybook/core/channels';
 import { parseStaticDir } from '../utils/server-statics';

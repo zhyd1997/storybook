@@ -4,7 +4,7 @@ import { readCsf, printCsf } from '@storybook/core/csf-tools';
 
 import { updateArgsInCsfFile } from './update-args-in-csf-file';
 import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { join } from 'node:path';
 import { format } from 'prettier';
 import { getDiff } from './getDiff';
 
