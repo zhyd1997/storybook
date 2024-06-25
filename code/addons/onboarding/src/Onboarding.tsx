@@ -140,7 +140,7 @@ export default function Onboarding({ api }: { api: API }) {
 
   useEffect(() => {
     return api.on(SAVE_STORY_RESPONSE, ({ payload, success }) => {
-      if (!success) return;
+      if (!success || !payload?.newStoryName) return;
       setCreatedStory(payload);
       setShowConfetti(true);
       setStep('5:StoryCreated');
