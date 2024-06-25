@@ -5,14 +5,14 @@
   "keywords": [
     "storybook"
   ],
-  "homepage": "https://github.com/storybookjs/storybook/tree/next/code/ui/blocks",
+  "homepage": "https://github.com/storybookjs/storybook/tree/next/code/lib/blocks",
   "bugs": {
     "url": "https://github.com/storybookjs/storybook/issues"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/storybookjs/storybook.git",
-    "directory": "code/ui/blocks"
+    "directory": "code/lib/blocks"
   },
   "funding": {
     "type": "opencollective",

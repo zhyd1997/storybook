@@ -1,37 +1,37 @@
 import path from 'path';
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { mergeConfig } from 'vite';
-import type { StorybookConfig } from '../../frameworks/react-vite';
+import type { StorybookConfig } from '../frameworks/react-vite';
 
 const isBlocksOnly = process.env.STORYBOOK_BLOCKS_ONLY === 'true';
 
 const allStories = [
   {
-    directory: '../../core/src/manager',
+    directory: '../core/src/manager',
     titlePrefix: '@manager',
   },
   {
-    directory: '../../core/src/preview-api',
+    directory: '../core/src/preview-api',
     titlePrefix: '@preview',
   },
   {
-    directory: '../../core/src/components',
+    directory: '../core/src/components',
     titlePrefix: '@components',
   },
   {
-    directory: '../blocks/src',
+    directory: '../lib/blocks/src',
     titlePrefix: '@blocks',
   },
   {
-    directory: '../../addons/controls/src', // TODO other addons?
+    directory: '../addons/controls/src', // TODO other addons?
     titlePrefix: '@addons/controls',
   },
   {
-    directory: '../../addons/onboarding/src',
+    directory: '../addons/onboarding/src',
     titlePrefix: '@addons/onboarding',
   },
   {
-    directory: '../../addons/interactions/src',
+    directory: '../addons/interactions/src',
     titlePrefix: '@addons/interactions',
   },
 ];
@@ -59,10 +59,10 @@ const blocksOnlyStories = [
   '../blocks/src/@(blocks|controls|examples)/*.@(mdx|stories.@(js|jsx|mjs|ts|tsx))',
 ];
 
-const componentsPath = path.join(__dirname, '../../core/src/components');
-const managerApiPath = path.join(__dirname, '../../core/src/manager-api');
-const themingPath = path.join(__dirname, '../../core/src/theming');
-const docsToolsPath = path.join(__dirname, '../../core/src/docs-tools');
+const componentsPath = path.join(__dirname, '../core/src/components');
+const managerApiPath = path.join(__dirname, '../core/src/manager-api');
+const themingPath = path.join(__dirname, '../core/src/theming');
+const docsToolsPath = path.join(__dirname, '../core/src/docs-tools');
 
 const config: StorybookConfig = {
   stories: isBlocksOnly ? blocksOnlyStories : allStories,

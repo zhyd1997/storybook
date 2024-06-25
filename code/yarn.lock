@@ -5506,9 +5506,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/blocks@workspace:*, @storybook/blocks@workspace:ui/blocks":
+"@storybook/blocks@workspace:*, @storybook/blocks@workspace:lib/blocks":
   version: 0.0.0-use.local
-  resolution: "@storybook/blocks@workspace:ui/blocks"
+  resolution: "@storybook/blocks@workspace:lib/blocks"
   dependencies:
     "@storybook/addon-actions": "workspace:*"
     "@storybook/csf": "npm:^0.1.8"

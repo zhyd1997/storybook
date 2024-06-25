@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import mapValues from 'lodash/mapValues.js';
-import { PureArgsTable as ArgsTable } from '@storybook/blocks';
+import { PureArgsTable as ArgsTable } from 'lib/blocks/dist';
 import type { StoryObj } from '@storybook/react';
 import type { Args, Parameters, StoryContext } from 'storybook/types';
 import { inferControls } from 'storybook/preview-api';
