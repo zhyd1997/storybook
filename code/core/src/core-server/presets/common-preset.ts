@@ -281,5 +281,11 @@ export const tags = async (existing: any) => {
 };
 
 export const managerEntries = async (existing: any, options: Options) => {
-  return ['@storybook/core/core-server/presets/common-manager', ...(existing || [])];
+  return [
+    join(
+      dirname(require.resolve('@storybook/core/package.json')),
+      'dist/core-server/presets/common-manager.js'
+    ),
+    ...(existing || []),
+  ];
 };
