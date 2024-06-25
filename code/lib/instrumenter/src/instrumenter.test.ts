@@ -1,19 +1,19 @@
 // @vitest-environment happy-dom
 
 /* eslint-disable no-underscore-dangle */
-import { addons, mockChannel } from '@storybook/core/preview-api';
+import { addons, mockChannel } from 'storybook/preview-api';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import {
   FORCE_REMOUNT,
   SET_CURRENT_STORY,
   STORY_RENDER_PHASE_CHANGED,
-} from '@storybook/core/core-events';
+} from 'storybook/core-events';
 import { global } from '@storybook/global';
 
 import { EVENTS, Instrumenter } from './instrumenter';
 import type { Options } from './types';
 
-vi.mock('@storybook/core/client-logger');
+vi.mock('storybook/client-logger');
 
 const callSpy = vi.fn();
 const syncSpy = vi.fn();

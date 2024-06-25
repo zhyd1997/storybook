@@ -2,7 +2,6 @@ import { defineEntry } from '../../../scripts/prepare/tools';
 
 export const getEntries = (cwd: string) => {
   const define = defineEntry(cwd);
-
   return [
     // empty, right now
     define('src/index.ts', ['node', 'browser'], true),

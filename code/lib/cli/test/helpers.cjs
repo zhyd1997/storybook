@@ -1,7 +1,7 @@
 const { sync: spawnSync } = require('cross-spawn');
 const path = require('path');
 
-const CLI_PATH = path.join(__dirname, '..', 'bin');
+const CLI_PATH = path.join(__dirname, '..', 'bin', 'index.cjs');
 
 /**
  * Execute command

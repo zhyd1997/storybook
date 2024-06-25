@@ -1,4 +1,4 @@
-import { styled } from '@storybook/core/theming';
+import { styled } from 'storybook/theming';
 import type { FC } from 'react';
 import React from 'react';
 

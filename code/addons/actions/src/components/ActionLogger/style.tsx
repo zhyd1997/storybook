@@ -1,4 +1,4 @@
-import { styled } from '@storybook/core/theming';
+import { styled } from 'storybook/theming';
 import { opacify } from 'polished';
 
 export const Action = styled.div({

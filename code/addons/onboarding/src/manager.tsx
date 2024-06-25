@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import React, { lazy, Suspense } from 'react';
-import { addons } from '@storybook/core/manager-api';
-import { STORY_SPECIFIED } from '@storybook/core/core-events';
+import { addons } from 'storybook/manager-api';
+import { STORY_SPECIFIED } from 'storybook/core-events';
 
 const App = lazy(() => import('./App'));
 

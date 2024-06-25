@@ -1,7 +1,7 @@
-import { type StoryContext as StoryContextBase, type WebRenderer } from '@storybook/core/types';
+import { type StoryContext as StoryContextBase, type WebRenderer } from 'storybook/types';
 import type { App, ConcreteComponent } from 'vue';
 
-export type { RenderContext } from '@storybook/core/types';
+export type { RenderContext } from 'storybook/types';
 
 export type StoryID = string;
 

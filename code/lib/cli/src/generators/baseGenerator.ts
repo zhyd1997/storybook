@@ -285,8 +285,7 @@ export async function baseGenerator(
       : extraPackages;
 
   const allPackages = [
-    '@storybook/core',
-    installStorybookPackage ? 'storybook' : undefined,
+    'storybook',
     getExternalFramework(rendererId) ? undefined : `@storybook/${rendererId}`,
     ...(installFrameworkPackages ? frameworkPackages : []),
     ...addonPackages,

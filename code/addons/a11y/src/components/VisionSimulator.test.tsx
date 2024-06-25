@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider, themes, convert } from '@storybook/core/theming';
+import { ThemeProvider, themes, convert } from 'storybook/theming';
 import { VisionSimulator, baseList } from './VisionSimulator';
 
 const getOptionByNameAndPercentage = (option: string, percentage?: number) =>

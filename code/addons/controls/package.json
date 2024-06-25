@@ -51,18 +51,18 @@
     "prep": "node --loader ../../../scripts/node_modules/esbuild-register/loader.js -r ../../../scripts/node_modules/esbuild-register/register.js ../../../scripts/prepare/addon-bundle.ts"
   },
   "dependencies": {
-    "@storybook/blocks": "workspace:*",
     "dequal": "^2.0.2",
     "lodash": "^4.17.21",
     "ts-dedent": "^2.0.0"
   },
   "devDependencies": {
+    "@storybook/blocks": "workspace:*",
     "@storybook/icons": "^1.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:^"
+    "storybook": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

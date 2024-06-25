@@ -61,6 +61,8 @@ const blocksOnlyStories = [
 
 const componentsPath = path.join(__dirname, '../../core/src/components');
 const managerApiPath = path.join(__dirname, '../../core/src/manager-api');
+const themingPath = path.join(__dirname, '../../core/src/theming');
+const docsToolsPath = path.join(__dirname, '../../core/src/docs-tools');
 
 const config: StorybookConfig = {
   stories: isBlocksOnly ? blocksOnlyStories : allStories,
@@ -94,10 +96,13 @@ const config: StorybookConfig = {
         alias: {
           ...(configType === 'DEVELOPMENT'
             ? {
+                '@storybook/theming': themingPath,
+                'storybook/theming': themingPath,
+                'storybook/docs-tools': docsToolsPath,
                 '@storybook/components': componentsPath,
-                '@storybook/core/components': componentsPath,
+                'storybook/components': componentsPath,
                 '@storybook/manager-api': managerApiPath,
-                '@storybook/core/manager-api': managerApiPath,
+                'storybook/manager-api': managerApiPath,
               }
             : {}),
         },

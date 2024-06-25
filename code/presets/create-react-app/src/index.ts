@@ -1,7 +1,7 @@
 import { join, relative, dirname } from 'path';
 import type { Configuration, RuleSetRule, WebpackPluginInstance } from 'webpack';
 
-import { logger } from '@storybook/core/node-logger';
+import { logger } from 'storybook/node-logger';
 import PnpWebpackPlugin from 'pnp-webpack-plugin';
 import { mergePlugins } from './helpers/mergePlugins';
 import { getReactScriptsPath } from './helpers/getReactScriptsPath';

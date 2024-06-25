@@ -6,8 +6,8 @@ import type {
   ModuleExport,
   Args,
   StoryContextForLoaders,
-} from '@storybook/core/types';
-import { SourceType } from '@storybook/core/docs-tools';
+} from 'storybook/types';
+import { SourceType } from 'storybook/docs-tools';
 
 import type { SourceCodeProps } from '../components/Source';
 import { Source as PureSource, SourceError } from '../components/Source';

@@ -88,8 +88,8 @@
     "@angular/forms": ">=15.0.0 < 19.0.0",
     "@angular/platform-browser": ">=15.0.0 < 19.0.0",
     "@angular/platform-browser-dynamic": ">=15.0.0 < 19.0.0",
-    "@storybook/core": "workspace:^",
     "rxjs": "^6.0.0 || ^7.4.0",
+    "storybook": "workspace:^",
     "typescript": "^4.0.0 || ^5.0.0",
     "zone.js": ">= 0.11.1 < 1.0.0"
   },

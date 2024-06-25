@@ -14,8 +14,8 @@ const buildMock = {
   withTelemetry: (name: string, options: any, fn: any) => fn(),
 };
 
-vi.doMock('@storybook/core/core-server', () => buildMock);
-vi.doMock('@storybook/core/common', () => ({
+vi.doMock('storybook/core-server', () => buildMock);
+vi.doMock('storybook/common', () => ({
   JsPackageManagerFactory: {
     getPackageManager: () => ({
       runPackageCommand: mockRunScript,

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import type { FC, ReactElement } from 'react';
-import { styled } from '@storybook/core/theming';
+import { styled } from 'storybook/theming';
 import * as tocbot from 'tocbot';
 
 export interface TocParameters {

@@ -1,2 +1,2 @@
-export * from '@storybook/core/manager-errors';
-export type * from '@storybook/core/manager-errors';
+export * from 'storybook/manager-errors';
+export type * from 'storybook/r-errors';

@@ -1,5 +1,5 @@
 import { dirname, join } from 'path';
-import type { PresetProperty } from '@storybook/core/types';
+import type { PresetProperty } from 'storybook/types';
 import type { StorybookConfig } from './types';
 
 export * from './types';

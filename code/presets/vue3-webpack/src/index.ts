@@ -1,4 +1,4 @@
-import type { PresetProperty } from '@storybook/core/types';
+import type { PresetProperty } from 'storybook/types';
 
 export * from './types';
 

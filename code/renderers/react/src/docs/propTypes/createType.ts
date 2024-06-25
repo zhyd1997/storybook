@@ -1,5 +1,5 @@
-import type { ExtractedProp, DocgenPropType, PropType } from '@storybook/core/docs-tools';
-import { createSummaryValue, isTooLongForTypeSummary } from '@storybook/core/docs-tools';
+import type { ExtractedProp, DocgenPropType, PropType } from 'storybook/docs-tools';
+import { createSummaryValue, isTooLongForTypeSummary } from 'storybook/docs-tools';
 import {
   generateFuncSignature,
   generateShortFuncSignature,

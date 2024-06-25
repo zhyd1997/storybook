@@ -1,15 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { addons, useEffect } from '@storybook/core/preview-api';
-import { deprecate } from '@storybook/core/client-logger';
-import type {
-  ArgTypes,
-  Args,
-  ArgsStoryFn,
-  DecoratorFunction,
-  StoryContext,
-} from '@storybook/core/types';
+import { addons, useEffect } from 'storybook/preview-api';
+import { deprecate } from 'storybook/client-logger';
+import type { ArgTypes, Args, ArgsStoryFn, DecoratorFunction, StoryContext } from 'storybook/types';
 
-import { SourceType, SNIPPET_RENDERED } from '@storybook/core/docs-tools';
+import { SourceType, SNIPPET_RENDERED } from 'storybook/docs-tools';
 import type { SvelteComponentDoc } from 'sveltedoc-parser';
 import type { SvelteRenderer, SvelteStoryResult } from '../types';
 

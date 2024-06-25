@@ -73,8 +73,8 @@
     "vue": "^3.2.33"
   },
   "peerDependencies": {
-    "@storybook/core": "workspace:^",
     "@vue/compiler-sfc": "^3.0.0",
+    "storybook": "workspace:^",
     "vue": "^3.0.0"
   },
   "engines": {

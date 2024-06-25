@@ -1,12 +1,12 @@
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi } from 'vitest';
-import * as api from '@storybook/core/manager-api';
-import type { Addon_BaseType } from '@storybook/core/types';
+import * as api from 'storybook/manager-api';
+import type { Addon_BaseType } from 'storybook/types';
 import { PANEL_ID } from './constants';
 import './manager';
 
-vi.mock('@storybook/core/manager-api');
+vi.mock('storybook/manager-api');
 const mockedApi = vi.mocked<api.API>(api as any);
 mockedApi.useAddonState = vi.fn();
 const mockedAddons = vi.mocked(api.addons);

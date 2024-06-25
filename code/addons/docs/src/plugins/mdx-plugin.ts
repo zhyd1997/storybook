@@ -1,4 +1,4 @@
-import type { Options } from '@storybook/core/types';
+import type { Options } from 'storybook/types';
 import type { Plugin } from 'vite';
 import rehypeSlug from 'rehype-slug';
 import rehypeExternalLinks from 'rehype-external-links';

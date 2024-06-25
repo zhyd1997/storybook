@@ -1,4 +1,4 @@
-import { logger } from '@storybook/core/node-logger';
+import { logger } from 'storybook/node-logger';
 import type { PluginOptions } from '../types';
 
 const incompatiblePresets = ['@storybook/preset-scss', '@storybook/preset-typescript'];

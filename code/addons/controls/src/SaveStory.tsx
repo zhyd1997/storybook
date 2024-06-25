@@ -6,9 +6,9 @@ import {
   Modal,
   TooltipNote,
   WithTooltip,
-} from '@storybook/core/components';
+} from 'storybook/components';
 import { AddIcon, CheckIcon, UndoIcon } from '@storybook/icons';
-import { keyframes, styled } from '@storybook/core/theming';
+import { keyframes, styled } from 'storybook/theming';
 import React from 'react';
 
 const slideIn = keyframes({

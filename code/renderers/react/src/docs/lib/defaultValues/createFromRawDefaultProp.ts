@@ -8,7 +8,7 @@ import {
   createSummaryValue,
   isTooLongForDefaultValueSummary,
   type PropDefaultValue,
-} from '@storybook/core/docs-tools';
+} from 'storybook/docs-tools';
 
 import type { InspectionFunction } from '../inspection';
 import { inspectValue } from '../inspection';

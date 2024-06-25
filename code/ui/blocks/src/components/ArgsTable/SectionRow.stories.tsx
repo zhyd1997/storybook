@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 import React from 'react';
-import { ResetWrapper } from '@storybook/core/components';
+import { ResetWrapper } from 'storybook/components';
 import { SectionRow } from './SectionRow';
 import { TableWrapper } from './ArgsTable';
 

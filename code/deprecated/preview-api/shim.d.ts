@@ -1,2 +1,2 @@
-export * from '@storybook/core/preview-api';
-export type * from '@storybook/core/preview-api';
+export * from 'storybook/preview-api';
+export type * from 'storybook/preview-api';

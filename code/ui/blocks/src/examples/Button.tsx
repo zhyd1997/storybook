@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '@storybook/core/theming';
+import { styled } from 'storybook/theming';
 
 interface ButtonProps {
   /**

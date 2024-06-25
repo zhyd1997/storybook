@@ -1,2 +1,2 @@
-export * from '@storybook/core/theming/create';
-export type * from '@storybook/core/theming/create';
+export * from 'storybook/theming/create';
+export type * from 'storybook/g/create';

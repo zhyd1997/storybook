@@ -23,7 +23,7 @@ describe('layout API', () => {
   beforeEach(() => {
     currentState = {
       ...defaultLayoutState,
-      selectedPanel: 'storybook/actions/panel',
+      selectedPanel: '@storybook/core/actions/panel',
       theme: themes.light,
       singleStory: false,
     };
@@ -471,14 +471,14 @@ describe('layout API', () => {
     });
 
     it('should set selectedPanel initially', () => {
-      const panelName = 'storybook/a11y/panel';
+      const panelName = '@storybook/core/a11y/panel';
       layoutApi.setOptions({ selectedPanel: panelName });
 
       expect(getLastSetStateArgs()[0].selectedPanel).toEqual(panelName);
     });
 
     it('should change selectedPanel if it is defined in the options and is different', () => {
-      const panelName = 'storybook/a11y/panel';
+      const panelName = '@storybook/core/a11y/panel';
       layoutApi.setOptions({});
       layoutApi.setOptions({ selectedPanel: panelName });
 

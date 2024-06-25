@@ -30,9 +30,7 @@ export function getMismatchingVersionsWarnings(
         return Object.keys(frameworkPackages).includes(packageName);
       }
     );
-    const cliVersion =
-      getPrimaryVersion('@storybook/cli', installationMetadata) ||
-      getPrimaryVersion('storybook', installationMetadata);
+    const cliVersion = getPrimaryVersion('storybook', installationMetadata);
     const frameworkVersion = getPrimaryVersion(frameworkPackageName, installationMetadata);
 
     if (!cliVersion || !frameworkVersion || semver.eq(cliVersion, frameworkVersion)) {

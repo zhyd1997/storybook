@@ -11,7 +11,7 @@ import { versions } from '@storybook/core/common';
 import type { SupportedFrameworks } from '@storybook/core/types';
 
 export function getCliDir() {
-  return dirname(require.resolve('@storybook/cli/package.json'));
+  return dirname(require.resolve('storybook/package.json'));
 }
 
 const resolveUsingBranchInstall = async (packageManager: JsPackageManager, request: string) => {

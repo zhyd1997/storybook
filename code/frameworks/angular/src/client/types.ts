@@ -4,7 +4,7 @@ import {
   Parameters as DefaultParameters,
   StoryContext as DefaultStoryContext,
   WebRenderer,
-} from '@storybook/core/types';
+} from 'storybook/types';
 
 export interface NgModuleMetadata {
   /**

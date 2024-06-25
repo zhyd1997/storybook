@@ -2,18 +2,19 @@ import type { Stats, Configuration, StatsOptions } from 'webpack';
 import webpack, { ProgressPlugin } from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import { logger } from '@storybook/core/node-logger';
-import type { Builder, Options } from '@storybook/core/types';
+import { logger } from 'storybook/node-logger';
+import type { Builder, Options } from 'storybook/types';
+import { corePath } from 'storybook/core-path';
 import { checkWebpackVersion } from '@storybook/core-webpack';
-import { dirname, join, parse } from 'path';
+import { join, parse } from 'path';
 import express from 'express';
 import fs from 'fs-extra';
-import { PREVIEW_BUILDER_PROGRESS } from '@storybook/core/core-events';
+import { PREVIEW_BUILDER_PROGRESS } from 'storybook/core-events';
 import {
   WebpackCompilationError,
   WebpackInvocationError,
   WebpackMissingStatsError,
-} from '@storybook/core/server-errors';
+} from 'storybook/server-errors';
 
 import prettyTime from 'pretty-hrtime';
 
@@ -25,9 +26,6 @@ export const printDuration = (startTime: [number, number]) =>
     .replace(' ms', ' milliseconds')
     .replace(' s', ' seconds')
     .replace(' m', ' minutes');
-
-const getAbsolutePath = <I extends string>(input: I): I =>
-  dirname(require.resolve(join(input, 'package.json'))) as any;
 
 let compilation: ReturnType<typeof webpackDevMiddleware> | undefined;
 let reject: (reason?: any) => void;
@@ -179,7 +177,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({
 
   compilation = webpackDevMiddleware(compiler, middlewareOptions);
 
-  const previewResolvedDir = join(getAbsolutePath('@storybook/core'), 'dist/preview');
+  const previewResolvedDir = join(corePath, 'dist/preview');
   const previewDirOrigin = previewResolvedDir;
 
   router.use(`/sb-preview`, express.static(previewDirOrigin, { immutable: true, maxAge: '5m' }));
@@ -288,7 +286,7 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
     });
   });
 
-  const previewResolvedDir = join(getAbsolutePath('@storybook/core'), 'dist/preview');
+  const previewResolvedDir = join(corePath, 'dist/preview');
   const previewDirOrigin = previewResolvedDir;
   const previewDirTarget = join(options.outputDir || '', `sb-preview`);
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IconButton, TooltipNote, WithTooltip } from '@storybook/core/components';
+import { IconButton, TooltipNote, WithTooltip } from 'storybook/components';
 import { type Call, CallStates, type ControlStates } from '@storybook/instrumenter';
-import { styled, typography } from '@storybook/core/theming';
+import { styled, typography } from 'storybook/theming';
 import { transparentize } from 'polished';
 
 import { ListUnorderedIcon } from '@storybook/icons';

@@ -35,7 +35,6 @@
     "@storybook/blocks": "portal:../../../code/ui/blocks",
     "@storybook/builder-vite": "portal:../../../code/builders/builder-vite",
     "@storybook/builder-webpack5": "portal:../../../code/builders/builder-webpack5",
-    "@storybook/cli": "portal:../../../code/lib/cli",
     "@storybook/codemod": "portal:../../../code/lib/codemod",
     "@storybook/core": "portal:../../../code/core",
     "@storybook/core-webpack": "portal:../../../code/lib/core-webpack",
@@ -73,14 +72,12 @@
     "@storybook/web-components": "portal:../../../code/renderers/web-components",
     "@storybook/web-components-vite": "portal:../../../code/frameworks/web-components-vite",
     "@storybook/web-components-webpack5": "portal:../../../code/frameworks/web-components-webpack5",
-    "sb": "portal:../../../code/lib/cli-sb",
-    "storybook": "portal:../../../code/lib/cli-storybook"
+    "storybook": "portal:../../../code/lib/cli"
   },
   "devDependencies": {
     "@playwright/experimental-ct-svelte": "^1.42.1",
     "@storybook/addon-essentials": "8.0.0-rc.2",
     "@storybook/addon-interactions": "8.0.0-rc.2",
-    "@storybook/core": "^8.0.0",
     "@storybook/svelte": "8.0.0-rc.2",
     "@storybook/svelte-vite": "8.0.0-rc.2",
     "@storybook/test": "8.0.0-rc.2",

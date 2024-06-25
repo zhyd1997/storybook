@@ -1,7 +1,7 @@
 import type { Component, ComponentOptions, ConcreteComponent } from 'vue';
 import { h } from 'vue';
-import type { DecoratorFunction, LegacyStoryFn, StoryContext } from '@storybook/core/types';
-import { sanitizeStoryContextUpdate } from '@storybook/core/preview-api';
+import type { DecoratorFunction, LegacyStoryFn, StoryContext } from 'storybook/types';
+import { sanitizeStoryContextUpdate } from 'storybook/preview-api';
 import type { VueRenderer } from './types';
 
 /*

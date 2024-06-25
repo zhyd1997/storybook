@@ -2,9 +2,9 @@ import { dirname, join, isAbsolute } from 'path';
 import rehypeSlug from 'rehype-slug';
 import rehypeExternalLinks from 'rehype-external-links';
 
-import type { DocsOptions, Options, PresetProperty } from '@storybook/core/types';
+import type { DocsOptions, Options, PresetProperty } from 'storybook/types';
 import type { CsfPluginOptions } from '@storybook/csf-plugin';
-import { logger } from '@storybook/core/node-logger';
+import { logger } from 'storybook/node-logger';
 import type { CompileOptions } from './compiler';
 
 /**
@@ -140,14 +140,6 @@ export const viteFinal = async (config: any, options: Options) => {
   // Use the resolvedReact preset to alias react and react-dom to either the users version or the version shipped with addon-docs
   const { react, reactDom, mdx } = await getResolvedReact(options);
 
-  const componentsPath = join(
-    dirname(require.resolve('@storybook/core/package.json')),
-    'dist/components'
-  );
-  const themingPath = join(
-    dirname(require.resolve('@storybook/core/package.json')),
-    'dist/theming'
-  );
   const packageDeduplicationPlugin = {
     name: 'storybook:package-deduplication',
     enforce: 'pre',
@@ -163,11 +155,7 @@ export const viteFinal = async (config: any, options: Options) => {
            * The following aliases are used to ensure a single instance of these packages are used in situations where they are duplicated
            * The packages will be duplicated by the package manager when the user has react installed with another version than 18.2.0
            */
-          '@storybook/core/theming': themingPath,
-          '@storybook/theming': themingPath,
-          '@storybook/components': componentsPath,
-          '@storybook/core/components': componentsPath,
-          '@storybook/blocks': dirname(require.resolve('@storybook/blocks')),
+          '@storybook/blocks': dirname(require.resolve('@storybook/blocks/package.json')),
         },
       },
     }),

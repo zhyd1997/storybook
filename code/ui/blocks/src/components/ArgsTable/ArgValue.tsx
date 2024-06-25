@@ -2,8 +2,8 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import memoize from 'memoizerific';
 import uniq from 'lodash/uniq.js';
-import { styled } from '@storybook/core/theming';
-import { WithTooltipPure, SyntaxHighlighter, codeCommon } from '@storybook/core/components';
+import { styled } from 'storybook/theming';
+import { WithTooltipPure, SyntaxHighlighter, codeCommon } from 'storybook/components';
 import type { PropSummaryValue } from './types';
 import { ChevronSmallDownIcon, ChevronSmallUpIcon } from '@storybook/icons';
 

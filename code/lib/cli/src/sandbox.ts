@@ -43,11 +43,9 @@ export const sandbox = async ({
   const packageManager = JsPackageManagerFactory.getPackageManager({
     force: pkgMgr,
   });
-  const latestVersion = await packageManager.latestVersion('@storybook/cli');
-  const nextVersion = await packageManager
-    .latestVersion('@storybook/cli@next')
-    .catch((e) => '0.0.0');
-  const currentVersion = versions['@storybook/cli'];
+  const latestVersion = await packageManager.latestVersion('storybook');
+  const nextVersion = await packageManager.latestVersion('storybook@next').catch((e) => '0.0.0');
+  const currentVersion = versions.storybook;
   const isPrerelease = prerelease(currentVersion);
   const isOutdated = lt(currentVersion, isPrerelease ? nextVersion : latestVersion);
   const borderColor = isOutdated ? '#FC521F' : '#F1618C';

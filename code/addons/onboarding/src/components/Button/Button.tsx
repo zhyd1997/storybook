@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 import React, { forwardRef } from 'react';
-import { styled } from '@storybook/core/theming';
+import { styled } from 'storybook/theming';
 
 export interface ButtonProps extends ComponentProps<'button'> {
   children: string;
