@@ -5662,7 +5662,7 @@ __metadata:
     "@babel/core": "npm:^7.24.4"
     "@babel/preset-env": "npm:^7.24.4"
     "@babel/types": "npm:^7.24.0"
-    "@storybook/core": "workspace:^"
+    "@storybook/core": "workspace:*"
     "@storybook/csf": "npm:^0.1.8"
     "@types/cross-spawn": "npm:^6.0.2"
     "@types/jscodeshift": "npm:^0.11.10"
@@ -5734,7 +5734,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/core@workspace:^, @storybook/core@workspace:core":
+"@storybook/core@workspace:*, @storybook/core@workspace:core":
   version: 0.0.0-use.local
   resolution: "@storybook/core@workspace:core"
   dependencies:
@@ -6489,7 +6489,7 @@ __metadata:
     "@storybook/builder-vite": "workspace:*"
     "@storybook/builder-webpack5": "workspace:*"
     "@storybook/codemod": "workspace:*"
-    "@storybook/core": "workspace:^"
+    "@storybook/core": "workspace:*"
     "@storybook/core-webpack": "workspace:*"
     "@storybook/csf": "npm:^0.1.8"
     "@storybook/csf-plugin": "workspace:*"
@@ -25645,7 +25645,7 @@ __metadata:
     "@babel/types": "npm:^7.24.0"
     "@ndelangen/get-tarball": "npm:^3.0.7"
     "@storybook/codemod": "workspace:*"
-    "@storybook/core": "workspace:^"
+    "@storybook/core": "workspace:*"
     "@types/cross-spawn": "npm:^6.0.2"
     "@types/prompts": "npm:^2.0.9"
     "@types/semver": "npm:^7.3.4"
