@@ -10,12 +10,13 @@ import { getEventMetadata } from '../lib/events';
 export interface SubState {
   globals?: Globals;
   userGlobals?: Globals;
+  storyGlobals?: Globals;
   globalTypes?: GlobalTypes;
 }
 
 export interface SubAPI {
   /**
-   * Returns the current globals, including overrides.
+   * Returns the current globals, which is the user globals overlaid with the story globals
    * @returns {Globals} The current globals.
    */
   getGlobals: () => Globals;
@@ -24,6 +25,11 @@ export interface SubAPI {
    * @returns {Globals} The current user globals.
    */
   getUserGlobals: () => Globals /**
+  /**
+   * Returns the current globals, as set by the story
+   * @returns {Globals} The current story globals.
+   */;
+  getStoryGlobals: () => Globals /**
    * Returns the globalTypes, as defined at the project level.
    * @returns {GlobalTypes} The globalTypes.
    */;
@@ -44,6 +50,9 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI, provider }) =
     getUserGlobals() {
       return store.getState().userGlobals as Globals;
     },
+    getStoryGlobals() {
+      return store.getState().storyGlobals as Globals;
+    },
     getGlobalTypes() {
       return store.getState().globalTypes as GlobalTypes;
     },
@@ -61,15 +70,31 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI, provider }) =
   const state: SubState = {
     globals: {},
     userGlobals: {},
+    storyGlobals: {},
     globalTypes: {},
   };
-  const updateGlobals = ({ globals, userGlobals }: { globals: Globals; userGlobals: Globals }) => {
-    const { globals: currentGlobals, userGlobals: currentUserGlobals } = store.getState();
+  const updateGlobals = ({
+    globals,
+    storyGlobals,
+    userGlobals,
+  }: {
+    globals: Globals;
+    storyGlobals: Globals;
+    userGlobals: Globals;
+  }) => {
+    const {
+      globals: currentGlobals,
+      userGlobals: currentUserGlobals,
+      storyGlobals: currentStoryGlobals,
+    } = store.getState();
     if (!deepEqual(globals, currentGlobals)) {
       store.setState({ globals });
     }
     if (!deepEqual(userGlobals, currentUserGlobals)) {
       store.setState({ userGlobals });
+    }
+    if (!deepEqual(storyGlobals, currentStoryGlobals)) {
+      store.setState({ storyGlobals });
     }
   };
 
@@ -77,12 +102,16 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI, provider }) =
     GLOBALS_UPDATED,
     function handleGlobalsUpdated(
       this: any,
-      { globals, userGlobals }: { globals: Globals; userGlobals: Globals }
+      {
+        globals,
+        storyGlobals,
+        userGlobals,
+      }: { globals: Globals; storyGlobals: Globals; userGlobals: Globals }
     ) {
       const { ref } = getEventMetadata(this, fullAPI)!;
 
       if (!ref) {
-        updateGlobals({ globals, userGlobals });
+        updateGlobals({ globals, storyGlobals, userGlobals });
       } else {
         logger.warn(
           'received a GLOBALS_UPDATED from a non-local ref. This is not currently supported.'

@@ -110,9 +110,6 @@ export type PreparedStory<TRenderer extends Renderer = Renderer> =
     ) => Promise<StoryContextForLoaders<TRenderer> & { loaded: StoryContext<TRenderer>['loaded'] }>;
     applyBeforeEach: (context: StoryContext<TRenderer>) => Promise<CleanupCallback[]>;
     playFunction?: (context: StoryContext<TRenderer>) => Promise<void> | void;
-
-    // Proof of concept
-    globalOverrides?: NormalizedStoryAnnotations<TRenderer>['globalOverrides'];
   };
 
 export type PreparedMeta<TRenderer extends Renderer = Renderer> = Omit<

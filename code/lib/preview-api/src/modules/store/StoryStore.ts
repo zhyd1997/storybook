@@ -239,7 +239,7 @@ export class StoryStore<TRenderer extends Renderer> {
       userGlobals,
       globals: {
         ...userGlobals,
-        ...story.globalOverrides,
+        ...story.storyGlobals,
       },
       hooks: this.hooks[story.id] as unknown,
     });

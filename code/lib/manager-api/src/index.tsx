@@ -502,10 +502,11 @@ export function useArgs(): [Args, (newArgs: Args) => void, (argNames?: string[])
 export function useGlobals(): [
   globals: Globals,
   updateGlobals: (newGlobals: Globals) => void,
+  storyGlobals: Globals,
   userGlobals: Globals,
 ] {
   const api = useStorybookApi();
-  return [api.getGlobals(), api.updateGlobals, api.getUserGlobals()];
+  return [api.getGlobals(), api.updateGlobals, api.getStoryGlobals, api.getUserGlobals()];
 }
 
 export function useGlobalTypes(): ArgTypes {

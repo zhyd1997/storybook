@@ -399,6 +399,7 @@ export class PreviewWithSelection<TRenderer extends Renderer> extends Preview<TR
         unmappedArgs,
         initialGlobals,
         userGlobals,
+        storyGlobals,
         globals,
       } = this.storyStoreValue.getStoryContext(render.story);
 
@@ -411,7 +412,7 @@ export class PreviewWithSelection<TRenderer extends Renderer> extends Preview<TR
       });
       // We need to update globals whenever we go in or out of an overridden story.
       // As an optimization we could check if that's the case, but it seems complex and error-prone
-      this.channel.emit(GLOBALS_UPDATED, { userGlobals, globals, initialGlobals });
+      this.channel.emit(GLOBALS_UPDATED, { userGlobals, storyGlobals, globals, initialGlobals });
     } else {
       // Default to the project parameters for MDX docs
       let { parameters } = this.storyStoreValue.projectAnnotations;
