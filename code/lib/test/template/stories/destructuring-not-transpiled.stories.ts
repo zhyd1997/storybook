@@ -1,8 +1,11 @@
 import { expect } from '@storybook/test';
+import { global as globalThis } from '@storybook/global';
 
-export default {};
+export default {
+  component: globalThis.Components.Button,
+};
 
-async function bla({ destructure }) {
+async function fn({ destructure }) {
   console.log(destructure);
 }
 
@@ -10,6 +13,6 @@ async function bla({ destructure }) {
 // See: https://github.com/storybookjs/storybook/discussions/27389
 export const DestructureNotTranspiled = {
   async play() {
-    await expect(bla.toString()).toBe('async function bla({ destructure }) {}');
+    await expect(fn.toString()).toBe('async function fn({ destructure }) {}');
   },
 };
