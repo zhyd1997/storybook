@@ -63,3 +63,17 @@ export const context_prop_is_available = {
     await expect(context.canvasElement).toEqual(canvasElement);
   },
 };
+
+export const step_and_canvas_element_can_be_used_in_loaders_and_before_each = {
+  parameters: { chromatic: { disable: true } },
+  loaders({ step, canvasElement }) {
+    step('loaders', async () => {
+      await expect(canvasElement).toBeInTheDocument();
+    });
+  },
+  beforeEach({ step, canvasElement }) {
+    step('before each', async () => {
+      await expect(canvasElement).toBeInTheDocument();
+    });
+  },
+};
