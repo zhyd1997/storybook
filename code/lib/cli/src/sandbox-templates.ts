@@ -1,4 +1,5 @@
-import type { StorybookConfigRaw } from '@storybook/types';
+import type { StoriesEntry, StorybookConfigRaw } from '@storybook/types';
+import type { ConfigFile } from '@storybook/csf-tools';
 
 export type SkippableTask =
   | 'smoke-test'
@@ -70,7 +71,9 @@ export type Template = {
    */
   modifications?: {
     skipTemplateStories?: boolean;
-    mainConfig?: Partial<StorybookConfigRaw>;
+    mainConfig?:
+      | Partial<StorybookConfigRaw>
+      | ((config: ConfigFile) => Partial<StorybookConfigRaw>);
     testBuild?: boolean;
     disableDocs?: boolean;
     extraDependencies?: string[];
@@ -100,6 +103,23 @@ const baseTemplates = {
       builder: '@storybook/builder-webpack5',
     },
     skipTasks: ['e2e-tests-dev', 'bench'],
+    modifications: {
+      mainConfig: (config) => {
+        const stories = config.getFieldValue<Array<StoriesEntry>>(['stories']);
+        return {
+          stories: stories?.map((s) => {
+            if (typeof s === 'string') {
+              return s.replace('js|jsx|mjs|ts|tsx', 'js|jsx|mjs');
+            } else {
+              return {
+                ...s,
+                files: s.files.replace('js|jsx|mjs|ts|tsx', 'js|jsx|mjs'),
+              };
+            }
+          }),
+        };
+      },
+    },
   },
   'cra/default-ts': {
     name: 'Create React App Latest (Webpack | TypeScript)',

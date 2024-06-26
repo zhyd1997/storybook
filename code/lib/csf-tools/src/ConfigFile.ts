@@ -313,7 +313,7 @@ export class ConfigFile {
     return _getPathProperties(rest, exported);
   }
 
-  getFieldValue(path: string[]) {
+  getFieldValue<T = any>(path: string[]): T | undefined {
     const node = this.getFieldNode(path);
     if (node) {
       const { code } = generate.default(node, {});
