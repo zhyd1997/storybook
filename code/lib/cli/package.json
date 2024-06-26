@@ -179,151 +179,76 @@
       "node-logger": [
         "./core/node-logger/index.d.ts"
       ],
-      "dist/node-logger": [
-        "./core/node-logger/index.d.ts"
-      ],
       "client-logger": [
-        "./core/client-logger/index.d.ts"
-      ],
-      "dist/client-logger": [
         "./core/client-logger/index.d.ts"
       ],
       "core-server": [
         "./core/core-server/index.d.ts"
       ],
-      "dist/core-server": [
-        "./core/core-server/index.d.ts"
-      ],
       "core-server/presets/common-preset": [
-        "./core/core-server/presets/common-preset.d.ts"
-      ],
-      "dist/core-server/presets/common-preset": [
         "./core/core-server/presets/common-preset.d.ts"
       ],
       "core-server/presets/common-manager": [
         "./core/core-server/presets/common-manager.d.ts"
       ],
-      "dist/core-server/presets/common-manager": [
-        "./core/core-server/presets/common-manager.d.ts"
-      ],
       "core-server/presets/common-override-preset": [
-        "./core/core-server/presets/common-override-preset.d.ts"
-      ],
-      "dist/core-server/presets/common-override-preset": [
         "./core/core-server/presets/common-override-preset.d.ts"
       ],
       "core-events": [
         "./core/core-events/index.d.ts"
       ],
-      "dist/core-events": [
-        "./core/core-events/index.d.ts"
-      ],
       "manager-errors": [
-        "./core/manager-errors.d.ts"
-      ],
-      "dist/manager-errors": [
         "./core/manager-errors.d.ts"
       ],
       "preview-errors": [
         "./core/preview-errors.d.ts"
       ],
-      "dist/preview-errors": [
-        "./core/preview-errors.d.ts"
-      ],
       "server-errors": [
-        "./core/server-errors.d.ts"
-      ],
-      "dist/server-errors": [
         "./core/server-errors.d.ts"
       ],
       "channels": [
         "./core/channels/index.d.ts"
       ],
-      "dist/channels": [
-        "./core/channels/index.d.ts"
-      ],
       "types": [
-        "./core/types/index.d.ts"
-      ],
-      "dist/types": [
         "./core/types/index.d.ts"
       ],
       "csf-tools": [
         "./core/csf-tools/index.d.ts"
       ],
-      "dist/csf-tools": [
-        "./core/csf-tools/index.d.ts"
-      ],
       "common": [
-        "./core/common/index.d.ts"
-      ],
-      "dist/common": [
         "./core/common/index.d.ts"
       ],
       "builder-manager": [
         "./core/builder-manager/index.d.ts"
       ],
-      "dist/builder-manager": [
-        "./core/builder-manager/index.d.ts"
-      ],
       "telemetry": [
-        "./core/telemetry/index.d.ts"
-      ],
-      "dist/telemetry": [
         "./core/telemetry/index.d.ts"
       ],
       "preview-api": [
         "./core/preview-api/index.d.ts"
       ],
-      "dist/preview-api": [
-        "./core/preview-api/index.d.ts"
-      ],
       "manager-api": [
-        "./core/manager-api/index.d.ts"
-      ],
-      "dist/manager-api": [
         "./core/manager-api/index.d.ts"
       ],
       "router": [
         "./core/router/index.d.ts"
       ],
-      "dist/router": [
-        "./core/router/index.d.ts"
-      ],
       "components": [
-        "./core/components/index.d.ts"
-      ],
-      "dist/components": [
         "./core/components/index.d.ts"
       ],
       "theming": [
         "./core/theming/index.d.ts"
       ],
-      "dist/theming": [
-        "./core/theming/index.d.ts"
-      ],
       "theming/create": [
-        "./core/theming/create.d.ts"
-      ],
-      "dist/theming/create": [
         "./core/theming/create.d.ts"
       ],
       "docs-tools": [
         "./core/docs-tools/index.d.ts"
       ],
-      "dist/docs-tools": [
-        "./core/docs-tools/index.d.ts"
-      ],
       "manager/globals-module-info": [
         "./core/manager/globals-module-info.d.ts"
       ],
-      "dist/manager/globals-module-info": [
-        "./core/manager/globals-module-info.d.ts"
-      ],
       "preview/globals": [
-        "./core/preview/globals.d.ts"
-      ],
-      "dist/preview/globals": [
         "./core/preview/globals.d.ts"
       ],
       "core-path": [

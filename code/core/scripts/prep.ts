@@ -437,7 +437,7 @@ async function generatePackageJsonFile() {
         .replace(/\.tsx?/, '')
         .replace('dist/', '')
     ] = content;
-    acc[main.replace(/\/index\.tsx?/, '').replace(/\.tsx?/, '')] = content;
+    // acc[main.replace(/\/index\.tsx?/, '').replace(/\.tsx?/, '')] = content;
     return acc;
   }, {});
 
@@ -459,7 +459,7 @@ async function generatePackageJsonFile() {
 
         const content = ['./' + main.replace(/\.tsx?/, '.d.ts')];
         acc[key.replace('dist/', '')] = content;
-        acc[key] = content;
+        // acc[key] = content;
         return acc;
       }, {}),
     },

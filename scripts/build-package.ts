@@ -121,9 +121,13 @@ async function run() {
   }
 
   selection?.filter(Boolean).forEach(async (v) => {
-    const command = (await readJSON(resolve('../code', v.location, 'package.json'))).scripts.prep
+    const command = (await readJSON(resolve('../code', v.location, 'package.json'))).scripts?.prep
       .split(posix.sep)
       .join(sep);
+
+    if (!command) {
+      return;
+    }
 
     const cwd = resolve(__dirname, '..', 'code', v.location);
     const sub = execaCommand(
