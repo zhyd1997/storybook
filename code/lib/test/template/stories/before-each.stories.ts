@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention,storybook/prefer-pascal-case */
 import { expect, mocked, getByRole, spyOn, userEvent } from '@storybook/test';
 
 const meta = {
@@ -40,5 +41,25 @@ export const BeforeEachOrder = {
       ['4 - [from decorator]'],
       ['5 - [from onClick]'],
     ]);
+  },
+};
+
+export const before_each_and_loaders_can_extend_context = {
+  parameters: { chromatic: { disable: true } },
+  loaders(context) {
+    context.foo = ['bar'];
+  },
+  beforeEach(context) {
+    context.foo = [...context.foo, 'baz'];
+  },
+  async play({ foo }) {
+    await expect(foo).toEqual(['bar', 'baz']);
+  },
+};
+
+export const context_prop_is_available = {
+  parameters: { chromatic: { disable: true } },
+  async play({ context, canvasElement }) {
+    await expect(context.canvasElement).toEqual(canvasElement);
   },
 };

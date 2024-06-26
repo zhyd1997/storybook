@@ -765,7 +765,7 @@ describe('prepareMeta', () => {
       ...preparedStory
     } = prepareStory({ id, name, moduleExport }, meta, { render });
 
-    const { ...preparedMeta } = prepareMeta(
+    const preparedMeta = prepareMeta(
       meta,
       normalizeProjectAnnotations(composeConfigs([{ render }])),
       {}
