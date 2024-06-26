@@ -186,7 +186,7 @@ const run = async () => {
   logger.log(`📦 found ${packages.length} storybook packages at version ${chalk.blue(version)}`);
 
   if (program.publish) {
-    await publish(packages, verdaccioUrl);
+    await publish(packages, 'http://localhost:6002');
   }
 
   await execa('npx', ['rimraf', '.npmrc'], { cwd: root });
