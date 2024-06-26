@@ -11,9 +11,16 @@ async function run() {
   const packages = await getWorkspaces();
   const packageTasks = packages
     .map((pkg) => {
+      let suffix = pkg.name.replace('@storybook/', '');
+      if (pkg.name === '@storybook/cli') {
+        suffix = 'sb-cli';
+      }
+      if (pkg.name === 'storybook') {
+        suffix = 'cli';
+      }
       return {
         ...pkg,
-        suffix: pkg.name.replace('@storybook/', ''),
+        suffix,
         defaultValue: false,
         helpText: `build only the ${pkg.name} package`,
       };
@@ -126,6 +133,7 @@ async function run() {
       .join(sep);
 
     if (!command) {
+      console.log(`No prep script found for ${v.name}`);
       return;
     }
 
