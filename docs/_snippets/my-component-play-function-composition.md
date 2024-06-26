@@ -169,7 +169,7 @@ export const SecondStory: Story = {
 
 export const CombinedStories: Story = {
   play: async ({ context, canvasElement }) => {
-    const canvas = within(context.canvasElement);
+    const canvas = within(canvasElement);
 
     // Runs the FirstStory and Second story play function before running this story's play function
     await FirstStory.play(context);
