@@ -433,6 +433,43 @@ describe('PreviewWeb', () => {
         });
       });
 
+      it('emits GLOBALS_UPDATED with initial global values', async () => {
+        document.location.search = '?id=component-one--a';
+        await createAndRenderPreview();
+
+        await waitForEvents([GLOBALS_UPDATED]);
+        expect(mockChannel.emit).toHaveBeenCalledWith(GLOBALS_UPDATED, {
+          initialGlobals: { a: 'b' },
+          userGlobals: { a: 'b' },
+          storyGlobals: {},
+          globals: { a: 'b' },
+        });
+      });
+
+      describe('if the story sets globals', () => {
+        it('emits GLOBALS_UPDATED with overridden storyGlobals', async () => {
+          document.location.search = '?id=component-one--a';
+          const newImportFn = vi.fn(async (path) => {
+            if (path === './src/ComponentOne.stories.js') {
+              return {
+                ...componentOneExports,
+                a: { ...componentOneExports.a, globals: { a: 'c' } },
+              };
+            }
+            return importFn(path);
+          });
+          await createAndRenderPreview({ importFn: newImportFn });
+
+          await waitForEvents([GLOBALS_UPDATED]);
+          expect(mockChannel.emit).toHaveBeenCalledWith(GLOBALS_UPDATED, {
+            initialGlobals: { a: 'b' },
+            userGlobals: { a: 'b' },
+            storyGlobals: { a: 'c' },
+            globals: { a: 'c' },
+          });
+        });
+      });
+
       it('applies loaders with story context', async () => {
         document.location.search = '?id=component-one--a';
         await createAndRenderPreview();
@@ -781,6 +818,60 @@ describe('PreviewWeb', () => {
         userGlobals: { a: 'c' },
         storyGlobals: {},
         globals: { a: 'c' },
+      });
+    });
+
+    describe('if the story sets globals', () => {
+      const newImportFn = vi.fn(async (path) => {
+        if (path === './src/ComponentOne.stories.js') {
+          return {
+            ...componentOneExports,
+            a: { ...componentOneExports.a, globals: { a: 'c' } },
+          };
+        }
+        return importFn(path);
+      });
+
+      const newGetProjectAnnotations = vi.fn(
+        () => ({ ...projectAnnotations, initialGlobals: { a: 'b', c: 'd' } }) as any
+      );
+
+      it('allows changes to globals the story did not set', async () => {
+        document.location.search = '?id=component-one--a';
+        await createAndRenderPreview({
+          importFn: newImportFn,
+          getProjectAnnotations: newGetProjectAnnotations,
+        });
+
+        mockChannel.emit.mockClear();
+        emitter.emit(UPDATE_GLOBALS, { globals: { c: 'e' } });
+
+        await waitForEvents([GLOBALS_UPDATED]);
+        expect(mockChannel.emit).toHaveBeenCalledWith(GLOBALS_UPDATED, {
+          initialGlobals: { a: 'b', c: 'd' },
+          userGlobals: { a: 'b', c: 'e' },
+          storyGlobals: { a: 'c' },
+          globals: { a: 'c', c: 'e' },
+        });
+      });
+
+      it('does not allow changes to globals the story sets', async () => {
+        document.location.search = '?id=component-one--a';
+        await createAndRenderPreview({
+          importFn: newImportFn,
+          getProjectAnnotations: newGetProjectAnnotations,
+        });
+
+        mockChannel.emit.mockClear();
+        emitter.emit(UPDATE_GLOBALS, { globals: { a: 'e' } });
+
+        await waitForEvents([GLOBALS_UPDATED]);
+        expect(mockChannel.emit).toHaveBeenCalledWith(GLOBALS_UPDATED, {
+          initialGlobals: { a: 'b', c: 'd' },
+          userGlobals: { a: 'e', c: 'd' },
+          storyGlobals: { a: 'c' },
+          globals: { a: 'c', c: 'd' },
+        });
       });
     });
 
@@ -1920,6 +2011,57 @@ describe('PreviewWeb', () => {
             one: { name: 'one', type: { name: 'string' }, mapping: { 1: 'mapped-1' } },
           },
           args: { foo: 'b', one: 1 },
+        });
+      });
+
+      it('emits GLOBALS_UPDATED with initial global values', async () => {
+        document.location.search = '?id=component-one--a';
+        await createAndRenderPreview();
+
+        mockChannel.emit.mockClear();
+        emitter.emit(SET_CURRENT_STORY, {
+          storyId: 'component-one--b',
+          viewMode: 'story',
+        });
+        await waitForSetCurrentStory();
+
+        await waitForEvents([GLOBALS_UPDATED]);
+        expect(mockChannel.emit).toHaveBeenCalledWith(GLOBALS_UPDATED, {
+          initialGlobals: { a: 'b' },
+          userGlobals: { a: 'b' },
+          storyGlobals: {},
+          globals: { a: 'b' },
+        });
+      });
+
+      describe('if the story sets globals', () => {
+        it('emits GLOBALS_UPDATED with overridden storyGlobals', async () => {
+          document.location.search = '?id=component-one--a';
+          const newImportFn = vi.fn(async (path) => {
+            if (path === './src/ComponentOne.stories.js') {
+              return {
+                ...componentOneExports,
+                b: { ...componentOneExports.b, globals: { a: 'c' } },
+              };
+            }
+            return importFn(path);
+          });
+
+          await createAndRenderPreview({ importFn: newImportFn });
+          mockChannel.emit.mockClear();
+          emitter.emit(SET_CURRENT_STORY, {
+            storyId: 'component-one--b',
+            viewMode: 'story',
+          });
+          await waitForSetCurrentStory();
+
+          await waitForEvents([GLOBALS_UPDATED]);
+          expect(mockChannel.emit).toHaveBeenCalledWith(GLOBALS_UPDATED, {
+            initialGlobals: { a: 'b' },
+            userGlobals: { a: 'b' },
+            storyGlobals: { a: 'c' },
+            globals: { a: 'c' },
+          });
         });
       });
 
