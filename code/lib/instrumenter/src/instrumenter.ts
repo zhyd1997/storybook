@@ -418,7 +418,7 @@ export class Instrumenter {
         return callRefsByResult.get(value);
       }
       if (value instanceof Array) {
-        if (depth > 10) return [];
+        if (depth > 10) return '[Circular]';
         return value.map((it) => serializeValues(it, ++depth));
       }
       if (value instanceof Date) {
@@ -453,7 +453,7 @@ export class Instrumenter {
         return { __class__: { name: value.constructor.name } };
       }
       if (Object.prototype.toString.call(value) === '[object Object]') {
-        if (depth > 10) return {};
+        if (depth > 10) return '[Circular]';
         return Object.fromEntries(
           Object.entries(value).map(([key, val]) => [key, serializeValues(val, ++depth)])
         );
