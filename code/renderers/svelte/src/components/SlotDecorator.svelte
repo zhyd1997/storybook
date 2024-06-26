@@ -1,13 +1,12 @@
 <script>
-  import { onMount, getContext } from 'svelte';
+  import { onMount } from 'svelte';
   import { VERSION as SVELTE_VERSION } from 'svelte/compiler';
-  import { ARG_TYPES_CONTEXT_KEY } from './PreviewRender.svelte';
 
   export let decorator = undefined;
   export let Component;
   export let props = {};
   export let on = undefined;
-  export let isOriginalStory = false;
+  export let argTypes = undefined;
 
   let instance;
   let decoratorInstance;
@@ -20,12 +19,11 @@
     We need to filter these args out so they are not passed to the component
   */
   let propsWithoutDocgenEvents;
-  $: propsWithoutDocgenEvents = isOriginalStory
-    ? Object.fromEntries(Object.entries(props).filter(([key]) => !key.startsWith('event_')))
-    : { ...props };
+  $: propsWithoutDocgenEvents = Object.fromEntries(
+    Object.entries(props).filter(([key]) => !key.startsWith('event_'))
+  );
 
-  if (isOriginalStory && IS_SVELTE_V4) {
-    const argTypes = getContext(ARG_TYPES_CONTEXT_KEY) ?? {};
+  if (argTypes && IS_SVELTE_V4) {
     const eventsFromArgTypes = Object.fromEntries(
       Object.entries(argTypes)
         .filter(([key, value]) => value.action && props[key] != null)

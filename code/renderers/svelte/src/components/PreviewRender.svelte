@@ -1,9 +1,4 @@
-<script context="module">
-  export const ARG_TYPES_CONTEXT_KEY = 'storybook/argTypes';
-</script>
-
 <script>
-  import { setContext } from 'svelte';
   import SlotDecorator from './SlotDecorator.svelte';
   import { dedent } from 'ts-dedent';
 
@@ -20,8 +15,8 @@
     props = {},
     /** @type {{[string]: () => {}}} Attach svelte event handlers */
     on,
-    /** @type {boolean} whether this level of the decorator chain is the last, ie. the actual story */
-    isOriginalStory,
+    /** @type {any} whether this level of the decorator chain is the last, ie. the actual story */
+    argTypes,
   } = storyFn();
 
   let firstTime = true;
@@ -36,18 +31,16 @@
         Component,
         props,
         on,
-        isOriginalStory,
+        argTypes,
       };
     }
     return storyFn();
   }
 
   // reactive, re-render on storyFn change
-  $: ({ Component, props = {}, on, isOriginalStory } = getStoryFnValue(storyFn));
+  $: ({ Component, props = {}, on, argTypes } = getStoryFnValue(storyFn));
 
   // set the argTypes context, read by the last SlotDecorator that renders the original story
-  setContext(ARG_TYPES_CONTEXT_KEY, storyContext.argTypes);
-
   if (!Component) {
     showError({
       title: `Expecting a Svelte component from the story: "${name}" of "${title}".`,
@@ -60,4 +53,4 @@
   }
 </script>
 
-<SlotDecorator {Component} {props} {on} {isOriginalStory} />
+<SlotDecorator {Component} {props} {on} {argTypes} />
