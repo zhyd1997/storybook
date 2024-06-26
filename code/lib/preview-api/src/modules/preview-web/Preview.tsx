@@ -48,7 +48,6 @@ import { StoryStore } from '../../store';
 import { StoryRender } from './render/StoryRender';
 import type { CsfDocsRender } from './render/CsfDocsRender';
 import type { MdxDocsRender } from './render/MdxDocsRender';
-import { satisfies } from '@storybook/core-common';
 
 const { fetch } = global;
 
