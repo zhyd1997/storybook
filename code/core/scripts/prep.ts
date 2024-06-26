@@ -3,6 +3,7 @@
 import { watch } from 'node:fs';
 import { rmdir } from 'node:fs/promises';
 import { join, relative, dirname } from 'node:path';
+import slash from 'slash';
 import {
   esbuild,
   process,
@@ -412,7 +413,7 @@ async function generatePackageJsonFile() {
   const location = join(cwd, 'package.json');
   const pkgJson = await Bun.file(location).json();
   pkgJson.exports = entries.reduce<Record<string, Record<string, string>>>((acc, entry) => {
-    let main = './' + relative(cwd, entry.file).replace('src', 'dist');
+    let main = './' + slash(relative(cwd, entry.file).replace('src', 'dist'));
 
     const content: Record<string, string> = {};
     if (entry.dts) {
@@ -446,7 +447,7 @@ async function generatePackageJsonFile() {
     '*': {
       '*': ['./dist/index.d.ts'],
       ...entries.reduce<Record<string, string[]>>((acc, entry) => {
-        let main = relative(cwd, entry.file).replace('src', 'dist');
+        let main = slash(relative(cwd, entry.file).replace('src', 'dist'));
         if (main === './dist/index.ts' || main === './dist/index.tsx') {
           main = '.';
         }
