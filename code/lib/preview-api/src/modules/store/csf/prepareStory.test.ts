@@ -4,7 +4,6 @@ import type {
   ArgsEnhancer,
   NormalizedComponentAnnotations,
   NormalizedStoryAnnotations,
-  PlayFunctionContext,
   PreparedStory,
   ProjectAnnotations,
   Renderer,
@@ -691,7 +690,7 @@ describe('playFunction', () => {
       { render }
     );
 
-    await playFunction!({} as PlayFunctionContext);
+    await playFunction?.({} as StoryContext);
     expect(play).toHaveBeenCalled();
     expect(inner).toHaveBeenCalled();
   });
@@ -714,7 +713,7 @@ describe('playFunction', () => {
     const context: Partial<StoryContext> = {
       step: (label, playFn) => preparedRunStep(label, playFn, context as StoryContext),
     };
-    await playFunction!(context as PlayFunctionContext);
+    await playFunction?.(context as StoryContext);
     expect(play).toHaveBeenCalled();
     expect(stepPlay).toHaveBeenCalled();
     expect(runStep).toBeCalledWith('label', expect.any(Function), expect.any(Object));

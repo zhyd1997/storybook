@@ -13,6 +13,8 @@ import { normalizeInputTypes } from './normalizeInputTypes';
 import { normalizeArrays } from './normalizeArrays';
 import { combineParameters } from '../parameters';
 
+// TODO(kasperpeulen) Consolidate this function with composeConfigs
+// As composeConfigs is the real normalizer, and always run before normalizeProjectAnnotations
 export function normalizeProjectAnnotations<TRenderer extends Renderer>({
   argTypes,
   globalTypes,
@@ -48,6 +50,6 @@ export function normalizeProjectAnnotations<TRenderer extends Renderer>({
       inferControls,
     ],
     initialGlobals: combineParameters(initialGlobals, globals),
-    ...annotations,
+    ...(annotations as NormalizedProjectAnnotations<TRenderer>),
   };
 }
