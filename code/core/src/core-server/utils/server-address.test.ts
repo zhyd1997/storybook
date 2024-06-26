@@ -3,7 +3,7 @@ import detectPort from 'detect-port';
 import { getServerAddresses, getServerPort, getServerChannelUrl } from './server-address';
 
 vi.mock('os', () => ({
-  default: { release: () => "" }
+  default: { release: () => '' },
 }));
 vi.mock('detect-port');
 vi.mock('@storybook/core/node-logger');
