@@ -111,10 +111,7 @@ const baseTemplates = {
             if (typeof s === 'string') {
               return s.replace('js|jsx|mjs|ts|tsx', 'js|jsx|mjs');
             } else {
-              return {
-                ...s,
-                files: s.files.replace('js|jsx|mjs|ts|tsx', 'js|jsx|mjs'),
-              };
+              return s;
             }
           }),
         };
