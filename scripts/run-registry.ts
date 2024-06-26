@@ -167,7 +167,17 @@ const run = async () => {
   await execa(
     'npx',
     // creates a .npmrc file in the root directory of the project
-    ['npm-auth-to-token', '-u', 'foo', '-p', 's3cret', '-e', 'test@test.com', '-r', verdaccioUrl],
+    [
+      'npm-auth-to-token',
+      '-u',
+      'foo',
+      '-p',
+      's3cret',
+      '-e',
+      'test@test.com',
+      '-r',
+      'http://localhost:6002',
+    ],
     {
       cwd: root,
     }
