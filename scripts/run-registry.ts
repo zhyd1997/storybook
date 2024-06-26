@@ -13,6 +13,7 @@ import { PACKS_DIRECTORY } from './utils/constants';
 
 import { maxConcurrentTasks } from './utils/concurrency';
 import { getWorkspaces } from './utils/workspace';
+import { execa, execaSync } from 'execa';
 
 program
   .option('-O, --open', 'keep process open')
@@ -21,6 +22,8 @@ program
 program.parse(process.argv);
 
 const logger = console;
+
+const root = path.resolve(__dirname, '..');
 
 const startVerdaccio = async () => {
   const ready = {
@@ -135,19 +138,6 @@ const publish = async (packages: { name: string; location: string }[], url: stri
   );
 };
 
-const addUser = (url: string) =>
-  new Promise<void>((res, rej) => {
-    logger.log(`👤 add temp user to verdaccio`);
-
-    exec(`npx npm-cli-adduser -r "${url}" -a -u user -p password -e user@example.com`, (e) => {
-      if (e) {
-        rej(e);
-      } else {
-        res();
-      }
-    });
-  });
-
 const run = async () => {
   const verdaccioUrl = `http://localhost:6001`;
 
@@ -173,18 +163,23 @@ const run = async () => {
 
   logger.log(`🌿 verdaccio running on ${verdaccioUrl}`);
 
-  // in some environments you need to add a dummy user. always try to add & catch on failure
-  try {
-    await addUser(verdaccioUrl);
-  } catch (e) {
-    //
-  }
+  logger.log(`👤 add temp user to verdaccio`);
+  await execa(
+    'npx',
+    // creates a .npmrc file in the root directory of the project
+    ['npm-auth-to-token', '-u', 'foo', '-p', 's3cret', '-e', 'test@test.com', '-r', verdaccioUrl],
+    {
+      cwd: root,
+    }
+  );
 
   logger.log(`📦 found ${packages.length} storybook packages at version ${chalk.blue(version)}`);
 
   if (program.publish) {
     await publish(packages, verdaccioUrl);
   }
+
+  await execa('npx', ['rimraf', '.npmrc'], { cwd: root });
 
   if (!program.open) {
     verdaccioServer.close();
@@ -194,5 +189,6 @@ const run = async () => {
 
 run().catch((e) => {
   logger.error(e);
+  execaSync('npx', ['rimraf', '.npmrc'], { cwd: root });
   process.exit(1);
 });
