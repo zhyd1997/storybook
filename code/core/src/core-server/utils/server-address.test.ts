@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from 'vitest';
 import detectPort from 'detect-port';
 import { getServerAddresses, getServerPort, getServerChannelUrl } from './server-address';
 
-vi.mock('os');
+vi.mock('os', () => ({
+  default: { release: () => "" }
+}));
 vi.mock('detect-port');
 vi.mock('@storybook/core/node-logger');
 
