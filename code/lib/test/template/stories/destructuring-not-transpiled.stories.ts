@@ -3,6 +3,7 @@ import { global as globalThis } from '@storybook/global';
 
 export default {
   component: globalThis.Components.Button,
+  args: { label: 'Button' },
 };
 
 async function fn({ destructure }) {
