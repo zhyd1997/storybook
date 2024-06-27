@@ -57,7 +57,6 @@ export const Description = styled.div({
 
 export type ValidationStates = 'valid' | 'error' | 'warn';
 
-// @ts-expect-error (non strict)
 export const TextInput: FC<ComponentProps<typeof Form.Input> & { valid: ValidationStates }> =
   styled(Form.Input)<{ valid: ValidationStates }>(
     ({ valid, theme }) =>

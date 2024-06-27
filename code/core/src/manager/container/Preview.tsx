@@ -100,7 +100,6 @@ const mapper = ({
     location,
     path,
     // @ts-expect-error (non strict)
-
     tabId,
   ]) as Addon_BaseType[];
   const toolsExtra = memoizedExtra(
