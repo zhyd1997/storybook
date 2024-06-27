@@ -42,10 +42,6 @@ export const installYarn2 = async ({ cwd, dryRun, debug }: YarnOptions) => {
     touch('.yarnrc.yml'),
     `yarn set version berry`,
 
-    // related issue: https://github.com/yarnpkg/berry/issues/5841
-    // waiting to have this released: https://github.com/yarnpkg/berry/pull/6205
-    `yarn set version from sources --branch 6205 --no-minify`,
-
     // Use the global cache so we aren't re-caching dependencies each time we run sandbox
     `yarn config set enableGlobalCache true`,
     `yarn config set checksumBehavior ignore`,
