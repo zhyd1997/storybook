@@ -134,7 +134,7 @@ const StyledButton = styled('button', {
     animating: boolean;
     animation: ButtonProps['animation'];
   }
->(({ theme, variant, size, disabled, active, animating, animation, padding }) => ({
+>(({ theme, variant, size, disabled, active, animating, animation = 'none', padding }) => ({
   border: 0,
   cursor: disabled ? 'not-allowed' : 'pointer',
   display: 'inline-flex',
@@ -243,8 +243,6 @@ const StyledButton = styled('button', {
 
   '> svg': {
     animation:
-      animating && animation !== 'none'
-        ? `${theme.animation[animation as 'glow']} 1000ms ease-out`
-        : '',
+      animating && animation !== 'none' ? `${theme.animation[animation]} 1000ms ease-out` : '',
   },
 }));
