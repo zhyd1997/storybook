@@ -415,14 +415,17 @@ export class Instrumenter {
     // Possibly we need to add HTMLElement support to telejson though
     // Keeping this function here, as removing it means we need to refactor the deserializing that happens in addon-interactions
     const maximumDepth = 25; // mimicks the max depth of telejson
-    // We use a depth, to avoid infinite recursion of self referencing values.
-    const serializeValues = (value: any, depth = 0): any => {
+    const serializeValues = (value: any, depth: number, seen: unknown[]): any => {
+      if (seen.includes(value)) return '[Circular]';
+      seen = [...seen, value];
+
+      if (depth > maximumDepth) return '...';
+
       if (callRefsByResult.has(value)) {
         return callRefsByResult.get(value);
       }
       if (value instanceof Array) {
-        if (depth > maximumDepth) return '[Circular]';
-        return value.map((it) => serializeValues(it, ++depth));
+        return value.map((it) => serializeValues(it, ++depth, seen));
       }
       if (value instanceof Date) {
         return { __date__: { value: value.toISOString() } };
@@ -456,15 +459,17 @@ export class Instrumenter {
         return { __class__: { name: value.constructor.name } };
       }
       if (Object.prototype.toString.call(value) === '[object Object]') {
-        if (depth > maximumDepth) return '[Circular]';
         return Object.fromEntries(
-          Object.entries(value).map(([key, val]) => [key, serializeValues(val, ++depth)])
+          Object.entries(value).map(([key, val]) => [key, serializeValues(val, ++depth, seen)])
         );
       }
       return value;
     };
 
-    const info: Call = { ...call, args: call.args.map(serializeValues) };
+    const info: Call = {
+      ...call,
+      args: call.args.map((arg) => serializeValues(arg, 0, [])),
+    };
 
     // Mark any ancestor calls as "chained upon" so we won't attempt to defer it later.
     call.path.forEach((ref: any) => {

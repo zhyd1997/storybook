@@ -187,98 +187,10 @@ describe('Instrumenter', () => {
       [
         {
           "array": [
-            {
-              "array": [
-                {
-                  "array": "[Circular]",
-                  "key": "value",
-                  "obj": {
-                    "array": "[Circular]",
-                    "key": "value",
-                    "obj": "[Circular]",
-                  },
-                },
-              ],
-              "key": "value",
-              "obj": {
-                "array": [
-                  {
-                    "array": "[Circular]",
-                    "key": "value",
-                    "obj": "[Circular]",
-                  },
-                ],
-                "key": "value",
-                "obj": {
-                  "array": "[Circular]",
-                  "key": "value",
-                  "obj": {
-                    "array": "[Circular]",
-                    "key": "value",
-                    "obj": "[Circular]",
-                  },
-                },
-              },
-            },
+            "[Circular]",
           ],
           "key": "value",
-          "obj": {
-            "array": [
-              {
-                "array": [
-                  {
-                    "array": "[Circular]",
-                    "key": "value",
-                    "obj": "[Circular]",
-                  },
-                ],
-                "key": "value",
-                "obj": {
-                  "array": "[Circular]",
-                  "key": "value",
-                  "obj": {
-                    "array": "[Circular]",
-                    "key": "value",
-                    "obj": "[Circular]",
-                  },
-                },
-              },
-            ],
-            "key": "value",
-            "obj": {
-              "array": [
-                {
-                  "array": "[Circular]",
-                  "key": "value",
-                  "obj": {
-                    "array": "[Circular]",
-                    "key": "value",
-                    "obj": "[Circular]",
-                  },
-                },
-              ],
-              "key": "value",
-              "obj": {
-                "array": [
-                  {
-                    "array": "[Circular]",
-                    "key": "value",
-                    "obj": "[Circular]",
-                  },
-                ],
-                "key": "value",
-                "obj": {
-                  "array": "[Circular]",
-                  "key": "value",
-                  "obj": {
-                    "array": "[Circular]",
-                    "key": "value",
-                    "obj": "[Circular]",
-                  },
-                },
-              },
-            },
-          },
+          "obj": "[Circular]",
         },
       ]
     `);
