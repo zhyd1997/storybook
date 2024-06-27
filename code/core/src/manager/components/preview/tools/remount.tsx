@@ -17,7 +17,7 @@ const StyledAnimatedIconButton = styled(IconButton)<
 >(({ theme, animating, disabled }) => ({
   opacity: disabled ? 0.5 : 1,
   svg: {
-    animation: animating ? `${theme.animation.rotate360} 1000ms ease-out` : 'unset',
+    animation: animating ? `${theme.animation.rotate360} 1000ms ease-out` : undefined,
   },
 }));
 
