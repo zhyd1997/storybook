@@ -13,16 +13,14 @@ export const allowList = [
   '@storybook/channel-postmessage',
   '@storybook/channel-websocket',
   '@storybook/client-api',
-  'storybook/client-logger',
   '@storybook/core-client',
   '@storybook/preview-web',
-  'storybook/preview-api',
   '@storybook/store',
 
   // see this file for more info: code/ui/manager/src/globals/types.ts
   '@storybook/components',
-  'storybook/router',
-  'storybook/theming',
+  '@storybook/router',
+  '@storybook/theming',
   '@storybook/api',
   '@storybook/manager-api',
 ];
@@ -31,9 +29,9 @@ export const allowList = [
 export const disallowList = [
   Object.keys(rendererPackages),
   Object.keys(frameworkPackages),
-  'storybook/core-events',
+  'storybook',
   '@storybook/instrumenter',
-  '@storybook/core/common',
+  '@storybook/core',
   '@storybook/core-server',
   '@storybook/manager',
   '@storybook/preview',
