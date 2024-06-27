@@ -32,6 +32,17 @@ const startVerdaccio = async () => {
   };
   return Promise.race([
     new Promise((resolve) => {
+      /** The proxy server will sit in front of verdaccio and tunnel traffic to either verdaccio or the actual npm global registry
+       * We do this because tunneling all traffic through verdaccio is slow (this might get fixed in verdaccio)
+       * With this heuristic we get the best of both worlds:
+       * - verdaccio for storybook packages (including unscoped packages such as `storybook` and `sb`)
+       * - npm global registry for all other packages
+       * - the best performance for both
+       *
+       * The proxy server listens on port 6001 and verdaccio on port 6002
+       *
+       * If you want to access the verdaccio UI, you can do so by visiting http://localhost:6002
+       */
       const proxy = http.createServer((req, res) => {
         // if request contains "storybook" redirect to verdaccio
         if (req.url?.includes('storybook') || req.url?.includes('/sb') || req.method === 'PUT') {
