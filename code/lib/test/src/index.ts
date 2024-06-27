@@ -17,7 +17,7 @@ export * from './spy';
 
 type Queries = ReturnType<typeof within<typeof queries>>;
 
-declare module '@storybook/types' {
+declare module '@storybook/csf' {
   interface Canvas extends Queries {}
 }
 

@@ -1,12 +1,11 @@
 import { global as globalThis } from '@storybook/global';
 import {
   expect,
-  fn,
   fireEvent,
+  fn,
   userEvent,
   waitFor,
   waitForElementToBeRemoved,
-  within,
 } from '@storybook/test';
 
 export default {
@@ -18,8 +17,7 @@ export default {
 
 export const Validation = {
   play: async (context) => {
-    const { args, canvasElement, step } = context;
-    const canvas = within(canvasElement);
+    const { args, canvas, step } = context;
 
     await step('Submit', async () => fireEvent.click(canvas.getByRole('button')));
 
@@ -28,8 +26,7 @@ export const Validation = {
 };
 
 export const Type = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async ({ canvas }) => {
     await userEvent.type(canvas.getByTestId('value'), 'foobar');
   },
 };
@@ -41,8 +38,7 @@ export const Step = {
 };
 
 export const TypeAndClear = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async ({ canvas }) => {
     await userEvent.type(canvas.getByTestId('value'), 'initial value');
     await userEvent.clear(canvas.getByTestId('value'));
     await userEvent.type(canvas.getByTestId('value'), 'final value');
@@ -50,8 +46,7 @@ export const TypeAndClear = {
 };
 
 export const Callback = {
-  play: async ({ args, canvasElement, step }) => {
-    const canvas = within(canvasElement);
+  play: async ({ args, canvas, step }) => {
     await step('Enter value', Type.play);
 
     await step('Submit', async () => {
@@ -65,24 +60,21 @@ export const Callback = {
 // NOTE: of course you can use `findByText()` to implicitly waitFor, but we want
 // an explicit test here
 export const SyncWaitFor = {
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
+  play: async ({ canvas, step }) => {
     await step('Submit form', Callback.play);
     await waitFor(() => canvas.getByText('Completed!!'));
   },
 };
 
 export const AsyncWaitFor = {
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
+  play: async ({ canvas, step }) => {
     await step('Submit form', Callback.play);
     await waitFor(async () => canvas.getByText('Completed!!'));
   },
 };
 
 export const WaitForElementToBeRemoved = {
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
+  play: async ({ canvas, step }) => {
     await step('SyncWaitFor play fn', SyncWaitFor.play);
     await waitForElementToBeRemoved(() => canvas.queryByText('Completed!!'), {
       timeout: 2000,
@@ -99,9 +91,8 @@ export const WithLoaders = {
 
 export const UserEventSetup = {
   play: async (context) => {
-    const { args, canvasElement, step } = context;
+    const { args, canvas, step } = context;
     const user = userEvent.setup();
-    const canvas = within(canvasElement);
     await step('Select and type on input using user-event v14 setup', async () => {
       const input = canvas.getByRole('textbox');
       await user.click(input);
