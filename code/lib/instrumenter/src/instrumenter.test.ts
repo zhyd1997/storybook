@@ -182,6 +182,18 @@ describe('Instrumenter', () => {
     obj.array = [obj];
 
     expect(() => fn(obj)).not.toThrow();
+
+    expect(callSpy.mock.calls[0][0].args).toMatchInlineSnapshot(`
+      [
+        {
+          "array": [
+            "[Circular]",
+          ],
+          "key": "value",
+          "obj": "[Circular]",
+        },
+      ]
+    `);
   });
 
   it('provides metadata about the call in the event', () => {
