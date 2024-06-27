@@ -4,6 +4,18 @@ import { glob } from 'glob';
 import Bun from 'bun';
 
 import slash from 'slash';
+import typescript from 'typescript';
+import sortPackageJson from 'sort-package-json';
+import * as tsup from 'tsup';
+import * as esbuild from 'esbuild';
+import type * as typefest from 'type-fest';
+import prettyTime from 'pretty-hrtime';
+import * as prettier from 'prettier';
+import chalk from 'chalk';
+import { dedent } from 'ts-dedent';
+import limit from 'p-limit';
+import { CODE_DIRECTORY } from '../utils/constants';
+import ts from 'typescript';
 
 import { globalExternals } from '@fal-works/esbuild-plugin-global-externals';
 
@@ -55,19 +67,6 @@ export const dts = async (entry: string, externals: string[], tsconfig: string) 
     })
   );
 };
-
-import typescript from 'typescript';
-import sortPackageJson from 'sort-package-json';
-import * as tsup from 'tsup';
-import * as esbuild from 'esbuild';
-import type * as typefest from 'type-fest';
-import prettyTime from 'pretty-hrtime';
-import * as prettier from 'prettier';
-import chalk from 'chalk';
-import { dedent } from 'ts-dedent';
-import limit from 'p-limit';
-import { CODE_DIRECTORY } from '../utils/constants';
-import ts from 'typescript';
 
 export const defineEntry =
   (cwd: string) =>

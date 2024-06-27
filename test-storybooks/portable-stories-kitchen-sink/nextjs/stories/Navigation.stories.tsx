@@ -9,10 +9,7 @@ import {
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from '@storybook/test';
-import * as t from '@storybook/test';
 import { getRouter } from '@storybook/nextjs/navigation.mock';
-
-console.log(t.userEvent)
 
 function Component() {
   const router = useRouter();
