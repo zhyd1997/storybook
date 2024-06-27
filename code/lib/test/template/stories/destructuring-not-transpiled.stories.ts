@@ -10,9 +10,11 @@ export default {
 // See: https://github.com/storybookjs/storybook/discussions/27389
 export const DestructureNotTranspiled = {
   async play() {
-    async function a({ b }) {
-      console.log(b);
+    async function fn({ destructured }: { destructured: unknown }) {
+      console.log(destructured);
     }
-    await expect(a.toString().replace(/\s+/g, ' ')).toContain('async function a({ b })');
+    const match = fn.toString().match(/[^(]*\(([^)]*)/);
+    const params = match?.[0];
+    await expect(params).toContain('destructured');
   },
 };
