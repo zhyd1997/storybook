@@ -7041,6 +7041,7 @@ __metadata:
   dependencies:
     "@storybook/client-logger": "workspace:*"
     "@storybook/core-events": "workspace:*"
+    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
     "@storybook/instrumenter": "workspace:*"
     "@storybook/preview-api": "workspace:*"
     "@testing-library/dom": "npm:10.1.0"
