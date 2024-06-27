@@ -6,7 +6,6 @@ import type {
   PreparedStory,
   TeardownRenderToCanvas,
   StoryContext,
-  StoryContextForLoaders,
   StoryId,
   StoryRenderOptions,
 } from '@storybook/types';
@@ -181,14 +180,15 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
 
     try {
       const context: StoryContext<TRenderer> = {
-        ...(this.storyContext() as StoryContextForLoaders<TRenderer>),
+        ...this.storyContext(),
         viewMode: this.viewMode,
         abortSignal,
         canvasElement,
         loaded: {},
         step: (label, play) => runStep(label, play, context),
+        context: null!,
+        canvas: {},
       };
-
       context.context = context;
 
       const renderContext: RenderContext<TRenderer> = {
