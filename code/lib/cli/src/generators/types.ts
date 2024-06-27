@@ -30,7 +30,6 @@ export interface FrameworkOptions {
   framework?: Record<string, any>;
   storybookConfigFolder?: string;
   componentsDestinationPath?: string;
-  installStorybookPackage?: boolean;
   installFrameworkPackages?: boolean;
 }
 

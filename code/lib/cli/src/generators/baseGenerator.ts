@@ -31,7 +31,6 @@ const defaultOptions: FrameworkOptions = {
   extensions: undefined,
   componentsDestinationPath: undefined,
   storybookConfigFolder: '.storybook',
-  installStorybookPackage: true,
   installFrameworkPackages: true,
 };
 
