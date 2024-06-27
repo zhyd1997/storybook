@@ -75,7 +75,7 @@ const getSnippet = ({
   transformFromProps,
 }: {
   snippet: string;
-  storyContext: StoryContextForLoaders;
+  storyContext: ReturnType<DocsContextProps['getStoryContext']>;
   typeFromProps: SourceType;
   transformFromProps?: SourceProps['transform'];
 }): string => {
