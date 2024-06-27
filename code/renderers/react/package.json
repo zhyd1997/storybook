@@ -88,6 +88,7 @@
   },
   "devDependencies": {
     "@storybook/test": "workspace:*",
+    "@storybook/blocks": "workspace:*",
     "@types/babel-plugin-react-docgen": "^4",
     "@types/semver": "^7.3.4",
     "@types/util-deprecate": "^1.0.0",
