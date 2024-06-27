@@ -134,6 +134,8 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI, provider }) =
         logger.warn('received globals from a non-local ref. This is not currently supported.');
       }
 
+      // If we have stored globals different to what the preview just inited with,
+      // we should update it to those values
       if (
         currentGlobals &&
         Object.keys(currentGlobals).length !== 0 &&
