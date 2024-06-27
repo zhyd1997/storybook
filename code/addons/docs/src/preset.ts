@@ -62,6 +62,12 @@ async function webpack(
   const { react, reactDom, mdx } = await getResolvedReact(options);
 
   let alias;
+
+  /** Add aliases for `@storybook/addon-docs` & `@storybook/blocks`
+   * These must be singletons to avoid multiple instances of react & emotion being loaded, both would cause the components to fail to render.
+   *
+   * In the future the `@storybook/theming` and `@storybook/components` can be removed, as they should be singletons in the future due to the peerDependency on `storybook` package.
+   */
   const cliPath = require.resolve('storybook/package.json');
   const themingPath = join(cliPath, '..', 'core', 'theming', 'index.js');
   const componentsPath = join(cliPath, '..', 'core', 'components', 'index.js');
@@ -176,9 +182,10 @@ export const viteFinal = async (config: any, options: Options) => {
           ...(isAbsolute(reactDom) && { 'react-dom/server': `${reactDom}/server.browser.js` }),
           'react-dom': reactDom,
           '@mdx-js/react': mdx,
-          /**
-           * The following aliases are used to ensure a single instance of these packages are used in situations where they are duplicated
-           * The packages will be duplicated by the package manager when the user has react installed with another version than 18.2.0
+          /** Add aliases for `@storybook/addon-docs` & `@storybook/blocks`
+           * These must be singletons to avoid multiple instances of react & emotion being loaded, both would cause the components to fail to render.
+           *
+           * In the future the `@storybook/theming` and `@storybook/components` can be removed, as they should be singletons in the future due to the peerDependency on `storybook` package.
            */
           '@storybook/theming': themingPath,
           '@storybook/components': componentsPath,
