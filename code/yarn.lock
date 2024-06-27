@@ -5129,7 +5129,6 @@ __metadata:
     typescript: "npm:^5.3.2"
     uuid: "npm:^9.0.0"
   peerDependencies:
-    "@storybook/test": "workspace:*"
     storybook: "workspace:^"
   languageName: unknown
   linkType: soft
