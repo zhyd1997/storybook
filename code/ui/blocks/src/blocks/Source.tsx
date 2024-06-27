@@ -1,11 +1,6 @@
 import type { ComponentProps, FC } from 'react';
 import React, { useContext } from 'react';
-import type {
-  StoryId,
-  PreparedStory,
-  ModuleExport,
-  Args,
-} from '@storybook/types';
+import type { StoryId, PreparedStory, ModuleExport, Args } from '@storybook/types';
 import { SourceType } from '@storybook/docs-tools';
 
 import type { SourceCodeProps } from '../components/Source';
