@@ -1,47 +1,20 @@
 import { join } from 'node:path';
 import { sortPackageJson } from '../../../../scripts/node_modules/sort-package-json';
 
-import { readJSON, writeFile, ensureFile } from 'fs-extra';
-import dedent from 'ts-dedent';
+import { readJSON } from 'fs-extra';
+import { mapCoreExportToSelf, write, generateMapperContent } from './utils';
 
-const write = async (location: string, data: string) => {
-  await ensureFile(location);
-  return writeFile(location, data);
-};
-
-const mapCoreExportToSelf = (map: Record<string, string>) => {
-  return Object.entries(map).reduce<Record<string, string>>((acc, [key, input]) => {
-    const value = input.replace('./dist/', './core/');
-    acc[key] = value;
-
-    return acc;
-  }, {});
-};
-
-const generateMapperContent = (input: string) => {
-  const value = input
-    .replace('./core/', '')
-    .replace('/index', '')
-    .replace('.cjs', '')
-    .replace('.d.ts', '')
-    .replace('.mjs', '')
-    .replace('.js', '');
-  if (input.endsWith('.js')) {
-    return `export * from '@storybook/core/${value}';\n`;
-  }
-  if (input.endsWith('.cjs')) {
-    return `module.exports = require('@storybook/core/${value}');\n`;
-  }
-  if (input.endsWith('.d.ts')) {
-    return dedent`
-      export * from '@storybook/core/${value}';
-      export type * from '@storybook/core/${value}';\n
-    `;
-  }
-  // eslint-disable-next-line local-rules/no-uncategorized-errors
-  throw new Error(`Unexpected input: ${input}`);
-};
-
+/** Update the `storybook` package's `exports` and `typesVersion` fields to expose all things exposed from `@storybook/core`
+ * We do this to ensure that users that import `storybook/theming` will get the code located at `@storybook/theming` (note the `@` symbol!)
+ *
+ * For every entry in `core/package.json`'s `exports` field, we:
+ * - Update the `exports` field in `package.json` to map the entry to the corresponding entry in `core`
+ * - Write a new file in `core/X` that re-exports the entry from `@storybook/core/X`
+ *
+ * By reading from `core/package.json`, we ensure that we always have the correct exports.
+ *
+ * Removal is not handled here, so if entries are ever removed from `@storybook/core` we'll have to remove those manually here.
+ */
 async function run() {
   const selfPackageJson = await readJSON(join(__dirname, '../package.json'));
   const corePackageJson = await readJSON(join(__dirname, '../../../core/package.json'));
