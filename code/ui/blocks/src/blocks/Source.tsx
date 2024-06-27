@@ -5,7 +5,6 @@ import type {
   PreparedStory,
   ModuleExport,
   Args,
-  StoryContextForLoaders,
 } from '@storybook/types';
 import { SourceType } from '@storybook/docs-tools';
 
@@ -24,7 +23,10 @@ type SourceParameters = SourceCodeProps & {
   /**
    * Transform the detected source for display
    */
-  transform?: (code: string, storyContext: StoryContextForLoaders) => string;
+  transform?: (
+    code: string,
+    storyContext: ReturnType<DocsContextProps['getStoryContext']>
+  ) => string;
   /**
    * Internal: set by our CSF loader (`enrichCsf` in `@storybook/csf-tools`).
    */
