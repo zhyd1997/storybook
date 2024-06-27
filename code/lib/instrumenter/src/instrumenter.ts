@@ -411,8 +411,10 @@ export class Instrumenter {
   invoke(fn: Function, object: Record<string, unknown>, call: Call, options: Options) {
     const { callRefsByResult, renderPhase } = this.getState(call.storyId);
 
-    const maximumDepth = 10;
-    // Map complex values to a JSON-serializable representation.
+    // TODO This function should not needed anymore, as the channel already serializes values with telejson
+    // Possibly we need to add HTMLElement support to telejson though
+    // Keeping this function here, as removing it means we need to refactor the deserializing that happens in addon-interactions
+    const maximumDepth = 25; // mimicks the max depth of telejson
     // We use a depth, to avoid infinite recursion of self referencing values.
     const serializeValues = (value: any, depth = 0): any => {
       if (callRefsByResult.has(value)) {
