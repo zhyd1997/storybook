@@ -5119,6 +5119,7 @@ __metadata:
   resolution: "@storybook/addon-actions@workspace:addons/actions"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
+    "@storybook/test": "workspace:*"
     "@types/uuid": "npm:^9.0.1"
     dequal: "npm:^2.0.2"
     polished: "npm:^4.2.2"
