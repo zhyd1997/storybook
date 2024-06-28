@@ -5,6 +5,7 @@ import {
   generatePropsSourceCode,
   generateSlotSourceCode,
   generateSourceCode,
+  getFunctionParamNames,
   parseDocgenInfo,
 } from './sourceDecorator';
 
@@ -228,4 +229,22 @@ test.each([
 ])('should parse event names from __docgenInfo', ({ __docgenInfo, eventNames }) => {
   const docgenInfo = parseDocgenInfo({ __docgenInfo });
   expect(docgenInfo.eventNames).toStrictEqual(eventNames);
+});
+
+test.each<{ fn: (...args: any[]) => unknown; expectedNames: string[] }>([
+  { fn: () => ({}), expectedNames: [] },
+  { fn: (a) => ({}), expectedNames: ['a'] },
+  { fn: (a, b) => ({}), expectedNames: ['a', 'b'] },
+  { fn: (a, b, { c }) => ({}), expectedNames: ['a', 'b', '{', 'c', '}'] },
+  { fn: ({ a, b }) => ({}), expectedNames: ['{', 'a', 'b', '}'] },
+  {
+    fn: {
+      // simulate minified function after running "storybook build"
+      toString: () => '({a:foo,b:bar})=>({})',
+    } as (...args: any[]) => unknown,
+    expectedNames: ['{', 'a', 'b', '}'],
+  },
+])('should extract function parameter names', ({ fn, expectedNames }) => {
+  const paramNames = getFunctionParamNames(fn);
+  expect(paramNames).toStrictEqual(expectedNames);
 });
