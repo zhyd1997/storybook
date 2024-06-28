@@ -21,7 +21,7 @@ export const globalsNameValueMap: Required<Record<keyof typeof globalsNameRefere
   '@storybook/client-logger': CLIENT_LOGGER,
   '@storybook/core/client-logger': CLIENT_LOGGER,
 
-  'storybook/internal/core-errors': CORE_EVENTS,
+  'storybook/internal/core-events': CORE_EVENTS,
   '@storybook/core-events': CORE_EVENTS,
   '@storybook/core/core-events': CORE_EVENTS,
 
