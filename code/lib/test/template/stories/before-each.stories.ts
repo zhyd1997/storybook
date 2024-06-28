@@ -15,9 +15,7 @@ const meta = {
 export default meta;
 
 export const BeforeEachOrder = {
-  parameters: {
-    chromatic: { disable: true },
-  },
+  parameters: { chromatic: { disable: true } },
   beforeEach() {
     console.log('3 - [from story beforeEach]');
   },
