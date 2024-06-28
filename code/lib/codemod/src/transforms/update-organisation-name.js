@@ -12,7 +12,7 @@ export const packageNames = {
   '@kadira/storybook-channels': 'storybook/internal/channels',
   '@kadira/storybook-channel-postmsg': '@storybook/channel-postmessage',
   '@kadira/storybook-channel-websocket': '@storybook/channel-websocket',
-  '@kadira/storybook-ui': 'storybook/manager',
+  '@kadira/storybook-ui': 'storybook/internal/manager',
   '@kadira/react-native-storybook': '@storybook/react-native',
   '@kadira/react-storybook': '@storybook/react',
   '@kadira/getstorybook': 'storybook',
