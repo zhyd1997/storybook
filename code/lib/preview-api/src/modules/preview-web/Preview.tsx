@@ -297,6 +297,8 @@ export class Preview<TRenderer extends Renderer> {
       this.storyRenders
         .filter((r) => r.id === storyId && !r.renderOptions.forceInitialArgs)
         .map((r) =>
+          // We only run the play function, with in a force remount.
+          // But when mount is destructured, the rendering happens inside of the play function.
           r.story && mountDestructured(r.story.playFunction) ? r.remount() : r.rerender()
         )
     );
