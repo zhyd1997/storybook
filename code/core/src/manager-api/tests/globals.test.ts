@@ -8,7 +8,7 @@ import {
 } from '@storybook/core/core-events';
 
 import { logger as _logger } from '@storybook/core/client-logger';
-import type { API } from '../index';
+import type { API } from '../root';
 import type { SubAPI } from '../modules/globals';
 import { init as initModule } from '../modules/globals';
 import type { ModuleArgs } from '../lib/types';

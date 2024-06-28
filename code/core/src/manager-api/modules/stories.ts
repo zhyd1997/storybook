@@ -54,7 +54,7 @@ import {
   addPreparedStories,
 } from '../lib/stories';
 
-import type { ComposedRef } from '../index';
+import type { ComposedRef } from '../root';
 import type { ModuleFn } from '../lib/types';
 
 const { fetch } = global;

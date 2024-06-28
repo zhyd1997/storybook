@@ -23,7 +23,7 @@ import type {
   StoryIndexV2,
 } from '@storybook/core/types';
 
-import { type API, combineParameters, type State } from '../index';
+import { type API, combineParameters, type State } from '../root';
 import merge from './merge';
 
 const TITLE_PATH_SEPARATOR = /\s*\/\s*/;

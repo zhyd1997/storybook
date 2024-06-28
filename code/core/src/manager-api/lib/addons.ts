@@ -18,7 +18,7 @@ import type {
 } from '@storybook/core/types';
 import { Addon_TypesEnum } from '@storybook/core/types';
 import { logger } from '@storybook/core/client-logger';
-import type { API } from '../index';
+import type { API } from '../root';
 import { mockChannel } from './storybook-channel-mock';
 
 export { Addon_Type as Addon, Addon_TypesEnum as types };

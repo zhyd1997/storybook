@@ -1,7 +1,7 @@
 import type { API_ProviderData } from '@storybook/core/types';
 import type { RouterData } from '@storybook/core/router';
 
-import type { API, State } from '../index';
+import type { API, State } from '../root';
 import type Store from '../store';
 
 export type ModuleFn<APIType = unknown, StateType = unknown> = (

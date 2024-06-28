@@ -1,6 +1,6 @@
 import merge from './lib/merge';
 
-import type { State } from './index';
+import type { State } from './root';
 
 interface Addition {
   [key: string]: any;

@@ -8,7 +8,7 @@ import type { SubAPI, SubState } from '../modules/layout';
 import type { SubState as AddonsSubState } from '../modules/addons';
 import { defaultLayoutState, init as initLayout } from '../modules/layout';
 import type Store from '../store';
-import type { API, State } from '..';
+import type { API, State } from '../root';
 import type { ModuleArgs } from '../lib/types';
 
 describe('layout API', () => {

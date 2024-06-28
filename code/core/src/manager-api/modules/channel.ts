@@ -1,7 +1,7 @@
 import type { Listener } from '@storybook/core/channels';
 
 import type { API_Provider } from '@storybook/core/types';
-import type { API } from '../index';
+import type { API } from '../root';
 import type { ModuleFn } from '../lib/types';
 
 export interface SubAPI {

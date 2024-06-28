@@ -22,7 +22,7 @@ import { getEventMetadata as getEventMetadataOriginal } from '../lib/events';
 
 import { init as initStories } from '../modules/stories';
 import type Store from '../store';
-import type { API, State } from '..';
+import type { API, State } from '../root';
 import { mockEntries, docsEntries, preparedEntries, navigationEntries } from './mockStoriesEntries';
 import type { ModuleArgs } from '../lib/types';
 
