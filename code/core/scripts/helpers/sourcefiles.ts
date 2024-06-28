@@ -97,15 +97,23 @@ async function generateExportsFile(prettierConfig: prettier.Options | null): Pro
 
   const location = join(import.meta.dirname, '..', '..', 'src', 'manager', 'globals', 'exports.ts');
 
-  const i = join(import.meta.dirname, '..', '..', 'src', 'manager', 'globals', 'runtime.ts');
-  const l = await temporaryFile({ extension: 'js' });
+  const entryFile = join(
+    import.meta.dirname,
+    '..',
+    '..',
+    'src',
+    'manager',
+    'globals',
+    'runtime.ts'
+  );
+  const outFile = await temporaryFile({ extension: 'js' });
 
   await esbuild.build({
-    entryPoints: [i],
+    entryPoints: [entryFile],
     bundle: true,
     format: 'esm',
     drop: ['console'],
-    outfile: l,
+    outfile: outFile,
     alias: localAlias,
     legalComments: 'none',
     splitting: false,
@@ -113,7 +121,7 @@ async function generateExportsFile(prettierConfig: prettier.Options | null): Pro
     target: 'chrome100',
   });
 
-  const { globalsNameValueMap: data } = await import(l);
+  const { globalsNameValueMap: data } = await import(outFile);
 
   // loop over all values of the keys of the data object and remove the default key
   for (const key in data) {
