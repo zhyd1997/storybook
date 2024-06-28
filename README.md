@@ -202,7 +202,6 @@ Storybook is organized as a monorepo. Useful scripts include:
 > boolean check if code conforms to linting rules - uses remark & eslint
 
 - `yarn lint:js` - will check js
-- `yarn lint:md` - will check markdown + code samples
 - `yarn lint:js --fix` - will automatically fix js
 
 #### `yarn test`
