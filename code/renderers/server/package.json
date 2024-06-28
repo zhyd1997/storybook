@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@storybook/csf": "0.1.10--canary.d841bb4.0",
+    "@storybook/global": "^5.0.0",
     "@types/fs-extra": "^11.0.1",
     "fs-extra": "^11.1.0",
     "ts-dedent": "^2.0.0",
