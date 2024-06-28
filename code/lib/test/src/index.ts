@@ -1,5 +1,5 @@
 import { instrument } from '@storybook/instrumenter';
-import type { LoaderFunction } from '@storybook/types';
+import type { LoaderFunction } from '@storybook/csf';
 import chai from 'chai';
 import { global } from '@storybook/global';
 import { expect as rawExpect } from './expect';
@@ -11,7 +11,7 @@ import {
   resetAllMocks,
   restoreAllMocks,
 } from './spy';
-import { type queries, within, userEvent } from './testing-library';
+import { type queries, within } from './testing-library';
 
 export * from './spy';
 
@@ -20,7 +20,8 @@ type Queries = ReturnType<typeof within<typeof queries>>;
 declare module '@storybook/csf' {
   interface Canvas extends Queries {}
   interface StoryContext {
-    userEvent: ReturnType<typeof userEvent.setup>;
+    // TODO enable this in a later PR, once we have time to QA this properly
+    //   userEvent: ReturnType<typeof userEvent.setup>;
   }
 }
 
@@ -100,7 +101,8 @@ const nameSpiesAndWrapActionsInSpies: LoaderFunction = ({ initialArgs }) => {
 const enhanceContext: LoaderFunction = (context) => {
   if (globalThis.HTMLElement && context.canvasElement instanceof globalThis.HTMLElement) {
     context.canvas = within(context.canvasElement);
-    context.userEvent = userEvent.setup();
+    // TODO enable this in a later PR, once we have time to QA this properly
+    // context.userEvent = userEvent.setup();
   }
 };
 
