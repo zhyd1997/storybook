@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { TooltipLinkList } from '@storybook/components';
 import { styled } from '@storybook/theming';
-import { screen, within, expect } from '@storybook/test';
+import { screen, userEvent, within, expect } from '@storybook/test';
 import type { State } from '@storybook/manager-api';
 import { LinkIcon } from '@storybook/icons';
 import { SidebarMenu } from './Menu';
@@ -69,7 +69,8 @@ export const Expanded: Story = {
       </DoubleThemeRenderingHack>
     );
   },
-  play: async ({ canvas, userEvent }) => {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     await new Promise((res) => {
       setTimeout(res, 500);
     });

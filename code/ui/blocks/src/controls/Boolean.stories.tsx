@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, fireEvent, fn, waitFor } from '@storybook/test';
+import { within, fireEvent, waitFor, expect, fn } from '@storybook/test';
 import { addons } from '@storybook/preview-api';
 import { RESET_STORY_ARGS, STORY_ARGS_UPDATED } from '@storybook/core-events';
 import { BooleanControl } from './Boolean';
@@ -48,7 +48,7 @@ export const Toggling: Story = {
     value: undefined,
     name: 'Toggling',
   },
-  play: async ({ canvas, id, args, step }) => {
+  play: async ({ canvasElement, id, args, step }) => {
     const channel = addons.getChannel();
 
     channel.emit(RESET_STORY_ARGS, { storyId: id });
@@ -56,6 +56,7 @@ export const Toggling: Story = {
       channel.once(STORY_ARGS_UPDATED, resolve);
     });
 
+    const canvas = within(canvasElement);
     await step('Change from Undefined to False', async () => {
       const setBooleanControl = canvas.getByText('Set boolean');
       await fireEvent.click(setBooleanControl);

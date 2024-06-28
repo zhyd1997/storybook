@@ -1,4 +1,5 @@
 import { global as globalThis } from '@storybook/global';
+import { userEvent, within } from '@storybook/test';
 
 export default {
   component: globalThis.Components.Button,
@@ -16,7 +17,8 @@ export default {
 
 export const Default = {
   play: async (context) => {
-    const { userEvent, canvas } = context;
+    const { args, canvasElement } = context;
+    const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button'));
   },
 };

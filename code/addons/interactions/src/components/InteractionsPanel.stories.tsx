@@ -2,7 +2,7 @@ import React from 'react';
 import type { StoryObj, Meta } from '@storybook/react';
 import { CallStates } from '@storybook/instrumenter';
 import { styled } from '@storybook/theming';
-import { waitFor, expect } from '@storybook/test';
+import { userEvent, within, waitFor, expect } from '@storybook/test';
 import { isChromatic } from '../../../../ui/.storybook/isChromatic';
 
 import { getCalls, getInteractions } from '../mocks';
@@ -61,8 +61,9 @@ export const Passing: Story = {
     interactions: getInteractions(CallStates.DONE),
   },
 };
-Passing.play = async ({ args, canvas, userEvent }) => {
+Passing.play = async ({ args, canvasElement }) => {
   if (isChromatic()) return;
+  const canvas = within(canvasElement);
 
   await waitFor(async () => {
     await userEvent.click(canvas.getByLabelText('Go to start'));

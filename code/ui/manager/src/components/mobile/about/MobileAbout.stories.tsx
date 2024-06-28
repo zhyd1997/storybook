@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ManagerContext } from '@storybook/manager-api';
 import React, { useEffect } from 'react';
+import { within } from '@storybook/test';
 import { MobileAbout } from './MobileAbout';
 import { LayoutProvider, useLayout } from '../../layout/LayoutProvider';
 
@@ -59,9 +60,9 @@ export const Dark: Story = {
 };
 
 export const Closed: Story = {
-  play: async ({ canvas }) => {
+  play: async ({ canvasElement }) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    const closeButton = await canvas.getByTitle('Close about section');
+    const closeButton = await within(canvasElement).getByTitle('Close about section');
     await closeButton.click();
   },
 };
