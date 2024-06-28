@@ -3626,6 +3626,7 @@ describe('PreviewWeb', () => {
               "dev",
               "test",
             ],
+            "testingLibraryRender": undefined,
             "title": "Component One",
           },
           "component-one--b": {
@@ -3674,6 +3675,7 @@ describe('PreviewWeb', () => {
               "dev",
               "test",
             ],
+            "testingLibraryRender": undefined,
             "title": "Component One",
           },
           "component-one--e": {
@@ -3700,6 +3702,7 @@ describe('PreviewWeb', () => {
               "dev",
               "test",
             ],
+            "testingLibraryRender": undefined,
             "title": "Component One",
           },
           "component-two--c": {
@@ -3736,6 +3739,7 @@ describe('PreviewWeb', () => {
               "dev",
               "test",
             ],
+            "testingLibraryRender": undefined,
             "title": "Component Two",
           },
         }

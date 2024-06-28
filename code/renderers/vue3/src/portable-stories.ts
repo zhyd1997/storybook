@@ -11,6 +11,7 @@ import type {
   Store_CSFExports,
   StoriesWithPartialProps,
 } from '@storybook/types';
+import { TestingLibraryMustBeConfigured } from '@storybook/core-events/preview-errors';
 import { h } from 'vue';
 
 import * as defaultProjectAnnotations from './entry-preview';
@@ -47,6 +48,18 @@ export function setProjectAnnotations(
 ) {
   originalSetProjectAnnotations<VueRenderer>(projectAnnotations);
 }
+
+// This will not be necessary once we have auto preset loading
+export const vueProjectAnnotations: ProjectAnnotations<VueRenderer> = {
+  ...defaultProjectAnnotations,
+  renderToCanvas: ({
+    storyContext: { context, unboundStoryFn, testingLibraryRender: render, canvasElement },
+  }) => {
+    if (render == null) throw new TestingLibraryMustBeConfigured();
+    const { unmount } = render(unboundStoryFn(context), { baseElement: canvasElement });
+    return unmount;
+  },
+};
 
 /**
  * Function that will receive a story along with meta (e.g. a default export from a .stories file)
@@ -85,7 +98,7 @@ export function composeStory<TArgs extends Args = Args>(
     story as StoryAnnotationsOrFn<VueRenderer, Args>,
     componentAnnotations,
     projectAnnotations,
-    defaultProjectAnnotations,
+    vueProjectAnnotations,
     exportsName
   );
 

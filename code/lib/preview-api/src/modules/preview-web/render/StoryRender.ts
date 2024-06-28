@@ -19,6 +19,8 @@ import {
 import type { StoryStore } from '../../store';
 import type { Render, RenderType } from './Render';
 import { PREPARE_ABORTED } from './Render';
+import { getUsedProps } from './mount-utils';
+import { MountMustBeDestructured } from '@storybook/core-events/preview-errors';
 
 const { AbortController } = globalThis;
 
@@ -178,6 +180,8 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
     // abort controller may be torn down (above) before we actually check the signal.
     const abortSignal = (this.abortController as AbortController).signal;
 
+    let mounted = false;
+
     try {
       const context: StoryContext<TRenderer> = {
         ...this.storyContext(),
@@ -188,8 +192,17 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         step: (label, play) => runStep(label, play, context),
         context: null!,
         canvas: {},
+        mount: null!,
+        renderToCanvas: async () => {
+          await this.runPhase(abortSignal, 'rendering', async () => {
+            const teardown = await this.renderToScreen(renderContext, canvasElement);
+            this.teardownRender = teardown || (() => {});
+            mounted = true;
+          });
+        },
       };
       context.context = context;
+      context.mount = this.story.mount(context);
 
       const renderContext: RenderContext<TRenderer> = {
         componentId,
@@ -226,10 +239,11 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
 
       if (abortSignal.aborted) return;
 
-      await this.runPhase(abortSignal, 'rendering', async () => {
-        const teardown = await this.renderToScreen(renderContext, canvasElement);
-        this.teardownRender = teardown || (() => {});
-      });
+      const mountDestructured = playFunction && getUsedProps(playFunction).includes('mount');
+
+      if (!mounted && !mountDestructured) {
+        await context.mount();
+      }
 
       this.notYetRendered = false;
       if (abortSignal.aborted) return;
@@ -247,6 +261,11 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         window.addEventListener('unhandledrejection', onError);
         this.disableKeyListeners = true;
         try {
+          if (!mountDestructured) {
+            context.mount = async () => {
+              throw new MountMustBeDestructured({ playFunction: playFunction.toString() });
+            };
+          }
           await this.runPhase(abortSignal, 'playing', async () => {
             await playFunction(context);
           });

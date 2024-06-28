@@ -24,6 +24,7 @@ import { combineParameters } from '../parameters';
 import { defaultDecorateStory } from '../decorators';
 import { groupArgsByTarget, UNTARGETED } from '../args';
 import { normalizeArrays } from './normalizeArrays';
+import { mountDestructured } from '../../preview-web/render/mount-utils';
 
 // Combine all the metadata about a story (both direct and inherited from the component/global scope)
 // into a "renderable" story function, with all decorators applied, parameters passed as context etc
@@ -80,7 +81,7 @@ export function prepareStory<TRenderer extends Renderer>(
   };
 
   const undecoratedStoryFn = (context: StoryContext<TRenderer>) =>
-    (render as ArgsStoryFn<TRenderer>)(context.args, context);
+    (context.originalStoryFn as ArgsStoryFn<TRenderer>)(context.args, context);
 
   // Currently it is only possible to set these globally
   const { applyDecorators = defaultDecorateStory, runStep } = projectAnnotations;
@@ -98,26 +99,57 @@ export function prepareStory<TRenderer extends Renderer>(
     storyAnnotations?.render ||
     componentAnnotations.render ||
     projectAnnotations.render;
-  if (!render) throw new Error(`No render function available for storyId '${id}'`);
 
   const decoratedStoryFn = applyHooks<TRenderer>(applyDecorators)(undecoratedStoryFn, decorators);
   const unboundStoryFn = (context: StoryContext<TRenderer>) => decoratedStoryFn(context);
 
   const playFunction = storyAnnotations?.play ?? componentAnnotations?.play;
 
+  const mountUsed = mountDestructured(playFunction);
+
+  if (!render && !mountUsed) {
+    throw new Error(`No render function available for storyId '${id}'`);
+  }
+
+  let { tags } = partialAnnotations;
+
+  if (mountUsed) {
+    // Play is not supported in docs yet, and when mount is used, the mounting is happening in play itself.
+    tags = tags.filter((tag) => tag !== 'autodocs');
+  }
+
+  const defaultMount = (context: StoryContext) => {
+    return async () => {
+      await context.renderToCanvas();
+      return context.canvas;
+    };
+  };
+
+  const mount =
+    storyAnnotations.mount ??
+    componentAnnotations.mount ??
+    projectAnnotations.mount ??
+    defaultMount;
+
+  const testingLibraryRender = projectAnnotations.testingLibraryRender;
+
   return {
     ...partialAnnotations,
+    tags,
     moduleExport,
     id,
     name,
     story: name,
-    originalStoryFn: render,
+    originalStoryFn: render!,
     undecoratedStoryFn,
     unboundStoryFn,
     applyLoaders,
     applyBeforeEach,
     playFunction,
     runStep,
+    mount,
+    testingLibraryRender,
+    renderToCanvas: projectAnnotations.renderToCanvas,
   };
 }
 export function prepareMeta<TRenderer extends Renderer>(

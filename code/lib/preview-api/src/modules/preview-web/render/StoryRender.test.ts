@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi } from 'vitest';
 import { Channel } from '@storybook/channels';
-import type { Renderer, StoryIndexEntry } from '@storybook/types';
+import type { Renderer, StoryContext, StoryIndexEntry } from '@storybook/types';
 import type { StoryStore } from '../../store';
 import { PREPARE_ABORTED } from './Render';
 
@@ -26,6 +26,13 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 window.location = { reload: vi.fn() } as any;
 
+const mount = (context: StoryContext) => {
+  return async () => {
+    await context.renderToCanvas();
+    return {};
+  };
+};
+
 describe('StoryRender', () => {
   it('does run play function if passed autoplay=true', async () => {
     const story = {
@@ -38,6 +45,7 @@ describe('StoryRender', () => {
       unboundStoryFn: vi.fn(),
       playFunction: vi.fn(),
       prepareContext: vi.fn(),
+      mount,
     };
 
     const render = new StoryRender(
@@ -66,6 +74,7 @@ describe('StoryRender', () => {
       unboundStoryFn: vi.fn(),
       playFunction: vi.fn(),
       prepareContext: vi.fn(),
+      mount,
     };
 
     const render = new StoryRender(
@@ -86,6 +95,8 @@ describe('StoryRender', () => {
   it('only rerenders once when triggered multiple times while pending', async () => {
     // Arrange - setup StoryRender and async gate blocking applyLoaders
     const [loaderGate, openLoaderGate] = createGate();
+    const renderToScreen = vi.fn();
+
     const story = {
       id: 'id',
       title: 'title',
@@ -96,13 +107,13 @@ describe('StoryRender', () => {
       unboundStoryFn: vi.fn(),
       playFunction: vi.fn(),
       prepareContext: vi.fn(),
+      mount,
     };
     const store = {
       getStoryContext: () => ({}),
       cleanupStory: vi.fn(),
       addCleanupCallbacks: vi.fn(),
     };
-    const renderToScreen = vi.fn();
     const render = new StoryRender(
       new Channel({}),
       store as any,
@@ -182,6 +193,7 @@ describe('StoryRender', () => {
         unboundStoryFn: vi.fn(),
         playFunction: vi.fn(),
         prepareContext: vi.fn(),
+        mount,
       };
       const store = {
         getStoryContext: () => ({}),
@@ -225,6 +237,7 @@ describe('StoryRender', () => {
         unboundStoryFn: vi.fn(),
         playFunction: vi.fn(),
         prepareContext: vi.fn(),
+        mount,
       };
       const store = {
         getStoryContext: () => ({}),
@@ -271,6 +284,7 @@ describe('StoryRender', () => {
         unboundStoryFn: vi.fn(),
         playFunction: vi.fn(() => playGate),
         prepareContext: vi.fn(),
+        mount,
       };
       const store = {
         getStoryContext: () => ({}),
@@ -317,6 +331,7 @@ describe('StoryRender', () => {
         unboundStoryFn: vi.fn(),
         playFunction: vi.fn(),
         prepareContext: vi.fn(),
+        mount,
       };
       const store = {
         getStoryContext: () => ({}),

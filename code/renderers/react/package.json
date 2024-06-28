@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "@storybook/client-logger": "workspace:*",
+    "@storybook/core-events": "workspace:^",
     "@storybook/docs-tools": "workspace:*",
     "@storybook/global": "^5.0.0",
     "@storybook/preview-api": "workspace:*",
