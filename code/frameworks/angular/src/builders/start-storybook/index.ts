@@ -11,7 +11,7 @@ import { BrowserBuilderOptions, StylePreprocessorOptions } from '@angular-devkit
 import { from, Observable, of } from 'rxjs';
 import { map, switchMap, mapTo } from 'rxjs/operators';
 import { sync as findUpSync } from 'find-up';
-import { sync as readUpSync } from 'read-pkg-up';
+import { findPackageSync } from 'fd-package-json';
 
 import { CLIOptions } from '@storybook/types';
 import { getEnvConfig, versions } from '@storybook/core-common';
@@ -37,6 +37,7 @@ export type StorybookBuilderOptions = JsonObject & {
   styles?: StyleElement[];
   stylePreprocessorOptions?: StylePreprocessorOptions;
   assets?: AssetPattern[];
+  preserveSymlinks?: boolean;
   sourceMap?: SourceMapUnion;
 } & Pick<
     // makes sure the option exists
@@ -118,10 +119,11 @@ const commandBuilder: BuilderHandlerFn<StorybookBuilderOptions> = (options, cont
         statsJson,
         previewUrl,
         sourceMap = false,
+        preserveSymlinks = false,
       } = options;
 
       const standaloneOptions: StandaloneOptions = {
-        packageJson: readUpSync({ cwd: __dirname }).packageJson,
+        packageJson: findPackageSync(__dirname),
         ci,
         configDir,
         ...(docs ? { docs } : {}),
@@ -141,6 +143,7 @@ const commandBuilder: BuilderHandlerFn<StorybookBuilderOptions> = (options, cont
           ...(stylePreprocessorOptions ? { stylePreprocessorOptions } : {}),
           ...(styles ? { styles } : {}),
           ...(assets ? { assets } : {}),
+          preserveSymlinks,
           sourceMap,
         },
         tsConfig,

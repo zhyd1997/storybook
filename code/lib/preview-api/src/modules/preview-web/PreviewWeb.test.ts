@@ -1,6 +1,4 @@
-/**
- * @vitest-environment jsdom
- */
+// @vitest-environment happy-dom
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import { global } from '@storybook/global';
@@ -944,7 +942,7 @@ describe('PreviewWeb', () => {
         openBlockLoadersGate({ l: 8 });
         await waitForRender();
 
-        // Assert - renderToCanvas to be called the first time with initial args
+        // Assert - renderToCanvas to be called the first time with initial args and returned `loaded` value.
         expect(projectAnnotations.renderToCanvas).toHaveBeenCalledOnce();
         expect(projectAnnotations.renderToCanvas).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -3353,7 +3351,7 @@ describe('PreviewWeb', () => {
       return {
         ...projectAnnotations,
         args: { global: 'added' },
-        globals: { a: 'edited' },
+        initialGlobals: { a: 'edited' },
         decorators: [newGlobalDecorator],
       };
     };
