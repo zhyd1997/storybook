@@ -1,6 +1,6 @@
 import type { StoryObj, Meta } from '@storybook/react';
 import { CallStates } from '@storybook/instrumenter';
-import { userEvent, within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import { getCalls } from '../mocks';
 
 import { Interaction } from './Interaction';
@@ -58,8 +58,7 @@ export const Hovered: Story = {
     // Set light theme to avoid stacked theme in chromatic
     theme: 'light',
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async ({ canvas, userEvent }) => {
     await userEvent.hover(canvas.getByRole('button'));
     await expect(canvas.getByTestId('icon-active')).toBeInTheDocument();
   },

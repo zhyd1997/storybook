@@ -3,7 +3,7 @@ import React from 'react';
 import type { IndexHash, State } from '@storybook/manager-api';
 import { ManagerContext, types } from '@storybook/manager-api';
 import type { StoryObj, Meta } from '@storybook/react';
-import { within, userEvent, expect, fn } from '@storybook/test';
+import { within, expect, fn } from '@storybook/test';
 import type { Addon_SidebarTopType } from '@storybook/types';
 import { Button, IconButton } from '@storybook/components';
 import { FaceHappyIcon } from '@storybook/icons';
@@ -207,7 +207,7 @@ export const StatusesOpen: Story = {
 export const Searching: Story = {
   ...StatusesOpen,
   parameters: { chromatic: { delay: 2200 } },
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     await step('wait 2000ms', () => wait(2000));
     const canvas = await within(canvasElement);
     const search = await canvas.findByPlaceholderText('Find components');
@@ -286,8 +286,7 @@ export const Scrolled: Story = {
       </>
     );
   },
-  play: async ({ canvasElement, step }) => {
-    const canvas = await within(canvasElement);
+  play: async ({ canvasElement, canvas, step, userEvent }) => {
     const scrollable = await canvasElement.querySelector('[data-radix-scroll-area-viewport]');
     await step('expand component', async () => {
       const componentNode = await canvas.queryAllByText('Child A2')[1];

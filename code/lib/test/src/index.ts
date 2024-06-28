@@ -11,7 +11,7 @@ import {
   resetAllMocks,
   restoreAllMocks,
 } from './spy';
-import { type queries, within } from './testing-library';
+import { type queries, within, userEvent } from './testing-library';
 
 export * from './spy';
 
@@ -19,6 +19,9 @@ type Queries = ReturnType<typeof within<typeof queries>>;
 
 declare module '@storybook/csf' {
   interface Canvas extends Queries {}
+  interface StoryContext {
+    userEvent: ReturnType<typeof userEvent.setup>;
+  }
 }
 
 export const { expect } = instrument(
@@ -94,9 +97,10 @@ const nameSpiesAndWrapActionsInSpies: LoaderFunction = ({ initialArgs }) => {
   traverseArgs(initialArgs);
 };
 
-const addCanvas: LoaderFunction = (context) => {
+const enhanceContext: LoaderFunction = (context) => {
   if (globalThis.HTMLElement && context.canvasElement instanceof globalThis.HTMLElement) {
     context.canvas = within(context.canvasElement);
+    context.userEvent = userEvent.setup();
   }
 };
 
@@ -105,7 +109,7 @@ const addCanvas: LoaderFunction = (context) => {
 (global as any).__STORYBOOK_TEST_LOADERS__ = [
   resetAllMocksLoader,
   nameSpiesAndWrapActionsInSpies,
-  addCanvas,
+  enhanceContext,
 ];
 // eslint-disable-next-line no-underscore-dangle
 (global as any).__STORYBOOK_TEST_ON_MOCK_CALL__ = onMockCall;
