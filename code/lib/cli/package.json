@@ -48,121 +48,121 @@
       "import": "./core/index.js",
       "require": "./core/index.cjs"
     },
-    "./node-logger": {
+    "./internal/node-logger": {
       "types": "./core/node-logger/index.d.ts",
       "import": "./core/node-logger/index.js",
       "require": "./core/node-logger/index.cjs"
     },
-    "./client-logger": {
+    "./internal/client-logger": {
       "types": "./core/client-logger/index.d.ts",
       "import": "./core/client-logger/index.js",
       "require": "./core/client-logger/index.cjs"
     },
-    "./core-server": {
+    "./internal/core-server": {
       "types": "./core/core-server/index.d.ts",
       "import": "./core/core-server/index.js",
       "require": "./core/core-server/index.cjs"
     },
-    "./core-server/presets/common-preset": {
+    "./internal/core-server/presets/common-preset": {
       "import": "./core/core-server/presets/common-preset.js",
       "require": "./core/core-server/presets/common-preset.cjs"
     },
-    "./core-server/presets/common-manager": {
+    "./internal/core-server/presets/common-manager": {
       "import": "./core/core-server/presets/common-manager.js"
     },
-    "./core-server/presets/common-override-preset": {
+    "./internal/core-server/presets/common-override-preset": {
       "import": "./core/core-server/presets/common-override-preset.js",
       "require": "./core/core-server/presets/common-override-preset.cjs"
     },
-    "./core-events": {
+    "./internal/core-events": {
       "types": "./core/core-events/index.d.ts",
       "import": "./core/core-events/index.js",
       "require": "./core/core-events/index.cjs"
     },
-    "./manager-errors": {
+    "./internal/manager-errors": {
       "types": "./core/manager-errors.d.ts",
       "import": "./core/manager-errors.js"
     },
-    "./preview-errors": {
+    "./internal/preview-errors": {
       "types": "./core/preview-errors.d.ts",
       "import": "./core/preview-errors.js",
       "require": "./core/preview-errors.cjs"
     },
-    "./server-errors": {
+    "./internal/server-errors": {
       "types": "./core/server-errors.d.ts",
       "import": "./core/server-errors.js",
       "require": "./core/server-errors.cjs"
     },
-    "./channels": {
+    "./internal/channels": {
       "types": "./core/channels/index.d.ts",
       "import": "./core/channels/index.js",
       "require": "./core/channels/index.cjs"
     },
-    "./types": {
+    "./internal/types": {
       "types": "./core/types/index.d.ts",
       "import": "./core/types/index.js",
       "require": "./core/types/index.cjs"
     },
-    "./csf-tools": {
+    "./internal/csf-tools": {
       "types": "./core/csf-tools/index.d.ts",
       "import": "./core/csf-tools/index.js",
       "require": "./core/csf-tools/index.cjs"
     },
-    "./common": {
+    "./internal/common": {
       "types": "./core/common/index.d.ts",
       "import": "./core/common/index.js",
       "require": "./core/common/index.cjs"
     },
-    "./builder-manager": {
+    "./internal/builder-manager": {
       "types": "./core/builder-manager/index.d.ts",
       "import": "./core/builder-manager/index.js",
       "require": "./core/builder-manager/index.cjs"
     },
-    "./telemetry": {
+    "./internal/telemetry": {
       "types": "./core/telemetry/index.d.ts",
       "import": "./core/telemetry/index.js",
       "require": "./core/telemetry/index.cjs"
     },
-    "./preview-api": {
+    "./internal/preview-api": {
       "types": "./core/preview-api/index.d.ts",
       "import": "./core/preview-api/index.js",
       "require": "./core/preview-api/index.cjs"
     },
-    "./manager-api": {
+    "./internal/manager-api": {
       "types": "./core/manager-api/index.d.ts",
       "import": "./core/manager-api/index.js",
       "require": "./core/manager-api/index.cjs"
     },
-    "./router": {
+    "./internal/router": {
       "types": "./core/router/index.d.ts",
       "import": "./core/router/index.js",
       "require": "./core/router/index.cjs"
     },
-    "./components": {
+    "./internal/components": {
       "types": "./core/components/index.d.ts",
       "import": "./core/components/index.js"
     },
-    "./theming": {
+    "./internal/theming": {
       "types": "./core/theming/index.d.ts",
       "import": "./core/theming/index.js",
       "require": "./core/theming/index.cjs"
     },
-    "./theming/create": {
+    "./internal/theming/create": {
       "types": "./core/theming/create.d.ts",
       "import": "./core/theming/create.js",
       "require": "./core/theming/create.cjs"
     },
-    "./docs-tools": {
+    "./internal/docs-tools": {
       "types": "./core/docs-tools/index.d.ts",
       "import": "./core/docs-tools/index.js",
       "require": "./core/docs-tools/index.cjs"
     },
-    "./manager/globals-module-info": {
+    "./internal/manager/globals-module-info": {
       "types": "./core/manager/globals-module-info.d.ts",
       "import": "./core/manager/globals-module-info.js",
       "require": "./core/manager/globals-module-info.cjs"
     },
-    "./preview/globals": {
+    "./internal/preview/globals": {
       "types": "./core/preview/globals.d.ts",
       "import": "./core/preview/globals.js",
       "require": "./core/preview/globals.cjs"
@@ -173,83 +173,86 @@
   "types": "dist/index.d.ts",
   "typesVersions": {
     "*": {
-      "*": [
-        "./dist/index.d.ts"
+      "internal/*": [
+        "./core/index.d.ts"
       ],
-      "node-logger": [
-        "./core/node-logger/index.d.ts"
-      ],
-      "client-logger": [
-        "./core/client-logger/index.d.ts"
-      ],
-      "core-server": [
-        "./core/core-server/index.d.ts"
-      ],
-      "core-server/presets/common-preset": [
-        "./core/core-server/presets/common-preset.d.ts"
-      ],
-      "core-server/presets/common-manager": [
-        "./core/core-server/presets/common-manager.d.ts"
-      ],
-      "core-server/presets/common-override-preset": [
-        "./core/core-server/presets/common-override-preset.d.ts"
-      ],
-      "core-events": [
-        "./core/core-events/index.d.ts"
-      ],
-      "manager-errors": [
-        "./core/manager-errors.d.ts"
-      ],
-      "preview-errors": [
-        "./core/preview-errors.d.ts"
-      ],
-      "server-errors": [
-        "./core/server-errors.d.ts"
-      ],
-      "channels": [
-        "./core/channels/index.d.ts"
-      ],
-      "types": [
-        "./core/types/index.d.ts"
-      ],
-      "csf-tools": [
-        "./core/csf-tools/index.d.ts"
-      ],
-      "common": [
-        "./core/common/index.d.ts"
-      ],
-      "builder-manager": [
+      "internal/builder-manager": [
         "./core/builder-manager/index.d.ts"
       ],
-      "telemetry": [
-        "./core/telemetry/index.d.ts"
+      "internal/channels": [
+        "./core/channels/index.d.ts"
       ],
-      "preview-api": [
-        "./core/preview-api/index.d.ts"
+      "internal/client-logger": [
+        "./core/client-logger/index.d.ts"
       ],
-      "manager-api": [
-        "./core/manager-api/index.d.ts"
+      "internal/common": [
+        "./core/common/index.d.ts"
       ],
-      "router": [
-        "./core/router/index.d.ts"
-      ],
-      "components": [
+      "internal/components": [
         "./core/components/index.d.ts"
       ],
-      "theming": [
-        "./core/theming/index.d.ts"
+      "internal/core-events": [
+        "./core/core-events/index.d.ts"
       ],
-      "theming/create": [
-        "./core/theming/create.d.ts"
+      "internal/core-server": [
+        "./core/core-server/index.d.ts"
       ],
-      "docs-tools": [
+      "internal/core-server/presets/common-manager": [
+        "./core/core-server/presets/common-manager.d.ts"
+      ],
+      "internal/core-server/presets/common-override-preset": [
+        "./core/core-server/presets/common-override-preset.d.ts"
+      ],
+      "internal/core-server/presets/common-preset": [
+        "./core/core-server/presets/common-preset.d.ts"
+      ],
+      "internal/csf-tools": [
+        "./core/csf-tools/index.d.ts"
+      ],
+      "internal/docs-tools": [
         "./core/docs-tools/index.d.ts"
       ],
-      "manager/globals-module-info": [
+      "internal/manager-api": [
+        "./core/manager-api/index.d.ts"
+      ],
+      "internal/manager-errors": [
+        "./core/manager-errors.d.ts"
+      ],
+      "internal/manager/globals-module-info": [
         "./core/manager/globals-module-info.d.ts"
       ],
-      "preview/globals": [
+      "internal/node-logger": [
+        "./core/node-logger/index.d.ts"
+      ],
+      "internal/preview-api": [
+        "./core/preview-api/index.d.ts"
+      ],
+      "internal/preview-errors": [
+        "./core/preview-errors.d.ts"
+      ],
+      "internal/preview/globals": [
         "./core/preview/globals.d.ts"
+      ],
+      "internal/router": [
+        "./core/router/index.d.ts"
+      ],
+      "internal/server-errors": [
+        "./core/server-errors.d.ts"
+      ],
+      "internal/telemetry": [
+        "./core/telemetry/index.d.ts"
+      ],
+      "internal/theming": [
+        "./core/theming/index.d.ts"
+      ],
+      "internal/theming/create": [
+        "./core/theming/create.d.ts"
+      ],
+      "internal/types": [
+        "./core/types/index.d.ts"
+      ],
+      "*": [
+        "./dist/index.d.ts"
       ],
       "core-path": [
         "./dist/core-path.d.ts"

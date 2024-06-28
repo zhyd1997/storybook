@@ -20,43 +20,45 @@ async function run() {
   const corePackageJson = await readJSON(join(__dirname, '../../../core/package.json'));
 
   await Promise.all(
-    Object.entries<Record<string, string>>(corePackageJson.exports).map(async ([key, input]) => {
-      const value = mapCoreExportToSelf(input);
-      if (key === './package.json') {
-        return;
-      }
-      if (key.startsWith('./dist')) {
-        return;
-      }
-      if (key === '.') {
-        selfPackageJson.exports['./core'] = value;
+    Object.entries<Record<string, string>>(corePackageJson.exports)
+      .sort()
+      .map(async ([key, input]) => {
+        const value = mapCoreExportToSelf(input);
+        if (key === './package.json') {
+          return;
+        }
+        if (key.startsWith('./dist')) {
+          return;
+        }
+        if (key === '.') {
+          selfPackageJson.exports['./core'] = value;
 
-        await Promise.all(
-          Object.values(value).map(async (v) => {
-            await write(join(__dirname, '..', v), generateMapperContent(v));
-          })
-        );
-      } else {
-        selfPackageJson.exports[key] = value;
-        await Promise.all(
-          Object.values(value).map(async (v) => {
-            await write(join(__dirname, '..', v), generateMapperContent(v));
-          })
-        );
-      }
-    })
+          await Promise.all(
+            Object.values(value).map(async (v) => {
+              await write(join(__dirname, '..', v), generateMapperContent(v));
+            })
+          );
+        } else {
+          selfPackageJson.exports[key.replace('./', './internal/')] = value;
+          await Promise.all(
+            Object.values(value).map(async (v) => {
+              await write(join(__dirname, '..', v), generateMapperContent(v));
+            })
+          );
+        }
+      })
   );
 
   type RecordOfStrings = Record<string, string[]>;
 
   selfPackageJson.typesVersions = {
     '*': {
-      ...Object.entries(
-        corePackageJson.typesVersions['*'] as RecordOfStrings
-      ).reduce<RecordOfStrings>((acc, [key, value]) => {
-        acc[key] = value.map((v) => v.replace('./dist/', './core/'));
-        return acc;
-      }, {}),
+      ...Object.entries(corePackageJson.typesVersions['*'] as RecordOfStrings)
+        .sort()
+        .reduce<RecordOfStrings>((acc, [key, value]) => {
+          acc['internal/' + key] = value.map((v) => v.replace('./dist/', './core/'));
+          return acc;
+        }, {}),
       '*': ['./dist/index.d.ts'],
       'core-path': ['./dist/core-path.d.ts'],
 
