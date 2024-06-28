@@ -11,7 +11,7 @@ export const globalsNameReferenceMap = {
   '@storybook/client-logger': '__STORYBOOK_MODULE_CLIENT_LOGGER__',
   '@storybook/core/client-logger': '__STORYBOOK_MODULE_CLIENT_LOGGER__',
 
-  'storybook/internal/core-errors': '__STORYBOOK_MODULE_CORE_EVENTS__',
+  'storybook/internal/core-events': '__STORYBOOK_MODULE_CORE_EVENTS__',
   '@storybook/core-events': '__STORYBOOK_MODULE_CORE_EVENTS__',
   '@storybook/core/core-events': '__STORYBOOK_MODULE_CORE_EVENTS__',
 

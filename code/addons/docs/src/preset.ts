@@ -166,9 +166,9 @@ export const viteFinal = async (config: any, options: Options) => {
   // Use the resolvedReact preset to alias react and react-dom to either the users version or the version shipped with addon-docs
   const { react, reactDom, mdx } = await getResolvedReact(options);
 
-  const cliPath = require.resolve('storybook/package.json');
-  const themingPath = join(cliPath, '..', 'core', 'theming', 'index.js');
-  const componentsPath = join(cliPath, '..', 'core', 'components', 'index.js');
+  const cliPath = dirname(require.resolve('storybook/package.json'));
+  const themingPath = join(cliPath, 'core', 'theming', 'index.js');
+  const componentsPath = join(cliPath, 'core', 'components', 'index.js');
   const blocksPath = dirname(require.resolve('@storybook/blocks/package.json'));
 
   const packageDeduplicationPlugin = {
