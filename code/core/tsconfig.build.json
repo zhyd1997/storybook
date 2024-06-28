@@ -6,6 +6,7 @@
     "skipDefaultLibCheck": true,
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
+    "rootDir": ".",
     "target": "ES2022",
     "module": "ES2022"
   },
