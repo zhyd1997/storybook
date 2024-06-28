@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { HexColorPicker, HslaStringColorPicker, RgbaStringColorPicker } from 'react-colorful';
 import convert from 'color-convert';
 import debounce from 'lodash/debounce.js';
-import { styled } from 'storybook/theming';
-import { TooltipNote, WithTooltip, Form } from 'storybook/components';
+import { styled } from 'storybook/internal/theming';
+import { TooltipNote, WithTooltip, Form } from 'storybook/internal/components';
 
 import type { ControlProps, ColorValue, ColorConfig, PresetColor } from './types';
 import { getControlId } from './helpers';

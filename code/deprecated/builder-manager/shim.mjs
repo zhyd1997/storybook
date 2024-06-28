@@ -1,1 +1,1 @@
-export * from 'storybook/builder-manager';
+export * from 'storybook/internal/builder-manager';

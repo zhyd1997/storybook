@@ -9,11 +9,11 @@ import {
   convert,
   styled,
   useTheme,
-} from 'storybook/theming';
-import { useArgs, DocsContext as DocsContextProps } from 'storybook/preview-api';
-import type { PreviewWeb } from 'storybook/preview-api';
+} from 'storybook/internal/theming';
+import { useArgs, DocsContext as DocsContextProps } from 'storybook/internal/preview-api';
+import type { PreviewWeb } from 'storybook/internal/preview-api';
 import type { ReactRenderer } from '@storybook/react';
-import type { Channel } from 'storybook/channels';
+import type { Channel } from 'storybook/internal/channels';
 
 import { DocsContext } from '@storybook/blocks';
 

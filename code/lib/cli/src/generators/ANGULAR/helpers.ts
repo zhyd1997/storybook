@@ -2,7 +2,7 @@ import fs from 'fs';
 import { join } from 'path';
 import prompts from 'prompts';
 import { dedent } from 'ts-dedent';
-import { MissingAngularJsonError } from 'storybook/server-errors';
+import { MissingAngularJsonError } from 'storybook/internal/server-errors';
 import boxen from 'boxen';
 import { logger } from '@storybook/core/node-logger';
 

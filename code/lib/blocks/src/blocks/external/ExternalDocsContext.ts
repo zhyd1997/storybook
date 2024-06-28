@@ -1,6 +1,6 @@
-import type { Renderer, CSFFile, ModuleExports, DocsContextProps } from 'storybook/types';
-import { DocsContext } from 'storybook/preview-api';
-import type { StoryStore } from 'storybook/preview-api';
+import type { Renderer, CSFFile, ModuleExports, DocsContextProps } from 'storybook/internal/types';
+import { DocsContext } from 'storybook/internal/preview-api';
+import type { StoryStore } from 'storybook/internal/preview-api';
 
 export class ExternalDocsContext<TRenderer extends Renderer> extends DocsContext<TRenderer> {
   constructor(

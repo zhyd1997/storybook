@@ -1,1 +1,1 @@
-export * from 'storybook/preview-api';
+export * from 'storybook/internal/preview-api';

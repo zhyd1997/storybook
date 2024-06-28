@@ -1,2 +1,2 @@
-export * from 'storybook/core-events';
-export type * from 'storybook/core-events';
+export * from 'storybook/internal/client-logger';
+export type * from 'storybook/internal/client-logger';

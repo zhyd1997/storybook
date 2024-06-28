@@ -1,7 +1,7 @@
 import type { FC, ChangeEvent } from 'react';
 import React, { useCallback, useState } from 'react';
-import { styled } from 'storybook/theming';
-import { Button, Form } from 'storybook/components';
+import { styled } from 'storybook/internal/theming';
+import { Button, Form } from 'storybook/internal/components';
 import { getControlId, getControlSetterButtonId } from './helpers';
 
 import type { ControlProps, TextValue, TextConfig } from './types';

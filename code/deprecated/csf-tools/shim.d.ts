@@ -1,2 +1,2 @@
-export * from 'storybook/csf-tools';
-export type * from 'storybook/csf-tools';
+export * from 'storybook/internal/csf-tools';
+export type * from 'storybook/internal/csf-tools';

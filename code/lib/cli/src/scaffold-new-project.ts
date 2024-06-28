@@ -5,9 +5,9 @@ import { readdirSync, remove } from 'fs-extra';
 import prompts from 'prompts';
 import { dedent } from 'ts-dedent';
 
-import { telemetry } from 'storybook/telemetry';
+import { telemetry } from 'storybook/internal/telemetry';
 
-import { GenerateNewProjectOnInitError } from 'storybook/server-errors';
+import { GenerateNewProjectOnInitError } from 'storybook/internal/server-errors';
 import { logger } from '@storybook/core/node-logger';
 
 import type { PackageManagerName } from '@storybook/core/common';

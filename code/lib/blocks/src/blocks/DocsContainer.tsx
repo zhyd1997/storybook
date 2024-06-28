@@ -1,9 +1,9 @@
 import type { FC, PropsWithChildren } from 'react';
 import React, { useEffect } from 'react';
 import { global } from '@storybook/global';
-import type { ThemeVars } from 'storybook/theming';
-import { ThemeProvider, ensure as ensureTheme } from 'storybook/theming';
-import type { Renderer } from 'storybook/types';
+import type { ThemeVars } from 'storybook/internal/theming';
+import { ThemeProvider, ensure as ensureTheme } from 'storybook/internal/theming';
+import type { Renderer } from 'storybook/internal/types';
 import { DocsPageWrapper } from '../components';
 import type { DocsContextProps } from './DocsContext';
 import { DocsContext } from './DocsContext';

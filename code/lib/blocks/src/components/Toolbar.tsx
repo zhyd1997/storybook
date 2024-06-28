@@ -1,7 +1,7 @@
 import type { FC, MouseEvent } from 'react';
 import React from 'react';
-import { styled } from 'storybook/theming';
-import { FlexBar, IconButton } from 'storybook/components';
+import { styled } from 'storybook/internal/theming';
+import { FlexBar, IconButton } from 'storybook/internal/components';
 import { ZoomIcon, ZoomOutIcon, ZoomResetIcon } from '@storybook/icons';
 
 interface ZoomProps {

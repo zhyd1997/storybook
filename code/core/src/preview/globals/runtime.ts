@@ -13,27 +13,27 @@ import type { globalsNameReferenceMap } from './globals';
 export const globalsNameValueMap: Required<Record<keyof typeof globalsNameReferenceMap, any>> = {
   '@storybook/global': GLOBAL,
 
-  'storybook/channels': CHANNELS,
+  'storybook/internal/channels': CHANNELS,
   '@storybook/channels': CHANNELS,
   '@storybook/core/channels': CHANNELS,
 
-  'storybook/client-logger': CLIENT_LOGGER,
+  'storybook/internal/client-logger': CLIENT_LOGGER,
   '@storybook/client-logger': CLIENT_LOGGER,
   '@storybook/core/client-logger': CLIENT_LOGGER,
 
-  'storybook/core-events': CORE_EVENTS,
+  'storybook/internal/core-errors': CORE_EVENTS,
   '@storybook/core-events': CORE_EVENTS,
   '@storybook/core/core-events': CORE_EVENTS,
 
-  'storybook/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
+  'storybook/internal/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
   '@storybook/core-events/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
   '@storybook/core/preview-errors': CORE_EVENTS_PREVIEW_ERRORS,
 
-  'storybook/preview-api': PREVIEW_API,
+  'storybook/internal/preview-api': PREVIEW_API,
   '@storybook/preview-api': PREVIEW_API,
   '@storybook/core/preview-api': PREVIEW_API,
 
-  'storybook/types': TYPES,
+  'storybook/internal/types': TYPES,
   '@storybook/types': TYPES,
   '@storybook/core/types': TYPES,
 };

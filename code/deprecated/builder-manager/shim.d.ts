@@ -1,2 +1,2 @@
-export * from 'storybook/builder-manager';
-export type * from 'storybook/r-manager';
+export * from 'storybook/internal/builder-manager';
+export type * from 'storybook/internal/builder-manager';

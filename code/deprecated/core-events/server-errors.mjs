@@ -1,1 +1,1 @@
-export * from 'storybook/server-errors';
+export * from 'storybook/internal/server-errors';

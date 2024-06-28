@@ -1,1 +1,1 @@
-export * from 'storybook/csf-tools';
+export * from 'storybook/internal/csf-tools';

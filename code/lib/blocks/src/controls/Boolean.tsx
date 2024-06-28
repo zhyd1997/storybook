@@ -2,9 +2,9 @@ import type { FC } from 'react';
 import React, { useCallback } from 'react';
 
 import { opacify, transparentize } from 'polished';
-import { styled } from 'storybook/theming';
+import { styled } from 'storybook/internal/theming';
 
-import { Button } from 'storybook/components';
+import { Button } from 'storybook/internal/components';
 import { getControlId, getControlSetterButtonId } from './helpers';
 
 import type { ControlProps, BooleanValue, BooleanConfig } from './types';

@@ -68,9 +68,9 @@ const config: StorybookConfig = {
           ...(configType === 'DEVELOPMENT'
             ? {
                 '@storybook/components': componentsPath,
-                'storybook/components': componentsPath,
+                'storybook/internal/components': componentsPath,
                 '@storybook/manager-api': managerApiPath,
-                'storybook/manager-api': managerApiPath,
+                'storybook/internal/manager-api': managerApiPath,
               }
             : {}),
         },

@@ -1,1 +1,1 @@
-export * from 'storybook/theming';
+export * from 'storybook/internal/theming';

@@ -1,2 +1,2 @@
-export * from 'storybook/telemetry';
-export type * from 'storybook/telemetry';
+export * from 'storybook/internal/telemetry';
+export type * from 'storybook/internal/telemetry';

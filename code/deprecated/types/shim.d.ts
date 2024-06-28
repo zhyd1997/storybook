@@ -1,2 +1,2 @@
-export * from 'storybook/types';
-export type * from 'storybook/types';
+export * from 'storybook/internal/types';
+export type * from 'storybook/internal/types';

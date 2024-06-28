@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React from 'react';
-import { styled } from 'storybook/theming';
-import { logger } from 'storybook/client-logger';
+import { styled } from 'storybook/internal/theming';
+import { logger } from 'storybook/internal/client-logger';
 
 import type { ControlProps, OptionsSingleSelection, NormalizedOptionsConfig } from '../types';
 

@@ -1,1 +1,1 @@
-export * from 'storybook/types';
+export * from 'storybook/internal/types';

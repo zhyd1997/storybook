@@ -7,10 +7,10 @@ import {
   themes,
   ignoreSsrWarning,
   useTheme,
-} from 'storybook/theming';
+} from 'storybook/internal/theming';
 
-import type { SupportedLanguage, SyntaxHighlighterProps } from 'storybook/components';
-import { SyntaxHighlighter } from 'storybook/components';
+import type { SupportedLanguage, SyntaxHighlighterProps } from 'storybook/internal/components';
+import { SyntaxHighlighter } from 'storybook/internal/components';
 import { EmptyBlock } from './EmptyBlock';
 
 const StyledSyntaxHighlighter: React.FunctionComponent<SyntaxHighlighterProps> = styled(

@@ -1,2 +1,2 @@
-export * from 'storybook/channels';
-export type * from 'storybook/channels';
+export * from 'storybook/internal/channels';
+export type * from 'storybook/internal/channels';

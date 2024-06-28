@@ -1,1 +1,1 @@
-export * from 'storybook/telemetry';
+export * from 'storybook/internal/telemetry';

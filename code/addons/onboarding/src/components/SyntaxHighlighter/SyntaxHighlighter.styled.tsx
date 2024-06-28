@@ -1,4 +1,4 @@
-import { styled } from 'storybook/theming';
+import { styled } from 'storybook/internal/theming';
 import { motion } from 'framer-motion';
 
 export const Code = styled(motion.div)`

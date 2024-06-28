@@ -1,2 +1,2 @@
-export * from 'storybook/server-errors';
-export type * from 'storybook/server-errors';
+export * from 'storybook/internal/server-errors';
+export type * from 'storybook/internal/server-errors';

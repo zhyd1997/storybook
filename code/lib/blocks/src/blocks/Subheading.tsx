@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react';
 import React from 'react';
-import { H3 } from 'storybook/components';
+import { H3 } from 'storybook/internal/components';
 import { HeaderMdx } from './mdx';
 import type { HeadingProps } from './Heading';
 

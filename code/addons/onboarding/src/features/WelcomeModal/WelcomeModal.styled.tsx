@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from '@storybook/icons';
-import { keyframes, styled } from 'storybook/theming';
-import { Modal } from 'storybook/components';
+import { keyframes, styled } from 'storybook/internal/theming';
+import { Modal } from 'storybook/internal/components';
 
 export const ModalWrapper = styled(Modal)`
   background: white;

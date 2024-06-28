@@ -26,12 +26,12 @@ import { useGetBackdropBoundary } from './hooks/useGetBackdropBoundary';
 import titleSidebarImg from './assets/01-title-sidebar.png';
 import storyNameSidebarImg from './assets/02-story-name-sidebar.png';
 import argsImg from './assets/03-args.png';
-import type { API, AddonStore } from 'storybook/manager-api';
+import type { API, AddonStore } from 'storybook/internal/manager-api';
 import { STORYBOOK_ADDON_ONBOARDING_CHANNEL } from '../../constants';
-import { useTheme } from 'storybook/theming';
+import { useTheme } from 'storybook/internal/theming';
 import type { CodeSnippets } from './code/types';
 import { BookmarkHollowIcon, CrossIcon } from '@storybook/icons';
-import { Modal } from 'storybook/components';
+import { Modal } from 'storybook/internal/components';
 
 // TODO: Add warning if backdropBoundary && !warningButtonStatus?.data is not true.
 // backdropBoundary && !warningButtonStatus?.data

@@ -1,1 +1,1 @@
-module.exports = require('storybook/docs-tools');
+module.exports = require('storybook/internal/docs-tools');

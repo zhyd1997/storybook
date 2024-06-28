@@ -1,1 +1,1 @@
-export * from 'storybook/channels';
+export * from 'storybook/internal/channels';

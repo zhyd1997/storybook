@@ -1,4 +1,4 @@
-import { styled } from 'storybook/theming';
+import { styled } from 'storybook/internal/theming';
 import type { FC } from 'react';
 import React from 'react';
 

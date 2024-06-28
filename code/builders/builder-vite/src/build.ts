@@ -1,5 +1,5 @@
-import type { Options } from 'storybook/types';
-import { logger } from 'storybook/node-logger';
+import type { Options } from 'storybook/internal/types';
+import { logger } from 'storybook/internal/node-logger';
 import { dedent } from 'ts-dedent';
 
 import { commonConfig } from './vite-config';

@@ -1,2 +1,2 @@
-export * from 'storybook/docs-tools';
-export type * from 'storybook/docs-tools';
+export * from 'storybook/internal/docs-tools';
+export type * from 'storybook/internal/docs-tools';

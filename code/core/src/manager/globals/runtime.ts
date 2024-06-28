@@ -24,42 +24,42 @@ export const globalsNameValueMap: Required<Record<keyof typeof globalsNameRefere
   'react-dom/client': REACT_DOM_CLIENT,
   '@storybook/icons': ICONS,
 
-  'storybook/components': COMPONENTS,
+  'storybook/internal/components': COMPONENTS,
   '@storybook/components': COMPONENTS,
   '@storybook/core/components': COMPONENTS,
 
-  'storybook/manager-api': MANAGER_API,
+  'storybook/internal/manager-api': MANAGER_API,
   '@storybook/manager-api': MANAGER_API,
   '@storybook/core/manager-api': MANAGER_API,
 
-  'storybook/router': ROUTER,
+  'storybook/internal/router': ROUTER,
   '@storybook/router': ROUTER,
   '@storybook/core/router': ROUTER,
 
-  'storybook/theming': THEMING,
+  'storybook/internal/theming': THEMING,
   '@storybook/theming': THEMING,
   '@storybook/core/theming': THEMING,
-  'storybook/theming/create': THEMINGCREATE,
+  'storybook/internal/theming/create': THEMINGCREATE,
   '@storybook/theming/create': THEMINGCREATE,
   '@storybook/core/theming/create': THEMINGCREATE,
 
-  'storybook/channels': CHANNELS,
+  'storybook/internal/channels': CHANNELS,
   '@storybook/channels': CHANNELS,
   '@storybook/core/channels': CHANNELS,
 
-  'storybook/core-events': EVENTS,
+  'storybook/internal/core-errors': EVENTS,
   '@storybook/core-events': EVENTS,
   '@storybook/core/core-events': EVENTS,
 
-  'storybook/types': TYPES,
+  'storybook/internal/types': TYPES,
   '@storybook/types': TYPES,
   '@storybook/core/types': TYPES,
 
-  'storybook/manager-errors': EVENTS_MANAGER_ERRORS,
+  'storybook/internal/manager-errors': EVENTS_MANAGER_ERRORS,
   '@storybook/core-events/manager-errors': EVENTS_MANAGER_ERRORS,
   '@storybook/core/manager-errors': EVENTS_MANAGER_ERRORS,
 
-  'storybook/client-logger': CLIENT_LOGGER,
+  'storybook/internal/client-logger': CLIENT_LOGGER,
   '@storybook/client-logger': CLIENT_LOGGER,
   '@storybook/core/client-logger': CLIENT_LOGGER,
 };

@@ -285,7 +285,7 @@ export default {
     'ZoomResetIcon',
     'iconList',
   ],
-  'storybook/components': [
+  'storybook/internal/components': [
     'A',
     'ActionBar',
     'AddonPanel',
@@ -495,7 +495,7 @@ export default {
     'resetComponents',
     'withReset',
   ],
-  'storybook/manager-api': [
+  'storybook/internal/manager-api': [
     'ActiveTabs',
     'Consumer',
     'ManagerContext',
@@ -597,7 +597,7 @@ export default {
     'useStorybookApi',
     'useStorybookState',
   ],
-  'storybook/router': [
+  'storybook/internal/router': [
     'BaseLocationProvider',
     'DEEPLY_EQUAL',
     'Link',
@@ -648,7 +648,7 @@ export default {
     'stringifyQuery',
     'useNavigate',
   ],
-  'storybook/theming': [
+  'storybook/internal/theming': [
     'CacheProvider',
     'ClassNames',
     'Global',
@@ -726,10 +726,10 @@ export default {
     'useTheme',
     'withTheme',
   ],
-  'storybook/theming/create': ['create', 'themes'],
+  'storybook/internal/theming/create': ['create', 'themes'],
   '@storybook/theming/create': ['create', 'themes'],
   '@storybook/core/theming/create': ['create', 'themes'],
-  'storybook/channels': [
+  'storybook/internal/channels': [
     'Channel',
     'PostMessageTransport',
     'WebsocketTransport',
@@ -747,7 +747,7 @@ export default {
     'WebsocketTransport',
     'createBrowserChannel',
   ],
-  'storybook/core-events': [
+  'storybook/internal/core-errors': [
     'ARGTYPES_INFO_REQUEST',
     'ARGTYPES_INFO_RESPONSE',
     'CHANNEL_CREATED',
@@ -915,10 +915,10 @@ export default {
     'UPDATE_QUERY_PARAMS',
     'UPDATE_STORY_ARGS',
   ],
-  'storybook/types': ['Addon_TypesEnum'],
+  'storybook/internal/types': ['Addon_TypesEnum'],
   '@storybook/types': ['Addon_TypesEnum'],
   '@storybook/core/types': ['Addon_TypesEnum'],
-  'storybook/manager-errors': [
+  'storybook/internal/manager-errors': [
     'Category',
     'ProviderDoesNotExtendBaseProviderError',
     'UncaughtManagerError',
@@ -933,7 +933,7 @@ export default {
     'ProviderDoesNotExtendBaseProviderError',
     'UncaughtManagerError',
   ],
-  'storybook/client-logger': ['deprecate', 'logger', 'once', 'pretty'],
+  'storybook/internal/client-logger': ['deprecate', 'logger', 'once', 'pretty'],
   '@storybook/client-logger': ['deprecate', 'logger', 'once', 'pretty'],
   '@storybook/core/client-logger': ['deprecate', 'logger', 'once', 'pretty'],
 } as const;

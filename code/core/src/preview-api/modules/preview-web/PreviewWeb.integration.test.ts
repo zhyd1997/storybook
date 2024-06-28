@@ -41,19 +41,19 @@ vi.mock('@storybook/blocks', async () => {
 vi.mock('@storybook/core/client-logger');
 vi.mock('@storybook/core/components');
 
-vi.mock('storybook/channels', async (importOriginal) => {
+vi.mock('storybook/internal/channels', async (importOriginal) => {
   return {
     ...(await importOriginal<typeof import('@storybook/core/channels')>()),
     createBrowserChannel: () => mockChannel,
   };
 });
-vi.mock('storybook/client-logger', async (importOriginal) => {
+vi.mock('storybook/internal/client-logger', async (importOriginal) => {
   return {
     ...(await importOriginal<typeof import('@storybook/core/client-logger')>()),
     createBrowserChannel: () => mockChannel,
   };
 });
-vi.mock('storybook/components', async (importOriginal) => {
+vi.mock('storybook/internal/components', async (importOriginal) => {
   return {
     ...(await importOriginal<typeof import('@storybook/core/components')>()),
     createBrowserChannel: () => mockChannel,

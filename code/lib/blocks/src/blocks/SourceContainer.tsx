@@ -1,9 +1,9 @@
 import type { FC, Context, PropsWithChildren } from 'react';
 import React, { createContext, useEffect, useState } from 'react';
 
-import { SNIPPET_RENDERED } from 'storybook/docs-tools';
-import type { SyntaxHighlighterFormatTypes } from 'storybook/components';
-import type { StoryId, Args, DocsContextProps } from 'storybook/types';
+import { SNIPPET_RENDERED } from 'storybook/internal/docs-tools';
+import type { SyntaxHighlighterFormatTypes } from 'storybook/internal/components';
+import type { StoryId, Args, DocsContextProps } from 'storybook/internal/types';
 
 import { stringify } from 'telejson';
 

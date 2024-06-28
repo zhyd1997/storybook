@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { within, fireEvent, waitFor, expect, fn } from '@storybook/test';
-import { addons } from 'storybook/preview-api';
-import { RESET_STORY_ARGS, STORY_ARGS_UPDATED } from 'storybook/core-events';
+import { addons } from 'storybook/internal/preview-api';
+import { RESET_STORY_ARGS, STORY_ARGS_UPDATED } from 'storybook/internal/core-events';
 import { BooleanControl } from './Boolean';
 
 const meta = {

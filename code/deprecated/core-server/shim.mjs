@@ -1,1 +1,1 @@
-export * from 'storybook/core-server';
+export * from 'storybook/internal/core-server';

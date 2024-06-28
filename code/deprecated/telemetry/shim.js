@@ -1,1 +1,1 @@
-module.exports = require('storybook/telemetry');
+module.exports = require('storybook/internal/telemetry');
