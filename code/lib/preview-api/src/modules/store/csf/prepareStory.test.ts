@@ -54,12 +54,12 @@ const addExtraContext = (
     hooks: new HooksContext(),
     viewMode: 'story' as const,
     loaded: {},
-    canvas: null!,
     mount: vi.fn(),
     abortSignal: new AbortController().signal,
     canvasElement: {},
     step: vi.fn(),
-    context: undefined! as StoryContext,
+    context: null! as StoryContext,
+    canvas: null!,
   };
   extraContext.context = extraContext;
   return extraContext;
