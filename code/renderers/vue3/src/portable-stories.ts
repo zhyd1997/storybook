@@ -52,11 +52,9 @@ export function setProjectAnnotations(
 // This will not be necessary once we have auto preset loading
 export const vueProjectAnnotations: ProjectAnnotations<VueRenderer> = {
   ...defaultProjectAnnotations,
-  renderToCanvas: ({
-    storyContext: { context, unboundStoryFn, testingLibraryRender: render, canvasElement },
-  }) => {
+  renderToCanvas: ({ storyFn, storyContext: { testingLibraryRender: render, canvasElement } }) => {
     if (render == null) throw new TestingLibraryMustBeConfigured();
-    const { unmount } = render(unboundStoryFn(context), { baseElement: canvasElement });
+    const { unmount } = render(storyFn(), { baseElement: canvasElement });
     return unmount;
   },
 };

@@ -93,20 +93,6 @@ describe('projectAnnotations', () => {
     expect(buttonElement).not.toBeNull();
   });
 
-  // it('explicit action are spies when the test loader is loaded', async () => {
-  //   const Story = composeStory(stories.WithActionArg, stories.default);
-  //   await Story.load();
-  //   expect(vi.mocked(Story.args.someActionArg!).mock).toBeDefined();
-  //
-  //   const { container } = render(<Story />);
-  //   expect(Story.args.someActionArg).toHaveBeenCalledOnce();
-  //   expect(Story.args.someActionArg).toHaveBeenCalledWith('in render');
-  //
-  //   await Story.play!({ canvasElement: container });
-  //   expect(Story.args.someActionArg).toHaveBeenCalledTimes(2);
-  //   expect(Story.args.someActionArg).toHaveBeenCalledWith('on click');
-  // });
-
   it('has action arg from argTypes when addon-actions annotations are added', () => {
     //@ts-expect-error our tsconfig.jsn#moduleResulution is set to 'node', which doesn't support this import
     const Story = composeStory(stories.WithActionArgType, stories.default, addonActionsPreview);

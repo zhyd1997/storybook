@@ -124,6 +124,7 @@ export type BoundStory<TRenderer extends Renderer = Renderer> = PreparedStory<TR
   storyFn: PartialStoryFn<TRenderer>;
 };
 
+// TODO Consolidate this with context for 9.0
 export declare type RenderContext<TRenderer extends Renderer = Renderer> = StoryIdentifier & {
   showMain: () => void;
   showError: (error: { title: string; description: string }) => void;

@@ -118,8 +118,21 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
   context.context = context;
   context.mount = story.mount(context);
   context.renderToCanvas = async () => {
+    // Consolidate this renderContext with Context in SB 9.0
     const unmount = await story.renderToCanvas?.(
-      { storyContext: context } as RenderContext<TRenderer>,
+      {
+        componentId: story.componentId,
+        title: story.title,
+        id: story.id,
+        name: story.name,
+        tags: story.tags,
+        showError: (error) => {},
+        showException: (error) => {},
+        forceRemount: true,
+        storyContext: context,
+        storyFn: () => story.unboundStoryFn(context),
+        unboundStoryFn: story.unboundStoryFn,
+      } as RenderContext<TRenderer>,
       context.canvasElement
     );
     if (unmount) {
