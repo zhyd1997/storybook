@@ -23,7 +23,7 @@ export async function generateTypesFiles(
           const getDtsProcess = () =>
             Bun.spawn(['bun', './scripts/dts.ts', index.toString()], {
               cwd,
-              stdio: ['inherit', 'inherit', 'inherit'],
+              stdio: ['ignore', 'pipe', 'inherit'],
             });
           let timer: ReturnType<typeof setTimeout> | undefined;
           let dtsProcess = getDtsProcess();

@@ -63,6 +63,7 @@ const types = measure(async () => {
   await generateTypesMapperFiles(entries);
   await modifyThemeTypes();
   await generateTypesFiles(entries, isOptimized, cwd);
+  await modifyThemeTypes();
 });
 
 const [filesTime, packageJsonTime, distTime, typesTime] = await Promise.all([
@@ -71,8 +72,6 @@ const [filesTime, packageJsonTime, distTime, typesTime] = await Promise.all([
   dist,
   types,
 ]);
-
-await modifyThemeTypes();
 
 console.log('Files generated in', chalk.yellow(prettyTime(filesTime)));
 console.log('Package.json generated in', chalk.yellow(prettyTime(packageJsonTime)));
