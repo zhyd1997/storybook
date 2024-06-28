@@ -7,10 +7,13 @@ import type {
   Args,
   ComponentAnnotations,
   LegacyStoryAnnotationsOrFn,
+  NamedOrDefaultProjectAnnotations,
+  ComposeStoryFn,
+  Store_CSFExports,
   StoryContext,
   Parameters,
   StrictArgTypes,
-  PlayFunctionContext,
+  ProjectAnnotations,
 } from '@storybook/core/types';
 
 import { HooksContext } from '../../../addons';
@@ -20,13 +23,7 @@ import { normalizeStory } from './normalizeStory';
 import { normalizeComponentAnnotations } from './normalizeComponentAnnotations';
 import { getValuesFromArgTypes } from './getValuesFromArgTypes';
 import { normalizeProjectAnnotations } from './normalizeProjectAnnotations';
-import type { NamedOrDefaultProjectAnnotations, ProjectAnnotations } from '@storybook/core/types';
-import type {
-  ComposeStoryFn,
-  ComposedStoryFn,
-  ComposedStoryPlayFn,
-  Store_CSFExports,
-} from '@storybook/core/types';
+import type { ComposedStoryFn } from '@storybook/core/types';
 
 let globalProjectAnnotations: ProjectAnnotations<any> = {};
 
@@ -105,18 +102,20 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
     args: { ...story.initialArgs },
     viewMode: 'story',
     loaded: {},
-    abortSignal: null as unknown as AbortSignal,
-    canvasElement: null,
+    abortSignal: new AbortController().signal,
+    step: (label, play) => story.runStep(label, play, context),
+    canvasElement: globalThis?.document?.body,
+    context: null!,
     ...story,
   };
 
+  context.context = context;
+
   const playFunction = story.playFunction
-    ? async (extraContext: Partial<PlayFunctionContext<TRenderer, TArgs>>) =>
-        story.playFunction!({
-          ...context,
-          ...extraContext,
-          canvasElement: extraContext?.canvasElement ?? globalThis.document?.body,
-        })
+    ? async (extraContext?: Partial<StoryContext<TRenderer, Partial<TArgs>>>) => {
+        Object.assign(context, extraContext);
+        return story.playFunction!(context);
+      }
     : undefined;
 
   let previousCleanupsDone = false;
@@ -160,8 +159,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
 
         previousCleanupsDone = true;
 
-        const loadedContext = await story.applyLoaders(context);
-        context.loaded = loadedContext.loaded;
+        context.loaded = await story.applyLoaders(context);
 
         cleanups.push(
           ...(await story.applyBeforeEach(context))
@@ -172,7 +170,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
       args: story.initialArgs as Partial<TArgs>,
       parameters: story.parameters as Parameters,
       argTypes: story.argTypes as StrictArgTypes<TArgs>,
-      play: playFunction as ComposedStoryPlayFn<TRenderer, TArgs> | undefined,
+      play: playFunction,
       tags: story.tags,
     }
   );

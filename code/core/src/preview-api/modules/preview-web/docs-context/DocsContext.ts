@@ -3,9 +3,17 @@ import type { Channel } from '@storybook/core/channels';
 import { dedent } from 'ts-dedent';
 import type { StoryStore } from '../../store';
 import type { DocsContextProps } from './DocsContextProps';
-import type { Renderer, StoryContextForLoaders, StoryId, StoryName } from '@storybook/core/types';
-import type { CSFFile, ModuleExport, ModuleExports, PreparedStory } from '@storybook/core/types';
-import type { ResolvedModuleExportFromType, ResolvedModuleExportType } from '@storybook/core/types';
+import type {
+  CSFFile,
+  ModuleExport,
+  ModuleExports,
+  PreparedStory,
+  Renderer,
+  ResolvedModuleExportFromType,
+  ResolvedModuleExportType,
+  StoryId,
+  StoryName,
+} from '@storybook/core/types';
 
 export class DocsContext<TRenderer extends Renderer> implements DocsContextProps<TRenderer> {
   private componentStoriesValue: PreparedStory<TRenderer>[];
@@ -223,8 +231,9 @@ export class DocsContext<TRenderer extends Renderer> implements DocsContextProps
   getStoryContext = (story: PreparedStory<TRenderer>) => {
     return {
       ...this.store.getStoryContext(story),
+      loaded: {},
       viewMode: 'docs',
-    } as StoryContextForLoaders<TRenderer>;
+    };
   };
 
   loadStory = (id: StoryId) => {

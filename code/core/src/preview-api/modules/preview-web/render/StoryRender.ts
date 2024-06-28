@@ -8,20 +8,18 @@ import {
 import type { StoryStore } from '../../store';
 import type { Render, RenderType } from './Render';
 import { PREPARE_ABORTED } from './Render';
-import type {
-  Renderer,
-  StoryContext,
-  StoryContextForLoaders,
-  StoryId,
-  ViewMode,
-} from '@storybook/core/types';
+
 import type {
   PreparedStory,
   RenderContext,
+  RenderContextCallbacks,
+  Renderer,
   RenderToCanvas,
+  StoryContext,
+  StoryId,
+  StoryRenderOptions,
   TeardownRenderToCanvas,
 } from '@storybook/core/types';
-import type { RenderContextCallbacks, StoryRenderOptions } from '@storybook/core/types';
 
 const { AbortController } = globalThis;
 
@@ -72,7 +70,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
     private renderToScreen: RenderToCanvas<TRenderer>,
     private callbacks: RenderContextCallbacks<TRenderer>,
     public id: StoryId,
-    public viewMode: ViewMode,
+    public viewMode: StoryContext['viewMode'],
     public renderOptions: StoryRenderOptions = { autoplay: true, forceInitialArgs: false },
     story?: PreparedStory<TRenderer>
   ) {
@@ -166,6 +164,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
       applyBeforeEach,
       unboundStoryFn,
       playFunction,
+      runStep,
     } = story;
 
     if (forceRemount && !initial) {
@@ -181,33 +180,17 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
     const abortSignal = (this.abortController as AbortController).signal;
 
     try {
-      let loadedContext: Awaited<ReturnType<typeof applyLoaders>>;
-      await this.runPhase(abortSignal, 'loading', async () => {
-        loadedContext = await applyLoaders({
-          ...this.storyContext(),
-          viewMode: this.viewMode,
-          // TODO add this to CSF
-          canvasElement,
-        } as unknown as StoryContextForLoaders<TRenderer>);
-      });
-      if (abortSignal.aborted) return;
-
-      const renderStoryContext: StoryContext<TRenderer> = {
-        ...loadedContext!,
-        // By this stage, it is possible that new args/globals have been received for this story
-        // and we need to ensure we render it with the new values
+      const context: StoryContext<TRenderer> = {
         ...this.storyContext(),
+        viewMode: this.viewMode,
         abortSignal,
-        // We should consider parameterizing the story types with TRenderer['canvasElement'] in the future
-        canvasElement: canvasElement as any,
+        canvasElement,
+        loaded: {},
+        step: (label, play) => runStep(label, play, context),
+        context: null!,
       };
 
-      await this.runPhase(abortSignal, 'beforeEach', async () => {
-        const cleanupCallbacks = await applyBeforeEach(renderStoryContext);
-        this.store.addCleanupCallbacks(story, cleanupCallbacks);
-      });
-
-      if (abortSignal.aborted) return;
+      context.context = context;
 
       const renderContext: RenderContext<TRenderer> = {
         componentId,
@@ -227,10 +210,22 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
           return this.callbacks.showException(error);
         },
         forceRemount: forceRemount || this.notYetRendered,
-        storyContext: renderStoryContext,
-        storyFn: () => unboundStoryFn(renderStoryContext),
+        storyContext: context,
+        storyFn: () => unboundStoryFn(context),
         unboundStoryFn,
       };
+      await this.runPhase(abortSignal, 'loading', async () => {
+        context.loaded = await applyLoaders(context);
+      });
+
+      if (abortSignal.aborted) return;
+
+      await this.runPhase(abortSignal, 'beforeEach', async () => {
+        const cleanupCallbacks = await applyBeforeEach(context);
+        this.store.addCleanupCallbacks(story, cleanupCallbacks);
+      });
+
+      if (abortSignal.aborted) return;
 
       await this.runPhase(abortSignal, 'rendering', async () => {
         const teardown = await this.renderToScreen(renderContext, canvasElement);
@@ -254,7 +249,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         this.disableKeyListeners = true;
         try {
           await this.runPhase(abortSignal, 'playing', async () => {
-            await playFunction(renderContext.storyContext);
+            await playFunction(context);
           });
           if (!ignoreUnhandledErrors && unhandledErrors.size > 0) {
             await this.runPhase(abortSignal, 'errored');

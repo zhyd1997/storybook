@@ -111,6 +111,7 @@ export function initializeSaveStory(channel: Channel, options: Options, coreConf
           csfId,
           newStoryId,
           newStoryName,
+          sourceFileContent: code,
           sourceFileName,
           sourceStoryName,
         },

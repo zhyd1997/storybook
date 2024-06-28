@@ -1,13 +1,7 @@
 import type { ComponentProps, FC } from 'react';
 import React, { useContext } from 'react';
-import type {
-  StoryId,
-  PreparedStory,
-  ModuleExport,
-  Args,
-  StoryContextForLoaders,
-} from 'storybook/internal/types';
-import { SourceType } from 'storybook/internal/docs-tools';
+import type { StoryId, PreparedStory, ModuleExport, Args } from '@storybook/core/types';
+import { SourceType } from '@storybook/core/docs-tools';
 
 import type { SourceCodeProps } from '../components/Source';
 import { Source as PureSource, SourceError } from '../components/Source';
@@ -24,7 +18,10 @@ type SourceParameters = SourceCodeProps & {
   /**
    * Transform the detected source for display
    */
-  transform?: (code: string, storyContext: StoryContextForLoaders) => string;
+  transform?: (
+    code: string,
+    storyContext: ReturnType<DocsContextProps['getStoryContext']>
+  ) => string;
   /**
    * Internal: set by our CSF loader (`enrichCsf` in `@storybook/csf-tools`).
    */
@@ -75,7 +72,7 @@ const getSnippet = ({
   transformFromProps,
 }: {
   snippet: string;
-  storyContext: StoryContextForLoaders;
+  storyContext: ReturnType<DocsContextProps['getStoryContext']>;
   typeFromProps: SourceType;
   transformFromProps?: SourceProps['transform'];
 }): string => {

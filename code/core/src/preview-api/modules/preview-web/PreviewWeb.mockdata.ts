@@ -11,9 +11,15 @@ import {
   STORY_THREW_EXCEPTION,
 } from '@storybook/core/core-events';
 
+import type {
+  ModuleImportFn,
+  ProjectAnnotations,
+  Renderer,
+  StoryIndex,
+  TeardownRenderToCanvas,
+} from '@storybook/core/types';
 import type { RenderPhase } from './render/StoryRender';
-import type { ModuleImportFn, TeardownRenderToCanvas } from '@storybook/core/types';
-import type { StoryIndex } from '@storybook/core/types';
+import { composeConfigs } from '../store';
 
 export const componentOneExports = {
   default: {
@@ -66,7 +72,7 @@ export const docsRenderer = {
   unmount: vi.fn(),
 };
 export const teardownrenderToCanvas: Mock<[TeardownRenderToCanvas]> = vi.fn();
-export const projectAnnotations = {
+const rawProjectAnnotations = {
   initialGlobals: { a: 'b' },
   globalTypes: {},
   decorators: [vi.fn((s) => s())],
@@ -74,6 +80,10 @@ export const projectAnnotations = {
   renderToCanvas: vi.fn().mockReturnValue(teardownrenderToCanvas),
   parameters: { docs: { renderer: () => docsRenderer } },
 };
+export const projectAnnotations = composeConfigs([
+  rawProjectAnnotations,
+]) as ProjectAnnotations<Renderer> & typeof rawProjectAnnotations;
+
 export const getProjectAnnotations = vi.fn(() => projectAnnotations as any);
 
 export const storyIndex: StoryIndex = {
