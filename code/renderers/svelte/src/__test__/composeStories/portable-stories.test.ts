@@ -103,10 +103,6 @@ describe('projectAnnotations', () => {
 });
 
 describe('CSF3', () => {
-  afterEach(() => {
-    cleanup();
-  });
-
   it('renders with inferred globalRender', () => {
     const Primary = composeStory(stories.CSF3Button, stories.default);
     render(Primary.Component, Primary.props);
@@ -174,11 +170,7 @@ const testCases = Object.values(composeStories(stories)).map(
   (Story) => [Story.storyName, Story] as [string, typeof Story]
 );
 it.each(testCases)('Renders %s story', async (_storyName, Story) => {
-  if (_storyName === 'CSF2StoryWithLocale') {
-    return;
-  }
-
+  if (_storyName === 'CSF2StoryWithLocale') return;
   await Story.play();
-
   expect(document.body).toMatchSnapshot();
 });

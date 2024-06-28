@@ -144,12 +144,8 @@ describe('ComposeStories types', () => {
 // Batch snapshot testing
 const testCases = Object.values(composeStories(stories)).map((Story) => [Story.storyName, Story]);
 it.each(testCases)('Renders %s story', async (_storyName, Story) => {
-  if (typeof Story === 'string' || _storyName === 'CSF2StoryWithLocale') {
-    return;
-  }
-
+  if (typeof Story === 'string' || _storyName === 'CSF2StoryWithLocale') return;
   await Story.play();
   await new Promise((resolve) => setTimeout(resolve, 0));
-
   expect(document.body).toMatchSnapshot();
 });
