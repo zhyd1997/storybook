@@ -1,4 +1,4 @@
-import type { StoryContext as StoryContextBase, WebRenderer } from '@storybook/types';
+import type { Canvas, StoryContext as StoryContextBase, WebRenderer } from '@storybook/types';
 import type { ComponentConstructorOptions, ComponentEvents, SvelteComponent } from 'svelte';
 
 export type StoryContext = StoryContextBase<SvelteRenderer>;
@@ -37,6 +37,11 @@ export interface SvelteRenderer<C extends SvelteComponent = SvelteComponent> ext
   storyResult: this['T'] extends Record<string, any>
     ? SvelteStoryResult<this['T'], ComponentEvents<C>>
     : SvelteStoryResult;
+
+  mount: (
+    Component?: ComponentType,
+    options?: Record<string, any> & { props: Record<string, any> }
+  ) => Promise<Canvas>;
 }
 
 export interface SvelteStoryResult<
