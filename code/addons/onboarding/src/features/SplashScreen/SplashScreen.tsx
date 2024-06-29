@@ -13,7 +13,7 @@ const fadeIn = keyframes({
 
 const slideIn = keyframes({
   from: {
-    transform: 'translate(0, -20px)',
+    transform: 'translate(0, 20px)',
     opacity: 0,
   },
   to: {
