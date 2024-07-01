@@ -17,7 +17,7 @@ import * as stories from './Button.stories';
 setProjectAnnotations([{ testingLibraryRender: render }]);
 
 // example with composeStories, returns an object with all stories composed with args/decorators
-const { CSF3Primary, LoaderStory } = composeStories(stories);
+const { CSF3Primary, LoaderStory, MountInPlayFunction } = composeStories(stories);
 
 afterEach(() => {
   cleanup();
@@ -50,6 +50,13 @@ describe('renders', () => {
     const { getByText } = render(<CSF3Primary />);
     const buttonElement = getByText(/foo/i);
     expect(buttonElement).not.toBeNull();
+  });
+
+  it('should render component mounted in play function', async () => {
+    await MountInPlayFunction.play();
+
+    expect(screen.getByTestId('spy-data').textContent).toEqual('mockFn return value');
+    expect(screen.getByTestId('loaded-data').textContent).toEqual('loaded data');
   });
 
   it('should call and compose loaders data', async () => {

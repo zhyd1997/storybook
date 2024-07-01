@@ -127,6 +127,28 @@ export const LoaderStory: CSF3Story<{ mockFn: (val: string) => string }> = {
   },
 };
 
+export const MountInPlayFunction: CSF3Story<{ mockFn: (val: string) => string }> = {
+  args: {
+    mockFn: fn(),
+  },
+  play: async ({ args, mount }) => {
+    // equivalent of loaders
+    const loadedData = await Promise.resolve('loaded data');
+    args.mockFn.mockReturnValueOnce('mockFn return value');
+    // equivalent of render
+    const data = args.mockFn('render');
+    await mount(
+      <div>
+        <div data-testid="loaded-data">{loadedData}</div>
+        <div data-testid="spy-data">{String(data)}</div>
+      </div>
+    );
+
+    // equivalent of play
+    expect(mockFn).toHaveBeenCalledWith('render');
+  },
+};
+
 export const WithActionArg: CSF3Story<{ someActionArg: HandlerFunction }> = {
   args: {
     someActionArg: action('some-action-arg'),
