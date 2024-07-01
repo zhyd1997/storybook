@@ -19,6 +19,18 @@ const MountStory = {
   },
 };
 
+const LongDefinition = {
+  play: async ({
+    mount,
+    veryLongDefinitionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn,
+    over,
+    multiple,
+    lines,
+  }: any) => {
+    await mount();
+  },
+};
+
 test('Detect destructure', () => {
   expect(getUsedProps(StoryWithContext.play)).toMatchInlineSnapshot(`[]`);
   expect(getUsedProps(StoryWitCanvasElement.play)).toMatchInlineSnapshot(`
@@ -30,6 +42,16 @@ test('Detect destructure', () => {
   expect(getUsedProps(MountStory.play)).toMatchInlineSnapshot(`
     [
       "mount",
+    ]
+  `);
+
+  expect(getUsedProps(LongDefinition.play)).toMatchInlineSnapshot(`
+    [
+      "mount",
+      "veryLongDefinitionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "over",
+      "multiple",
+      "lines",
     ]
   `);
 });
