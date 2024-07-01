@@ -1,4 +1,4 @@
-import { expect, mocked, getByRole, spyOn, userEvent } from '@storybook/test';
+import { expect, mocked, getByRole, spyOn, userEvent, fn } from '@storybook/test';
 
 const meta = {
   component: globalThis.Components.Button,
@@ -44,25 +44,22 @@ export const MountInPlay = {
   },
 };
 
-// TODO enable this test once this issue is fixed:
-// https://github.com/storybookjs/storybook/issues/28406
-// export const mount_should_be_destructed = {
-//   beforeEach() {
-//     console.log('3 - [from story beforeEach]');
-//   },
-//   decorators: (storyFn) => {
-//     console.log('5 - [from decorator]');
-//     return storyFn();
-//   },
-//   args: {
-//     label: 'Button',
-//     onClick: () => {
-//       console.log('7 - [from onClick]');
-//     },
-//   },
-//   async play(context) {
-//     await expect(async () => {
-//       await context.mount();
-//     }).rejects.toThrow();
-//   },
-// };
+export const MountShouldBeDestructured = {
+  parameters: { chromatic: { disable: true } },
+  args: {
+    label: 'Button',
+    onClick: fn(),
+  },
+  async play(context) {
+    let error;
+
+    // TODO use expect.toThrow once this issue is fixed
+    // https://github.com/storybookjs/storybook/issues/28406
+    try {
+      await context.mount();
+    } catch (e) {
+      error = e;
+    }
+    await expect(error?.name).toContain('MountMustBeDestructured');
+  },
+};

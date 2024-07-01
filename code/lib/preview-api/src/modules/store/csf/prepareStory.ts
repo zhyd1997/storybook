@@ -108,13 +108,15 @@ export function prepareStory<TRenderer extends Renderer>(
   const mountUsed = mountDestructured(playFunction);
 
   if (!render && !mountUsed) {
+    // TODO Make this a named error
     throw new Error(`No render function available for storyId '${id}'`);
   }
 
   let { tags } = partialAnnotations;
 
   if (mountUsed) {
-    // Play is not supported in docs yet, and when mount is used, the mounting is happening in play itself.
+    // Don't show stories where mount is used in docs.
+    // As the play function is not running in docs, and when mount is used, the mounting is happening in play itself.
     tags = tags.filter((tag) => tag !== 'autodocs');
   }
 

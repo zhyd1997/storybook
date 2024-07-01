@@ -19,7 +19,7 @@ import {
 import type { StoryStore } from '../../store';
 import type { Render, RenderType } from './Render';
 import { PREPARE_ABORTED } from './Render';
-import { getUsedProps } from './mount-utils';
+import { mountDestructured } from './mount-utils';
 import { MountMustBeDestructured } from '@storybook/core-events/preview-errors';
 
 const { AbortController } = globalThis;
@@ -239,9 +239,9 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
 
       if (abortSignal.aborted) return;
 
-      const mountDestructured = playFunction && getUsedProps(playFunction).includes('mount');
+      const isMountDestructured = playFunction && mountDestructured(playFunction);
 
-      if (!mounted && !mountDestructured) {
+      if (!mounted && !isMountDestructured) {
         await context.mount();
       }
 
@@ -261,7 +261,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         window.addEventListener('unhandledrejection', onError);
         this.disableKeyListeners = true;
         try {
-          if (!mountDestructured) {
+          if (!isMountDestructured) {
             context.mount = async () => {
               throw new MountMustBeDestructured({ playFunction: playFunction.toString() });
             };
