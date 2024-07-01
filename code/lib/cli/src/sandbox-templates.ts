@@ -109,7 +109,7 @@ const baseTemplates = {
         return {
           stories: stories?.map((s) => {
             if (typeof s === 'string') {
-              return s.replace('js|jsx|mjs|ts|tsx', 'js|jsx|mjs');
+              return s.replace(/\|(tsx?|ts)\b|\b(tsx?|ts)\|/g, '');
             } else {
               return s;
             }
