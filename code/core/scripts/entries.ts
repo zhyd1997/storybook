@@ -33,8 +33,6 @@ export const getEntries = (cwd: string) => {
       'react-dom',
       '@storybook/csf',
       '@storybook/global',
-      'memoizerific',
-      'util-deprecate',
     ]),
     define('src/theming/index.ts', ['browser', 'node'], true, ['react']),
     define('src/theming/create.ts', ['browser', 'node'], true, ['react']),
