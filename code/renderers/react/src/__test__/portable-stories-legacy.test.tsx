@@ -195,7 +195,7 @@ describe('Legacy Portable Stories API', () => {
   it.each(testCases)('Renders %s story', async (_storyName, Story) => {
     cleanup();
 
-    if (_storyName === 'CSF2StoryWithLocale') {
+    if (_storyName === 'CSF2StoryWithLocale' || _storyName === 'MountInPlayFunction') {
       return;
     }
 

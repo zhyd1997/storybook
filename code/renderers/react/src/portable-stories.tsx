@@ -48,7 +48,7 @@ export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<ReactRende
     storyContext: { context, unboundStoryFn: Story, testingLibraryRender: render, canvasElement },
   }) => {
     if (render == null) throw new TestingLibraryMustBeConfiguredError();
-    const { unmount } = render(<Story {...context} />, { baseElement: canvasElement });
+    const { unmount } = render(<Story {...context} />, { baseElement: context.canvasElement });
     return unmount;
   },
 };

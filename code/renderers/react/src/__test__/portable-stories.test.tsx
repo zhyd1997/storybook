@@ -135,9 +135,10 @@ describe('CSF3', () => {
     const CSF3InputFieldFilled = composeStory(stories.CSF3InputFieldFilled, stories.default);
 
     const div = document.createElement('div');
+    console.log(div.tagName);
     document.body.appendChild(div);
 
-    await CSF3InputFieldFilled.play!({ canvasElement: div });
+    await CSF3InputFieldFilled.play({ canvasElement: div });
 
     const input = screen.getByTestId('input') as HTMLInputElement;
     expect(input.value).toEqual('Hello world!');

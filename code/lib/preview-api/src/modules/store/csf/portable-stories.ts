@@ -110,7 +110,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
   const globalsFromGlobalTypes = getValuesFromArgTypes(normalizedProjectAnnotations.globalTypes);
 
   const initializeContext = () => {
-    const context: StoryContext<TRenderer> = {
+    const context: StoryContext<TRenderer> = prepareContext({
       hooks: new HooksContext(),
       globals: {
         ...globalsFromGlobalTypes,
@@ -126,10 +126,9 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
       ...story,
       context: null!,
       mount: null!,
-    };
+    });
 
     context.context = context;
-    context.mount = story.mount(context);
 
     if (story.renderToCanvas) {
       context.renderToCanvas = async () => {
@@ -156,7 +155,9 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
       };
     }
 
-    return prepareContext(context);
+    context.mount = story.mount(context);
+
+    return context;
   };
 
   let loadedContext: StoryContext<TRenderer> | undefined;
