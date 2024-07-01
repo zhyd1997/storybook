@@ -20,7 +20,7 @@ import type { StoryStore } from '../../store';
 import type { Render, RenderType } from './Render';
 import { PREPARE_ABORTED } from './Render';
 import { mountDestructured } from './mount-utils';
-import { MountMustBeDestructured } from '@storybook/core-events/preview-errors';
+import { MountMustBeDestructuredError } from '@storybook/core-events/preview-errors';
 
 const { AbortController } = globalThis;
 
@@ -263,7 +263,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         try {
           if (!isMountDestructured) {
             context.mount = async () => {
-              throw new MountMustBeDestructured({ playFunction: playFunction.toString() });
+              throw new MountMustBeDestructuredError({ playFunction: playFunction.toString() });
             };
           }
           await this.runPhase(abortSignal, 'playing', async () => {

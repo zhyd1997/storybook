@@ -11,7 +11,7 @@ import type {
   Store_CSFExports,
   StoriesWithPartialProps,
 } from '@storybook/types';
-import { TestingLibraryMustBeConfigured } from '@storybook/core-events/preview-errors';
+import { TestingLibraryMustBeConfiguredError } from '@storybook/core-events/preview-errors';
 import { h } from 'vue';
 
 import * as defaultProjectAnnotations from './entry-preview';
@@ -53,7 +53,7 @@ export function setProjectAnnotations(
 export const vueProjectAnnotations: ProjectAnnotations<VueRenderer> = {
   ...defaultProjectAnnotations,
   renderToCanvas: ({ storyFn, storyContext: { testingLibraryRender: render, canvasElement } }) => {
-    if (render == null) throw new TestingLibraryMustBeConfigured();
+    if (render == null) throw new TestingLibraryMustBeConfiguredError();
     const { unmount } = render(storyFn(), { baseElement: canvasElement });
     return unmount;
   },

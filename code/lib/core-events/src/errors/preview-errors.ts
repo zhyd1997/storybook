@@ -238,7 +238,7 @@ export class StoryStoreAccessedBeforeInitializationError extends StorybookError 
   }
 }
 
-export class MountMustBeDestructured extends StorybookError {
+export class MountMustBeDestructuredError extends StorybookError {
   readonly category = Category.PREVIEW_API;
 
   readonly code = 12;
@@ -257,7 +257,7 @@ export class MountMustBeDestructured extends StorybookError {
   }
 }
 
-export class TestingLibraryMustBeConfigured extends StorybookError {
+export class TestingLibraryMustBeConfiguredError extends StorybookError {
   readonly category = Category.PREVIEW_API;
 
   readonly code = 13;

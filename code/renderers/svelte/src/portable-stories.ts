@@ -19,7 +19,7 @@ import PreviewRender from '@storybook/svelte/internal/PreviewRender.svelte';
 // @ts-expect-error Don't know why TS doesn't pick up the types export here
 import { createSvelte5Props } from '@storybook/svelte/internal/createSvelte5Props';
 import { IS_SVELTE_V4 } from './utils';
-import { TestingLibraryMustBeConfigured } from '@storybook/core-events/preview-errors';
+import { TestingLibraryMustBeConfiguredError } from '@storybook/core-events/preview-errors';
 
 type ComposedStory<TArgs extends Args = any> = ComposedStoryFn<SvelteRenderer, TArgs> & {
   Component: typeof PreviewRender;
@@ -61,7 +61,7 @@ export function setProjectAnnotations(
 export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<SvelteRenderer> = {
   ...svelteProjectAnnotations,
   renderToCanvas: ({ storyFn, storyContext: { testingLibraryRender: render, canvasElement } }) => {
-    if (render == null) throw new TestingLibraryMustBeConfigured();
+    if (render == null) throw new TestingLibraryMustBeConfiguredError();
     const { Component, props } = storyFn();
     const { unmount } = render(Component, { props, target: canvasElement });
     return unmount;

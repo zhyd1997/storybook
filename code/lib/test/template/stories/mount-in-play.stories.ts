@@ -60,6 +60,6 @@ export const MountShouldBeDestructured = {
     } catch (e) {
       error = e;
     }
-    await expect(error?.name).toContain('MountMustBeDestructured');
+    await expect(error?.name).toContain('MountMustBeDestructuredError');
   },
 };

@@ -27,7 +27,7 @@ import { normalizeComponentAnnotations } from './normalizeComponentAnnotations';
 import { getValuesFromArgTypes } from './getValuesFromArgTypes';
 import { normalizeProjectAnnotations } from './normalizeProjectAnnotations';
 import { mountDestructured } from '../../../modules/preview-web/render/mount-utils';
-import { MountMustBeDestructured } from '@storybook/core-events/preview-errors';
+import { MountMustBeDestructuredError } from '@storybook/core-events/preview-errors';
 
 let globalProjectAnnotations: ProjectAnnotations<any> = {};
 
@@ -319,7 +319,7 @@ async function playStory<TRenderer extends Renderer>(
   if (playFunction) {
     if (!isMountDestructured) {
       context.mount = async () => {
-        throw new MountMustBeDestructured({ playFunction: playFunction.toString() });
+        throw new MountMustBeDestructuredError({ playFunction: playFunction.toString() });
       };
     }
     await playFunction(context);
