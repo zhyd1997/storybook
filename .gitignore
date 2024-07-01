@@ -54,8 +54,4 @@ code/bench-results/
 
 /packs
 code/.nx/cache
-<<<<<<< Updated upstream
 !**/fixtures/**/yarn.lock
-=======
-*storybook.log
->>>>>>> Stashed changes
