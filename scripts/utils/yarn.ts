@@ -78,6 +78,8 @@ export const addWorkaroundResolutions = async ({ cwd, dryRun }: YarnOptions) => 
     '@testing-library/dom': '^9.3.4',
     '@testing-library/jest-dom': '^6.4.2',
     '@testing-library/user-event': '^14.5.2',
+    // TODO: Remove as soon as @storybook/csf@0.1.10 is released
+    '@storybook/csf': '0.1.10--canary.d841bb4.0',
   };
   await writeJSON(packageJsonPath, packageJson, { spaces: 2 });
 };
