@@ -97,61 +97,68 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
 
   const globalsFromGlobalTypes = getValuesFromArgTypes(normalizedProjectAnnotations.globalTypes);
 
-  const context: StoryContext<TRenderer> = {
-    hooks: new HooksContext(),
-    globals: {
-      ...globalsFromGlobalTypes,
-      ...normalizedProjectAnnotations.initialGlobals,
-    },
-    args: { ...story.initialArgs },
-    viewMode: 'story',
-    loaded: {},
-    abortSignal: new AbortController().signal,
-    step: (label, play) => story.runStep(label, play, context),
-    canvasElement: globalThis?.document?.body,
-    canvas: {},
-    ...story,
-    context: null!,
-    mount: null!,
-  };
+  const initializeContext = () => {
+    const context: StoryContext<TRenderer> = {
+      hooks: new HooksContext(),
+      globals: {
+        ...globalsFromGlobalTypes,
+        ...normalizedProjectAnnotations.initialGlobals,
+      },
+      args: { ...story.initialArgs },
+      viewMode: 'story',
+      loaded: {},
+      abortSignal: new AbortController().signal,
+      step: (label, play) => story.runStep(label, play, context),
+      canvasElement: globalThis?.document?.body,
+      canvas: {},
+      ...story,
+      context: null!,
+      mount: null!,
+    };
 
-  context.context = context;
-  context.mount = story.mount(context);
-  context.renderToCanvas = async () => {
-    // Consolidate this renderContext with Context in SB 9.0
-    const unmount = await story.renderToCanvas?.(
-      {
-        componentId: story.componentId,
-        title: story.title,
-        id: story.id,
-        name: story.name,
-        tags: story.tags,
-        showError: (error) => {},
-        showException: (error) => {},
-        forceRemount: true,
-        storyContext: context,
-        storyFn: () => story.unboundStoryFn(context),
-        unboundStoryFn: story.unboundStoryFn,
-      } as RenderContext<TRenderer>,
-      context.canvasElement
-    );
-    if (unmount) {
-      cleanups.push(unmount);
-    }
+    context.context = context;
+    context.mount = story.mount(context);
+    context.renderToCanvas = async () => {
+      // Consolidate this renderContext with Context in SB 9.0
+      const unmount = await story.renderToCanvas?.(
+        {
+          componentId: story.componentId,
+          title: story.title,
+          id: story.id,
+          name: story.name,
+          tags: story.tags,
+          showError: (error) => {},
+          showException: (error) => {},
+          forceRemount: true,
+          storyContext: context,
+          storyFn: () => story.unboundStoryFn(context),
+          unboundStoryFn: story.unboundStoryFn,
+        } as RenderContext<TRenderer>,
+        context.canvasElement
+      );
+      if (unmount) {
+        cleanups.push(unmount);
+      }
+    };
+    return prepareContext(context);
   };
 
   const playFunction = (extraContext?: Partial<StoryContext<TRenderer, Partial<TArgs>>>) => {
+    const context = initializeContext();
     Object.assign(context, extraContext);
     return playStory(story, context);
   };
 
+  let loadedContext: StoryContext<TRenderer> | undefined;
+
   const composedStory: ComposedStoryFn<TRenderer, Partial<TArgs>> = Object.assign(
     function storyFn(extraArgs?: Partial<TArgs>) {
+      const context = loadedContext ?? initializeContext();
       context.args = {
         ...context.initialArgs,
         ...extraArgs,
       };
-      return story.unboundStoryFn(prepareContext(context));
+      return story.unboundStoryFn(context);
     },
     {
       id: story.id,
@@ -161,9 +168,13 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
         for (const callback of [...cleanups].reverse()) await callback();
         cleanups.length = 0;
 
+        const context = initializeContext();
+
         context.loaded = await story.applyLoaders(context);
 
         cleanups.push(...(await story.applyBeforeEach(context)).filter(Boolean));
+
+        loadedContext = context;
       },
       args: story.initialArgs as Partial<TArgs>,
       parameters: story.parameters as Parameters,
