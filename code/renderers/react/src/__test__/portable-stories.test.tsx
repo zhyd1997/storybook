@@ -1,8 +1,10 @@
+// @vitest-environment happy-dom
+
 /* eslint-disable import/namespace */
 import React from 'react';
 import { vi, it, expect, afterEach, describe } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
-import { addons } from '@storybook/preview-api';
+import { addons } from 'storybook/internal/preview-api';
 
 import * as addonActionsPreview from '@storybook/addon-actions/preview';
 import type { Meta } from '@storybook/react';
@@ -81,7 +83,7 @@ describe('projectAnnotations', () => {
 
   it('renders with custom projectAnnotations via composeStory params', () => {
     const WithPortugueseText = composeStory(stories.CSF2StoryWithLocale, stories.default, {
-      globals: { locale: 'pt' },
+      initialGlobals: { locale: 'pt' },
     });
     const { getByText } = render(<WithPortugueseText />);
     const buttonElement = getByText('Olá!');
