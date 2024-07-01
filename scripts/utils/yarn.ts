@@ -74,6 +74,8 @@ export const addWorkaroundResolutions = async ({ cwd, dryRun }: YarnOptions) => 
     '@vitejs/plugin-react': '4.2.0',
     '@sveltejs/vite-plugin-svelte': '3.0.1',
     '@vitejs/plugin-vue': '4.5.0',
+    // TODO: Remove as soon as @storybook/csf@0.1.10 is released
+    '@storybook/csf': '0.1.10--canary.d841bb4.0',
   };
   await writeJSON(packageJsonPath, packageJson, { spaces: 2 });
 };
