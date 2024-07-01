@@ -85,6 +85,18 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
     normalizedComponentAnnotations
   );
 
+  // TODO: Remove this in 9.0
+  // We can only use the renderToCanvas definition of the default config when testingLibraryRender is set
+  // This makes sure, that when the user doesn't do this, and doesn't provide its own renderToCanvas definition,
+  // we fall back to the < 8.1 behavior of the play function.
+  if (
+    defaultConfig &&
+    !globalProjectAnnotations?.testingLibraryRender &&
+    !projectAnnotations?.testingLibraryRender
+  ) {
+    defaultConfig.renderToCanvas = undefined;
+  }
+
   const normalizedProjectAnnotations = normalizeProjectAnnotations<TRenderer>(
     composeConfigs([defaultConfig ?? {}, globalProjectAnnotations, projectAnnotations ?? {}])
   );
@@ -118,42 +130,66 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
 
     context.context = context;
     context.mount = story.mount(context);
-    context.renderToCanvas = async () => {
-      // Consolidate this renderContext with Context in SB 9.0
-      const unmount = await story.renderToCanvas?.(
-        {
-          componentId: story.componentId,
-          title: story.title,
-          id: story.id,
-          name: story.name,
-          tags: story.tags,
-          showError: (error) => {},
-          showException: (error) => {},
-          forceRemount: true,
-          storyContext: context,
-          storyFn: () => story.unboundStoryFn(context),
-          unboundStoryFn: story.unboundStoryFn,
-        } as RenderContext<TRenderer>,
-        context.canvasElement
-      );
-      if (unmount) {
-        cleanups.push(unmount);
-      }
-    };
-    return prepareContext(context);
-  };
 
-  const playFunction = (extraContext?: Partial<StoryContext<TRenderer, Partial<TArgs>>>) => {
-    const context = initializeContext();
-    Object.assign(context, extraContext);
-    return playStory(story, context);
+    if (story.renderToCanvas) {
+      context.renderToCanvas = async () => {
+        // Consolidate this renderContext with Context in SB 9.0
+        const unmount = await story.renderToCanvas?.(
+          {
+            componentId: story.componentId,
+            title: story.title,
+            id: story.id,
+            name: story.name,
+            tags: story.tags,
+            showError: (error) => {},
+            showException: (error) => {},
+            forceRemount: true,
+            storyContext: context,
+            storyFn: () => story.unboundStoryFn(context),
+            unboundStoryFn: story.unboundStoryFn,
+          } as RenderContext<TRenderer>,
+          context.canvasElement
+        );
+        if (unmount) {
+          cleanups.push(unmount);
+        }
+      };
+    }
+
+    return prepareContext(context);
   };
 
   let loadedContext: StoryContext<TRenderer> | undefined;
 
+  // TODO: Remove in 9.0
+  const backwardsCompatiblePlay = async (
+    extraContext?: Partial<StoryContext<TRenderer, Partial<TArgs>>>
+  ) => {
+    const context = initializeContext();
+    if (loadedContext) {
+      context.loaded = loadedContext.loaded;
+    }
+    Object.assign(context, extraContext);
+    return story.playFunction!(context);
+  };
+  const newPlay = (extraContext?: Partial<StoryContext<TRenderer, Partial<TArgs>>>) => {
+    const context = initializeContext();
+    Object.assign(context, extraContext);
+    return playStory(story, context);
+  };
+  const playFunction =
+    !story.renderToCanvas && story.playFunction
+      ? backwardsCompatiblePlay
+      : !story.renderToCanvas && !story.playFunction
+        ? undefined
+        : newPlay;
+
   const composedStory: ComposedStoryFn<TRenderer, Partial<TArgs>> = Object.assign(
     function storyFn(extraArgs?: Partial<TArgs>) {
-      const context = loadedContext ?? initializeContext();
+      const context = initializeContext();
+      if (loadedContext) {
+        context.loaded = loadedContext.loaded;
+      }
       context.args = {
         ...context.initialArgs,
         ...extraArgs,
@@ -179,7 +215,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
       args: story.initialArgs as Partial<TArgs>,
       parameters: story.parameters as Parameters,
       argTypes: story.argTypes as StrictArgTypes<TArgs>,
-      play: playFunction,
+      play: playFunction!,
       tags: story.tags,
     }
   );
