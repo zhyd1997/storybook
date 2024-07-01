@@ -3,6 +3,8 @@ import type { Renderer, StoryAnnotationsOrFn } from '@storybook/core/types';
 
 import { normalizeStory } from './normalizeStory';
 
+vi.mock('@storybook/core/client-logger');
+
 describe('normalizeStory', () => {
   describe('id generation', () => {
     it('respects component id', () => {
