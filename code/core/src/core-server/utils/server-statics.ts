@@ -2,7 +2,7 @@ import { logger } from '@storybook/core/node-logger';
 import type { Options } from '@storybook/core/types';
 import { getDirectoryFromWorkingDir } from '@storybook/core/common';
 import chalk from 'chalk';
-import type { Server } from 'connect';
+import type { Server } from './server-connect';
 import { pathExists } from 'fs-extra';
 import { basename, isAbsolute, normalize, posix, relative, resolve, sep, win32 } from 'node:path';
 import sirv from 'sirv';

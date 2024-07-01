@@ -6,7 +6,7 @@ import type { StoryIndexGenerator } from './StoryIndexGenerator';
 import { summarizeIndex } from './summarizeIndex';
 import { versionStatus } from './versionStatus';
 import { sendTelemetryError } from '../withTelemetry';
-import type { Server } from 'connect';
+import type { Server } from './server-connect';
 
 export async function doTelemetry(
   app: Server,

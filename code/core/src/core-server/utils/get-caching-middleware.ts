@@ -1,4 +1,4 @@
-import type { NextHandleFunction } from 'connect';
+import type { NextHandleFunction } from './server-connect';
 
 export function getCachingMiddleware(): NextHandleFunction {
   return (req, res, next) => {

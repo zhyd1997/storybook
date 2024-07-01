@@ -13,7 +13,7 @@ import {
   WebpackCompilationError,
   WebpackInvocationError,
   WebpackMissingStatsError,
-} from 'storybook/internal/core-events';
+} from 'storybook/internal/server-errors';
 import sirv from 'sirv';
 
 import prettyTime from 'pretty-hrtime';

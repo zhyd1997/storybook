@@ -1,4 +1,4 @@
-import type { Server } from 'connect';
+import type { Server } from './server-connect';
 import { basename } from 'node:path';
 import { writeJSON } from 'fs-extra';
 

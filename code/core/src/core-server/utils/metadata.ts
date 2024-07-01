@@ -1,5 +1,5 @@
 import { writeJSON } from 'fs-extra';
-import type { Server } from 'connect';
+import type { Server } from './server-connect';
 import { getStorybookMetadata } from '@storybook/core/telemetry';
 
 export async function extractStorybookMetadata(outputFile: string, configDir: string) {

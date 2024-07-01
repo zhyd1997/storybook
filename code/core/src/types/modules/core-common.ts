@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { FileSystemCache } from 'file-system-cache';
 import type { Options as TelejsonOptions } from 'telejson';
-import type { Server } from 'connect';
+import type { Server } from '../../core-server/utils/server-connect';
 import type { Server as HttpServer } from 'http';
 import type { PackageJson as PackageJsonFromTypeFest } from 'type-fest';
 

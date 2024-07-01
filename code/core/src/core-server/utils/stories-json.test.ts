@@ -1,6 +1,6 @@
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 
-import type { Server } from 'connect';
+import type { Server } from './server-connect';
 import Watchpack from 'watchpack';
 import path from 'node:path';
 import debounce from 'lodash/debounce.js';

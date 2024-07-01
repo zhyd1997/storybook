@@ -3,7 +3,7 @@ import { normalizeStories } from '@storybook/core/common';
 import { useStoriesJson } from './stories-json';
 import type { ServerChannel } from './get-server-channel';
 import { StoryIndexGenerator } from './StoryIndexGenerator';
-import type { Server } from 'connect';
+import type { Server } from './server-connect';
 
 export async function getStoryIndexGenerator(
   app: Server,

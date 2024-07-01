@@ -1,4 +1,4 @@
-import type { NextHandleFunction } from 'connect';
+import type { NextHandleFunction } from './server-connect';
 
 export function getAccessControlMiddleware(crossOriginIsolated: boolean): NextHandleFunction {
   return (req, res, next) => {
