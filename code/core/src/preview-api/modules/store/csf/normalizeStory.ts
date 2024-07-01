@@ -8,8 +8,7 @@ import type {
 } from '@storybook/core/types';
 import { storyNameFromExport, toId } from '@storybook/csf';
 import { dedent } from 'ts-dedent';
-import { logger } from '@storybook/core/client-logger';
-import deprecate from 'util-deprecate';
+import { logger, deprecate } from '@storybook/core/client-logger';
 import { normalizeInputTypes } from './normalizeInputTypes';
 import { normalizeArrays } from './normalizeArrays';
 import type {
@@ -24,8 +23,6 @@ CSF .story annotations deprecated; annotate story functions directly:
 See https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations for details and codemod.
 `;
 
-const deprecatedStoryAnnotationWarning = deprecate(() => {}, deprecatedStoryAnnotation);
-
 export function normalizeStory<TRenderer extends Renderer>(
   key: StoryId,
   storyAnnotations: LegacyStoryAnnotationsOrFn<TRenderer>,
@@ -38,7 +35,7 @@ export function normalizeStory<TRenderer extends Renderer>(
   const { story } = storyObject;
   if (story) {
     logger.debug('deprecated story', story);
-    deprecatedStoryAnnotationWarning();
+    deprecate(deprecatedStoryAnnotation);
   }
 
   const exportName = storyNameFromExport(key);
