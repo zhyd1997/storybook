@@ -28,6 +28,7 @@ export interface VueRenderer extends WebRenderer {
 
   mount: (
     Component?: StoryFnVueReturnType,
+    // TODO add proper typesafety
     options?: { props: Record<string, any>; slots: Record<string, any> }
   ) => Promise<Canvas>;
 }

@@ -5,8 +5,8 @@ export const mount: BaseAnnotations<SvelteRenderer>['mount'] = (context: StoryCo
   return async (Component, options) => {
     if (Component) {
       context.originalStoryFn = () => ({
-        Component: Component,
-        props: options?.props ?? options,
+        Component,
+        props: options && 'props' in options ? options?.props : options,
       });
     }
     await context.renderToCanvas();
