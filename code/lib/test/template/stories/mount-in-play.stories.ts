@@ -43,3 +43,26 @@ export const MountInPlay = {
     ]);
   },
 };
+
+// TODO enable this test once this issue is fixed:
+// https://github.com/storybookjs/storybook/issues/28406
+// export const mount_should_be_destructed = {
+//   beforeEach() {
+//     console.log('3 - [from story beforeEach]');
+//   },
+//   decorators: (storyFn) => {
+//     console.log('5 - [from decorator]');
+//     return storyFn();
+//   },
+//   args: {
+//     label: 'Button',
+//     onClick: () => {
+//       console.log('7 - [from onClick]');
+//     },
+//   },
+//   async play(context) {
+//     await expect(async () => {
+//       await context.mount();
+//     }).rejects.toThrow();
+//   },
+// };
