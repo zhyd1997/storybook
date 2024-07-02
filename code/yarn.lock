@@ -5739,7 +5739,7 @@ __metadata:
     "@radix-ui/react-dialog": "npm:^1.0.5"
     "@radix-ui/react-scroll-area": "npm:^1.0.5"
     "@radix-ui/react-slot": "npm:^1.0.2"
-    "@storybook/csf": "npm:0.1.10--canary.d841bb4.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/docs-mdx": "npm:3.1.0-next.0"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.5"
@@ -5881,15 +5881,6 @@ __metadata:
   dependencies:
     type-fest: "npm:^2.19.0"
   checksum: 10c0/c5bd17b92aeb8be5918cfad238bfef4c08553f8c60b6284e1cabb8646aeb6f8d6ab4343a77954a5c9924ca717cf306c239c0b061915918137136aa0c9b4be5ab
-  languageName: node
-  linkType: hard
-
-"@storybook/csf@npm:0.1.10--canary.d841bb4.0":
-  version: 0.1.10--canary.d841bb4.0
-  resolution: "@storybook/csf@npm:0.1.10--canary.d841bb4.0"
-  dependencies:
-    type-fest: "npm:^2.19.0"
-  checksum: 10c0/35a9b5cf88a3378fb362d0a1988265ec218aa98d54b82b56e78a4c1142b3beed6e2ee42bd8731bac009fd8133e085c92af43541028468865b51c0b1220ded338
   languageName: node
   linkType: hard
 
