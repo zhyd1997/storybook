@@ -43,6 +43,7 @@ const getDescriptionFromResolvedOf = (resolvedOf: ReturnType<typeof useOf>): str
         projectAnnotations: { parameters },
       } = resolvedOf;
       return (
+        // @ts-expect-error (non-strict)
         parameters.docs?.extractComponentDescription?.(component, {
           component,
           parameters,

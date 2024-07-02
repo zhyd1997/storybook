@@ -90,6 +90,7 @@ export const getStoryProps = <TFramework extends Renderer>(
   const storyParameters = (docs.story || {}) as StoryParameters & { iframeHeight?: string };
 
   if (docs.disable) {
+    // @ts-expect-error (non-strict)
     return null;
   }
 
@@ -102,6 +103,7 @@ export const getStoryProps = <TFramework extends Renderer>(
     const height = props.height ?? storyParameters.height;
     const autoplay = props.autoplay ?? storyParameters.autoplay ?? false;
     return {
+      // @ts-expect-error (non-strict)
       story,
       inline: true,
       height,
@@ -110,12 +112,14 @@ export const getStoryProps = <TFramework extends Renderer>(
       forceInitialArgs: !!props.__forceInitialArgs,
       // eslint-disable-next-line no-underscore-dangle
       primary: !!props.__primary,
+      // @ts-expect-error (non-strict)
       renderStoryToElement: context.renderStoryToElement,
     };
   }
 
   const height = props.height ?? storyParameters.height ?? storyParameters.iframeHeight ?? '100px';
   return {
+    // @ts-expect-error (non-strict)
     story,
     inline: false,
     height,

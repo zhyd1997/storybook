@@ -249,14 +249,20 @@ export const ObjectControl: FC<ObjectProps> = ({ name, value, onChange, argType 
   const data = useMemo(() => value && cloneDeep(value), [value]);
   const hasData = data !== null && data !== undefined;
   const [showRaw, setShowRaw] = useState(!hasData);
+
+  // @ts-expect-error (non-strict)
   const [parseError, setParseError] = useState<Error>(null);
   const readonly = !!argType?.table?.readonly;
   const updateRaw: (raw: string) => void = useCallback(
     (raw) => {
       try {
-        if (raw) onChange(JSON.parse(raw));
+        if (raw) {
+          onChange(JSON.parse(raw));
+        }
+        // @ts-expect-error (non-strict)
         setParseError(undefined);
       } catch (e) {
+        // @ts-expect-error (non-strict)
         setParseError(e);
       }
     },
@@ -271,7 +277,10 @@ export const ObjectControl: FC<ObjectProps> = ({ name, value, onChange, argType 
 
   const htmlElRef = useRef(null);
   useEffect(() => {
-    if (forceVisible && htmlElRef.current) htmlElRef.current.select();
+    if (forceVisible && htmlElRef.current) {
+      // @ts-expect-error (non-strict)
+      htmlElRef.current.select();
+    }
   }, [forceVisible]);
 
   if (!hasData) {
@@ -291,6 +300,7 @@ export const ObjectControl: FC<ObjectProps> = ({ name, value, onChange, argType 
       onBlur={(event: FocusEvent<HTMLTextAreaElement>) => updateRaw(event.target.value)}
       placeholder="Edit JSON string..."
       autoFocus={forceVisible}
+      // @ts-expect-error (non-strict)
       valid={parseError ? 'error' : null}
       readOnly={readonly}
     />

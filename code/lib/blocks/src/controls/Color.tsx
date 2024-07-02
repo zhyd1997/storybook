@@ -231,6 +231,7 @@ const useColorInput = (
   }, [initialValue]);
 
   const realValue = useMemo(
+    // @ts-expect-error (non-strict)
     () => getRealValue(value, color, colorSpace).toLowerCase(),
     [value, color, colorSpace]
   );
@@ -244,6 +245,7 @@ const useColorInput = (
 
       if (v === '') {
         setColor(undefined);
+        // @ts-expect-error (non-strict)
         onChange(undefined);
       }
 
@@ -297,6 +299,7 @@ const usePresets = (
   const addPreset: (color: ParsedColor) => void = useCallback(
     (color) => {
       if (!color?.valid) return;
+      // @ts-expect-error (non-strict)
       if (presets.some((preset) => id(preset[colorSpace]) === id(color[colorSpace]))) return;
       setSelectedColors((arr) => arr.concat(color));
     },
@@ -322,6 +325,7 @@ export const ColorControl: FC<ColorControlProps> = ({
     initialValue,
     debouncedOnChange
   );
+  // @ts-expect-error (non-strict)
   const { presets, addPreset } = usePresets(presetColors, color, colorSpace);
   const Picker = ColorPicker[colorSpace];
 
@@ -331,8 +335,10 @@ export const ColorControl: FC<ColorControlProps> = ({
     <Wrapper aria-readonly={readonly}>
       <PickerTooltip
         startOpen={startOpen}
+        // @ts-expect-error (non-strict)
         trigger={readonly ? [null] : undefined}
         closeOnOutsideClick
+        // @ts-expect-error (non-strict)
         onVisibleChange={() => addPreset(color)}
         tooltip={
           <TooltipContent>
@@ -344,13 +350,19 @@ export const ColorControl: FC<ColorControlProps> = ({
               <Swatches>
                 {presets.map((preset, index: number) => (
                   <WithTooltip
+                    // @ts-expect-error (non-strict)
+
                     key={`${preset.value}-${index}`}
                     hasChrome={false}
+                    // @ts-expect-error (non-strict)
                     tooltip={<Note note={preset.keyword || preset.value} />}
                   >
                     <Swatch
+                      // @ts-expect-error (non-strict)
                       value={preset[colorSpace]}
+                      // @ts-expect-error (non-strict)
                       active={color && id(preset[colorSpace]) === id(color[colorSpace])}
+                      // @ts-expect-error (non-strict)
                       onClick={() => updateValue(preset.value)}
                     />
                   </WithTooltip>

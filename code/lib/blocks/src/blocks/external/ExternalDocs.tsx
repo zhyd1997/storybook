@@ -31,5 +31,6 @@ export function ExternalDocs<TRenderer extends Renderer = Renderer>({
 
   const TDocs = Docs as typeof Docs<TRenderer>;
 
+  // @ts-expect-error (non-strict)
   return <TDocs docsParameter={docsParameter} context={preview.docsContext()} />;
 }

@@ -44,6 +44,7 @@ export const SourceContainer: FC<PropsWithChildren<{ channel: DocsContextProps['
   useEffect(() => {
     const handleSnippetRendered = (
       idOrEvent: StoryId | SnippetRenderedEvent,
+      // @ts-expect-error (non-strict)
       inputSource: string = null,
       inputFormat: SyntaxHighlighterFormatTypes = false
     ) => {

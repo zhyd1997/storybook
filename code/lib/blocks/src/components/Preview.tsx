@@ -92,6 +92,7 @@ const StyledSource = styled(Source)(({ theme }) => ({
 }));
 
 const PreviewContainer = styled.div<PreviewProps>(
+  // @ts-expect-error (non-strict)
   ({ theme, withSource, isExpanded }) => ({
     position: 'relative',
     overflow: 'hidden',
@@ -121,6 +122,7 @@ const getSource = (
   switch (true) {
     case !!(withSource && withSource.error): {
       return {
+        // @ts-expect-error (non-strict)
         source: null,
         actionItem: {
           title: 'No code available',
@@ -194,6 +196,7 @@ export const Preview: FC<PreviewProps> = ({
   ...props
 }) => {
   const [expanded, setExpanded] = useState(isExpanded);
+  // @ts-expect-error (non-strict)
   const { source, actionItem } = getSource(withSource, expanded, setExpanded);
   const [scale, setScale] = useState(1);
   const previewClasses = [className].concat(['sbdocs', 'sbdocs-preview', 'sb-unstyled']);
@@ -222,6 +225,7 @@ export const Preview: FC<PreviewProps> = ({
 
     e.preventDefault();
     if (additionalActionItems.filter((item) => item.title === 'Copied').length === 0) {
+      // @ts-expect-error (non-strict)
       copyToClipboard(source.props.code).then(() => {
         setAdditionalActionItems([
           ...additionalActionItems,

@@ -36,12 +36,14 @@ export const Title: FunctionComponent<TitleProps> = (props) => {
   try {
     preparedMeta = useOf(of || 'meta', ['meta']).preparedMeta;
   } catch (error) {
+    // @ts-expect-error (non-strict)
     if (children && !error.message.includes('did you forget to use <Meta of={} />?')) {
       // ignore error about unattached CSF since we can still render children
       throw error;
     }
   }
 
+  // @ts-expect-error (non-strict)
   const content = children || extractTitle(preparedMeta?.title);
 
   return content ? <PureTitle className="sbdocs-title sb-unstyled">{content}</PureTitle> : null;

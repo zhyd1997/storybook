@@ -36,6 +36,7 @@ export const NumberControl: FC<NumberProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState(typeof value === 'number' ? value : '');
   const [forceVisible, setForceVisible] = useState(false);
+  // @ts-expect-error (non-strict)
   const [parseError, setParseError] = useState<Error>(null);
   const readonly = !!argType?.table?.readonly;
 
@@ -48,6 +49,7 @@ export const NumberControl: FC<NumberProps> = ({
         setParseError(new Error(`'${event.target.value}' is not a number`));
       } else {
         onChange(result);
+        // @ts-expect-error (non-strict)
         setParseError(null);
       }
     },
@@ -62,12 +64,16 @@ export const NumberControl: FC<NumberProps> = ({
 
   const htmlElRef = useRef(null);
   useEffect(() => {
-    if (forceVisible && htmlElRef.current) htmlElRef.current.select();
+    if (forceVisible && htmlElRef.current) {
+      // @ts-expect-error (non-strict)
+      htmlElRef.current.select();
+    }
   }, [forceVisible]);
 
   useEffect(() => {
     const newInputValue = typeof value === 'number' ? value : '';
     if (inputValue !== newInputValue) {
+      // @ts-expect-error (non-strict)
       setInputValue(value);
     }
   }, [value]);
@@ -96,6 +102,7 @@ export const NumberControl: FC<NumberProps> = ({
         size="flex"
         placeholder="Edit number..."
         value={inputValue}
+        // @ts-expect-error (non-strict)
         valid={parseError ? 'error' : null}
         autoFocus={forceVisible}
         readOnly={readonly}

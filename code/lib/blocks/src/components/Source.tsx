@@ -114,6 +114,7 @@ const Source: FunctionComponent<SourceProps> = ({
       bordered
       copyable
       format={format}
+      // @ts-expect-error (non-strict)
       language={language}
       className="docblock-source sb-unstyled"
       {...rest}
