@@ -4,7 +4,7 @@
 import React from 'react';
 import { vi, it, expect, afterEach, describe } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
-import { addons } from '@storybook/preview-api';
+import { addons } from 'storybook/internal/preview-api';
 
 import * as addonActionsPreview from '@storybook/addon-actions/preview';
 import type { Meta } from '@storybook/react';
@@ -17,7 +17,7 @@ import * as stories from './Button.stories';
 setProjectAnnotations([{ testingLibraryRender: render }]);
 
 // example with composeStories, returns an object with all stories composed with args/decorators
-const { CSF3Primary, LoaderStory } = composeStories(stories);
+const { CSF3Primary, LoaderStory, MountInPlayFunction } = composeStories(stories);
 
 afterEach(() => {
   cleanup();
@@ -50,6 +50,13 @@ describe('renders', () => {
     const { getByText } = render(<CSF3Primary />);
     const buttonElement = getByText(/foo/i);
     expect(buttonElement).not.toBeNull();
+  });
+
+  it('should render component mounted in play function', async () => {
+    await MountInPlayFunction.play();
+
+    expect(screen.getByTestId('spy-data').textContent).toEqual('mockFn return value');
+    expect(screen.getByTestId('loaded-data').textContent).toEqual('loaded data');
   });
 
   it('should call and compose loaders data', async () => {
@@ -128,9 +135,10 @@ describe('CSF3', () => {
     const CSF3InputFieldFilled = composeStory(stories.CSF3InputFieldFilled, stories.default);
 
     const div = document.createElement('div');
+    console.log(div.tagName);
     document.body.appendChild(div);
 
-    await CSF3InputFieldFilled.play!({ canvasElement: div });
+    await CSF3InputFieldFilled.play({ canvasElement: div });
 
     const input = screen.getByTestId('input') as HTMLInputElement;
     expect(input.value).toEqual('Hello world!');

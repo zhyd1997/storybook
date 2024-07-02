@@ -2,7 +2,7 @@ import {
   composeStory as originalComposeStory,
   composeStories as originalComposeStories,
   setProjectAnnotations as originalSetProjectAnnotations,
-} from '@storybook/preview-api';
+} from 'storybook/internal/preview-api';
 import type {
   Args,
   NamedOrDefaultProjectAnnotations,
@@ -10,12 +10,12 @@ import type {
   Store_CSFExports,
   StoriesWithPartialProps,
   ProjectAnnotations,
-} from '@storybook/types';
+} from 'storybook/internal/types';
 
 import * as reactProjectAnnotations from './entry-preview';
 import type { Meta } from './public-types';
 import type { ReactRenderer } from './types';
-import { TestingLibraryMustBeConfigured } from '@storybook/core-events/preview-errors';
+import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
 import React from 'react';
 
 /** Function that sets the globalConfig of your storybook. The global config is the preview module of your .storybook folder.
@@ -47,8 +47,8 @@ export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<ReactRende
   renderToCanvas: ({
     storyContext: { context, unboundStoryFn: Story, testingLibraryRender: render, canvasElement },
   }) => {
-    if (render == null) throw new TestingLibraryMustBeConfigured();
-    const { unmount } = render(<Story {...context} />, { baseElement: canvasElement });
+    if (render == null) throw new TestingLibraryMustBeConfiguredError();
+    const { unmount } = render(<Story {...context} />, { baseElement: context.canvasElement });
     return unmount;
   },
 };
