@@ -184,6 +184,8 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
 
     let mounted = false;
 
+    const isMountDestructured = playFunction && mountDestructured(playFunction);
+
     try {
       const context: StoryContext<TRenderer> = {
         ...this.storyContext(),
@@ -201,6 +203,11 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
             this.teardownRender = teardown || (() => {});
             mounted = true;
           });
+
+          if (isMountDestructured) {
+            // put the phase back to playing if mount is used inside a play function
+            await this.runPhase(abortSignal, 'playing', async () => {});
+          }
         },
       };
       context.context = context;
@@ -240,8 +247,6 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
       });
 
       if (abortSignal.aborted) return;
-
-      const isMountDestructured = playFunction && mountDestructured(playFunction);
 
       if (!mounted && !isMountDestructured) {
         await context.mount();
