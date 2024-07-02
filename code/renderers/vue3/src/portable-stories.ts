@@ -11,7 +11,7 @@ import type {
   Store_CSFExports,
   StoriesWithPartialProps,
 } from 'storybook/internal/types';
-import { TestingLibraryMustBeConfiguredError } from '@storybook/core-events/preview-errors';
+import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
 import { h } from 'vue';
 
 import * as defaultProjectAnnotations from './entry-preview';
