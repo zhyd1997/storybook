@@ -46,7 +46,7 @@
   "dependencies": {
     "@storybook/client-logger": "workspace:*",
     "@storybook/core-events": "workspace:*",
-    "@storybook/csf": "0.1.10--canary.99.ba76785.0",
+    "@storybook/csf": "0.1.10",
     "@storybook/instrumenter": "workspace:*",
     "@storybook/preview-api": "workspace:*",
     "@testing-library/dom": "10.1.0",

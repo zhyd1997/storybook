@@ -5288,7 +5288,7 @@ __metadata:
   dependencies:
     "@storybook/client-logger": "workspace:*"
     "@storybook/core-events": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/manager-api": "workspace:*"
     "@storybook/preview-api": "workspace:*"
@@ -5555,7 +5555,7 @@ __metadata:
     "@storybook/client-logger": "workspace:*"
     "@storybook/components": "workspace:*"
     "@storybook/core-events": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/docs-tools": "workspace:*"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.5"
@@ -5785,7 +5785,7 @@ __metadata:
     "@babel/core": "npm:^7.24.4"
     "@babel/preset-env": "npm:^7.24.4"
     "@babel/types": "npm:^7.24.0"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/csf-tools": "workspace:*"
     "@storybook/node-logger": "workspace:*"
     "@storybook/types": "workspace:*"
@@ -5822,7 +5822,7 @@ __metadata:
     "@radix-ui/react-scroll-area": "npm:^1.0.5"
     "@radix-ui/react-slot": "npm:^1.0.2"
     "@storybook/client-logger": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.5"
     "@storybook/test": "workspace:*"
@@ -5905,7 +5905,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/core-events@workspace:lib/core-events"
   dependencies:
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     chalk: "npm:^4.1.0"
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
@@ -5925,7 +5925,7 @@ __metadata:
     "@storybook/channels": "workspace:*"
     "@storybook/core-common": "workspace:*"
     "@storybook/core-events": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/csf-tools": "workspace:*"
     "@storybook/docs-mdx": "npm:3.1.0-next.0"
     "@storybook/global": "npm:^5.0.0"
@@ -6007,7 +6007,7 @@ __metadata:
     "@babel/parser": "npm:^7.24.4"
     "@babel/traverse": "npm:^7.24.1"
     "@babel/types": "npm:^7.24.0"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/types": "workspace:*"
     "@types/fs-extra": "npm:^11.0.1"
     "@types/js-yaml": "npm:^4.0.5"
@@ -6019,12 +6019,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/csf@npm:0.1.10--canary.99.ba76785.0":
-  version: 0.1.10--canary.99.ba76785.0
-  resolution: "@storybook/csf@npm:0.1.10--canary.99.ba76785.0"
+"@storybook/csf@npm:0.1.10":
+  version: 0.1.10
+  resolution: "@storybook/csf@npm:0.1.10"
   dependencies:
     type-fest: "npm:^2.19.0"
-  checksum: 10c0/8c99e2e1d458d69fbe8156ee6da22f3b9365cb3cb7051f051c1aa3cbd819033112decf16f2a4263163cedf8a6729a382ac82e77e9d704fbae498493788508d2c
+  checksum: 10c0/c5bd17b92aeb8be5918cfad238bfef4c08553f8c60b6284e1cabb8646aeb6f8d6ab4343a77954a5c9924ca717cf306c239c0b061915918137136aa0c9b4be5ab
   languageName: node
   linkType: hard
 
@@ -6206,7 +6206,7 @@ __metadata:
     "@storybook/channels": "workspace:*"
     "@storybook/client-logger": "workspace:*"
     "@storybook/core-events": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.5"
     "@storybook/router": "workspace:*"
@@ -6546,7 +6546,7 @@ __metadata:
     "@storybook/client-logger": "workspace:*"
     "@storybook/core-common": "workspace:*"
     "@storybook/core-events": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/types": "workspace:*"
     "@types/qs": "npm:^6.9.5"
@@ -6734,7 +6734,7 @@ __metadata:
     "@storybook/core-events": "workspace:*"
     "@storybook/core-server": "workspace:*"
     "@storybook/core-webpack": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/csf-plugin": "workspace:*"
     "@storybook/csf-tools": "workspace:*"
     "@storybook/docs-tools": "workspace:*"
@@ -6886,7 +6886,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/server@workspace:renderers/server"
   dependencies:
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/csf-tools": "workspace:*"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/preview-api": "workspace:*"
@@ -6903,7 +6903,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/source-loader@workspace:lib/source-loader"
   dependencies:
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/types": "workspace:*"
     estraverse: "npm:^5.2.0"
     lodash: "npm:^4.17.21"
@@ -7022,7 +7022,7 @@ __metadata:
   dependencies:
     "@storybook/client-logger": "workspace:*"
     "@storybook/core-events": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@storybook/instrumenter": "workspace:*"
     "@storybook/preview-api": "workspace:*"
     "@testing-library/dom": "npm:10.1.0"
@@ -7074,7 +7074,7 @@ __metadata:
   resolution: "@storybook/types@workspace:lib/types"
   dependencies:
     "@storybook/channels": "workspace:*"
-    "@storybook/csf": "npm:0.1.10--canary.99.ba76785.0"
+    "@storybook/csf": "npm:0.1.10"
     "@types/express": "npm:^4.17.21"
     "@types/fs-extra": "npm:^11.0.1"
     "@types/node": "npm:^18.0.0"
