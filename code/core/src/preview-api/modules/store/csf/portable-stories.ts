@@ -3,20 +3,21 @@
 import { type CleanupCallback, isExportStory } from '@storybook/csf';
 import { dedent } from 'ts-dedent';
 import type {
-  Renderer,
   Args,
+  Canvas,
   ComponentAnnotations,
+  ComposedStoryFn,
+  ComposeStoryFn,
   LegacyStoryAnnotationsOrFn,
   NamedOrDefaultProjectAnnotations,
-  ComposeStoryFn,
-  Store_CSFExports,
-  StoryContext,
   Parameters,
-  StrictArgTypes,
+  PreparedStory,
   ProjectAnnotations,
   RenderContext,
-  PreparedStory,
-  Canvas,
+  Renderer,
+  Store_CSFExports,
+  StoryContext,
+  StrictArgTypes,
 } from '@storybook/core/types';
 
 import { HooksContext } from '../../../addons';
@@ -26,7 +27,6 @@ import { normalizeStory } from './normalizeStory';
 import { normalizeComponentAnnotations } from './normalizeComponentAnnotations';
 import { getValuesFromArgTypes } from './getValuesFromArgTypes';
 import { normalizeProjectAnnotations } from './normalizeProjectAnnotations';
-import type { ComposedStoryFn } from '@storybook/core/types';
 import { mountDestructured } from '../../../modules/preview-web/render/mount-utils';
 import { MountMustBeDestructuredError } from '@storybook/core/preview-errors';
 
@@ -90,16 +90,21 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
   // We can only use the renderToCanvas definition of the default config when testingLibraryRender is set
   // This makes sure, that when the user doesn't do this, and doesn't provide its own renderToCanvas definition,
   // we fall back to the < 8.1 behavior of the play function.
-  if (
+
+  const fallback =
     defaultConfig &&
     !globalProjectAnnotations?.testingLibraryRender &&
-    !projectAnnotations?.testingLibraryRender
-  ) {
-    defaultConfig.renderToCanvas = undefined;
-  }
+    !projectAnnotations?.testingLibraryRender;
 
   const normalizedProjectAnnotations = normalizeProjectAnnotations<TRenderer>(
-    composeConfigs([defaultConfig ?? {}, globalProjectAnnotations, projectAnnotations ?? {}])
+    composeConfigs([
+      {
+        ...defaultConfig,
+        renderToCanvas: fallback ? undefined : defaultConfig?.renderToCanvas,
+      },
+      globalProjectAnnotations,
+      projectAnnotations ?? {},
+    ])
   );
 
   const story = prepareStory<TRenderer>(

@@ -63,7 +63,7 @@ describe('projectAnnotations', () => {
   });
 
   it('renders with custom projectAnnotations via setProjectAnnotations', () => {
-    setProjectAnnotations([{ parameters: { injected: true } }]);
+    setProjectAnnotations([{ parameters: { injected: true }, testingLibraryRender: render }]);
     const Story = composeStory(stories.CSF2StoryWithLocale, stories.default);
     expect(Story.parameters?.injected).toBe(true);
   });
@@ -90,9 +90,7 @@ describe('CSF3', () => {
   });
 
   it('renders with play function', async () => {
-    const CSF3InputFieldFilled = composeStory(stories.CSF3InputFieldFilled, stories.default, {
-      testingLibraryRender: render,
-    });
+    const CSF3InputFieldFilled = composeStory(stories.CSF3InputFieldFilled, stories.default);
 
     await CSF3InputFieldFilled.play();
 
