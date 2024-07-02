@@ -15,7 +15,7 @@ import type {
 import * as reactProjectAnnotations from './entry-preview';
 import type { Meta } from './public-types';
 import type { ReactRenderer } from './types';
-import { TestingLibraryMustBeConfiguredError } from '@storybook/core-events/preview-errors';
+import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
 import React from 'react';
 
 /** Function that sets the globalConfig of your storybook. The global config is the preview module of your .storybook folder.
