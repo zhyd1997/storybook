@@ -1,5 +1,6 @@
 import React from 'react';
 
+// @ts-expect-error (importing a js file)
 import { imported } from '../imported';
 
 const local = 'local-value';
