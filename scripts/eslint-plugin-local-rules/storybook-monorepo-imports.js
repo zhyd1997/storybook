@@ -16,9 +16,15 @@ module.exports = {
       ImportDeclaration: (node) => {
         const fileName = context.getPhysicalFilename();
         const isInCLI = !!fileName.includes(path.join('code', 'lib', 'cli'));
+        const isInCodeod = !!fileName.includes(path.join('code', 'lib', 'codemod'));
         const isInCore = !!fileName.includes(path.join('code', 'core'));
 
-        if (node.source.value.startsWith('@storybook/core/') && !isInCLI && !isInCore) {
+        if (
+          node.source.value.startsWith('@storybook/core/') &&
+          !isInCLI &&
+          !isInCore &&
+          !isInCodeod
+        ) {
           const newPath = node.source.value
             .replace('@storybook/core', 'storybook/internal')
             .replace('/src', '');
