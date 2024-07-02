@@ -1,5 +1,5 @@
-import type { StoriesEntry, StorybookConfigRaw } from '@storybook/types';
-import type { ConfigFile } from '@storybook/csf-tools';
+import type { StoriesEntry, StorybookConfigRaw } from '@storybook/core/types';
+import type { ConfigFile } from '@storybook/core/csf-tools';
 
 export type SkippableTask =
   | 'smoke-test'
