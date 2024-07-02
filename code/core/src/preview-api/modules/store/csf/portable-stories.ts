@@ -16,6 +16,7 @@ import type {
   ProjectAnnotations,
   RenderContext,
   PreparedStory,
+  Canvas,
 } from '@storybook/core/types';
 
 import { HooksContext } from '../../../addons';
@@ -122,7 +123,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
       abortSignal: new AbortController().signal,
       step: (label, play) => story.runStep(label, play, context),
       canvasElement: globalThis?.document?.body,
-      canvas: {},
+      canvas: {} as Canvas,
       ...story,
       context: null!,
       mount: null!,

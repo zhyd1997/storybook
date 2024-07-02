@@ -12,6 +12,7 @@ import { mountDestructured } from './mount-utils';
 import { MountMustBeDestructuredError } from '@storybook/core-events/preview-errors';
 
 import type {
+  Canvas,
   PreparedStory,
   RenderContext,
   RenderContextCallbacks,
@@ -192,7 +193,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         loaded: {},
         step: (label, play) => runStep(label, play, context),
         context: null!,
-        canvas: {},
+        canvas: {} as Canvas,
         mount: null!,
         renderToCanvas: async () => {
           await this.runPhase(abortSignal, 'rendering', async () => {
