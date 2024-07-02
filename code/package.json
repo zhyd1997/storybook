@@ -203,6 +203,7 @@
     "storybook": "workspace:^",
     "svelte": "^5.0.0-next.65",
     "ts-dedent": "^2.0.0",
+    "ts-plugin-sort-import-suggestions": "^1.0.4",
     "typescript": "^5.4.3",
     "util": "^0.12.4",
     "vite": "^4.0.0",

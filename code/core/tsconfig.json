@@ -7,7 +7,12 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "target": "ES2022",
-    "module": "ES2022"
+    "module": "ES2022",
+    "baseUrl": ".",
+    "paths": {
+      // "storybook/internal/*": ["./src/*"],
+      "@storybook/core/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*", "scripts/**/*", "*.d.ts"]
 }
