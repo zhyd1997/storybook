@@ -48,16 +48,6 @@ import { StoryStore } from '../../store';
 import { StoryRender } from './render/StoryRender';
 import type { CsfDocsRender } from './render/CsfDocsRender';
 import type { MdxDocsRender } from './render/MdxDocsRender';
-import type { Args, Globals, Renderer, StoryId } from '@storybook/core/types';
-import type {
-  ModuleImportFn,
-  PreparedStory,
-  ProjectAnnotations,
-  RenderToCanvas,
-} from '@storybook/core/types';
-import type { RenderContextCallbacks, StoryRenderOptions } from '@storybook/core/types';
-import type { StoryIndex } from '@storybook/core/types';
-import type { SetGlobalsPayload } from '@storybook/core/types';
 
 const { fetch } = global;
 
