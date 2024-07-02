@@ -39,7 +39,7 @@ const buildStory = (overrides: Partial<PreparedStory> = {}): PreparedStory =>
     mount: vi.fn((context: StoryContext) => {
       return async () => {
         await context.renderToCanvas();
-        return {};
+        return context.canvas;
       };
     }),
     ...overrides,
@@ -159,7 +159,7 @@ describe('StoryRender', () => {
   it('does not call mount if play function destructures mount', async () => {
     const actualMount = vi.fn(async (context) => {
       await context.renderToCanvas();
-      return {};
+      return context.canvas;
     });
     const story = buildStory({
       mount: (context) => () => actualMount(context) as any,
@@ -187,7 +187,9 @@ describe('StoryRender', () => {
     });
     const story = buildStory({
       mount: (context) => () => actualMount(context) as any,
-      playFunction: (context) => context.mount(),
+      playFunction: async (context) => {
+        await context.mount();
+      },
     });
     const view = { showException: vi.fn() };
     const render = new StoryRender(
