@@ -62,6 +62,7 @@
   },
   "devDependencies": {
     "@storybook/addon-actions": "workspace:*",
+    "@storybook/react": "workspace:*",
     "@storybook/test": "workspace:*",
     "@types/color-convert": "^2.0.0"
   },

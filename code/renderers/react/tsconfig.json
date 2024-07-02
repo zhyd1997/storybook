@@ -4,7 +4,9 @@
     // "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"]
+      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "@storybook/react": ["./"],
+      "@storybook/blocks": ["../../lib/blocks"]
     }
   },
   "include": ["src/**/*", "template/**/*"]
