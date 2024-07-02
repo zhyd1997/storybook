@@ -80,7 +80,6 @@ const InlineStory: FunctionComponent<InlineStoryProps> = (props) => {
         )} { min-height: ${height}; transform: translateZ(0); overflow: auto }`}</style>
       ) : null}
       {showLoader && <StorySkeleton />}
-      {/* @ts-expect-error (Type 'undefined' is not assignable to type 'HTMLDivElement | null') */}
       <div ref={storyRef} id={`${storyBlockIdFromId(props)}-inner`} data-name={story.name} />
     </>
   );

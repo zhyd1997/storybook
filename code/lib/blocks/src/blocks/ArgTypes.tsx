@@ -29,7 +29,6 @@ function extractComponentArgTypes(
   if (!extractArgTypes) {
     throw new Error(ArgsTableError.ARGS_UNSUPPORTED);
   }
-  // @ts-expect-error (non-strict)
   return extractArgTypes(component);
 }
 
@@ -40,7 +39,6 @@ function getArgTypesFromResolved(resolved: ReturnType<typeof useOf>) {
       projectAnnotations: { parameters },
     } = resolved;
     return {
-      // @ts-expect-error (non-strict)
       argTypes: extractComponentArgTypes(component, parameters),
       parameters,
       component,
@@ -69,7 +67,6 @@ export const ArgTypes: FC<ArgTypesProps> = (props) => {
   }
   const resolved = useOf(of || 'meta');
   const { argTypes, parameters, component, subcomponents } = getArgTypesFromResolved(resolved);
-  // @ts-expect-error (non-strict)
   const argTypesParameters = parameters.docs?.argTypes || ({} as ArgTypesParameters);
 
   const include = props.include ?? argTypesParameters.include;
@@ -78,7 +75,6 @@ export const ArgTypes: FC<ArgTypesProps> = (props) => {
 
   const filteredArgTypes = filterArgTypes(argTypes, include, exclude);
 
-  // @ts-expect-error (non-strict)
   const hasSubcomponents = Boolean(subcomponents) && Object.keys(subcomponents).length > 0;
 
   if (!hasSubcomponents) {
@@ -87,11 +83,9 @@ export const ArgTypes: FC<ArgTypesProps> = (props) => {
 
   const mainComponentName = getComponentName(component);
   const subcomponentTabs = Object.fromEntries(
-    // @ts-expect-error (non-strict)
     Object.entries(subcomponents).map(([key, comp]) => [
       key,
       {
-        // @ts-expect-error (non-strict)
         rows: filterArgTypes(extractComponentArgTypes(comp, parameters), include, exclude),
         sort,
       },

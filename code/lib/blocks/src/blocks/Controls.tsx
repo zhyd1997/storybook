@@ -32,7 +32,6 @@ function extractComponentArgTypes(
   if (!extractArgTypes) {
     throw new Error(ArgsTableError.ARGS_UNSUPPORTED);
   }
-  // @ts-expect-error (non-strict)
   return extractArgTypes(component);
 }
 
@@ -56,7 +55,6 @@ export const Controls: FC<ControlsProps> = (props) => {
 
   const filteredArgTypes = filterArgTypes(argTypes, include, exclude);
 
-  // @ts-expect-error (non-strict)
   const hasSubcomponents = Boolean(subcomponents) && Object.keys(subcomponents).length > 0;
 
   if (!hasSubcomponents) {
@@ -77,7 +75,6 @@ export const Controls: FC<ControlsProps> = (props) => {
 
   const mainComponentName = getComponentName(component);
   const subcomponentTabs = Object.fromEntries(
-    // @ts-expect-error (non-strict)
     Object.entries(subcomponents).map(([key, comp]) => [
       key,
       {

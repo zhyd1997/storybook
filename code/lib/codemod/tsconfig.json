@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
+    "strict": false,
     "baseUrl": ".",
     "paths": {
       "storybook/internal/*": ["../../lib/cli/core/*"]

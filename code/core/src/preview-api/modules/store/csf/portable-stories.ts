@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { type CleanupCallback, isExportStory } from '@storybook/csf';
+import { type CleanupCallback, isExportStory, type Canvas } from '@storybook/csf';
 import { dedent } from 'ts-dedent';
 import type {
   Renderer,
@@ -106,7 +106,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
     step: (label, play) => story.runStep(label, play, context),
     canvasElement: globalThis?.document?.body,
     context: null!,
-    canvas: {},
+    canvas: {} as Canvas,
     ...story,
   };
 

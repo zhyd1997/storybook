@@ -219,7 +219,6 @@ export const RangeControl: FC<RangeProps> = ({
   return (
     <RangeWrapper aria-readonly={readonly}>
       <RangeLabel>{min}</RangeLabel>
-      {/* @ts-expect-error (non-strict) */}
       <RangeInput
         id={getControlId(name)}
         type="range"
@@ -228,7 +227,6 @@ export const RangeControl: FC<RangeProps> = ({
         {...{ name, value, min, max, step, onFocus, onBlur }}
       />
       <RangeCurrentAndMaxLabel numberOFDecimalsPlaces={numberOFDecimalsPlaces} max={max}>
-        {/* @ts-expect-error (non-strict) */}
         {hasValue ? value.toFixed(numberOFDecimalsPlaces) : '--'} / {max}
       </RangeCurrentAndMaxLabel>
     </RangeWrapper>

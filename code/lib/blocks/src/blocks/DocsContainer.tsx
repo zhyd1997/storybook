@@ -54,7 +54,6 @@ export const DocsContainer: FC<PropsWithChildren<DocsContainerProps>> = ({
   return (
     <DocsContext.Provider value={context}>
       <SourceContainer channel={context.channel}>
-        {/* @ts-expect-error (non-strict) */}
         <ThemeProvider theme={ensureTheme(theme)}>
           <DocsPageWrapper
             toc={toc ? <TableOfContents className="sbdocs sbdocs-toc--custom" {...toc} /> : null}

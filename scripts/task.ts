@@ -473,8 +473,8 @@ async function run() {
         if (controller) controllers.push(controller);
       } catch (err) {
         invariant(err instanceof Error);
-        logger.error(`Error running task ${getTaskKey(task)}:`);
-        logger.error(JSON.stringify(err, null, 2));
+        // logger.error(`Error running task ${getTaskKey(task)}:`);
+        // logger.error(JSON.stringify(err, null, 2));
 
         if (process.env.CI) {
           logger.error(
@@ -500,7 +500,8 @@ async function run() {
           controller.abort();
         });
 
-        throw err;
+        process.exit(1);
+        // throw err;
       }
       statuses.set(task, task.service ? 'serving' : 'complete');
 

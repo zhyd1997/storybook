@@ -183,12 +183,9 @@ export type SortType = 'alpha' | 'requiredFirst' | 'none';
 type SortFn = (a: ArgType, b: ArgType) => number;
 
 const sortFns: Record<SortType, SortFn | null> = {
-  // @ts-expect-error (non-strict)
   alpha: (a: ArgType, b: ArgType) => a.name.localeCompare(b.name),
   requiredFirst: (a: ArgType, b: ArgType) =>
-    // @ts-expect-error (non-strict)
     Number(!!b.type?.required) - Number(!!a.type?.required) || a.name.localeCompare(b.name),
-  // @ts-expect-error (non-strict)
   none: undefined,
 };
 
@@ -271,14 +268,12 @@ const groupRows = (rows: ArgType, sort: SortType) => {
   };
 
   const sorted = {
-    // @ts-expect-error (non-strict)
     ungrouped: sections.ungrouped.sort(sortFn),
     ungroupedSubsections: sortSubsection(sections.ungroupedSubsections),
     sections: Object.keys(sections.sections).reduce<Record<string, Section>>(
       (acc, cur) => ({
         ...acc,
         [cur]: {
-          // @ts-expect-error (non-strict)
           ungrouped: sections.sections[cur].ungrouped.sort(sortFn),
           subsections: sortSubsection(sections.sections[cur].subsections),
         },
@@ -301,7 +296,6 @@ const safeIncludeConditionalArg = (row: ArgType, args: Args, globals: Globals) =
   try {
     return includeConditionalArg(row, args, globals);
   } catch (err) {
-    // @ts-expect-error (non-strict)
     once.warn(err.message);
     return false;
   }
@@ -338,7 +332,6 @@ export const ArgsTable: FC<ArgsTableProps> = (props) => {
   // This happen when you load the manager and the story is not yet loaded
   if (isLoading) return <Skeleton />;
 
-  // @ts-expect-error (non-strict)
   const { rows, args, globals } = 'rows' in props && props;
   const groups = groupRows(
     pickBy(

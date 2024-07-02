@@ -6557,7 +6557,6 @@ __metadata:
     storybook: "workspace:^"
     svelte: "npm:^5.0.0-next.65"
     ts-dedent: "npm:^2.0.0"
-    ts-plugin-sort-import-suggestions: "npm:^1.0.4"
     typescript: "npm:^5.4.3"
     util: "npm:^0.12.4"
     vite: "npm:^4.0.0"
@@ -26717,13 +26716,6 @@ __metadata:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: 10c0/95187932fb83f3901e22546bd2feeac7d2feb4f412f42ac3a595f049a23e8dcf70516dffb51866391228ea2dbcfaea039e250fb2bb334d48a86ab2b6aea0ae2d
-  languageName: node
-  linkType: hard
-
-"ts-plugin-sort-import-suggestions@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "ts-plugin-sort-import-suggestions@npm:1.0.4"
-  checksum: 10c0/1817bdba9861b934af6aeb9403703047041e1944aadf91fde2dfc4ddcc3913bc48570eead52defb34622de94b68488b47e79492da304a6ca604c9a097b2dbe2d
   languageName: node
   linkType: hard
 

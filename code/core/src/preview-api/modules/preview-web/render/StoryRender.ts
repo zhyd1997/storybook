@@ -20,6 +20,7 @@ import type {
   StoryRenderOptions,
   TeardownRenderToCanvas,
 } from '@storybook/core/types';
+import type { Canvas } from '@storybook/csf';
 
 const { AbortController } = globalThis;
 
@@ -188,7 +189,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         loaded: {},
         step: (label, play) => runStep(label, play, context),
         context: null!,
-        canvas: {},
+        canvas: {} as Canvas,
       };
       context.context = context;
 

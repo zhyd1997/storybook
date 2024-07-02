@@ -66,7 +66,6 @@ export const TextControl: FC<TextProps> = ({
         size="flex"
         placeholder="Edit string..."
         autoFocus={forceVisible}
-        // @ts-expect-error (non-strict)
         valid={isValid ? null : 'error'}
         {...{ name, value: isValid ? value : '', onFocus, onBlur }}
       />

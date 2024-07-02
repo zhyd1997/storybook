@@ -125,14 +125,12 @@ export const useSourceProps = (
     }
   }
 
-  // @ts-expect-error (non-strict)
   const sourceParameters = (story?.parameters?.docs?.source || {}) as SourceParameters;
   const { code } = props; // We will fall back to `sourceParameters.code`, but per story below
   let format = props.format ?? sourceParameters.format;
   const language = props.language ?? sourceParameters.language ?? 'jsx';
   const dark = props.dark ?? sourceParameters.dark ?? false;
 
-  // @ts-expect-error (non-strict)
   if (!code && !story) {
     return { error: SourceError.SOURCE_UNAVAILABLE };
   }
@@ -144,7 +142,6 @@ export const useSourceProps = (
       dark,
     };
   }
-  // @ts-expect-error (non-strict)
   const storyContext = docsContext.getStoryContext(story);
 
   // eslint-disable-next-line no-underscore-dangle
@@ -152,16 +149,13 @@ export const useSourceProps = (
     ? storyContext.initialArgs
     : storyContext.unmappedArgs;
 
-  // @ts-expect-error (non-strict)
   const source = getStorySource(story.id, argsForSource, sourceContext);
-  // @ts-expect-error (non-strict)
   format = source.format ?? story.parameters.docs?.source?.format ?? false;
 
   return {
     code: getSnippet({
       snippet: source.code,
       storyContext: { ...storyContext, args: argsForSource },
-      // @ts-expect-error (non-strict)
       typeFromProps: props.type,
       transformFromProps: props.transform,
     }),
