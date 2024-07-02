@@ -4,17 +4,9 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": [
-        "../../lib/cli/core/*"
-      ]
+      "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "__testfixtures__",
-    "__tests__"
-  ],
-  "include": [
-    "src/**/*"
-  ]
+  "exclude": ["node_modules", "__testfixtures__", "__tests__"],
+  "include": ["src/**/*"]
 }

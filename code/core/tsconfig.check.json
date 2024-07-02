@@ -1,8 +1,6 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    
-
     "skipDefaultLibCheck": true,
     "moduleResolution": "Bundler",
     "target": "ES2022",

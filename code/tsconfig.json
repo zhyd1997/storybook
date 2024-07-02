@@ -9,11 +9,7 @@
     "incremental": false,
     "isolatedModules": true,
     "jsx": "react",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "CommonJS",
     "moduleResolution": "Node",
     "noImplicitAny": true,
@@ -23,10 +19,5 @@
     "strictBindCallApply": true,
     "target": "ES2020"
   },
-  "exclude": [
-    "dist",
-    "**/dist",
-    "node_modules",
-    "**/node_modules"
-  ]
+  "exclude": ["dist", "**/dist", "node_modules", "**/node_modules"]
 }

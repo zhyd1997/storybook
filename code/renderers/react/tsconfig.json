@@ -4,13 +4,8 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": [
-        "../../lib/cli/core/*"
-      ]
+      "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
-  "include": [
-    "src/**/*",
-    "template/**/*"
-  ]
+  "include": ["src/**/*", "template/**/*"]
 }

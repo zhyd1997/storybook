@@ -3,12 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": [
-        "../../lib/cli/core/*"
-      ]
+      "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
