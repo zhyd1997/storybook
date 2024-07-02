@@ -2,7 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "storybook/internal/*": ["../../lib/cli/core/*"],
+    }
   },
   "include": ["src/**/*"]
 }

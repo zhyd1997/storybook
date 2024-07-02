@@ -4,7 +4,11 @@
     "module": "esnext",
     "skipLibCheck": true,
     "rootDir": "./src",
-    "strict": false
+    "strict": false,
+    "baseUrl": ".",
+    "paths": {
+      "storybook/internal/*": ["../../lib/cli/core/*"],
+    }
   },
   "include": ["src/**/*"]
 }

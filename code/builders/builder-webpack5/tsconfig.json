@@ -6,16 +6,7 @@
     "baseUrl": ".",
     "paths": {
       "storybook/internal/*": ["../../lib/cli/core/*"],
-      // "@storybook/core/*": ["./"]
-    },
-    // "plugins": [
-    //   {
-    //     "name": "ts-plugin-sort-import-suggestions",
-    //     "moveUpPatterns": ["storybook/internal"],
-    //     "moveDownPatterns": ["@storybook/core"],
-    //   }
-    // ]
+    }
   },
   "include": ["src/**/*"],
-  // "exclude": ["code/core/**", "**/code/core/**", "../../**/core/**", "@storybook/core"]
 }

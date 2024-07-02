@@ -3,7 +3,11 @@
   "compilerOptions": {
     "strict": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "storybook/internal/*": ["../../lib/cli/core/*"],
+    }
   },
   "include": ["src/**/*", "template/**/*"]
 }

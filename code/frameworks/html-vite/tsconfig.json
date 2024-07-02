@@ -4,7 +4,11 @@
     "rootDir": "./src",
     "types": ["node"],
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "storybook/internal/*": ["../../lib/cli/core/*"],
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["src/**/*.test.*", "src/**/__testfixtures__/**"]

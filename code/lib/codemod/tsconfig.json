@@ -3,7 +3,11 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "allowJs": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "storybook/internal/*": ["../../lib/cli/core/*"],
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "__testfixtures__", "__tests__"]
