@@ -1,15 +1,13 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "types": ["node"],
+    "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-
-    "baseUrl": ".",
     "paths": {
       "storybook/internal/*": ["../../lib/cli/core/*"]
-    }
+    },
+    "rootDir": "./src"
   },
+  "extends": "../../tsconfig.json",
   "include": ["src/**/*"]
 }

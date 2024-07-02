@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "types": ["node"],
     "baseUrl": ".",
     "paths": {
       "storybook/internal/*": ["../../lib/cli/core/*"]

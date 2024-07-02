@@ -1,13 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "types": ["node"],
-
-    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
+  "extends": "../../tsconfig.json",
   "include": ["src/**/*"]
 }
