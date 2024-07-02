@@ -93,7 +93,7 @@ const baseTemplates = {
   'cra/default-js': {
     name: 'Create React App Latest (Webpack | JavaScript)',
     script: `
-      npx create-react-app {{beforeDir}} && \
+      npx create-react-app {{beforeDir}} && cd {{beforeDir}} && \
       jq '.browserslist.production[0] = ">0.9%"' package.json > tmp.json && mv tmp.json package.json
     `,
     expected: {
@@ -107,7 +107,7 @@ const baseTemplates = {
   'cra/default-ts': {
     name: 'Create React App Latest (Webpack | TypeScript)',
     script: `
-      npx create-react-app {{beforeDir}} --template typescript && \
+      npx create-react-app {{beforeDir}} --template typescript && cd {{beforeDir}} && \
       jq '.browserslist.production[0] = ">0.9%"' package.json > tmp.json && mv tmp.json package.json
     `,
     // Re-enable once https://github.com/storybookjs/storybook/issues/19351 is fixed.
