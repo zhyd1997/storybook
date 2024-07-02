@@ -89,7 +89,7 @@ async function generateDistFiles() {
     bundle: true,
     chunkNames: 'chunks/[name]-[hash]',
     external: ['@storybook/core', ...external],
-    keepNames: true,
+    keepNames: false,
     legalComments: 'none',
     lineLimit: 140,
     metafile: true,
