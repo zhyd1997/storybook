@@ -292,35 +292,23 @@ export function createPlaywrightTest<TFixture extends { extend: any }>(
             `);
         }
 
-        // start the play function on the client, and halt when rendering starts
         await page.evaluate(async (wrappedStoryRef: WrappedStoryRef) => {
           const unwrappedStoryRef = await globalThis.__pwUnwrapObject?.(wrappedStoryRef);
           const story =
             '__pw_type' in unwrappedStoryRef ? unwrappedStoryRef.type : unwrappedStoryRef;
-
-          const renderingStarted = Promise.withResolvers<void>();
-          story.renderingEnded = Promise.withResolvers();
-          story.playPromise = story.play({
-            canvasElement: document.querySelector('#root'),
-            renderToCanvas: async () => {
-              renderingStarted.resolve();
-              await story.renderingEnded?.promise;
-            },
-          });
-          await renderingStarted.promise;
+          return story?.load?.();
         }, storyRef);
 
-        // let playwright mount the story in node
+        // mount the story
         const mountResult = await mount(storyRef, ...restArgs);
 
-        // go back to client to continue playing the play function
+        // play the story in the browser
         await page.evaluate(async (wrappedStoryRef: WrappedStoryRef) => {
           const unwrappedStoryRef = await globalThis.__pwUnwrapObject?.(wrappedStoryRef);
           const story =
             '__pw_type' in unwrappedStoryRef ? unwrappedStoryRef.type : unwrappedStoryRef;
-
-          story.renderingEnded?.resolve();
-          await story.playPromise;
+          const canvasElement = document.querySelector('#root');
+          return story?.play?.({ canvasElement });
         }, storyRef);
 
         return mountResult;
