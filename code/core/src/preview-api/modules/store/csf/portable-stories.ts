@@ -25,9 +25,9 @@ import { normalizeStory } from './normalizeStory';
 import { normalizeComponentAnnotations } from './normalizeComponentAnnotations';
 import { getValuesFromArgTypes } from './getValuesFromArgTypes';
 import { normalizeProjectAnnotations } from './normalizeProjectAnnotations';
-import type { ComposedStoryFn } from 'storybook/internal/types';
+import type { ComposedStoryFn } from '@storybook/core/types';
 import { mountDestructured } from '../../../modules/preview-web/render/mount-utils';
-import { MountMustBeDestructuredError } from 'storybook/internal/core-events/preview-errors';
+import { MountMustBeDestructuredError } from '@storybook/core/preview-errors';
 
 let globalProjectAnnotations: ProjectAnnotations<any> = {};
 
