@@ -1,17 +1,21 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": [
+        "../../lib/cli/core/*"
+      ]
     }
   },
+  "include": [
+    "src/**/*",
+    "src/**/*.vue",
+    "template/**/*",
+    "template/**/*.vue"
+  ],
   "vueCompilerOptions": {
     "target": 3
-  },
-  "include": ["src/**/*", "src/**/*.vue", "template/**/*", "template/**/*.vue"]
+  }
 }

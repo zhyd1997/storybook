@@ -2,12 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "module": "esnext",
-    "skipLibCheck": true,
     "rootDir": "./src",
-    "strict": false,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
   "include": ["src/**/*"]

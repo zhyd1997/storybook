@@ -19,7 +19,7 @@
     "noUnusedLocals": false,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
   "include": ["src/**/*", "src/**/*.json"]

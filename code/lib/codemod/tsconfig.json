@@ -1,14 +1,20 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "skipLibCheck": true,
     "allowJs": true,
-    "strict": true,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": [
+        "../../lib/cli/core/*"
+      ]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "__testfixtures__", "__tests__"]
+  "exclude": [
+    "node_modules",
+    "__testfixtures__",
+    "__tests__"
+  ],
+  "include": [
+    "src/**/*"
+  ]
 }

@@ -1,11 +1,15 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*", "template/**/*"],
   "compilerOptions": {
-    "strict": false,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": [
+        "../../lib/cli/core/*"
+      ]
     }
-  }
+  },
+  "include": [
+    "src/**/*",
+    "template/**/*"
+  ]
 }

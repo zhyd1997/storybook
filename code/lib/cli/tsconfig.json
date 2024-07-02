@@ -2,13 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "types": ["node"],
-    "strict": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
+
+    
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
   "include": ["src/**/*"]

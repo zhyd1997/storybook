@@ -1,14 +1,16 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": [
+        "../../lib/cli/core/*"
+      ]
     }
   },
-  "include": ["src/**/*", "template/**/*"]
+  "include": [
+    "src/**/*",
+    "template/**/*"
+  ]
 }

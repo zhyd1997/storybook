@@ -3,13 +3,12 @@
   "compilerOptions": {
     "rootDir": "./src",
     "types": ["node"],
-    "resolveJsonModule": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "strict": true,
+
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
   "include": ["src/**/*"]

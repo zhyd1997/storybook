@@ -19,7 +19,7 @@ export function interopRequireDefault(filePath: string) {
       tsconfigRaw: `{
       "compilerOptions": {
         "strict": false,
-        "skipLibCheck": true,
+        
       },
     }`,
     });

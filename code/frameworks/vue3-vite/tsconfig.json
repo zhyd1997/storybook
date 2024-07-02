@@ -3,12 +3,11 @@
   "compilerOptions": {
     "rootDir": "./src",
     "types": ["node"],
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "strict": true,
+    
+
     "baseUrl": ".",
     "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
+      "storybook/internal/*": ["../../lib/cli/core/*"]
     }
   },
   "include": ["src/**/*"]
