@@ -132,7 +132,107 @@ describe('StoryRender', () => {
     });
   });
 
-  it('calls story.mount if play function is does not destructure mount', async () => {});
+  it('calls mount if play function does not destructure mount', async () => {
+    const actualMount = vi.fn(async (context) => {
+      await context.renderToCanvas();
+      return {};
+    });
+    const story = buildStory({
+      mount: (context) => () => actualMount(context) as any,
+      playFunction: () => {},
+    });
+    const render = new StoryRender(
+      new Channel({}),
+      buildStore(),
+      vi.fn() as any,
+      {} as any,
+      entry.id,
+      'story',
+      { autoplay: true },
+      story
+    );
+
+    await render.renderToElement({} as any);
+    expect(actualMount).toHaveBeenCalled();
+  });
+
+  it('does not call mount if play function destructures mount', async () => {
+    const actualMount = vi.fn(async (context) => {
+      await context.renderToCanvas();
+      return {};
+    });
+    const story = buildStory({
+      mount: (context) => () => actualMount(context) as any,
+      playFunction: ({ mount }) => {},
+    });
+    const render = new StoryRender(
+      new Channel({}),
+      buildStore(),
+      vi.fn() as any,
+      {} as any,
+      entry.id,
+      'story',
+      { autoplay: true },
+      story
+    );
+
+    await render.renderToElement({} as any);
+    expect(actualMount).not.toHaveBeenCalled();
+  });
+
+  it('errors if play function calls mount without destructuring', async () => {
+    const actualMount = vi.fn(async (context) => {
+      await context.renderToCanvas();
+      return {};
+    });
+    const story = buildStory({
+      mount: (context) => () => actualMount(context) as any,
+      playFunction: (context) => context.mount(),
+    });
+    const view = { showException: vi.fn() };
+    const render = new StoryRender(
+      new Channel({}),
+      buildStore(),
+      vi.fn() as any,
+      view as any,
+      entry.id,
+      'story',
+      { autoplay: true },
+      story
+    );
+
+    await render.renderToElement({} as any);
+    expect(view.showException).toHaveBeenCalled();
+  });
+
+  it('enters rendering phase during play if play function calls mount', async () => {
+    const actualMount = vi.fn(async (context) => {
+      await context.renderToCanvas();
+      return {};
+    });
+    const story = buildStory({
+      mount: (context) => () => actualMount(context) as any,
+      playFunction: ({ mount }) => {
+        expect(render.phase).toBe('playing');
+        mount();
+      },
+    });
+    const render = new StoryRender(
+      new Channel({}),
+      buildStore(),
+      vi.fn(() => {
+        expect(render.phase).toBe('rendering');
+      }) as any,
+      {} as any,
+      entry.id,
+      'story',
+      { autoplay: true },
+      story
+    );
+
+    await render.renderToElement({} as any);
+    expect(actualMount).toHaveBeenCalled();
+  });
 
   describe('teardown', () => {
     it('throws PREPARE_ABORTED if torndown during prepare', async () => {
