@@ -46,6 +46,6 @@ The heuristic is simple:
 
 ## The 1 exception: the `storybook` package itself
 
-The sol exception is the `storybook` package itself.
+The sole exception is the `storybook` package itself.
 
 Obviously, the `storybook` package cannot depend on itself, so it must import from `@storybook/core`.
