@@ -49,13 +49,13 @@
   "files.associations": {
     "*.js": "javascriptreact"
   },
-  "javascript.preferences.importModuleSpecifier": "project-relative",
+  "javascript.preferences.importModuleSpecifier": "relative",
   "javascript.preferences.quoteStyle": "single",
   "js/ts.implicitProjectConfig.target": "ESNext",
   "prettier.ignorePath": "./code/.prettierignore",
   "storyExplorer.storybookConfigDir": "./code/.storybook",
   "typescript.format.enable": false,
-  "typescript.preferences.importModuleSpecifier": "project-relative",
+  "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.preferences.preferTypeOnlyAutoImports": true,
   "typescript.preferences.quoteStyle": "single",
   "typescript.preferGoToSourceDefinition": true,

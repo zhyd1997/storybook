@@ -14,9 +14,6 @@
     "moduleResolution": "Node",
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "paths": {
-      "storybook/internal/*": ["./lib/cli/core/*"]
-    },
     "skipLibCheck": true,
     "strict": true,
     "strictBindCallApply": true,
