@@ -119,7 +119,8 @@
     },
     "./components": {
       "types": "./dist/components/index.d.ts",
-      "import": "./dist/components/index.js"
+      "import": "./dist/components/index.js",
+      "require": "./dist/components/index.cjs"
     },
     "./theming": {
       "types": "./dist/theming/index.d.ts",
