@@ -1,12 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
-
-    "baseUrl": ".",
-    "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"]
-    }
+    "module": "ESNext"
   },
   "include": ["src/**/*", "src/**/*.svelte", "template/**/*", "template/**/*.svelte"]
 }

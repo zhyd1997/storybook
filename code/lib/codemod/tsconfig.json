@@ -2,11 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
-    "strict": false,
-    "baseUrl": ".",
-    "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"]
-    }
+    "strict": false
   },
   "exclude": ["node_modules", "__testfixtures__", "__tests__"],
   "include": ["src/**/*"]

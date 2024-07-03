@@ -5,8 +5,7 @@
     "module": "ES2022",
     "moduleResolution": "Bundler",
     "paths": {
-      "@storybook/core/*": ["./src/*"],
-      "@storybook/react": ["../renderers/react"]
+      "@storybook/core/*": ["./src/*"]
     },
     "skipDefaultLibCheck": true,
     "target": "ES2022"

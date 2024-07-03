@@ -1,11 +1,5 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"],
-      "react": ["../../node_modules/react"]
-    }
-  },
+  "compilerOptions": {},
   "include": ["src/**/*"]
 }

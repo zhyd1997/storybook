@@ -1,11 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": ".",
-    "paths": {
-      "storybook/internal/*": ["../../lib/cli/core/*"]
-    }
+    "allowJs": true
   },
   "include": ["src/**/*", "src/**/*.vue", "template/**/*", "template/**/*.vue"],
   "vueCompilerOptions": {
