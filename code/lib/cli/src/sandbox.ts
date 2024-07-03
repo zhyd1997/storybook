@@ -10,9 +10,9 @@ import invariant from 'tiny-invariant';
 import { lt, prerelease } from 'semver';
 import type { Template, TemplateKey } from './sandbox-templates';
 import { allTemplates as TEMPLATES } from './sandbox-templates';
-import type { PackageManagerName } from '@storybook/core-common';
-import { JsPackageManagerFactory } from '@storybook/core-common';
-import { versions } from '@storybook/core-common';
+import type { PackageManagerName } from '@storybook/core/common';
+import { JsPackageManagerFactory } from '@storybook/core/common';
+import { versions } from '@storybook/core/common';
 import { doInitiate } from './initiate';
 
 const logger = console;
@@ -43,11 +43,9 @@ export const sandbox = async ({
   const packageManager = JsPackageManagerFactory.getPackageManager({
     force: pkgMgr,
   });
-  const latestVersion = await packageManager.latestVersion('@storybook/cli');
-  const nextVersion = await packageManager
-    .latestVersion('@storybook/cli@next')
-    .catch((e) => '0.0.0');
-  const currentVersion = versions['@storybook/cli'];
+  const latestVersion = await packageManager.latestVersion('storybook');
+  const nextVersion = await packageManager.latestVersion('storybook@next').catch((e) => '0.0.0');
+  const currentVersion = versions.storybook;
   const isPrerelease = prerelease(currentVersion);
   const isOutdated = lt(currentVersion, isPrerelease ? nextVersion : latestVersion);
   const borderColor = isOutdated ? '#FC521F' : '#F1618C';
@@ -225,6 +223,7 @@ export const sandbox = async ({
         process.chdir(templateDestination);
         // we run doInitiate, instead of initiate, to avoid sending this init event to telemetry, because it's not a real world project
         await doInitiate({
+          dev: process.env.CI !== 'true' && process.env.IN_STORYBOOK_SANBOX !== 'true',
           ...options,
         });
         process.chdir(before);

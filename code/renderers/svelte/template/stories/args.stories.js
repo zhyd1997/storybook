@@ -1,6 +1,10 @@
 import { within, userEvent, waitFor, expect } from '@storybook/test';
-import { UPDATE_STORY_ARGS, RESET_STORY_ARGS, STORY_RENDERED } from '@storybook/core-events';
-import { addons } from '@storybook/preview-api';
+import {
+  UPDATE_STORY_ARGS,
+  RESET_STORY_ARGS,
+  STORY_RENDERED,
+} from 'storybook/internal/core-events';
+import { addons } from 'storybook/internal/preview-api';
 import ButtonView from './views/ButtonJavaScript.svelte';
 
 export default {
@@ -23,7 +27,10 @@ export const RemountOnResetStoryArgs = {
     await expect(button).toHaveTextContent('You clicked: 0');
 
     await userEvent.click(button);
-    await expect(button).toHaveTextContent('You clicked: 1');
+
+    await waitFor(async () => {
+      await expect(button).toHaveTextContent('You clicked: 1');
+    });
 
     await step("Update story args with { text: 'Changed' }", async () => {
       await channel.emit(UPDATE_STORY_ARGS, { storyId: id, updatedArgs: { text: 'Changed' } });

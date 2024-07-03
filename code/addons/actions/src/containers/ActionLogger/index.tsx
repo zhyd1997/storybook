@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { dequal as deepEqual } from 'dequal';
 
-import type { API } from '@storybook/manager-api';
-import { STORY_CHANGED } from '@storybook/core-events';
+import type { API } from 'storybook/internal/manager-api';
+import { STORY_CHANGED } from 'storybook/internal/core-events';
 
 import { ActionLogger as ActionLoggerComponent } from '../../components/ActionLogger';
 import type { ActionDisplay } from '../../models';
@@ -63,12 +63,12 @@ export default class ActionLogger extends Component<ActionLoggerProps, ActionLog
   addAction = (action: ActionDisplay) => {
     this.setState((prevState: ActionLoggerState) => {
       const actions = [...prevState.actions];
-      const previous = actions.length && actions[0];
+      const previous = actions.length && actions[actions.length - 1];
       if (previous && safeDeepEqual(previous.data, action.data)) {
         previous.count++;
       } else {
         action.count = 1;
-        actions.unshift(action);
+        actions.push(action);
       }
       return { actions: actions.slice(0, action.options.limit) };
     });

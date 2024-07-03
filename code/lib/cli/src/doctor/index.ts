@@ -1,12 +1,11 @@
 import chalk from 'chalk';
 import boxen from 'boxen';
 import { createWriteStream, move, remove } from 'fs-extra';
-import tempy from 'tempy';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import { join } from 'path';
 
-import { JsPackageManagerFactory } from '@storybook/core-common';
-import type { PackageManagerName } from '@storybook/core-common';
+import { JsPackageManagerFactory } from '@storybook/core/common';
+import type { PackageManagerName } from '@storybook/core/common';
 import { getStorybookData } from '../automigrate/helpers/mainConfigFile';
 import { cleanLog } from '../automigrate/helpers/cleanLog';
 import { getMismatchingVersionsWarnings } from './getMismatchingVersionsWarning';
@@ -24,8 +23,9 @@ let TEMP_LOG_FILE_PATH = '';
 const originalStdOutWrite = process.stdout.write.bind(process.stdout);
 const originalStdErrWrite = process.stderr.write.bind(process.stdout);
 
-const augmentLogsToFile = () => {
-  TEMP_LOG_FILE_PATH = tempy.file({ name: LOG_FILE_NAME });
+const augmentLogsToFile = async () => {
+  const { temporaryFile } = await import('tempy');
+  TEMP_LOG_FILE_PATH = temporaryFile({ name: LOG_FILE_NAME });
   const logStream = createWriteStream(TEMP_LOG_FILE_PATH);
 
   process.stdout.write = (d: string) => {
@@ -51,7 +51,7 @@ export const doctor = async ({
   configDir: userSpecifiedConfigDir,
   packageManager: pkgMgr,
 }: DoctorOptions = {}) => {
-  augmentLogsToFile();
+  await augmentLogsToFile();
 
   let foundIssues = false;
   const logDiagnostic = (title: string, message: string) => {

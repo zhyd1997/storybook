@@ -1,7 +1,7 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { join, relative, dirname } from 'path';
 import type { Configuration, RuleSetRule, WebpackPluginInstance } from 'webpack';
-import { logger } from '@storybook/node-logger';
+
+import { logger } from 'storybook/internal/node-logger';
 import PnpWebpackPlugin from 'pnp-webpack-plugin';
 import { mergePlugins } from './helpers/mergePlugins';
 import { getReactScriptsPath } from './helpers/getReactScriptsPath';
@@ -126,6 +126,14 @@ const webpack = async (
         ...getModulePath(CWD),
       ],
       plugins: [PnpWebpackPlugin as any],
+      // manual copy from builder-webpack because defaults are disabled in this CRA preset
+      conditionNames: [
+        ...(webpackConfig.resolve?.conditionNames ?? []),
+        'storybook',
+        'stories',
+        'test',
+        '...',
+      ],
     },
     resolveLoader,
   } as Configuration;

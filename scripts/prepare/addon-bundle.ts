@@ -1,17 +1,15 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node
-
 import * as fs from 'fs-extra';
 import path, { dirname, join, relative } from 'path';
 import type { Options } from 'tsup';
 import type { PackageJson } from 'type-fest';
 import { build } from 'tsup';
 import aliasPlugin from 'esbuild-plugin-alias';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import slash from 'slash';
 import { exec } from '../utils/exec';
 
-import { globalPackages as globalPreviewPackages } from '../../code/lib/preview/src/globals/globals';
-import { globalPackages as globalManagerPackages } from '../../code/ui/manager/src/globals/globals';
+import { globalPackages as globalPreviewPackages } from '../../code/core/src/preview/globals/globals';
+import { globalPackages as globalManagerPackages } from '../../code/core/src/manager/globals/globals';
 
 /* TYPES */
 
@@ -51,7 +49,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   } = (await fs.readJson(join(cwd, 'package.json'))) as PackageJsonWithBundlerConfig;
 
   if (pre) {
-    await exec(`node -r ${__dirname}/../node_modules/esbuild-register/register.js ${pre}`, { cwd });
+    await exec(`bun ${pre}`, { cwd });
   }
 
   const reset = hasFlag(flags, 'reset');
@@ -193,11 +191,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   await Promise.all(tasks);
 
   if (post) {
-    await exec(
-      `node -r ${__dirname}/../node_modules/esbuild-register/register.js ${post}`,
-      { cwd },
-      { debug: true }
-    );
+    await exec(`bun ${post}`, { cwd }, { debug: true });
   }
 
   console.log('done');
