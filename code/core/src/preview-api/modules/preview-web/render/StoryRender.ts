@@ -318,9 +318,9 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         if (abortSignal.aborted) return;
       }
 
-      await this.runPhase(abortSignal, 'completed', async () => {
-        this.channel.emit(STORY_RENDERED, id);
-      });
+      await this.runPhase(abortSignal, 'completed', async () =>
+        this.channel.emit(STORY_RENDERED, id)
+      );
     } catch (err) {
       this.phase = 'errored';
       this.callbacks.showException(err as Error);

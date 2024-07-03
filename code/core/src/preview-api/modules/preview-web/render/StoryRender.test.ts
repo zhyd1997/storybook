@@ -155,6 +155,27 @@ describe('StoryRender', () => {
     expect(mountSpy).toHaveBeenCalledOnce();
   });
 
+  it('does not call mount twice if mount called in play function', async () => {
+    const story = buildStory({
+      playFunction: async ({ mount }) => {
+        await mount();
+      },
+    });
+    const render = new StoryRender(
+      new Channel({}),
+      buildStore(),
+      vi.fn() as any,
+      {} as any,
+      entry.id,
+      'story',
+      { autoplay: true },
+      story
+    );
+
+    await render.renderToElement({} as any);
+    expect(mountSpy).toHaveBeenCalledOnce();
+  });
+
   it('errors if play function calls mount without destructuring', async () => {
     const story = buildStory({
       playFunction: async (context) => {
