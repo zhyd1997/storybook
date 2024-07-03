@@ -1,14 +1,8 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "module": "ES2022",
-    "moduleResolution": "Bundler",
-    "paths": {
-      "@storybook/core/*": ["./src/*"]
-    },
-    "skipDefaultLibCheck": true,
-    "target": "ES2022"
+    "resolveJsonModule": true,
+    "module": "ES2022"
   },
   "include": ["src/**/*", "scripts/**/*", "*.d.ts"]
 }
