@@ -11,6 +11,7 @@ import { StorybookError } from './storybook-error';
  * to prevent manager and preview errors from having the same category and error code.
  */
 export enum Category {
+  BLOCKS = 'BLOCKS',
   DOCS_TOOLS = 'DOCS-TOOLS',
   PREVIEW_CLIENT_LOGGER = 'PREVIEW_CLIENT-LOGGER',
   PREVIEW_CHANNELS = 'PREVIEW_CHANNELS',
@@ -265,6 +266,44 @@ export class TestingLibraryMustBeConfiguredError extends StorybookError {
   template() {
     return dedent`
     You must configure testingLibraryRender to use play in portable stories.
+    
+    import { render } from '@testing-library/[renderer]';
+    
+    setProjectAnnotations({
+      testingLibraryRender: render,
+    });
+    
+    For other testing renderers, you can configure renderToCanvas:
+    
+    import { render } from 'your-renderer';
+    
+    setProjectAnnotations({
+      renderToCanvas: ({ storyFn }) => {
+        const Story = storyFn();
+        
+        // Svelte
+        render(Story.Component, Story.props);
+        
+        // Vue
+        render(Story);
+        
+        // or for React
+        render(<Story/>);
+      },
+    });
+    
+    `;
+  }
+}
+
+export class PlayFunctionWithMountNotAvailableError extends StorybookError {
+  readonly category = Category.BLOCKS;
+
+  readonly code = 1;
+
+  template() {
+    return dedent`
+    You at
     
     import { render } from '@testing-library/[renderer]';
     
