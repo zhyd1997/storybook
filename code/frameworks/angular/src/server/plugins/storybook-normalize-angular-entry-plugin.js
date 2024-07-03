@@ -14,7 +14,7 @@ export default class StorybookNormalizeAngularEntryPlugin {
     compiler.hooks.environment.tap(PLUGIN_NAME, () => {
       // Store the original entry configuration
       const originalEntry = compiler.options.entry;
-      
+
       // Overwrite the entry configuration to normalize it
       compiler.options.entry = async () => {
         let entryResult;
@@ -39,7 +39,9 @@ export default class StorybookNormalizeAngularEntryPlugin {
           // Combine and deduplicate imports from 'main' and 'styles'
           return {
             main: {
-              import: Array.from(new Set([...entryResult.main.import, ...entryResult.styles.import])),
+              import: Array.from(
+                new Set([...entryResult.main.import, ...entryResult.styles.import])
+              ),
             },
           };
         }
