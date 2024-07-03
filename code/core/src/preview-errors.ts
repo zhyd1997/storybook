@@ -307,45 +307,7 @@ export class NoRenderFunctionError extends StorybookError {
 
   template() {
     return dedent`
-      No render function available for storyId '${this.data.id}
-    `;
-  }
-}
-
-export class PlayFunctionWithMountNotAvailableError extends StorybookError {
-  readonly category = Category.BLOCKS;
-
-  readonly code = 1;
-
-  template() {
-    return dedent`
-    You at
-    
-    import { render } from '@testing-library/[renderer]';
-    
-    setProjectAnnotations({
-      testingLibraryRender: render,
-    });
-    
-    For other testing renderers, you can configure renderToCanvas:
-    
-    import { render } from 'your-renderer';
-    
-    setProjectAnnotations({
-      renderToCanvas: ({ storyFn }) => {
-        const Story = storyFn();
-        
-        // Svelte
-        render(Story.Component, Story.props);
-        
-        // Vue
-        render(Story);
-        
-        // or for React
-        render(<Story/>);
-      },
-    });
-    
+    No render function available for storyId '${this.data.id}'
     `;
   }
 }
