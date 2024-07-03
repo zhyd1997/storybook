@@ -215,7 +215,62 @@ Storybook is organized as a monorepo. Useful scripts include:
 
 Become a sponsor to have your logo and website URL on our README on Github. \[[Become a sponsor](https://opencollective.com/storybook#sponsor)]
 
-<a href="https://opencollective.com/storybook"><img src="https://opencollective.com/storybook/tiers/sponsors.svg?limit=80&button=false&avatarHeight=46&width=750"></a>
+<a href="https://opencollective.com/storybook/sponsor/0/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/0/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/1/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/1/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/2/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/2/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/3/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/3/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/4/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/4/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/5/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/5/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/6/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/6/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/7/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/7/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/8/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/8/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/9/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/9/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/10/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/10/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/11/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/11/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/12/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/12/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/13/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/13/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/14/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/14/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/15/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/15/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/16/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/16/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/17/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/17/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/18/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/18/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/19/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/19/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/20/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/20/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/21/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/21/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/22/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/22/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/23/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/23/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/24/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/24/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/25/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/25/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/26/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/26/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/27/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/27/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/28/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/28/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/29/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/29/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/30/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/30/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/31/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/31/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/32/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/32/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/33/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/33/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/34/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/34/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/35/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/35/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/36/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/36/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/37/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/37/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/38/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/38/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/39/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/39/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/40/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/40/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/41/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/41/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/42/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/42/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/43/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/43/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/44/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/44/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/45/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/45/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/46/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/46/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/47/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/47/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/48/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/48/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/49/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/49/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/50/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/50/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/51/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/51/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/52/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/52/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/53/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/53/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/54/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/54/avatar.svg?requireActive=true"></a>
+<a href="https://opencollective.com/storybook/sponsor/55/website?requireActive=true" target="_blank"><img src="https://opencollective.com/storybook/sponsor/55/avatar.svg?requireActive=true"></a>
 
 ### Backers
 
