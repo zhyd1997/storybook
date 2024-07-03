@@ -1,9 +1,9 @@
 import { describe, afterEach, it, expect, vi } from 'vitest';
 import * as fs from 'fs';
-import { logger } from '@storybook/node-logger';
+import { logger } from '@storybook/core/node-logger';
 import { detect, detectFrameworkPreset, detectLanguage } from './detect';
 import { ProjectType, SupportedLanguage } from './project_types';
-import type { JsPackageManager, PackageJsonWithMaybeDeps } from '@storybook/core-common';
+import type { JsPackageManager, PackageJsonWithMaybeDeps } from '@storybook/core/common';
 
 vi.mock('./helpers', () => ({
   isNxProject: vi.fn(),
@@ -14,18 +14,19 @@ vi.mock('fs', () => ({
   stat: vi.fn(),
   lstat: vi.fn(),
   access: vi.fn(),
+  realpathSync: vi.fn(),
+  lstatSync: vi.fn(),
+  readdir: vi.fn(),
+  readdirSync: vi.fn(),
+  readlinkSync: vi.fn(),
+  default: vi.fn(),
 }));
 
 vi.mock('fs-extra', () => ({
   pathExistsSync: vi.fn(() => true),
 }));
 
-vi.mock('path', () => ({
-  // make it return just the second path, for easier testing
-  join: vi.fn((_, p) => p),
-}));
-
-vi.mock('@storybook/node-logger');
+vi.mock('@storybook/core/node-logger');
 
 const MOCK_FRAMEWORK_FILES: {
   name: string;
@@ -36,6 +37,28 @@ const MOCK_FRAMEWORK_FILES: {
     files: {
       'package.json': {
         dependencies: {
+          vue: '^3.0.0',
+        },
+      },
+    },
+  },
+  {
+    name: ProjectType.NUXT,
+    files: {
+      'package.json': {
+        dependencies: {
+          nuxt: '^3.11.2',
+        },
+      },
+    },
+  },
+  {
+    name: ProjectType.NUXT,
+    files: {
+      'package.json': {
+        dependencies: {
+          // Nuxt projects may have Vue 3 as an explicit dependency
+          nuxt: '^3.11.2',
           vue: '^3.0.0',
         },
       },
@@ -431,16 +454,6 @@ describe('Detect', () => {
     it(`UNDETECTED for unknown frameworks`, () => {
       const result = detectFrameworkPreset();
       expect(result).toBe(ProjectType.UNDETECTED);
-    });
-
-    // TODO(blaine): Remove once Nuxt3 is supported
-    it(`UNSUPPORTED for Nuxt framework above version 3.0.0`, () => {
-      const result = detectFrameworkPreset({
-        dependencies: {
-          nuxt: '3.0.0',
-        },
-      });
-      expect(result).toBe(ProjectType.UNSUPPORTED);
     });
 
     // TODO: The mocking in this test causes tests after it to fail
