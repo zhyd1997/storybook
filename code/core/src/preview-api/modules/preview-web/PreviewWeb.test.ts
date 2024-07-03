@@ -3556,6 +3556,7 @@ describe('PreviewWeb', () => {
         await (preview.storyStore as StoryStore<Renderer>)?.loadStory({
           storyId: 'component-one--b',
         }),
+        {} as any,
         {} as any
       );
       await waitForRenderPhase('playing');
