@@ -295,6 +295,29 @@ export class TestingLibraryMustBeConfiguredError extends StorybookError {
   }
 }
 
+export class NoStoryMountedError extends StorybookError {
+  readonly category = Category.PREVIEW_API;
+
+  readonly code = 14;
+
+  template() {
+    return dedent`
+    No story is mounted in your story.
+    
+    This usually occurs when you destructure mount in the play function, but forgot to call it.
+    
+    For example:
+
+    async play({ mount, canvasElement }) {
+      // 👈mount should be called: await mount(); 
+      const canvas = within(canvasElement);
+      const button = await canvas.findByRole('button');
+      await userEvent.click(button);
+    };
+    `;
+  }
+}
+
 export class NextJsSharpError extends StorybookError {
   readonly category = Category.FRAMEWORK_NEXTJS;
 
