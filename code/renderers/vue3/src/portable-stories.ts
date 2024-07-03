@@ -45,8 +45,8 @@ export function setProjectAnnotations(
   projectAnnotations:
     | NamedOrDefaultProjectAnnotations<VueRenderer>
     | NamedOrDefaultProjectAnnotations<VueRenderer>[]
-) {
-  originalSetProjectAnnotations<VueRenderer>(projectAnnotations);
+): ProjectAnnotations<VueRenderer> {
+  return originalSetProjectAnnotations<VueRenderer>(projectAnnotations);
 }
 
 // This will not be necessary once we have auto preset loading
