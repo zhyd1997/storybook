@@ -134,17 +134,6 @@ For additional help, share your issue in [the repo's GitHub Discussions](https:/
 
 See [Addon / Framework Support Table](https://storybook.js.org/docs/react/api/frameworks-feature-support)
 
-### Deprecated/Removed Addons
-
-| Addons                                                                                       |                                                            |
-| -------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| [contexts](https://storybook.js.org/addons/@storybook/addon-contexts/)                       | Addon for driving your components under dynamic contexts   |
-| [info](https://github.com/storybookjs/deprecated-addons/tree/master/addons/info)             | Annotate stories with extra component usage information    |
-| [knobs](https://github.com/storybookjs/addon-knobs)                                          | Interactively edit component prop data in the Storybook UI |
-| [notes](https://github.com/storybookjs/deprecated-addons/tree/master/addons/notes)           | Annotate Storybook stories with notes                      |
-| [options](https://www.npmjs.com/package/@storybook/addon-options)                            | Customize the Storybook UI in code                         |
-| [storyshots](https://github.com/storybookjs/storybook/tree/main/code/addons/storyshots-core) | Snapshot testing for components in Storybook               |
-
 To continue improving your experience, we have to eventually deprecate or remove certain addons in favor of new and better tools.
 
 If you're using info/notes, we highly recommend you migrate to [docs](code/addons/docs/) instead, and [here is a guide](code/addons/docs/docs/recipes.md#migrating-from-notesinfo-addons) to help you.
