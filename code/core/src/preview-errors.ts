@@ -296,6 +296,22 @@ export class TestingLibraryMustBeConfiguredError extends StorybookError {
   }
 }
 
+export class NoRenderFunctionError extends StorybookError {
+  readonly category = Category.PREVIEW_API;
+
+  readonly code = 14;
+
+  constructor(public data: { id: string }) {
+    super();
+  }
+
+  template() {
+    return dedent`
+      No render function available for storyId '${this.data.id}
+    `;
+  }
+}
+
 export class PlayFunctionWithMountNotAvailableError extends StorybookError {
   readonly category = Category.BLOCKS;
 

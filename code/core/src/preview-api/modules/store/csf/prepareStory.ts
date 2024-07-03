@@ -27,6 +27,7 @@ import type {
   NormalizedStoryAnnotations,
 } from '@storybook/core/types';
 import { mountDestructured } from '../../preview-web/render/mount-utils';
+import { NoRenderFunctionError } from '@storybook/core/preview-errors';
 
 // Combine all the metadata about a story (both direct and inherited from the component/global scope)
 // into a "render-able" story function, with all decorators applied, parameters passed as context etc
@@ -110,8 +111,7 @@ export function prepareStory<TRenderer extends Renderer>(
   const usesMount = mountDestructured(playFunction);
 
   if (!render && !usesMount) {
-    // TODO Make this a named error
-    throw new Error(`No render function available for storyId '${id}'`);
+    throw new NoRenderFunctionError({ id });
   }
 
   const defaultMount = (context: StoryContext) => {
