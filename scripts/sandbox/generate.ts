@@ -4,20 +4,19 @@ import pLimit from 'p-limit';
 import prettyTime from 'pretty-hrtime';
 import { copy, emptyDir, ensureDir, move, remove, rename, writeFile } from 'fs-extra';
 import { program } from 'commander';
-import { directory } from 'tempy';
 import { execaCommand } from 'execa';
 import { esMain } from '../utils/esmain';
 
 import type { OptionValues } from '../utils/options';
 import { createOptions } from '../utils/options';
 import { allTemplates as sandboxTemplates } from '../../code/lib/cli/src/sandbox-templates';
-import storybookVersions from '../../code/lib/core-common/src/versions';
-import { JsPackageManagerFactory } from '../../code/lib/core-common/src/js-package-manager/JsPackageManagerFactory';
+import storybookVersions from '../../code/core/src/common/versions';
+import { JsPackageManagerFactory } from '../../code/core/src/common/js-package-manager/JsPackageManagerFactory';
 
 import { localizeYarnConfigFiles, setupYarn } from './utils/yarn';
 import type { GeneratorConfig } from './utils/types';
 import { getStackblitzUrl, renderTemplate } from './utils/template';
-import type { JsPackageManager } from '../../code/lib/core-common/src/js-package-manager';
+import type { JsPackageManager } from '../../code/core/src/common/js-package-manager';
 import {
   BEFORE_DIR_NAME,
   AFTER_DIR_NAME,
@@ -26,7 +25,7 @@ import {
   LOCAL_REGISTRY_URL,
 } from '../utils/constants';
 import * as ghActions from '@actions/core';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 
 const isCI = process.env.GITHUB_ACTIONS === 'true';
 
@@ -39,7 +38,7 @@ const sbInit = async (
   flags?: string[],
   debug?: boolean
 ) => {
-  const sbCliBinaryPath = join(__dirname, `../../code/lib/cli/bin/index.js`);
+  const sbCliBinaryPath = join(__dirname, `../../code/lib/cli/bin/index.cjs`);
   console.log(`🎁 Installing storybook`);
   const env = { STORYBOOK_DISABLE_TELEMETRY: 'true', ...envVars };
   const fullFlags = ['--yes', ...(flags || [])];
@@ -81,7 +80,8 @@ const addStorybook = async ({
   const beforeDir = join(baseDir, BEFORE_DIR_NAME);
   const afterDir = join(baseDir, AFTER_DIR_NAME);
 
-  const tmpDir = directory();
+  const { temporaryDirectory } = await import('tempy');
+  const tmpDir = temporaryDirectory();
 
   try {
     await copy(beforeDir, tmpDir);
@@ -151,6 +151,7 @@ const runGenerators = async (
   console.log(`🤹‍♂️ Generating sandboxes with a concurrency of ${1}`);
 
   const limit = pLimit(1);
+  const { temporaryDirectory } = await import('tempy');
 
   const generationResults = await Promise.allSettled(
     generators.map(({ dirName, name, script, expected, env }) =>
@@ -163,11 +164,11 @@ const runGenerators = async (
           else if (expected.renderer === '@storybook/server') flags = ['--type server'];
 
           const time = process.hrtime();
-          console.log(`🧬 Generating ${name} (${{ dirName }})`);
+          console.log(`🧬 Generating ${name} (${dirName})`);
           await emptyDir(baseDir);
 
           // We do the creation inside a temp dir to avoid yarn container problems
-          const createBaseDir = directory();
+          const createBaseDir = temporaryDirectory();
           if (!script.includes('pnp')) {
             await setupYarn({ cwd: createBaseDir });
           }

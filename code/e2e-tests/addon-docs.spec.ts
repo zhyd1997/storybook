@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import process from 'process';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import { SbPage } from './util';
 
 const storybookUrl = process.env.STORYBOOK_URL || 'http://localhost:8001';
@@ -200,6 +200,12 @@ test.describe('addon-docs', () => {
       expectedReactVersionRange = /^17/;
     } else if (templateName.includes('react16')) {
       expectedReactVersionRange = /^16/;
+    } else if (
+      templateName.includes('nextjs/prerelease') ||
+      templateName.includes('react-vite/prerelease') ||
+      templateName.includes('react-webpack/prerelease')
+    ) {
+      expectedReactVersionRange = /^19/;
     }
 
     // Arrange - Get the actual versions

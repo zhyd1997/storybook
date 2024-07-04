@@ -1,4 +1,4 @@
-import type { Options } from '@storybook/types';
+import type { Options } from 'storybook/internal/types';
 import type { Plugin } from 'vite';
 import rehypeSlug from 'rehype-slug';
 import rehypeExternalLinks from 'rehype-external-links';
@@ -32,7 +32,7 @@ export async function mdxPlugin(options: Options): Promise<Plugin> {
         mdxCompileOptions: {
           providerImportSource: join(
             dirname(require.resolve('@storybook/addon-docs/package.json')),
-            '/dist/shims/mdx-react-shim'
+            '/dist/shims/mdx-react-shim.mjs'
           ),
           ...mdxPluginOptions?.mdxCompileOptions,
           rehypePlugins: [
