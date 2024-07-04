@@ -11,6 +11,7 @@ import { StorybookError } from './storybook-error';
  * to prevent manager and preview errors from having the same category and error code.
  */
 export enum Category {
+  BLOCKS = 'BLOCKS',
   DOCS_TOOLS = 'DOCS-TOOLS',
   PREVIEW_CLIENT_LOGGER = 'PREVIEW_CLIENT-LOGGER',
   PREVIEW_CHANNELS = 'PREVIEW_CHANNELS',
@@ -235,6 +236,102 @@ export class StoryStoreAccessedBeforeInitializationError extends StorybookError 
 
     It is not recommended to use methods directly on the Story Store anyway, in Storybook 9 we will
     remove access to the store entirely`;
+  }
+}
+
+export class MountMustBeDestructuredError extends StorybookError {
+  readonly category = Category.PREVIEW_API;
+
+  readonly code = 12;
+
+  constructor(public data: { playFunction: string }) {
+    super();
+  }
+
+  template() {
+    return dedent`
+    To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
+    
+    Instead received:
+    ${this.data.playFunction}
+    `;
+  }
+}
+
+export class TestingLibraryMustBeConfiguredError extends StorybookError {
+  readonly category = Category.PREVIEW_API;
+
+  readonly code = 13;
+
+  template() {
+    return dedent`
+    You must configure testingLibraryRender to use play in portable stories.
+    
+    import { render } from '@testing-library/[renderer]';
+    
+    setProjectAnnotations({
+      testingLibraryRender: render,
+    });
+    
+    For other testing renderers, you can configure renderToCanvas:
+    
+    import { render } from 'your-renderer';
+    
+    setProjectAnnotations({
+      renderToCanvas: ({ storyFn }) => {
+        const Story = storyFn();
+        
+        // Svelte
+        render(Story.Component, Story.props);
+        
+        // Vue
+        render(Story);
+        
+        // or for React
+        render(<Story/>);
+      },
+    });
+    
+    `;
+  }
+}
+
+export class NoRenderFunctionError extends StorybookError {
+  readonly category = Category.PREVIEW_API;
+
+  readonly code = 14;
+
+  constructor(public data: { id: string }) {
+    super();
+  }
+
+  template() {
+    return dedent`
+    No render function available for storyId '${this.data.id}'
+    `;
+  }
+}
+
+export class NoStoryMountedError extends StorybookError {
+  readonly category = Category.PREVIEW_API;
+
+  readonly code = 15;
+
+  template() {
+    return dedent`
+    No story is mounted in your story.
+    
+    This usually occurs when you destructure mount in the play function, but forgot to call it.
+    
+    For example:
+
+    async play({ mount, canvasElement }) {
+      // 👈mount should be called: await mount(); 
+      const canvas = within(canvasElement);
+      const button = await canvas.findByRole('button');
+      await userEvent.click(button);
+    };
+    `;
   }
 }
 
