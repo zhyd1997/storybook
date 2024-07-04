@@ -3,14 +3,15 @@ import {
   composeStories as originalComposeStories,
   setProjectAnnotations as originalSetProjectAnnotations,
   composeConfigs,
-} from '@storybook/preview-api';
+} from 'storybook/internal/preview-api';
 import type {
   Args,
   ProjectAnnotations,
   StoryAnnotationsOrFn,
   Store_CSFExports,
   StoriesWithPartialProps,
-} from '@storybook/types';
+  NamedOrDefaultProjectAnnotations,
+} from 'storybook/internal/types';
 
 // ! ATTENTION: This needs to be a relative import so it gets prebundled. This is to avoid ESM issues in Nextjs + Jest setups
 import { INTERNAL_DEFAULT_PROJECT_ANNOTATIONS as reactAnnotations } from '../../../renderers/react/src/portable-stories';
@@ -34,9 +35,11 @@ import type { ReactRenderer, Meta } from '@storybook/react';
  * @param projectAnnotations - e.g. (import projectAnnotations from '../.storybook/preview')
  */
 export function setProjectAnnotations(
-  projectAnnotations: ProjectAnnotations<ReactRenderer> | ProjectAnnotations<ReactRenderer>[]
-) {
-  originalSetProjectAnnotations<ReactRenderer>(projectAnnotations);
+  projectAnnotations:
+    | NamedOrDefaultProjectAnnotations<ReactRenderer>
+    | NamedOrDefaultProjectAnnotations<ReactRenderer>[]
+): ProjectAnnotations<ReactRenderer> {
+  return originalSetProjectAnnotations<ReactRenderer>(projectAnnotations);
 }
 
 // This will not be necessary once we have auto preset loading
