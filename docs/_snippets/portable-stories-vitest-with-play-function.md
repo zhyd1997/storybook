@@ -7,11 +7,7 @@ import meta, { Primary } from './Button.stories';
 
 test('renders and executes the play function', async () => {
   const PrimaryStory = composeStory(Primary, meta);
-
-  // First, render the story
-  render(<PrimaryStory />);
-
-  // Then, execute the play function
+  // Mount story and run interactions
   await PrimaryStory.play();
 });
 ```
@@ -25,11 +21,7 @@ import meta, { Primary } from './Button.stories';
 
 test('renders and executes the play function', async () => {
   const PrimaryStory = composeStory(Primary, meta);
-
-  // First, render the story
-  render(PrimaryStory.Component, PrimaryStory.props);
-
-  // Then, execute the play function
+  // Mount story and run interactions
   await PrimaryStory.play();
 });
 ```
@@ -43,12 +35,7 @@ import meta, { Primary } from './Button.stories';
 
 test('renders and executes the play function', async () => {
   const PrimaryStory = composeStory(Primary, meta);
-
-  // First, render the story
-  render(PrimaryStory);
-
-  // Then, execute the play function
+  // Mount story and run interactions
   await PrimaryStory.play();
 });
 ```
-

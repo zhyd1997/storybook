@@ -1,10 +1,11 @@
 ```js filename="setupFile.js|ts" renderer="react" language="js"
 // Storybook's preview file location
-import * as globalStorybookConfig from './.storybook/preview';
+import * as previewAnnotations from './.storybook/preview';
 
 import { setProjectAnnotations } from '@storybook/react';
+import { render as testingLibraryRender } from '@testing-library/react';
 
-setProjectAnnotations(globalStorybookConfig);
+setProjectAnnotations([previewAnnotations, { testingLibraryRender }]);
 ```
 
 ```js filename="vitest.config.js" renderer="react" language="js" tabTitle="vite"
@@ -22,7 +23,7 @@ export default mergeConfig(
       clearMocks: true,
       setupFiles: './src/setupTests.js', //👈 Our configuration file enabled here
     },
-  }),
+  })
 );
 ```
 
@@ -42,17 +43,18 @@ export default mergeConfig(
       clearMocks: true,
       setupFiles: './src/setupTests.ts', //👈 Our configuration file enabled here
     },
-  }),
+  })
 );
 ```
 
 ```js filename="setupFile.js|ts" renderer="vue" language="js"
 // Storybook's preview file location
-import * as globalStorybookConfig from './.storybook/preview';
+import * as previewAnnotations from './.storybook/preview';
 
 import { setProjectAnnotations } from '@storybook/vue3';
+import { render as testingLibraryRender } from '@testing-library/vue';
 
-setProjectAnnotations(globalStorybookConfig);
+setProjectAnnotations([previewAnnotations, { testingLibraryRender }]);
 ```
 
 ```js filename="vitest.config.js" renderer="vue" language="js" tabTitle="vite"
@@ -70,7 +72,7 @@ export default mergeConfig(
       clearMocks: true,
       setupFiles: './src/setupTests.js', //👈 Our configuration file enabled here
     },
-  }),
+  })
 );
 ```
 
@@ -90,7 +92,6 @@ export default mergeConfig(
       clearMocks: true,
       setupFiles: './src/setupTests.ts', //👈 Our configuration file enabled here
     },
-  }),
+  })
 );
 ```
-
