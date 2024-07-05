@@ -300,12 +300,15 @@ export class NoStoryMountedError extends StorybookError {
 }
 
 export class NextJsSharpError extends StorybookError {
-  constructor(public data: { importType: string }) {
+  constructor() {
     super({
       category: Category.FRAMEWORK_NEXTJS,
       code: 1,
+      documentation: 'https://storybook.js.org/docs/get-started/nextjs#faq',
       message: dedent`
-        Tried to access sharp from "${data.importType}" but it was not available. You might be missing the required dependencies.
+      You are importing avif images, but you don't have sharp installed.
+
+      You have to install sharp in order to use image optimization features in Next.js.
       `,
     });
   }
