@@ -1,3 +1,13 @@
+import dedent from 'ts-dedent';
+
+function parseErrorCode({
+  code,
+  category,
+}: Pick<StorybookError, 'code' | 'category'>): `SB_${typeof category}_${string}` {
+  const paddedCode = String(code).padStart(4, '0');
+  return `SB_${category}_${paddedCode}`;
+}
+
 export abstract class StorybookError extends Error {
   /**
    * Category of the error. Used to classify the type of error, e.g., 'PREVIEW_API'.
@@ -16,7 +26,7 @@ export abstract class StorybookError extends Error {
 
   /**
    * Specifies the documentation for the error.
-   * - If `true`, links to a documentation page on the Storybook website (make sure it exists before enabling).
+   * - If `true`, links to a documentation page on the Storybook website (make sure it exists before enabling) – This is not implemented yet.
    * - If a string, uses the provided URL for documentation (external or FAQ links).
    * - If `false` (default), no documentation link is added.
    */
@@ -28,7 +38,7 @@ export abstract class StorybookError extends Error {
   readonly fromStorybook: true = true as const;
 
   get fullErrorCode() {
-    return fullErrorCode({ code: this.code, category: this.category });
+    return parseErrorCode({ code: this.code, category: this.category });
   }
 
   /**
@@ -46,7 +56,7 @@ export abstract class StorybookError extends Error {
     template: string;
     documentation?: boolean | string | string[];
   }) {
-    super(StorybookError.message(props));
+    super(StorybookError.getFullMessage(props));
     this.category = props.category;
     this.documentation = props.documentation ?? false;
     this.code = props.code;
@@ -55,7 +65,7 @@ export abstract class StorybookError extends Error {
   /**
    * Generates the error message along with additional documentation link (if applicable).
    */
-  static message({
+  static getFullMessage({
     documentation,
     code,
     category,
@@ -64,21 +74,13 @@ export abstract class StorybookError extends Error {
     let page: string | undefined;
 
     if (documentation === true) {
-      page = `https://storybook.js.org/error/${fullErrorCode({ code, category })}`;
+      page = `https://storybook.js.org/error/${parseErrorCode({ code, category })}`;
     } else if (typeof documentation === 'string') {
       page = documentation;
     } else if (Array.isArray(documentation)) {
       page = `\n${documentation.map((doc) => `\t- ${doc}`).join('\n')}`;
     }
 
-    return `${template}${page != null ? `\n\nMore info: ${page}\n` : ''}`;
+    return dedent`${template}${page != null ? `\n\nMore info: ${page}\n` : ''}`;
   }
-}
-
-function fullErrorCode({
-  code,
-  category,
-}: Pick<StorybookError, 'code' | 'category'>): `SB_${typeof category}_${string}` {
-  const paddedCode = String(code).padStart(4, '0');
-  return `SB_${category}_${paddedCode}`;
 }
