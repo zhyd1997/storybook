@@ -1527,7 +1527,7 @@ describe('StoryIndexGenerator', () => {
           type: 'story',
         };
         expect(() => {
-          generator.chooseDuplicate(mockEntry, { ...mockEntry, importPath: 'DifferentPath' });
+          generator.chooseDuplicate(mockEntry, { ...mockEntry, importPath: 'DifferentPath' }, []);
         }).toThrowErrorMatchingInlineSnapshot(`[Error: Duplicate stories with id: StoryId]`);
       });
 
