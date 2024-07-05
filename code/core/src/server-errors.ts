@@ -56,7 +56,7 @@ export class NxProjectDetectedError extends StorybookError {
       category: Category.CLI_INIT,
       code: 1,
       documentation: 'https://nx.dev/packages/storybook',
-      template: dedent`
+      message: dedent`
         We have detected Nx in your project. Nx has its own Storybook initializer, so please use it instead.
         Run "nx g @nx/storybook:configuration" to add Storybook to your project.
       `,
@@ -71,7 +71,7 @@ export class MissingFrameworkFieldError extends StorybookError {
       code: 1,
       documentation:
         'https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#new-framework-api',
-      template: dedent`
+      message: dedent`
         Could not find a 'framework' field in Storybook config.
 
         Please run 'npx storybook automigrate' to automatically fix your config.
@@ -87,7 +87,7 @@ export class InvalidFrameworkNameError extends StorybookError {
       code: 2,
       documentation:
         'https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#new-framework-api',
-      template: dedent`
+      message: dedent`
         Invalid value of '${data.frameworkName}' in the 'framework' field of Storybook config.
   
         Please run 'npx storybook automigrate' to automatically fix your config.
@@ -102,7 +102,7 @@ export class CouldNotEvaluateFrameworkError extends StorybookError {
       category: Category.CORE_COMMON,
       code: 3,
       documentation: '',
-      template: dedent`
+      message: dedent`
         Could not evaluate the '${data.frameworkName}' package from the 'framework' field of Storybook config.
 
         Are you sure it's a valid package and is installed?
@@ -120,7 +120,7 @@ export class ConflictingStaticDirConfigError extends StorybookError {
       code: 1,
       documentation:
         'https://storybook.js.org/docs/react/configure/images-and-assets#serving-static-files-via-storybook-configuration',
-      template: dedent`
+      message: dedent`
         Storybook encountered a conflict when trying to serve statics. You have configured both:
         * Storybook's option in the config file: 'staticDirs'
         * Storybook's (deprecated) CLI flag: '--staticDir' or '-s'
@@ -138,7 +138,7 @@ export class InvalidStoriesEntryError extends StorybookError {
       code: 4,
       documentation:
         'https://storybook.js.org/docs/react/faq#can-i-have-a-storybook-with-no-local-stories',
-      template: dedent`
+      message: dedent`
         Storybook could not index your stories.
         Your main configuration somehow does not contain a 'stories' field, or it resolved to an empty array.
   
@@ -157,7 +157,7 @@ export class WebpackMissingStatsError extends StorybookError {
         'https://webpack.js.org/configuration/stats/',
         'https://storybook.js.org/docs/react/builders/webpack#configure',
       ],
-      template: dedent`
+      message: dedent`
         No Webpack stats found. Did you turn off stats reporting in your Webpack config?
         Storybook needs Webpack stats (including errors) in order to build correctly.
       `,
@@ -174,7 +174,7 @@ export class WebpackInvocationError extends StorybookError {
     super({
       category: Category.BUILDER_WEBPACK5,
       code: 2,
-      template: data.error.message.trim(),
+      message: data.error.message.trim(),
     });
   }
 }
@@ -206,7 +206,7 @@ export class WebpackCompilationError extends StorybookError {
       category: Category.BUILDER_WEBPACK5,
       code: 3,
       // This error message is a followup of errors logged by Webpack to the user
-      template: dedent`
+      message: dedent`
         There were problems when compiling your code with Webpack.
         Run Storybook with --debug-webpack for more information.
       `,
@@ -224,7 +224,7 @@ export class MissingAngularJsonError extends StorybookError {
       category: Category.CLI_INIT,
       code: 2,
       documentation: 'https://storybook.js.org/docs/angular/faq#error-no-angularjson-file-found',
-      template: dedent`
+      message: dedent`
         An angular.json file was not found in the current working directory: ${data.path}
         Storybook needs it to work properly, so please rerun the command at the root of your project, where the angular.json file is located.
       `,
@@ -241,7 +241,7 @@ export class AngularLegacyBuildOptionsError extends StorybookError {
         'https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#angular-drop-support-for-calling-storybook-directly',
         'https://github.com/storybookjs/storybook/tree/next/code/frameworks/angular#how-do-i-migrate-to-an-angular-storybook-builder',
       ],
-      template: dedent`
+      message: dedent`
           Your Storybook startup script uses a solution that is not supported anymore.
           You must use Angular builder to have an explicit configuration on the project used in angular.json.
 
@@ -262,7 +262,7 @@ export class CriticalPresetLoadError extends StorybookError {
       category: Category.CORE_SERVER,
       code: 2,
       documentation: '',
-      template: dedent`
+      message: dedent`
           Storybook failed to load the following preset: ${data.presetName}.
 
           Please check whether your setup is correct, the Storybook dependencies (and their peer dependencies) are installed correctly and there are no package version clashes.
@@ -281,7 +281,7 @@ export class MissingBuilderError extends StorybookError {
       category: Category.CORE_SERVER,
       code: 3,
       documentation: 'https://github.com/storybookjs/storybook/issues/24071',
-      template: dedent`
+      message: dedent`
           Storybook could not find a builder configuration for your project. 
           Builders normally come from a framework package e.g. '@storybook/react-vite', or from builder packages e.g. '@storybook/builder-vite'.
           
@@ -303,7 +303,7 @@ export class GoogleFontsDownloadError extends StorybookError {
       code: 1,
       documentation:
         'https://github.com/storybookjs/storybook/blob/next/code/frameworks/nextjs/README.md#nextjs-font-optimization',
-      template: dedent`
+      message: dedent`
           Failed to fetch \`${data.fontFamily}\` from Google Fonts with URL: \`${data.url}\`
         `,
     });
@@ -317,7 +317,7 @@ export class GoogleFontsLoadingError extends StorybookError {
       code: 2,
       documentation:
         'https://github.com/storybookjs/storybook/blob/next/code/frameworks/nextjs/README.md#nextjs-font-optimization',
-      template: dedent`
+      message: dedent`
           An error occurred when trying to load Google Fonts with URL \`${data.url}\`.
           
           ${data.error instanceof Error ? data.error.message : ''}
@@ -332,7 +332,7 @@ export class NoMatchingExportError extends StorybookError {
       category: Category.CORE_SERVER,
       code: 4,
       documentation: '',
-      template: dedent`
+      message: dedent`
           There was an exports mismatch error when trying to build Storybook.
           Please check whether the versions of your Storybook packages match whenever possible, as this might be the cause.
           
@@ -385,7 +385,7 @@ export class MainFileESMOnlyImportError extends StorybookError {
       code: 5,
       documentation:
         'https://github.com/storybookjs/storybook/issues/23972#issuecomment-1948534058',
-      template: message.join('\n'),
+      message: message.join('\n'),
     });
   }
 }
@@ -396,7 +396,7 @@ export class MainFileMissingError extends StorybookError {
       category: Category.CORE_SERVER,
       code: 6,
       documentation: 'https://storybook.js.org/docs/configure',
-      template: dedent`
+      message: dedent`
         No configuration files have been found in your configDir: ${chalk.yellow(data.location)}.
         Storybook needs a "main.js" file, please add it.
         
@@ -418,7 +418,7 @@ export class MainFileEvaluationError extends StorybookError {
     super({
       category: Category.CORE_SERVER,
       code: 7,
-      template: dedent`
+      message: dedent`
       Storybook couldn't evaluate your ${chalk.yellow(data.location)} file.
 
       ${errorText}
@@ -435,7 +435,7 @@ export class GenerateNewProjectOnInitError extends StorybookError {
       category: Category.CLI_INIT,
       code: 3,
       documentation: '',
-      template: dedent`
+      message: dedent`
           There was an error while using ${data.packageManager} to create a new ${
             data.projectType
           } project.
@@ -451,7 +451,7 @@ export class UpgradeStorybookToLowerVersionError extends StorybookError {
     super({
       category: Category.CLI_UPGRADE,
       code: 3,
-      template: dedent`
+      message: dedent`
         You are trying to upgrade Storybook to a lower version than the version currently installed. This is not supported.
 
         Storybook version ${data.beforeVersion} was detected in your project, but you are trying to "upgrade" to version ${data.currentVersion}.
@@ -472,7 +472,7 @@ export class UpgradeStorybookToSameVersionError extends StorybookError {
     super({
       category: Category.CLI_UPGRADE,
       code: 4,
-      template: dedent`
+      message: dedent`
         You are upgrading Storybook to the same version that is currently installed in the project, version ${data.beforeVersion}.
         
         This usually happens when running the upgrade command without a version specifier, e.g. "npx storybook upgrade".
@@ -496,7 +496,7 @@ export class UpgradeStorybookUnknownCurrentVersionError extends StorybookError {
     super({
       category: Category.CLI_UPGRADE,
       code: 5,
-      template: dedent`
+      message: dedent`
         We couldn't determine the current version of Storybook in your project.
 
         Are you running the Storybook CLI in a project without Storybook?
@@ -511,7 +511,7 @@ export class UpgradeStorybookInWrongWorkingDirectory extends StorybookError {
     super({
       category: Category.CLI_UPGRADE,
       code: 6,
-      template: dedent`
+      message: dedent`
         You are running the upgrade command in a CWD that does not contain Storybook dependencies.
 
         Did you mean to run it in a different directory? Make sure the directory you run this command in contains a package.json with your Storybook dependencies.
@@ -525,7 +525,7 @@ export class NoStatsForViteDevError extends StorybookError {
     super({
       category: Category.BUILDER_VITE,
       code: 1,
-      template: dedent`
+      message: dedent`
         Unable to write preview stats as the Vite builder does not support stats in dev mode.
 
         Please remove the \`--stats-json\` flag when running in dev mode.
@@ -541,7 +541,7 @@ export class FindPackageVersionsError extends StorybookError {
     super({
       category: Category.CLI,
       code: 1,
-      template: dedent`
+      message: dedent`
         Unable to find versions of "${data.packageName}" using ${data.packageManager}
         ${data.error && `Reason: ${data.error}`}
       `,

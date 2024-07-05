@@ -7,7 +7,7 @@ describe('StorybookError', () => {
       super({
         category: 'TEST_CATEGORY',
         code: 123,
-        template: 'This is a test error.',
+        message: 'This is a test error.',
         documentation,
       });
     }

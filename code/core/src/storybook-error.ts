@@ -53,7 +53,7 @@ export abstract class StorybookError extends Error {
   constructor(props: {
     category: string;
     code: number;
-    template: string;
+    message: string;
     documentation?: boolean | string | string[];
   }) {
     super(StorybookError.getFullMessage(props));
@@ -69,7 +69,7 @@ export abstract class StorybookError extends Error {
     documentation,
     code,
     category,
-    template,
+    message,
   }: ConstructorParameters<typeof StorybookError>[0]) {
     let page: string | undefined;
 
@@ -81,6 +81,6 @@ export abstract class StorybookError extends Error {
       page = `\n${documentation.map((doc) => `\t- ${doc}`).join('\n')}`;
     }
 
-    return dedent`${template}${page != null ? `\n\nMore info: ${page}\n` : ''}`;
+    return dedent`${message}${page != null ? `\n\nMore info: ${page}\n` : ''}`;
   }
 }

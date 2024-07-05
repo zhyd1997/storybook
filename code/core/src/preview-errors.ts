@@ -37,7 +37,7 @@ export class MissingStoryAfterHmrError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 1,
-      template: dedent`
+      message: dedent`
         Couldn't find story matching id '${data.storyId}' after HMR.
         - Did you just rename a story?
         - Did you remove it from your CSF file?
@@ -55,7 +55,7 @@ export class ImplicitActionsDuringRendering extends StorybookError {
       code: 2,
       documentation:
         'https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#using-implicit-actions-during-rendering-is-deprecated-for-example-in-the-play-function',
-      template: dedent`
+      message: dedent`
         We detected that you use an implicit action arg while ${data.phase} of your story.  
         ${data.deprecated ? `\nThis is deprecated and won't work in Storybook 8 anymore.\n` : ``}
         Please provide an explicit spy to your args like this:
@@ -74,7 +74,7 @@ export class CalledExtractOnStoreError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 3,
-      template: dedent`
+      message: dedent`
         Cannot call \`storyStore.extract()\` without calling \`storyStore.cacheAllCsfFiles()\` first.
 
         You probably meant to call \`await preview.extract()\` which does the above for you.`,
@@ -87,7 +87,7 @@ export class MissingRenderToCanvasError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 4,
-      template: dedent`
+      message: dedent`
         Expected your framework's preset to export a \`renderToCanvas\` field.
 
         Perhaps it needs to be upgraded for Storybook 6.4?`,
@@ -102,7 +102,7 @@ export class CalledPreviewMethodBeforeInitializationError extends StorybookError
     super({
       category: Category.PREVIEW_API,
       code: 5,
-      template: dedent`
+      message: dedent`
         Called \`Preview.${data.methodName}()\` before initialization.
         
         The preview needs to load the story index before most methods can be called. If you want
@@ -119,7 +119,7 @@ export class StoryIndexFetchError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 6,
-      template: dedent`
+      message: dedent`
         Error fetching \`/index.json\`:
         
         ${data.text}
@@ -138,7 +138,7 @@ export class MdxFileWithNoCsfReferencesError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 7,
-      template: dedent`
+      message: dedent`
         Tried to render docs entry ${data.storyId} but it is a MDX file that has no CSF
         references, or autodocs for a CSF file that some doesn't refer to itself.
         
@@ -153,7 +153,7 @@ export class EmptyIndexError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 8,
-      template: dedent`
+      message: dedent`
         Couldn't find any stories in your Storybook.
 
         - Please check your stories field of your main.js config: does it match correctly?
@@ -167,7 +167,7 @@ export class NoStoryMatchError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 9,
-      template: dedent`
+      message: dedent`
         Couldn't find story matching '${data.storySpecifier}'.
 
         - Are you sure a story with that id exists?
@@ -182,7 +182,7 @@ export class MissingStoryFromCsfFileError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 10,
-      template: dedent`
+      message: dedent`
         Couldn't find story matching id '${data.storyId}' after importing a CSF file.
 
         The file was indexed as if the story was there, but then after importing the file in the browser
@@ -200,7 +200,7 @@ export class StoryStoreAccessedBeforeInitializationError extends StorybookError 
     super({
       category: Category.PREVIEW_API,
       code: 11,
-      template: dedent`
+      message: dedent`
         Cannot access the Story Store until the index is ready.
 
         It is not recommended to use methods directly on the Story Store anyway, in Storybook 9 we will
@@ -214,7 +214,7 @@ export class MountMustBeDestructuredError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 12,
-      template: dedent`
+      message: dedent`
         To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
         
         Instead received:
@@ -229,7 +229,7 @@ export class TestingLibraryMustBeConfiguredError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 13,
-      template: dedent`
+      message: dedent`
         You must configure testingLibraryRender to use play in portable stories.
         
         import { render } from '@testing-library/[renderer]';
@@ -267,7 +267,7 @@ export class NoRenderFunctionError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 14,
-      template: dedent`
+      message: dedent`
         No render function available for storyId '${data.id}'
       `,
     });
@@ -279,7 +279,7 @@ export class NoStoryMountedError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 15,
-      template: dedent`
+      message: dedent`
         No story is mounted in your story.
         
         This usually occurs when you destructure mount in the play function, but forgot to call it.
@@ -302,7 +302,7 @@ export class NextJsSharpError extends StorybookError {
     super({
       category: Category.FRAMEWORK_NEXTJS,
       code: 1,
-      template: dedent`
+      message: dedent`
         Tried to access sharp from "${data.importType}" but it was not available. You might be missing the required dependencies.
       `,
     });
@@ -314,7 +314,7 @@ export class NextjsRouterMocksNotAvailable extends StorybookError {
     super({
       category: Category.FRAMEWORK_NEXTJS,
       code: 2,
-      template: dedent`
+      message: dedent`
         Tried to access router mocks from "${data.importType}" but they were not created yet. You might be running code in an unsupported environment.
       `,
     });
@@ -327,7 +327,7 @@ export class UnknownArgTypesError extends StorybookError {
       category: Category.DOCS_TOOLS,
       code: 1,
       documentation: 'https://github.com/storybookjs/storybook/issues/26606',
-      template: dedent`
+      message: dedent`
         There was a failure when generating detailed ArgTypes in ${data.language} for:
         ${JSON.stringify(data.type, null, 2)} 
         

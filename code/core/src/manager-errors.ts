@@ -25,7 +25,7 @@ export class ProviderDoesNotExtendBaseProviderError extends StorybookError {
     super({
       category: Category.MANAGER_UI,
       code: 1,
-      template: `The Provider passed into Storybook's UI is not extended from the base Provider. Please check your Provider implementation.`,
+      message: `The Provider passed into Storybook's UI is not extended from the base Provider. Please check your Provider implementation.`,
     });
   }
 }
@@ -39,7 +39,7 @@ export class UncaughtManagerError extends StorybookError {
     super({
       category: Category.MANAGER_UNCAUGHT,
       code: 1,
-      template: data.error.message,
+      message: data.error.message,
     });
     this.stack = data.error.stack;
   }
