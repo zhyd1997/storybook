@@ -1,5 +1,3 @@
-import dedent from 'ts-dedent';
-
 function parseErrorCode({
   code,
   category,
@@ -81,6 +79,6 @@ export abstract class StorybookError extends Error {
       page = `\n${documentation.map((doc) => `\t- ${doc}`).join('\n')}`;
     }
 
-    return dedent`${message}${page != null ? `\n\nMore info: ${page}\n` : ''}`;
+    return `${message}${page != null ? `\n\nMore info: ${page}\n` : ''}`;
   }
 }
