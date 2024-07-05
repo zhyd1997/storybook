@@ -219,19 +219,20 @@ export class MountMustBeDestructuredError extends StorybookError {
     super({
       category: Category.PREVIEW_API,
       code: 12,
-      documentation:
-        'https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test',
       message: dedent`
+      
       To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
+
       ${
         !transpiled
           ? ''
           : dedent`
-            It seems that your builder is configured to transpile destructuring.
-            To use the mount prop, you need to configure your builder to transpile not further than ES2017.          
-            `
+          It seems that your builder is configured to transpile destructuring.
+          To use the mount prop of the story context, you need to configure your builder to transpile not further than ES2017.          
+          `
       }
-    
+      More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test
+      
       Received the following play function:
       ${data.playFunction}
       `,
