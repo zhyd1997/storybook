@@ -275,23 +275,25 @@ export class NoRenderFunctionError extends StorybookError {
 }
 
 export class NoStoryMountedError extends StorybookError {
-  constructor(public data: { mountFunction: string }) {
+  constructor() {
     super({
       category: Category.PREVIEW_API,
       code: 15,
       message: dedent`
-        No story is mounted in your story.
+        No component is mounted in your story.
         
-        This usually occurs when you destructure mount in the play function, but forgot to call it.
+        This usually occurs when you destructure mount in the play function, but forget to call it.
         
         For example:
 
         async play({ mount, canvasElement }) {
-          // 👈mount should be called: await mount(); 
+          // 👈 mount should be called: await mount(); 
           const canvas = within(canvasElement);
           const button = await canvas.findByRole('button');
           await userEvent.click(button);
         };
+
+        Make sure to either remove it or call mount in your play function.
       `,
     });
   }
