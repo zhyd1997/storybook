@@ -240,7 +240,7 @@ export class MountMustBeDestructuredError extends StorybookError {
 }
 
 export class TestingLibraryMustBeConfiguredError extends StorybookError {
-  constructor(public data: { importType: string }) {
+  constructor() {
     super({
       category: Category.PREVIEW_API,
       code: 13,
