@@ -316,7 +316,7 @@ export class NoStoryMountedError extends StorybookError {
 }
 
 export class NextJsSharpError extends StorybookError {
-  constructor(public data: { importType: string }) {
+  constructor() {
     super({
       category: Category.FRAMEWORK_NEXTJS,
       code: 1,
