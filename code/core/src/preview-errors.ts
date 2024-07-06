@@ -228,7 +228,7 @@ export class MountMustBeDestructuredError extends StorybookError {
           ? ''
           : dedent`
           It seems that your builder is configured to transpile destructuring.
-          To use the mount prop of the story context, you need to configure your builder to transpile not further than ES2017.          
+          To use the mount prop of the story context, you must configure your builder to transpile to no earlier than ES2017.          
           `
       }
       More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test
