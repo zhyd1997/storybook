@@ -63,8 +63,7 @@ export class ImplicitActionsDuringRendering extends StorybookError {
           ... 
           args: {
            ${data.name}: fn()
-          }
-      `,
+          }`,
     });
   }
 }
@@ -90,7 +89,7 @@ export class MissingRenderToCanvasError extends StorybookError {
       message: dedent`
         Expected your framework's preset to export a \`renderToCanvas\` field.
 
-        Perhaps it needs to be upgraded for Storybook 6.4?`,
+        Perhaps it needs to be upgraded for Storybook 7.0?`,
       documentation:
         'https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#mainjs-framework-field',
     });
@@ -228,14 +227,13 @@ export class MountMustBeDestructuredError extends StorybookError {
           ? ''
           : dedent`
           It seems that your builder is configured to transpile destructuring.
-          To use the mount prop of the story context, you need to configure your builder to transpile not further than ES2017.          
+          To use the mount prop of the story context, you must configure your builder to transpile to no earlier than ES2017.          
           `
       }
       More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test
       
       Received the following play function:
-      ${data.playFunction}
-      `,
+      ${data.playFunction}`,
     });
   }
 }
@@ -271,9 +269,7 @@ export class TestingLibraryMustBeConfiguredError extends StorybookError {
             // or for React
             render(<Story/>);
           },
-        });
-        
-        `,
+        });`,
     });
   }
 }
