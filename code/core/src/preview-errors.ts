@@ -63,8 +63,7 @@ export class ImplicitActionsDuringRendering extends StorybookError {
           ... 
           args: {
            ${data.name}: fn()
-          }
-      `,
+          }`,
     });
   }
 }
@@ -90,7 +89,7 @@ export class MissingRenderToCanvasError extends StorybookError {
       message: dedent`
         Expected your framework's preset to export a \`renderToCanvas\` field.
 
-        Perhaps it needs to be upgraded for Storybook 6.4?`,
+        Perhaps it needs to be upgraded for Storybook 7.0?`,
       documentation:
         'https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#mainjs-framework-field',
     });
@@ -234,8 +233,7 @@ export class MountMustBeDestructuredError extends StorybookError {
       More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test
       
       Received the following play function:
-      ${data.playFunction}
-      `,
+      ${data.playFunction}`,
     });
   }
 }
@@ -271,9 +269,7 @@ export class TestingLibraryMustBeConfiguredError extends StorybookError {
             // or for React
             render(<Story/>);
           },
-        });
-        
-        `,
+        });`,
     });
   }
 }
