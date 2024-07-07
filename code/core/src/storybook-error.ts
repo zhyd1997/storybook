@@ -28,7 +28,7 @@ export abstract class StorybookError extends Error {
    * - If a string, uses the provided URL for documentation (external or FAQ links).
    * - If `false` (default), no documentation link is added.
    */
-  public documentation: boolean | string | string[];
+  public readonly documentation: boolean | string | string[];
 
   /**
    * Flag used to easily determine if the error originates from Storybook.
