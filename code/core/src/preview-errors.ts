@@ -210,14 +210,30 @@ export class StoryStoreAccessedBeforeInitializationError extends StorybookError 
 
 export class MountMustBeDestructuredError extends StorybookError {
   constructor(public data: { playFunction: string }) {
+    const transpiled =
+      /function\s*\*|regeneratorRuntime|asyncToGenerator|_ref|param|_0|__async/.test(
+        data.playFunction
+      );
+
     super({
       category: Category.PREVIEW_API,
       code: 12,
       message: dedent`
-        To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
-        
-        Instead received:
-        ${data.playFunction}`,
+      
+      To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
+
+      ${
+        !transpiled
+          ? ''
+          : dedent`
+          It seems that your builder is configured to transpile destructuring.
+          To use the mount prop of the story context, you must configure your builder to transpile to no earlier than ES2017.          
+          `
+      }
+      More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test
+      
+      Received the following play function:
+      ${data.playFunction}`,
     });
   }
 }
