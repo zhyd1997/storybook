@@ -1,8 +1,8 @@
 import { global } from '@storybook/global';
 
 import { dedent } from 'ts-dedent';
-import type { RenderContext } from '@storybook/types';
-import { simulatePageLoad, simulateDOMContentLoaded } from '@storybook/preview-api';
+import type { RenderContext } from 'storybook/internal/types';
+import { simulatePageLoad, simulateDOMContentLoaded } from 'storybook/internal/preview-api';
 import type { StoryFn, Args, ArgTypes } from './public-types';
 import type { FetchStoryHtmlType, ServerRenderer } from './types';
 
@@ -22,7 +22,8 @@ const buildStoryArgs = (args: Args, argTypes: ArgTypes) => {
   Object.keys(argTypes).forEach((key: string) => {
     const argType = argTypes[key];
     const { control } = argType;
-    const controlType = control && control.type.toLowerCase();
+    const controlType =
+      control && typeof control === 'object' && 'type' in control && control.type?.toLowerCase();
     const argValue = storyArgs[key];
     switch (controlType) {
       case 'date':

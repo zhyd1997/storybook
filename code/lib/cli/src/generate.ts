@@ -2,19 +2,19 @@ import program from 'commander';
 import chalk from 'chalk';
 import envinfo from 'envinfo';
 import leven from 'leven';
-import { sync as readUpSync } from 'read-pkg-up';
+import { findPackageSync } from 'fd-package-json';
 import invariant from 'tiny-invariant';
 
-import { logger } from '@storybook/node-logger';
-import { addToGlobalContext, telemetry } from '@storybook/telemetry';
+import { logger } from '@storybook/core/node-logger';
+import { addToGlobalContext, telemetry } from '@storybook/core/telemetry';
 import {
   parseList,
   getEnvConfig,
   JsPackageManagerFactory,
   versions,
   removeAddon as remove,
-} from '@storybook/core-common';
-import { withTelemetry } from '@storybook/core-server';
+} from '@storybook/core/common';
+import { withTelemetry } from '@storybook/core/core-server';
 
 import type { CommandOptions } from './generators/types';
 import { initiate } from './initiate';
@@ -30,9 +30,8 @@ import { doctor } from './doctor';
 
 addToGlobalContext('cliVersion', versions.storybook);
 
-const readUpResult = readUpSync({ cwd: __dirname });
-invariant(readUpResult, 'Failed to find the closest package.json file.');
-const pkg = readUpResult.packageJson;
+const pkg = findPackageSync(__dirname);
+invariant(pkg, 'Failed to find the closest package.json file.');
 const consoleLogger = console;
 
 const command = (name: string) =>
@@ -58,6 +57,17 @@ command('init')
   .option('-y --yes', 'Answer yes to all prompts')
   .option('-b --builder <webpack5 | vite>', 'Builder library')
   .option('-l --linkable', 'Prepare installation for link (contributor helper)')
+  // due to how Commander handles default values and negated options, we have to elevate the default into Commander, and we have to specify `--dev`
+  // alongside `--no-dev` even if we are unlikely to directly use `--dev`. https://github.com/tj/commander.js/issues/2068#issuecomment-1804524585
+  .option(
+    '--dev',
+    'Launch the development server after completing initialization. Enabled by default',
+    process.env.CI !== 'true' && process.env.IN_STORYBOOK_SANDBOX !== 'true'
+  )
+  .option(
+    '--no-dev',
+    'Complete the initialization of Storybook without launching the Storybook development server'
+  )
   .action((options: CommandOptions) => {
     initiate(options).catch(() => process.exit(1));
   });
@@ -68,6 +78,7 @@ command('add <addon>')
     '--package-manager <npm|pnpm|yarn1|yarn2>',
     'Force package manager for installing dependencies'
   )
+  .option('-c, --config-dir <dir-name>', 'Directory where to load Storybook configurations from')
   .option('-s --skip-postinstall', 'Skip package specific postinstall config modifications')
   .action((addonName: string, options: any) => add(addonName, options));
 
@@ -313,4 +324,4 @@ program.on('command:*', ([invalidCmd]) => {
   process.exit(1);
 });
 
-program.usage('<command> [options]').version(pkg.version).parse(process.argv);
+program.usage('<command> [options]').version(String(pkg.version)).parse(process.argv);

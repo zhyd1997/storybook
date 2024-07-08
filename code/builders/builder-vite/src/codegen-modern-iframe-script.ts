@@ -1,5 +1,5 @@
-import { loadPreviewOrConfigFile, getFrameworkName } from '@storybook/core-common';
-import type { Options, PreviewAnnotation } from '@storybook/types';
+import { loadPreviewOrConfigFile, getFrameworkName } from 'storybook/internal/common';
+import type { Options, PreviewAnnotation } from 'storybook/internal/types';
 import { virtualStoriesFile, virtualAddonSetupFile } from './virtual-file-names';
 import { processPreviewAnnotation } from './utils/process-preview-annotation';
 
@@ -21,9 +21,13 @@ export async function generateModernIframeScriptCode(options: Options, projectRo
   // and the HMR handler.  We don't use the hot.accept callback params because only the changed
   // modules are provided, the rest are null.  We can just re-import everything again in that case.
   const getPreviewAnnotationsFunction = `
-  const getProjectAnnotations = async () => {
+  const getProjectAnnotations = async (hmrPreviewAnnotationModules = []) => {
     const configs = await Promise.all([${previewAnnotationURLs
-      .map((previewAnnotation) => `import('${previewAnnotation}')`)
+      .map(
+        (previewAnnotation, index) =>
+          // Prefer the updated module from an HMR update, otherwise import the original module
+          `hmrPreviewAnnotationModules.at(${index}) ?? import('${previewAnnotation}')`
+      )
       .join(',\n')}])
     return composeConfigs(configs);
   }`;
@@ -45,10 +49,10 @@ export async function generateModernIframeScriptCode(options: Options, projectRo
       window.__STORYBOOK_PREVIEW__.onStoriesChanged({ importFn: newModule.importFn });
       });
 
-    import.meta.hot.accept(${JSON.stringify(previewAnnotationURLs)}, () => {
+    import.meta.hot.accept(${JSON.stringify(previewAnnotationURLs)}, (previewAnnotationModules) => {
       ${getPreviewAnnotationsFunction}
       // getProjectAnnotations has changed so we need to patch the new one in
-      window.__STORYBOOK_PREVIEW__.onGetProjectAnnotationsChanged({ getProjectAnnotations });
+      window.__STORYBOOK_PREVIEW__.onGetProjectAnnotationsChanged({ getProjectAnnotations: () => getProjectAnnotations(previewAnnotationModules) });
     });
   }`.trim();
   };
@@ -60,7 +64,7 @@ export async function generateModernIframeScriptCode(options: Options, projectRo
    * @todo Inline variable and remove `noinspection`
    */
   const code = `
-  import { composeConfigs, PreviewWeb, ClientApi } from '@storybook/preview-api';
+  import { composeConfigs, PreviewWeb, ClientApi } from 'storybook/internal/preview-api';
   import '${virtualAddonSetupFile}';
   import { importFn } from '${virtualStoriesFile}';
   

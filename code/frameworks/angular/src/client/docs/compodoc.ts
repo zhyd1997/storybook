@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { global } from '@storybook/global';
 
-import { InputType, ArgTypes, SBType } from '@storybook/types';
-import { logger } from '@storybook/client-logger';
+import { InputType, ArgTypes, SBType } from 'storybook/internal/types';
+import { logger } from 'storybook/internal/client-logger';
 import {
   Argument,
   Class,
@@ -200,7 +200,7 @@ const extractDefaultValueFromComments = (property: Property, value: any) => {
 
 const extractDefaultValue = (property: Property) => {
   try {
-    let value: string | boolean = property.defaultValue?.replace(/^'(.*)'$/, '$1');
+    let value: string = property.defaultValue?.replace(/^'(.*)'$/, '$1');
     value = castDefaultValue(property, value);
 
     if (value == null && property.jsdoctags?.length > 0) {

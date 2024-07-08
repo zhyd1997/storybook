@@ -1,5 +1,8 @@
 import { minVersion, validRange } from 'semver';
-import type { SupportedFrameworks } from '@storybook/types';
+import type {
+  SupportedFrameworks,
+  SupportedRenderers as CoreSupportedFrameworks,
+} from '@storybook/core/types';
 
 function eqMajor(versionRange: string, major: number) {
   // Uses validRange to avoid a throw from minVersion if an invalid range gets passed
@@ -20,22 +23,13 @@ export type ExternalFramework = {
 export const externalFrameworks: ExternalFramework[] = [
   { name: 'qwik', packageName: 'storybook-framework-qwik' },
   { name: 'solid', frameworks: ['storybook-solidjs-vite'], renderer: 'storybook-solidjs' },
+  { name: 'nuxt', packageName: '@storybook-vue/nuxt' },
 ];
 
-// Should match @storybook/<renderer>
-export type SupportedRenderers =
-  | 'react'
-  | 'react-native'
-  | 'vue3'
-  | 'angular'
-  | 'ember'
-  | 'preact'
-  | 'svelte'
-  | 'qwik'
-  | 'html'
-  | 'web-components'
-  | 'server'
-  | 'solid';
+/**
+ * @deprecated Please use `SupportedFrameworks` from `@storybook/types` instead
+ */
+export type SupportedRenderers = CoreSupportedFrameworks;
 
 export const SUPPORTED_RENDERERS: SupportedRenderers[] = [
   'react',
@@ -59,6 +53,7 @@ export enum ProjectType {
   WEBPACK_REACT = 'WEBPACK_REACT',
   NEXTJS = 'NEXTJS',
   VUE3 = 'VUE3',
+  NUXT = 'NUXT',
   ANGULAR = 'ANGULAR',
   EMBER = 'EMBER',
   WEB_COMPONENTS = 'WEB_COMPONENTS',
@@ -124,6 +119,13 @@ export type TemplateConfiguration = {
  * therefore WEBPACK_REACT has to come first, as it's more specific.
  */
 export const supportedTemplates: TemplateConfiguration[] = [
+  {
+    preset: ProjectType.NUXT,
+    dependencies: ['nuxt'],
+    matcherFunction: ({ dependencies }) => {
+      return dependencies?.every(Boolean) ?? true;
+    },
+  },
   {
     preset: ProjectType.VUE3,
     dependencies: {
@@ -245,10 +247,7 @@ export const supportedTemplates: TemplateConfiguration[] = [
 // users an "Unsupported framework" message
 export const unsupportedTemplate: TemplateConfiguration = {
   preset: ProjectType.UNSUPPORTED,
-  dependencies: {
-    // TODO(blaine): Remove when we support Nuxt 3
-    nuxt: (versionRange) => eqMajor(versionRange, 3),
-  },
+  dependencies: {},
   matcherFunction: ({ dependencies }) => {
     return dependencies?.some(Boolean) ?? false;
   },

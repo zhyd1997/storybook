@@ -1,5 +1,5 @@
-import type { StrictArgTypes } from '@storybook/types';
-import type { PropDef, ArgTypesExtractor } from '@storybook/docs-tools';
+import type { StrictArgTypes } from 'storybook/internal/types';
+import type { PropDef, ArgTypesExtractor } from 'storybook/internal/docs-tools';
 import { extractProps } from './extractProps';
 
 export const extractArgTypes: ArgTypesExtractor = (component) => {
@@ -22,9 +22,9 @@ export const extractArgTypes: ArgTypesExtractor = (component) => {
           description,
           type: { required, ...sbType },
           table: {
-            type,
+            type: type ?? undefined,
             jsDocTags,
-            defaultValue: defaultSummary,
+            defaultValue: defaultSummary ?? undefined,
           },
         };
         return acc;

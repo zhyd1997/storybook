@@ -19,7 +19,7 @@ import {
   provideAnimations,
   provideNoopAnimations,
 } from '@angular/platform-browser/animations';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import { NgModuleMetadata } from '../../types';
 import { isComponentAlreadyDeclared } from './NgModulesAnalyzer';
 
@@ -175,7 +175,17 @@ export class PropertyExtractor implements NgModuleMetadata {
     const isPipe = decorators.some((d) => this.isDecoratorInstanceOf(d, 'Pipe'));
 
     const isDeclarable = isComponent || isDirective || isPipe;
-    const isStandalone = (isComponent || isDirective) && decorators.some((d) => d.standalone);
+
+    // Check if the hierarchically lowest Component or Directive decorator (the only relevant for importing dependencies) is standalone.
+    const isStandalone = !!(
+      (isComponent || isDirective) &&
+      [...decorators]
+        .reverse() // reflectionCapabilities returns decorators in a hierarchically top-down order
+        .find(
+          (d) =>
+            this.isDecoratorInstanceOf(d, 'Component') || this.isDecoratorInstanceOf(d, 'Directive')
+        )?.standalone
+    );
 
     return { isDeclarable, isStandalone };
   };
