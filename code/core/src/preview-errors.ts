@@ -230,7 +230,7 @@ export class MountMustBeDestructuredError extends StorybookError {
           Ensure that your builder is configured to transpile no earlier than ES2017.
           
           This feature is not available:
-          - When you have configured a storybook framework to transpile destructure statements or async/await.
+          - When you have configured a Storybook framework to transpile destructure statements or async/await.
           - In Angular, as async/await is transpiled to support the zone.js polyfill.`
       }
       More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-the-component-gets-rendered
