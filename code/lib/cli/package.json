@@ -288,7 +288,6 @@
   "dependencies": {
     "@babel/core": "^7.24.4",
     "@babel/types": "^7.24.0",
-    "@ndelangen/get-tarball": "^3.0.7",
     "@storybook/codemod": "workspace:*",
     "@storybook/core": "workspace:*",
     "@types/semver": "^7.3.4",
@@ -317,6 +316,7 @@
     "ts-dedent": "^2.0.0"
   },
   "devDependencies": {
+    "@ndelangen/get-tarball": "^3.0.7",
     "@types/cross-spawn": "^6.0.2",
     "@types/prompts": "^2.0.9",
     "@types/util-deprecate": "^1.0.0",
