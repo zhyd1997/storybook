@@ -5,9 +5,11 @@ export const Default = {
       data: { title: 'Mount inside of play' },
     });
 
-    // 👇Pass data that is created inside of the play function to the component
-    // For example a just generated UUID
-    const canvas = await mount(<Page {...args} params={{ id: String(note.id) }} />);
+    const canvas = await mount(
+      // 👇 Pass data that is created inside of the play function to the component
+      //   For example, a just-generated UUID
+      <Page {...args} params={{ id: String(note.id) }} />
+    );
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
@@ -21,9 +23,11 @@ export const Default = {
       data: { title: 'Mount inside of play' },
     });
 
-    // 👇Pass data that is created inside of the play function to the component
-    // For example a just generated UUID
-    const canvas = await mount(<Page {...args} params={{ id: String(note.id) }} />);
+    const canvas = await mount(
+      // 👇 Pass data that is created inside of the play function to the component
+      //   For example, a just-generated UUID
+      <Page {...args} params={{ id: String(note.id) }} />
+    );
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
@@ -37,9 +41,12 @@ export const Default: Story = {
       data: { title: 'Mount inside of play' },
     });
 
-    // 👇Pass data that is created inside of the play function to the component
-    // For example a just generated UUID
-    const canvas = await mount(Page, { props: { ...args, params: { id: String(note.id) } } });
+    const canvas = await mount(
+      Page,
+      // 👇 Pass data that is created inside of the play function to the component
+      //   For example, a just-generated UUID
+      { props: { ...args, params: { id: String(note.id) } } }
+    );
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
@@ -53,9 +60,12 @@ export const Default = {
       data: { title: 'Mount inside of play' },
     });
 
-    // 👇Pass data that is created inside of the play function to the component
-    // For example a just generated UUID
-    const canvas = await mount(Page, { props: { ...args, params: { id: String(note.id) } } });
+    const canvas = await mount(
+      Page,
+      // 👇 Pass data that is created inside of the play function to the component
+      //   For example, a just-generated UUID
+      { props: { ...args, params: { id: String(note.id) } } }
+    );
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
@@ -69,9 +79,12 @@ export const Default: Story = {
       data: { title: 'Mount inside of play' },
     });
 
-    // 👇Pass data that is created inside of the play function to the component
-    // For example a just generated UUID
-    const canvas = await mount(Page, { props: { ...args, params: { id: String(note.id) } } });
+    const canvas = await mount(
+      Page,
+      // 👇 Pass data that is created inside of the play function to the component
+      //   For example, a just-generated UUID
+      { props: { ...args, params: { id: String(note.id) } } }
+    );
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
@@ -85,9 +98,12 @@ export const Default = {
       data: { title: 'Mount inside of play' },
     });
 
-    // 👇Pass data that is created inside of the play function to the component
-    // For example a just generated UUID
-    const canvas = await mount(Page, { props: { ...args, params: { id: String(note.id) } } });
+    const canvas = await mount(
+      Page,
+      // 👇 Pass data that is created inside of the play function to the component
+      //   For example, a just-generated UUID
+      { props: { ...args, params: { id: String(note.id) } } }
+    );
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },

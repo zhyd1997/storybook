@@ -56,40 +56,60 @@ Once the story loads in the UI, it simulates the user's behavior and verifies th
 
 <Video src="../_assets/writing-tests/addon-interaction-example-optimized.mp4" />
 
+<If notRenderer="angular">
+
 ### Run code before the component gets rendered
 
 You can execute code before rendering by using the `mount` function in the `play` method.
 
-Note that you must always destructure mount from the play function context. If you do not, an error will be thrown.
-
 Here's an example of using the [`mockdate`](https://github.com/boblauer/MockDate) package to mock the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), a useful way to make your story render in a consistent state.
 
-<Callout variant="info">
-  You *must* destructure the mount property from the context. This makes sure that storybook won't start rendering before the play function begins.
-</Callout>
+<CodeSnippets path="mount-basic.md" />
 
 <Callout variant="warning">
-  You *must* destructure the mount property from the context.
-  This makes sure that Storybook won't start rendering the story before the play function begins.
+  There are two requirements to use the `mount` function:
 
-  This feature is not available:
+  1. You *must* destructure the mount property from the `context` (the argument passed to your play function). This makes sure that Storybook does not start rendering the story before the play function begins.
+  2. Your Storybook framework or builder must be configured to transpile to ES2017 or newer. This is because destructuring statements and async/await usages are otherwise transpiled away, which prevents Storybook from recognizing your usage of `mount`.
+</Callout>
 
-  - When you have configured a Storybook framework to transpile destructure statements or async/await.
-  - In Angular, as async/await is transpiled to support the zone.js polyfill.
+<If renderer={['react', 'vue', 'svelte']}>
 
-  Ensure that your builder is configured to transpile no earlier than ES2017.
+#### Create mock data before rendering
+
+You can also use `mount` to create mock data that you want to pass to the component. To do so, first create your data in the play function and then call the `mount` function with a component configured with that data. In this example, we create a mock `note` and pass its `id` to the Page component, which we call `mount` with.
+
+<CodeSnippets path="mount-advanced.md" />
+
+<Callout variant="info">
+  When you call `mount()` with no arguments, the component is rendered using the story’s render function, whether the [implicit default](../api/csf.mdx#default-render-functions) or the [explicit custom definition](../api/csf.mdx#custom-render-functions).
+
+  When you mount a specific component inside the `mount` function like in the example above, the story’s render function will be ignored. This is why you must forward the `args` to the component.
+</Callout>
+
+</If>
+
+</If>
+
+### Run code before each story in a file
+
+Sometimes you might need to run the same code before each story in a file. For instance, you might need to set up the initial state of the component or modules. You can do this by adding an asynchronous `beforeEach` function to the component meta.
+
+You can return a cleanup function from the `beforeEach` function, which will run **after** each story, when the story is remounted or navigated away from.
+
+<Callout variant="info">
+Generally, you should reset component and module state in the [preview file's `beforeEach` function](#reset-state-for-all-tests), to ensure it applies to your entire project. However, if a component's needs are particularly unique, you can use the returned cleanup function in the component meta `beforeEach` to reset the state as needed.
 </Callout>
 
 {/* prettier-ignore-start */}
 
-<CodeSnippets path="mount-basic.md" />
+<CodeSnippets path="before-each-in-meta-mock-date.md" />
 
 {/* prettier-ignore-end */}
 
-### Reset state in a preview beforeEach
+### Reset state for all tests
 
-Make sure to avoid hanging state by resetting state back in a `beforeEach` function in the preview file (`.storybook/preview.js|ts`).
-This code will run before every story in the project.
+When you [alter a component's state](#run-code-before-the-component-gets-rendered), it's important to reset that state before rendering another story to maintain isolation between tests. You can do this in a `beforeEach` function in the preview file (`.storybook/preview.js|ts`). This code will run before every story in the project.
 
 {/* prettier-ignore-start */}
 
@@ -99,34 +119,6 @@ This code will run before every story in the project.
 
 <Callout variant="info">
   It is *not* necessary to restore `fn()` mocks, as Storybook will already do that automatically before rendering a story. See the [`parameters.test.restoreMocks` API](../api/parameters.mdx#restoremocks) for more information.
-</Callout>
-
-### Run code before each story
-
-Sometimes you might need to run the same code before each story in a file.
-You can do this by adding an asynchronous `beforeEach` function to the component meta.
-
-You can return a cleanup function from the `beforeEach` function, which will run **after** each story, when the story is remounted or navigated away from.
-You don't need to add specific cleanup in your component meta `beforeEach`, if you already reset the state to a default in a preview file `beforeEach`.
-
-{/* prettier-ignore-start */}
-
-<CodeSnippets path="before-each-in-meta-mock-date.md" />
-
-{/* prettier-ignore-end */}
-
-### Pass data created in play to the component
-
-When you create data inside the play function, you can pass it to the component in the following way:
-
-{/* prettier-ignore-start */}
-
-<CodeSnippets path="mount-advanced.md" />
-
-{/* prettier-ignore-end */}
-
-<Callout variant="info">
-  When you mount a specific component inside the mount function like in the example above, the story’s render function will be ignored.
 </Callout>
 
 ### API for user-events
