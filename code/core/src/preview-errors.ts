@@ -230,7 +230,7 @@ export class MountMustBeDestructuredError extends StorybookError {
           To use the mount prop of the story context, you must configure your builder to transpile to no earlier than ES2017.          
           `
       }
-      More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test
+      More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-the-component-gets-rendered
       
       Received the following play function:
       ${data.playFunction}`,

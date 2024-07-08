@@ -68,13 +68,25 @@ Here's an example of using the [`mockdate`](https://github.com/boblauer/MockDate
   You *must* destructure the mount property from the context. This makes sure that storybook won't start rendering before the play function begins.
 </Callout>
 
+<Callout variant="warning">
+  You *must* destructure the mount property from the context.
+  This makes sure that storybook won't start rendering before the play function begins.
+
+  This feature is not available:
+
+  - When you have configured a storybook framework to transpile destructure statements or async/await.
+  - In Angular, as async/await is transpiled to support the zone.js polyfill.
+
+  Ensure that your builder is configured to transpile no earlier than ES2017.
+</Callout>
+
 {/* prettier-ignore-start */}
 
 <CodeSnippets path="mount-basic.md" />
 
 {/* prettier-ignore-end */}
 
-### Reset state in a preview loader
+### Reset state in a preview beforeEach
 
 Make sure to avoid hanging state by resetting state back in a `beforeEach` function in the preview file (`.storybook/preview.js|ts`).
 This code will run before every story in the project.
