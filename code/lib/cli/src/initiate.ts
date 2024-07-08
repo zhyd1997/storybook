@@ -434,7 +434,6 @@ export async function initiate(options: CommandOptions): Promise<void> {
         ProjectType.REACT_PROJECT,
         ProjectType.NEXTJS,
         ProjectType.VUE3,
-        ProjectType.NUXT,
         ProjectType.ANGULAR,
       ].includes(projectType);
 
