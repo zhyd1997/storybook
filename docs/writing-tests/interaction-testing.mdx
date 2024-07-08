@@ -60,9 +60,9 @@ Once the story loads in the UI, it simulates the user's behavior and verifies th
 
 You can execute code before rendering by using the `mount` function in the `play` method.
 
-Note that you must always destructure mount from the context. If you do not, an error will be thrown.
+Note that you must always destructure mount from the play function context. If you do not, an error will be thrown.
 
-Here's an example of using the [`mockdate`](https://github.com/boblauer/MockDate) package to mock the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date).
+Here's an example of using the [`mockdate`](https://github.com/boblauer/MockDate) package to mock the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), a useful way to make your story render in a consistent state.
 
 <Callout variant="info">
   You *must* destructure the mount property from the context. This makes sure that storybook won't start rendering before the play function begins.
@@ -92,7 +92,7 @@ This code will run before every story in the project.
 ### Run code before each story
 
 Sometimes you might need to run the same code before each story in a file.
-You can do this by adding an asynchronous `beforeEach` function to the meta.
+You can do this by adding an asynchronous `beforeEach` function to the component meta.
 
 You return a cleanup function from the `beforeEach` function, which will run **after** each story, when the story is remounted or navigated away from.
 You don't need this if you reset the state to a default in the preview file,

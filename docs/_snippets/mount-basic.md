@@ -4,7 +4,7 @@ import MockDate from 'mockdate';
 // ...
 
 export const ChristmasUI = {
-  async play({ canvasElement }) {
+  async play({ mount }) {
     MockDate.set('2024-12-25');
     // 👇Render the component with the mocked date
     await mount();
@@ -19,7 +19,7 @@ import MockDate from 'mockdate';
 // ...
 
 export const ChristmasUI: Story = {
-  async play({ canvasElement }) {
+  async play({ mount }) {
     MockDate.set('2024-12-25');
     // 👇Render the component with the mocked date
     await mount();
@@ -34,7 +34,7 @@ import MockDate from 'mockdate';
 // ...
 
 export const ChristmasUI: Story = {
-  async play({ canvasElement }) {
+  async play({ mount }) {
     MockDate.set('2024-12-25');
     // 👇Render the component with the mocked date
     await mount();
