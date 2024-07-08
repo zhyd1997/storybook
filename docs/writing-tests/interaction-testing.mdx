@@ -92,7 +92,7 @@ This code will run before every story in the project.
 ### Run code before each story
 
 Sometimes you might need to run the same code before each story in a file.
-You can do this by adding an asynchronous `beforeEach` function to the meta.
+You can do this by adding an asynchronous `beforeEach` function to the component meta.
 
 You return a cleanup function from the `beforeEach` function, which will run **after** each story, when the story is remounted or navigated away from.
 You don't need this if you reset the state to a default in the preview file,
