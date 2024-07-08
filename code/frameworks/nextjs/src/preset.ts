@@ -118,7 +118,7 @@ export const babel: PresetProperty<'babel'> = async (baseConfig: TransformOption
         include: /(story|stories)\.[cm]?[jt]sx?$/,
         presets: [
           [
-            '@babel/preset-env',
+            'next/dist/compiled/babel/preset-env',
             {
               bugfixes: true,
               targets: {
