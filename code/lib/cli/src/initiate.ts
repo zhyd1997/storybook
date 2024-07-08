@@ -427,12 +427,16 @@ export async function initiate(options: CommandOptions): Promise<void> {
     logger.log('\nRunning Storybook');
 
     try {
-      const isReactWebProject =
-        projectType === ProjectType.REACT_SCRIPTS ||
-        projectType === ProjectType.REACT ||
-        projectType === ProjectType.WEBPACK_REACT ||
-        projectType === ProjectType.REACT_PROJECT ||
-        projectType === ProjectType.NEXTJS;
+      const supportsOnboarding = [
+        ProjectType.REACT_SCRIPTS,
+        ProjectType.REACT,
+        ProjectType.WEBPACK_REACT,
+        ProjectType.REACT_PROJECT,
+        ProjectType.NEXTJS,
+        ProjectType.VUE3,
+        ProjectType.NUXT,
+        ProjectType.ANGULAR,
+      ].includes(projectType);
 
       const flags = [];
 
@@ -442,7 +446,7 @@ export async function initiate(options: CommandOptions): Promise<void> {
         flags.push('--');
       }
 
-      if (isReactWebProject) {
+      if (supportsOnboarding) {
         flags.push('--initial-path=/onboarding');
       }
 
