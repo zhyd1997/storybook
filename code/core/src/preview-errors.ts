@@ -221,7 +221,7 @@ export class MountMustBeDestructuredError extends StorybookError {
       message: dedent`
       
       To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
-      This makes sure that storybook won't start rendering before the play function begins.
+      This makes sure that Storybook won't start rendering the story before the play function begins.
 
       ${
         !transpiled
