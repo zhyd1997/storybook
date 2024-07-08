@@ -221,14 +221,17 @@ export class MountMustBeDestructuredError extends StorybookError {
       message: dedent`
       
       To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
+      This makes sure that storybook won't start rendering before the play function begins.
 
       ${
         !transpiled
           ? ''
           : dedent`
-          It seems that your builder is configured to transpile destructuring.
-          To use the mount prop of the story context, you must configure your builder to transpile to no earlier than ES2017.          
-          `
+          Ensure that your builder is configured to transpile no earlier than ES2017.
+          
+          This feature is not available:
+          - When you have configured a storybook framework to transpile destructure statements or async/await.
+          - In Angular, as async/await is transpiled to support the zone.js polyfill.`
       }
       More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-the-component-gets-rendered
       
