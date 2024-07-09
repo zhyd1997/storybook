@@ -1,5 +1,5 @@
-import { enhanceArgTypes, extractComponentDescription } from '@storybook/docs-tools';
-import type { ArgTypesEnhancer } from '@storybook/types';
+import { enhanceArgTypes, extractComponentDescription } from 'storybook/internal/docs-tools';
+import type { ArgTypesEnhancer } from 'storybook/internal/types';
 import { extractArgTypes } from './docs/extractArgTypes';
 import { sourceDecorator } from './docs/sourceDecorator';
 import type { VueRenderer } from './types';

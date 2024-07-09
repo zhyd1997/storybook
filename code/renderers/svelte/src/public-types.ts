@@ -10,13 +10,13 @@ import type {
   StoryContext as GenericStoryContext,
   StrictArgs,
   ProjectAnnotations,
-} from '@storybook/types';
+} from 'storybook/internal/types';
 
 import type { ComponentType, ComponentProps, SvelteComponent } from 'svelte';
 import type { SetOptional, Simplify } from 'type-fest';
 import type { SvelteRenderer } from './types';
 
-export type { Args, ArgTypes, Parameters, StrictArgs } from '@storybook/types';
+export type { Args, ArgTypes, Parameters, StrictArgs } from 'storybook/internal/types';
 
 /**
  * Metadata to configure the stories for a component.
