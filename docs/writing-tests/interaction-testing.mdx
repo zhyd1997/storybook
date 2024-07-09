@@ -56,9 +56,9 @@ Once the story loads in the UI, it simulates the user's behavior and verifies th
 
 <Video src="../_assets/writing-tests/addon-interaction-example-optimized.mp4" />
 
-<If notRenderer="angular">
-
 ### Run code before the component gets rendered
+
+<If notRenderer="angular">
 
 You can execute code before rendering by using the `mount` function in the `play` method.
 
@@ -88,6 +88,41 @@ You can also use `mount` to create mock data that you want to pass to the compon
 </Callout>
 
 </If>
+
+</If>
+
+<If renderer="angular">
+
+You can execute code before running test by defining an asynchronous `beforeEach` function for the story.
+
+Additionally, if you return a cleanup function from the `beforeEach` function, it will run **after** the test is run, when the story is remounted or navigated away from.
+
+<Callout variant="info">
+Generally, you should reset component and module state in the [preview file's `beforeEach` function](#reset-state-for-all-tests), to ensure it applies to your entire project. However, if a story's needs are particularly unique, you can use the returned cleanup function in the story's `beforeEach` to reset the state as needed.
+</Callout>
+
+Here's an example of using the [`mockdate`](https://github.com/boblauer/MockDate) package to mock the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), a useful way to make your story render in a consistent state.
+
+```ts filename="Page.stories.ts"
+import MockDate from 'mockdate';
+
+// ...rest of story file
+
+export const ChristmasUI = {
+  // 👇 Set the value of Date for this story
+  async beforeEach() {
+    MockDate.set('2024-12-25');
+
+    // 👇 Reset the Date after this test runs
+    return () => {
+      MockDate.reset();
+    };
+  }
+  async play({ canvasElement }) {
+    // ... This will run with the mocked Date
+  },
+};
+```
 
 </If>
 
