@@ -8,7 +8,7 @@ const cache = createFileSystemCache({
   ttl: 24 * 60 * 60 * 1000, // 24h
 });
 
-const getPortableStoriesFileCountUncached = async () => {
+export const getPortableStoriesFileCountUncached = async () => {
   const { stdout } = await execaCommand(`git grep -m1 -c composeStor`, {
     cwd: process.cwd(),
     shell: true,

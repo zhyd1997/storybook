@@ -1,19 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { join } from 'path';
 
-import { getPortableStoriesFiles } from './get-portable-stories-usage';
+import { getPortableStoriesFileCountUncached } from './get-portable-stories-usage';
 
-describe('getPortableStoriesFiles', () => {
+describe('getPortableStoriesFileCountUncached', () => {
   it('should ignores node_modules, non-source files', async () => {
-    const base = join(__dirname, '__fixtures__');
-    const usage = (await getPortableStoriesFiles(base)).map((f) => f.replace(base, ''));
-    expect(usage).toMatchInlineSnapshot(`
-      [
-        "/b.js",
-        "/a.js",
-        "/foo/a.js",
-        "/.storybook/a.js",
-      ]
-    `);
+    const usage = await getPortableStoriesFileCountUncached();
+    // verify git grep -m1 -c composeStor | wc -l
+    expect(usage).toMatchInlineSnapshot(`14`);
   });
 });
