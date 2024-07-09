@@ -1,51 +1,34 @@
-import { readFile } from 'fs/promises';
-import { join } from 'path';
-import { glob } from 'glob';
+import { execaCommand } from 'execa';
 
 import { createFileSystemCache, resolvePathInStorybookCache } from '../common';
 
 const cache = createFileSystemCache({
   basePath: resolvePathInStorybookCache('portable-stories'),
   ns: 'storybook',
-  ttl: 24 * 60 * 60 * 1000,
+  ttl: 24 * 60 * 60 * 1000, // 24h
 });
 
-export const containsPortableStories = async (filename: string) => {
-  if (/sb\-preview\/runtime.m?js$/i.test(filename)) return null;
-
-  const fileContent = await readFile(filename, 'utf-8');
-  const contains = /composeStor[y|ies]/g.test(fileContent);
-  return contains ? filename : null;
-};
-
-export const getPortableStoriesFiles = async (base: string) => {
-  const files = await glob('**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}', {
-    ignore: ['**/node_modules/**', '**/storybook-static/**', '**/dist/**'],
-    dot: true,
-    cwd: base,
+const getPortableStoriesFileCountUncached = async () => {
+  const { stdout } = await execaCommand(`git grep -m1 -c composeStor`, {
+    cwd: process.cwd(),
+    shell: true,
   });
-
-  const hits = [];
-  const chunkSize = 10;
-  for (let i = 0; i < files.length; i += chunkSize) {
-    const chunk = files.slice(i, i + chunkSize);
-    const results = (
-      await Promise.all(chunk.map((f: string) => containsPortableStories(join(base, f))))
-    ).filter(Boolean);
-    if (results.length > 0) {
-      hits.push(...results);
-    }
-  }
-  return hits as string[];
+  return stdout.split('\n').filter(Boolean).length;
 };
 
 const CACHE_KEY = 'portableStories';
 export const getPortableStoriesFileCount = async () => {
   let cached = await cache.get(CACHE_KEY);
   if (!cached) {
-    const files = await getPortableStoriesFiles(process.cwd());
-    cached = { usage: files.length };
-    await cache.set(CACHE_KEY, cached);
+    try {
+      const count = await getPortableStoriesFileCountUncached();
+      cached = { count };
+      await cache.set(CACHE_KEY, cached);
+    } catch (err: any) {
+      // exit code 1 if no matches are found
+      const count = err.exitCode === 1 ? 0 : null;
+      cached = { count };
+    }
   }
-  return cached.usage;
+  return cached.count;
 };
