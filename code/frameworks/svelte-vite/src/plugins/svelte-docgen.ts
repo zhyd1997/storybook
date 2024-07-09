@@ -7,6 +7,7 @@ import type { SvelteComponentDoc, SvelteParserOptions } from 'sveltedoc-parser';
 import { logger } from 'storybook/internal/node-logger';
 import { preprocess } from 'svelte/compiler';
 import { replace, typescript } from 'svelte-preprocess';
+import { ts2doc } from './ts2doc';
 
 /*
  * Patch sveltedoc-parser internal options.
@@ -73,69 +74,78 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
     async transform(src: string, id: string) {
       if (!filter(id)) return undefined;
 
-      if (preprocessOptions && !docPreprocessOptions) {
-        /*
-         * We can't use vitePreprocess() for the documentation
-         * because it uses esbuild which removes jsdoc.
-         *
-         * By default, only typescript is transpiled, and style tags are removed.
-         *
-         * Note: these preprocessors are only used to make the component
-         * compatible to sveltedoc-parser (no ts), not to compile
-         * the component.
-         */
-        docPreprocessOptions = [replace([[/<style.+<\/style>/gims, '']])];
+      const resource = path.relative(cwd, id);
+      const rawSource = fs.readFileSync(resource).toString();
+
+      // Use ts2doc to get props information
+      const { hasRuneProps, data } = ts2doc(rawSource);
+
+      let componentDoc: SvelteComponentDoc & { keywords?: string[] } = {};
+
+      if (!hasRuneProps) {
+        // legacy mode (slots and events)
+
+        if (preprocessOptions && !docPreprocessOptions) {
+          /*
+           * We can't use vitePreprocess() for the documentation
+           * because it uses esbuild which removes jsdoc.
+           *
+           * By default, only typescript is transpiled, and style tags are removed.
+           *
+           * Note: these preprocessors are only used to make the component
+           * compatible to sveltedoc-parser (no ts), not to compile
+           * the component.
+           */
+          docPreprocessOptions = [replace([[/<style.+<\/style>/gims, '']])];
+
+          try {
+            const ts = require.resolve('typescript');
+            if (ts) {
+              docPreprocessOptions.unshift(typescript());
+            }
+          } catch {
+            // this will error in JavaScript-only projects, this is okay
+          }
+        }
+
+        let docOptions;
+        if (docPreprocessOptions) {
+          const { code: fileContent } = await preprocess(rawSource, docPreprocessOptions, {
+            filename: resource,
+          });
+
+          docOptions = {
+            fileContent,
+          };
+        } else {
+          docOptions = { filename: resource };
+        }
+
+        // set SvelteDoc options
+        const options: SvelteParserOptions = {
+          ...docOptions,
+          version: 3,
+        };
 
         try {
-          const ts = require.resolve('typescript');
-          if (ts) {
-            docPreprocessOptions.unshift(typescript());
+          componentDoc = await svelteDoc.parse(options);
+        } catch (error: any) {
+          componentDoc = { keywords: [], data: [] };
+          if (logDocgen) {
+            logger.error(error);
           }
-        } catch {
-          // this will error in JavaScript-only projects, this is okay
         }
       }
 
-      const resource = path.relative(cwd, id);
-
-      let docOptions;
-      if (docPreprocessOptions) {
-        const rawSource = fs.readFileSync(resource).toString();
-
-        const { code: fileContent } = await preprocess(rawSource, docPreprocessOptions, {
-          filename: resource,
-        });
-
-        docOptions = {
-          fileContent,
-        };
-      } else {
-        docOptions = { filename: resource };
-      }
-
-      // set SvelteDoc options
-      const options: SvelteParserOptions = {
-        ...docOptions,
-        version: 3,
-      };
-
-      const s = new MagicString(src);
-
-      let componentDoc: SvelteComponentDoc & { keywords?: string[] };
-      try {
-        componentDoc = await svelteDoc.parse(options);
-      } catch (error: any) {
-        componentDoc = { keywords: [], data: [] };
-        if (logDocgen) {
-          logger.error(error);
-        }
-      }
+      // Always use props info from ts2doc
+      componentDoc.data = data;
 
       // get filename for source content
       const file = path.basename(resource);
 
       componentDoc.name = path.basename(file);
 
+      const s = new MagicString(src);
       const componentName = getNameFromFilename(resource);
       s.append(`;${componentName}.__docgen = ${JSON.stringify(componentDoc)}`);
 
