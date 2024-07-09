@@ -1,5 +1,5 @@
 ```tsx filename="Page.stories.tsx" renderer="react" language="ts"
-export const Default = {
+export const Default: Story = {
   play: async ({ mount, args }) => {
     const note = await db.note.create({
       data: { title: 'Mount inside of play' },
@@ -13,6 +13,10 @@ export const Default = {
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
+  argTypes: {
+    // 👇 Make the params prop un-controllable, as the value is always overriden in the play function.
+    params: { control: { disable: true } },
+  }
 };
 ```
 
@@ -31,6 +35,10 @@ export const Default = {
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
+  argTypes: {
+    // 👇 Make the params prop un-controllable, as the value is always overriden in the play function.
+    params: { control: { disable: true } },
+  }
 };
 ```
 
@@ -50,6 +58,10 @@ export const Default: Story = {
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
+  argTypes: {
+    // 👇 Make the params prop un-controllable, as the value is always overriden in the play function.
+    params: { control: { disable: true } },
+  }
 };
 ```
 
@@ -69,6 +81,10 @@ export const Default = {
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
+  argTypes: {
+    // 👇 Make the params prop un-controllable, as the value is always overriden in the play function.
+    params: { control: { disable: true } },
+  }
 };
 ```
 
@@ -88,6 +104,10 @@ export const Default: Story = {
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
+  argTypes: {
+    // 👇 Make the params prop un-controllable, as the value is always overriden in the play function.
+    params: { control: { disable: true } },
+  }
 };
 ```
 
@@ -107,5 +127,9 @@ export const Default = {
 
     await userEvent.click(await canvas.findByRole('menuitem', { name: /login to add/i }));
   },
+  argTypes: {
+    // 👇 Make the params prop un-controllable, as the value is always overriden in the play function.
+    params: { control: { disable: true } },
+  }
 };
 ```
