@@ -34,7 +34,7 @@ export async function useStatics(router: Router, options: Options) {
           // Don't log for the internal static dir
           if (!targetEndpoint.startsWith('/sb-')) {
             logger.info(
-        `=> Serving static files from ${chalk.cyan(staticDir)} at ${chalk.cyan(targetEndpoint)}`
+              `=> Serving static files from ${chalk.cyan(staticDir)} at ${chalk.cyan(targetEndpoint)}`
             );
           }
 
