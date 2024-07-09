@@ -1,32 +1,15 @@
 import program from 'commander';
 import chalk from 'chalk';
-import envinfo from 'envinfo';
 import leven from 'leven';
 import { findPackageSync } from 'fd-package-json';
 import invariant from 'tiny-invariant';
 
 import { logger } from '@storybook/core/node-logger';
-import { addToGlobalContext, telemetry } from '@storybook/core/telemetry';
-import {
-  parseList,
-  getEnvConfig,
-  JsPackageManagerFactory,
-  versions,
-  removeAddon as remove,
-} from '@storybook/core/common';
-import { withTelemetry } from '@storybook/core/core-server';
+import { addToGlobalContext } from '@storybook/core/telemetry';
+import { parseList, getEnvConfig, versions } from '@storybook/core/common';
 
-import type { CommandOptions } from './generators/types';
-import { initiate } from './initiate';
-import { add } from './add';
-import { migrate } from './migrate';
-import { upgrade, type UpgradeOptions } from './upgrade';
-import { sandbox } from './sandbox';
-import { link } from './link';
-import { doAutomigrate } from './automigrate';
-import { dev } from './dev';
-import { build } from './build';
-import { doctor } from './doctor';
+import { dev } from '../dev';
+import { build } from '../build';
 
 addToGlobalContext('cliVersion', versions.storybook);
 
@@ -45,173 +28,6 @@ const command = (name: string) =>
     )
     .option('--debug', 'Get more logs in debug mode', false)
     .option('--enable-crash-reports', 'Enable sending crash reports to telemetry data');
-
-command('init')
-  .description('Initialize Storybook into your project.')
-  .option('-f --force', 'Force add Storybook')
-  .option('-s --skip-install', 'Skip installing deps')
-  .option('--package-manager <npm|pnpm|yarn1|yarn2>', 'Force package manager for installing deps')
-  .option('--use-pnp', 'Enable pnp mode for Yarn 2+')
-  .option('-p --parser <babel | babylon | flow | ts | tsx>', 'jscodeshift parser')
-  .option('-t --type <type>', 'Add Storybook for a specific project type')
-  .option('-y --yes', 'Answer yes to all prompts')
-  .option('-b --builder <webpack5 | vite>', 'Builder library')
-  .option('-l --linkable', 'Prepare installation for link (contributor helper)')
-  // due to how Commander handles default values and negated options, we have to elevate the default into Commander, and we have to specify `--dev`
-  // alongside `--no-dev` even if we are unlikely to directly use `--dev`. https://github.com/tj/commander.js/issues/2068#issuecomment-1804524585
-  .option(
-    '--dev',
-    'Launch the development server after completing initialization. Enabled by default',
-    process.env.CI !== 'true' && process.env.IN_STORYBOOK_SANDBOX !== 'true'
-  )
-  .option(
-    '--no-dev',
-    'Complete the initialization of Storybook without launching the Storybook development server'
-  )
-  .action((options: CommandOptions) => {
-    initiate(options).catch(() => process.exit(1));
-  });
-
-command('add <addon>')
-  .description('Add an addon to your Storybook')
-  .option(
-    '--package-manager <npm|pnpm|yarn1|yarn2>',
-    'Force package manager for installing dependencies'
-  )
-  .option('-c, --config-dir <dir-name>', 'Directory where to load Storybook configurations from')
-  .option('-s --skip-postinstall', 'Skip package specific postinstall config modifications')
-  .action((addonName: string, options: any) => add(addonName, options));
-
-command('remove <addon>')
-  .description('Remove an addon from your Storybook')
-  .option(
-    '--package-manager <npm|pnpm|yarn1|yarn2>',
-    'Force package manager for installing dependencies'
-  )
-  .action((addonName: string, options: any) =>
-    withTelemetry('remove', { cliOptions: options }, async () => {
-      await remove(addonName, options);
-      if (!options.disableTelemetry) {
-        await telemetry('remove', { addon: addonName, source: 'cli' });
-      }
-    })
-  );
-
-command('upgrade')
-  .description(`Upgrade your Storybook packages to v${versions.storybook}`)
-  .option(
-    '--package-manager <npm|pnpm|yarn1|yarn2>',
-    'Force package manager for installing dependencies'
-  )
-  .option('-y --yes', 'Skip prompting the user')
-  .option('-f --force', 'force the upgrade, skipping autoblockers')
-  .option('-n --dry-run', 'Only check for upgrades, do not install')
-  .option('-s --skip-check', 'Skip postinstall version and automigration checks')
-  .option('-c, --config-dir <dir-name>', 'Directory where to load Storybook configurations from')
-  .action(async (options: UpgradeOptions) => upgrade(options).catch(() => process.exit(1)));
-
-command('info')
-  .description('Prints debugging information about the local environment')
-  .action(async () => {
-    consoleLogger.log(chalk.bold('\nStorybook Environment Info:'));
-    const pkgManager = await JsPackageManagerFactory.getPackageManager();
-    const activePackageManager = pkgManager.type.replace(/\d/, ''); // 'yarn1' -> 'yarn'
-    const output = await envinfo.run({
-      System: ['OS', 'CPU', 'Shell'],
-      Binaries: ['Node', 'Yarn', 'npm', 'pnpm'],
-      Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
-      npmPackages: '{@storybook/*,*storybook*,sb,chromatic}',
-      npmGlobalPackages: '{@storybook/*,*storybook*,sb,chromatic}',
-    });
-    const activePackageManagerLine = output.match(new RegExp(`${activePackageManager}:.*`, 'i'));
-    consoleLogger.log(
-      output.replace(
-        activePackageManagerLine,
-        chalk.bold(`${activePackageManagerLine} <----- active`)
-      )
-    );
-  });
-
-command('migrate [migration]')
-  .description('Run a Storybook codemod migration on your source files')
-  .option('-l --list', 'List available migrations')
-  .option('-g --glob <glob>', 'Glob for files upon which to apply the migration', '**/*.js')
-  .option('-p --parser <babel | babylon | flow | ts | tsx>', 'jscodeshift parser')
-  .option('-c, --config-dir <dir-name>', 'Directory where to load Storybook configurations from')
-  .option(
-    '-n --dry-run',
-    'Dry run: verify the migration exists and show the files to which it will be applied'
-  )
-  .option(
-    '-r --rename <from-to>',
-    'Rename suffix of matching files after codemod has been applied, e.g. ".js:.ts"'
-  )
-  .action((migration, { configDir, glob, dryRun, list, rename, parser }) => {
-    migrate(migration, {
-      configDir,
-      glob,
-      dryRun,
-      list,
-      rename,
-      parser,
-    }).catch((err) => {
-      logger.error(err);
-      process.exit(1);
-    });
-  });
-
-command('sandbox [filterValue]')
-  .alias('repro') // for backwards compatibility
-  .description('Create a sandbox from a set of possible templates')
-  .option('-o --output <outDir>', 'Define an output directory')
-  .option('--no-init', 'Whether to download a template without an initialized Storybook', false)
-  .action((filterValue, options) =>
-    sandbox({ filterValue, ...options }).catch((e) => {
-      logger.error(e);
-      process.exit(1);
-    })
-  );
-
-command('link <repo-url-or-directory>')
-  .description('Pull down a repro from a URL (or a local directory), link it, and run storybook')
-  .option('--local', 'Link a local directory already in your file system')
-  .option('--no-start', 'Start the storybook', true)
-  .action((target, { local, start }) =>
-    link({ target, local, start }).catch((e) => {
-      logger.error(e);
-      process.exit(1);
-    })
-  );
-
-command('automigrate [fixId]')
-  .description('Check storybook for incompatibilities or migrations and apply fixes')
-  .option('-y --yes', 'Skip prompting the user')
-  .option('-n --dry-run', 'Only check for fixes, do not actually run them')
-  .option('--package-manager <npm|pnpm|yarn1|yarn2>', 'Force package manager')
-  .option('-l --list', 'List available migrations')
-  .option('-c, --config-dir <dir-name>', 'Directory of Storybook configurations to migrate')
-  .option('-s --skip-install', 'Skip installing deps')
-  .option(
-    '--renderer <renderer-pkg-name>',
-    'The renderer package for the framework Storybook is using.'
-  )
-  .action(async (fixId, options) => {
-    await doAutomigrate({ fixId, ...options }).catch((e) => {
-      logger.error(e);
-      process.exit(1);
-    });
-  });
-
-command('doctor')
-  .description('Check Storybook for known problems and provide suggestions or fixes')
-  .option('--package-manager <npm|pnpm|yarn1|yarn2>', 'Force package manager')
-  .option('-c, --config-dir <dir-name>', 'Directory of Storybook configuration')
-  .action(async (options) => {
-    await doctor(options).catch((e) => {
-      logger.error(e);
-      process.exit(1);
-    });
-  });
 
 command('dev')
   .option('-p, --port <number>', 'Port to run Storybook', (str) => parseInt(str, 10))
