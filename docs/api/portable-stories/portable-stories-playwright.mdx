@@ -122,15 +122,11 @@ sidebar:
   - addon annotations (optional): those exported by addons
   - beforeAll: code that runs before all tests
 
-  ```ts
-  // playwright/index.ts
-  // Replace your-renderer with the renderer you are using (e.g. react, vue3)
-  import { setProjectAnnotations } from '@storybook/your-renderer';
-  import * as addonAnnotations from 'my-addon/preview';
-  import * as previewAnnotations from '../.storybook/preview';
+  {/* prettier-ignore-start */}
 
-  setProjectAnnotations([previewAnnotations, addonAnnotations]);
-  ```
+  <CodeSnippets path="portable-stories-playwright-ct-compose-stories.md" />
+
+  {/* prettier-ignore-end */}
 
   <Callout variant="warning">
     Sometimes a story can require an addon's [decorator](../../writing-stories/decorators.mdx) or [loader](../../writing-stories/loaders.mdx) to render properly. For example, an addon can apply a decorator that wraps your story in the necessary router context. In this case, you must include that addon's `preview` export in the project annotations set. See `addonAnnotations` in the example above.
@@ -192,23 +188,7 @@ sidebar:
 
   {/* prettier-ignore-start */}
 
-  ```tsx
-  // Button.portable.ts
-  import { test } from 'playwright';
-  import { render } from '@testing-library/react';
-  import { composeStory } from '@storybook/react';
-
-  import meta, { Primary } from './Button.stories';
-
-  export const PrimaryEnglish = composeStory(
-    Primary,
-    meta,
-    { globals: { locale: 'en' } } // 👈 Project annotations to override the locale
-  );
-
-  export const PrimarySpanish =
-    composeStory(Primary, meta, { globals: { locale: 'es' } });
-  ```
+  <CodeSnippets path="portable-stories-playwright-ct-override-globals.md" />
 
   You can then use those composed stories in your Playwright test file using the [`createTest`](#createtest) function.
 

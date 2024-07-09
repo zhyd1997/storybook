@@ -2,8 +2,6 @@
 title: 'Portable stories in Vitest'
 ---
 
-{/* This page is unpublished for now */}
-
 <If notRenderer={['react', 'vue', 'svelte']}>
   <Callout variant="info">
     Portable stories in Vitest are currently only supported in [React](?renderer=react), [Vue](?renderer=vue) and [Svelte](?renderer=svelte) projects.
@@ -167,26 +165,11 @@ title: 'Portable stories in Vitest'
   - beforeAll: code that runs before all tests
   - testingLibraryRender: the render function from Testing Library
 
-  ```ts
-  // setup-portable-stories.ts
-  import { beforeAll } from 'vitest';
-  // Replace your-renderer with the renderer you are using (e.g. react, vue3, svelte)
-  import { setProjectAnnotations } from '@storybook/your-renderer';
-  // Replace your-renderer with the renderer you are using (e.g. react, vue, svelte)
-  import { render as testingLibraryRender } from '@testing-library/your-renderer';
-  import * as addonAnnotations from 'my-addon/preview';
-  import * as previewAnnotations from './.storybook/preview';
+  {/* prettier-ignore-start */}
 
-  const annotations = setProjectAnnotations([
-    previewAnnotations,
-    addonAnnotations,
-    // Attention: Passing the render function from testing library is required if you mount stories in play functions
-    { testingLibraryRender }
-  ]);
+  <CodeSnippets path="portable-stories-vitest-set-project-annotations.md" />
 
-  // supports beforeAll hook from Storybook
-  beforeAll(annotations.beforeAll);
-  ```
+  {/* prettier-ignore-end */}
 
   <Callout variant="warning">
     Sometimes a story can require an addon's [decorator](../../writing-stories/decorators.mdx) or [loader](../../writing-stories/loaders.mdx) to render properly. For example, an addon can apply a decorator that wraps your story in the necessary router context. In this case, you must include that addon's `preview` export in the project annotations set. See `addonAnnotations` in the example above.

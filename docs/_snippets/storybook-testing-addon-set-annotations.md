@@ -1,11 +1,13 @@
 ```js filename="setupFile.js|ts" renderer="react" language="js"
+import { setProjectAnnotations } from '@storybook/react';
+import { render as testingLibraryRender } from '@testing-library/react';
 // Storybook's preview file location
 import * as previewAnnotations from './.storybook/preview';
 
-import { setProjectAnnotations } from '@storybook/react';
-import { render as testingLibraryRender } from '@testing-library/react';
+const annotations = setProjectAnnotations([previewAnnotations, { testingLibraryRender }]);
 
-setProjectAnnotations([previewAnnotations, { testingLibraryRender }]);
+// Supports beforeAll hook from Storybook
+beforeAll(annotations.beforeAll);
 ```
 
 ```js filename="vitest.config.js" renderer="react" language="js" tabTitle="vite"
