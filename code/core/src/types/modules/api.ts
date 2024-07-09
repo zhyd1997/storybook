@@ -196,6 +196,7 @@ export type API_ComposedRefUpdate = Partial<
     | 'version'
     | 'indexError'
     | 'previewInitialized'
+    | 'sourceUrl'
     | 'internal_index'
   >
 >;
