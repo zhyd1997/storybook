@@ -7,7 +7,7 @@ import type { SvelteComponentDoc, SvelteParserOptions } from 'sveltedoc-parser';
 import { logger } from 'storybook/internal/node-logger';
 import { preprocess } from 'svelte/compiler';
 import { replace, typescript } from 'svelte-preprocess';
-import { ts2doc } from './ts2doc';
+import { generateDocgen } from './generateDocgen';
 
 /*
  * Patch sveltedoc-parser internal options.
@@ -78,7 +78,7 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
       const rawSource = fs.readFileSync(resource).toString();
 
       // Use ts2doc to get props information
-      const { hasRuneProps, data } = ts2doc(rawSource);
+      const { hasRuneProps, data } = generateDocgen(rawSource);
 
       let componentDoc: SvelteComponentDoc & { keywords?: string[] } = {};
 

@@ -7,6 +7,9 @@ function getInitializerValue(initializer?: ts.Node) {
   if (initializer === undefined) {
     return undefined;
   }
+  if (initializer.kind === ts.SyntaxKind.NullKeyword) {
+    return null;
+  }
   if (ts.isNumericLiteral(initializer)) {
     return Number(initializer.text);
   }
@@ -25,7 +28,7 @@ function getInitializerValue(initializer?: ts.Node) {
 /*
  * Make sveltedoc-parser compatible data from .svelte file with svelte2tsx and TypeScript.
  */
-export function ts2doc(fileContent: string) {
+export function generateDocgen(fileContent: string) {
   const shimFilename = require.resolve('svelte2tsx/svelte-shims-v4.d.ts');
   const shimContent = ts.sys.readFile(shimFilename) || '';
   const shimSourceFile = ts.createSourceFile(
