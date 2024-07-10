@@ -1,3 +1,6 @@
+## 8.2.0
+
+
 ## 8.1.11
 
 - Telemetry: Detect Node version - [#28299](https://github.com/storybookjs/storybook/pull/28299), thanks @yannbf!
