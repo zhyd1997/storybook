@@ -83,7 +83,7 @@ const uploadBench = async () => {
   const appTable = dataset.table('bench2');
 
   await Promise.all([
-    prNumber
+    prNumber && prNumber !== '0'
       ? fetch('https://storybook-benchmark-bot.vercel.app/description', {
           method: 'POST',
           body: JSON.stringify({
