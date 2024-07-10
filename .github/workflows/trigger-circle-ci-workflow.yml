@@ -49,7 +49,8 @@ jobs:
             -d '{
                   "branch": "'"$BRANCH"'",
                   "parameters": {
-                    "workflow": "normal"
+                    "workflow": "normal",
+                    "pr": ${{ github.event.pull_request.number}}
                   }
                 }'
         env:
@@ -68,7 +69,8 @@ jobs:
             -d '{
                   "branch": "'"$BRANCH"'",
                   "parameters": {
-                    "workflow": "docs"
+                    "workflow": "docs",
+                    "pr": ${{ github.event.pull_request.number}}
                   }
                 }'
         env:
@@ -87,7 +89,8 @@ jobs:
             -d '{
                   "branch": "'"$BRANCH"'",
                   "parameters": {
-                    "workflow": "merged"
+                    "workflow": "merged",
+                    "pr": ${{ github.event.pull_request.number}}
                   }
                 }'
         env:
@@ -106,7 +109,8 @@ jobs:
             -d '{
                   "branch": "'"$BRANCH"'",
                   "parameters": {
-                    "workflow": "daily"
+                    "workflow": "daily",
+                    "pr": ${{ github.event.pull_request.number}}
                   }
                 }'
         env:
