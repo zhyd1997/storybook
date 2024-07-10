@@ -152,6 +152,11 @@
       "import": "./dist/cli/index.js",
       "require": "./dist/cli/index.cjs"
     },
+    "./cli/bin": {
+      "types": "./dist/cli/bin/index.d.ts",
+      "import": "./dist/cli/bin/index.js",
+      "require": "./dist/cli/bin/index.cjs"
+    },
     "./package.json": "./package.json"
   },
   "main": "dist/index.cjs",
@@ -239,6 +244,9 @@
       ],
       "cli": [
         "./dist/cli/index.d.ts"
+      ],
+      "cli/bin": [
+        "./dist/cli/bin/index.d.ts"
       ]
     }
   },

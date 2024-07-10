@@ -41,6 +41,7 @@ export const getEntries = (cwd: string) => {
     define('src/manager/globals-module-info.ts', ['node'], true),
     define('src/preview/globals.ts', ['node'], true),
     define('src/cli/index.ts', ['node'], true),
+    define('src/cli/bin/index.ts', ['node'], true),
   ];
 };
 
