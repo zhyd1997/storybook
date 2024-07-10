@@ -7,7 +7,7 @@ import 'jest-specific-snapshot';
 
 import { describe, test, expect } from '@jest/globals';
 
-// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, svelte, etc.)
 import { composeStories } from '@storybook/your-renderer';
 
 const compose = (entry) => {
@@ -76,7 +76,7 @@ import "jest-specific-snapshot";
 
 import { describe, test, expect } from "@jest/globals";
 
-// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, svelte, etc.)
 import { composeStories } from '@storybook/your-renderer';
 
 type StoryFile = {
@@ -149,7 +149,7 @@ describe("Stories Snapshots", () => {
 import path from 'path';
 import { describe, expect, test } from 'vitest';
 
-// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, svelte, etc.)
 import { composeStories } from '@storybook/your-renderer';
 
 const compose = (entry) => {
@@ -213,7 +213,7 @@ import type { Meta, StoryFn } from '@storybook/your-framework';
 import path from 'path';
 import { describe, expect, test } from 'vitest';
 
-// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, svelte, etc.)
 import { composeStories } from '@storybook/your-renderer';
 
 type StoryFile = {

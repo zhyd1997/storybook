@@ -163,7 +163,7 @@ sidebar:
   These are the configurations needed in the setup file:
   - preview annotations: those defined in `.storybook/preview.ts`
   - addon annotations (optional): those exported by addons
-  - beforeAll: code that runs before all tests
+  - beforeAll: code that runs before all tests ([more info](../../writing-tests/interaction-testing.mdx#beforeall))
   - testingLibraryRender: the render function from Testing Library
 
   {/* prettier-ignore-start */}
@@ -172,11 +172,11 @@ sidebar:
 
   {/* prettier-ignore-end */}
 
-  <Callout variant="warning">
-    Sometimes a story can require an addon's [decorator](../../writing-stories/decorators.mdx) or [loader](../../writing-stories/loaders.mdx) to render properly. For example, an addon can apply a decorator that wraps your story in the necessary router context. In this case, you must include that addon's `preview` export in the project annotations set. See `addonAnnotations` in the example above.
+  Sometimes a story can require an addon's [decorator](../../writing-stories/decorators.mdx) or [loader](../../writing-stories/loaders.mdx) to render properly. For example, an addon can apply a decorator that wraps your story in the necessary router context. In this case, you must include that addon's `preview` export in the project annotations set. See `addonAnnotations` in the example above.
 
-    Note: If the addon doesn't automatically apply the decorator or loader itself, but instead exports them for you to apply manually in `.storybook/preview.js|ts` (e.g. using `withThemeFromJSXProvider` from [@storybook/addon-themes](https://github.com/storybookjs/storybook/blob/next/code/addons/themes/docs/api.md#withthemefromjsxprovider)), then you do not need to do anything else. They are already included in the `previewAnnotations` in the example above.
-  </Callout>
+  Note: If the addon doesn't automatically apply the decorator or loader itself, but instead exports them for you to apply manually in `.storybook/preview.js|ts` (e.g. using `withThemeFromJSXProvider` from [@storybook/addon-themes](https://github.com/storybookjs/storybook/blob/next/code/addons/themes/docs/api.md#withthemefromjsxprovider)), then you do not need to do anything else. They are already included in the `previewAnnotations` in the example above.
+
+  If you need to configure Testing Library's `render` or use a different render function, please let us know in [this discussion](https://github.com/storybookjs/storybook/discussions/28532) so we can learn more about your needs.
 
   ### Type
 
@@ -202,7 +202,7 @@ sidebar:
 
   To preview your stories in Storybook, Storybook runs a story pipeline, which includes applying project annotations, loading data, rendering the story, and playing interactions. This is a simplified version of the pipeline:
 
-  ![A flow diagram of the story pipeline. First, set project annotations. Collect annotations (decorators, args, etc) which are exported by addons and the preview file. Second, compose story. Create renderable elements based on the stories passed onto the API. Third, render story. Load, mount, and execute the play function as part of the portable stories API.](../../_assets/api/story-pipeline.png)
+  ![A flow diagram of the story pipeline. First, set project annotations. Collect annotations (decorators, args, etc) which are exported by addons and the preview file. Second, compose story. Create renderable elements based on the stories passed onto the API. Third, play. Mount the component and execute all the story lifecycle hooks.](../../_assets/api/story-pipeline.png)
 
   When you want to reuse a story in a different environment, however, it's crucial to understand that all these steps make a story. The portable stories API provides you with the mechanism to recreate that story pipeline in your external environment:
 
