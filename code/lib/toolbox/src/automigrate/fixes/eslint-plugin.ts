@@ -6,7 +6,7 @@ import {
   extractEslintInfo,
   findEslintFile,
   SUPPORTED_ESLINT_EXTENSIONS,
-} from '../helpers/eslintPlugin';
+} from '@storybook/core/cli';
 
 import type { Fix } from '../types';
 

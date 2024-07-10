@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { dedent } from 'ts-dedent';
 import { readConfig } from '@storybook/core/csf-tools';
 import type { Fix } from '../types';
-import { detectPnp } from '../../detect';
+import { detectPnp } from '@storybook/core/cli';
 import { updateMainConfig } from '../helpers/mainConfigFile';
 import {
   getFieldsForRequireWrapper,

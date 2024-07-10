@@ -1,4 +1,4 @@
-import path from 'path';
+import path, { dirname } from 'path';
 import fse from 'fs-extra';
 import { dedent } from 'ts-dedent';
 import ora from 'ora';
@@ -6,14 +6,14 @@ import invariant from 'tiny-invariant';
 import type { JsPackageManager } from '@storybook/core/common';
 import { getPackageDetails, versions as packageVersions } from '@storybook/core/common';
 import type { SupportedFrameworks } from '@storybook/core/types';
-import type { NpmOptions } from '../NpmOptions';
-import type { SupportedRenderers, Builder } from '../project_types';
-import { SupportedLanguage, externalFrameworks } from '../project_types';
-import { copyTemplateFiles } from '../helpers';
+import type { NpmOptions } from '@storybook/core/cli';
+import type { SupportedRenderers, Builder } from '@storybook/core/cli';
+import { SupportedLanguage, externalFrameworks } from '@storybook/core/cli';
+import { copyTemplateFiles } from '@storybook/core/cli';
 import { configureMain, configurePreview } from './configure';
 import type { FrameworkOptions, GeneratorOptions } from './types';
-import { configureEslintPlugin, extractEslintInfo } from '../automigrate/helpers/eslintPlugin';
-import { detectBuilder } from '../detect';
+import { configureEslintPlugin, extractEslintInfo } from '@storybook/core/cli';
+import { detectBuilder } from '@storybook/core/cli';
 
 const logger = console;
 
@@ -394,6 +394,11 @@ export async function baseGenerator(
       packageManager,
       language,
       destination: componentsDestinationPath,
+      assetsDir: path.join('create-storybook', 'rendererAssets', 'common'),
     });
   }
+}
+
+export function getCliDir() {
+  return dirname(require.resolve('create-storybook/package.json'));
 }

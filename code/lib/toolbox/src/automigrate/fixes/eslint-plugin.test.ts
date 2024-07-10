@@ -5,8 +5,10 @@ import * as fsExtra from 'fs-extra';
 import type { PackageJson } from '@storybook/core/common';
 import { eslintPlugin } from './eslint-plugin';
 import { makePackageManager } from '../helpers/testing-helpers';
+import * as fs from 'node:fs';
 
 vi.mock('fs-extra', async () => import('../../../../../__mocks__/fs-extra'));
+vi.mock('fs');
 
 const checkEslint = async ({
   packageJson,
@@ -39,6 +41,7 @@ const checkEslint = async ({
       }
     `),
   });
+  vi.mocked(fs).existsSync.mockImplementation(() => true);
   return eslintPlugin.check({
     packageManager: makePackageManager(packageJson),
     mainConfig: {} as any,

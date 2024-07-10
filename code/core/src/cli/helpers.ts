@@ -5,9 +5,9 @@ import path, { join } from 'path';
 import { coerce, satisfies } from 'semver';
 import stripJsonComments from 'strip-json-comments';
 
-import findUp from 'find-up';
+import { findUpSync } from 'find-up';
 import invariant from 'tiny-invariant';
-import { getCliDir, getRendererDir } from './dirs';
+import { getRendererDir } from './dirs';
 import {
   type JsPackageManager,
   type PackageJson,
@@ -15,8 +15,7 @@ import {
   frameworkToRenderer as CoreFrameworkToRenderer,
 } from '@storybook/core/common';
 import type { SupportedFrameworks, SupportedRenderers } from '@storybook/core/types';
-import { CoreBuilder } from './project_types';
-import { SupportedLanguage } from './project_types';
+import { CoreBuilder, SupportedLanguage } from './project_types';
 import { versions as storybookMonorepoPackages } from '@storybook/core/common';
 
 const logger = console;
@@ -128,7 +127,7 @@ type CopyTemplateFilesOptions = {
   packageManager: JsPackageManager;
   renderer: SupportedFrameworks | SupportedRenderers;
   language: SupportedLanguage;
-  includeCommonAssets?: boolean;
+  assetsDir?: string;
   destination?: string;
 };
 
@@ -164,7 +163,7 @@ export async function copyTemplateFiles({
   renderer,
   language,
   destination,
-  includeCommonAssets = true,
+  assetsDir,
 }: CopyTemplateFilesOptions) {
   const languageFolderMapping: Record<SupportedLanguage | 'typescript', string> = {
     // keeping this for backwards compatibility in case community packages are using it
@@ -213,14 +212,14 @@ export async function copyTemplateFiles({
   };
 
   const destinationPath = destination ?? (await targetPath());
-  if (includeCommonAssets) {
-    await fse.copy(join(getCliDir(), 'rendererAssets', 'common'), destinationPath, {
+  if (assetsDir) {
+    await fse.copy(assetsDir, destinationPath, {
       overwrite: true,
     });
   }
   await fse.copy(await templatePath(), destinationPath, { overwrite: true });
 
-  if (includeCommonAssets) {
+  if (assetsDir) {
     const rendererType = frameworkToRenderer[renderer] || 'react';
     await adjustTemplate(join(destinationPath, 'Configure.mdx'), { renderer: rendererType });
   }
@@ -258,7 +257,7 @@ export function getStorybookVersionSpecifier(packageJson: PackageJsonWithDepsAnd
 }
 
 export async function isNxProject() {
-  return findUp.sync('nx.json');
+  return findUpSync('nx.json');
 }
 
 export function coerceSemver(version: string) {

@@ -10,13 +10,13 @@ import { addToGlobalContext, telemetry } from '@storybook/core/telemetry';
 import { JsPackageManagerFactory, versions, removeAddon as remove } from '@storybook/core/common';
 import { withTelemetry } from '@storybook/core/core-server';
 
-import { add } from './add';
-import { migrate } from './migrate';
-import { upgrade, type UpgradeOptions } from './upgrade';
-import { sandbox } from './sandbox';
-import { link } from './link';
-import { doAutomigrate } from './automigrate';
-import { doctor } from './doctor';
+import { add } from '../add';
+import { migrate } from '../migrate';
+import { upgrade, type UpgradeOptions } from '../upgrade';
+import { sandbox } from '../sandbox';
+import { link } from '../link';
+import { doAutomigrate } from '../automigrate';
+import { doctor } from '../doctor';
 
 addToGlobalContext('cliVersion', versions.storybook);
 

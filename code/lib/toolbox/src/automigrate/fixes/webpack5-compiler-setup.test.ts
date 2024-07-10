@@ -2,7 +2,7 @@ import { vi, describe, it, expect } from 'vitest';
 import type { StorybookConfig } from '@storybook/core/types';
 import type { JsPackageManager } from '@storybook/core/common';
 import { webpack5CompilerSetup } from './webpack5-compiler-setup';
-import { CoreWebpackCompilers } from '../../project_types';
+import { CoreWebpackCompilers } from '@storybook/core/cli';
 
 const check = async ({
   packageManager,

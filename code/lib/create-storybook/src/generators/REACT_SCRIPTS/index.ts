@@ -5,7 +5,7 @@ import { dedent } from 'ts-dedent';
 
 import { baseGenerator } from '../baseGenerator';
 import type { Generator } from '../types';
-import { CoreBuilder } from '../../project_types';
+import { CoreBuilder } from '@storybook/core/cli';
 
 const generator: Generator = async (packageManager, npmOptions, options) => {
   const monorepoRootPath = path.join(__dirname, '..', '..', '..', '..', '..', '..');

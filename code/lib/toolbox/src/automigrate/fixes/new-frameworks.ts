@@ -6,7 +6,7 @@ import { frameworkPackages, rendererPackages } from '@storybook/core/common';
 import type { Preset } from '@storybook/core/types';
 import invariant from 'tiny-invariant';
 import type { Fix } from '../types';
-import { getStorybookVersionSpecifier } from '../../helpers';
+import { getStorybookVersionSpecifier } from '@storybook/core/cli';
 import {
   getNextjsAddonOptions,
   detectBuilderInfo,

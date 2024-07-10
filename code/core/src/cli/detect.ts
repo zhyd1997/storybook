@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import findUp from 'find-up';
+import { findUpSync } from 'find-up';
 import semver from 'semver';
 import { logger } from '@storybook/core/node-logger';
 
@@ -110,8 +110,8 @@ export function detectFrameworkPreset(
  * @returns CoreBuilder
  */
 export async function detectBuilder(packageManager: JsPackageManager, projectType: ProjectType) {
-  const viteConfig = findUp.sync(viteConfigFiles);
-  const webpackConfig = findUp.sync(webpackConfigFiles);
+  const viteConfig = findUpSync(viteConfigFiles);
+  const webpackConfig = findUpSync(webpackConfigFiles);
   const dependencies = await packageManager.getAllDependencies();
 
   if (viteConfig || (dependencies.vite && dependencies.webpack === undefined)) {
@@ -161,7 +161,7 @@ export function isStorybookInstantiated(configDir = resolve(process.cwd(), '.sto
 }
 
 export async function detectPnp() {
-  return !!findUp.sync(['.pnp.js', '.pnp.cjs']);
+  return !!findUpSync(['.pnp.js', '.pnp.cjs']);
 }
 
 export async function detectLanguage(packageManager: JsPackageManager) {

@@ -10,10 +10,6 @@ import type { JsPackageManager } from '@storybook/core/common';
 import { versions } from '@storybook/core/common';
 import type { SupportedFrameworks } from '@storybook/core/types';
 
-export function getCliDir() {
-  return dirname(require.resolve('storybook/package.json'));
-}
-
 const resolveUsingBranchInstall = async (packageManager: JsPackageManager, request: string) => {
   const { temporaryDirectory } = await import('tempy');
   const tempDirectory = temporaryDirectory();

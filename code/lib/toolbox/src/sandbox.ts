@@ -13,7 +13,7 @@ import { allTemplates as TEMPLATES } from './sandbox-templates';
 import type { PackageManagerName } from '@storybook/core/common';
 import { JsPackageManagerFactory } from '@storybook/core/common';
 import { versions } from '@storybook/core/common';
-import { doInitiate } from './initiate';
+import { initiate } from 'create-storybook';
 
 const logger = console;
 
@@ -222,7 +222,7 @@ export const sandbox = async ({
         const before = process.cwd();
         process.chdir(templateDestination);
         // we run doInitiate, instead of initiate, to avoid sending this init event to telemetry, because it's not a real world project
-        await doInitiate({
+        await initiate({
           dev: process.env.CI !== 'true' && process.env.IN_STORYBOOK_SANBOX !== 'true',
           ...options,
         });

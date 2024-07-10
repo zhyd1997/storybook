@@ -6,7 +6,7 @@ import { writeConfig } from '@storybook/core/csf-tools';
 import type { Fix } from '../types';
 import type { PackageJson } from '@storybook/core/types';
 import { updateMainConfig } from '../helpers/mainConfigFile';
-import { getStorybookVersionSpecifier } from '../../helpers';
+import { getStorybookVersionSpecifier } from '@storybook/core/cli';
 
 const logger = console;
 

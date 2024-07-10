@@ -4,8 +4,8 @@ import invariant from 'tiny-invariant';
 import { addToGlobalContext } from '@storybook/core/telemetry';
 import { versions } from '@storybook/core/common';
 
-import type { CommandOptions } from './generators/types';
-import { initiate } from './initiate';
+import type { CommandOptions } from '../generators/types';
+import { initiate } from '../initiate';
 
 addToGlobalContext('cliVersion', versions.storybook);
 

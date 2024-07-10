@@ -1,11 +1,10 @@
 import { join } from 'path';
 import { commandLog } from '@storybook/core/common';
-import { baseGenerator } from '../baseGenerator';
+import { baseGenerator, getCliDir } from '../baseGenerator';
 import type { Generator } from '../types';
-import { CoreBuilder } from '../../project_types';
-import { AngularJSON, compoDocPreviewPrefix, promptForCompoDocs } from './helpers';
-import { getCliDir } from '../../dirs';
-import { copyTemplate } from '../../helpers';
+import { CoreBuilder } from '@storybook/core/cli';
+import { AngularJSON, compoDocPreviewPrefix, promptForCompoDocs } from '@storybook/core/cli';
+import { copyTemplate } from '@storybook/core/cli';
 
 const generator: Generator<{ projectName: string }> = async (
   packageManager,

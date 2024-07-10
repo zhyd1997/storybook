@@ -1,7 +1,7 @@
 import { describe, beforeAll, expect, vi, it } from 'vitest';
 import fse from 'fs-extra';
 import { dedent } from 'ts-dedent';
-import { SupportedLanguage } from '../project_types';
+import { SupportedLanguage } from '@storybook/core/cli';
 import { configureMain, configurePreview } from './configure';
 
 vi.mock('fs-extra');

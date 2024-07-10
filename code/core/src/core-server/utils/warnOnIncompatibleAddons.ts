@@ -2,7 +2,7 @@ import { logger } from '@storybook/core/node-logger';
 import {
   getIncompatibleStorybookPackages,
   getIncompatiblePackagesSummary,
-} from '../../../../lib/cli/src/doctor/getIncompatibleStorybookPackages';
+} from '../../../../lib/toolbox/src/doctor/getIncompatibleStorybookPackages';
 
 export const warnOnIncompatibleAddons = async (currentStorybookVersion: string) => {
   const incompatiblePackagesList = await getIncompatibleStorybookPackages({

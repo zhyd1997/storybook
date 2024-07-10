@@ -7,7 +7,7 @@ import {
 
 import { runFixes } from './automigrate';
 import { mdxToCSF } from './automigrate/fixes/mdx-to-csf';
-import { getStorybookVersionSpecifier } from './helpers';
+import { getStorybookVersionSpecifier } from '@storybook/core/cli';
 
 const logger = console;
 

@@ -2,8 +2,7 @@ import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import type { StorybookConfig } from '@storybook/core/types';
 import type { JsPackageManager } from '@storybook/core/common';
 import { angularBuildersMultiproject } from './angular-builders-multiproject';
-import * as helpers from '../../helpers';
-import * as angularHelpers from '../../generators/ANGULAR/helpers';
+import * as helpers from '@storybook/core/cli';
 
 const checkAngularBuilders = async ({
   packageManager,
@@ -19,13 +18,9 @@ const checkAngularBuilders = async ({
   });
 };
 
-vi.mock('../../helpers', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../helpers')>()),
+vi.mock('@storybook/core/cli', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@storybook/core/cli')>()),
   isNxProject: vi.fn(),
-}));
-
-vi.mock('../../generators/ANGULAR/helpers', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../generators/ANGULAR/helpers')>()),
   AngularJSON: vi.fn(),
 }));
 
@@ -100,7 +95,7 @@ describe('is not Nx project', () => {
       describe('has one Storybook builder defined', () => {
         beforeEach(() => {
           // Mock AngularJSON.constructor
-          vi.mocked(angularHelpers.AngularJSON).mockImplementation(
+          vi.mocked(helpers.AngularJSON).mockImplementation(
             () =>
               ({
                 hasStorybookBuilder: true,
@@ -121,7 +116,7 @@ describe('is not Nx project', () => {
       describe('has one project', () => {
         beforeEach(() => {
           // Mock AngularJSON.constructor
-          vi.mocked(angularHelpers.AngularJSON).mockImplementation(
+          vi.mocked(helpers.AngularJSON).mockImplementation(
             () =>
               ({
                 hasStorybookBuilder: false,
@@ -146,7 +141,7 @@ describe('is not Nx project', () => {
       describe('has multiple projects without root project defined', () => {
         beforeEach(() => {
           // Mock AngularJSON.constructor
-          vi.mocked(angularHelpers.AngularJSON).mockImplementation(
+          vi.mocked(helpers.AngularJSON).mockImplementation(
             () =>
               ({
                 hasStorybookBuilder: false,

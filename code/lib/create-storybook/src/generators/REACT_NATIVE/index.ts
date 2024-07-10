@@ -1,7 +1,7 @@
-import { copyTemplateFiles, getBabelDependencies } from '../../helpers';
+import { copyTemplateFiles, getBabelDependencies } from '@storybook/core/cli';
 import type { JsPackageManager } from '@storybook/core/common';
-import type { NpmOptions } from '../../NpmOptions';
-import { SupportedLanguage } from '../../project_types';
+import type { NpmOptions } from '@storybook/core/cli';
+import { SupportedLanguage } from '@storybook/core/cli';
 
 const generator = async (
   packageManager: JsPackageManager,
@@ -59,7 +59,6 @@ const generator = async (
     renderer: 'react-native',
     language: SupportedLanguage.TYPESCRIPT_3_8,
     destination: storybookConfigFolder,
-    includeCommonAssets: false,
   });
 };
 

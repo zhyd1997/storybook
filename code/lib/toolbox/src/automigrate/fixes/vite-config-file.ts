@@ -2,7 +2,7 @@ import { dedent } from 'ts-dedent';
 import type { Fix } from '../types';
 import findUp from 'find-up';
 import { getFrameworkPackageName } from '../helpers/mainConfigFile';
-import { frameworkToRenderer } from '../../helpers';
+import { frameworkToRenderer } from '@storybook/core/cli';
 import { frameworkPackages } from '@storybook/core/common';
 import path from 'path';
 

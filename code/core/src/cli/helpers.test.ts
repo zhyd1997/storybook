@@ -38,7 +38,6 @@ vi.mock('fs', async (importOriginal) => {
 vi.mock('./dirs', () => ({
   getRendererDir: (_: JsPackageManager, renderer: string) =>
     normalizePath(`@storybook/${renderer}`),
-  getCliDir: () => normalizePath('storybook'),
 }));
 
 vi.mock('fs-extra', async (importOriginal) => {
@@ -123,11 +122,12 @@ describe('Helpers', () => {
         renderer: 'react',
         language,
         packageManager: packageManagerMock,
+        assetsDir: normalizePath('create-storybook/rendererAssets/common'),
       });
 
       expect(fse.copy).toHaveBeenNthCalledWith(
         1,
-        normalizePath('storybook/rendererAssets/common'),
+        normalizePath('create-storybook/rendererAssets/common'),
         './stories',
         expect.anything()
       );

@@ -14,7 +14,7 @@ import { dedent } from 'ts-dedent';
 import path from 'path';
 import type { JsPackageManager } from '@storybook/core/common';
 import { getCoercedStorybookVersion } from '@storybook/core/common';
-import { frameworkToRenderer } from '../../helpers';
+import { frameworkToRenderer } from '@storybook/core/cli';
 
 const logger = console;
 

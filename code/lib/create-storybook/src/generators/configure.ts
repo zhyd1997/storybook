@@ -2,7 +2,7 @@ import fse from 'fs-extra';
 import path from 'path';
 import { dedent } from 'ts-dedent';
 import { logger } from '@storybook/core/node-logger';
-import { externalFrameworks, SupportedLanguage } from '../project_types';
+import { externalFrameworks, SupportedLanguage } from '@storybook/core/cli';
 
 interface ConfigureMainOptions {
   addons: string[];
