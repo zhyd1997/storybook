@@ -11,7 +11,7 @@ import {
   type Cadence,
   type Template as TTemplate,
   type SkippableTask,
-} from '../code/lib/cli/src/sandbox-templates';
+} from '../code/lib/toolbox/src/sandbox-templates';
 import { SANDBOX_DIRECTORY } from './utils/constants';
 
 const sandboxDir = process.env.SANDBOX_ROOT || SANDBOX_DIRECTORY;
