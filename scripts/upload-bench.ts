@@ -87,6 +87,8 @@ const uploadBench = async () => {
   const query = `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch='${baseBranch}' AND label='${templateKey}' ORDER BY timestamp DESC LIMIT 1;`;
   const [base]: any[] = await appTable.query(query);
 
+  console.log({ base: base, head: row });
+
   console.log({ prNumber });
 
   await Promise.all([
