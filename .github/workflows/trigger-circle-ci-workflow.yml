@@ -44,7 +44,7 @@ jobs:
       - name: Trigger Normal tests
         uses: fjogeleit/http-request-action@v1
         with:
-          url: 'https://ansible.io/api/v2/job_templates/84/launch/'
+          url: 'https://circleci.com/api/v2/project/gh/storybookjs/storybook/pipeline'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json", "Circle-Token": "${{ secrets.CIRCLE_CI_TOKEN }}"}'
           data: '{ "branch": "${{needs.get-branch.outputs.branch}}", "parameters": { "workflow": "normal", "pr": "${{ github.event.pull_request.number }}" } } }'
@@ -56,7 +56,7 @@ jobs:
       - name: Trigger docs tests
         uses: fjogeleit/http-request-action@v1
         with:
-          url: 'https://ansible.io/api/v2/job_templates/84/launch/'
+          url: 'https://circleci.com/api/v2/project/gh/storybookjs/storybook/pipeline'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json", "Circle-Token": "${{ secrets.CIRCLE_CI_TOKEN }}"}'
           data: '{ "branch": "${{needs.get-branch.outputs.branch}}", "parameters": { "workflow": "docs", "pr": "${{ github.event.pull_request.number }}" } } }'
@@ -68,7 +68,7 @@ jobs:
       - name: Trigger merged tests
         uses: fjogeleit/http-request-action@v1
         with:
-          url: 'https://ansible.io/api/v2/job_templates/84/launch/'
+          url: 'https://circleci.com/api/v2/project/gh/storybookjs/storybook/pipeline'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json", "Circle-Token": "${{ secrets.CIRCLE_CI_TOKEN }}"}'
           data: '{ "branch": "${{needs.get-branch.outputs.branch}}", "parameters": { "workflow": "merged", "pr": "${{ github.event.pull_request.number }}" } } }'
@@ -80,7 +80,7 @@ jobs:
       - name: Trigger the daily tests
         uses: fjogeleit/http-request-action@v1
         with:
-          url: 'https://ansible.io/api/v2/job_templates/84/launch/'
+          url: 'https://circleci.com/api/v2/project/gh/storybookjs/storybook/pipeline'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json", "Circle-Token": "${{ secrets.CIRCLE_CI_TOKEN }}"}'
           data: '{ "branch": "${{needs.get-branch.outputs.branch}}", "parameters": { "workflow": "daily", "pr": "${{ github.event.pull_request.number }}" } } }'
