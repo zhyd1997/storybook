@@ -122,7 +122,7 @@ describe('Helpers', () => {
         renderer: 'react',
         language,
         packageManager: packageManagerMock,
-        assetsDir: normalizePath('create-storybook/rendererAssets/common'),
+        commonAssetsDir: normalizePath('create-storybook/rendererAssets/common'),
       });
 
       expect(fse.copy).toHaveBeenNthCalledWith(

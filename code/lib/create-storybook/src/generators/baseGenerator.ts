@@ -394,7 +394,7 @@ export async function baseGenerator(
       packageManager,
       language,
       destination: componentsDestinationPath,
-      assetsDir: path.join(getCliDir(), 'rendererAssets', 'common'),
+      commonAssetsDir: path.join(getCliDir(), 'rendererAssets', 'common'),
     });
   }
 }

@@ -127,7 +127,7 @@ type CopyTemplateFilesOptions = {
   packageManager: JsPackageManager;
   renderer: SupportedFrameworks | SupportedRenderers;
   language: SupportedLanguage;
-  assetsDir?: string;
+  commonAssetsDir?: string;
   destination?: string;
 };
 
@@ -163,7 +163,7 @@ export async function copyTemplateFiles({
   renderer,
   language,
   destination,
-  assetsDir,
+  commonAssetsDir,
 }: CopyTemplateFilesOptions) {
   const languageFolderMapping: Record<SupportedLanguage | 'typescript', string> = {
     // keeping this for backwards compatibility in case community packages are using it
@@ -212,14 +212,14 @@ export async function copyTemplateFiles({
   };
 
   const destinationPath = destination ?? (await targetPath());
-  if (assetsDir) {
-    await fse.copy(assetsDir, destinationPath, {
+  if (commonAssetsDir) {
+    await fse.copy(commonAssetsDir, destinationPath, {
       overwrite: true,
     });
   }
   await fse.copy(await templatePath(), destinationPath, { overwrite: true });
 
-  if (assetsDir) {
+  if (commonAssetsDir) {
     const rendererType = frameworkToRenderer[renderer] || 'react';
     await adjustTemplate(join(destinationPath, 'Configure.mdx'), { renderer: rendererType });
   }
