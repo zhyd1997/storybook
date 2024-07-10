@@ -23,10 +23,6 @@ const checkAngularBuilders = async ({
 vi.mock('storybook/internal/cli', async (importOriginal) => ({
   ...(await importOriginal<typeof import('storybook/internal/cli')>()),
   isNxProject: vi.fn(),
-}));
-
-vi.mock('storybook/internal/cli', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('storybook/internal/cli')>()),
   AngularJSON: vi.fn(),
 }));
 

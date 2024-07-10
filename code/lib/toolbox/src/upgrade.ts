@@ -1,6 +1,6 @@
 import { sync as spawnSync } from 'cross-spawn';
 import { telemetry } from 'storybook/internal/telemetry';
-import semver, { eq, lt, prerelease } from 'semver';
+import semver, { eq, lt, prerelease, clean } from 'semver';
 import { logger } from 'storybook/internal/node-logger';
 import { withTelemetry } from 'storybook/internal/core-server';
 import {
@@ -34,7 +34,7 @@ const versionRegex = /(@storybook\/[^@]+)@(\S+)/;
 export const getStorybookVersion = (line: string) => {
   if (line.startsWith('npm ')) return null;
   const match = versionRegex.exec(line);
-  if (!match || !semver.clean(match[2])) return null;
+  if (!match || !clean(match[2])) return null;
   return {
     package: match[1],
     version: match[2],

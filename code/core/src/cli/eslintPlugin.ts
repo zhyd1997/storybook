@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import { readConfig, writeConfig } from '@storybook/core/csf-tools';
 import type { JsPackageManager } from '@storybook/core/common';
 import { paddedLog } from '@storybook/core/common';
+import fs from 'node:fs';
 
 export const SUPPORTED_ESLINT_EXTENSIONS = ['js', 'cjs', 'json'];
 const UNSUPPORTED_ESLINT_EXTENSIONS = ['yaml', 'yml'];
@@ -14,7 +15,7 @@ const UNSUPPORTED_ESLINT_EXTENSIONS = ['yaml', 'yml'];
 export const findEslintFile = () => {
   const filePrefix = '.eslintrc';
   const unsupportedExtension = UNSUPPORTED_ESLINT_EXTENSIONS.find((ext: string) =>
-    fse.existsSync(`${filePrefix}.${ext}`)
+    fs.existsSync(`${filePrefix}.${ext}`)
   );
 
   if (unsupportedExtension) {
@@ -22,7 +23,7 @@ export const findEslintFile = () => {
   }
 
   const extension = SUPPORTED_ESLINT_EXTENSIONS.find((ext: string) =>
-    fse.existsSync(`${filePrefix}.${ext}`)
+    fs.existsSync(`${filePrefix}.${ext}`)
   );
   return extension ? `${filePrefix}.${extension}` : null;
 };
