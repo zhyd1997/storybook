@@ -84,9 +84,8 @@ const uploadBench = async () => {
 
   const baseBranch = 'next';
 
-  const [base]: any[] = await appTable.query(
-    `SELECT * FROM [storybook-benchmark.benchmark_results.bench2] WHERE branch='${baseBranch}' AND label='${templateKey}' ORDER BY timestamp DESC LIMIT 1;`
-  );
+  const query = `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch='${baseBranch}' AND label='${templateKey}' ORDER BY timestamp DESC LIMIT 1;`;
+  const [base]: any[] = await appTable.query(query);
 
   console.log({ base });
 
