@@ -1,5 +1,8 @@
 ---
-title: 'Unit tests'
+title: 'Stories in unit tests'
+sidebar:
+  title: Unit tests
+  order: 0
 ---
 
 Teams test a variety of UI characteristics using different tools. Each tool requires you to replicate the same component state over and over. That’s a maintenance headache. Ideally, you’d set up your tests similarly and reuse that across tools.
@@ -18,13 +21,17 @@ Stories are a practical starting point for UI testing. Import stories into tools
 
 {/* prettier-ignore-end */}
 
-<Callout variant="info" icon="💡">
-  You can use Testing Library out-of-the-box with [Storybook Interaction Testing](../interaction-testing.mdx).
+<Callout variant="warning">
+  
+  To ensure your stories are composed with all aspects of your Storybook configuration, such as [decorators](../../writing-stories/decorators.mdx), you will need to [configure your portable stories](../../api/portable-stories/portable-stories-vitest.mdx#1-apply-project-level-annotations).
+
 </Callout>
 
 Once the test runs, it loads the story and renders it. [Testing Library](https://testing-library.com/) then emulates the user's behavior and checks if the component state has been updated.
 
 ## Configure
+
+{/* TODO: This section is pointless? */}
 
 By default, Storybook offers a zero-config setup for React and other frameworks via addons, allowing you to run your stories as tests with Testing Library. However, if you're running tests and you've set up specific configurations in your Storybook instance (e.g., global [decorators](../../writing-stories/decorators.mdx#global-decorators), [parameters](../../writing-stories/parameters.mdx#global-parameters)) that you want to use in your tests, you'll need to extend your test setup to include these configurations. To do so, create a `setupFile.js|ts` file as follows:
 

@@ -1,19 +1,26 @@
 ```tsx filename="Button.test.tsx" renderer="react" language="ts"
 import { vi, test, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { composeStory } from '@storybook/react';
 
 import meta, { Primary } from './Button.stories';
 
-test('onclick handler is called', () => {
+test('renders primary button with default args', async () => {
   // Returns a story which already contains all annotations from story, meta and global levels
   const PrimaryStory = composeStory(Primary, meta);
 
-  const onClickSpy = vi.fn();
-  render(<PrimaryStory onClick={onClickSpy} />);
-  const buttonElement = screen.getByRole('button');
-  buttonElement.click();
-  expect(onClickSpy).toHaveBeenCalled();
+  await PrimaryStory.play();
+  const buttonElement = screen.getByText('Text coming from args in stories file!');
+  expect(buttonElement).not.toBeNull();
+});
+
+test('renders primary button with overridden props', async () => {
+  // You can override props and they will get merged with values from the story's args
+  const PrimaryStory = composeStory({ ...Primary, args: { label: 'Hello world' } }, meta);
+
+  await PrimaryStory.play();
+  const buttonElement = screen.getByText(/Hello world/i);
+  expect(buttonElement).not.toBeNull();
 });
 ```
 
@@ -24,20 +31,20 @@ import { composeStory } from '@storybook/svelte';
 
 import meta, { Primary } from './Button.stories';
 
-test('renders primary button with default args', () => {
+test('renders primary button with default args', async () => {
   // Returns a story which already contains all annotations from story, meta and global levels
   const PrimaryStory = composeStory(Primary, meta);
 
-  render(PrimaryStory.Component, PrimaryStory.props);
+  PrimaryStory.play();
   const buttonElement = screen.getByText('Text coming from args in stories file!');
   expect(buttonElement).not.toBeNull();
 });
 
-test('renders primary button with overridden props', () => {
+test('renders primary button with overridden props', async () => {
   // You can override props and they will get merged with values from the story's args
   const PrimaryStory = composeStory({ ...Primary, args: { label: 'Hello world' } }, meta);
 
-  render(PrimaryStory.Component, PrimaryStory.props);
+  PrimaryStory.play();
   const buttonElement = screen.getByText(/Hello world/i);
   expect(buttonElement).not.toBeNull();
 });
@@ -50,15 +57,21 @@ import { composeStory } from '@storybook/vue3';
 
 import meta, { Primary } from './Button.stories';
 
-test('onclick handler is called', () => {
+test('renders primary button with default args', async () => {
   // Returns a story which already contains all annotations from story, meta and global levels
   const PrimaryStory = composeStory(Primary, meta);
 
-  const onClickSpy = vi.fn();
-  render(Primary, { props: { onClick: onClickSpy } });
-  const buttonElement = screen.getByRole('button');
-  buttonElement.click();
-  expect(onClickSpy).toHaveBeenCalled();
+  PrimaryStory.play();
+  const buttonElement = screen.getByText('Text coming from args in stories file!');
+  expect(buttonElement).not.toBeNull();
+});
+
+test('renders primary button with overridden props', async () => {
+  // You can override props and they will get merged with values from the story's args
+  const PrimaryStory = composeStory({ ...Primary, args: { label: 'Hello world' } }, meta);
+
+  PrimaryStory.play();
+  const buttonElement = screen.getByText(/Hello world/i);
+  expect(buttonElement).not.toBeNull();
 });
 ```
-

@@ -8,11 +8,11 @@ import * as previewAnnotations from './.storybook/preview';
 const annotations = setProjectAnnotations([
   previewAnnotations,
   addonAnnotations,
-  // Attention: Passing the render function from testing library is required if you mount stories in play functions
+  // You MUST provide this option to use portable stories with vitest
   { testingLibraryRender },
 ]);
 
-// Supports beforeAll hook from Storybook
+// Run Storybook's beforeAll hook
 beforeAll(annotations.beforeAll);
 ```
 
@@ -26,11 +26,11 @@ import * as previewAnnotations from './.storybook/preview';
 const annotations = setProjectAnnotations([
   previewAnnotations,
   addonAnnotations,
-  // Attention: Passing the render function from testing library is required if you mount stories in play functions
+  // You MUST provide this option to use portable stories with vitest
   { testingLibraryRender },
 ]);
 
-// Supports beforeAll hook from Storybook
+// Run Storybook's beforeAll hook
 beforeAll(annotations.beforeAll);
 ```
 
@@ -44,10 +44,10 @@ import * as previewAnnotations from './.storybook/preview';
 const annotations = setProjectAnnotations([
   previewAnnotations,
   addonAnnotations,
-  // Attention: Passing the render function from testing library is required if you mount stories in play functions
+  // You MUST provide this option to use portable stories with vitest
   { testingLibraryRender },
 ]);
 
-// Supports beforeAll hook from Storybook
+// Run Storybook's beforeAll hook
 beforeAll(annotations.beforeAll);
 ```
