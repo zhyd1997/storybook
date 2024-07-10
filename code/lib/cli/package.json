@@ -172,6 +172,11 @@
       "types": "./core/cli/index.d.ts",
       "import": "./core/cli/index.js",
       "require": "./core/cli/index.cjs"
+    },
+    "./internal/cli/bin": {
+      "types": "./core/cli/bin/index.d.ts",
+      "import": "./core/cli/bin/index.js",
+      "require": "./core/cli/bin/index.cjs"
     }
   },
   "main": "dist/index.cjs",
@@ -190,6 +195,9 @@
       ],
       "internal/cli": [
         "./core/cli/index.d.ts"
+      ],
+      "internal/cli/bin": [
+        "./core/cli/bin/index.d.ts"
       ],
       "internal/client-logger": [
         "./core/client-logger/index.d.ts"
