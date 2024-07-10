@@ -6778,7 +6778,6 @@ __metadata:
     "@babel/core": "npm:^7.24.4"
     "@babel/types": "npm:^7.24.0"
     "@storybook/codemod": "workspace:*"
-    "@storybook/core": "workspace:*"
     "@types/cross-spawn": "npm:^6.0.2"
     "@types/prompts": "npm:^2.0.9"
     "@types/semver": "npm:^7.3.4"
@@ -12162,7 +12161,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-storybook@workspace:lib/create-storybook"
   dependencies:
-    "@storybook/core": "workspace:*"
     "@types/prompts": "npm:^2.0.9"
     "@types/semver": "npm:^7.3.4"
     "@types/util-deprecate": "npm:^1.0.0"

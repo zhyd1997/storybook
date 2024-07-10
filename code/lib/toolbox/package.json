@@ -40,7 +40,6 @@
     "@babel/core": "^7.24.4",
     "@babel/types": "^7.24.0",
     "@storybook/codemod": "workspace:*",
-    "@storybook/core": "workspace:*",
     "@types/semver": "^7.3.4",
     "chalk": "^4.1.0",
     "commander": "^6.2.1",
