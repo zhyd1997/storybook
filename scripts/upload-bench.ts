@@ -7,7 +7,7 @@ import { loadBench } from './bench/utils';
 import { SANDBOX_DIRECTORY } from './utils/constants';
 
 const templateKey = process.argv[2];
-const prNumber = process.argv[3];
+let prNumber = process.argv[3];
 
 const GCP_CREDENTIALS = JSON.parse(process.env.GCP_CREDENTIALS || '{}');
 const sandboxDir = process.env.SANDBOX_ROOT || SANDBOX_DIRECTORY;
@@ -82,6 +82,16 @@ const uploadBench = async () => {
   const dataset = store.dataset('benchmark_results');
   const appTable = dataset.table('bench2');
 
+  const baseBranch = 'next';
+
+  const [base]: any[] = await appTable.query(
+    `SELECT * FROM [storybook-benchmark.benchmark_results.bench2] WHERE branch='${baseBranch}' AND label='${templateKey}' ORDER BY timestamp DESC LIMIT 1;`
+  );
+
+  console.log({ base });
+
+  prNumber = '28508';
+
   await Promise.all([
     prNumber && prNumber !== '0'
       ? fetch('https://storybook-benchmark-bot.vercel.app/description', {
@@ -90,7 +100,7 @@ const uploadBench = async () => {
             owner: 'storybookjs',
             repo: 'storybook',
             issueNumber: prNumber,
-            base: row, // TODO change this to actual base
+            base: base,
             head: row,
           }),
         })
