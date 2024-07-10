@@ -2,6 +2,7 @@
 import { beforeAll } from '@jest/globals';
 import { render as testingLibraryRender } from '@testing-library/react';
 import { setProjectAnnotations } from '@storybook/react';
+// 👇 Import the exported annotations, if any, from the addons you're using; otherwise remove this
 import * as addonAnnotations from 'my-addon/preview';
 import * as previewAnnotations from './.storybook/preview';
 
@@ -20,6 +21,7 @@ beforeAll(annotations.beforeAll);
 import { beforeAll } from '@jest/globals';
 import { render as testingLibraryRender } from '@testing-library/vue';
 import { setProjectAnnotations } from '@storybook/vue3';
+// 👇 Import the exported annotations, if any, from the addons you're using; otherwise remove this
 import * as addonAnnotations from 'my-addon/preview';
 import * as previewAnnotations from './.storybook/preview';
 

@@ -13,6 +13,10 @@ sidebar:
   {/* End non-supported renderers */}
 </If>
 
+<If renderer="svelte">
+  (⚠️ **Experimental**)
+</If>
+
 <If renderer={['react', 'vue', 'svelte']}>
   Portable stories are Storybook [stories](../../writing-stories/index.mdx) which can be used in external environments, such as [Vitest](https://vitest.dev).
 
@@ -180,41 +184,38 @@ sidebar:
 
   </Callout>
 
-  {/* TODO: Create issue for interest in non-Testing Library render option, with recipe, and mention here (Jest, too) */}
+  {/* TODO: Create issue for interest in non-Testing Library render option, with recipe, and mention here (Jest, too)
     
-    ```js
-    import { render } from '@testing-library/[renderer]';
-    
-    setProjectAnnotations({
-      testingLibraryRender: render,
-    });
-    
-    For other testing renderers, you can configure renderToCanvas:
-    
-    import { render } from 'your-renderer';
-    
-    setProjectAnnotations({
-      renderToCanvas: ({ storyFn }) => {
-        const Story = storyFn();
-        
-        // Svelte
-        render(Story.Component, Story.props);
-        
-        // Vue
-        render(Story);
-        
-        // or for React
-        render(<Story/>);
-      },
-    });
-    ```
-  {/* TODO: This callout is immediately after the prior one */}
+  ```js
+  import { render } from '@testing-library/[renderer]';
+  
+  setProjectAnnotations({
+    testingLibraryRender: render,
+  });
+  
+  For other testing renderers, you can configure renderToCanvas:
+  
+  import { render } from 'your-renderer';
+  
+  setProjectAnnotations({
+    renderToCanvas: ({ storyFn }) => {
+      const Story = storyFn();
+      
+      // Svelte
+      render(Story.Component, Story.props);
+      
+      // Vue
+      render(Story);
+      
+      // or for React
+      render(<Story/>);
+    },
+  });
+  ``` */}
 
-  <Callout variant="warning">
-    Sometimes a story can require an addon's [decorator](../../writing-stories/decorators.mdx) or [loader](../../writing-stories/loaders.mdx) to render properly. For example, an addon can apply a decorator that wraps your story in the necessary router context. In this case, you must include that addon's `preview` export in the project annotations set. See `addonAnnotations` in the example above.
+  Sometimes a story can require an addon's [decorator](../../writing-stories/decorators.mdx) or [loader](../../writing-stories/loaders.mdx) to render properly. For example, an addon can apply a decorator that wraps your story in the necessary router context. In this case, you must include that addon's `preview` export in the project annotations set. See `addonAnnotations` in the example above.
 
-    Note: If the addon doesn't automatically apply the decorator or loader itself, but instead exports them for you to apply manually in `.storybook/preview.js|ts` (e.g. using `withThemeFromJSXProvider` from [@storybook/addon-themes](https://github.com/storybookjs/storybook/blob/next/code/addons/themes/docs/api.md#withthemefromjsxprovider)), then you do not need to do anything else. They are already included in the `previewAnnotations` in the example above.
-  </Callout>
+  Note: If the addon doesn't automatically apply the decorator or loader itself, but instead exports them for you to apply manually in `.storybook/preview.js|ts` (e.g. using `withThemeFromJSXProvider` from [@storybook/addon-themes](https://github.com/storybookjs/storybook/blob/next/code/addons/themes/docs/api.md#withthemefromjsxprovider)), then you do not need to do anything else. They are already included in the `previewAnnotations` in the example above.
 
   ### Type
 
@@ -259,10 +260,6 @@ sidebar:
   Finally, stories can prepare data they need (e.g. setting up some mocks or fetching data) before rendering by defining [loaders](../../writing-stories/loaders.mdx), [beforeEach](../../writing-tests/interaction-testing.mdx#run-code-before-each-story) or by having all the story code in the play function when using the [mount](../../writing-tests/interaction-testing.mdx#run-code-before-the-component-gets-rendered). In portable stories, all of these steps will be executed when you run the `play` method of the composed story.
 
   👉 For this, you use the [`composeStories`](#composestories) or [`composeStory`](#composestory) API. The composed story will return a `play` method to be called.
-
-  <Callout variant="warning">
-    If any of your stories mounts the component in the play function, you must set the `testingLibraryRender` annotation in [`setProjectAnnotations`](#setprojectannotations) to the render function from Testing Library. This is required to ensure that the component is mounted correctly in the test environment.
-  </Callout>
 
   {/* prettier-ignore-start */}
 

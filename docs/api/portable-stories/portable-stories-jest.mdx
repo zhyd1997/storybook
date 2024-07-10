@@ -222,10 +222,6 @@ sidebar:
 
   👉 For this, you use the [`composeStories`](#composestories) or [`composeStory`](#composestory) API. The composed story will return a `play` method to be called.
 
-  <Callout variant="warning">
-    If any of your stories mounts the component in the play function, you must set the `testingLibraryRender` annotation in [`setProjectAnnotations`](#setprojectannotations) to the render function from Testing Library. This is required to ensure that the component is mounted correctly in the test environment.
-  </Callout>
-
   {/* prettier-ignore-start */}
 
   <CodeSnippets path="portable-stories-jest-with-play-function.md" />
