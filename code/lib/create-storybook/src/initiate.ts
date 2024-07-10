@@ -3,8 +3,8 @@ import findUp from 'find-up';
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { telemetry } from 'storybook/internal/telemetry';
-import { withTelemetry } from '@storybook/core/core-server';
-import { NxProjectDetectedError } from '@storybook/core/server-errors';
+import { withTelemetry } from 'storybook/internal/core-server';
+import { NxProjectDetectedError } from 'storybook/internal/server-errors';
 import {
   versions,
   HandledError,
@@ -12,15 +12,15 @@ import {
   commandLog,
   paddedLog,
   getProjectRoot,
-} from '@storybook/core/common';
-import type { JsPackageManager } from '@storybook/core/common';
+} from 'storybook/internal/common';
+import type { JsPackageManager } from 'storybook/internal/common';
 
 import { dedent } from 'ts-dedent';
 import boxen from 'boxen';
 import { lt, prerelease } from 'semver';
-import type { Builder, NpmOptions } from '@storybook/core/cli';
-import { installableProjectTypes, ProjectType } from '@storybook/core/cli';
-import { detect, isStorybookInstantiated, detectLanguage, detectPnp } from '@storybook/core/cli';
+import type { Builder, NpmOptions } from 'storybook/internal/cli';
+import { installableProjectTypes, ProjectType } from 'storybook/internal/cli';
+import { detect, isStorybookInstantiated, detectLanguage, detectPnp } from 'storybook/internal/cli';
 import angularGenerator from './generators/ANGULAR';
 import emberGenerator from './generators/EMBER';
 import reactGenerator from './generators/REACT';

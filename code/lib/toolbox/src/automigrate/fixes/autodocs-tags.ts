@@ -1,7 +1,7 @@
 import { dedent } from 'ts-dedent';
 import chalk from 'chalk';
-import type { DocsOptions } from '@storybook/core/types';
-import { readConfig, writeConfig } from '@storybook/core/csf-tools';
+import type { DocsOptions } from 'storybook/internal/types';
+import { readConfig, writeConfig } from 'storybook/internal/csf-tools';
 import { updateMainConfig } from '../helpers/mainConfigFile';
 import type { Fix } from '../types';
 

@@ -5,10 +5,14 @@ import leven from 'leven';
 import { findPackageSync } from 'fd-package-json';
 import invariant from 'tiny-invariant';
 
-import { logger } from '@storybook/core/node-logger';
-import { addToGlobalContext, telemetry } from '@storybook/core/telemetry';
-import { JsPackageManagerFactory, versions, removeAddon as remove } from '@storybook/core/common';
-import { withTelemetry } from '@storybook/core/core-server';
+import { logger } from 'storybook/internal/node-logger';
+import { addToGlobalContext, telemetry } from 'storybook/internal/telemetry';
+import {
+  JsPackageManagerFactory,
+  versions,
+  removeAddon as remove,
+} from 'storybook/internal/common';
+import { withTelemetry } from 'storybook/internal/core-server';
 
 import { add } from '../add';
 import { migrate } from '../migrate';

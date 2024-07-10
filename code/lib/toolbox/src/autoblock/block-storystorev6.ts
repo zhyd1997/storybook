@@ -1,6 +1,6 @@
 import { createBlocker } from './types';
 import { dedent } from 'ts-dedent';
-import type { StorybookConfigRaw } from '@storybook/core/types';
+import type { StorybookConfigRaw } from 'storybook/internal/types';
 import chalk from 'chalk';
 
 export const blocker = createBlocker({

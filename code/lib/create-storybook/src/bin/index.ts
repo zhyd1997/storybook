@@ -1,8 +1,8 @@
 import program from 'commander';
 import { findPackageSync } from 'fd-package-json';
 import invariant from 'tiny-invariant';
-import { addToGlobalContext } from '@storybook/core/telemetry';
-import { versions } from '@storybook/core/common';
+import { addToGlobalContext } from 'storybook/internal/telemetry';
+import { versions } from 'storybook/internal/common';
 
 import type { CommandOptions } from '../generators/types';
 import { initiate } from '../initiate';

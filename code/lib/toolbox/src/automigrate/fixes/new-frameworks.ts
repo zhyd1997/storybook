@@ -1,12 +1,12 @@
 import chalk from 'chalk';
 import { dedent } from 'ts-dedent';
 import semver from 'semver';
-import { frameworkPackages, rendererPackages } from '@storybook/core/common';
+import { frameworkPackages, rendererPackages } from 'storybook/internal/common';
 
-import type { Preset } from '@storybook/core/types';
+import type { Preset } from 'storybook/internal/types';
 import invariant from 'tiny-invariant';
 import type { Fix } from '../types';
-import { getStorybookVersionSpecifier } from '@storybook/core/cli';
+import { getStorybookVersionSpecifier } from 'storybook/internal/cli';
 import {
   getNextjsAddonOptions,
   detectBuilderInfo,

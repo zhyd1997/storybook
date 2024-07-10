@@ -1,12 +1,12 @@
 import chalk from 'chalk';
 import { dedent } from 'ts-dedent';
 
-import { writeConfig } from '@storybook/core/csf-tools';
+import { writeConfig } from 'storybook/internal/csf-tools';
 
 import type { Fix } from '../types';
-import type { PackageJson } from '@storybook/core/types';
+import type { PackageJson } from 'storybook/internal/types';
 import { updateMainConfig } from '../helpers/mainConfigFile';
-import { getStorybookVersionSpecifier } from '@storybook/core/cli';
+import { getStorybookVersionSpecifier } from 'storybook/internal/cli';
 
 const logger = console;
 

@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { frameworkPackages, rendererPackages } from '@storybook/core/common';
-import type { InstallationMetadata } from '@storybook/core/common';
+import { frameworkPackages, rendererPackages } from 'storybook/internal/common';
+import type { InstallationMetadata } from 'storybook/internal/common';
 import { hasMultipleVersions } from './hasMultipleVersions';
 
 export const messageDivider = '\n\n';

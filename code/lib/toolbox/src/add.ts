@@ -5,8 +5,8 @@ import {
   getCoercedStorybookVersion,
   type PackageManagerName,
   versions,
-} from '@storybook/core/common';
-import { readConfig, writeConfig } from '@storybook/core/csf-tools';
+} from 'storybook/internal/common';
+import { readConfig, writeConfig } from 'storybook/internal/csf-tools';
 import { isAbsolute, join } from 'path';
 import SemVer from 'semver';
 import { dedent } from 'ts-dedent';

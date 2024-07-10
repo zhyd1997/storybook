@@ -1,6 +1,6 @@
 import prompts from 'prompts';
-import type { SupportedFrameworks } from '@storybook/core/types';
-import { frameworkPackages } from '@storybook/core/common';
+import type { SupportedFrameworks } from 'storybook/internal/types';
+import { frameworkPackages } from 'storybook/internal/common';
 import type { Fix } from '../types';
 import {
   getAddonNames,
@@ -9,13 +9,13 @@ import {
   getFrameworkPackageName,
   updateMainConfig,
 } from '../helpers/mainConfigFile';
-import { frameworkToDefaultBuilder } from '@storybook/core/cli';
+import { frameworkToDefaultBuilder } from 'storybook/internal/cli';
 import {
   CoreBuilder,
   CoreWebpackCompilers,
   builderNameToCoreBuilder,
   compilerNameToCoreCompiler,
-} from '@storybook/core/cli';
+} from 'storybook/internal/cli';
 import { dedent } from 'ts-dedent';
 import chalk from 'chalk';
 import { add } from '../../add';

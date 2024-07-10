@@ -5,16 +5,16 @@ import {
   frameworkPackages,
   builderPackages,
   extractProperFrameworkName,
-} from '@storybook/core/common';
-import type { StorybookConfigRaw, StorybookConfig } from '@storybook/core/types';
-import type { ConfigFile } from '@storybook/core/csf-tools';
-import { readConfig, writeConfig as writeConfigFile } from '@storybook/core/csf-tools';
+} from 'storybook/internal/common';
+import type { StorybookConfigRaw, StorybookConfig } from 'storybook/internal/types';
+import type { ConfigFile } from 'storybook/internal/csf-tools';
+import { readConfig, writeConfig as writeConfigFile } from 'storybook/internal/csf-tools';
 import chalk from 'chalk';
 import { dedent } from 'ts-dedent';
 import path from 'path';
-import type { JsPackageManager } from '@storybook/core/common';
-import { getCoercedStorybookVersion } from '@storybook/core/common';
-import { frameworkToRenderer } from '@storybook/core/cli';
+import type { JsPackageManager } from 'storybook/internal/common';
+import { getCoercedStorybookVersion } from 'storybook/internal/common';
+import { frameworkToRenderer } from 'storybook/internal/cli';
 
 const logger = console;
 

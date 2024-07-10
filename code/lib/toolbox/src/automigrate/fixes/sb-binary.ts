@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 import { dedent } from 'ts-dedent';
 import type { Fix } from '../types';
-import { getStorybookVersionSpecifier } from '@storybook/core/cli';
-import type { PackageJsonWithDepsAndDevDeps } from '@storybook/core/common';
+import { getStorybookVersionSpecifier } from 'storybook/internal/cli';
+import type { PackageJsonWithDepsAndDevDeps } from 'storybook/internal/common';
 
 interface SbBinaryRunOptions {
   storybookVersion: string;

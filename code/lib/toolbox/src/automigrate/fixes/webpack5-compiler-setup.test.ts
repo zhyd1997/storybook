@@ -1,8 +1,8 @@
 import { vi, describe, it, expect } from 'vitest';
-import type { StorybookConfig } from '@storybook/core/types';
-import type { JsPackageManager } from '@storybook/core/common';
+import type { StorybookConfig } from 'storybook/internal/types';
+import type { JsPackageManager } from 'storybook/internal/common';
 import { webpack5CompilerSetup } from './webpack5-compiler-setup';
-import { CoreWebpackCompilers } from '@storybook/core/cli';
+import { CoreWebpackCompilers } from 'storybook/internal/cli';
 
 const check = async ({
   packageManager,

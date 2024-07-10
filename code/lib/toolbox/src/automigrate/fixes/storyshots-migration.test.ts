@@ -1,8 +1,8 @@
 import { describe, afterEach, it, expect, vi } from 'vitest';
 
-import type { StorybookConfig } from '@storybook/core/types';
+import type { StorybookConfig } from 'storybook/internal/types';
 import { storyshotsMigration } from './storyshots-migration';
-import type { JsPackageManager } from '@storybook/core/common';
+import type { JsPackageManager } from 'storybook/internal/common';
 
 const check = async ({
   packageManager,

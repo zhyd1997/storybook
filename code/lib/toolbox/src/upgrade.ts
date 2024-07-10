@@ -1,7 +1,7 @@
 import { sync as spawnSync } from 'cross-spawn';
 import { telemetry } from 'storybook/internal/telemetry';
 import semver, { eq, lt, prerelease } from 'semver';
-import { logger } from '@storybook/core/node-logger';
+import { logger } from 'storybook/internal/node-logger';
 import { withTelemetry } from 'storybook/internal/core-server';
 import {
   UpgradeStorybookInWrongWorkingDirectory,
@@ -13,17 +13,17 @@ import {
 import chalk from 'chalk';
 import { dedent } from 'ts-dedent';
 import boxen from 'boxen';
-import type { JsPackageManager, PackageManagerName } from '@storybook/core/common';
+import type { JsPackageManager, PackageManagerName } from 'storybook/internal/common';
 import {
   isCorePackage,
   versions,
   getStorybookInfo,
   loadMainConfig,
   JsPackageManagerFactory,
-} from '@storybook/core/common';
+} from 'storybook/internal/common';
 import { automigrate } from './automigrate/index';
 import { autoblock } from './autoblock/index';
-import { hasStorybookDependencies } from '@storybook/core/cli';
+import { hasStorybookDependencies } from 'storybook/internal/cli';
 
 type Package = {
   package: string;

@@ -1,8 +1,8 @@
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
-import type { StorybookConfig } from '@storybook/core/types';
-import type { JsPackageManager } from '@storybook/core/common';
+import type { StorybookConfig } from 'storybook/internal/types';
+import type { JsPackageManager } from 'storybook/internal/common';
 import { angularBuildersMultiproject } from './angular-builders-multiproject';
-import * as helpers from '@storybook/core/cli';
+import * as helpers from 'storybook/internal/cli';
 
 const checkAngularBuilders = async ({
   packageManager,
@@ -18,8 +18,8 @@ const checkAngularBuilders = async ({
   });
 };
 
-vi.mock('@storybook/core/cli', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@storybook/core/cli')>()),
+vi.mock('storybook/internal/cli', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('storybook/internal/cli')>()),
   isNxProject: vi.fn(),
   AngularJSON: vi.fn(),
 }));

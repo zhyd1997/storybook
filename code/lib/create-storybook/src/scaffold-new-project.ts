@@ -8,9 +8,9 @@ import { dedent } from 'ts-dedent';
 import { telemetry } from 'storybook/internal/telemetry';
 
 import { GenerateNewProjectOnInitError } from 'storybook/internal/server-errors';
-import { logger } from '@storybook/core/node-logger';
+import { logger } from 'storybook/internal/node-logger';
 
-import type { PackageManagerName } from '@storybook/core/common';
+import type { PackageManagerName } from 'storybook/internal/common';
 import type { CommandOptions } from './generators/types';
 
 type CoercedPackageManagerName = 'npm' | 'yarn' | 'pnpm';

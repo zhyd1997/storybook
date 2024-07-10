@@ -1,10 +1,10 @@
 import type { MockInstance } from 'vitest';
 import { describe, it, expect, vi } from 'vitest';
 import { wrapRequire } from './wrap-require';
-import * as detect from '@storybook/core/cli';
+import * as detect from 'storybook/internal/cli';
 
-vi.mock('@storybook/core/cli', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@storybook/core/cli')>()),
+vi.mock('storybook/internal/cli', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('storybook/internal/cli')>()),
   detectPnp: vi.fn(),
 }));
 

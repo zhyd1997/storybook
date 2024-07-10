@@ -1,5 +1,5 @@
-import type { PackageJson } from '@storybook/core/types';
-import { rendererPackages } from '@storybook/core/common';
+import type { PackageJson } from 'storybook/internal/types';
+import { rendererPackages } from 'storybook/internal/common';
 import prompts from 'prompts';
 
 export const detectRenderer = async (packageJson: PackageJson) => {

@@ -3,11 +3,11 @@ import {
   JsPackageManagerFactory,
   getCoercedStorybookVersion,
   getStorybookInfo,
-} from '@storybook/core/common';
+} from 'storybook/internal/common';
 
 import { runFixes } from './automigrate';
 import { mdxToCSF } from './automigrate/fixes/mdx-to-csf';
-import { getStorybookVersionSpecifier } from '@storybook/core/cli';
+import { getStorybookVersionSpecifier } from 'storybook/internal/cli';
 
 const logger = console;
 

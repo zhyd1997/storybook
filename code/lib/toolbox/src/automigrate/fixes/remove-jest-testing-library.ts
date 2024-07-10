@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { dedent } from 'ts-dedent';
 import type { Fix } from '../types';
-import { getStorybookVersionSpecifier } from '@storybook/core/cli';
+import { getStorybookVersionSpecifier } from 'storybook/internal/cli';
 import { runCodemod } from '@storybook/codemod';
 import prompts from 'prompts';
 
