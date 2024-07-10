@@ -154,7 +154,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
       const content = await fs.readFile(file, 'utf-8');
       await fs.writeFile(
         file,
-        content.replace(/from \'core\/dist\/(.*)\'/, `from 'storybook/internal/$1'`)
+        content.replace(/from \'core\/dist\/(.*)\'/g, `from 'storybook/internal/$1'`)
       );
     })
   );
