@@ -1,3 +1,8 @@
+## 8.2.1
+
+- CPC: Fix type generation - [#28507](https://github.com/storybookjs/storybook/pull/28507), thanks @ndelangen!
+- Types: Update type signatures of objects and functions - [#28503](https://github.com/storybookjs/storybook/pull/28503), thanks @valentinpalkovic!
+
 ## 8.2.0
 
 Hold onto your hats! Storybook 8.2 has dropped, packed with a treasure trove of new features and bug fixes:
