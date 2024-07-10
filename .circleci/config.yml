@@ -499,8 +499,6 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - attach_workspace:
           at: .
-      - bun-orb/setup:
-          version: 1.1.1
       - run:
           name: Running Bench
           command: yarn task --task bench --template $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench) --no-link --start-from=never --junit
