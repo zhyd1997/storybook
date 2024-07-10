@@ -8,7 +8,7 @@ parameters:
     default: "skipped"
   pr:
     description: The PR number
-    type: integer
+    type: string
     default: "0"
 
 executors:
