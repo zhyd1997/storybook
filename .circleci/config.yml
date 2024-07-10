@@ -9,6 +9,7 @@ parameters:
   pr:
     description: The PR number
     type: integer
+    default: "0"
 
 executors:
   sb_node_18_classic:
