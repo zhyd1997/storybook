@@ -394,7 +394,7 @@ export async function baseGenerator(
       packageManager,
       language,
       destination: componentsDestinationPath,
-      assetsDir: path.join('create-storybook', 'rendererAssets', 'common'),
+      assetsDir: path.join(getCliDir(), 'rendererAssets', 'common'),
     });
   }
 }
