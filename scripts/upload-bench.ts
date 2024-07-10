@@ -7,6 +7,7 @@ import { loadBench } from './bench/utils';
 import { SANDBOX_DIRECTORY } from './utils/constants';
 
 const templateKey = process.argv[2];
+const prNumber = process.argv[3];
 
 const GCP_CREDENTIALS = JSON.parse(process.env.GCP_CREDENTIALS || '{}');
 const sandboxDir = process.env.SANDBOX_ROOT || SANDBOX_DIRECTORY;
@@ -81,7 +82,21 @@ const uploadBench = async () => {
   const dataset = store.dataset('benchmark_results');
   const appTable = dataset.table('bench2');
 
-  await appTable.insert([row]);
+  await Promise.all([
+    prNumber
+      ? fetch('https://storybook-benchmark-bot.vercel.app/description', {
+          method: 'POST',
+          body: JSON.stringify({
+            owner: 'storybookjs',
+            repo: 'storybook',
+            issueNumber: prNumber,
+            base: row, // TODO change this to actual base
+            head: row,
+          }),
+        })
+      : Promise.resolve(),
+    appTable.insert([row]),
+  ]);
 };
 
 uploadBench()

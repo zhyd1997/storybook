@@ -503,7 +503,7 @@ jobs:
           command: yarn task --task bench --template $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench) --no-link --start-from=never --junit
       - run:
           name: Uploading results
-          command: yarn upload-bench $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench) --pr << pipeline.parameters.pr >>
+          command: yarn upload-bench $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench) << pipeline.parameters.pr >>
       - report-workflow-on-failure:
           template: $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench)
   test-empty-init:
