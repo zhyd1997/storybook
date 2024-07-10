@@ -26,7 +26,7 @@ import { render, fireEvent } from '@testing-library/preact';
 
 import { InvalidForm } from './LoginForm.stories'; //👈 Our stories imported here.
 
-it('Checks if the form is valid', () => {
+it('Checks if the form is valid', async () => {
   const { getByTestId, getByText } = render(<InvalidForm {...InvalidForm.args} />);
 
   fireEvent.click(getByText('Submit'));
@@ -113,7 +113,7 @@ import * as stories from './LoginForm.stories'; // 👈 Our stories imported her
 
 const { InvalidForm } = composeStories(stories);
 
-test('Checks if the form is valid', () => {
+test('Checks if the form is valid', async () => {
   // Renders the composed story
   await InvalidForm.play();
 
@@ -137,7 +137,7 @@ import * as stories from './LoginForm.stories'; // 👈 Our stories imported her
 
 const { InvalidForm } = composeStories(stories);
 
-test('Checks if the form is valid', () => {
+test('Checks if the form is valid', async () => {
   // Renders the composed story
   await InvalidForm.play();
 
