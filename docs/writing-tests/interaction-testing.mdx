@@ -133,7 +133,7 @@ Sometimes you might need to run the same code before each story in a file. For i
 You can return a cleanup function from the `beforeEach` function, which will run **after** each story, when the story is remounted or navigated away from.
 
 <Callout variant="info">
-Generally, you should reset component and module state in the [preview file's `beforeEach` function](#reset-state-for-all-tests), to ensure it applies to your entire project. However, if a component's needs are particularly unique, you can use the returned cleanup function in the component meta `beforeEach` to reset the state as needed.
+Generally, you should reset component and module state in the [preview file's `beforeAll` or `beforeEach` functions](#reset-state-for-all-tests), to ensure it applies to your entire project. However, if a component's needs are particularly unique, you can use the returned cleanup function in the component meta `beforeEach` to reset the state as needed.
 </Callout>
 
 {/* prettier-ignore-start */}
@@ -142,9 +142,31 @@ Generally, you should reset component and module state in the [preview file's `b
 
 {/* prettier-ignore-end */}
 
-### Reset state for all tests
+### Set up or reset state for all tests
 
-When you [alter a component's state](#run-code-before-the-component-gets-rendered), it's important to reset that state before rendering another story to maintain isolation between tests. You can do this in a `beforeEach` function in the preview file (`.storybook/preview.js|ts`). This code will run before every story in the project.
+When you [alter a component's state](#run-code-before-the-component-gets-rendered), it's important to reset that state before rendering another story to maintain isolation between tests. 
+
+There are two options for resetting state, `beforeAll` and `beforeEach`.
+
+#### `beforeAll`
+
+The `beforeAll` function in the preview file (`.storybook/preview.js|ts`) will run once before any stories in the project and will _not_ re-run between stories. Beyond its initial run when kicking off a test run, it will not run again unless the preview file is updated. This is a good place to bootstrap your project or run any setup that your entire project depends on, as in the example below.
+
+You can return a cleanup function from the `beforeAll` function, which will run before re-running the `beforeAll` function or during the teardown process in the test runner.
+
+{/* prettier-ignore-start */}
+
+<CodeSnippets path="before-all-in-preview.md" />
+
+{/* prettier-ignore-end */}
+
+{/* prettier-ignore-start */}
+
+#### `beforeEach`
+
+Unlike `beforeAll`, which runs only once, the `beforeEach` function in the preview file (`.storybook/preview.js|ts`) will run before each story in the project. This is best used for resetting state or modules that are used by all or most of your stories. In the example below, we use it to reset the mocked Date.
+
+You can return a cleanup function from the `beforeEach` function, which will run **after** each story, when the story is remounted or navigated away from.
 
 {/* prettier-ignore-start */}
 
