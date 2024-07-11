@@ -8,7 +8,7 @@ import { SANDBOX_DIRECTORY } from './utils/constants';
 
 const templateKey = process.argv[2];
 const prNumber = process.argv[3];
-const baseBranch = process.argv[3];
+const baseBranch = process.argv[4];
 
 const GCP_CREDENTIALS = JSON.parse(process.env.GCP_CREDENTIALS || '{}');
 const sandboxDir = process.env.SANDBOX_ROOT || SANDBOX_DIRECTORY;
@@ -79,8 +79,10 @@ const uploadBench = async () => {
   const dataset = store.dataset('benchmark_results');
   const appTable = dataset.table('bench2');
 
-  const query = `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch='${baseBranch}' AND label='${templateKey}' ORDER BY timestamp DESC LIMIT 1;`;
-  const [[base]]: any[] = await appTable.query(query);
+  const [[base]]: any[] = await appTable.query({
+    query: `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch=@baseBranch AND label=@templateKey ORDER BY timestamp DESC LIMIT 1;`,
+    params: { baseBranch, templateKey },
+  });
 
   function uploadToGithub() {
     return prNumber && prNumber !== '0'
@@ -90,7 +92,7 @@ const uploadBench = async () => {
             owner: 'storybookjs',
             repo: 'storybook',
             issueNumber: prNumber,
-            base: base,
+            base: { ...defaults, ...base },
             head: row,
           }),
         })
