@@ -3,7 +3,7 @@ name: Trigger CircleCI workflow
 on:
   # Use pull_request_target, as we don't need to check out the actual code of the fork in this script.
   # And this is the only way to trigger the Circle CI API on forks as well.
-  pull_request: # TODO: HAS TO BE REVERTED TO `pull_request_target`
+  pull_request_target:
     types: [opened, synchronize, labeled, reopened]
   push:
     branches:
@@ -39,13 +39,13 @@ jobs:
   get-parameters:
     runs-on: ubuntu-latest
     steps:
-      - if: github.event_name == 'pull_request' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:normal') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:normal')))
+      - if: github.event_name == 'pull_request_target' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:normal') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:normal')))
         run: echo "workflow=normal" >> $GITHUB_ENV
-      - if: github.event_name == 'pull_request' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:docs') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:docs')))
+      - if: github.event_name == 'pull_request_target' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:docs') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:docs')))
         run: echo "workflow=docs" >> $GITHUB_ENV
       - if: github.event_name == 'push' || (github.event.action == 'labeled' && github.event.label.name == 'ci:merged') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:merged'))
         run: echo "workflow=merged" >> $GITHUB_ENV
-      - if: github.event_name == 'pull_request' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:daily') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:daily')))
+      - if: github.event_name == 'pull_request_target' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:daily') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:daily')))
         run: echo "workflow=daily" >> $GITHUB_ENV
     outputs:
       workflow: ${{ env.workflow }}
@@ -55,7 +55,7 @@ jobs:
   trigger-circle-ci-workflow:
     runs-on: ubuntu-latest
     needs: [get-branch, get-parameters]
-    if: github.event_name == 'pull_request' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:normal') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:normal')))
+    if: github.event_name == 'pull_request_target' && ((github.event.action == 'labeled' && github.event.label.name == 'ci:normal') || (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'ci:normal')))
     steps:
       - name: Trigger Normal tests
         uses: fjogeleit/http-request-action@v1
