@@ -7,12 +7,11 @@ import invariant from 'tiny-invariant';
 import { externalFrameworks } from './project_types';
 import type { SupportedRenderers } from './project_types';
 import type { JsPackageManager } from '@storybook/core/common';
-import { versions } from '@storybook/core/common';
+import { temporaryDirectory, versions } from '@storybook/core/common';
 import type { SupportedFrameworks } from '@storybook/core/types';
 
 const resolveUsingBranchInstall = async (packageManager: JsPackageManager, request: string) => {
-  const { temporaryDirectory } = await import('tempy');
-  const tempDirectory = temporaryDirectory();
+  const tempDirectory = await temporaryDirectory();
   const name = request as keyof typeof versions;
 
   // FIXME: this might not be the right version for community packages
