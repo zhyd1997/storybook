@@ -5,7 +5,7 @@ import { exec } from './exec';
 
 const require = createRequire(import.meta.url);
 const cliExecutable = require.resolve('../../code/lib/cli/bin/index.cjs');
-const toolboxExecutable = require.resolve('../../code/lib/toolbox/bin/index.cjs');
+const toolboxExecutable = require.resolve('../../code/lib/cli-storybook/bin/index.cjs');
 const createStorybookExecutable = require.resolve('../../code/lib/create-storybook/bin/index.cjs');
 
 export type CLIStep<TOptions extends OptionSpecifier> = {

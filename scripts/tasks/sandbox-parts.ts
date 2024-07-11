@@ -41,7 +41,7 @@ import {
 import { workspacePath } from '../utils/workspace';
 import { babelParse } from '../../code/core/src/csf-tools/babelParse';
 import { CODE_DIRECTORY, REPROS_DIRECTORY } from '../utils/constants';
-import type { TemplateKey } from '../../code/lib/toolbox/src/sandbox-templates';
+import type { TemplateKey } from '../../code/lib/cli-storybook/src/sandbox-templates';
 import { isFunction } from 'lodash';
 
 const logger = console;

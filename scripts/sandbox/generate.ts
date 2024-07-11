@@ -9,7 +9,7 @@ import { esMain } from '../utils/esmain';
 
 import type { OptionValues } from '../utils/options';
 import { createOptions } from '../utils/options';
-import { allTemplates as sandboxTemplates } from '../../code/lib/toolbox/src/sandbox-templates';
+import { allTemplates as sandboxTemplates } from '../../code/lib/cli-storybook/src/sandbox-templates';
 import storybookVersions from '../../code/core/src/common/versions';
 import { JsPackageManagerFactory } from '../../code/core/src/common/js-package-manager/JsPackageManagerFactory';
 

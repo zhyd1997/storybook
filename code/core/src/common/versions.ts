@@ -68,7 +68,6 @@ export default {
   '@storybook/react-dom-shim': '8.3.0-alpha.0',
   '@storybook/source-loader': '8.3.0-alpha.0',
   '@storybook/test': '8.3.0-alpha.0',
-  '@storybook/toolbox': '8.3.0-alpha.0',
   '@storybook/preset-create-react-app': '8.3.0-alpha.0',
   '@storybook/preset-html-webpack': '8.3.0-alpha.0',
   '@storybook/preset-preact-webpack': '8.3.0-alpha.0',
