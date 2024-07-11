@@ -5758,7 +5758,7 @@ __metadata:
     "@radix-ui/react-scroll-area": "npm:^1.0.5"
     "@radix-ui/react-slot": "npm:^1.0.2"
     "@storybook/csf": "npm:0.1.11"
-    "@storybook/docs-mdx": "npm:4.0.0--canary.19.48b6c75.0"
+    "@storybook/docs-mdx": "npm:4.0.0--canary.19.f920eba.0"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.5"
     "@tanstack/react-virtual": "npm:^3.3.0"
@@ -5911,12 +5911,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/docs-mdx@npm:4.0.0--canary.19.48b6c75.0":
-  version: 4.0.0--canary.19.48b6c75.0
-  resolution: "@storybook/docs-mdx@npm:4.0.0--canary.19.48b6c75.0"
+"@storybook/docs-mdx@npm:4.0.0--canary.19.f920eba.0":
+  version: 4.0.0--canary.19.f920eba.0
+  resolution: "@storybook/docs-mdx@npm:4.0.0--canary.19.f920eba.0"
   dependencies:
     acorn: "npm:^8.12.1"
-  checksum: 10c0/6229aea30fbe02b46162de9ad0871ded4a0a37d92823e379a17b657d06fb6f694d20e79ca7b107dc0c19b0a586059133482248aa2ea6f27ce14f59c076f1853b
+  checksum: 10c0/b25c8bb5651932d5e883c8c5441d94d33e528b84ebe35ae565abfda0804eafd635f9f6c90b8c52cd0fe3473b458cb77acceb63d7b87e10dc6a36d47b508b753f
   languageName: node
   linkType: hard
 
