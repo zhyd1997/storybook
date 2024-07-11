@@ -11,6 +11,7 @@ import {
   type JsPackageManager,
   getCoercedStorybookVersion,
   getStorybookInfo,
+  temporaryFile,
 } from 'storybook/internal/common';
 
 import type {
@@ -40,8 +41,7 @@ const originalStdOutWrite = process.stdout.write.bind(process.stdout);
 const originalStdErrWrite = process.stderr.write.bind(process.stdout);
 
 const augmentLogsToFile = async () => {
-  const { temporaryFile } = await import('tempy');
-  TEMP_LOG_FILE_PATH = temporaryFile({ name: LOG_FILE_NAME });
+  TEMP_LOG_FILE_PATH = await temporaryFile({ name: LOG_FILE_NAME });
   const logStream = createWriteStream(TEMP_LOG_FILE_PATH);
 
   process.stdout.write = (d: string) => {

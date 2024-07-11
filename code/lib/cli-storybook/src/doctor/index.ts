@@ -4,7 +4,7 @@ import { createWriteStream, move, remove } from 'fs-extra';
 import { dedent } from 'ts-dedent';
 import { join } from 'path';
 
-import { JsPackageManagerFactory } from 'storybook/internal/common';
+import { JsPackageManagerFactory, temporaryFile } from 'storybook/internal/common';
 import type { PackageManagerName } from 'storybook/internal/common';
 import { getStorybookData } from '../automigrate/helpers/mainConfigFile';
 import { cleanLog } from '../automigrate/helpers/cleanLog';
@@ -24,8 +24,7 @@ const originalStdOutWrite = process.stdout.write.bind(process.stdout);
 const originalStdErrWrite = process.stderr.write.bind(process.stdout);
 
 const augmentLogsToFile = async () => {
-  const { temporaryFile } = await import('tempy');
-  TEMP_LOG_FILE_PATH = temporaryFile({ name: LOG_FILE_NAME });
+  TEMP_LOG_FILE_PATH = await temporaryFile({ name: LOG_FILE_NAME });
   const logStream = createWriteStream(TEMP_LOG_FILE_PATH);
 
   process.stdout.write = (d: string) => {
