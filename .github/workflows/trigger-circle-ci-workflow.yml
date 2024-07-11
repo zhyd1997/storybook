@@ -87,8 +87,7 @@ jobs:
             -d '{
                   "branch": "'"$BRANCH"'",
                   "parameters": {
-                    "workflow": "merged",
-                    "pr": "'"$PR_NUMBER"'",
+                    "workflow": "merged"
                   }
                 }'
         env:
