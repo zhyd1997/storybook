@@ -24,11 +24,11 @@
     /**
      * Snippet contents
      */
-    children: Snippet;
+    children?: Snippet;
     /**
      * Text contents
      */
-    label?: string;
+    label: string;
     /**
      * Click handler
      */
@@ -47,7 +47,7 @@
 >
   {#if label}
     {label}
-  {:else}
+  {:else if children}
     {@render children()}
   {/if}
 </button>

@@ -35,7 +35,7 @@ export const createArgTypes = (docgen: SvelteComponentDoc) => {
   if (docgen.data) {
     docgen.data.forEach((item) => {
       results[item.name] = {
-        control: parseTypeToControl(item.type),
+        ...parseTypeToControl(item.type),
         name: item.name,
         description: item.description || undefined,
         type: {
@@ -100,25 +100,26 @@ const parseTypeToControl = (type: JSDocType | undefined): any => {
   if (type.kind === 'type') {
     switch (type.type) {
       case 'string':
-        return { type: 'text' };
-
+        return { control: { type: 'text' } };
       case 'enum':
-        return { type: 'radio' };
+        return { control: { type: 'radio' } };
       case 'any':
-        return { type: 'object' };
+        return { control: { type: 'object' } };
       default:
-        return { type: type.type };
+        return { control: { type: type.type } };
     }
   } else if (type.kind === 'union') {
     // @ts-expect-error TODO: fix, this seems like a broke in package update
     if (Array.isArray(type.type) && !type.type.find((t) => t.type !== 'string')) {
       return {
-        type: 'radio',
+        control: { type: 'select' },
         options: type.type
           .filter((t) => t.kind === 'const')
           .map((t) => (t as JSDocTypeConst).value),
       };
     }
+  } else if (type.kind === 'function') {
+    return { control: null };
   }
 
   return null;

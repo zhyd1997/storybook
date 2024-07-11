@@ -3,11 +3,11 @@ import MagicString from 'magic-string';
 import path from 'path';
 import fs from 'fs';
 import svelteDoc from 'sveltedoc-parser';
-import type { SvelteComponentDoc, SvelteParserOptions } from 'sveltedoc-parser';
+import type { SvelteComponentDoc, SvelteParserOptions, JSDocType } from 'sveltedoc-parser';
 import { logger } from 'storybook/internal/node-logger';
 import { preprocess } from 'svelte/compiler';
 import { replace, typescript } from 'svelte-preprocess';
-import { generateDocgen } from './generateDocgen';
+import { generateDocgen, type Docgen, type Type } from './generateDocgen';
 
 /*
  * Patch sveltedoc-parser internal options.
@@ -59,6 +59,66 @@ function getNameFromFilename(filename: string) {
   return base[0].toUpperCase() + base.slice(1);
 }
 
+function formatToSvelteDocParserType(type: Type): JSDocType {
+  switch (type.type) {
+    case 'string':
+      return { kind: 'type', type: 'string', text: 'string' };
+    case 'number':
+      return { kind: 'type', type: 'number', text: 'number' };
+    case 'boolean':
+      return { kind: 'type', type: 'boolean', text: 'boolean' };
+    case 'symbol':
+      return { kind: 'type', type: 'symbol', text: 'symbol' };
+    case 'object':
+      return { kind: 'type', type: 'object', text: 'object' };
+    case 'null':
+      return { kind: 'type', type: 'other', text: 'null' };
+    case 'any':
+      return { kind: 'type', type: 'other', text: 'any' };
+    case 'array':
+      return { kind: 'type', type: 'array', text: 'array' };
+    case 'reference':
+      return { kind: 'type', type: 'other', text: type.text };
+    case 'other':
+      return { kind: 'type', type: 'other', text: type.text };
+    case 'function':
+      return { kind: 'function', text: type.text };
+    case 'literal':
+      return { kind: 'const', type: typeof type.value, value: type.value, text: type.text };
+    case 'union': {
+      const nonNull = type.types.filter((t) => t.type !== 'null'); // ignore null
+      const text = nonNull.map((t): string => formatToSvelteDocParserType(t).text).join(' | ');
+      const types = nonNull.map((t) => formatToSvelteDocParserType(t));
+      return types.length === 1 ? types[0] : { kind: 'union', type: types, text };
+    }
+    case 'intersection': {
+      const text = type.types.map((t): string => formatToSvelteDocParserType(t).text).join(' & ');
+      return { kind: 'type', type: 'intersection', text };
+    }
+  }
+}
+
+function emulateSvelteDocParserDataItems(docgen: Docgen) {
+  const data = docgen.props.map((p) => {
+    const required = p.runes && p.defaultValue === undefined && p.type && !p.type.optional;
+    return {
+      name: p.name,
+      visibility: 'public',
+      description: p.description,
+      keywords: required ? [{ name: 'required', description: '' }] : [],
+      kind: 'let',
+      type: p.type ? formatToSvelteDocParserType(p.type) : undefined,
+      static: false,
+      readonly: false,
+      importPath: undefined,
+      originalName: undefined,
+      localName: undefined,
+      defaultValue: p.defaultValue,
+    };
+  });
+  return data;
+}
+
 export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Promise<PluginOption> {
   const cwd = process.cwd();
   const { preprocess: preprocessOptions, logDocgen = false } = svelteOptions;
@@ -77,13 +137,17 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
       const resource = path.relative(cwd, id);
       const rawSource = fs.readFileSync(resource).toString();
 
-      // Use ts2doc to get props information
-      const { hasRuneProps, data } = generateDocgen(rawSource);
+      // Get props information
+      const docgen = generateDocgen(rawSource);
+      const hasRuneProps = docgen.props.some((p) => p.runes);
+      const data = emulateSvelteDocParserDataItems(docgen);
 
       let componentDoc: SvelteComponentDoc & { keywords?: string[] } = {};
 
       if (!hasRuneProps) {
-        // legacy mode (slots and events)
+        // Use sveltedoc-parser for generating documentation of events and slots.
+        //
+        // Note: Events and slots will be deprecated in Svelte 5.
 
         if (preprocessOptions && !docPreprocessOptions) {
           /*
@@ -137,7 +201,7 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
         }
       }
 
-      // Always use props info from ts2doc
+      // Always use props info from generateDocgen
       componentDoc.data = data;
 
       // get filename for source content
