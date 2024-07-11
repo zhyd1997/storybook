@@ -79,12 +79,12 @@ const uploadBench = async () => {
   const dataset = store.dataset('benchmark_results');
   const appTable = dataset.table('bench2');
 
-  const [[base]]: any[] = await appTable.query({
-    query: `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch=@baseBranch AND label=@templateKey ORDER BY timestamp DESC LIMIT 1;`,
-    params: { baseBranch, templateKey },
-  });
+  async function uploadToGithub() {
+    const [[base]]: any[] = await appTable.query({
+      query: `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch=@baseBranch AND label=@templateKey ORDER BY timestamp DESC LIMIT 1;`,
+      params: { baseBranch, templateKey },
+    });
 
-  function uploadToGithub() {
     return prNumber && prNumber !== '0'
       ? fetch('https://storybook-benchmark-bot.vercel.app/description', {
           method: 'POST',
