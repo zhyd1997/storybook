@@ -8,6 +8,7 @@ import { SANDBOX_DIRECTORY } from './utils/constants';
 
 const templateKey = process.argv[2];
 const prNumber = process.argv[3];
+const baseBranch = process.argv[3];
 
 const GCP_CREDENTIALS = JSON.parse(process.env.GCP_CREDENTIALS || '{}');
 const sandboxDir = process.env.SANDBOX_ROOT || SANDBOX_DIRECTORY;
@@ -64,12 +65,8 @@ const uploadBench = async () => {
 
   const row = {
     ...defaults,
-    branch:
-      process.env.CIRCLE_BRANCH ||
-      (await execaCommand('git rev-parse --abbrev-ref HEAD', { cleanup: true })).stdout,
-    commit:
-      process.env.CIRCLE_SHA1 ||
-      (await execaCommand('git rev-parse HEAD', { cleanup: true })).stdout,
+    branch: await getBranchName(),
+    commit: await getCommitHash(),
     timestamp: new Date().toISOString(),
     label: templateKey,
     ...results,
@@ -82,13 +79,11 @@ const uploadBench = async () => {
   const dataset = store.dataset('benchmark_results');
   const appTable = dataset.table('bench2');
 
-  const baseBranch = 'next';
-
   const query = `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch='${baseBranch}' AND label='${templateKey}' ORDER BY timestamp DESC LIMIT 1;`;
   const [[base]]: any[] = await appTable.query(query);
 
-  await Promise.all([
-    prNumber && prNumber !== '0'
+  function uploadToGithub() {
+    return prNumber && prNumber !== '0'
       ? fetch('https://storybook-benchmark-bot.vercel.app/description', {
           method: 'POST',
           body: JSON.stringify({
@@ -99,9 +94,14 @@ const uploadBench = async () => {
             head: row,
           }),
         })
-      : Promise.resolve(),
-    appTable.insert([row]),
-  ]);
+      : Promise.resolve();
+  }
+
+  function uploadToBigQuery() {
+    return appTable.insert([row]);
+  }
+
+  await Promise.all([uploadToGithub(), uploadToBigQuery()]);
 };
 
 uploadBench()
@@ -117,3 +117,16 @@ uploadBench()
   .then(() => {
     console.log('done');
   });
+
+async function getCommitHash(): Promise<string> {
+  return (
+    process.env.CIRCLE_SHA1 || (await execaCommand('git rev-parse HEAD', { cleanup: true })).stdout
+  );
+}
+
+async function getBranchName(): Promise<string> {
+  return (
+    process.env.CIRCLE_BRANCH ||
+    (await execaCommand('git rev-parse --abbrev-ref HEAD', { cleanup: true })).stdout
+  );
+}
