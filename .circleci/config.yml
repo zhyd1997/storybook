@@ -841,6 +841,10 @@ workflows:
                 # --smoke-test is not supported for the angular builder right now
                 # - "angular-cli"
                 - "lit-vite-ts"
+      - bench:
+          parallelism: 5
+          requires:
+            - build-sandboxes
 
       # TODO: reenable once we find out the source of flakyness
       # - test-runner-dev:
