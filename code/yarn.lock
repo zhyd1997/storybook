@@ -3757,19 +3757,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndelangen/fs-extra-unified@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@ndelangen/fs-extra-unified@npm:1.0.3"
-  peerDependencies:
-    "@types/fs-extra": ^11.0.0
-    fs-extra: ^11.0.0
-  peerDependenciesMeta:
-    "@types/fs-extra":
-      optional: true
-  checksum: 10c0/397e94eb34a644e33bb7e0cf263da2758efb44924dd6b4bd90e82184868cf4dca5f116b628a9dd0837e3c5c9a36735069bec4312f5d6be2b9997cb0fd3712aaa
-  languageName: node
-  linkType: hard
-
 "@ndelangen/get-tarball@npm:^3.0.7":
   version: 3.0.9
   resolution: "@ndelangen/get-tarball@npm:3.0.9"
@@ -5777,7 +5764,6 @@ __metadata:
     "@emotion/styled": "npm:^11.11.0"
     "@emotion/use-insertion-effect-with-fallbacks": "npm:^1.0.1"
     "@fal-works/esbuild-plugin-global-externals": "npm:^2.1.2"
-    "@ndelangen/fs-extra-unified": "npm:^1.0.3"
     "@ndelangen/get-tarball": "npm:^3.0.7"
     "@popperjs/core": "npm:^2.6.0"
     "@radix-ui/react-dialog": "npm:^1.0.5"
