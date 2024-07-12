@@ -110,8 +110,14 @@ describe('missingStorybookDependencies', () => {
         mainConfigPath: 'path/to/main-config.js',
       });
 
-      expect(mockPackageManager.addDependencies).toHaveBeenCalledWith(
+      expect(mockPackageManager.addDependencies).toHaveBeenNthCalledWith(
+        1,
         { installAsDevDependencies: true },
+        ['@storybook/preview-api@8.1.10', '@storybook/manager-api@8.1.10']
+      );
+      expect(mockPackageManager.addDependencies).toHaveBeenNthCalledWith(
+        2,
+        { installAsDevDependencies: true, skipInstall: true, packageJson: expect.anything() },
         ['@storybook/preview-api@^8.1.10', '@storybook/manager-api@^8.1.10']
       );
     });

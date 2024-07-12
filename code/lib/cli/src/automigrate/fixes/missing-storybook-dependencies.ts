@@ -4,6 +4,7 @@ import { dedent } from 'ts-dedent';
 
 import type { Fix } from '../types';
 import { getStorybookVersionSpecifier } from '../../helpers';
+import type { InstallationMetadata, JsPackageManager } from '@storybook/core/common';
 
 const logger = console;
 
@@ -34,6 +35,30 @@ const consolidatedPackages = [
   '@storybook/components',
 ];
 
+async function checkInstallations(
+  packageManager: JsPackageManager,
+  packages: string[]
+): Promise<InstallationMetadata['dependencies']> {
+  let result: Record<string, any> = {};
+
+  // go through each package and get installation info at depth 0 to make sure
+  // the dependency is directly installed, else they could come from other dependencies
+  const promises = packages.map((pkg) => packageManager.findInstallations([pkg], { depth: 0 }));
+
+  const analyses = await Promise.all(promises);
+
+  analyses.forEach((analysis) => {
+    if (analysis?.dependencies) {
+      result = {
+        ...result,
+        ...analysis.dependencies,
+      };
+    }
+  });
+
+  return result;
+}
+
 /**
  * Find usage of Storybook packages in the project files which are not present in the dependencies.
  */
@@ -46,12 +71,12 @@ export const missingStorybookDependencies: Fix<MissingStorybookDependenciesOptio
     // Dynamically import globby because it is a pure ESM module
     const { globby } = await import('globby');
 
-    const result = await packageManager.findInstallations(consolidatedPackages);
+    const result = await checkInstallations(packageManager, consolidatedPackages);
     if (!result) {
       return null;
     }
 
-    const installedDependencies = Object.keys(result.dependencies);
+    const installedDependencies = Object.keys(result);
     const dependenciesToCheck = consolidatedPackages.filter(
       (pkg) => !installedDependencies.includes(pkg)
     );
@@ -103,8 +128,25 @@ export const missingStorybookDependencies: Fix<MissingStorybookDependenciesOptio
       const versionToInstall = getStorybookVersionSpecifier(
         await packageManager.retrievePackageJson()
       );
+
+      const versionToInstallWithoutModifiers = versionToInstall?.replace(/[\^~]/, '');
+
+      /**
+       * WORKAROUND: necessary for the following scenario:
+       * Storybook latest is currently at 8.2.2
+       * User has all Storybook deps at ^8.2.1
+       * We run e.g. npm install with the dependency@^8.2.1
+       * The package.json will have ^8.2.1 but install 8.2.2
+       * So we first install the exact version, then run code again
+       * to write to package.json to add the caret back, but without running install
+       */
       await packageManager.addDependencies(
         { installAsDevDependencies: true },
+        dependenciesToInstall.map((pkg) => `${pkg}@${versionToInstallWithoutModifiers}`)
+      );
+      const packageJson = await packageManager.retrievePackageJson();
+      await packageManager.addDependencies(
+        { installAsDevDependencies: true, skipInstall: true, packageJson },
         dependenciesToInstall.map((pkg) => `${pkg}@${versionToInstall}`)
       );
     }
