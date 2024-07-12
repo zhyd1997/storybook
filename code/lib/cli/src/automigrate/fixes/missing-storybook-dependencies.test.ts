@@ -83,7 +83,6 @@ describe('missingStorybookDependencies', () => {
       };
       const message = missingStorybookDependencies.prompt({ packageUsage });
 
-      // @ts-expect-error not sure why the type is not augmented
       expect(message).toMatchInlineSnapshot(`
         "Found the following Storybook packages used in your project, but they are missing from your project dependencies:
         - [36m@storybook/preview-api[39m: (1 file)
