@@ -3,9 +3,9 @@ import fse from 'fs-extra';
 import { dedent } from 'ts-dedent';
 import ora from 'ora';
 import invariant from 'tiny-invariant';
-import type { JsPackageManager } from '@storybook/core-common';
-import { getPackageDetails, versions as packageVersions } from '@storybook/core-common';
-import type { SupportedFrameworks } from '@storybook/types';
+import type { JsPackageManager } from '@storybook/core/common';
+import { getPackageDetails, versions as packageVersions } from '@storybook/core/common';
+import type { SupportedFrameworks } from '@storybook/core/types';
 import type { NpmOptions } from '../NpmOptions';
 import type { SupportedRenderers, Builder } from '../project_types';
 import { SupportedLanguage, externalFrameworks } from '../project_types';
@@ -23,7 +23,6 @@ const defaultOptions: FrameworkOptions = {
   staticDir: undefined,
   addScripts: true,
   addMainFile: true,
-  addPreviewFile: true,
   addComponents: true,
   webpackCompiler: () => undefined,
   extraMain: undefined,
@@ -31,8 +30,6 @@ const defaultOptions: FrameworkOptions = {
   extensions: undefined,
   componentsDestinationPath: undefined,
   storybookConfigFolder: '.storybook',
-  installStorybookPackage: true,
-  installFrameworkPackages: true,
 };
 
 const getBuilderDetails = (builder: string) => {
@@ -205,15 +202,12 @@ export async function baseGenerator(
     staticDir,
     addScripts,
     addMainFile,
-    addPreviewFile,
     addComponents,
     extraMain,
     extensions,
     storybookConfigFolder,
     componentsDestinationPath,
     webpackCompiler,
-    installStorybookPackage,
-    installFrameworkPackages,
   } = {
     ...defaultOptions,
     ...options,
@@ -285,9 +279,9 @@ export async function baseGenerator(
       : extraPackages;
 
   const allPackages = [
-    installStorybookPackage ? 'storybook' : undefined,
+    'storybook',
     getExternalFramework(rendererId) ? undefined : `@storybook/${rendererId}`,
-    ...(installFrameworkPackages ? frameworkPackages : []),
+    ...frameworkPackages,
     ...addonPackages,
     ...(extraPackagesToInstall || []),
   ].filter(Boolean);
@@ -329,9 +323,7 @@ export async function baseGenerator(
     addDependenciesSpinner.succeed();
   }
 
-  if (addMainFile || addPreviewFile) {
-    await fse.ensureDir(`./${storybookConfigFolder}`);
-  }
+  await fse.ensureDir(`./${storybookConfigFolder}`);
 
   if (addMainFile) {
     const prefixes = shouldApplyRequireWrapperOnPackageNames
@@ -379,14 +371,12 @@ export async function baseGenerator(
     });
   }
 
-  if (addPreviewFile) {
-    await configurePreview({
-      frameworkPreviewParts,
-      storybookConfigFolder: storybookConfigFolder as string,
-      language,
-      rendererId,
-    });
-  }
+  await configurePreview({
+    frameworkPreviewParts,
+    storybookConfigFolder: storybookConfigFolder as string,
+    language,
+    rendererId,
+  });
 
   if (addScripts) {
     await packageManager.addStorybookCommandInScripts({
