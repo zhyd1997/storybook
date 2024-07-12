@@ -76,7 +76,7 @@ export const missingStorybookDependencies: Fix<MissingStorybookDependenciesOptio
       return null;
     }
 
-    const installedDependencies = Object.keys(result);
+    const installedDependencies = Object.keys(result).sort();
     const dependenciesToCheck = consolidatedPackages.filter(
       (pkg) => !installedDependencies.includes(pkg)
     );
@@ -113,6 +113,7 @@ export const missingStorybookDependencies: Fix<MissingStorybookDependenciesOptio
           ([pkg, files]) =>
             `- ${chalk.cyan(pkg)}: (${files.length} ${files.length === 1 ? 'file' : 'files'})`
         )
+        .sort()
         .join('\n')}
 
       Referencing missing packages can cause your project to crash. We can automatically add them to your dependencies.

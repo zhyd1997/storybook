@@ -81,8 +81,8 @@ describe('missingStorybookDependencies', () => {
 
       expect(message).toMatchInlineSnapshot(`
         "Found the following Storybook packages used in your project, but they are missing from your project dependencies:
-        - [36m@storybook/preview-api[39m: (1 file)
         - [36m@storybook/manager-api[39m: (1 file)
+        - [36m@storybook/preview-api[39m: (1 file)
 
         Referencing missing packages can cause your project to crash. We can automatically add them to your dependencies.
 
