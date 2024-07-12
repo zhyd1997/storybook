@@ -1,0 +1,119 @@
+import { describe, expect, vi, it } from 'vitest';
+import type { JsPackageManager } from '@storybook/core/common';
+
+import { missingStorybookDependencies } from './missing-storybook-dependencies';
+import { beforeEach } from 'node:test';
+
+vi.mock('globby', () => ({
+  __esModule: true,
+  globby: vi.fn().mockResolvedValue(['.storybook/manager.ts', 'path/to/file.stories.tsx']),
+}));
+
+vi.mock('node:fs/promises', () => ({
+  __esModule: true,
+  readFile: vi.fn().mockResolvedValue(`
+    // these are NOT installed, will be reported
+    import { someFunction } from '@storybook/preview-api';
+    import { anotherFunction } from '@storybook/manager-api';
+    import { SomeError } from '@storybook/core-events/server-errors';
+    // this IS installed, will not be reported
+    import { yetAnotherFunction } from '@storybook/theming';
+  `),
+}));
+
+vi.mock('../../helpers', () => ({
+  getStorybookVersionSpecifier: vi.fn().mockReturnValue('^8.1.10'),
+}));
+
+const check = async ({
+  packageManager,
+  storybookVersion = '8.1.10',
+}: {
+  packageManager: JsPackageManager;
+  storybookVersion?: string;
+}) => {
+  return missingStorybookDependencies.check({
+    packageManager,
+    mainConfig: {} as any,
+    storybookVersion,
+  });
+};
+
+describe('missingStorybookDependencies', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const mockPackageManager = {
+    findInstallations: vi.fn().mockResolvedValue({
+      dependencies: {
+        '@storybook/react': '8.1.0',
+        '@storybook/theming': '8.1.0',
+      },
+    }),
+    retrievePackageJson: vi.fn().mockResolvedValue({
+      dependencies: {
+        '@storybook/core': '8.1.0',
+      },
+    }),
+    addDependencies: vi.fn().mockResolvedValue(undefined),
+  } as Partial<JsPackageManager>;
+
+  describe('check function', () => {
+    it('should identify missing dependencies', async () => {
+      const result = await check({
+        packageManager: mockPackageManager as JsPackageManager,
+      });
+
+      expect(Object.keys(result!.packageUsage)).not.includes('@storybook/theming');
+      expect(result).toEqual({
+        packageUsage: {
+          '@storybook/preview-api': ['.storybook/manager.ts', 'path/to/file.stories.tsx'],
+          '@storybook/manager-api': ['.storybook/manager.ts', 'path/to/file.stories.tsx'],
+          '@storybook/core-events': ['.storybook/manager.ts', 'path/to/file.stories.tsx'],
+        },
+      });
+    });
+  });
+
+  describe('prompt function', () => {
+    it('should provide a proper message with the missing dependencies', () => {
+      const packageUsage = {
+        '@storybook/preview-api': ['.storybook/manager.ts'],
+        '@storybook/manager-api': ['path/to/file.stories.tsx'],
+      };
+      const message = missingStorybookDependencies.prompt({ packageUsage });
+
+      // @ts-expect-error not sure why the type is not augmented
+      expect(message).toMatchInlineSnapshot(`
+        "Found usage of the following Storybook packages, but they are not present in your project dependencies:
+        - [36m@storybook/preview-api[39m: (1 file)
+        - [36m@storybook/manager-api[39m: (1 file)
+
+        Not having them directly installed will cause breakage in your project, and we can fix this by adding them to your dependencies."
+      `);
+    });
+  });
+
+  describe('run function', () => {
+    it('should add missing dependencies', async () => {
+      const dryRun = false;
+      const packageUsage = {
+        '@storybook/preview-api': ['.storybook/manager.ts'],
+        '@storybook/manager-api': ['path/to/file.stories.tsx'],
+      };
+
+      await missingStorybookDependencies.run!({
+        result: { packageUsage },
+        dryRun,
+        packageManager: mockPackageManager as JsPackageManager,
+        mainConfigPath: 'path/to/main-config.js',
+      });
+
+      expect(mockPackageManager.addDependencies).toHaveBeenCalledWith(
+        { installAsDevDependencies: true },
+        ['@storybook/preview-api@^8.1.10', '@storybook/manager-api@^8.1.10']
+      );
+    });
+  });
+});
