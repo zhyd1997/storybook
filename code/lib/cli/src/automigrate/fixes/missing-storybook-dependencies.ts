@@ -65,7 +65,7 @@ async function checkInstallations(
 export const missingStorybookDependencies: Fix<MissingStorybookDependenciesOptions> = {
   id: 'missingStorybookDependencies',
   promptType: 'auto',
-  versionRange: ['*', '*'],
+  versionRange: ['<8.2', '>=8.2'],
 
   async check({ packageManager }) {
     // Dynamically import globby because it is a pure ESM module
