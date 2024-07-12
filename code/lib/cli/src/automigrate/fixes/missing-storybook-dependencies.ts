@@ -107,7 +107,7 @@ export const missingStorybookDependencies: Fix<MissingStorybookDependenciesOptio
 
   prompt({ packageUsage }) {
     return dedent`
-      Found usage of the following Storybook packages, but they are not present in your project dependencies:
+      Found the following Storybook packages used in your project, but they are missing from your project dependencies:
       ${Object.entries(packageUsage)
         .map(
           ([pkg, files]) =>
@@ -115,7 +115,9 @@ export const missingStorybookDependencies: Fix<MissingStorybookDependenciesOptio
         )
         .join('\n')}
 
-      Not having them directly installed will cause breakage in your project, and we can fix this by adding them to your dependencies.
+      Referencing missing packages can cause your project to crash. We can automatically add them to your dependencies.
+
+      More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#failed-to-resolve-import-storybookx-error
     `;
   },
 

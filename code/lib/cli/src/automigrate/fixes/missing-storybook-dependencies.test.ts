@@ -86,11 +86,13 @@ describe('missingStorybookDependencies', () => {
 
       // @ts-expect-error not sure why the type is not augmented
       expect(message).toMatchInlineSnapshot(`
-        "Found usage of the following Storybook packages, but they are not present in your project dependencies:
+        "Found the following Storybook packages used in your project, but they are missing from your project dependencies:
         - [36m@storybook/preview-api[39m: (1 file)
         - [36m@storybook/manager-api[39m: (1 file)
 
-        Not having them directly installed will cause breakage in your project, and we can fix this by adding them to your dependencies."
+        Referencing missing packages can cause your project to crash. We can automatically add them to your dependencies.
+
+        More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#failed-to-resolve-import-storybookx-error"
       `);
     });
   });
