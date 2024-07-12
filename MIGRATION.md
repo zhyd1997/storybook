@@ -434,7 +434,7 @@ Cannot find module @storybook/preview-api or its corresponding type declarations
 Internal server error: Failed to resolve import "@storybook/theming/create" from ".storybook/theme.ts". Does the file exist?
 ```
 
-To protect your project from missing dependencies, try [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import).
+To protect your project from missing dependencies, try the `no-extraneous-dependencies` rule in [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import).
 
 ### Preview.js globals renamed to initialGlobals
 
