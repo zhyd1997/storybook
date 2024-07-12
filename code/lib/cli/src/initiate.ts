@@ -2,9 +2,9 @@ import { appendFile, readFile } from 'fs/promises';
 import findUp from 'find-up';
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { telemetry } from '@storybook/telemetry';
-import { withTelemetry } from '@storybook/core-server';
-import { NxProjectDetectedError } from '@storybook/core-events/server-errors';
+import { telemetry } from 'storybook/internal/telemetry';
+import { withTelemetry } from '@storybook/core/core-server';
+import { NxProjectDetectedError } from '@storybook/core/server-errors';
 import {
   versions,
   HandledError,
@@ -12,10 +12,10 @@ import {
   commandLog,
   paddedLog,
   getProjectRoot,
-} from '@storybook/core-common';
-import type { JsPackageManager } from '@storybook/core-common';
+} from '@storybook/core/common';
+import type { JsPackageManager } from '@storybook/core/common';
 
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import boxen from 'boxen';
 import { lt, prerelease } from 'semver';
 import type { Builder } from './project_types';
@@ -28,7 +28,6 @@ import reactNativeGenerator from './generators/REACT_NATIVE';
 import reactScriptsGenerator from './generators/REACT_SCRIPTS';
 import nextjsGenerator from './generators/NEXTJS';
 import vue3Generator from './generators/VUE3';
-import nuxtGenerator from './generators/NUXT';
 import webpackReactGenerator from './generators/WEBPACK_REACT';
 import htmlGenerator from './generators/HTML';
 import webComponentsGenerator from './generators/WEB-COMPONENTS';
@@ -108,11 +107,6 @@ const installStorybook = async <Project extends ProjectType>(
       case ProjectType.VUE3:
         return vue3Generator(packageManager, npmOptions, generatorOptions).then(
           commandLog('Adding Storybook support to your "Vue 3" app')
-        );
-
-      case ProjectType.NUXT:
-        return nuxtGenerator(packageManager, npmOptions, generatorOptions).then(
-          commandLog('Adding Storybook support to your "Nuxt" app')
         );
 
       case ProjectType.ANGULAR:
@@ -248,8 +242,8 @@ export async function doInitiate(options: CommandOptions): Promise<
     force: pkgMgr,
   });
 
-  const latestVersion = await packageManager.latestVersion('@storybook/cli');
-  const currentVersion = versions['@storybook/cli'];
+  const latestVersion = await packageManager.latestVersion('storybook');
+  const currentVersion = versions.storybook;
   const isPrerelease = prerelease(currentVersion);
   const isOutdated = lt(currentVersion, latestVersion);
   const borderColor = isOutdated ? '#FC521F' : '#F1618C';
@@ -287,12 +281,6 @@ export async function doInitiate(options: CommandOptions): Promise<
     }
     // Prompt the user to create a new project from our list.
     await scaffoldNewProject(packageManager.type, options);
-
-    if (process.env.IN_STORYBOOK_SANDBOX === 'true' || process.env.CI === 'true') {
-      packageManager.addPackageResolutions({
-        '@storybook/telemetry': versions['@storybook/telemetry'],
-      });
-    }
   }
 
   let projectType: ProjectType;
@@ -433,12 +421,15 @@ export async function initiate(options: CommandOptions): Promise<void> {
     logger.log('\nRunning Storybook');
 
     try {
-      const isReactWebProject =
-        projectType === ProjectType.REACT_SCRIPTS ||
-        projectType === ProjectType.REACT ||
-        projectType === ProjectType.WEBPACK_REACT ||
-        projectType === ProjectType.REACT_PROJECT ||
-        projectType === ProjectType.NEXTJS;
+      const supportsOnboarding = [
+        ProjectType.REACT_SCRIPTS,
+        ProjectType.REACT,
+        ProjectType.WEBPACK_REACT,
+        ProjectType.REACT_PROJECT,
+        ProjectType.NEXTJS,
+        ProjectType.VUE3,
+        ProjectType.ANGULAR,
+      ].includes(projectType);
 
       const flags = [];
 
@@ -448,7 +439,7 @@ export async function initiate(options: CommandOptions): Promise<void> {
         flags.push('--');
       }
 
-      if (isReactWebProject) {
+      if (supportsOnboarding) {
         flags.push('--initial-path=/onboarding');
       }
 

@@ -14,7 +14,9 @@ In addition, you can write pure documentation pages in MDX and add them to Story
 ![MDX simple example result](../_assets/writing-docs/mdx-hero.png)
 
 <Callout variant="info">
-  Writing stories directly in MDX was removed in Storybook 8, and we're no longer supporting it. Please reference the [previous documentation](../../../release-6-5/docs/writing-docs/mdx.mdx) for guidance on that feature or [migrate](../migration-guide.md#storiesmdx-to-mdxcsf) to the new format.
+
+  Writing stories directly in MDX was removed in Storybook 8, and we're no longer supporting it. Please reference the [previous documentation](../../../release-6-5/docs/writing-docs/mdx.mdx) for guidance on that feature or [migrate](../migration-guide/index.mdx#storiesmdx-to-mdxcsf) to the new format.
+  
 </Callout>
 
 ## Basic example
@@ -83,7 +85,7 @@ Imports the components and stories that will be used in the JSX throughout the r
 {/* prettier-ignore-end */}
 
 <Callout variant="info">
-  When providing the `of` prop to the `Meta` block, make sure that you're referencing the [**default export**](../api/csf.md#default-export) of the story file and not the component itself to prevent render issues with the generated documentation.
+  When providing the `of` prop to the `Meta` block, make sure that you're referencing the [**default export**](../api/csf.mdx#default-export) of the story file and not the component itself to prevent render issues with the generated documentation.
 </Callout>
 
 The `Meta` block defines where the document will be placed in the sidebar. In this case, it is adjacent to the Checkbox’s stories. By default, the docs sidebar node is titled `"Docs"`, but this can be customized by passing a `name` prop (e.g., `<Meta of={CheckboxStories} name="Info" />`). If you want to place a docs node at an arbitrary point in the navigation hierarchy, you can use the `title` prop (e.g., `<Meta title="path/to/node" />`).
@@ -163,7 +165,9 @@ However, providing the `Meta` Doc Block may not be required for certain use case
 {/* prettier-ignore-end */}
 
 <Callout variant="info" icon="💡">
+
   If you're overriding an existing auto-generated documentation page enabled via [`tags`](./autodocs.mdx#setup-automated-docs) configuration property, we recommend removing it to avoid errors.
+  
 </Callout>
 
 Once the custom MDX documentation is loaded, Storybook will infer the title and location using the same heuristic rules to generate [auto-title stories](../configure/user-interface/sidebar-and-urls.mdx#csf-30-auto-titles) and render it in the sidebar as a `Docs` entry.
@@ -298,7 +302,7 @@ If you're still encountering issues, we recommend reaching out to the community 
 
 ### The controls are not updating the story within the MDX documentation page
 
-If you turned off inline rendering for your stories via the [`inline`](../api/doc-block-story.md#inline) configuration option, you would run into a situation where the associated controls are not updating the story within the documentation page. This is a known limitation of the current implementation and will be addressed in a future release.
+If you turned off inline rendering for your stories via the [`inline`](../api/doc-blocks/doc-block-story.mdx#inline) configuration option, you would run into a situation where the associated controls are not updating the story within the documentation page. This is a known limitation of the current implementation and will be addressed in a future release.
 
 ### The React version used is unexpected
 
