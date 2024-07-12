@@ -23,7 +23,11 @@ export function rollupBasedPlugin(options: EnrichCsfOptions): Partial<RollupPlug
         }).parse();
         enrichCsf(csf, csfSource, options);
         const inputSourceMap = this.getCombinedSourcemap();
-        return formatCsf(csf, { sourceMaps: true, inputSourceMap }, code);
+        return formatCsf(
+          csf,
+          { sourceMaps: true, inputSourceMap: inputSourceMap.toString() },
+          code
+        );
       } catch (err: any) {
         // This can be called on legacy storiesOf files, so just ignore
         // those errors. But warn about other errors.
