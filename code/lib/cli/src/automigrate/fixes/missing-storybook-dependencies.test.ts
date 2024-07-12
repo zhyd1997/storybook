@@ -1,8 +1,7 @@
-import { describe, expect, vi, it } from 'vitest';
+import { describe, expect, vi, it, beforeEach } from 'vitest';
 import type { JsPackageManager } from '@storybook/core/common';
 
 import { missingStorybookDependencies } from './missing-storybook-dependencies';
-import { beforeEach } from 'node:test';
 
 vi.mock('globby', () => ({
   __esModule: true,
