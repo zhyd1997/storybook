@@ -39,10 +39,6 @@ const check = async ({
 };
 
 describe('missingStorybookDependencies', () => {
-  beforeEach(() => {
-    vi.restoreAllMocks();
-  });
-
   const mockPackageManager = {
     findInstallations: vi.fn().mockResolvedValue({
       dependencies: {
