@@ -1,5 +1,6 @@
 import { describe, expect, vi, it, beforeEach } from 'vitest';
 import type { JsPackageManager } from '@storybook/core/common';
+import stripAnsi from 'strip-ansi';
 
 import { missingStorybookDependencies } from './missing-storybook-dependencies';
 
@@ -77,12 +78,13 @@ describe('missingStorybookDependencies', () => {
         '@storybook/preview-api': ['.storybook/manager.ts'],
         '@storybook/manager-api': ['path/to/file.stories.tsx'],
       };
+
       const message = missingStorybookDependencies.prompt({ packageUsage });
 
-      expect(message).toMatchInlineSnapshot(`
+      expect(stripAnsi(message)).toMatchInlineSnapshot(`
         "Found the following Storybook packages used in your project, but they are missing from your project dependencies:
-        - [36m@storybook/manager-api[39m: (1 file)
-        - [36m@storybook/preview-api[39m: (1 file)
+        - @storybook/manager-api: (1 file)
+        - @storybook/preview-api: (1 file)
 
         Referencing missing packages can cause your project to crash. We can automatically add them to your dependencies.
 
