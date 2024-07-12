@@ -1,14 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  let {
-    primary = true,
-    backgroundColor,
-    size = 'medium',
-    onclick,
-    children,
-    label,
-  }: {
+  type MyProps = {
     /**
      * Is this the principal call to action on the page?
      */
@@ -33,7 +26,16 @@
      * Click handler
      */
     onclick?: () => void;
-  } = $props();
+  };
+
+  let {
+    primary = true,
+    backgroundColor,
+    size = 'medium',
+    onclick,
+    children,
+    label,
+  }: MyProps = $props();
 
   let mode = $derived(primary ? 'storybook-button--primary' : 'storybook-button--secondary');
   let style = $derived(backgroundColor ? `background-color: ${backgroundColor}` : '');

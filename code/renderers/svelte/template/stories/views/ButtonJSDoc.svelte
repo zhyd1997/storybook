@@ -10,17 +10,18 @@
   import { createEventDispatcher } from 'svelte';
 
   /**
-   * Rounds the button
+   * @type {boolean} Rounds the button
    */
   export let primary = false;
 
   /**
-   * Displays the count
+   * @type {number} Counter
    */
   export let count = 0;
 
   /**
    * How large should the button be?
+   * @type {'large' | 'medium' | 'small'}
    */
   export let size = 'medium';
 

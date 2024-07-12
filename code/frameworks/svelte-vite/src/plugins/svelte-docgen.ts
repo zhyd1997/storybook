@@ -3,7 +3,12 @@ import MagicString from 'magic-string';
 import path from 'path';
 import fs from 'fs';
 import svelteDoc from 'sveltedoc-parser';
-import type { SvelteComponentDoc, SvelteParserOptions, JSDocType } from 'sveltedoc-parser';
+import type {
+  SvelteComponentDoc,
+  SvelteDataItem,
+  SvelteParserOptions,
+  JSDocType,
+} from 'sveltedoc-parser';
 import { logger } from 'storybook/internal/node-logger';
 import { preprocess } from 'svelte/compiler';
 import { replace, typescript } from 'svelte-preprocess';
@@ -98,8 +103,8 @@ function formatToSvelteDocParserType(type: Type): JSDocType {
   }
 }
 
-function emulateSvelteDocParserDataItems(docgen: Docgen) {
-  const data = docgen.props.map((p) => {
+function transformToSvelteDocParserDataItems(docgen: Docgen): SvelteDataItem[] {
+  return docgen.props.map((p) => {
     const required = p.runes && p.defaultValue === undefined && p.type && !p.type.optional;
     return {
       name: p.name,
@@ -114,9 +119,8 @@ function emulateSvelteDocParserDataItems(docgen: Docgen) {
       originalName: undefined,
       localName: undefined,
       defaultValue: p.defaultValue,
-    };
+    } satisfies SvelteDataItem;
   });
-  return data;
 }
 
 export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Promise<PluginOption> {
@@ -140,7 +144,7 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
       // Get props information
       const docgen = generateDocgen(rawSource);
       const hasRuneProps = docgen.props.some((p) => p.runes);
-      const data = emulateSvelteDocParserDataItems(docgen);
+      const data = transformToSvelteDocParserDataItems(docgen);
 
       let componentDoc: SvelteComponentDoc & { keywords?: string[] } = {};
 

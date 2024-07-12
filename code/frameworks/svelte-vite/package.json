@@ -47,6 +47,8 @@
     "prep": "node --loader ../../../scripts/node_modules/esbuild-register/loader.js -r ../../../scripts/node_modules/esbuild-register/register.js ../../../scripts/prepare/bundle.ts"
   },
   "dependencies": {
+    "@babel/generator": "^7.24.8",
+    "@babel/parser": "^7.24.8",
     "@babel/traverse": "^7.24.7",
     "@storybook/builder-vite": "workspace:*",
     "@storybook/svelte": "workspace:*",

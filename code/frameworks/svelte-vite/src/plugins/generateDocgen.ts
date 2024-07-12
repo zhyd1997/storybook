@@ -20,10 +20,6 @@ export type PropInfo = {
   runes?: boolean;
 };
 
-export type EventInfo = {
-  name: string;
-};
-
 type BaseType = {
   /** Permits undefined or not */
   optional?: boolean;
@@ -32,41 +28,33 @@ type BaseType = {
 type ScalarType = BaseType & {
   type: 'number' | 'string' | 'boolean' | 'symbol' | 'any' | 'null';
 };
-
 type FunctionType = BaseType & {
   type: 'function';
   text: string;
 };
-
 type LiteralType = BaseType & {
   type: 'literal';
   value: string | number | boolean;
   text: string;
 };
-
 type ArrayType = BaseType & {
   type: 'array';
 };
-
 type ObjectType = BaseType & {
   type: 'object';
 };
-
 type UnionType = BaseType & {
   type: 'union';
   types: Type[];
 };
-
 type IntersectionType = BaseType & {
   type: 'intersection';
   types: Type[];
 };
-
 type ReferenceType = BaseType & {
   type: 'reference';
   text: string;
 };
-
 type OtherType = BaseType & {
   type: 'other';
   text: string;
@@ -84,7 +72,7 @@ export type Type =
   | IntersectionType;
 
 /**
- * Try to infer a type from a initializer expression (for when there is no type annotation)
+ * Try to infer a type from an initializer expression (for when there is no type annotation)
  */
 function inferTypeFromInitializer(expr: Expression): Type | undefined {
   switch (expr.type) {
@@ -171,11 +159,11 @@ function parseType(type: TSType): Type | undefined {
     }
   } else if (type.type == 'TSIntersectionType') {
     // e.g. `A & B`
-    const types: Type[] = type.types
+    const types = type.types
       .map((t) => {
         return parseType(t);
       })
-      .filter((t) => t !== undefined);
+      .filter((t) => t !== undefined) as Type[];
     return { type: 'intersection', types };
   }
   return undefined;
@@ -197,8 +185,7 @@ function tryParseJSDocType(text: string): Type | undefined {
     for (const decl of stmt.declarations) {
       if (decl.id.type == 'Identifier') {
         if (decl.id.typeAnnotation?.type === 'TSTypeAnnotation') {
-          const a = parseType(decl.id.typeAnnotation.typeAnnotation);
-          return a;
+          return parseType(decl.id.typeAnnotation.typeAnnotation);
         }
       }
     }
@@ -207,7 +194,7 @@ function tryParseJSDocType(text: string): Type | undefined {
 }
 
 /**
- * Extract JSDoc comments
+ * Parse JSDoc comments
  */
 function parseComments(leadingComments?: Comment[] | null) {
   if (!leadingComments) {
@@ -267,7 +254,7 @@ export function generateDocgen(fileContent: string): Docgen {
   }
 
   const propMap: Map<string, PropInfo> = new Map();
-  // const events: EventInfo[] = [];
+  let propTypeName = '$$ComponentProps';
 
   traverse(ast, {
     FunctionDeclaration: (funcPath) => {
@@ -275,38 +262,29 @@ export function generateDocgen(fileContent: string): Docgen {
         return;
       }
       funcPath.traverse({
-        TSTypeAliasDeclaration(path) {
-          if (
-            path.node.id.name !== '$$ComponentProps' ||
-            path.node.typeAnnotation.type !== 'TSTypeLiteral'
-          ) {
+        ReturnStatement: (path) => {
+          // For runes mode: Get the name of props type alias from `return { props: {} as MyProps, ... }`
+          if (path.parent !== funcPath.node.body) {
             return;
           }
-          const members = path.node.typeAnnotation.members;
-          members.forEach((member) => {
-            if (member.type === 'TSPropertySignature' && member.key.type === 'Identifier') {
-              const name = member.key.name;
-
-              const type =
-                member.typeAnnotation && member.typeAnnotation.type === 'TSTypeAnnotation'
-                  ? parseType(member.typeAnnotation.typeAnnotation)
-                  : undefined;
-
-              if (type && member.optional) {
-                type.optional = true;
+          const argument = path.node.argument;
+          if (argument?.type === 'ObjectExpression') {
+            argument.properties.forEach((property) => {
+              if (property.type === 'ObjectProperty') {
+                if (property.key.type === 'Identifier' && property.key.name === 'props') {
+                  if (property.value.type == 'TSAsExpression') {
+                    const typeAnnotation = property.value.typeAnnotation;
+                    if (
+                      typeAnnotation?.type === 'TSTypeReference' &&
+                      typeAnnotation.typeName.type === 'Identifier'
+                    ) {
+                      propTypeName = typeAnnotation.typeName.name;
+                    }
+                  }
+                }
               }
-
-              const { description } = parseComments(member.leadingComments);
-
-              propMap.set(name, {
-                ...propMap.get(name),
-                name,
-                type: type,
-                description,
-                runes: true,
-              });
-            }
-          });
+            });
+          }
         },
         VariableDeclaration: (path) => {
           if (path.node.kind !== 'let' || path.parent !== funcPath.node.body) {
@@ -319,7 +297,7 @@ export function generateDocgen(fileContent: string): Docgen {
               declaration.id.typeAnnotation &&
               declaration.id.typeAnnotation.type === 'TSTypeAnnotation'
             ) {
-              // Get default values from Svelte 5's `let { ... } = $props();`
+              // For runes mode: Collect default values from `let { ... } = $props();`
 
               const typeAnnotation = declaration.id.typeAnnotation.typeAnnotation;
               if (
@@ -350,7 +328,7 @@ export function generateDocgen(fileContent: string): Docgen {
                 }
               });
             } else if (declaration.id.type === 'Identifier') {
-              // Get props from Svelte 4's `export let a = ...`
+              // For legacy mode: Collect props info from `export let a = ...`
 
               const name = declaration.id.name;
               if (tsx.exportedNames.has(name)) {
@@ -389,6 +367,40 @@ export function generateDocgen(fileContent: string): Docgen {
             }
           });
         },
+      });
+    },
+  });
+
+  // For runes mode: Try to find and parse the props type alias.
+  traverse(ast, {
+    TSTypeAliasDeclaration(path) {
+      if (path.node.id.name !== propTypeName || path.node.typeAnnotation.type !== 'TSTypeLiteral') {
+        return;
+      }
+      const members = path.node.typeAnnotation.members;
+      members.forEach((member) => {
+        if (member.type === 'TSPropertySignature' && member.key.type === 'Identifier') {
+          const name = member.key.name;
+
+          const type =
+            member.typeAnnotation && member.typeAnnotation.type === 'TSTypeAnnotation'
+              ? parseType(member.typeAnnotation.typeAnnotation)
+              : undefined;
+
+          if (type && member.optional) {
+            type.optional = true;
+          }
+
+          const { description } = parseComments(member.leadingComments);
+
+          propMap.set(name, {
+            ...propMap.get(name),
+            name,
+            type: type,
+            description,
+            runes: true,
+          });
+        }
       });
     },
   });
