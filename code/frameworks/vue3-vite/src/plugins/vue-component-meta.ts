@@ -64,6 +64,7 @@ export async function vueComponentMeta(tsconfigPath = 'tsconfig.json'): Promise<
                 value: {
                   kind: value.schema.kind,
                   type: value.schema.type,
+                  // note that value.schema.schema is not included here (see comment above)
                 },
               });
             });
