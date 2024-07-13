@@ -601,7 +601,7 @@ export const loadCsf = (code: string, options: CsfOptions) => {
 
 export const formatCsf = (
   csf: CsfFile,
-  options: GeneratorOptions & { inputSourceMap?: string } = { sourceMaps: false },
+  options: GeneratorOptions & { inputSourceMap?: any } = { sourceMaps: false },
   code?: string
 ) => {
   const result = generate(csf._ast, options, code);
