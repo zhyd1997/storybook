@@ -19,6 +19,7 @@ export type StandaloneOptions = CLIOptions &
       assets?: AssetPattern[];
       sourceMap?: SourceMapUnion;
       preserveSymlinks?: boolean;
+      experimentalZoneless?: boolean;
     };
     angularBuilderContext?: BuilderContext | null;
     tsConfig?: string;
