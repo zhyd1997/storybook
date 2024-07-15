@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Sizes } from './types';
+
   /**
    * @component Button TypeScript
    * @wrapper
@@ -24,6 +26,11 @@
    * @slot
    */
   export let text: string = 'You clicked';
+
+  /**
+   * How large should the button be?
+   */
+  export let size: Sizes = 'medium';
 
   const dispatch = createEventDispatcher();
 

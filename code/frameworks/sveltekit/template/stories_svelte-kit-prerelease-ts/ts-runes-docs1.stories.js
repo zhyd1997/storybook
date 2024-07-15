@@ -1,7 +1,7 @@
 import ButtonTypescriptRunes from './ButtonTypeScriptRunes1.svelte';
 
 export default {
-  title: 'stories/renderers/svelte/ts-runes1-docs',
+  title: 'stories/renderers/svelte/ts-runes-docs1',
   component: ButtonTypescriptRunes,
   args: {
     primary: true,

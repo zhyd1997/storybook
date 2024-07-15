@@ -1,32 +1,27 @@
-import { svelte2tsx } from 'svelte2tsx';
+import ts from 'typescript';
+import svelte2tsx from 'svelte2tsx';
+import path from 'path';
 import { VERSION } from 'svelte/compiler';
-
-import { parse } from '@babel/parser';
-import traverse from '@babel/traverse';
-import generate from '@babel/generator';
-import type { Comment, Expression, TSType } from '@babel/types';
-import { parse as parseComment } from 'comment-parser';
+import cripto from 'crypto';
 
 export type Docgen = {
   name?: string;
+  runePropsUsed?: boolean;
   props: PropInfo[];
 };
 
 export type PropInfo = {
   name: string;
   type?: Type;
-  defaultValue?: string;
+  optional?: boolean;
+  defaultValue?: DefaultValue;
   description?: string;
-  runes?: boolean;
 };
 
-type BaseType = {
-  /** Permits undefined or not */
-  optional?: boolean;
-};
+type BaseType = object;
 
 type ScalarType = BaseType & {
-  type: 'number' | 'string' | 'boolean' | 'symbol' | 'any' | 'null';
+  type: 'number' | 'string' | 'boolean' | 'any' | 'null' | 'undefined';
 };
 type FunctionType = BaseType & {
   type: 'function';
@@ -39,9 +34,11 @@ type LiteralType = BaseType & {
 };
 type ArrayType = BaseType & {
   type: 'array';
+  text: string;
 };
 type ObjectType = BaseType & {
   type: 'object';
+  text: string;
 };
 type UnionType = BaseType & {
   type: 'union';
@@ -51,14 +48,6 @@ type IntersectionType = BaseType & {
   type: 'intersection';
   types: Type[];
 };
-type ReferenceType = BaseType & {
-  type: 'reference';
-  text: string;
-};
-type OtherType = BaseType & {
-  type: 'other';
-  text: string;
-};
 
 export type Type =
   | ScalarType
@@ -66,346 +55,358 @@ export type Type =
   | FunctionType
   | ArrayType
   | ObjectType
-  | OtherType
-  | ReferenceType
   | UnionType
   | IntersectionType;
 
-/**
- * Try to infer a type from an initializer expression (for when there is no type annotation)
- */
-function inferTypeFromInitializer(expr: Expression): Type | undefined {
-  switch (expr.type) {
-    case 'ObjectExpression':
-      return { type: 'object' };
-    case 'StringLiteral':
-      return { type: 'string' };
-    case 'TemplateLiteral':
-      return { type: 'string' };
-    case 'NumericLiteral':
-      return { type: 'number' };
-    case 'BooleanLiteral':
-      return { type: 'boolean' };
-    case 'ArrayExpression':
-      return { type: 'array' };
-    case 'NullLiteral':
-      return undefined; // cannot infer
-    default:
-      return undefined;
-  }
-}
+type DefaultValue = {
+  text: string;
+};
 
-function parseType(type: TSType): Type | undefined {
-  switch (type.type) {
-    case 'TSNumberKeyword':
-      return { type: 'number' };
-    case 'TSStringKeyword':
-      return { type: 'string' };
-    case 'TSBooleanKeyword':
-      return { type: 'boolean' };
-    case 'TSSymbolKeyword':
-      return { type: 'symbol' };
-    case 'TSAnyKeyword':
-      return { type: 'any' };
-    case 'TSNullKeyword':
-      return { type: 'null' };
-    case 'TSObjectKeyword':
-      return { type: 'object' };
-    case 'TSFunctionType':
-      return { type: 'function', text: generate(type).code };
-    case 'TSTypeReference':
-      return { type: 'reference', text: generate(type).code };
-    case 'TSLiteralType':
-      const text = generate(type.literal).code;
-      switch (type.literal.type) {
-        case 'StringLiteral':
-          return {
-            type: 'literal',
-            value: type.literal.value,
-            text,
-          };
-        case 'NumericLiteral':
-          return {
-            type: 'literal',
-            value: type.literal.value,
-            text,
-          };
-        case 'BooleanLiteral':
-          return { type: 'literal', value: type.literal.value, text: text };
-      }
-      return undefined;
+function convertType(type: ts.Type, checker: ts.TypeChecker): Type | undefined {
+  if (type.flags & ts.TypeFlags.Any) {
+    return { type: 'any' };
   }
-  if (type.type == 'TSTypeLiteral') {
-    return { type: 'object' };
-  } else if (type.type == 'TSUnionType') {
-    // e.g. `string | number | undefined`
-    let optional: boolean | undefined = undefined;
-    const types: Type[] = [];
-    type.types.forEach((t) => {
-      if (t.type === 'TSUndefinedKeyword') {
-        optional = true;
-      } else {
-        const ty = parseType(t);
-        if (ty) {
-          types.push(ty);
-        }
-      }
-    });
-    if (types.length === 1) {
-      // e.g. `string | undefined` => string?
-      return { ...types[0], optional };
-    } else if (types.length > 1) {
-      return { type: 'union', optional, types };
+  if (type.flags & ts.TypeFlags.Number) {
+    return { type: 'number' };
+  }
+  if (type.flags & ts.TypeFlags.String) {
+    return { type: 'string' };
+  }
+  if (type.flags & ts.TypeFlags.Boolean) {
+    return { type: 'boolean' };
+  }
+  if (type.flags & ts.TypeFlags.Null) {
+    return { type: 'null' };
+  }
+  if (type.flags & ts.TypeFlags.Undefined) {
+    return { type: 'undefined' };
+  }
+  if (type.getCallSignatures().length > 0) {
+    return { type: 'function', text: checker.typeToString(type) };
+  }
+  if (type.flags & ts.TypeFlags.Object) {
+    const indexType = checker.getIndexTypeOfType(type, ts.IndexKind.Number);
+    if (indexType) {
+      return { type: 'array', text: checker.typeToString(type) };
     }
-  } else if (type.type == 'TSIntersectionType') {
-    // e.g. `A & B`
+    return { type: 'object', text: checker.typeToString(type) };
+  }
+  if (type.isNumberLiteral() || type.isStringLiteral()) {
+    return {
+      type: 'literal',
+      value: type.value,
+      text: JSON.stringify(type.value),
+    };
+  }
+  if (type.flags & ts.TypeFlags.BooleanLiteral) {
+    const text = checker.typeToString(type);
+    return { type: 'literal', value: text === 'true', text: text };
+  }
+  if (type.isUnion()) {
     const types = type.types
-      .map((t) => {
-        return parseType(t);
-      })
-      .filter((t) => t !== undefined) as Type[];
+      .map((t) => convertType(t, checker))
+      .filter((t) => {
+        return t !== undefined && t.type !== 'undefined';
+      }) as Type[];
+
+    const idxTrue = types.findIndex((t) => t.type === 'literal' && t.value === true);
+    const idxFalse = types.findIndex((t) => t.type === 'literal' && t.value === false);
+    if (idxTrue !== -1 && idxFalse !== -1) {
+      types.splice(Math.max(idxTrue, idxFalse), 1);
+      types.splice(Math.min(idxTrue, idxFalse), 1, { type: 'boolean' });
+    }
+
+    return types.length > 1 ? { type: 'union', types: types } : types[0];
+  }
+  if (type.isIntersection()) {
+    const types = type.types.map((t) => convertType(t, checker)).filter((t) => t !== undefined);
     return { type: 'intersection', types };
   }
+
   return undefined;
 }
 
-/**
- * Try to parse a type text like `string | number | undefined` to a Type object.
- */
-function tryParseJSDocType(text: string): Type | undefined {
-  let ast;
-  try {
-    ast = parse(`let x: ${text};`, { plugins: ['typescript'] });
-  } catch {
-    return undefined;
-  }
-
-  const stmt = ast.program.body[0];
-  if (stmt.type === 'VariableDeclaration') {
-    for (const decl of stmt.declarations) {
-      if (decl.id.type == 'Identifier') {
-        if (decl.id.typeAnnotation?.type === 'TSTypeAnnotation') {
-          return parseType(decl.id.typeAnnotation.typeAnnotation);
+function formatInitializer(expr: ts.Expression, checker: ts.TypeChecker): DefaultValue | undefined {
+  if (ts.isNumericLiteral(expr)) {
+    return { text: expr.text };
+  } else if (ts.isStringLiteral(expr)) {
+    return { text: JSON.stringify(expr.text) };
+  } else if (ts.isIdentifier(expr)) {
+    const symbol = checker.getSymbolAtLocation(expr);
+    if (symbol) {
+      if (checker.isUndefinedSymbol(symbol)) {
+        return { text: 'undefined' };
+      } else {
+        const decl = symbol.valueDeclaration;
+        if (decl && ts.isVariableDeclaration(decl) && decl.initializer) {
+          const type = checker.getTypeAtLocation(decl.initializer);
+        }
+        const type = checker.getTypeAtLocation(expr);
+        if (type.isLiteral()) {
+          return { text: JSON.stringify(type.value) };
+        } else if (type.flags & ts.TypeFlags.Null) {
+          return { text: 'null' };
+        } else if (type.flags & ts.TypeFlags.BooleanLiteral) {
+          return { text: checker.typeToString(type) };
         }
       }
+    }
+  } else {
+    switch (expr.kind) {
+      case ts.SyntaxKind.TrueKeyword:
+        return { text: 'true' };
+      case ts.SyntaxKind.FalseKeyword:
+        return { text: 'false' };
+      case ts.SyntaxKind.NullKeyword:
+        return { text: 'null' };
     }
   }
   return undefined;
 }
 
-/**
- * Parse JSDoc comments
- */
-function parseComments(leadingComments?: Comment[] | null) {
-  if (!leadingComments) {
-    return {};
+function loadCompilerOptions(basepath: string): ts.CompilerOptions {
+  const jsConfigPath = ts.findConfigFile(basepath, ts.sys.fileExists, 'jsconfig.json');
+  const tsConfigPath = ts.findConfigFile(basepath, ts.sys.fileExists);
+  const configPath = jsConfigPath || tsConfigPath;
+
+  let options: ts.CompilerOptions = {};
+
+  if (configPath) {
+    const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
+    const config = ts.parseJsonConfigFileContent(
+      configFile.config,
+      ts.sys,
+      path.dirname(configPath),
+      undefined,
+      configPath,
+      undefined
+    );
+    options = config.options;
   }
-  let type: Type | undefined = undefined;
-  let description: string | undefined = undefined;
-
-  const content = leadingComments
-    .filter((c) => c.type === 'CommentBlock')
-    .map((c) => c.value)
-    .join('\n');
-
-  if (!content.startsWith('*')) {
-    // not a TSDoc/JSDoc
-    return {};
-  }
-
-  const blocks = parseComment('/*' + content + '*/');
-  const cc: string[] = [];
-  blocks.forEach((block) => {
-    cc.push(block.description);
-    block.tags.forEach((tag) => {
-      // JSDoc @type tag
-      if (tag.tag === 'type') {
-        type ||= tryParseJSDocType(tag.type);
-      }
-      cc.push(tag.name);
-      cc.push(tag.description);
-    });
-    description = cc.filter((c) => c).join(' ');
-  });
-
   return {
-    description,
-    type,
+    ...options,
+    sourceMap: false,
+    noEmit: true,
+    allowJs: true,
+    checkJs: true,
+    skipLibCheck: true,
+    skipDefaultLibCheck: true,
   };
 }
 
-export function generateDocgen(fileContent: string): Docgen {
-  const tsx = svelte2tsx(fileContent, {
-    version: VERSION,
-    isTsFile: true,
-    mode: 'ts',
-  });
+export interface SourceFileCache {
+  filenameToSourceFiles: Record<string, ts.SourceFile>;
+  hashToSourceFiles: Record<string, ts.SourceFile>;
+}
 
-  let ast: ReturnType<typeof parse>;
-  try {
-    ast = parse(tsx.code, {
-      sourceType: 'module',
-      plugins: ['typescript'],
-      allowImportExportEverywhere: true,
-      allowAwaitOutsideFunction: true,
-    });
-  } catch {
-    return { props: [] };
+export function createSourceFileCache(): SourceFileCache {
+  return {
+    filenameToSourceFiles: {},
+    hashToSourceFiles: {},
+  };
+}
+
+export function generateDocgen(targetFileName: string, sourceFileCache: SourceFileCache): Docgen {
+  if (targetFileName.endsWith('.svelte')) {
+    targetFileName = targetFileName + '.tsx';
+  }
+  let propsRuneUsed = false;
+
+  const options = loadCompilerOptions(targetFileName);
+
+  // Create a custom host
+  const originalHost = ts.createCompilerHost(options);
+  const host: ts.CompilerHost = {
+    ...originalHost,
+    fileExists(fileName) {
+      let exists = originalHost.fileExists(fileName);
+      if (exists) {
+        return exists;
+      }
+
+      if (fileName.endsWith('.svelte.tsx') || fileName.endsWith('.svelte.jsx')) {
+        fileName = fileName.slice(0, -4); // remove .tsx or .jsx
+        exists = originalHost.fileExists(fileName);
+        return exists;
+      }
+
+      return false;
+    },
+    getSourceFile(fileName, languageVersion, onError) {
+      if (fileName.endsWith('.svelte.tsx') || fileName.endsWith('.svelte.jsx')) {
+        // svelte file
+
+        const realFileName = fileName.slice(0, -4); // remove .tsx or .jsx
+        const content = originalHost.readFile(realFileName);
+        if (content === undefined) {
+          return;
+        }
+
+        const digest = cripto.createHash('sha256').update(content).digest('hex');
+
+        if (sourceFileCache.hashToSourceFiles[digest]) {
+          return sourceFileCache.hashToSourceFiles[digest];
+        }
+
+        const tsx = svelte2tsx.svelte2tsx(content, {
+          version: VERSION,
+          isTsFile: true,
+          emitOnTemplateError: true,
+          mode: 'dts',
+        });
+
+        const sourceFile = ts.createSourceFile(
+          fileName,
+          tsx.code,
+          languageVersion,
+          true,
+          ts.ScriptKind.JS // Make typescript to parse JSDoc
+        );
+
+        sourceFileCache.hashToSourceFiles[digest] = sourceFile;
+        return sourceFile;
+      } else {
+        // non-svelte file
+
+        if (sourceFileCache.filenameToSourceFiles[fileName]) {
+          return sourceFileCache.filenameToSourceFiles[fileName];
+        }
+
+        const content = originalHost.readFile(fileName);
+        if (content === undefined) {
+          return;
+        }
+
+        const digest = cripto.createHash('sha256').update(content).digest('hex');
+
+        if (sourceFileCache.hashToSourceFiles[digest]) {
+          return sourceFileCache.hashToSourceFiles[digest];
+        }
+
+        const sourceFile = ts.createSourceFile(fileName, content, languageVersion, true);
+
+        if (sourceFile) {
+          let isCacheTarget = false;
+          isCacheTarget ||= fileName
+            .split(path.sep)
+            .some((part) => part.toLowerCase() === 'node_modules');
+          if (isCacheTarget) {
+            sourceFileCache.filenameToSourceFiles[fileName] = sourceFile;
+          }
+          sourceFileCache.hashToSourceFiles[digest] = sourceFile;
+        }
+        return sourceFile;
+      }
+    },
+    writeFile() {},
+  };
+
+  const shimFilename = require.resolve('svelte2tsx/svelte-shims-v4.d.ts');
+
+  // Create a program with the custom compiler host
+  const program = ts.createProgram([targetFileName, shimFilename], options, host);
+  const checker = program.getTypeChecker();
+  const sourceFile = program.getSourceFile(targetFileName);
+  if (sourceFile === undefined) {
+    return {
+      props: [],
+    };
   }
 
   const propMap: Map<string, PropInfo> = new Map();
-  let propTypeName = '$$ComponentProps';
 
-  traverse(ast, {
-    FunctionDeclaration: (funcPath) => {
-      if (funcPath.node.id && funcPath.node.id.name !== 'render') {
-        return;
-      }
-      funcPath.traverse({
-        ReturnStatement: (path) => {
-          // For runes mode: Get the name of props type alias from `return { props: {} as MyProps, ... }`
-          if (path.parent !== funcPath.node.body) {
-            return;
-          }
-          const argument = path.node.argument;
-          if (argument?.type === 'ObjectExpression') {
-            argument.properties.forEach((property) => {
-              if (property.type === 'ObjectProperty') {
-                if (property.key.type === 'Identifier' && property.key.name === 'props') {
-                  if (property.value.type == 'TSAsExpression') {
-                    const typeAnnotation = property.value.typeAnnotation;
-                    if (
-                      typeAnnotation?.type === 'TSTypeReference' &&
-                      typeAnnotation.typeName.type === 'Identifier'
-                    ) {
-                      propTypeName = typeAnnotation.typeName.name;
-                    }
-                  }
-                }
-              }
-            });
-          }
-        },
-        VariableDeclaration: (path) => {
-          if (path.node.kind !== 'let' || path.parent !== funcPath.node.body) {
-            return;
-          }
+  const renderFunction = sourceFile.statements.find((statement) => {
+    return ts.isFunctionDeclaration(statement) && statement.name?.text === 'render';
+  }) as ts.FunctionDeclaration | undefined;
+  if (renderFunction === undefined) {
+    return {
+      props: [],
+    };
+  }
 
-          path.node.declarations.forEach((declaration) => {
-            if (
-              declaration.id.type === 'ObjectPattern' &&
-              declaration.id.typeAnnotation &&
-              declaration.id.typeAnnotation.type === 'TSTypeAnnotation'
-            ) {
-              // For runes mode: Collect default values from `let { ... } = $props();`
+  let propsType: ts.Type | undefined;
 
-              const typeAnnotation = declaration.id.typeAnnotation.typeAnnotation;
-              if (
-                typeAnnotation.type !== 'TSTypeReference' ||
-                typeAnnotation.typeName.type !== 'Identifier' ||
-                typeAnnotation.typeName.name !== '$$ComponentProps'
-              ) {
-                return;
-              }
+  {
+    const signature = checker.getSignatureFromDeclaration(renderFunction);
+    if (signature && signature.declaration) {
+      const type = checker.getReturnTypeOfSignature(signature);
+      // Get props type from ReturnType<render>
+      type.getProperties().forEach((retObjProp) => {
+        if (retObjProp.name === 'props') {
+          const decl = signature.getDeclaration();
+          propsType = checker.getTypeOfSymbolAtLocation(retObjProp, decl);
+          propsType.getProperties().forEach((prop) => {
+            const name = prop.getName();
+            const optional = (prop.flags & ts.SymbolFlags.Optional) !== 0;
+            const docText =
+              ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
 
-              declaration.id.properties.forEach((property) => {
-                if (property.type === 'ObjectProperty') {
-                  if (property.key.type !== 'Identifier') {
-                    return;
-                  }
-                  const name = property.key.name;
-                  if (property.value.type === 'AssignmentPattern') {
-                    const defaultValue = generate(property.value.right, {
-                      compact: true,
-                    }).code;
-                    propMap.set(name, {
-                      ...propMap.get(name),
-                      name,
-                      defaultValue,
-                      runes: true,
-                    });
-                  }
-                }
-              });
-            } else if (declaration.id.type === 'Identifier') {
-              // For legacy mode: Collect props info from `export let a = ...`
+            // type from TS type annotation
+            let propType = checker.getTypeOfSymbolAtLocation(prop, decl);
 
-              const name = declaration.id.name;
-              if (tsx.exportedNames.has(name)) {
-                let typeName: Type | undefined = undefined;
-                if (
-                  declaration.id.typeAnnotation &&
-                  declaration.id.typeAnnotation.type === 'TSTypeAnnotation'
-                ) {
-                  const typeAnnotation = declaration.id.typeAnnotation.typeAnnotation;
-                  typeName = parseType(typeAnnotation);
-                }
-
-                const { description, type: typeFromComment } = parseComments(
-                  path.node.leadingComments
-                );
-                if (typeName === undefined && typeFromComment) {
-                  typeName = typeFromComment;
-                }
-
-                if (typeName === undefined && declaration.init) {
-                  typeName = inferTypeFromInitializer(declaration.init);
-                }
-
-                const initializer = declaration.init
-                  ? generate(declaration.init, { compact: true }).code
-                  : undefined;
-
-                propMap.set(name, {
-                  ...propMap.get(name),
-                  type: typeName,
-                  name,
-                  description,
-                  defaultValue: initializer,
-                });
+            if (prop.valueDeclaration) {
+              // type from JSDoc
+              const typeNode = ts.getJSDocType(prop.valueDeclaration!);
+              if (typeNode!) {
+                propType = checker.getTypeFromTypeNode(typeNode);
               }
             }
-          });
-        },
-      });
-    },
-  });
 
-  // For runes mode: Try to find and parse the props type alias.
-  traverse(ast, {
-    TSTypeAliasDeclaration(path) {
-      if (path.node.id.name !== propTypeName || path.node.typeAnnotation.type !== 'TSTypeLiteral') {
-        return;
-      }
-      const members = path.node.typeAnnotation.members;
-      members.forEach((member) => {
-        if (member.type === 'TSPropertySignature' && member.key.type === 'Identifier') {
-          const name = member.key.name;
-
-          const type =
-            member.typeAnnotation && member.typeAnnotation.type === 'TSTypeAnnotation'
-              ? parseType(member.typeAnnotation.typeAnnotation)
-              : undefined;
-
-          if (type && member.optional) {
-            type.optional = true;
-          }
-
-          const { description } = parseComments(member.leadingComments);
-
-          propMap.set(name, {
-            ...propMap.get(name),
-            name,
-            type: type,
-            description,
-            runes: true,
+            propMap.set(name, {
+              name: name,
+              optional: optional,
+              description: docText,
+              type: convertType(propType, checker),
+            });
           });
         }
       });
-    },
+    }
+  }
+
+  renderFunction.body?.forEachChild((node) => {
+    if (ts.isVariableStatement(node)) {
+      node.declarationList.declarations.forEach((declaration) => {
+        // let { ... }: <propsType> = $props();
+        if (
+          propsType &&
+          declaration.type &&
+          propsType === checker.getTypeFromTypeNode(declaration.type) &&
+          ts.isObjectBindingPattern(declaration.name)
+        ) {
+          propsRuneUsed = true;
+          declaration.name.elements.forEach((element) => {
+            const name = element.name.getText();
+            const prop = propMap.get(name);
+            if (prop && element.initializer) {
+              const defaultValue = formatInitializer(element.initializer, checker);
+              if (defaultValue) {
+                prop.defaultValue = defaultValue;
+              }
+            }
+          });
+        }
+
+        // export let <prop> = ...;
+        if (
+          ts.isVariableDeclaration(declaration) &&
+          ts.isIdentifier(declaration.name) &&
+          propMap.has(declaration.name.text)
+        ) {
+          const prop = propMap.get(declaration.name.text);
+          if (prop && declaration.initializer) {
+            const defaultValue = formatInitializer(declaration.initializer, checker);
+            if (defaultValue) {
+              prop.defaultValue = defaultValue;
+            }
+          }
+        }
+      });
+    }
   });
 
   return {
     props: Array.from(propMap.values()),
+    runePropsUsed: propsRuneUsed,
   };
 }

@@ -12,7 +12,7 @@ import type {
 import { logger } from 'storybook/internal/node-logger';
 import { preprocess } from 'svelte/compiler';
 import { replace, typescript } from 'svelte-preprocess';
-import { generateDocgen, type Docgen, type Type } from './generateDocgen';
+import { generateDocgen, createSourceFileCache, type Docgen, type Type } from './generateDocgen';
 
 /*
  * Patch sveltedoc-parser internal options.
@@ -64,7 +64,7 @@ function getNameFromFilename(filename: string) {
   return base[0].toUpperCase() + base.slice(1);
 }
 
-function formatToSvelteDocParserType(type: Type): JSDocType {
+function transformToSvelteDocParserType(type: Type): JSDocType {
   switch (type.type) {
     case 'string':
       return { kind: 'type', type: 'string', text: 'string' };
@@ -72,53 +72,56 @@ function formatToSvelteDocParserType(type: Type): JSDocType {
       return { kind: 'type', type: 'number', text: 'number' };
     case 'boolean':
       return { kind: 'type', type: 'boolean', text: 'boolean' };
-    case 'symbol':
-      return { kind: 'type', type: 'symbol', text: 'symbol' };
-    case 'object':
-      return { kind: 'type', type: 'object', text: 'object' };
+    case 'null':
+      return { kind: 'type', type: 'other', text: 'null' };
+    case 'undefined':
+      return { kind: 'type', type: 'other', text: 'undefined' };
     case 'null':
       return { kind: 'type', type: 'other', text: 'null' };
     case 'any':
       return { kind: 'type', type: 'other', text: 'any' };
+    case 'object':
+      return { kind: 'type', type: 'object', text: type.text };
     case 'array':
-      return { kind: 'type', type: 'array', text: 'array' };
-    case 'reference':
-      return { kind: 'type', type: 'other', text: type.text };
-    case 'other':
-      return { kind: 'type', type: 'other', text: type.text };
+      return { kind: 'type', type: 'array', text: type.text };
     case 'function':
       return { kind: 'function', text: type.text };
     case 'literal':
       return { kind: 'const', type: typeof type.value, value: type.value, text: type.text };
     case 'union': {
       const nonNull = type.types.filter((t) => t.type !== 'null'); // ignore null
-      const text = nonNull.map((t): string => formatToSvelteDocParserType(t).text).join(' | ');
-      const types = nonNull.map((t) => formatToSvelteDocParserType(t));
+      const text = nonNull.map((t): string => transformToSvelteDocParserType(t).text).join(' | ');
+      const types = nonNull.map((t) => transformToSvelteDocParserType(t));
       return types.length === 1 ? types[0] : { kind: 'union', type: types, text };
     }
     case 'intersection': {
-      const text = type.types.map((t): string => formatToSvelteDocParserType(t).text).join(' & ');
+      const text = type.types
+        .map((t): string => transformToSvelteDocParserType(t).text)
+        .join(' & ');
       return { kind: 'type', type: 'intersection', text };
     }
   }
 }
 
+/**
+ * Mimic sveltedoc-parser's props data structure
+ */
 function transformToSvelteDocParserDataItems(docgen: Docgen): SvelteDataItem[] {
   return docgen.props.map((p) => {
-    const required = p.runes && p.defaultValue === undefined && p.type && !p.type.optional;
+    const required = p.optional === false;
     return {
       name: p.name,
       visibility: 'public',
       description: p.description,
       keywords: required ? [{ name: 'required', description: '' }] : [],
       kind: 'let',
-      type: p.type ? formatToSvelteDocParserType(p.type) : undefined,
+      type: p.type ? transformToSvelteDocParserType(p.type) : undefined,
       static: false,
       readonly: false,
       importPath: undefined,
       originalName: undefined,
       localName: undefined,
-      defaultValue: p.defaultValue,
+      defaultValue: p.defaultValue ? p.defaultValue.text : undefined,
     } satisfies SvelteDataItem;
   });
 }
@@ -130,6 +133,7 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
   const { createFilter } = await import('vite');
 
   const filter = createFilter(include);
+  const sourceFileCache = createSourceFileCache();
 
   let docPreprocessOptions: Parameters<typeof preprocess>[1] | undefined;
 
@@ -139,16 +143,14 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
       if (!filter(id)) return undefined;
 
       const resource = path.relative(cwd, id);
-      const rawSource = fs.readFileSync(resource).toString();
 
       // Get props information
-      const docgen = generateDocgen(rawSource);
-      const hasRuneProps = docgen.props.some((p) => p.runes);
+      const docgen = generateDocgen(resource, sourceFileCache);
       const data = transformToSvelteDocParserDataItems(docgen);
 
       let componentDoc: SvelteComponentDoc & { keywords?: string[] } = {};
 
-      if (!hasRuneProps) {
+      if (!docgen.runePropsUsed) {
         // Use sveltedoc-parser for generating documentation of events and slots.
         //
         // Note: Events and slots will be deprecated in Svelte 5.
@@ -178,6 +180,7 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
 
         let docOptions;
         if (docPreprocessOptions) {
+          const rawSource = fs.readFileSync(resource).toString();
           const { code: fileContent } = await preprocess(rawSource, docPreprocessOptions, {
             filename: resource,
           });

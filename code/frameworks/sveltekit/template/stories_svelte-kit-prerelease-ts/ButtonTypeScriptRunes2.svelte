@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+  import type { MyPropsA, Sizes } from "./types";
 
   type MyProps = {
     /**
@@ -13,20 +13,8 @@
     /**
      * How large should the button be?
      */
-    size?: 'small' | 'medium' | 'large';
-    /**
-     * Snippet contents
-     */
-    children?: Snippet;
-    /**
-     * Text contents
-     */
-    label: string;
-    /**
-     * Click handler
-     */
-    onclick?: () => void;
-  };
+    size?: Sizes;
+  } & MyPropsA;
 
   let {
     primary = true,

@@ -20,8 +20,12 @@
   export let count = 0;
 
   /**
+   * @typedef {'large' | 'medium' | 'small'} Sizes
+   */
+
+  /**
    * How large should the button be?
-   * @type {'large' | 'medium' | 'small'}
+   * @type {Sizes}
    */
   export let size = 'medium';
 

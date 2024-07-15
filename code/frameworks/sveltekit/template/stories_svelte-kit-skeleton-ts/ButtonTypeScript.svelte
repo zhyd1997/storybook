@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Sizes } from './types';
+
   /**
    * @component Button TypeScript
    * @wrapper
@@ -25,6 +27,11 @@
    */
   export let text: string = 'You clicked';
 
+  /**
+   * How large should the button be?
+   */
+  export let size: Sizes = 'medium';
+
   const dispatch = createEventDispatcher();
 
   function handleClick(_event: MouseEvent) {
@@ -40,6 +47,7 @@
 
 <Button
   {primary}
+  {size}
   on:click
   on:click={handleClick}
   on:mousehover={onMouseHover}
