@@ -23,7 +23,7 @@ const logger = console;
 export const sbBinary: Fix<SbBinaryRunOptions> = {
   id: 'storybook-binary',
 
-  versionRange: ['<7', '>=7'],
+  versionRange: ['*', '*'],
 
   async check({ packageManager, storybookVersion }) {
     const packageJson = await packageManager.retrievePackageJson();
