@@ -107,9 +107,9 @@ export const doctor = async ({
 
   if (!('storybook' in allDependencies)) {
     logDiagnostic(
-      'Package storybook not found',
+      `Package ${chalk.cyan('storybook')} not found`,
       dedent`
-        The storybook package was not found in your package.json.
+        The ${chalk.cyan('storybook')} package was not found in your package.json.
         Installing storybook as a direct dev dependency in your package.json is required. 
       `
     );
