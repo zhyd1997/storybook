@@ -110,7 +110,7 @@ export const doctor = async ({
       `Package ${chalk.cyan('storybook')} not found`,
       dedent`
         The ${chalk.cyan('storybook')} package was not found in your package.json.
-        Installing storybook as a direct dev dependency in your package.json is required. 
+        Installing ${chalk.cyan('storybook')} as a direct dev dependency in your package.json is required. 
       `
     );
   }
