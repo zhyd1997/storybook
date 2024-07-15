@@ -28,14 +28,8 @@ export const sbBinary: Fix<SbBinaryRunOptions> = {
   async check({ packageManager, storybookVersion }) {
     const packageJson = await packageManager.retrievePackageJson();
 
-    const nrwlStorybookVersion = await packageManager.getPackageVersion('@nrwl/storybook');
     const sbBinaryVersion = await packageManager.getPackageVersion('sb');
     const storybookBinaryVersion = await packageManager.getPackageVersion('storybook');
-
-    // Nx provides their own binary, so we don't need to do anything
-    if (nrwlStorybookVersion) {
-      return null;
-    }
 
     const hasSbBinary = !!sbBinaryVersion;
     const hasStorybookBinary = !!storybookBinaryVersion;
