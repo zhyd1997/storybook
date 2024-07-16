@@ -1,21 +1,21 @@
-import { describe, it, expect, vi } from 'vitest';
-import * as sbcc from '@storybook/core-common';
-import {
-  UpgradeStorybookToLowerVersionError,
-  UpgradeStorybookToSameVersionError,
-} from '@storybook/core-events/server-errors';
+import { describe, expect, it, vi } from 'vitest';
+import * as sbcc from '@storybook/core/common';
+import { UpgradeStorybookToLowerVersionError } from 'storybook/internal/server-errors';
 import { doUpgrade, getStorybookVersion } from './upgrade';
+import { logger } from '@storybook/core/node-logger';
 
 const findInstallationsMock = vi.fn<string[], Promise<sbcc.InstallationMetadata | undefined>>();
 
-vi.mock('@storybook/telemetry');
-vi.mock('@storybook/core-common', async (importOriginal) => {
+vi.mock('@storybook/core/telemetry');
+vi.mock('@storybook/core/common', async (importOriginal) => {
   const originalModule = (await importOriginal()) as typeof sbcc;
   return {
     ...originalModule,
     JsPackageManagerFactory: {
       getPackageManager: () => ({
         findInstallations: findInstallationsMock,
+        latestVersion: async () => '8.0.0',
+        retrievePackageJson: async () => {},
         getAllDependencies: async () => ({ storybook: '8.0.0' }),
       }),
     },
@@ -32,8 +32,8 @@ vi.mock('@storybook/core-common', async (importOriginal) => {
 describe.each([
   ['│ │ │ ├── @babel/code-frame@7.10.3 deduped', null],
   [
-    '│ ├── @storybook/theming@6.0.0-beta.37 extraneous',
-    { package: '@storybook/theming', version: '6.0.0-beta.37' },
+    '│ ├── "@storybook/core/theming@6.0.0-beta.37 extraneous',
+    { package: '@storybook/core/theming', version: '6.0.0-beta.37' },
   ],
   [
     '├─┬ @storybook/preset-create-react-app@3.1.2',
@@ -54,7 +54,7 @@ describe('Upgrade errors', () => {
   it('should throw an error when upgrading to a lower version number', async () => {
     findInstallationsMock.mockResolvedValue({
       dependencies: {
-        '@storybook/cli': [
+        storybook: [
           {
             version: '8.1.0',
           },
@@ -68,10 +68,10 @@ describe('Upgrade errors', () => {
     await expect(doUpgrade({} as any)).rejects.toThrowError(UpgradeStorybookToLowerVersionError);
     expect(findInstallationsMock).toHaveBeenCalledWith(Object.keys(sbcc.versions));
   });
-  it('should throw an error when upgrading to the same version number', async () => {
+  it('should show a warning when upgrading to the same version number', async () => {
     findInstallationsMock.mockResolvedValue({
       dependencies: {
-        '@storybook/cli': [
+        storybook: [
           {
             version: '8.0.0',
           },
@@ -82,7 +82,15 @@ describe('Upgrade errors', () => {
       dedupeCommand: '',
     });
 
-    await expect(doUpgrade({} as any)).rejects.toThrowError(UpgradeStorybookToSameVersionError);
+    // Mock as a throw, so that we don't have to mock the content of the doUpgrade fn that comes after it
+    vi.spyOn(logger, 'warn').mockImplementation((error) => {
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      throw error;
+    });
+
+    await expect(doUpgrade({ packageManager: 'npm' } as any)).rejects.toContain(
+      'You are upgrading Storybook to the same version that is currently installed in the project'
+    );
     expect(findInstallationsMock).toHaveBeenCalledWith(Object.keys(sbcc.versions));
   });
 });
