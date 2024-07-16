@@ -286,7 +286,8 @@ export const convertVueComponentMetaProp = (
     case 'object':
       return {
         name: 'object',
-        // Storybook does not generate controls for object properties so we don't need to recursively map the object schema here
+        // while Storybook generates simple JSON object controls, nested schemas don't have specialized controls
+        // so we don't need to recursively map the object schema here
         value: {},
         required,
       };
