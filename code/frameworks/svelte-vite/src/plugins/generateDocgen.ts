@@ -119,14 +119,19 @@ function convertType(type: ts.Type, checker: ts.TypeChecker): Type | undefined {
     return types.length > 1 ? { type: 'union', types: types } : types[0];
   }
   if (type.isIntersection()) {
-    const types = type.types.map((t) => convertType(t, checker)).filter((t) => t !== undefined);
+    const types = type.types
+      .map((t) => convertType(t, checker))
+      .filter((t) => t !== undefined) as Type[];
     return { type: 'intersection', types };
   }
 
   return undefined;
 }
 
-function formatInitializer(expr: ts.Expression, checker: ts.TypeChecker): DefaultValue | undefined {
+function initializerToDefaultValue(
+  expr: ts.Expression,
+  checker: ts.TypeChecker
+): DefaultValue | undefined {
   if (ts.isNumericLiteral(expr)) {
     return { text: expr.text };
   } else if (ts.isStringLiteral(expr)) {
@@ -234,7 +239,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
     },
     getSourceFile(fileName, languageVersion, onError) {
       if (fileName.endsWith('.svelte.tsx') || fileName.endsWith('.svelte.jsx')) {
-        // svelte file
+        // .svelte file (`import ... from './path/to/file.svelte'`)
 
         const realFileName = fileName.slice(0, -4); // remove .tsx or .jsx
         const content = originalHost.readFile(realFileName);
@@ -260,7 +265,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
           tsx.code,
           languageVersion,
           true,
-          ts.ScriptKind.JS // Make typescript to parse JSDoc
+          ts.ScriptKind.JS // Set to 'JS' to enable TypeScript to parse JSDoc.
         );
 
         sourceFileCache.hashToSourceFiles[digest] = sourceFile;
@@ -276,7 +281,6 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         if (content === undefined) {
           return;
         }
-
         const digest = cripto.createHash('sha256').update(content).digest('hex');
 
         if (sourceFileCache.hashToSourceFiles[digest]) {
@@ -286,13 +290,15 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         const sourceFile = ts.createSourceFile(fileName, content, languageVersion, true);
 
         if (sourceFile) {
-          let isCacheTarget = false;
-          isCacheTarget ||= fileName
+          let shouldCacheByFileName = false;
+          shouldCacheByFileName ||= fileName
             .split(path.sep)
             .some((part) => part.toLowerCase() === 'node_modules');
-          if (isCacheTarget) {
+          if (shouldCacheByFileName) {
+            // cache by filename
             sourceFileCache.filenameToSourceFiles[fileName] = sourceFile;
           }
+          // cache by digest
           sourceFileCache.hashToSourceFiles[digest] = sourceFile;
         }
         return sourceFile;
@@ -303,7 +309,6 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
 
   const shimFilename = require.resolve('svelte2tsx/svelte-shims-v4.d.ts');
 
-  // Create a program with the custom compiler host
   const program = ts.createProgram([targetFileName, shimFilename], options, host);
   const checker = program.getTypeChecker();
   const sourceFile = program.getSourceFile(targetFileName);
@@ -326,48 +331,47 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
 
   let propsType: ts.Type | undefined;
 
-  {
-    const signature = checker.getSignatureFromDeclaration(renderFunction);
-    if (signature && signature.declaration) {
-      const type = checker.getReturnTypeOfSignature(signature);
-      // Get props type from ReturnType<render>
-      type.getProperties().forEach((retObjProp) => {
-        if (retObjProp.name === 'props') {
-          const decl = signature.getDeclaration();
-          propsType = checker.getTypeOfSymbolAtLocation(retObjProp, decl);
-          propsType.getProperties().forEach((prop) => {
-            const name = prop.getName();
-            const optional = (prop.flags & ts.SymbolFlags.Optional) !== 0;
-            const docText =
-              ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
+  const signature = checker.getSignatureFromDeclaration(renderFunction);
+  if (signature && signature.declaration) {
+    const type = checker.getReturnTypeOfSignature(signature);
+    // Get props type from ReturnType<render>
+    type.getProperties().forEach((retObjProp) => {
+      if (retObjProp.name === 'props') {
+        const decl = signature.getDeclaration();
+        propsType = checker.getTypeOfSymbolAtLocation(retObjProp, decl);
+        propsType.getProperties().forEach((prop) => {
+          const name = prop.getName();
+          const optional = (prop.flags & ts.SymbolFlags.Optional) !== 0;
+          const docText =
+            ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
 
-            // type from TS type annotation
-            let propType = checker.getTypeOfSymbolAtLocation(prop, decl);
+          // type from TS type annotation
+          let propType = checker.getTypeOfSymbolAtLocation(prop, decl);
 
-            if (prop.valueDeclaration) {
-              // type from JSDoc
-              const typeNode = ts.getJSDocType(prop.valueDeclaration!);
-              if (typeNode!) {
-                propType = checker.getTypeFromTypeNode(typeNode);
-              }
+          if (prop.valueDeclaration) {
+            // type from JSDoc
+            const typeNode = ts.getJSDocType(prop.valueDeclaration!);
+            if (typeNode!) {
+              propType = checker.getTypeFromTypeNode(typeNode);
             }
+          }
 
-            propMap.set(name, {
-              name: name,
-              optional: optional,
-              description: docText,
-              type: convertType(propType, checker),
-            });
+          propMap.set(name, {
+            name: name,
+            optional: optional,
+            description: docText,
+            type: convertType(propType, checker),
           });
-        }
-      });
-    }
+        });
+      }
+    });
   }
 
   renderFunction.body?.forEachChild((node) => {
     if (ts.isVariableStatement(node)) {
       node.declarationList.declarations.forEach((declaration) => {
-        // let { ... }: <propsType> = $props();
+        // Extract default values from:
+        //     let { <name> = <defaultValue>, ... }: <propsType> = ...
         if (
           propsType &&
           declaration.type &&
@@ -379,7 +383,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
             const name = element.name.getText();
             const prop = propMap.get(name);
             if (prop && element.initializer) {
-              const defaultValue = formatInitializer(element.initializer, checker);
+              const defaultValue = initializerToDefaultValue(element.initializer, checker);
               if (defaultValue) {
                 prop.defaultValue = defaultValue;
               }
@@ -387,7 +391,8 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
           });
         }
 
-        // export let <prop> = ...;
+        // Extract default values from:
+        //    export let <name> = <defaultValue>
         if (
           ts.isVariableDeclaration(declaration) &&
           ts.isIdentifier(declaration.name) &&
@@ -395,7 +400,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         ) {
           const prop = propMap.get(declaration.name.text);
           if (prop && declaration.initializer) {
-            const defaultValue = formatInitializer(declaration.initializer, checker);
+            const defaultValue = initializerToDefaultValue(declaration.initializer, checker);
             if (defaultValue) {
               prop.defaultValue = defaultValue;
             }
