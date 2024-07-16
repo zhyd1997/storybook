@@ -18,6 +18,7 @@ const defaultContext: Addon_StoryContext<AngularRenderer> = {
   args: {},
   argTypes: {},
   globals: {},
+  storyGlobals: {},
   hooks: {},
   loaded: {},
   originalStoryFn: vi.fn(),
