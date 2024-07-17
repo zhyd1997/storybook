@@ -91,6 +91,7 @@ export interface IndexInputStats {
   play?: boolean;
   render?: boolean;
   storyFn?: boolean;
+  mount?: boolean;
 }
 
 /**

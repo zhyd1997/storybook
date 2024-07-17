@@ -116,6 +116,23 @@ const sortExports = (exportByName: Record<string, any>, order: string[]) => {
   );
 };
 
+const hasMount = (play: t.Node | undefined) => {
+  if (t.isArrowFunctionExpression(play) || t.isFunctionDeclaration(play)) {
+    const params = play.params;
+    if (params.length >= 1) {
+      const [arg] = params;
+      if (t.isObjectPattern(arg)) {
+        return !!arg.properties.find((prop) => {
+          if (t.isObjectProperty(prop) && t.isIdentifier(prop.key)) {
+            return prop.key.name === 'mount';
+          }
+        });
+      }
+    }
+  }
+  return false;
+};
+
 export interface CsfOptions {
   fileName?: string;
   makeTitle: (userTitle: string) => string;
@@ -544,14 +561,16 @@ export class CsfFile {
         if (play) {
           acc[key].tags = [...(acc[key].tags || []), 'play-fn'];
         }
+        const stats = acc[key].__stats;
         ['play', 'render'].forEach((annotation) => {
-          acc[key].__stats[annotation as keyof IndexInputStats] =
+          stats[annotation as keyof IndexInputStats] =
             !!storyAnnotations[annotation] || !!self._metaAnnotations[annotation];
         });
         const storyExport = self.getStoryExport(key);
-        acc[key].__stats.storyFn = !!(
+        stats.storyFn = !!(
           t.isArrowFunctionExpression(storyExport) || t.isFunctionDeclaration(storyExport)
         );
+        stats.mount = hasMount(storyAnnotations.play ?? self._metaAnnotations.play);
 
         return acc;
       },

@@ -46,6 +46,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -55,6 +56,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -81,6 +83,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -89,6 +92,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
       `);
     });
 
@@ -114,6 +118,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -140,6 +145,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -164,6 +170,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -186,6 +193,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -209,12 +217,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: default-title--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -238,12 +248,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: custom-id--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -267,12 +279,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
           - id: custom-id
             name: Custom Paremeters Id
             __stats:
               play: false
               render: false
               storyFn: false
+              mount: false
       `);
     });
 
@@ -297,12 +311,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: foo-bar-baz--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -331,6 +347,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -340,6 +357,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
       `);
     });
 
@@ -368,6 +386,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -377,6 +396,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
       `);
     });
 
@@ -402,12 +422,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: foo-bar-baz--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -433,12 +455,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: foo-bar-baz--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -462,12 +486,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: default-title--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -495,6 +521,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -521,6 +548,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -548,6 +576,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -580,6 +609,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -607,6 +637,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -616,6 +647,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -638,12 +670,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
           - id: foo-bar--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: false
+              mount: false
       `);
     });
 
@@ -671,6 +705,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: foo-bar--a
             name: A
             parameters:
@@ -680,6 +715,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -708,6 +744,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -783,12 +820,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: default-title--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
 
@@ -837,12 +876,14 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
           - id: foo-bar--b
             name: B
             __stats:
               play: false
               render: false
               storyFn: true
+              mount: false
       `);
     });
   });
@@ -915,6 +956,7 @@ describe('CsfFile', () => {
               play: false
               render: true
               storyFn: false
+              mount: false
       `);
     });
 
@@ -942,6 +984,7 @@ describe('CsfFile', () => {
               play: false
               render: true
               storyFn: false
+              mount: false
       `);
     });
 
@@ -967,6 +1010,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
       `);
     });
 
@@ -994,6 +1038,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: false
+              mount: false
       `);
     });
 
@@ -1070,6 +1115,7 @@ describe('CsfFile', () => {
               play: false
               render: false
               storyFn: true
+              mount: false
             tags:
               - 'Y'
       `);
@@ -1098,6 +1144,7 @@ describe('CsfFile', () => {
               play: false
               render: true
               storyFn: false
+              mount: false
             tags:
               - 'Y'
       `);
@@ -1128,6 +1175,7 @@ describe('CsfFile', () => {
               play: false
               render: true
               storyFn: false
+              mount: false
             tags:
               - 'Y'
       `);
@@ -1183,6 +1231,7 @@ describe('CsfFile', () => {
               play: true
               render: false
               storyFn: true
+              mount: false
             tags:
               - 'Y'
               - play-fn
@@ -1213,8 +1262,61 @@ describe('CsfFile', () => {
               play: true
               render: true
               storyFn: false
+              mount: false
             tags:
               - 'Y'
+              - play-fn
+      `);
+    });
+
+    it('mount', () => {
+      expect(
+        parse(
+          dedent`
+          export default { title: 'foo/bar' };
+          export const A = {
+            play: ({ mount }) => {},
+          };
+        `
+        )
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: foo/bar
+        stories:
+          - id: foo-bar--a
+            name: A
+            __stats:
+              play: true
+              render: false
+              storyFn: false
+              mount: true
+            tags:
+              - play-fn
+      `);
+    });
+
+    it('mount renamed', () => {
+      expect(
+        parse(
+          dedent`
+          export default { title: 'foo/bar' };
+          export const A = {
+            play: ({ mount: mountRenamed, context }) => {},
+          };
+        `
+        )
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: foo/bar
+        stories:
+          - id: foo-bar--a
+            name: A
+            __stats:
+              play: true
+              render: false
+              storyFn: false
+              mount: true
+            tags:
               - play-fn
       `);
     });
@@ -1243,6 +1345,7 @@ describe('CsfFile', () => {
               play: true
               render: true
               storyFn: false
+              mount: false
             tags:
               - 'Y'
       `);
@@ -1270,6 +1373,7 @@ describe('CsfFile', () => {
               play: true
               render: false
               storyFn: true
+              mount: false
             tags:
               - 'Y'
       `);
@@ -1315,6 +1419,7 @@ describe('CsfFile', () => {
             play: true
             render: false
             storyFn: false
+            mount: false
         - type: story
           importPath: foo/bar.stories.js
           exportName: B
@@ -1330,6 +1435,7 @@ describe('CsfFile', () => {
             play: true
             render: false
             storyFn: false
+            mount: false
       `);
     });
 
@@ -1363,6 +1469,7 @@ describe('CsfFile', () => {
             play: false
             render: false
             storyFn: false
+            mount: false
       `);
     });
 
@@ -1401,6 +1508,7 @@ describe('CsfFile', () => {
             play: false
             render: false
             storyFn: false
+            mount: false
       `);
     });
 
@@ -1454,6 +1562,7 @@ describe('CsfFile', () => {
             play: false
             render: true
             storyFn: false
+            mount: false
       `);
     });
 
@@ -1486,6 +1595,7 @@ describe('CsfFile', () => {
             play: false
             render: true
             storyFn: false
+            mount: false
       `);
     });
 
@@ -1518,6 +1628,7 @@ describe('CsfFile', () => {
             play: false
             render: true
             storyFn: false
+            mount: false
       `);
     });
 
@@ -1550,6 +1661,7 @@ describe('CsfFile', () => {
             play: false
             render: true
             storyFn: false
+            mount: false
       `);
     });
   });
