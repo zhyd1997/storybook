@@ -10,35 +10,35 @@ const config: StorybookConfig = {
   stories: [
     {
       directory: '../core/template/stories',
-      titlePrefix: '@core',
+      titlePrefix: 'core',
     },
     {
       directory: '../core/src/manager',
-      titlePrefix: '@manager',
+      titlePrefix: 'manager',
     },
     {
       directory: '../core/src/preview-api',
-      titlePrefix: '@preview',
+      titlePrefix: 'preview',
     },
     {
       directory: '../core/src/components',
-      titlePrefix: '@components',
+      titlePrefix: 'components',
     },
     {
       directory: '../lib/blocks/src',
-      titlePrefix: '@blocks',
+      titlePrefix: 'blocks',
     },
     {
       directory: '../addons/controls/src',
-      titlePrefix: '@addons/controls',
+      titlePrefix: 'addons/controls',
     },
     {
       directory: '../addons/onboarding/src',
-      titlePrefix: '@addons/onboarding',
+      titlePrefix: 'addons/onboarding',
     },
     {
       directory: '../addons/interactions/src',
-      titlePrefix: '@addons/interactions',
+      titlePrefix: 'addons/interactions',
     },
   ],
   addons: [
