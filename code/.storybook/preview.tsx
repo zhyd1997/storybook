@@ -15,6 +15,8 @@ import type { PreviewWeb } from 'storybook/internal/preview-api';
 import type { ReactRenderer } from '@storybook/react';
 import type { Channel } from 'storybook/internal/channels';
 
+import '../renderers/react/template/components';
+
 import { DocsContext } from '@storybook/blocks';
 
 import { DocsPageWrapper } from '../lib/blocks/src/components';
