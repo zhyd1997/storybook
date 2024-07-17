@@ -133,6 +133,8 @@ const hasMount = (play: t.Node | undefined) => {
   return false;
 };
 
+const MODULE_MOCK_REGEX = /^[.\/#].*\.mock(\.)?[^.]*$/i;
+
 export interface CsfOptions {
   fileName?: string;
   makeTitle: (userTitle: string) => string;
@@ -571,6 +573,7 @@ export class CsfFile {
           t.isArrowFunctionExpression(storyExport) || t.isFunctionDeclaration(storyExport)
         );
         stats.mount = hasMount(storyAnnotations.play ?? self._metaAnnotations.play);
+        stats.moduleMock = !!self.imports.find((fname) => MODULE_MOCK_REGEX.test(fname));
 
         return acc;
       },

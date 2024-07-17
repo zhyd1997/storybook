@@ -48,6 +48,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -59,6 +60,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -87,6 +89,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -97,6 +100,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -124,6 +128,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -152,6 +157,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -178,6 +184,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -202,6 +209,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -227,6 +235,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: default-title--b
             name: B
             __stats:
@@ -235,6 +244,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -260,6 +270,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: custom-id--b
             name: B
             __stats:
@@ -268,6 +279,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -293,6 +305,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
           - id: custom-id
             name: Custom Paremeters Id
             __stats:
@@ -301,6 +314,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -327,6 +341,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: foo-bar-baz--b
             name: B
             __stats:
@@ -335,6 +350,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -365,6 +381,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -376,6 +393,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -406,6 +424,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -417,6 +436,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -444,6 +464,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: foo-bar-baz--b
             name: B
             __stats:
@@ -452,6 +473,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -479,6 +501,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: foo-bar-baz--b
             name: B
             __stats:
@@ -487,6 +510,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -512,6 +536,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: default-title--b
             name: B
             __stats:
@@ -520,6 +545,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -549,6 +575,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -577,6 +604,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -606,6 +634,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -640,6 +669,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -669,6 +699,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: foo-bar--b
             name: B
             parameters:
@@ -680,6 +711,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -704,6 +736,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
           - id: foo-bar--b
             name: B
             __stats:
@@ -712,6 +745,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -741,6 +775,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: foo-bar--a
             name: A
             parameters:
@@ -752,6 +787,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -782,6 +818,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -859,6 +896,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: default-title--b
             name: B
             __stats:
@@ -867,6 +905,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -917,6 +956,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
           - id: foo-bar--b
             name: B
             __stats:
@@ -925,6 +965,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
       `);
     });
   });
@@ -999,6 +1040,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -1028,6 +1070,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -1055,6 +1098,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -1084,6 +1128,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
       `);
     });
 
@@ -1162,6 +1207,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
             tags:
               - 'Y'
       `);
@@ -1192,6 +1238,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
             tags:
               - 'Y'
       `);
@@ -1224,6 +1271,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
             tags:
               - 'Y'
       `);
@@ -1281,6 +1329,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
             tags:
               - 'Y'
               - play-fn
@@ -1313,6 +1362,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
             tags:
               - 'Y'
               - play-fn
@@ -1341,6 +1391,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: true
+              moduleMock: false
             tags:
               - play-fn
       `);
@@ -1368,6 +1419,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: true
+              moduleMock: false
             tags:
               - play-fn
       `);
@@ -1399,6 +1451,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: false
               mount: false
+              moduleMock: false
             tags:
               - 'Y'
       `);
@@ -1428,6 +1481,7 @@ describe('CsfFile', () => {
               beforeEach: false
               storyFn: true
               mount: false
+              moduleMock: false
             tags:
               - 'Y'
       `);
@@ -1475,6 +1529,7 @@ describe('CsfFile', () => {
             beforeEach: false
             storyFn: false
             mount: false
+            moduleMock: false
         - type: story
           importPath: foo/bar.stories.js
           exportName: B
@@ -1492,6 +1547,7 @@ describe('CsfFile', () => {
             beforeEach: false
             storyFn: false
             mount: false
+            moduleMock: false
       `);
     });
 
@@ -1527,6 +1583,7 @@ describe('CsfFile', () => {
             beforeEach: false
             storyFn: false
             mount: false
+            moduleMock: false
       `);
     });
 
@@ -1567,6 +1624,7 @@ describe('CsfFile', () => {
             beforeEach: false
             storyFn: false
             mount: false
+            moduleMock: false
       `);
     });
 
@@ -1622,6 +1680,7 @@ describe('CsfFile', () => {
             beforeEach: false
             storyFn: false
             mount: false
+            moduleMock: false
       `);
     });
 
@@ -1656,6 +1715,7 @@ describe('CsfFile', () => {
             beforeEach: false
             storyFn: false
             mount: false
+            moduleMock: false
       `);
     });
 
@@ -1690,6 +1750,7 @@ describe('CsfFile', () => {
             beforeEach: false
             storyFn: false
             mount: false
+            moduleMock: false
       `);
     });
 
@@ -1724,6 +1785,7 @@ describe('CsfFile', () => {
             beforeEach: false
             storyFn: false
             mount: false
+            moduleMock: false
       `);
     });
   });
@@ -1751,6 +1813,106 @@ describe('CsfFile', () => {
               beforeEach: true
               storyFn: false
               mount: false
+              moduleMock: false
+      `);
+    });
+  });
+
+  describe('module mocks', () => {
+    it('alias', () => {
+      expect(
+        parse(
+          dedent`
+          import foo from '#bar.mock';
+          export default { title: 'foo/bar' };
+          export const A = {};
+        `
+        )
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: foo/bar
+        stories:
+          - id: foo-bar--a
+            name: A
+            __stats:
+              play: false
+              render: false
+              beforeEach: false
+              storyFn: false
+              mount: false
+              moduleMock: true
+      `);
+    });
+    it('relative', () => {
+      expect(
+        parse(
+          dedent`
+          import foo from './bar.mock';
+          export default { title: 'foo/bar' };
+          export const A = {};
+        `
+        )
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: foo/bar
+        stories:
+          - id: foo-bar--a
+            name: A
+            __stats:
+              play: false
+              render: false
+              beforeEach: false
+              storyFn: false
+              mount: false
+              moduleMock: true
+      `);
+    });
+    it('absolute', () => {
+      expect(
+        parse(
+          dedent`
+          import foo from '/path/to/bar.mock';
+          export default { title: 'foo/bar' };
+          export const A = {};
+        `
+        )
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: foo/bar
+        stories:
+          - id: foo-bar--a
+            name: A
+            __stats:
+              play: false
+              render: false
+              beforeEach: false
+              storyFn: false
+              mount: false
+              moduleMock: true
+      `);
+    });
+    it('package', () => {
+      expect(
+        parse(
+          dedent`
+          import foo from 'smart-mock';
+          export default { title: 'foo/bar' };
+          export const A = {};
+        `
+        )
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: foo/bar
+        stories:
+          - id: foo-bar--a
+            name: A
+            __stats:
+              play: false
+              render: false
+              beforeEach: false
+              storyFn: false
+              mount: false
+              moduleMock: false
       `);
     });
   });

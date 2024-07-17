@@ -93,6 +93,7 @@ export interface IndexInputStats {
   storyFn?: boolean;
   mount?: boolean;
   beforeEach?: boolean;
+  moduleMock?: boolean;
 }
 
 /**
