@@ -9,7 +9,7 @@ const managerApiPath = path.join(__dirname, '../core/src/manager-api');
 const config: StorybookConfig = {
   stories: [
     {
-      directory: '../core/template',
+      directory: '../core/template/stories',
       titlePrefix: '@core',
     },
     {
