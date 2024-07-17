@@ -314,4 +314,11 @@ export const globalTypes = {
       ],
     },
   },
+  foo: { defaultValue: 'fooDefaultValue' },
+  bar: { defaultValue: 'barDefaultValue' },
+};
+
+export const initialGlobals = {
+  foo: 'fooValue',
+  baz: 'bazValue',
 };
