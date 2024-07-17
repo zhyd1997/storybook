@@ -65,6 +65,7 @@ export const ToolbarMenuList: FC<ToolbarMenuListProps> = withKeyboardCycle(
               const listItem = ToolbarMenuListItem({
                 ...item,
                 currentValue,
+                disabled: isOverridden,
                 onClick: () => {
                   handleItemClick(item.value);
                   onHide();
@@ -78,13 +79,15 @@ export const ToolbarMenuList: FC<ToolbarMenuListProps> = withKeyboardCycle(
         closeOnOutsideClick
         onVisibleChange={setIsTooltipVisible}
       >
-        <ToolbarMenuButton
-          active={isTooltipVisible || hasGlobalValue}
-          disabled={isOverridden}
-          description={description || ''}
-          icon={icon}
-          title={title || ''}
-        />
+        {
+          <ToolbarMenuButton
+            active={isTooltipVisible || hasGlobalValue}
+            disabled={isOverridden}
+            description={description || ''}
+            icon={icon}
+            title={title || ''}
+          />
+        }
       </WithTooltip>
     );
   }

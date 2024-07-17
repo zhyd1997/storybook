@@ -506,7 +506,7 @@ export function useGlobals(): [
   userGlobals: Globals,
 ] {
   const api = useStorybookApi();
-  return [api.getGlobals(), api.updateGlobals, api.getStoryGlobals, api.getUserGlobals()];
+  return [api.getGlobals(), api.updateGlobals, api.getStoryGlobals(), api.getUserGlobals()];
 }
 
 export function useGlobalTypes(): ArgTypes {

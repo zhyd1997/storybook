@@ -1,8 +1,8 @@
 import type { ReactNode, FC } from 'react';
-import React, { useState, Fragment, useEffect, useRef, memo } from 'react';
+import React, { useState, Fragment, useEffect, useRef } from 'react';
 import memoize from 'memoizerific';
 
-import { styled, Global, type Theme, withTheme } from 'storybook/internal/theming';
+import { styled, Global } from 'storybook/internal/theming';
 
 import { IconButton, WithTooltip, TooltipLinkList } from 'storybook/internal/components';
 
@@ -114,131 +114,137 @@ const getStyles = (
   return isRotated ? flip(result) : result;
 };
 
-export const ViewportTool: FC = memo(
-  withTheme(({ theme }: { theme: Theme }) => {
-    const [globals, updateGlobals] = useGlobals();
+export const ViewportTool: FC = () => {
+  const [globals, updateGlobals, storyGlobals] = useGlobals();
+  const isDisabled = PARAM_KEY in storyGlobals;
 
-    const {
-      viewports = MINIMAL_VIEWPORTS,
-      defaultOrientation,
-      defaultViewport,
-      disable,
-    } = useParameter<ViewportAddonParameter>(PARAM_KEY, {});
+  const {
+    viewports = MINIMAL_VIEWPORTS,
+    defaultOrientation,
+    defaultViewport,
+    disable,
+  } = useParameter<ViewportAddonParameter>(PARAM_KEY, {});
 
-    const list = toList(viewports);
-    const api = useStorybookApi();
-    const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const list = toList(viewports);
+  const api = useStorybookApi();
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
-    if (defaultViewport && !list.find((i) => i.id === defaultViewport)) {
-      console.warn(
-        `Cannot find "defaultViewport" of "${defaultViewport}" in addon-viewport configs, please check the "viewports" setting in the configuration.`
-      );
+  if (defaultViewport && !list.find((i) => i.id === defaultViewport)) {
+    console.warn(
+      `Cannot find "defaultViewport" of "${defaultViewport}" in addon-viewport configs, please check the "viewports" setting in the configuration.`
+    );
+  }
+
+  useEffect(() => {
+    registerShortcuts(api, globals, updateGlobals, Object.keys(viewports));
+  }, [viewports, globals, globals.viewport, updateGlobals, api]);
+
+  useEffect(() => {
+    if (isDisabled) {
+      return;
     }
 
-    useEffect(() => {
-      registerShortcuts(api, globals, updateGlobals, Object.keys(viewports));
-    }, [viewports, globals, globals.viewport, updateGlobals, api]);
+    const defaultRotated = defaultOrientation === 'landscape';
 
-    useEffect(() => {
-      const defaultRotated = defaultOrientation === 'landscape';
-
-      if (
-        (defaultViewport && globals.viewport !== defaultViewport) ||
-        (defaultOrientation && globals.viewportRotated !== defaultRotated)
-      ) {
-        updateGlobals({
-          viewport: defaultViewport,
-          viewportRotated: defaultRotated,
-        });
-      }
-      // NOTE: we don't want to re-run this effect when `globals` changes
-      // due to https://github.com/storybookjs/storybook/issues/26334
-      //
-      // Also, this *will* rerun every time you change story as the parameter is briefly `undefined`.
-      // This behaviour is intentional, if a bit of a happy accident in implementation.
-      //
-      // Ultimately this process of "locking in" a parameter value should be
-      // replaced by https://github.com/storybookjs/storybook/discussions/23347
-      // or something similar.
-      //
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [defaultOrientation, defaultViewport, updateGlobals]);
-
-    const item =
-      list.find((i) => i.id === globals.viewport) ||
-      list.find((i) => i.id === defaultViewport) ||
-      list.find((i) => i.default) ||
-      responsiveViewport;
-
-    const ref = useRef<ViewportStyles>();
-
-    const styles = getStyles(ref.current, item.styles, globals.viewportRotated);
-
-    useEffect(() => {
-      ref.current = styles;
-    }, [item]);
-
-    if (disable || Object.entries(viewports).length === 0) {
-      return null;
+    if (
+      (defaultViewport && globals.viewport !== defaultViewport) ||
+      (defaultOrientation && globals.viewportRotated !== defaultRotated)
+    ) {
+      updateGlobals({
+        viewport: defaultViewport,
+        viewportRotated: defaultRotated,
+      });
     }
+    // NOTE: we don't want to re-run this effect when `globals` changes
+    // due to https://github.com/storybookjs/storybook/issues/26334
+    //
+    // Also, this *will* rerun every time you change story as the parameter is briefly `undefined`.
+    // This behavior is intentional, if a bit of a happy accident in implementation.
+    //
+    // Ultimately this process of "locking in" a parameter value should be
+    // replaced by https://github.com/storybookjs/storybook/discussions/23347
+    // or something similar.
+    //
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultOrientation, defaultViewport, updateGlobals]);
 
-    return (
-      <Fragment>
-        <WithTooltip
-          placement="top"
-          tooltip={({ onHide }) => (
-            <TooltipLinkList links={toLinks(list, item, updateGlobals, onHide)} />
-          )}
-          closeOnOutsideClick
-          onVisibleChange={setIsTooltipVisible}
+  const item =
+    list.find((i) => i.id === globals.viewport) ||
+    list.find((i) => i.id === defaultViewport) ||
+    list.find((i) => i.default) ||
+    responsiveViewport;
+
+  const ref = useRef<ViewportStyles>();
+
+  const styles = getStyles(ref.current, item.styles, globals.viewportRotated);
+
+  useEffect(() => {
+    ref.current = styles;
+  }, [item]);
+
+  if (disable || Object.entries(viewports).length === 0) {
+    return null;
+  }
+
+  return (
+    <Fragment>
+      <WithTooltip
+        placement="top"
+        tooltip={({ onHide }) => (
+          <TooltipLinkList links={toLinks(list, item, updateGlobals, onHide)} />
+        )}
+        closeOnOutsideClick
+        onVisibleChange={setIsTooltipVisible}
+      >
+        <IconButtonWithLabel
+          disabled={isDisabled}
+          key="viewport"
+          title="Change the size of the preview"
+          active={isTooltipVisible || !!styles}
+          onDoubleClick={() => {
+            updateGlobals({ viewport: responsiveViewport.id });
+          }}
         >
-          <IconButtonWithLabel
-            key="viewport"
-            title="Change the size of the preview"
-            active={isTooltipVisible || !!styles}
-            onDoubleClick={() => {
-              updateGlobals({ viewport: responsiveViewport.id });
+          <GrowIcon />
+          {styles ? (
+            <IconButtonLabel>
+              {globals.viewportRotated ? `${item.title} (L)` : `${item.title} (P)`}
+            </IconButtonLabel>
+          ) : null}
+        </IconButtonWithLabel>
+      </WithTooltip>
+
+      {styles && (
+        <Global
+          styles={{
+            [`iframe[data-is-storybook="true"]`]: {
+              ...(styles || {
+                width: '100%',
+                height: '100%',
+              }),
+            },
+          }}
+        />
+      )}
+      {styles && !isDisabled ? (
+        <ActiveViewportSize>
+          <ActiveViewportLabel title="Viewport width">
+            {styles.width.replace('px', '')}
+          </ActiveViewportLabel>
+          <IconButton
+            key="viewport-rotate"
+            title="Rotate viewport"
+            onClick={() => {
+              updateGlobals({ viewportRotated: !globals.viewportRotated });
             }}
           >
-            <GrowIcon />
-            {styles ? (
-              <IconButtonLabel>
-                {globals.viewportRotated ? `${item.title} (L)` : `${item.title} (P)`}
-              </IconButtonLabel>
-            ) : null}
-          </IconButtonWithLabel>
-        </WithTooltip>
-
-        {styles ? (
-          <ActiveViewportSize>
-            <Global
-              styles={{
-                [`iframe[data-is-storybook="true"]`]: {
-                  ...(styles || {
-                    width: '100%',
-                    height: '100%',
-                  }),
-                },
-              }}
-            />
-            <ActiveViewportLabel title="Viewport width">
-              {styles.width.replace('px', '')}
-            </ActiveViewportLabel>
-            <IconButton
-              key="viewport-rotate"
-              title="Rotate viewport"
-              onClick={() => {
-                updateGlobals({ viewportRotated: !globals.viewportRotated });
-              }}
-            >
-              <TransferIcon />
-            </IconButton>
-            <ActiveViewportLabel title="Viewport height">
-              {styles.height.replace('px', '')}
-            </ActiveViewportLabel>
-          </ActiveViewportSize>
-        ) : null}
-      </Fragment>
-    );
-  })
-);
+            <TransferIcon />
+          </IconButton>
+          <ActiveViewportLabel title="Viewport height">
+            {styles.height.replace('px', '')}
+          </ActiveViewportLabel>
+        </ActiveViewportSize>
+      ) : null}
+    </Fragment>
+  );
+};

@@ -68,7 +68,7 @@ export const BackgroundSelector: FC = memo(function BackgroundSelector() {
     DEFAULT_BACKGROUNDS_CONFIG
   );
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [globals, updateGlobals] = useGlobals();
+  const [globals, updateGlobals, storyGlobals] = useGlobals();
 
   const globalsBackgroundColor = globals[BACKGROUNDS_PARAM_KEY]?.value;
 
@@ -97,37 +97,38 @@ export const BackgroundSelector: FC = memo(function BackgroundSelector() {
     return null;
   }
 
+  const isDisabled = BACKGROUNDS_PARAM_KEY in storyGlobals;
+
   return (
-    <Fragment>
-      <WithTooltip
-        placement="top"
-        closeOnOutsideClick
-        tooltip={({ onHide }) => {
-          return (
-            <TooltipLinkList
-              links={getDisplayedItems(
-                backgroundsConfig.values,
-                selectedBackgroundColor,
-                ({ selected }: GlobalState) => {
-                  if (selectedBackgroundColor !== selected) {
-                    onBackgroundChange(selected);
-                  }
-                  onHide();
+    <WithTooltip
+      placement="top"
+      closeOnOutsideClick
+      tooltip={({ onHide }) => {
+        return (
+          <TooltipLinkList
+            links={getDisplayedItems(
+              backgroundsConfig.values,
+              selectedBackgroundColor,
+              ({ selected }: GlobalState) => {
+                if (selectedBackgroundColor !== selected) {
+                  onBackgroundChange(selected);
                 }
-              )}
-            />
-          );
-        }}
-        onVisibleChange={setIsTooltipVisible}
+                onHide();
+              }
+            )}
+          />
+        );
+      }}
+      onVisibleChange={setIsTooltipVisible}
+    >
+      <IconButton
+        disabled={isDisabled}
+        key="background"
+        title="Change the background of the preview"
+        active={selectedBackgroundColor !== 'transparent' || isTooltipVisible}
       >
-        <IconButton
-          key="background"
-          title="Change the background of the preview"
-          active={selectedBackgroundColor !== 'transparent' || isTooltipVisible}
-        >
-          <PhotoIcon />
-        </IconButton>
-      </WithTooltip>
-    </Fragment>
+        <PhotoIcon />
+      </IconButton>
+    </WithTooltip>
   );
 });

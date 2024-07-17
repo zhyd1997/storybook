@@ -8,7 +8,7 @@ import { GridIcon } from '@storybook/icons';
 import { PARAM_KEY as BACKGROUNDS_PARAM_KEY } from '../constants';
 
 export const GridSelector: FC = memo(function GridSelector() {
-  const [globals, updateGlobals] = useGlobals();
+  const [globals, updateGlobals, storyGlobals] = useGlobals();
 
   const { grid } = useParameter(BACKGROUNDS_PARAM_KEY, {
     grid: { disable: false },
@@ -18,12 +18,14 @@ export const GridSelector: FC = memo(function GridSelector() {
     return null;
   }
 
+  const isDisabled = BACKGROUNDS_PARAM_KEY in storyGlobals;
   const isActive = globals[BACKGROUNDS_PARAM_KEY]?.grid || false;
 
   return (
     <IconButton
       key="background"
       active={isActive}
+      disabled={isDisabled}
       title="Apply a grid to the preview"
       onClick={() =>
         updateGlobals({

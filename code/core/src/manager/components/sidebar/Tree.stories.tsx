@@ -8,6 +8,7 @@ import { within, expect } from '@storybook/test';
 import { Tree } from './Tree';
 import { index } from './mockdata.large';
 import { DEFAULT_REF_ID } from './Sidebar';
+import { viewport } from '@popperjs/core';
 
 const customViewports = {
   sized: {
@@ -23,11 +24,10 @@ const meta = {
   component: Tree,
   title: 'Sidebar/Tree',
   excludeStories: /.*Data$/,
-  globals: { theme: 'light' },
+  globals: { theme: 'light', viewport: 'sized', viewportRotated: false },
   parameters: {
     layout: 'fullscreen',
     viewport: {
-      defaultViewport: 'sized',
       viewports: customViewports,
     },
     chromatic: { viewports: [380] },

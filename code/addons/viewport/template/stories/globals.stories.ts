@@ -18,7 +18,10 @@ export default {
 };
 
 export const Selected = {
-  globals: { viewport: first },
+  globals: {
+    viewport: first,
+    viewportRotated: false,
+  },
 };
 
 export const Orientation = {
@@ -29,7 +32,10 @@ export const Orientation = {
 };
 
 export const Custom = {
-  globals: { viewport: 'phone' },
+  globals: {
+    viewport: 'phone',
+    viewportRotated: false,
+  },
   parameters: {
     viewport: {
       viewports: {
