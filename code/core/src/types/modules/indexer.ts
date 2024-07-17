@@ -92,6 +92,7 @@ export interface IndexInputStats {
   render?: boolean;
   storyFn?: boolean;
   mount?: boolean;
+  beforeEach?: boolean;
 }
 
 /**
