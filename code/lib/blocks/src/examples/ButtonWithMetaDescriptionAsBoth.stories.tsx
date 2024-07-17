@@ -13,9 +13,9 @@ const meta = {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
+  // Stop *this* story from being stacked in Chromatic
+  globals: { theme: 'default' },
   parameters: {
-    // Stop *this* story from being stacked in Chromatic
-    theme: 'default',
     docs: {
       description: {
         component: `

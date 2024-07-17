@@ -20,9 +20,9 @@ export default {
         },
       },
     },
-    theme: 'light',
     chromatic: { viewports: [700] },
   },
+  globals: { theme: 'light' },
 };
 
 const style: CSSProperties = {

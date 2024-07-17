@@ -23,9 +23,9 @@ const meta = {
   component: Tree,
   title: 'Sidebar/Tree',
   excludeStories: /.*Data$/,
+  globals: { theme: 'light' },
   parameters: {
     layout: 'fullscreen',
-    theme: 'light',
     viewport: {
       defaultViewport: 'sized',
       viewports: customViewports,
@@ -64,7 +64,7 @@ export const Full: Story = {
 };
 export const Dark: Story = {
   ...Full,
-  parameters: { theme: 'dark' },
+  globals: { theme: 'dark' },
 };
 
 export const SingleStoryComponents: Story = {

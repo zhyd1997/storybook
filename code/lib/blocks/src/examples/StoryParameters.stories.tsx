@@ -5,7 +5,7 @@ const meta = {
   title: 'examples/Stories for the Story Block',
   component: SimpleSizeTest,
   // Stop *this* story from being stacked in Chromatic (we want the caller to stack though)
-  parameters: { theme: 'default' },
+  globals: { theme: 'default' },
 } satisfies Meta<typeof SimpleSizeTest>;
 export default meta;
 

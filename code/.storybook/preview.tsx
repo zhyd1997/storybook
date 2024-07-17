@@ -10,7 +10,11 @@ import {
   styled,
   useTheme,
 } from 'storybook/internal/theming';
-import { useArgs, DocsContext as DocsContextProps } from 'storybook/internal/preview-api';
+import {
+  useArgs,
+  DocsContext as DocsContextProps,
+  useGlobals,
+} from 'storybook/internal/preview-api';
 import type { PreviewWeb } from 'storybook/internal/preview-api';
 import type { ReactRenderer } from '@storybook/react';
 import type { Channel } from 'storybook/internal/channels';
@@ -163,10 +167,16 @@ export const decorators = [
   /**
    * This decorator renders the stories side-by-side, stacked or default based on the theme switcher in the toolbar
    */
-  (StoryFn, { globals, parameters, playFunction, args }) => {
+  (StoryFn, { globals, parameters, playFunction, args, userGlobals, storyGlobals, ...rest }) => {
+    console.log({ rest, userGlobals, globals });
     const defaultTheme =
       isChromatic() && !playFunction && args.autoplay !== true ? 'stacked' : 'light';
-    const theme = globals.theme || parameters.theme || defaultTheme;
+    const theme =
+      storyGlobals.theme || userGlobals.theme || globals.theme || parameters.theme || defaultTheme;
+
+    const [x, y] = useGlobals();
+
+    console.log({ x, y });
 
     switch (theme) {
       case 'side-by-side': {
@@ -326,6 +336,7 @@ export const globalTypes = {
         { value: 'stacked', icon: 'bottombar', title: 'stacked' },
       ],
     },
+    // defaultValue: 'light',
   },
   foo: { defaultValue: 'fooDefaultValue' },
   bar: { defaultValue: 'barDefaultValue' },
