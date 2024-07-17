@@ -336,7 +336,6 @@ export const globalTypes = {
         { value: 'stacked', icon: 'bottombar', title: 'stacked' },
       ],
     },
-    // defaultValue: 'light',
   },
   foo: { defaultValue: 'fooDefaultValue' },
   bar: { defaultValue: 'barDefaultValue' },
