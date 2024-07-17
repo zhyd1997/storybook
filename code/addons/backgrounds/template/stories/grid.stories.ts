@@ -1,9 +1,15 @@
 import { global as globalThis } from '@storybook/global';
 
 export default {
+  title: 'Grid',
   component: globalThis.Components.Button,
   args: {
     label: 'Click Me!',
+  },
+  globals: {
+    backgrounds: {
+      grid: true,
+    },
   },
   parameters: {
     backgrounds: {

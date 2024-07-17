@@ -33,6 +33,14 @@ const config: StorybookConfig = {
       titlePrefix: 'addons/controls',
     },
     {
+      directory: '../addons/viewport/template/stories',
+      titlePrefix: 'addons/viewport',
+    },
+    {
+      directory: '../addons/backgrounds/template/stories',
+      titlePrefix: 'addons/backgrounds',
+    },
+    {
       directory: '../addons/onboarding/src',
       titlePrefix: 'addons/onboarding',
     },

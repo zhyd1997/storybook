@@ -25,6 +25,10 @@ export const getBackgroundColorByName = (
     return currentSelectedValue;
   }
 
+  if (currentSelectedValue) {
+    return currentSelectedValue;
+  }
+
   const defaultBackground = backgrounds.find((background) => background.name === defaultName);
   if (defaultBackground) {
     return defaultBackground.value;

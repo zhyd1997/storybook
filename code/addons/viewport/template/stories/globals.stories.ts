@@ -8,6 +8,7 @@ export default {
   args: {
     label: 'Click Me!',
   },
+  globals: {},
   parameters: {
     viewport: {
       viewports: MINIMAL_VIEWPORTS,
@@ -16,31 +17,21 @@ export default {
   },
 };
 
-export const Basic = {
-  parameters: {},
-};
-
 export const Selected = {
-  parameters: {
-    viewport: {
-      defaultViewport: first,
-    },
-  },
+  globals: { viewport: first },
 };
 
 export const Orientation = {
-  parameters: {
-    viewport: {
-      defaultViewport: first,
-      defaultOrientation: 'landscape',
-    },
+  globals: {
+    viewport: first,
+    viewportRotated: true,
   },
 };
 
 export const Custom = {
+  globals: { viewport: 'phone' },
   parameters: {
     viewport: {
-      defaultViewport: 'phone',
       viewports: {
         phone: {
           name: 'Phone Width',
@@ -52,11 +43,5 @@ export const Custom = {
         },
       },
     },
-  },
-};
-
-export const Disabled = {
-  parameters: {
-    viewport: { disable: true },
   },
 };

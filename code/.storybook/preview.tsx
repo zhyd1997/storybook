@@ -173,6 +173,7 @@ export const decorators = [
     const theme =
       storyGlobals.theme || userGlobals.theme || globals.theme || parameters.theme || defaultTheme;
 
+    console.log({ storyGlobals, userGlobals, globals });
     switch (theme) {
       case 'side-by-side': {
         return (
