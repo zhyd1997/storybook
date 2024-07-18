@@ -14,6 +14,9 @@ export default {
   args: {
     onSuccess: fn(),
   },
+  globals: {
+    theme: 'light',
+  },
 };
 
 export const Validation = {
