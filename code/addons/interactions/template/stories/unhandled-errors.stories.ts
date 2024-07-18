@@ -5,7 +5,6 @@ export default {
   component: globalThis.Components.Button,
   args: {
     label: 'Button',
-    onClick: fn(),
   },
   argTypes: {
     onClick: { type: 'function' },
