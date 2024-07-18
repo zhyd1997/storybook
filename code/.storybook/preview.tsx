@@ -210,7 +210,7 @@ export const decorators = [
           <ThemeProvider theme={convert(themes[theme])}>
             <Global styles={createReset} />
             <ThemedSetRoot />
-            {!parameters.theme && isChromatic() && playFunction && (
+            {!storyGlobals.theme && isChromatic() && playFunction && (
               <>
                 <PlayFnNotice>
                   <span>
