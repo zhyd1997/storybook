@@ -21,7 +21,7 @@ test.describe('addon-toolbars', () => {
     await expect(sbPage.previewRoot()).toContainText('Hola');
   });
 
-  test('locale button should have no effect for story that overrides locale global', async ({
+  test('locale button should be disabled for story that overrides locale global', async ({
     page,
   }) => {
     const sbPage = new SbPage(page);
@@ -29,10 +29,8 @@ test.describe('addon-toolbars', () => {
     // Click on viewport button and select spanish
     await sbPage.navigateToStory('addons/toolbars/globals', 'override');
     await expect(sbPage.previewRoot()).toContainText('안녕하세요');
-    await sbPage.selectToolbar('[title="Internationalization locale"]', '#list-item-es');
+    const button = await sbPage.page.locator('[title="Internationalization locale"]');
 
-    // Check that korean is still chosen
-    await expect(sbPage.previewRoot()).not.toContainText('Hola');
-    await expect(sbPage.previewRoot()).toContainText('안녕하세요');
+    await expect(await button.getAttribute('disabled')).toBe('true');
   });
 });
