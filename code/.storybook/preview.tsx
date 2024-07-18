@@ -15,8 +15,6 @@ import type { PreviewWeb } from 'storybook/internal/preview-api';
 import type { ReactRenderer } from '@storybook/react';
 import type { Channel } from 'storybook/internal/channels';
 
-import '../renderers/react/template/components';
-
 import { DocsContext } from '@storybook/blocks';
 
 import { DocsPageWrapper } from '../lib/blocks/src/components';
@@ -136,7 +134,6 @@ export const loaders = [
     }
     return { docsContext };
   },
-  async () => ({ projectValue: 2 }),
 ];
 
 export const decorators = [
@@ -262,20 +259,9 @@ export const decorators = [
       </>
     );
   },
-  (storyFn: PartialStoryFn, context: StoryContext) => {
-    if (context.parameters.useProjectDecorator)
-      return storyFn({ args: { ...context.args, text: `project ${context.args.text}` } });
-    return storyFn();
-  },
 ];
 
 export const parameters = {
-  projectParameter: 'projectParameter',
-  storyObject: {
-    a: 'project',
-    b: 'project',
-    c: 'project',
-  },
   options: {
     storySort: (a, b) =>
       a.title === b.title ? 0 : a.id.localeCompare(b.id, undefined, { numeric: true }),
@@ -328,11 +314,4 @@ export const globalTypes = {
       ],
     },
   },
-  foo: { defaultValue: 'fooDefaultValue' },
-  bar: { defaultValue: 'barDefaultValue' },
-};
-
-export const initialGlobals = {
-  foo: 'fooValue',
-  baz: 'bazValue',
 };

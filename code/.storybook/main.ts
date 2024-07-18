@@ -29,16 +29,40 @@ const config: StorybookConfig = {
       titlePrefix: 'blocks',
     },
     {
+      directory: '../addons/a11y/template/stories',
+      titlePrefix: 'addons/a11y',
+    },
+    {
+      directory: '../addons/actions/template/stories',
+      titlePrefix: 'addons/actions',
+    },
+    {
+      directory: '../addons/backgrounds/template/stories',
+      titlePrefix: 'addons/backgrounds',
+    },
+    {
       directory: '../addons/controls/src',
       titlePrefix: 'addons/controls',
+    },
+    {
+      directory: '../addons/controls/template/stories',
+      titlePrefix: 'addons/controls',
+    },
+    {
+      directory: '../addons/docs/template/stories',
+      titlePrefix: 'addons/docs',
+    },
+    {
+      directory: '../addons/links/template/stories',
+      titlePrefix: 'addons/links',
     },
     {
       directory: '../addons/viewport/template/stories',
       titlePrefix: 'addons/viewport',
     },
     {
-      directory: '../addons/backgrounds/template/stories',
-      titlePrefix: 'addons/backgrounds',
+      directory: '../addons/toolbars/template/stories',
+      titlePrefix: 'addons/toolbars',
     },
     {
       directory: '../addons/onboarding/src',
@@ -46,6 +70,10 @@ const config: StorybookConfig = {
     },
     {
       directory: '../addons/interactions/src',
+      titlePrefix: 'addons/interactions',
+    },
+    {
+      directory: '../addons/interactions/template/stories',
       titlePrefix: 'addons/interactions',
     },
   ],
@@ -57,6 +85,11 @@ const config: StorybookConfig = {
     '@storybook/addon-designs',
     '@storybook/addon-a11y',
     '@chromatic-com/storybook',
+  ],
+  previewAnnotations: [
+    './core/template/stories/preview.ts',
+    './addons/toolbars/template/stories/preview.ts',
+    './renderers/react/template/components/index.js',
   ],
   build: {
     test: {

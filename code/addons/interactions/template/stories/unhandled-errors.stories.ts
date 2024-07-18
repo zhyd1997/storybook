@@ -1,10 +1,11 @@
 import { global as globalThis } from '@storybook/global';
-import { userEvent, within } from '@storybook/test';
+import { fn, userEvent, within } from '@storybook/test';
 
 export default {
   component: globalThis.Components.Button,
   args: {
     label: 'Button',
+    onClick: fn(),
   },
   argTypes: {
     onClick: { type: 'function' },
