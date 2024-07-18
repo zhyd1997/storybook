@@ -70,7 +70,7 @@ async function webpack(
    */
   const cliPath = require.resolve('storybook/package.json');
   const themingPath = join(cliPath, '..', 'core', 'theming', 'index.js');
-  const themingCreatePath = join(cliPath, 'core', 'theming', 'create.js');
+  const themingCreatePath = join(cliPath, '..', 'core', 'theming', 'create.js');
 
   const componentsPath = join(cliPath, '..', 'core', 'components', 'index.js');
   const blocksPath = dirname(require.resolve('@storybook/blocks/package.json'));
