@@ -18,7 +18,6 @@ import type { Channel } from 'storybook/internal/channels';
 import { DocsContext } from '@storybook/blocks';
 
 import { DocsPageWrapper } from '../lib/blocks/src/components';
-import type { PartialStoryFn, StoryContext } from 'storybook/internal/types';
 
 const { document } = global;
 
