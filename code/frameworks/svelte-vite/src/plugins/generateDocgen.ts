@@ -288,7 +288,6 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         }
 
         const sourceFile = ts.createSourceFile(fileName, content, languageVersion, true);
-
         if (sourceFile) {
           let shouldCacheByFileName = false;
           shouldCacheByFileName ||= fileName
@@ -345,7 +344,6 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
           let docText = ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
 
           // Type from TS type annotation
-          // type from TS type annotation
           let propType = checker.getTypeOfSymbolAtLocation(prop, decl);
 
           if (prop.valueDeclaration) {
@@ -358,6 +356,16 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
             if (typeNode) {
               propType = checker.getTypeFromTypeNode(typeNode);
             }
+          }
+
+          // Ignore props from svelte/elements.d.ts (HTMLAttributes, AriaAttributes and DOMAttributes).
+          // Some libraries use these for {...$$restProps}
+          if (
+            prop.valueDeclaration
+              ?.getSourceFile()
+              .fileName.includes('node_modules/svelte/elements.d.ts')
+          ) {
+            return;
           }
 
           propMap.set(name, {
