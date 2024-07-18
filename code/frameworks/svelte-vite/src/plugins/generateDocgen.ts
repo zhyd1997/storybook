@@ -342,16 +342,20 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         propsType.getProperties().forEach((prop) => {
           const name = prop.getName();
           const optional = (prop.flags & ts.SymbolFlags.Optional) !== 0;
-          const docText =
-            ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
+          let docText = ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
 
+          // Type from TS type annotation
           // type from TS type annotation
           let propType = checker.getTypeOfSymbolAtLocation(prop, decl);
 
           if (prop.valueDeclaration) {
-            // type from JSDoc
-            const typeNode = ts.getJSDocType(prop.valueDeclaration!);
-            if (typeNode!) {
+            // Type and comment from JSDoc '@type {type} comment'
+            const typeTag = ts.getJSDocTypeTag(prop.valueDeclaration);
+            if (typeTag?.comment) {
+              docText = ((docText || '') + '\n' + typeTag.comment).trim();
+            }
+            const typeNode = ts.getJSDocType(prop.valueDeclaration);
+            if (typeNode) {
               propType = checker.getTypeFromTypeNode(typeNode);
             }
           }
