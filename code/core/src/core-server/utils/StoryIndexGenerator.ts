@@ -28,8 +28,7 @@ import { storyNameFromExport, toId, combineTags } from '@storybook/csf';
 import { dedent } from 'ts-dedent';
 import { autoName } from './autoName';
 import { IndexingError, MultipleIndexingError } from './IndexingError';
-import { addStats, summarizeStats, type IndexStatsSummary } from './summarizeStats';
-import { Input } from '../../components/components/form/form.stories';
+import { addStats, type IndexStatsSummary } from './summarizeStats';
 
 // Extended type to keep track of the csf meta id so we know the component id when referencing docs in `extractDocs`
 type StoryIndexEntryWithExtra = StoryIndexEntry & {
@@ -264,7 +263,7 @@ export class StoryIndexGenerator {
 
           addStats(item.extra.stats, statsSummary);
 
-          // Drop the meta id as it isn't part of the index, we just used it for record keeping in `extractDocs`
+          // Drop extra data used for internal bookkeeping
           const { extra, ...existing } = item;
           return existing;
         });

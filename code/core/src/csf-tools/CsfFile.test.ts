@@ -1432,6 +1432,7 @@ describe('CsfFile', () => {
           export default { title: 'foo/bar', play: () => {}, tags: ['X'] };
           export const A = {
             render: () => {},
+            loaders: [],
             tags: ['Y'],
           };
         `
