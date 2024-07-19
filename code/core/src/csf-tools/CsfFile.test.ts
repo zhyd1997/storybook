@@ -45,6 +45,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -57,6 +58,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -86,6 +88,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -97,6 +100,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -125,6 +129,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -154,6 +159,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -181,6 +187,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -206,6 +213,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -232,6 +240,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -241,6 +250,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -267,6 +277,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -276,6 +287,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -302,6 +314,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -311,6 +324,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -338,6 +352,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -347,6 +362,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -378,6 +394,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -390,6 +407,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -421,6 +439,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -433,6 +452,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -461,6 +481,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -470,6 +491,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -498,6 +520,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -507,6 +530,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -533,6 +557,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -542,6 +567,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -572,6 +598,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -601,6 +628,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -631,6 +659,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -666,6 +695,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -696,6 +726,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -708,6 +739,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -733,6 +765,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -742,6 +775,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -772,6 +806,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -784,6 +819,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -815,6 +851,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -893,6 +930,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -902,6 +940,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -953,6 +992,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -962,6 +1002,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -1037,6 +1078,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: true
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1067,6 +1109,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: true
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1095,6 +1138,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1125,6 +1169,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1204,6 +1249,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -1235,6 +1281,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: true
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1268,6 +1315,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: true
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1326,6 +1374,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -1359,6 +1408,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: true
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1388,6 +1438,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: true
@@ -1416,6 +1467,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: true
@@ -1449,6 +1501,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: true
+              loaders: true
               beforeEach: false
               storyFn: false
               mount: false
@@ -1479,6 +1532,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: false
+              loaders: false
               beforeEach: false
               storyFn: true
               mount: false
@@ -1527,6 +1581,7 @@ describe('CsfFile', () => {
           __stats:
             play: true
             render: false
+            loaders: false
             beforeEach: false
             storyFn: false
             mount: false
@@ -1545,6 +1600,7 @@ describe('CsfFile', () => {
           __stats:
             play: true
             render: false
+            loaders: false
             beforeEach: false
             storyFn: false
             mount: false
@@ -1581,6 +1637,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: false
+            loaders: false
             beforeEach: false
             storyFn: false
             mount: false
@@ -1622,6 +1679,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: false
+            loaders: false
             beforeEach: false
             storyFn: false
             mount: false
@@ -1678,6 +1736,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: true
+            loaders: false
             beforeEach: false
             storyFn: false
             mount: false
@@ -1713,6 +1772,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: true
+            loaders: false
             beforeEach: false
             storyFn: false
             mount: false
@@ -1748,6 +1808,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: true
+            loaders: false
             beforeEach: false
             storyFn: false
             mount: false
@@ -1783,6 +1844,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: true
+            loaders: false
             beforeEach: false
             storyFn: false
             mount: false
@@ -1811,6 +1873,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: true
               storyFn: false
               mount: false
@@ -1838,6 +1901,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1862,6 +1926,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1886,6 +1951,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
@@ -1910,6 +1976,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               beforeEach: false
               storyFn: false
               mount: false
