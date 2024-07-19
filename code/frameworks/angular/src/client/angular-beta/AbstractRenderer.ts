@@ -1,4 +1,10 @@
-import { ApplicationRef, enableProdMode, NgModule } from '@angular/core';
+import {
+  ApplicationRef,
+  enableProdMode,
+  NgModule,
+  Provider,
+  EnvironmentProviders,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -9,6 +15,7 @@ import { getApplication } from './StorybookModule';
 import { storyPropsProvider } from './StorybookProvider';
 import { PropertyExtractor } from './utils/PropertyExtractor';
 import { queueBootstrapping } from './utils/BootstrapQueue';
+import { AngularJSON } from '../../../../../../code/lib/cli/src/generators/ANGULAR/helpers';
 
 type StoryRenderInfo = {
   storyFnAngular: StoryFnAngularReturnType;
@@ -109,10 +116,28 @@ export abstract class AbstractRenderer {
       analyzedMetadata,
     });
 
+    const angularJSON = new AngularJSON();
+    const projectRoot = angularJSON.rootProject;
+    const hasZoneJS = !!projectRoot.architect.build.options.polyfills?.includes('zone.js');
+    const hasExperimentalZoneless =
+      !!projectRoot.architect.storybook?.options.experimentalZoneless ||
+      !!projectRoot.architect['build-storybook']?.options.experimentalZoneless;
+    let experimentalZonelessProvider: () => EnvironmentProviders | null = null;
+
+    if (!hasZoneJS && hasExperimentalZoneless) {
+      try {
+        const { provideExperimentalZonelessChangeDetection } = await import('@angular/core');
+        experimentalZonelessProvider = provideExperimentalZonelessChangeDetection;
+      } catch (error) {
+        throw new Error('Experimental zoneless change detection requires Angular 18 or higher');
+      }
+    }
+
     const applicationRef = await queueBootstrapping(() => {
       return bootstrapApplication(application, {
         ...storyFnAngular.applicationConfig,
         providers: [
+          experimentalZonelessProvider(),
           storyPropsProvider(newStoryProps$),
           ...analyzedMetadata.applicationProviders,
           ...(storyFnAngular.applicationConfig?.providers ?? []),
