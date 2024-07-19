@@ -21,6 +21,10 @@ const config: StorybookConfig = {
       titlePrefix: 'preview',
     },
     {
+      directory: '../core/src/components/brand',
+      titlePrefix: 'brand',
+    },
+    {
       directory: '../core/src/components/components',
       titlePrefix: 'components',
     },

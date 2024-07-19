@@ -101,7 +101,6 @@ const content = Object.entries(panels).map(([k, v]) => (
 ));
 
 export default {
-  title: 'Tabs',
   args: {
     menuName: 'Addons',
   },
