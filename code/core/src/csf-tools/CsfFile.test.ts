@@ -45,6 +45,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: foo-bar--b
             name: B
@@ -54,6 +55,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -80,6 +82,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
           - id: foo-bar--b
             name: B
@@ -88,6 +91,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
       `);
     });
@@ -113,6 +117,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -139,6 +144,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -163,6 +169,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -185,6 +192,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -208,12 +216,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: default-title--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -237,12 +247,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: custom-id--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -266,12 +278,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
           - id: custom-id
             name: Custom Paremeters Id
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
       `);
     });
@@ -296,12 +310,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: foo-bar-baz--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -330,6 +346,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
           - id: foo-bar--b
             name: B
@@ -339,6 +356,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
       `);
     });
@@ -367,6 +385,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
           - id: foo-bar--b
             name: B
@@ -376,6 +395,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
       `);
     });
@@ -401,12 +421,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: foo-bar-baz--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -432,12 +454,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: foo-bar-baz--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -461,12 +485,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: default-title--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -494,6 +520,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -520,6 +547,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -547,6 +575,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -579,6 +608,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -606,6 +636,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: foo-bar--b
             name: B
@@ -615,6 +646,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -637,12 +669,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
           - id: foo-bar--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
       `);
     });
@@ -670,6 +704,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: foo-bar--a
             name: A
@@ -679,6 +714,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -707,6 +743,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -782,12 +819,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: default-title--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -836,12 +875,14 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
           - id: foo-bar--b
             name: B
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
       `);
     });
@@ -914,6 +955,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: true
+              loaders: false
               storyFn: false
       `);
     });
@@ -941,6 +983,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: true
+              loaders: false
               storyFn: false
       `);
     });
@@ -966,6 +1009,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
       `);
     });
@@ -993,6 +1037,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: false
       `);
     });
@@ -1069,6 +1114,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: false
+              loaders: false
               storyFn: true
             tags:
               - 'Y'
@@ -1097,6 +1143,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: true
+              loaders: false
               storyFn: false
             tags:
               - 'Y'
@@ -1127,6 +1174,7 @@ describe('CsfFile', () => {
             __stats:
               play: false
               render: true
+              loaders: false
               storyFn: false
             tags:
               - 'Y'
@@ -1182,6 +1230,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: false
+              loaders: false
               storyFn: true
             tags:
               - 'Y'
@@ -1212,6 +1261,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: true
+              loaders: false
               storyFn: false
             tags:
               - 'Y'
@@ -1226,6 +1276,7 @@ describe('CsfFile', () => {
           export default { title: 'foo/bar', play: () => {}, tags: ['X'] };
           export const A = {
             render: () => {},
+            loaders: [],
             tags: ['Y'],
           };
         `
@@ -1242,6 +1293,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: true
+              loaders: true
               storyFn: false
             tags:
               - 'Y'
@@ -1269,6 +1321,7 @@ describe('CsfFile', () => {
             __stats:
               play: true
               render: false
+              loaders: false
               storyFn: true
             tags:
               - 'Y'
@@ -1314,6 +1367,7 @@ describe('CsfFile', () => {
           __stats:
             play: true
             render: false
+            loaders: false
             storyFn: false
         - type: story
           importPath: foo/bar.stories.js
@@ -1329,6 +1383,7 @@ describe('CsfFile', () => {
           __stats:
             play: true
             render: false
+            loaders: false
             storyFn: false
       `);
     });
@@ -1362,6 +1417,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: false
+            loaders: false
             storyFn: false
       `);
     });
@@ -1400,6 +1456,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: false
+            loaders: false
             storyFn: false
       `);
     });
@@ -1453,6 +1510,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: true
+            loaders: false
             storyFn: false
       `);
     });
@@ -1485,6 +1543,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: true
+            loaders: false
             storyFn: false
       `);
     });
@@ -1517,6 +1576,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: true
+            loaders: false
             storyFn: false
       `);
     });
@@ -1549,6 +1609,7 @@ describe('CsfFile', () => {
           __stats:
             play: false
             render: true
+            loaders: false
             storyFn: false
       `);
     });

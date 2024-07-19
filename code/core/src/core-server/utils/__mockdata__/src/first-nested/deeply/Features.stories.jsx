@@ -19,3 +19,9 @@ export const WithTest = {
     await mount();
   },
 };
+
+export const WithCSF1 = {
+  parameters: {},
+  decorators: [],
+  loaders: [],
+};

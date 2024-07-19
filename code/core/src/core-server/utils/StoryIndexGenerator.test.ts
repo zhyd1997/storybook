@@ -93,6 +93,7 @@ describe('StoryIndexGenerator', () => {
 
         expect(stats).toMatchInlineSnapshot(`
           {
+            "loaders": 0,
             "play": 0,
             "render": 0,
             "storyFn": 0,
@@ -349,6 +350,18 @@ describe('StoryIndexGenerator', () => {
                 "title": "first-nested/deeply/F",
                 "type": "story",
               },
+              "first-nested-deeply-features--with-csf-1": {
+                "componentPath": undefined,
+                "id": "first-nested-deeply-features--with-csf-1",
+                "importPath": "./src/first-nested/deeply/Features.stories.jsx",
+                "name": "With CSF 1",
+                "tags": [
+                  "dev",
+                  "test",
+                ],
+                "title": "first-nested/deeply/Features",
+                "type": "story",
+              },
               "first-nested-deeply-features--with-play": {
                 "componentPath": undefined,
                 "id": "first-nested-deeply-features--with-play",
@@ -444,6 +457,7 @@ describe('StoryIndexGenerator', () => {
 
         expect(stats).toMatchInlineSnapshot(`
           {
+            "loaders": 1,
             "play": 2,
             "render": 1,
             "storyFn": 1,
@@ -584,6 +598,18 @@ describe('StoryIndexGenerator', () => {
                 "title": "first-nested/deeply/F",
                 "type": "story",
               },
+              "first-nested-deeply-features--with-csf-1": {
+                "componentPath": undefined,
+                "id": "first-nested-deeply-features--with-csf-1",
+                "importPath": "./src/first-nested/deeply/Features.stories.jsx",
+                "name": "With CSF 1",
+                "tags": [
+                  "dev",
+                  "test",
+                ],
+                "title": "first-nested/deeply/Features",
+                "type": "story",
+              },
               "first-nested-deeply-features--with-play": {
                 "componentPath": undefined,
                 "id": "first-nested-deeply-features--with-play",
@@ -692,6 +718,7 @@ describe('StoryIndexGenerator', () => {
 
         expect(stats).toMatchInlineSnapshot(`
           {
+            "loaders": 1,
             "play": 2,
             "render": 1,
             "storyFn": 1,
@@ -738,6 +765,7 @@ describe('StoryIndexGenerator', () => {
             "first-nested-deeply-features--with-story-fn",
             "first-nested-deeply-features--with-render",
             "first-nested-deeply-features--with-test",
+            "first-nested-deeply-features--with-csf-1",
             "nested-button--docs",
             "nested-button--story-one",
             "second-nested-g--docs",
@@ -779,6 +807,7 @@ describe('StoryIndexGenerator', () => {
             "first-nested-deeply-features--with-story-fn",
             "first-nested-deeply-features--with-render",
             "first-nested-deeply-features--with-test",
+            "first-nested-deeply-features--with-csf-1",
             "nested-button--docs",
             "nested-button--story-one",
             "second-nested-g--docs",
@@ -1758,6 +1787,7 @@ describe('StoryIndexGenerator', () => {
           "first-nested-deeply-features--with-story-fn",
           "first-nested-deeply-features--with-render",
           "first-nested-deeply-features--with-test",
+          "first-nested-deeply-features--with-csf-1",
         ]
       `);
     });

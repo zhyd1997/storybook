@@ -544,7 +544,7 @@ export class CsfFile {
         if (play) {
           acc[key].tags = [...(acc[key].tags || []), 'play-fn'];
         }
-        ['play', 'render'].forEach((annotation) => {
+        ['play', 'render', 'loaders'].forEach((annotation) => {
           acc[key].__stats[annotation as keyof IndexInputStats] =
             !!storyAnnotations[annotation] || !!self._metaAnnotations[annotation];
         });
