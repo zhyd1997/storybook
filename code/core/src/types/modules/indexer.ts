@@ -87,6 +87,13 @@ export type DocsIndexEntry = BaseIndexEntry & {
 
 export type IndexEntry = StoryIndexEntry | DocsIndexEntry;
 
+export interface IndexInputStats {
+  loaders?: boolean;
+  play?: boolean;
+  render?: boolean;
+  storyFn?: boolean;
+}
+
 /**
  * The base input for indexing a story or docs entry.
  */
@@ -115,6 +122,10 @@ export type BaseIndexInput = {
    * Only use this if you need to override the auto-generated id.
    */
   __id?: StoryId;
+  /**
+   * Stats about language feature usage that the indexer can optionally report
+   */
+  __stats?: IndexInputStats;
 };
 
 /**

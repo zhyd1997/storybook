@@ -9,12 +9,18 @@ import bt from '@babel/traverse';
 import * as recast from 'recast';
 
 import { toId, isExportStory, storyNameFromExport } from '@storybook/csf';
-import type { ComponentAnnotations, StoryAnnotations, Tag } from '@storybook/core/types';
+import type {
+  Tag,
+  StoryAnnotations,
+  ComponentAnnotations,
+  IndexedCSFFile,
+  IndexInput,
+  IndexInputStats,
+} from '@storybook/core/types';
 import type { Options } from 'recast';
 import { babelParse } from './babelParse';
 import { findVarInitialization } from './findVarInitialization';
 import type { PrintResultType } from './PrintResultType';
-import type { IndexInput, IndexedCSFFile } from '@storybook/core/types';
 
 // @ts-expect-error (needed due to it's use of `exports.default`)
 const traverse = (bt.default || bt) as typeof bt;
@@ -136,6 +142,7 @@ export interface StaticMeta
 
 export interface StaticStory extends Pick<StoryAnnotations, 'name' | 'parameters' | 'tags'> {
   id: string;
+  __stats: IndexInputStats;
 }
 
 export class CsfFile {
@@ -392,6 +399,7 @@ export class CsfFile {
                   id: 'FIXME',
                   name,
                   parameters,
+                  __stats: {},
                 };
               }
             });
@@ -422,7 +430,12 @@ export class CsfFile {
                   }
                 } else {
                   self._storyAnnotations[exportName] = {};
-                  self._stories[exportName] = { id: 'FIXME', name: exportName, parameters: {} };
+                  self._stories[exportName] = {
+                    id: 'FIXME',
+                    name: exportName,
+                    parameters: {},
+                    __stats: {},
+                  };
                 }
               }
             });
@@ -520,7 +533,8 @@ export class CsfFile {
           parameters.docsOnly = true;
         }
         acc[key] = { ...story, id, parameters };
-        const { tags, play } = self._storyAnnotations[key];
+        const storyAnnotations = self._storyAnnotations[key];
+        const { tags, play } = storyAnnotations;
         if (tags) {
           const node = t.isIdentifier(tags)
             ? findVarInitialization(tags.name, this._ast.program)
@@ -530,6 +544,15 @@ export class CsfFile {
         if (play) {
           acc[key].tags = [...(acc[key].tags || []), 'play-fn'];
         }
+        ['play', 'render', 'loaders'].forEach((annotation) => {
+          acc[key].__stats[annotation as keyof IndexInputStats] =
+            !!storyAnnotations[annotation] || !!self._metaAnnotations[annotation];
+        });
+        const storyExport = self.getStoryExport(key);
+        acc[key].__stats.storyFn = !!(
+          t.isArrowFunctionExpression(storyExport) || t.isFunctionDeclaration(storyExport)
+        );
+
         return acc;
       },
       {} as Record<string, StaticStory>
@@ -589,6 +612,7 @@ export class CsfFile {
         metaId: this.meta?.id,
         tags,
         __id: story.id,
+        __stats: story.__stats,
       };
     });
   }
