@@ -103,6 +103,13 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  refs: {
+    icons: {
+      title: 'Icons',
+      url: 'https://main--64b56e737c0aeefed9d5e675.chromatic.com',
+      expanded: false,
+    },
+  },
   core: {
     disableTelemetry: true,
   },
