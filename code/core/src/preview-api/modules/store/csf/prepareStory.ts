@@ -147,6 +147,7 @@ export function prepareStory<TRenderer extends Renderer>(
     testingLibraryRender,
     renderToCanvas: projectAnnotations.renderToCanvas,
     usesMount,
+    storyGlobals: {},
   };
 }
 export function prepareMeta<TRenderer extends Renderer>(
@@ -219,7 +220,7 @@ function preparePartialAnnotations<TRenderer extends Renderer>(
     ...storyAnnotations?.globals,
   };
 
-  const contextForEnhancers: StoryContextForEnhancers<TRenderer> = {
+  const contextForEnhancers: StoryContextForEnhancers<TRenderer> & { storyGlobals: Globals } = {
     componentId: componentAnnotations.id,
     title: componentAnnotations.title,
     kind: componentAnnotations.title, // Back compat
