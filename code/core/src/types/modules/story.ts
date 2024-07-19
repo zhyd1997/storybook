@@ -6,6 +6,7 @@ import type {
   CleanupCallback,
   StepRunner,
   Canvas,
+  Globals,
 } from '@storybook/csf';
 
 import type {
@@ -112,6 +113,7 @@ export type PreparedStory<TRenderer extends Renderer = Renderer> =
     testingLibraryRender?: (...args: never[]) => unknown;
     renderToCanvas?: ProjectAnnotations<TRenderer>['renderToCanvas'];
     usesMount: boolean;
+    storyGlobals: Globals;
   };
 
 export type PreparedMeta<TRenderer extends Renderer = Renderer> = Omit<
