@@ -26,7 +26,6 @@ export const ToolbarMenuListItem = ({
     active: currentValue === value,
     right,
     title,
-    icon,
     disabled,
     onClick,
   };
