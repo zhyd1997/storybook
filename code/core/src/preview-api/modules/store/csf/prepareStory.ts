@@ -131,6 +131,7 @@ export function prepareStory<TRenderer extends Renderer>(
   const testingLibraryRender = projectAnnotations.testingLibraryRender;
 
   return {
+    storyGlobals: {},
     ...partialAnnotations,
     moduleExport,
     id,
@@ -147,7 +148,6 @@ export function prepareStory<TRenderer extends Renderer>(
     testingLibraryRender,
     renderToCanvas: projectAnnotations.renderToCanvas,
     usesMount,
-    storyGlobals: {},
   };
 }
 export function prepareMeta<TRenderer extends Renderer>(
