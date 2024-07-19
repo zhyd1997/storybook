@@ -60,6 +60,8 @@ const formatLocation = (node: t.Node, fileName?: string) => {
   return `${fileName || ''} (line ${line}, col ${column})`.trim();
 };
 
+export const isModuleMock = (importPath: string) => MODULE_MOCK_REGEX.test(importPath);
+
 const isArgsStory = (init: t.Node, parent: t.Node, csf: CsfFile) => {
   let storyFn: t.Node = init;
   // export const Foo = Bar.bind({})
@@ -133,7 +135,7 @@ const hasMount = (play: t.Node | undefined) => {
   return false;
 };
 
-const MODULE_MOCK_REGEX = /^[.\/#].*\.mock(\.)?[^.]*$/i;
+const MODULE_MOCK_REGEX = /^[.\/#].*\.mock($|\.[^.]*$)/i;
 
 export interface CsfOptions {
   fileName?: string;
@@ -573,7 +575,7 @@ export class CsfFile {
           t.isArrowFunctionExpression(storyExport) || t.isFunctionDeclaration(storyExport)
         );
         stats.mount = hasMount(storyAnnotations.play ?? self._metaAnnotations.play);
-        stats.moduleMock = !!self.imports.find((fname) => MODULE_MOCK_REGEX.test(fname));
+        stats.moduleMock = !!self.imports.find((fname) => isModuleMock(fname));
 
         return acc;
       },

@@ -2,7 +2,7 @@
 import { dedent } from 'ts-dedent';
 import { describe, it, expect, vi } from 'vitest';
 import yaml from 'js-yaml';
-import { loadCsf } from './CsfFile';
+import { loadCsf, isModuleMock } from './CsfFile';
 
 expect.addSnapshotSerializer({
   print: (val: any) => yaml.dump(val).trimEnd(),
@@ -1477,6 +1477,36 @@ describe('CsfFile', () => {
       `);
     });
 
+    it('mount meta', () => {
+      expect(
+        parse(
+          dedent`
+          export default {
+            title: 'foo/bar',
+            play: ({ context, mount: mountRenamed }) => {},
+          };
+          export const A = {};
+        `
+        )
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: foo/bar
+          tags:
+            - play-fn
+        stories:
+          - id: foo-bar--a
+            name: A
+            __stats:
+              play: true
+              render: false
+              loaders: false
+              beforeEach: false
+              storyFn: false
+              mount: true
+              moduleMock: false
+      `);
+    });
+
     it('meta csf2', () => {
       expect(
         parse(
@@ -1933,55 +1963,25 @@ describe('CsfFile', () => {
               moduleMock: true
       `);
     });
-    it('absolute', () => {
-      expect(
-        parse(
-          dedent`
-          import foo from '/path/to/bar.mock';
-          export default { title: 'foo/bar' };
-          export const A = {};
-        `
-        )
-      ).toMatchInlineSnapshot(`
-        meta:
-          title: foo/bar
-        stories:
-          - id: foo-bar--a
-            name: A
-            __stats:
-              play: false
-              render: false
-              loaders: false
-              beforeEach: false
-              storyFn: false
-              mount: false
-              moduleMock: true
-      `);
-    });
-    it('package', () => {
-      expect(
-        parse(
-          dedent`
-          import foo from 'smart-mock';
-          export default { title: 'foo/bar' };
-          export const A = {};
-        `
-        )
-      ).toMatchInlineSnapshot(`
-        meta:
-          title: foo/bar
-        stories:
-          - id: foo-bar--a
-            name: A
-            __stats:
-              play: false
-              render: false
-              loaders: false
-              beforeEach: false
-              storyFn: false
-              mount: false
-              moduleMock: false
-      `);
-    });
+  });
+});
+
+describe('isModuleMock', () => {
+  it('prefix', () => {
+    expect(isModuleMock('#foo.mock')).toBe(true);
+    expect(isModuleMock('./foo.mock')).toBe(true);
+    expect(isModuleMock('../foo.mock')).toBe(true);
+    expect(isModuleMock('/foo.mock')).toBe(true);
+
+    expect(isModuleMock('foo.mock')).toBe(false);
+    expect(isModuleMock('@/foo.mock')).toBe(false);
+  });
+  it('sufixes', () => {
+    expect(isModuleMock('#foo.mock.js')).toBe(true);
+    expect(isModuleMock('#foo.mock.mjs')).toBe(true);
+    expect(isModuleMock('#foo.mock.vue')).toBe(true);
+
+    expect(isModuleMock('#foo.mocktail')).toBe(false);
+    expect(isModuleMock('#foo.mock.test.ts')).toBe(false);
   });
 });
