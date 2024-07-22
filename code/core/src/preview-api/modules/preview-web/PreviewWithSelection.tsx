@@ -405,6 +405,10 @@ export class PreviewWithSelection<TRenderer extends Renderer> extends Preview<TR
       // Default to the project parameters for MDX docs
       let { parameters } = this.storyStoreValue.projectAnnotations;
 
+      // We need to update globals whenever we go in or out of an overridden story.
+      // As an optimization we could check if that's the case, but it seems complex and error-prone
+      super.onUpdateGlobals({ globals: {} });
+
       if (isCsfDocsRender(render) || render.entry.tags?.includes(ATTACHED_MDX_TAG)) {
         if (!render.csfFiles) throw new MdxFileWithNoCsfReferencesError({ storyId });
         ({ parameters } = this.storyStoreValue.preparedMetaFromCSFFile({
