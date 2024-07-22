@@ -136,8 +136,8 @@ export const ViewportTool: FC = () => {
   }
 
   useEffect(() => {
-    registerShortcuts(api, globals, updateGlobals, Object.keys(viewports));
-  }, [viewports, globals, globals.viewport, updateGlobals, api]);
+    registerShortcuts(api, globals.viewport, updateGlobals, Object.keys(viewports));
+  }, [viewports, globals.viewport, updateGlobals, api]);
 
   useEffect(() => {
     if (isDisabled) {

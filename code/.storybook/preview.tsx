@@ -16,6 +16,7 @@ import type { ReactRenderer } from '@storybook/react';
 import type { Channel } from 'storybook/internal/channels';
 
 import { DocsContext } from '@storybook/blocks';
+import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 
 import { DocsPageWrapper } from '../lib/blocks/src/components';
 
@@ -294,5 +295,11 @@ export const parameters = {
       'HSLA(240,11%,91%,0.5)',
       'slategray',
     ],
+  },
+};
+
+export const globalTypes = {
+  viewport: {
+    viewports: MINIMAL_VIEWPORTS,
   },
 };

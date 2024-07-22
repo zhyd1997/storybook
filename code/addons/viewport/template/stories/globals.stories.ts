@@ -10,13 +10,13 @@ export default {
   },
   globals: {},
   parameters: {
-    viewport: {
-      viewports: MINIMAL_VIEWPORTS,
-    },
     chromatic: { disable: true },
   },
 };
 
+export const Unset = {
+  globals: {},
+};
 export const Selected = {
   globals: {
     viewport: first,
@@ -31,23 +31,9 @@ export const Orientation = {
   },
 };
 
-export const Custom = {
+export const Missing = {
   globals: {
     viewport: 'phone',
     viewportRotated: false,
-  },
-  parameters: {
-    viewport: {
-      viewports: {
-        phone: {
-          name: 'Phone Width',
-          styles: {
-            height: '600px',
-            width: '100vh',
-          },
-          type: 'mobile',
-        },
-      },
-    },
   },
 };
