@@ -523,7 +523,7 @@ export enum Addon_TypesEnum {
   experimental_PAGE = 'page',
   /**
    * This adds items in the bottom of the sidebar.
-   * @unstable
+   * @deprecated This doesn't do anything anymore and will be removed in Storybook 9.0.
    */
   experimental_SIDEBAR_BOTTOM = 'sidebar-bottom',
   /**
