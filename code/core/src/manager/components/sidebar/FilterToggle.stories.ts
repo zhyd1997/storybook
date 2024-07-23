@@ -9,21 +9,6 @@ export default {
   },
 };
 
-export const Changes = {
-  args: {
-    count: 12,
-    label: 'Change',
-    status: 'warning',
-  },
-};
-
-export const ChangesActive = {
-  args: {
-    ...Changes.args,
-    active: true,
-  },
-};
-
 export const Errors = {
   args: {
     count: 2,
@@ -35,6 +20,21 @@ export const Errors = {
 export const ErrorsActive = {
   args: {
     ...Errors.args,
+    active: true,
+  },
+};
+
+export const Warning = {
+  args: {
+    count: 12,
+    label: 'Warning',
+    status: 'warning',
+  },
+};
+
+export const WarningActive = {
+  args: {
+    ...Warning.args,
     active: true,
   },
 };
