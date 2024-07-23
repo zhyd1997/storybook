@@ -115,7 +115,7 @@ const getStyles = (
   return isRotated ? flip(result) : result;
 };
 
-export const ViewportTool: FC = () => {
+export const ViewportToolLegacy: FC = () => {
   const [globals, updateGlobals, storyGlobals] = useGlobals();
   const isDisabled = PARAM_KEY in storyGlobals;
 

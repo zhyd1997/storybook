@@ -3,8 +3,8 @@ import { addons, types } from 'storybook/internal/manager-api';
 
 import { ADDON_ID } from './constants';
 
-import { ViewportTool as LegacyViewportTool } from './legacy/ToolLegacy';
-import { ViewportTool as ModernViewportTool } from './Tool';
+import { ViewportToolLegacy } from './legacy/ToolLegacy';
+import { ViewportTool } from './Tool';
 
 addons.register(ADDON_ID, (api) => {
   addons.add(ADDON_ID, {
@@ -12,6 +12,6 @@ addons.register(ADDON_ID, (api) => {
     type: types.TOOL,
     match: ({ viewMode, tabId }) => viewMode === 'story' && !tabId,
     render: () =>
-      FEATURES?.viewportStoryGlobals ? <ModernViewportTool api={api} /> : <LegacyViewportTool />,
+      FEATURES?.viewportStoryGlobals ? <ViewportTool api={api} /> : <ViewportToolLegacy />,
   });
 });
