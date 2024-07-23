@@ -36,7 +36,7 @@
     "*.d.ts"
   ],
   "peerDependencies": {
-    "storybook": "^8.2.5"
+    "storybook": "workspace:^"
   },
   "publishConfig": {
     "access": "public"
