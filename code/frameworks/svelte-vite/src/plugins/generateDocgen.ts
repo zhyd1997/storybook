@@ -2,7 +2,7 @@ import ts from 'typescript';
 import svelte2tsx from 'svelte2tsx';
 import path from 'path';
 import { VERSION } from 'svelte/compiler';
-import cripto from 'crypto';
+import crypto from 'crypto';
 
 export type Docgen = {
   name?: string;
@@ -21,7 +21,7 @@ export type PropInfo = {
 type BaseType = object;
 
 type ScalarType = BaseType & {
-  type: 'number' | 'string' | 'boolean' | 'any' | 'null' | 'undefined';
+  type: 'number' | 'string' | 'boolean' | 'any' | 'null' | 'undefined' | 'void';
 };
 type FunctionType = BaseType & {
   type: 'function';
@@ -63,6 +63,9 @@ type DefaultValue = {
 };
 
 function convertType(type: ts.Type, checker: ts.TypeChecker): Type | undefined {
+  // TypeScript compiler uses bit flags to represent type information.
+  // Note the use of the bitwise AND (&) operator here.
+  // See examples at: https://github.com/search?q=repo%3Amicrosoft%2FTypeScript+TypeFlags.&type=code
   if (type.flags & ts.TypeFlags.Any) {
     return { type: 'any' };
   }
@@ -80,6 +83,9 @@ function convertType(type: ts.Type, checker: ts.TypeChecker): Type | undefined {
   }
   if (type.flags & ts.TypeFlags.Undefined) {
     return { type: 'undefined' };
+  }
+  if (type.flags & ts.TypeFlags.Void) {
+    return { type: 'void' };
   }
   if (type.getCallSignatures().length > 0) {
     return { type: 'function', text: checker.typeToString(type) };
@@ -103,6 +109,7 @@ function convertType(type: ts.Type, checker: ts.TypeChecker): Type | undefined {
     return { type: 'literal', value: text === 'true', text: text };
   }
   if (type.isUnion()) {
+    // TypeA | TypeB
     const types = type.types
       .map((t) => convertType(t, checker))
       .filter((t) => {
@@ -119,6 +126,7 @@ function convertType(type: ts.Type, checker: ts.TypeChecker): Type | undefined {
     return types.length > 1 ? { type: 'union', types: types } : types[0];
   }
   if (type.isIntersection()) {
+    // TypeA & TypeB
     const types = type.types
       .map((t) => convertType(t, checker))
       .filter((t) => t !== undefined) as Type[];
@@ -141,30 +149,24 @@ function initializerToDefaultValue(
     if (symbol) {
       if (checker.isUndefinedSymbol(symbol)) {
         return { text: 'undefined' };
-      } else {
-        const decl = symbol.valueDeclaration;
-        if (decl && ts.isVariableDeclaration(decl) && decl.initializer) {
-          const type = checker.getTypeAtLocation(decl.initializer);
-        }
-        const type = checker.getTypeAtLocation(expr);
-        if (type.isLiteral()) {
-          return { text: JSON.stringify(type.value) };
-        } else if (type.flags & ts.TypeFlags.Null) {
-          return { text: 'null' };
-        } else if (type.flags & ts.TypeFlags.BooleanLiteral) {
-          return { text: checker.typeToString(type) };
-        }
+      }
+      const type = checker.getTypeAtLocation(expr);
+      if (type.isLiteral()) {
+        return { text: JSON.stringify(type.value) };
+      } else if (type.flags & ts.TypeFlags.Null) {
+        return { text: 'null' };
+      } else if (type.flags & ts.TypeFlags.BooleanLiteral) {
+        return { text: checker.typeToString(type) };
       }
     }
-  } else {
-    switch (expr.kind) {
-      case ts.SyntaxKind.TrueKeyword:
-        return { text: 'true' };
-      case ts.SyntaxKind.FalseKeyword:
-        return { text: 'false' };
-      case ts.SyntaxKind.NullKeyword:
-        return { text: 'null' };
-    }
+  }
+  switch (expr.kind) {
+    case ts.SyntaxKind.TrueKeyword:
+      return { text: 'true' };
+    case ts.SyntaxKind.FalseKeyword:
+      return { text: 'false' };
+    case ts.SyntaxKind.NullKeyword:
+      return { text: 'null' };
   }
   return undefined;
 }
@@ -174,28 +176,31 @@ function loadCompilerOptions(basepath: string): ts.CompilerOptions {
   const tsConfigPath = ts.findConfigFile(basepath, ts.sys.fileExists);
   const configPath = jsConfigPath || tsConfigPath;
 
-  let options: ts.CompilerOptions = {};
-
-  if (configPath) {
-    const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
-    const config = ts.parseJsonConfigFileContent(
-      configFile.config,
-      ts.sys,
-      path.dirname(configPath),
-      undefined,
-      configPath,
-      undefined
-    );
-    options = config.options;
-  }
-  return {
-    ...options,
+  const forcedOptions = {
     sourceMap: false,
     noEmit: true,
     allowJs: true,
     checkJs: true,
     skipLibCheck: true,
     skipDefaultLibCheck: true,
+  };
+  if (!configPath) {
+    return forcedOptions;
+  }
+
+  const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
+  const config = ts.parseJsonConfigFileContent(
+    configFile.config,
+    ts.sys,
+    path.dirname(configPath),
+    undefined,
+    configPath,
+    undefined
+  );
+
+  return {
+    ...config.options,
+    ...forcedOptions,
   };
 }
 
@@ -247,7 +252,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
           return;
         }
 
-        const digest = cripto.createHash('sha256').update(content).digest('hex');
+        const digest = crypto.createHash('sha256').update(content).digest('hex');
 
         if (sourceFileCache.hashToSourceFiles[digest]) {
           return sourceFileCache.hashToSourceFiles[digest];
@@ -273,6 +278,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
       } else {
         // non-svelte file
 
+        // We can significantly speed up the docgen process by caching common source files.
         if (sourceFileCache.filenameToSourceFiles[fileName]) {
           return sourceFileCache.filenameToSourceFiles[fileName];
         }
@@ -281,7 +287,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         if (content === undefined) {
           return;
         }
-        const digest = cripto.createHash('sha256').update(content).digest('hex');
+        const digest = crypto.createHash('sha256').update(content).digest('hex');
 
         if (sourceFileCache.hashToSourceFiles[digest]) {
           return sourceFileCache.hashToSourceFiles[digest];
@@ -303,7 +309,9 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         return sourceFile;
       }
     },
-    writeFile() {},
+    writeFile() {
+      // do nothing
+    },
   };
 
   const shimFilename = require.resolve('svelte2tsx/svelte-shims-v4.d.ts');

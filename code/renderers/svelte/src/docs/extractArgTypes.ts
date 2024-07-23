@@ -111,13 +111,13 @@ const parseTypeToControl = (type: JSDocType | undefined): any => {
         return { control: { type: type.type } };
     }
   } else if (type.kind === 'union') {
-    // @ts-expect-error TODO: fix, this seems like a broke in package update
-    if (Array.isArray(type.type) && !type.type.find((t) => t.type !== 'string')) {
+    if (
+      Array.isArray(type.type) &&
+      !type.type.find((t) => t.kind !== 'const' || t.type !== 'string')
+    ) {
       return {
-        control: { type: 'select' },
-        options: type.type
-          .filter((t) => t.kind === 'const')
-          .map((t) => (t as JSDocTypeConst).value),
+        control: { type: 'radio' },
+        options: type.type.map((t) => (t as JSDocTypeConst).value),
       };
     }
   } else if (type.kind === 'function') {

@@ -80,6 +80,8 @@ function transformToSvelteDocParserType(type: Type): JSDocType {
       return { kind: 'type', type: 'other', text: 'null' };
     case 'any':
       return { kind: 'type', type: 'other', text: 'any' };
+    case 'void':
+      return { kind: 'type', type: 'other', text: 'void' };
     case 'object':
       return { kind: 'type', type: 'object', text: type.text };
     case 'array':
@@ -151,9 +153,10 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
       let componentDoc: SvelteComponentDoc & { keywords?: string[] } = {};
 
       if (!docgen.runePropsUsed) {
-        // Use sveltedoc-parser for generating documentation of events and slots.
+        // Retain sveltedoc-parser for backward compatibility, as it can extract slot information from HTML comments.
+        // See: https://github.com/alexprey/sveltedoc-parser/issues/61
         //
-        // Note: Events and slots will be deprecated in Svelte 5.
+        // Note: Events are deprecated in Svelte 5, and slots cannot be used in runes mode.
 
         if (preprocessOptions && !docPreprocessOptions) {
           /*
