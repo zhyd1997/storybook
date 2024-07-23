@@ -1,4 +1,4 @@
-import type { Viewport } from './models';
+import type { Viewport } from './types';
 
 export const responsiveViewport: Viewport = {
   name: 'Reset viewport',

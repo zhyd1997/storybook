@@ -2,10 +2,9 @@ import React, { Fragment } from 'react';
 import { addons, types } from 'storybook/internal/manager-api';
 
 import { ADDON_ID } from './constants';
-import { BackgroundSelector as BackgroundSelectorLegacy } from './legacy/BackgroundSelectorLegacy';
-import { GridSelector as GridSelectorLegacy } from './legacy/GridSelectorLegacy';
-import { BackgroundSelector } from './modern/BackgroundSelectorModern';
-import { GridSelector } from './modern/GridSelectorModern';
+import { BackgroundToolLegacy } from './legacy/BackgroundSelectorLegacy';
+import { GridToolLegacy } from './legacy/GridSelectorLegacy';
+import { BackgroundTool } from './components/Tool';
 
 addons.register(ADDON_ID, () => {
   addons.add(ADDON_ID, {
@@ -14,11 +13,11 @@ addons.register(ADDON_ID, () => {
     match: ({ viewMode, tabId }) => !!(viewMode && viewMode.match(/^(story|docs)$/)) && !tabId,
     render: () =>
       FEATURES?.backgroundsStoryGlobals ? (
-        <BackgroundSelector />
+        <BackgroundTool />
       ) : (
         <Fragment>
-          <BackgroundSelectorLegacy />
-          <GridSelectorLegacy />
+          <BackgroundToolLegacy />
+          <GridToolLegacy />
         </Fragment>
       ),
   });

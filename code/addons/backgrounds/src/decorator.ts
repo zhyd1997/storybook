@@ -5,9 +5,9 @@ import type {
   StoryContext,
 } from 'storybook/internal/types';
 
-import { PARAM_KEY as KEY } from '../constants';
-import { clearStyles, addBackgroundStyle, isReduceMotionEnabled, addGridStyle } from '../helpers';
-import type { Background } from '../types';
+import { PARAM_KEY as KEY } from './constants';
+import { clearStyles, addBackgroundStyle, isReduceMotionEnabled, addGridStyle } from './utils';
+import type { Background } from './types';
 
 const defaultGrid = {
   cellSize: 100,
@@ -20,11 +20,13 @@ type BackgroundMap = Record<string, Background>;
 const BG_SELECTOR_BASE = `addon-backgrounds`;
 const GRID_SELECTOR_BASE = 'addon-backgrounds-grid';
 
+const transitionStyle = isReduceMotionEnabled() ? '' : 'transition: background-color 0.3s;';
+
 export const withBackgroundAndGrid = (
   StoryFn: StoryFunction<Renderer>,
   context: StoryContext<Renderer>
 ) => {
-  const { globals, globalTypes, parameters } = context;
+  const { globals, globalTypes, parameters, viewMode, id } = context;
   const data = globals[KEY] || {};
   const backgroundMap = (globalTypes[KEY]?.options as any as BackgroundMap) || {};
   const backgroundName: string = data.value;
@@ -33,9 +35,6 @@ export const withBackgroundAndGrid = (
   const gridConfig = globalTypes[KEY]?.grid || defaultGrid;
   const isGrid = data.grid || false;
   const shownBackground = !!item;
-
-  const viewMode = context.viewMode;
-  const id = context.id;
 
   const backgroundSelector = viewMode === 'docs' ? `#anchor--${id} .docs-story` : '.sb-show-main';
   const gridSelector = viewMode === 'docs' ? `#anchor--${id} .docs-story` : '.sb-show-main';
@@ -49,8 +48,6 @@ export const withBackgroundAndGrid = (
     offsetX = defaultOffset,
     offsetY = defaultOffset,
   } = gridConfig;
-
-  const transitionStyle = isReduceMotionEnabled() ? '' : 'transition: background-color 0.3s;';
 
   const backgroundSelectorId =
     viewMode === 'docs' ? `${BG_SELECTOR_BASE}-docs-${id}` : `${BG_SELECTOR_BASE}-color`;

@@ -12,7 +12,7 @@ type BackgroundMap = Record<string, Background>;
 
 const emptyBackgroundMap: BackgroundMap = {};
 
-export const BackgroundSelector = memo(function BackgroundSelector() {
+export const BackgroundTool = memo(function BackgroundSelector() {
   const globalTypes = useGlobalTypes();
   const [globals, updateGlobals, storyGlobals] = useGlobals();
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);

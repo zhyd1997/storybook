@@ -5,8 +5,8 @@ import { IconButton, WithTooltip, TooltipLinkList, P } from 'storybook/internal/
 import { useGlobals, type API, useGlobalTypes } from 'storybook/internal/manager-api';
 
 import { GrowIcon, RefreshIcon, TransferIcon } from '@storybook/icons';
-import { PARAM_KEY } from './constants';
-import { registerShortcuts } from './shortcuts';
+import { PARAM_KEY } from '../constants';
+import { registerShortcuts } from '../shortcuts';
 import {
   IconButtonWithLabel,
   IconButtonLabel,
@@ -14,9 +14,9 @@ import {
   ActiveViewportLabel,
   iconsMap,
   emptyViewportMap,
-} from './utils';
-import { responsiveViewport } from './responsiveViewport';
-import type { Viewport, ViewportMap } from './models/Viewport';
+} from '../utils';
+import { responsiveViewport } from '../responsiveViewport';
+import type { Viewport, ViewportMap } from '../types';
 
 interface PureProps {
   item: Viewport;

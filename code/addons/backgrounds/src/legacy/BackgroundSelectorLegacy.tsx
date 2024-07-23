@@ -8,14 +8,14 @@ import { IconButton, WithTooltip, TooltipLinkList } from 'storybook/internal/com
 
 import { PhotoIcon } from '@storybook/icons';
 import { PARAM_KEY as BACKGROUNDS_PARAM_KEY } from '../constants';
-import { ColorIcon } from '../components/ColorIcon';
+import { ColorIcon } from './ColorIcon';
 import type {
   BackgroundSelectorItem,
   Background,
   BackgroundsParameter,
   GlobalState,
 } from '../types';
-import { getBackgroundColorByName } from '../helpers';
+import { getBackgroundColorByName } from './getBackgroundColorByName';
 
 const createBackgroundSelectorItem = memoize(1000)(
   (
@@ -62,7 +62,7 @@ const DEFAULT_BACKGROUNDS_CONFIG: BackgroundsParameter = {
   values: [],
 };
 
-export const BackgroundSelector: FC = memo(function BackgroundSelector() {
+export const BackgroundToolLegacy: FC = memo(function BackgroundSelector() {
   const backgroundsConfig = useParameter<BackgroundsParameter>(
     BACKGROUNDS_PARAM_KEY,
     DEFAULT_BACKGROUNDS_CONFIG
