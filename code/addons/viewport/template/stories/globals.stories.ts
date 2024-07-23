@@ -8,7 +8,6 @@ export default {
   args: {
     label: 'Click Me!',
   },
-  globals: {},
   parameters: {
     chromatic: { disable: true },
   },
@@ -21,8 +20,8 @@ export const Selected = {
   globals: {
     viewport: {
       value: first,
+      isRotated: false,
     },
-    viewportRotated: false,
   },
 };
 

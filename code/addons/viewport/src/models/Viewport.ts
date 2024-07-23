@@ -1,3 +1,4 @@
+// TODO: remove the function type from styles in 9.0
 export type Styles = ViewportStyles | ((s: ViewportStyles | undefined) => ViewportStyles) | null;
 
 export interface Viewport {

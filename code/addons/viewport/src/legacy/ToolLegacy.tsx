@@ -8,10 +8,11 @@ import { IconButton, WithTooltip, TooltipLinkList } from 'storybook/internal/com
 
 import { useStorybookApi, useParameter, useGlobals } from 'storybook/internal/manager-api';
 import { GrowIcon, TransferIcon } from '@storybook/icons';
-import { registerShortcuts } from './shortcuts';
-import { PARAM_KEY } from './constants';
-import { MINIMAL_VIEWPORTS } from './defaults';
-import type { ViewportAddonParameter, ViewportMap, ViewportStyles, Styles } from './models';
+import { registerShortcuts } from '../shortcuts';
+import { PARAM_KEY } from '../constants';
+import { MINIMAL_VIEWPORTS } from '../defaults';
+import type { Styles, ViewportMap, ViewportStyles } from '../models/Viewport';
+import type { ViewportAddonParameter } from '../models/ViewportAddonParameter';
 
 interface ViewportItem {
   id: string;

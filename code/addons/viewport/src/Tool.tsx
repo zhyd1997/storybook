@@ -4,31 +4,19 @@ import { Global } from 'storybook/internal/theming';
 import { IconButton, WithTooltip, TooltipLinkList, P } from 'storybook/internal/components';
 import { useGlobals, type API, useGlobalTypes } from 'storybook/internal/manager-api';
 
-import {
-  BrowserIcon,
-  GrowIcon,
-  MobileIcon,
-  RefreshIcon,
-  TabletIcon,
-  TransferIcon,
-} from '@storybook/icons';
+import { GrowIcon, RefreshIcon, TransferIcon } from '@storybook/icons';
 import { PARAM_KEY } from './constants';
-import type { Viewport, ViewportMap } from './models';
 import { registerShortcuts } from './shortcuts';
 import {
   IconButtonWithLabel,
   IconButtonLabel,
   ActiveViewportSize,
   ActiveViewportLabel,
-} from './ToolUtils';
+  iconsMap,
+  emptyViewportMap,
+} from './utils';
 import { responsiveViewport } from './responsiveViewport';
-
-const iconsMap: Record<Viewport['type'], React.ReactNode> = {
-  desktop: <BrowserIcon />,
-  mobile: <MobileIcon />,
-  tablet: <TabletIcon />,
-  other: <Fragment />,
-};
+import type { Viewport, ViewportMap } from './models/Viewport';
 
 interface PureProps {
   item: Viewport;
@@ -44,8 +32,6 @@ interface PureProps {
 }
 
 type Link = Parameters<typeof TooltipLinkList>['0']['links'][0];
-
-const emptyViewportMap: ViewportMap = {};
 
 export const ViewportTool: FC<{ api: API }> = ({ api }) => {
   const globalTypes = useGlobalTypes();
@@ -187,9 +173,7 @@ const Pure = React.memo(function PureTool(props: PureProps) {
             >
               <TransferIcon />
             </IconButton>
-          ) : (
-            <Fragment>/</Fragment>
-          )}
+          ) : null}
           <ActiveViewportLabel title="Viewport height">
             {height.replace('px', '')}
           </ActiveViewportLabel>
