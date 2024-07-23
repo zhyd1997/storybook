@@ -32,4 +32,4 @@ export const normalizeInputType = (inputType: InputType, key: string): StrictInp
 
 export const normalizeInputTypes = (
   inputTypes: ArgTypes | GlobalTypes
-): StrictArgTypes | StrictGlobalTypes => mapValues(inputTypes, normalizeInputType);
+): StrictArgTypes | StrictGlobalTypes => mapValues(inputTypes, normalizeInputType) as any;

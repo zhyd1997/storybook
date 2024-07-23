@@ -19,21 +19,27 @@ export const Unset = {
 };
 export const Selected = {
   globals: {
-    viewport: first,
+    viewport: {
+      value: first,
+    },
     viewportRotated: false,
   },
 };
 
 export const Orientation = {
   globals: {
-    viewport: first,
-    viewportRotated: true,
+    viewport: {
+      value: first,
+      isRotated: true,
+    },
   },
 };
 
 export const Missing = {
   globals: {
-    viewport: 'phone',
-    viewportRotated: false,
+    viewport: {
+      value: 'phone',
+      isRotated: false,
+    },
   },
 };

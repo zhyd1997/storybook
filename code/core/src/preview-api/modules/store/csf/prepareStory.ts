@@ -115,7 +115,7 @@ export function prepareStory<TRenderer extends Renderer>(
     throw new NoRenderFunctionError({ id });
   }
 
-  const defaultMount = (context: StoryContext) => {
+  const defaultMount = (context: StoryContext<TRenderer>) => {
     return async () => {
       await context.renderToCanvas();
       return context.canvas;

@@ -236,6 +236,7 @@ export class StoryStore<TRenderer extends Renderer> {
       ...story,
       args: forceInitialArgs ? story.initialArgs : this.args.get(story.id),
       initialGlobals,
+      globalTypes: this.projectAnnotations.globalTypes,
       userGlobals,
       globals: {
         ...userGlobals,

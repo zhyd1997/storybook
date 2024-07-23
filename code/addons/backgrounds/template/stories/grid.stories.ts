@@ -6,11 +6,6 @@ export default {
   args: {
     label: 'Click Me!',
   },
-  globals: {
-    backgrounds: {
-      grid: true,
-    },
-  },
   parameters: {
     backgrounds: {
       grid: {
