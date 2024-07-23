@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, type FC } from 'react';
 
 import { Global } from 'storybook/internal/theming';
 import { IconButton, WithTooltip, TooltipLinkList } from 'storybook/internal/components';
@@ -8,7 +7,6 @@ import { useGlobals, type API, useGlobalTypes } from 'storybook/internal/manager
 import { BrowserIcon, GrowIcon, MobileIcon, TabletIcon, TransferIcon } from '@storybook/icons';
 import { PARAM_KEY } from './constants';
 import type { ViewportMap, Viewport } from './models';
-import type { Globals } from 'storybook/internal/types';
 import { registerShortcuts } from './shortcuts';
 import {
   IconButtonWithLabel,
@@ -28,7 +26,7 @@ const iconsMap: Record<Viewport['type'], React.ReactNode> = {
 interface PureArgs {
   length: number;
   item: Viewport;
-  updateGlobals: (newGlobals: Globals) => void;
+  updateGlobals: ReturnType<typeof useGlobals>['1'];
   viewportMap: ViewportMap;
   viewportName: any;
   setIsTooltipVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,11 +59,14 @@ export const ViewportTool: FC<{ api: API }> = ({ api }) => {
     registerShortcuts(api, globals.viewport, updateGlobals, Object.keys(viewportMap));
   }, [viewportMap, globals.viewport, updateGlobals, api]);
 
-  if (!viewportMap || length < 1) {
+  if (item.styles === null || !viewportMap || length < 1) {
     return null;
   }
 
-  if (item.styles === null || typeof item.styles === 'function') {
+  if (typeof item.styles === 'function') {
+    console.warn(
+      'addon viewport no longer supports dynamic styles using a function, use css calc() instead'
+    );
     return null;
   }
 
@@ -91,19 +92,20 @@ export const ViewportTool: FC<{ api: API }> = ({ api }) => {
   );
 };
 
-const PureTool: FC<PureArgs> = ({
-  length,
-  item,
-  updateGlobals,
-  viewportMap,
-  viewportName,
-  setIsTooltipVisible,
-  isLocked,
-  isActive,
-  viewportRotated,
-  width,
-  height,
-}) => {
+const Pure = React.memo(function PureTool(props: PureArgs) {
+  const {
+    item,
+    length,
+    viewportMap,
+    viewportName,
+    viewportRotated,
+    updateGlobals,
+    setIsTooltipVisible,
+    isLocked,
+    isActive,
+    width,
+    height,
+  } = props;
   return (
     <Fragment>
       <WithTooltip
@@ -197,6 +199,4 @@ const PureTool: FC<PureArgs> = ({
       ) : null}
     </Fragment>
   );
-};
-
-const Pure = React.memo(PureTool);
+});

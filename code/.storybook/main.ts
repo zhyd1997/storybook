@@ -117,6 +117,11 @@ const config: StorybookConfig = {
   core: {
     disableTelemetry: true,
   },
+  features: {
+    viewportStoryGlobals: true,
+    themesStoryGlobals: true,
+    backgroundsStoryGlobals: true,
+  },
   viteFinal: (viteConfig, { configType }) =>
     mergeConfig(viteConfig, {
       resolve: {

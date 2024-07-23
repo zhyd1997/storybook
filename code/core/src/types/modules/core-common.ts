@@ -375,6 +375,19 @@ export interface StorybookConfigRaw {
      * Enable asynchronous component rendering in React renderer
      */
     experimentalRSC?: boolean;
+
+    /**
+     * use globals & globalTypes for configuring the viewport addon
+     */
+    viewportStoryGlobals?: boolean;
+    /**
+     * use globals & globalTypes for configuring the backgrounds addon
+     */
+    backgroundsStoryGlobals?: boolean;
+    /**
+     * use globals & globalTypes for configuring the themes addon
+     */
+    themesStoryGlobals?: boolean;
   };
 
   build?: TestBuildConfig;
