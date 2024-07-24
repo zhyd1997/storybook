@@ -6,14 +6,14 @@ ng run my-project:build-storybook
 ```
 
 ```shell renderer="common" language="js" packageManager="npm"
-npm run storybook build
+npm run build-storybook
 ```
 
 ```shell renderer="common" language="js" packageManager="pnpm"
-pnpm run storybook build
+pnpm run build-storybook
 ```
 
 ```shell renderer="common" language="js" packageManager="yarn"
-yarn storybook build
+yarn build-storybook
 ```
 
