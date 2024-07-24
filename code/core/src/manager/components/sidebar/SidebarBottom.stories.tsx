@@ -12,20 +12,20 @@ export default {
   },
 };
 
-export const Changes = {
-  args: {
-    status: {
-      one: { 'sidebar-bottom-filter': { status: 'warn' } },
-      two: { 'sidebar-bottom-filter': { status: 'warn' } },
-    },
-  },
-};
-
 export const Errors = {
   args: {
     status: {
       one: { 'sidebar-bottom-filter': { status: 'error' } },
       two: { 'sidebar-bottom-filter': { status: 'error' } },
+    },
+  },
+};
+
+export const Warnings = {
+  args: {
+    status: {
+      one: { 'sidebar-bottom-filter': { status: 'warn' } },
+      two: { 'sidebar-bottom-filter': { status: 'warn' } },
     },
   },
 };
