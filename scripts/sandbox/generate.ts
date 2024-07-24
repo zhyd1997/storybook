@@ -72,7 +72,7 @@ const withLocalRegistry = async ({
     error = e;
   } finally {
     console.log(`📦 Restoring registry: ${prevUrl}`);
-    await runCommand(`npm config set registry ${LOCAL_REGISTRY_URL}`, { cwd, env }, debug);
+    await runCommand(`npm config set registry ${prevUrl}`, { cwd, env }, debug);
 
     if (error) {
       throw error;
