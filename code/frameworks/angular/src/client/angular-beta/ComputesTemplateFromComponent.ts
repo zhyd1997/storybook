@@ -80,6 +80,22 @@ export const computesTemplateFromComponent = (
   );
 };
 
+/**
+ * Stringify an object with a placholder in the circular references.
+ */
+function stringifyCircular(obj: any) {
+  const seen = new Set();
+  return JSON.stringify(obj, (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) {
+        return '[Circular]';
+      }
+      seen.add(value);
+    }
+    return value;
+  });
+}
+
 const createAngularInputProperty = ({
   propertyName,
   value,
@@ -95,7 +111,7 @@ const createAngularInputProperty = ({
       templateValue = `'${value}'`;
       break;
     case 'object':
-      templateValue = JSON.stringify(value)
+      templateValue = stringifyCircular(value)
         .replace(/'/g, '\u2019')
         .replace(/\\"/g, '\u201D')
         .replace(/"([^-"]+)":/g, '$1: ')

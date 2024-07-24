@@ -11,6 +11,7 @@ export interface ISomeInterface {
   one: string;
   two: boolean;
   three: any[];
+  ref?: ISomeInterface;
 }
 
 @Component({
