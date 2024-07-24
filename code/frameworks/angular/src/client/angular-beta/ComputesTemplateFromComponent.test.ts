@@ -8,6 +8,35 @@ import {
 import { ISomeInterface, ButtonAccent, InputComponent } from './__testfixtures__/input.component';
 
 describe('angular template decorator', () => {
+  it('with props should generate tag with properties', () => {
+    const component = InputComponent;
+    const props = {
+      isDisabled: true,
+      label: 'Hello world',
+      accent: ButtonAccent.High,
+      counter: 4,
+      'aria-label': 'Hello world',
+    };
+    const source = computesTemplateFromComponent(component, props);
+    expect(source).toEqual(
+      `<doc-button [counter]="counter" [accent]="accent" [isDisabled]="isDisabled" [label]="label" [aria-label]="this['aria-label']"></doc-button>`
+    );
+  });
+
+  it('with props should generate tag with outputs', () => {
+    const component = InputComponent;
+    const props = {
+      isDisabled: true,
+      label: 'Hello world',
+      onClick: ($event: any) => {},
+      'dash-out': ($event: any) => {},
+    };
+    const source = computesTemplateFromComponent(component, props);
+    expect(source).toEqual(
+      `<doc-button [isDisabled]="isDisabled" [label]="label" (onClick)="onClick($event)" (dash-out)="this['dash-out']($event)"></doc-button>`
+    );
+  });
+
   it('with no props should generate simple tag', () => {
     const component = InputComponent;
     const props = {};
@@ -545,11 +574,12 @@ describe('angular source decorator', () => {
         label: 'Hello world',
         accent: ButtonAccent.High,
         counter: 4,
+        'aria-label': 'Hello world',
       };
       const argTypes: ArgTypes = {};
       const source = computesTemplateSourceFromComponent(component, props, argTypes);
       expect(source).toEqual(
-        `<doc-button [counter]="4" [accent]="'High'" [isDisabled]="true" [label]="'Hello world'"></doc-button>`
+        `<doc-button [counter]="4" [accent]="'High'" [isDisabled]="true" [label]="'Hello world'" [aria-label]="'Hello world'"></doc-button>`
       );
     });
 
@@ -559,11 +589,12 @@ describe('angular source decorator', () => {
         isDisabled: true,
         label: 'Hello world',
         onClick: ($event: any) => {},
+        'dash-out': ($event: any) => {},
       };
       const argTypes: ArgTypes = {};
       const source = computesTemplateSourceFromComponent(component, props, argTypes);
       expect(source).toEqual(
-        `<doc-button [isDisabled]="true" [label]="'Hello world'" (onClick)="onClick($event)"></doc-button>`
+        `<doc-button [isDisabled]="true" [label]="'Hello world'" (onClick)="onClick($event)" (dash-out)="this['dash-out']($event)"></doc-button>`
       );
     });
 
