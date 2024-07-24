@@ -1,36 +1,40 @@
 import React, { useState, memo, Fragment } from 'react';
 
-import { useGlobals, useGlobalTypes } from 'storybook/internal/manager-api';
+import { useGlobals, useParameter } from 'storybook/internal/manager-api';
 import { IconButton, WithTooltip, TooltipLinkList } from 'storybook/internal/components';
 
 import { CircleIcon, GridIcon, PhotoIcon, RefreshIcon } from '@storybook/icons';
 import { PARAM_KEY as KEY } from '../constants';
-import type { Background } from '../types';
+import type { Background, BackgroundMap, Config } from '../types';
 
 type Link = Parameters<typeof TooltipLinkList>['0']['links'][0];
-type BackgroundMap = Record<string, Background>;
 
 const emptyBackgroundMap: BackgroundMap = {};
 
 export const BackgroundTool = memo(function BackgroundSelector() {
-  const globalTypes = useGlobalTypes();
+  const config = useParameter<Config>(KEY);
   const [globals, updateGlobals, storyGlobals] = useGlobals();
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
+  const { options = emptyBackgroundMap, disabled } = config || {};
+
+  if (disabled) {
+    return null;
+  }
+
   const data = globals[KEY] || {};
-  const backgroundMap = (globalTypes[KEY]?.options as any as BackgroundMap) || emptyBackgroundMap;
   const backgroundName: string = data.value;
   const isGrid = data.grid || false;
 
-  const item = backgroundMap[backgroundName];
+  const item = options[backgroundName];
   const isLocked = !!storyGlobals?.[KEY];
-  const length = Object.keys(backgroundMap).length;
+  const length = Object.keys(options).length;
 
   return (
     <Pure
       {...{
         length,
-        backgroundMap,
+        backgroundMap: options,
         item,
         updateGlobals,
         backgroundName,

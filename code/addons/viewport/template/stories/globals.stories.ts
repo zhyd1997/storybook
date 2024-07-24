@@ -4,9 +4,9 @@ import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 const first = Object.keys(MINIMAL_VIEWPORTS)[0];
 
 export default {
-  component: globalThis.Components.Button,
+  component: globalThis.Components.Pre,
   args: {
-    label: 'Click Me!',
+    text: 'Testing the viewport',
   },
   parameters: {
     chromatic: { disable: true },
@@ -34,11 +34,19 @@ export const Orientation = {
   },
 };
 
-export const Missing = {
+export const Invalid = {
   globals: {
     viewport: {
       value: 'phone',
       isRotated: false,
+    },
+  },
+};
+
+export const NoRationDefined = {
+  globals: {
+    viewport: {
+      value: first,
     },
   },
 };

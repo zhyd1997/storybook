@@ -1,3 +1,5 @@
+import { PARAM_KEY as KEY } from './constants';
+
 export const initialGlobals = {
-  viewport: { value: 'reset', isRotated: false },
+  [KEY]: { value: 'reset', isRotated: false },
 };

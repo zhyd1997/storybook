@@ -297,9 +297,6 @@ export const parameters = {
       'slategray',
     ],
   },
-};
-
-export const globalTypes = {
   viewport: {
     options: MINIMAL_VIEWPORTS,
   },
@@ -314,7 +311,24 @@ export const globalTypes = {
       opacity: 0.8,
     },
   },
-} satisfies GlobalTypes;
+};
+
+// export const globalTypes = {
+//   viewport: {
+//     options: MINIMAL_VIEWPORTS,
+//   },
+//   backgrounds: {
+//     options: {
+//       light: { name: 'light', value: '#f7f7f7' },
+//       dark: { name: 'dark', value: '#333' },
+//     },
+//     grid: {
+//       cellSize: 15,
+//       cellAmount: 10,
+//       opacity: 0.8,
+//     },
+//   },
+// } satisfies GlobalTypes;
 
 export const initialGlobals = {
   // theme: 'light',

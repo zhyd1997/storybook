@@ -1,11 +1,11 @@
 import React, { useState, Fragment, useEffect, type FC } from 'react';
 
 import { Global } from 'storybook/internal/theming';
-import { IconButton, WithTooltip, TooltipLinkList, P } from 'storybook/internal/components';
-import { useGlobals, type API, useGlobalTypes } from 'storybook/internal/manager-api';
+import { IconButton, WithTooltip, TooltipLinkList } from 'storybook/internal/components';
+import { useGlobals, type API, useParameter } from 'storybook/internal/manager-api';
 
 import { GrowIcon, RefreshIcon, TransferIcon } from '@storybook/icons';
-import { PARAM_KEY } from '../constants';
+import { PARAM_KEY as KEY } from '../constants';
 import { registerShortcuts } from '../shortcuts';
 import {
   IconButtonWithLabel,
@@ -16,7 +16,7 @@ import {
   emptyViewportMap,
 } from '../utils';
 import { responsiveViewport } from '../responsiveViewport';
-import type { Viewport, ViewportMap } from '../types';
+import type { Config, Viewport, ViewportMap } from '../types';
 
 interface PureProps {
   item: Viewport;
@@ -34,26 +34,26 @@ interface PureProps {
 type Link = Parameters<typeof TooltipLinkList>['0']['links'][0];
 
 export const ViewportTool: FC<{ api: API }> = ({ api }) => {
-  const globalTypes = useGlobalTypes();
+  const config = useParameter<Config>(KEY);
   const [globals, updateGlobals, storyGlobals] = useGlobals();
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
-  const viewportMap = (globalTypes[PARAM_KEY]?.options as any as ViewportMap) || emptyViewportMap;
-  const data = globals?.[PARAM_KEY] || {};
+  const { options = emptyViewportMap, disabled } = config || {};
+  const data = globals?.[KEY] || {};
   const viewportName: string = data.value;
   const isRotated: boolean = data.isRotated;
 
-  const item = viewportMap[viewportName] || responsiveViewport;
+  const item = options[viewportName] || responsiveViewport;
   const isActive = isTooltipVisible || item !== responsiveViewport;
-  const isLocked = PARAM_KEY in storyGlobals;
+  const isLocked = KEY in storyGlobals;
 
-  const length = Object.keys(viewportMap).length;
+  const length = Object.keys(options).length;
 
   useEffect(() => {
-    registerShortcuts(api, viewportName, updateGlobals, Object.keys(viewportMap));
-  }, [viewportMap, viewportName, updateGlobals, api]);
+    registerShortcuts(api, viewportName, updateGlobals, Object.keys(options));
+  }, [options, viewportName, updateGlobals, api]);
 
-  if (item.styles === null || !viewportMap || length < 1) {
+  if (item.styles === null || !options || length < 1) {
     return null;
   }
 
@@ -67,12 +67,16 @@ export const ViewportTool: FC<{ api: API }> = ({ api }) => {
   const width = isRotated ? item.styles.height : item.styles.width;
   const height = isRotated ? item.styles.width : item.styles.height;
 
+  if (disabled) {
+    return null;
+  }
+
   return (
     <Pure
       {...{
         item,
         updateGlobals,
-        viewportMap,
+        viewportMap: options,
         viewportName,
         isRotated: isRotated,
         setIsTooltipVisible,
@@ -112,7 +116,7 @@ const Pure = React.memo(function PureTool(props: PureProps) {
                       title: 'Reset viewport',
                       icon: <RefreshIcon />,
                       onClick: () => {
-                        updateGlobals({ [PARAM_KEY]: { value: undefined, isRotated: false } });
+                        updateGlobals({ [KEY]: { value: undefined, isRotated: false } });
                         onHide();
                       },
                     },
@@ -124,7 +128,7 @@ const Pure = React.memo(function PureTool(props: PureProps) {
                 icon: iconsMap[value.type],
                 active: k === viewportName,
                 onClick: () => {
-                  updateGlobals({ [PARAM_KEY]: { value: k, isRotated: false } });
+                  updateGlobals({ [KEY]: { value: k, isRotated: false } });
                   onHide();
                 },
               })),
@@ -140,7 +144,7 @@ const Pure = React.memo(function PureTool(props: PureProps) {
           title="Change the size of the preview"
           active={isActive}
           onDoubleClick={() => {
-            updateGlobals({ [PARAM_KEY]: { value: undefined, isRotated: false } });
+            updateGlobals({ [KEY]: { value: undefined, isRotated: false } });
           }}
         >
           <GrowIcon />
@@ -168,12 +172,14 @@ const Pure = React.memo(function PureTool(props: PureProps) {
               key="viewport-rotate"
               title="Rotate viewport"
               onClick={() => {
-                updateGlobals({ [PARAM_KEY]: { value: viewportName, isRotated: !isRotated } });
+                updateGlobals({ [KEY]: { value: viewportName, isRotated: !isRotated } });
               }}
             >
               <TransferIcon />
             </IconButton>
-          ) : null}
+          ) : (
+            '/'
+          )}
           <ActiveViewportLabel title="Viewport height">
             {height.replace('px', '')}
           </ActiveViewportLabel>

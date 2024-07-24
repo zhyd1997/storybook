@@ -9,38 +9,40 @@ export const decorators: Addon_DecoratorFunction[] = FEATURES?.backgroundsStoryG
   : [withGrid, withBackground];
 
 // TODO: remove in 9.0
-export const parameters = FEATURES?.backgroundsStoryGlobals
-  ? {}
-  : {
-      [PARAM_KEY]: {
-        grid: {
-          cellSize: 20,
-          opacity: 0.5,
-          cellAmount: 5,
-        },
-        values: [
-          { name: 'light', value: '#F8F8F8' },
-          { name: 'dark', value: '#333333' },
-        ],
-      },
-    };
+export const parameters = {
+  [PARAM_KEY]: {
+    grid: {
+      cellSize: 20,
+      opacity: 0.5,
+      cellAmount: 5,
+    },
+    values: [
+      { name: 'light', value: '#F8F8F8' },
+      { name: 'dark', value: '#333333' },
+    ],
+  },
+};
 
-// TODO: remove feature flag in 9.0
-export const globalTypes = FEATURES?.backgroundsStoryGlobals
-  ? {
-      [PARAM_KEY]: {
-        grid: {
-          cellSize: 20,
-          opacity: 0.5,
-          cellAmount: 5,
-        },
-        values: [
-          { name: 'light', value: '#F8F8F8' },
-          { name: 'dark', value: '#333333' },
-        ],
-      },
-    }
-  : {};
+// // TODO: remove feature flag in 9.0
+// export const globalTypes = FEATURES?.backgroundsStoryGlobals
+//   ? {
+//       [PARAM_KEY]: {
+//         grid: {
+//           cellSize: 20,
+//           opacity: 0.5,
+//           cellAmount: 5,
+//         },
+//         values: [
+//           { name: 'light', value: '#F8F8F8' },
+//           { name: 'dark', value: '#333333' },
+//         ],
+//       },
+//     }
+//   : {};
+
+export const globalTypes = {
+  [PARAM_KEY]: {},
+};
 
 export const initialGlobals = {
   [PARAM_KEY]: null as any,

@@ -1,6 +1,9 @@
 import { global as globalThis } from '@storybook/global';
 import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 
+// these stories only work with `viewportStoryGlobals` set to false
+// because the `default` prop is dropped and because, `values` changed to `options` and is now an object
+
 const first = Object.keys(MINIMAL_VIEWPORTS)[0];
 
 export default {

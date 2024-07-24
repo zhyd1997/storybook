@@ -6,12 +6,20 @@ export interface Viewport {
   styles: Styles;
   type: 'desktop' | 'mobile' | 'tablet' | 'other';
 }
+export interface ModernViewport {
+  name: string;
+  styles: ViewportStyles;
+  type: 'desktop' | 'mobile' | 'tablet' | 'other';
+}
 
 export interface ViewportStyles {
   height: string;
   width: string;
 }
 
-export interface ViewportMap {
-  [key: string]: Viewport;
+export type ViewportMap = Record<string, Viewport>;
+
+export interface Config {
+  options: Record<string, ModernViewport>;
+  disabled: boolean;
 }

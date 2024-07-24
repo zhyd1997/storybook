@@ -35,3 +35,19 @@ export interface BackgroundsConfig {
   defaultBackgroundName: string | null;
   disable: boolean;
 }
+
+export type BackgroundMap = Record<string, Background>;
+
+export interface GridConfig {
+  cellAmount: number;
+  cellSize: number;
+  opacity: number;
+  offsetX?: number;
+  offsetY?: number;
+}
+
+export interface Config {
+  options: BackgroundMap;
+  disabled: boolean;
+  grid: GridConfig;
+}
