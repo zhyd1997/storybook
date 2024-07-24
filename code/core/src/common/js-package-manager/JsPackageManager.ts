@@ -64,12 +64,6 @@ export abstract class JsPackageManager {
     return packageJSON ? packageJSON.version ?? null : null;
   }
 
-  async getRegistryURL() {
-    const res = await this.executeCommand({ command: 'npm', args: ['config', 'get', 'registry'] });
-    const url = res.trim();
-    return url === 'undefined' ? undefined : url;
-  }
-
   constructor(options?: JsPackageManagerOptions) {
     this.cwd = options?.cwd || process.cwd();
   }
