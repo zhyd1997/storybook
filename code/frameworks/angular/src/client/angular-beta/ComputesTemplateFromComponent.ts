@@ -7,6 +7,20 @@ import {
   getComponentInputsOutputs,
 } from './utils/NgComponentAnalyzer';
 
+/**
+ * Check if the name matches the criteria for a valid identifier.
+ * A valid identifier can only contain letters, digits, underscores, or dollar signs.
+ * It cannot start with a digit.
+ */
+const isValidIdentifier = (name: string): boolean => /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(name);
+
+/**
+ * Returns the property name, if it can be accessed with dot notation. If not,
+ * it returns `this['propertyName']`.
+ */
+export const formatPropInTemplate = (propertyName: string) =>
+  isValidIdentifier(propertyName) ? propertyName : `this['${propertyName}']`;
+
 const separateInputsOutputsAttributes = (
   ngComponentInputsOutputs: ComponentInputsOutputs,
   props: ICollection = {}
@@ -50,10 +64,12 @@ export const computesTemplateFromComponent = (
   );
 
   const templateInputs =
-    initialInputs.length > 0 ? ` ${initialInputs.map((i) => `[${i}]="${i}"`).join(' ')}` : '';
+    initialInputs.length > 0
+      ? ` ${initialInputs.map((i) => `[${i}]="${formatPropInTemplate(i)}"`).join(' ')}`
+      : '';
   const templateOutputs =
     initialOutputs.length > 0
-      ? ` ${initialOutputs.map((i) => `(${i})="${i}($event)"`).join(' ')}`
+      ? ` ${initialOutputs.map((i) => `(${i})="${formatPropInTemplate(i)}($event)"`).join(' ')}`
       : '';
 
   return buildTemplate(
@@ -137,7 +153,7 @@ export const computesTemplateSourceFromComponent = (
       : '';
   const templateOutputs =
     initialOutputs.length > 0
-      ? ` ${initialOutputs.map((i) => `(${i})="${i}($event)"`).join(' ')}`
+      ? ` ${initialOutputs.map((i) => `(${i})="${formatPropInTemplate(i)}($event)"`).join(' ')}`
       : '';
 
   return buildTemplate(ngComponentMetadata.selector, '', templateInputs, templateOutputs);
