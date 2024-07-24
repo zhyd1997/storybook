@@ -301,13 +301,14 @@ export const parameters = {
   },
   backgrounds: {
     options: {
-      light: { name: 'light', value: '#f7f7f7' },
-      dark: { name: 'dark', value: '#333' },
+      light: { name: 'light', value: '#edecec' },
+      dark: { name: 'dark', value: '#262424' },
+      blue: { name: 'blue', value: '#1b1a2c' },
     },
     grid: {
       cellSize: 15,
       cellAmount: 10,
-      opacity: 0.8,
+      opacity: 0.4,
     },
   },
 };
