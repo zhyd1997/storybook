@@ -391,6 +391,7 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - attach_workspace:
           at: .
+      # As of Playwright 0.14.0 its images come with Node 20, but we need Node 18 because of esbuild-register's limitations
       - run:
           name: Downgrade to Node.js 18
           command: |
@@ -420,6 +421,7 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - attach_workspace:
           at: .
+      # As of Playwright 0.14.0 its images come with Node 20, but we need Node 18 because of esbuild-register's limitations
       - run:
           name: Downgrade to Node.js 18
           command: |
@@ -468,6 +470,7 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - attach_workspace:
           at: .
+      # As of Playwright 0.14.0 its images come with Node 20, but we need Node 18 because of esbuild-register's limitations
       - run:
           name: Downgrade to Node.js 18
           command: |
@@ -500,6 +503,7 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - attach_workspace:
           at: .
+      # As of Playwright 0.14.0 its images come with Node 20, but we need Node 18 because of esbuild-register's limitations
       - run:
           name: Downgrade to Node.js 18
           command: |
@@ -532,6 +536,7 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - attach_workspace:
           at: .
+      # As of Playwright 0.14.0 its images come with Node 20, but we need Node 18 because of esbuild-register's limitations
       - run:
           name: Downgrade to Node.js 18
           command: |
