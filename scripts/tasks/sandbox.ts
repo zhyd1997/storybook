@@ -89,7 +89,7 @@ export const sandbox: Task = {
     if (
       details.sandboxDir.includes('vite') &&
       !details.sandboxDir.includes('html') &&
-      !details.sandboxDir.includes('web-components')
+      !details.sandboxDir.includes('lit')
     ) {
       const renderer = details.template.expected.renderer.replace('@storybook/', '');
 
