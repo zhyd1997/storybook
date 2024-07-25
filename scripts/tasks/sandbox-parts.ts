@@ -10,13 +10,14 @@ import {
   readFileSync,
   readJson,
   writeJson,
+  writeFile,
 } from 'fs-extra';
 import { join, resolve, sep } from 'path';
 import JSON5 from 'json5';
 import { createRequire } from 'module';
 import slash from 'slash';
 
-import type { Task } from '../task';
+import type { Task, TemplateDetails } from '../task';
 import { executeCLIStep, steps } from '../utils/cli-step';
 import {
   installYarn2,
@@ -43,6 +44,7 @@ import { babelParse } from '../../code/core/src/csf-tools/babelParse';
 import { CODE_DIRECTORY, REPROS_DIRECTORY } from '../utils/constants';
 import type { TemplateKey } from '../../code/lib/cli/src/sandbox-templates';
 import { isFunction } from 'lodash';
+import dedent from 'ts-dedent';
 
 const logger = console;
 
@@ -361,6 +363,133 @@ async function linkPackageStories(
       }
     })
   );
+}
+
+export async function setupVitest(
+  details: TemplateDetails,
+  options: { renderer: string; testingLibraryPackage: string }
+) {
+  const { renderer, testingLibraryPackage } = options;
+  const { sandboxDir, template } = details;
+  await writeFile(
+    join(sandboxDir, '.storybook/setupTests.ts'),
+    dedent`import { beforeAll, beforeEach } from 'vitest'
+    import { setProjectAnnotations } from '${template.expected.renderer}'
+    import {
+      render as testingLibraryRender,
+      cleanup,
+    } from '${testingLibraryPackage}'
+
+    import * as rendererDocsAnnotations from '${template.expected.renderer}/dist/entry-preview-docs.mjs'
+    import * as addonActionsAnnotations from '@storybook/addon-actions/preview'
+    import * as addonInteractionsAnnotations from '@storybook/addon-interactions/preview'
+    import * as componentAnnotations from '../src/stories/components'
+    import * as coreAnnotations from '../template-stories/core/preview'
+    import * as toolbarAnnotations from '../template-stories/addons/toolbars/preview'
+    import * as projectAnnotations from './preview'
+    
+    beforeEach(cleanup)
+    
+    const annotations = setProjectAnnotations([
+      rendererDocsAnnotations,
+      projectAnnotations,
+      componentAnnotations,
+      coreAnnotations,
+      toolbarAnnotations,
+      addonActionsAnnotations,
+      addonInteractionsAnnotations,
+      { testingLibraryRender },
+    ])
+
+    beforeAll(annotations.beforeAll!)`
+  );
+
+  await writeFile(
+    join(sandboxDir, '.storybook/vitest.config.ts'),
+    dedent`import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
+    import viteConfig from '../vite.config'
+    import { storybookTest } from '@storybook/experimental-vitest-plugin'
+
+    export default mergeConfig(
+      viteConfig,
+      defineConfig({
+        plugins: [
+          storybookTest({
+            renderer: '${renderer}',
+          }),
+        ],
+        resolve: {
+          preserveSymlinks: true,
+        },
+        test: {
+          name: 'storybook',
+          include: [
+            '../src/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+            '../template-stories/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+          ],
+          exclude: [
+            ...defaultExclude,
+            // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
+            '../**/*argtypes*',
+            // TODO: somehow support autotitle in portable stories
+            '../**/*title*',
+            // TODO: Failures related to Storybook channel usage
+            '../**/*shortcuts*',
+            // TODO: investigate TypeError: mocked(...).mockReturnValue is not a function
+            '../**/*module-mocking*',
+            // TODO (VUE3): Failures related to Storybook channel usage
+            '../**/ScopedSlots.stories.ts',
+            '../**/ReactiveSlots.stories.ts',
+            '../**/ReactiveDecorators.stories.ts',
+            '../**/ReactiveArgs.stories.ts',
+            '../**/CustomRenderOptionsArgsFromData.stories.ts',
+            '../**/CustomRenderFunctionalComponent.stories.ts',
+            // TODO (VUE3): Investigate TypeError: _ctx.$greetingMessage is not a function
+            '../**/GlobalSetup.stories.ts',
+            '../**/SourceDecorator.stories.ts',
+          ],
+          /**
+           * TODO: Either fix or acknowledge limitation of:
+           * - Storybook channel usage:
+           * -- KeydownDuringPlay, Hooks, Events, ChangeArgs
+           * - @storybook/core/preview-api hooks:
+           * -- UseState
+           * - Targeted args:
+           * -- Targets
+           */
+          testNamePattern: /^(?!.*(KeydownDuringPlay|Hooks|Events|ChangeArgs|Targets|UseState)).*$/,
+          browser: {
+            // enabled: true,
+            name: 'chromium',
+            provider: 'playwright',
+            headless: true,
+            screenshotFailures: false,
+          },
+          setupFiles: ['./.storybook/setupTests.ts'],
+          environment: 'happy-dom',
+        },
+      })
+    )`
+  );
+
+  await writeFile(
+    join(sandboxDir, 'vitest.workspace.ts'),
+    dedent`
+      import { defineWorkspace } from 'vitest/config'
+
+      export default defineWorkspace(['.storybook'])
+  `
+  );
+
+  const packageJsonPath = join(sandboxDir, 'package.json');
+  const packageJson = await readJson(packageJsonPath);
+
+  packageJson.scripts = {
+    ...packageJson.scripts,
+    vitest: 'vitest',
+  };
+
+  await writeJson(packageJsonPath, packageJson, { spaces: 2 });
 }
 
 export async function addExtraDependencies({

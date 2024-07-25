@@ -12,6 +12,7 @@ export default {
     // Skip errors if we are running in the test runner
     (storyFn: any) => window?.navigator?.userAgent?.match(/StorybookTestRunner/) || storyFn(),
   ],
+  tags: ['!test'],
 };
 
 export const RenderThrows = {

@@ -37,7 +37,7 @@ export const sandbox: Task = {
       await remove(details.sandboxDir);
     }
 
-    const { create, install, addStories, extendMain, init, addExtraDependencies, setImportMap } =
+    const { create, install, setupVitest, addStories, extendMain, init, addExtraDependencies, setImportMap } =
       // @ts-expect-error esbuild for some reason exports a default object
       // eslint-disable-next-line import/extensions
       (await import('./sandbox-parts.ts')).default;
@@ -75,11 +75,29 @@ export const sandbox: Task = {
       await addStories(details, options);
     }
 
+    const extraDeps = details.template.modifications?.extraDependencies ?? [];
+
+    if (details.sandboxDir.includes('vite')) {
+      const renderer = details.template.expected.renderer.replace('@storybook/', '');
+
+      // Remove numbers so that vue3 becomes vue
+      const testingLibraryPackage = `@testing-library/${renderer.replace(/\d/g, '')}`;
+      extraDeps.push(
+        'happy-dom',
+        'vitest',
+        '@vitest/browser',
+        '@storybook/experimental-vitest-plugin@0.0.1--canary.2.bbfa711.0',
+        testingLibraryPackage
+      );
+
+      await setupVitest(details, { renderer, testingLibraryPackage });
+    }
+
     await addExtraDependencies({
       cwd: details.sandboxDir,
       debug: options.debug,
       dryRun: options.dryRun,
-      extraDeps: details.template.modifications?.extraDependencies,
+      extraDeps,
     });
 
     await extendMain(details, options);
