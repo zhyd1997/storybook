@@ -16,7 +16,7 @@ export const BackgroundTool = memo(function BackgroundSelector() {
   const [globals, updateGlobals, storyGlobals] = useGlobals();
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
-  const { options = emptyBackgroundMap, disabled } = config || {};
+  const { options = emptyBackgroundMap, disabled = true } = config || {};
 
   if (disabled) {
     return null;
@@ -24,7 +24,7 @@ export const BackgroundTool = memo(function BackgroundSelector() {
 
   const data = globals[KEY] || {};
   const backgroundName: string = data.value;
-  const isGrid = data.grid || false;
+  const isGridActive = data.grid || false;
 
   const item = options[backgroundName];
   const isLocked = !!storyGlobals?.[KEY];
@@ -40,7 +40,7 @@ export const BackgroundTool = memo(function BackgroundSelector() {
         backgroundName,
         setIsTooltipVisible,
         isLocked,
-        isGrid,
+        isGridActive,
         isTooltipVisible,
       }}
     />
@@ -55,13 +55,12 @@ interface PureProps {
   backgroundName: string | undefined;
   setIsTooltipVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isLocked: boolean;
-  isGrid: boolean;
+  isGridActive: boolean;
   isTooltipVisible: boolean;
 }
 
 const Pure = memo(function PureTool(props: PureProps) {
   const {
-    //
     item,
     length,
     updateGlobals,
@@ -69,13 +68,13 @@ const Pure = memo(function PureTool(props: PureProps) {
     backgroundMap,
     backgroundName,
     isLocked,
-    isGrid,
+    isGridActive: isGrid,
     isTooltipVisible,
   } = props;
   return (
     <Fragment>
       <IconButton
-        key="background"
+        key="grid"
         active={isGrid}
         disabled={isLocked}
         title="Apply a grid to the preview"
@@ -90,6 +89,7 @@ const Pure = memo(function PureTool(props: PureProps) {
 
       {length > 0 ? (
         <WithTooltip
+          key="background"
           placement="top"
           closeOnOutsideClick
           tooltip={({ onHide }) => {
