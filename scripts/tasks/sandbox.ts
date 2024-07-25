@@ -37,7 +37,16 @@ export const sandbox: Task = {
       await remove(details.sandboxDir);
     }
 
-    const { create, install, setupVitest, addStories, extendMain, init, addExtraDependencies, setImportMap } =
+    const {
+      create,
+      install,
+      setupVitest,
+      addStories,
+      extendMain,
+      init,
+      addExtraDependencies,
+      setImportMap,
+    } =
       // @ts-expect-error esbuild for some reason exports a default object
       // eslint-disable-next-line import/extensions
       (await import('./sandbox-parts.ts')).default;
@@ -77,7 +86,11 @@ export const sandbox: Task = {
 
     const extraDeps = details.template.modifications?.extraDependencies ?? [];
 
-    if (details.sandboxDir.includes('vite')) {
+    if (
+      details.sandboxDir.includes('vite') &&
+      !details.sandboxDir.includes('html') &&
+      !details.sandboxDir.includes('web-components')
+    ) {
       const renderer = details.template.expected.renderer.replace('@storybook/', '');
 
       // Remove numbers so that vue3 becomes vue
