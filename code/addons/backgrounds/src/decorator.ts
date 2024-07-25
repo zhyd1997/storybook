@@ -7,15 +7,13 @@ import type {
 
 import { PARAM_KEY as KEY } from './constants';
 import { clearStyles, addBackgroundStyle, isReduceMotionEnabled, addGridStyle } from './utils';
-import type { Background, Config, GridConfig } from './types';
+import type { Config, GridConfig } from './types';
 
 const defaultGrid: GridConfig = {
   cellSize: 100,
   cellAmount: 10,
   opacity: 0.8,
 };
-
-type BackgroundMap = Record<string, Background>;
 
 const BG_SELECTOR_BASE = `addon-backgrounds`;
 const GRID_SELECTOR_BASE = 'addon-backgrounds-grid';

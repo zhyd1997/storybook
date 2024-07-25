@@ -60,6 +60,7 @@ const addExtraContext = (
     step: vi.fn(),
     context: null! as StoryContext,
     canvas: null!,
+    globalTypes: {},
   };
   extraContext.context = extraContext;
   return extraContext;

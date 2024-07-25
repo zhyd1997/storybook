@@ -16,6 +16,7 @@ export default {
 export const Unset = {
   globals: {},
 };
+
 export const Selected = {
   globals: {
     viewport: {
