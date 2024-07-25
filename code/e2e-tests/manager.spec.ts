@@ -200,7 +200,16 @@ test.describe('Manager UI', () => {
     test('Navigate to story', async ({ page }) => {
       const sbPage = new SbPage(page);
 
+      const closeNavigationButton = await sbPage.page.locator('[title="Close navigation menu"]');
+      // navigation menu is closed
+      await expect(closeNavigationButton).not.toBeVisible();
+
       const mobileNavigationHeading = await sbPage.page.locator('[title="Open navigation menu"]');
+
+      await sbPage.page.waitForFunction((selector) => {
+        const content = document.querySelector(selector)?.textContent;
+        return content?.includes('Configure your project/Docs');
+      }, '[title="Open navigation menu"]');
 
       // navigation menu is closed
       await expect(mobileNavigationHeading).toHaveText('Configure your project/Docs');
