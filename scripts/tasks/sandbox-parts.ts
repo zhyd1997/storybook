@@ -404,11 +404,13 @@ export async function setupVitest(
     beforeAll(annotations.beforeAll!)`
   );
 
+  const isSvelte = template.expected.renderer === '@storybook/svelte';
   await writeFile(
     join(sandboxDir, '.storybook/vitest.config.ts'),
     dedent`import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
-    import viteConfig from '../vite.config'
     import { storybookTest } from '@storybook/experimental-vitest-plugin'
+    import viteConfig from '../vite.config'
+    ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite" :  ''}
 
     export default mergeConfig(
       viteConfig,
@@ -417,6 +419,7 @@ export async function setupVitest(
           storybookTest({
             renderer: '${renderer}',
           }),
+          ${isSvelte ? "svelteTesting()" :  ''}
         ],
         resolve: {
           preserveSymlinks: true,
