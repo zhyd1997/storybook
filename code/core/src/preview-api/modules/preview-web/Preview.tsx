@@ -299,6 +299,9 @@ export class Preview<TRenderer extends Renderer> {
     currentStory?: PreparedStory<TRenderer>;
   }) {
     if (!this.storyStoreValue) {
+      await this.storeInitializationPromise;
+    }
+    if (!this.storyStoreValue) {
       throw new CalledPreviewMethodBeforeInitializationError({ methodName: 'onUpdateGlobals' });
     }
 
