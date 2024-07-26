@@ -12,7 +12,7 @@ type Story = StoryObj<Button>;
 
 export const Large: Story = {
   parameters: {
-    backgrounds: { disable: true },
+    backgrounds: { disabled: true },
   },
 };
 ```
@@ -26,7 +26,7 @@ export default {
 
 export const Large = {
   parameters: {
-    backgrounds: { disable: true },
+    backgrounds: { disabled: true },
   },
 };
 ```
@@ -46,7 +46,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Large: Story = {
   parameters: {
-    backgrounds: { disable: true },
+    backgrounds: { disabled: true },
   },
 };
 ```
@@ -66,7 +66,7 @@ type Story = StoryObj<typeof Button>;
 
 export const Large: Story = {
   parameters: {
-    backgrounds: { disable: true },
+    backgrounds: { disabled: true },
   },
 };
 ```
@@ -78,7 +78,7 @@ export default {
 
 export const Large = {
   parameters: {
-    backgrounds: { disable: true },
+    backgrounds: { disabled: true },
   },
 };
 ```
@@ -95,7 +95,7 @@ type Story = StoryObj;
 
 export const Large: Story = {
   parameters: {
-    backgrounds: { disable: true },
+    backgrounds: { disabled: true },
   },
 };
 ```

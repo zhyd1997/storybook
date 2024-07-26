@@ -2,17 +2,10 @@
 export default {
   parameters: {
     backgrounds: {
-      default: 'twitter',
-      values: [
-        {
-          name: 'twitter',
-          value: '#00aced',
-        },
-        {
-          name: 'facebook',
-          value: '#3b5998',
-        },
-      ],
+      options: {
+        dark: { name: 'Dark', value: '#333' },
+        light: { name: 'Light', value: '#333' },
+      },
     },
   },
 };
@@ -25,17 +18,10 @@ import { Preview } from '@storybook/your-framework';
 const preview: Preview = {
   parameters: {
     backgrounds: {
-      default: 'twitter',
-      values: [
-        {
-          name: 'twitter',
-          value: '#00aced',
-        },
-        {
-          name: 'facebook',
-          value: '#3b5998',
-        },
-      ],
+      options: {
+        dark: { name: 'Dark', value: '#333' },
+        light: { name: 'Light', value: '#333' },
+      },
     },
   },
 };

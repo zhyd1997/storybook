@@ -8,11 +8,10 @@ const meta: Meta<Button> = {
   component: Button,
   parameters: {
     backgrounds: {
-      default: 'twitter',
-      values: [
-        { name: 'twitter', value: '#00aced' },
-        { name: 'facebook', value: '#3b5998' },
-      ],
+      options: {
+        dark: { name: 'Dark', value: '#333' },
+        light: { name: 'Light', value: '#333' },
+      },
     },
   },
 };
@@ -28,11 +27,10 @@ export default {
   component: Button,
   parameters: {
     backgrounds: {
-      default: 'twitter',
-      values: [
-        { name: 'twitter', value: '#00aced' },
-        { name: 'facebook', value: '#3b5998' },
-      ],
+      options: {
+        dark: { name: 'Dark', value: '#333' },
+        light: { name: 'Light', value: '#333' },
+      },
     },
   },
 };
@@ -49,11 +47,10 @@ const meta = {
   component: Button,
   parameters: {
     backgrounds: {
-      default: 'twitter',
-      values: [
-        { name: 'twitter', value: '#00aced' },
-        { name: 'facebook', value: '#3b5998' },
-      ],
+      options: {
+        dark: { name: 'Dark', value: '#333' },
+        light: { name: 'Light', value: '#333' },
+      },
     },
   },
 } satisfies Meta<typeof Button>;
@@ -72,11 +69,10 @@ const meta: Meta<typeof Button> = {
   component: Button,
   parameters: {
     backgrounds: {
-      default: 'twitter',
-      values: [
-        { name: 'twitter', value: '#00aced' },
-        { name: 'facebook', value: '#3b5998' },
-      ],
+      options: {
+        dark: { name: 'Dark', value: '#333' },
+        light: { name: 'Light', value: '#333' },
+      },
     },
   },
 };

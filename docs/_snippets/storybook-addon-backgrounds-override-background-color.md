@@ -12,7 +12,11 @@ type Story = StoryObj<Button>;
 
 export const Large: Story = {
   parameters: {
-    backgrounds: { default: 'facebook' },
+    backgrounds: {
+      options: {
+        dark: { name: 'Dark', value: '#000' },
+      },
+    },
   },
 };
 ```
@@ -26,7 +30,11 @@ export default {
 
 export const Large = {
   parameters: {
-    backgrounds: { default: 'facebook' },
+    backgrounds: {
+      options: {
+        dark: { name: 'Dark', value: '#000' },
+      },
+    },
   },
 };
 ```
@@ -46,7 +54,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Large: Story = {
   parameters: {
-    backgrounds: { default: 'facebook' },
+    backgrounds: {
+      options: {
+        dark: { name: 'Dark', value: '#000' },
+      },
+    },
   },
 };
 ```
@@ -66,7 +78,11 @@ type Story = StoryObj<typeof Button>;
 
 export const Large: Story = {
   parameters: {
-    backgrounds: { default: 'facebook' },
+    backgrounds: {
+      options: {
+        dark: { name: 'Dark', value: '#000' },
+      },
+    },
   },
 };
 ```
@@ -78,7 +94,11 @@ export default {
 
 export const Large = {
   parameters: {
-    backgrounds: { default: 'facebook' },
+    backgrounds: {
+      options: {
+        dark: { name: 'Dark', value: '#000' },
+      },
+    },
   },
 };
 ```
@@ -95,7 +115,11 @@ type Story = StoryObj;
 
 export const Large: Story = {
   parameters: {
-    backgrounds: { default: 'facebook' },
+    backgrounds: {
+      options: {
+        dark: { name: 'Dark', value: '#000' },
+      },
+    },
   },
 };
 ```
