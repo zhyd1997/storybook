@@ -21,7 +21,7 @@ const customViewports = {
 export default {
   parameters: {
     viewport: {
-      viewports: {
+      options: {
         ...MINIMAL_VIEWPORTS,
         ...customViewports,
       },
@@ -56,7 +56,7 @@ const customViewports = {
 const preview: Preview = {
   parameters: {
     viewport: {
-      viewports: {
+      options: {
         ...MINIMAL_VIEWPORTS,
         ...customViewports,
       },

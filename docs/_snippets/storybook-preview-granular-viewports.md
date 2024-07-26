@@ -4,11 +4,16 @@ import { INITIAL_VIEWPORTS, MINIMAL_VIEWPORTS } from '@storybook/addon-viewport'
 export default {
   parameters: {
     viewport: {
-      viewports: {
+      options: {
         ...INITIAL_VIEWPORTS,
         ...MINIMAL_VIEWPORTS,
       },
-      defaultViewport: 'iphone14promax',
+    },
+  },
+  initialGlobals: {
+    viewport: {
+      value: 'iphone14promax',
+      isRotated: false,
     },
   },
 };
@@ -23,11 +28,16 @@ import { INITIAL_VIEWPORTS, MINIMAL_VIEWPORTS } from '@storybook/addon-viewport'
 const preview: Preview = {
   parameters: {
     viewport: {
-      viewports: {
+      options: {
         ...INITIAL_VIEWPORTS,
         ...MINIMAL_VIEWPORTS,
       },
-      defaultViewport: 'iphone14promax',
+    },
+  },
+  initialGlobals: {
+    viewport: {
+      value: 'iphone14promax',
+      isRotated: false,
     },
   },
 };

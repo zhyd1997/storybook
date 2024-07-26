@@ -21,16 +21,14 @@ Out of the box, the Viewport addon offers you a standard set of viewports that y
 
 {/* prettier-ignore-end */}
 
-The viewport global can take an object with the following keys:
+The viewport parameter can take an object with the following keys:
 
 | Field                  | Type    | Description                                               | Default Value  |
 | ---------------------- | ------- | --------------------------------------------------------- | -------------- |
-| **defaultViewport**    | String  | Sets the default viewport                                 | `'responsive'` |
-| **defaultOrientation** | String  | Sets the default orientation (e.g. portrait or landscape) | `'portrait'`   |
-| **disable**            | Boolean | Disables the viewport                                     | N/A            |
-| **viewports**          | Object  | The configuration objects for the viewport                | `{}`           |
+| **disabled**           | Boolean | Disables the viewport                                     | N/A            |
+| **options**            | Object  | The available list of viewports                           | `{}`           |
 
-The viewports object needs the following keys:
+Each viewports object needs the following keys:
 
 | Field      | Type   | Description                                           | Example values          |
 | ---------- | ------ | ----------------------------------------------------- | ----------------------- |
@@ -138,27 +136,39 @@ Update your story through [parameters](../writing-stories/parameters.mdx) to inc
 
 If you need, you can edit them on the shortcuts page.
 
+## Setting value
+
+You can set the viewport in the toolbar by clicking on the viewport you want to use.
+
+If you want to enforce a story to use a viewport, you can do so by setting the `viewport` global in the story:
+
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9"
+// Replace your-framework with the name of your framework
+import type { Meta, StoryObj } from '@storybook/your-framework';
+
+import { Button } from './Button';
+
+const meta = {
+  component: Button,
+} satisfies Meta<typeof Button>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Large: Story = {
+  global: {
+    viewport: { value: 'phone', isRotated: false },
+  },
+};
+```
+
 ## API
 
 ### Parameters
 
 This addon contributes the following [parameters](../writing-stories/parameters.mdx) to Storybook, under the `viewport` namespace:
 
-#### `defaultOrientation`
-
-Type: `'portrait' | 'landscape'`
-
-Default: `'portrait'`
-
-Specifies the default orientation used when viewing a story.
-
-#### `defaultViewport`
-
-Type: `string`
-
-Specifies the default viewport used when viewing a story. Must match a key in the [`viewports`](#viewports) object.
-
-#### `disable`
+#### `disabled`
 
 Type: `boolean`
 
@@ -166,17 +176,17 @@ Disable this addon's behavior. If you wish to disable this addon for the entire 
 
 This parameter is most useful to allow overriding at more specific levels. For example, if this parameter is set to `true` at the project level, it could then be re-enabled by setting it to `false` at the meta (component) or story level.
 
-#### `viewports`
+#### `options`
 
 Type:
 
 ```ts
 {
-  [key: string]: {
+  Record<string, {
     name: string,
     styles: { height: string, width: string },
-    type: 'desktop' | 'mobile' | 'tablet',
-  },
+    type: 'desktop' | 'mobile' | 'tablet' | 'other',
+  }>,
 };
 ```
 

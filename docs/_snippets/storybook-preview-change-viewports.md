@@ -2,8 +2,8 @@
 export default {
   parameters: {
     viewport: {
-      viewports: newViewports, // newViewports would be an ViewportMap. (see below for examples)
-      defaultViewport: 'someDefault',
+      // newViewports would be an ViewportMap. (see below for examples)
+      options: newViewports,
     },
   },
 };
@@ -16,8 +16,8 @@ import { Preview } from '@storybook/your-framework';
 const preview: Preview = {
   parameters: {
     viewport: {
-      viewports: newViewports, // newViewports would be an ViewportMap. (see below for examples)
-      defaultViewport: 'someDefault',
+      // newViewports would be an ViewportMap. (see below for examples)
+      options: newViewports,
     },
   },
 };

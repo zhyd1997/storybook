@@ -40,17 +40,16 @@ export default {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
 
 export const MyStory = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      //👇 Your own default viewport
+      value: 'iphone6',
     },
   },
 };
@@ -69,9 +68,7 @@ const meta = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 } satisfies Meta<typeof MyComponent>;
@@ -80,9 +77,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -101,9 +98,7 @@ const meta: Meta<typeof MyComponent> = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
@@ -112,9 +107,9 @@ export default meta;
 type Story = StoryObj<typeof MyComponent>;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -131,17 +126,15 @@ export default {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
 
 export const MyStory = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -160,9 +153,7 @@ const meta = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 } satisfies Meta<typeof MyComponent>;
@@ -171,9 +162,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -192,9 +183,7 @@ const meta: Meta<typeof MyComponent> = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
@@ -203,9 +192,9 @@ export default meta;
 type Story = StoryObj<typeof MyComponent>;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -222,17 +211,15 @@ export default {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
 
 export const MyStory = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -272,9 +259,7 @@ const meta = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 } satisfies Meta<typeof MyComponent>;
@@ -283,9 +268,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -303,9 +288,7 @@ const meta: Meta<typeof MyComponent> = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
@@ -314,9 +297,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -333,18 +316,15 @@ export default {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
 
 export const MyStory = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -363,10 +343,7 @@ const meta = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 } satisfies Meta<typeof MyComponent>;
@@ -375,9 +352,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -396,10 +373,7 @@ const meta: Meta<typeof MyComponent> = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
@@ -408,9 +382,9 @@ export default meta;
 type Story = StoryObj<typeof MyComponent>;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -425,17 +399,15 @@ export default {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
 
 export const MyStory = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };
@@ -452,9 +424,7 @@ const meta: Meta = {
     //👇 The viewports object from the Essentials addon
     viewport: {
       //👇 The viewports you want to use
-      viewports: INITIAL_VIEWPORTS,
-      //👇 Your own default viewport
-      defaultViewport: 'iphone6',
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
@@ -463,9 +433,9 @@ export default meta;
 type Story = StoryObj;
 
 export const MyStory: Story = {
-  parameters: {
+  globals: {
     viewport: {
-      defaultViewport: 'iphonex',
+      value: 'iphone6',
     },
   },
 };

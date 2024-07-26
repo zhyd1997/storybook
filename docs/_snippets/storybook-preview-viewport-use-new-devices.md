@@ -1,7 +1,9 @@
 ```js filename=".storybook/preview.js" renderer="common" language="js"
 export default {
   parameters: {
-    viewport: { viewports: customViewports },
+    viewport: { 
+      options: customViewports
+    },
   },
 };
 ```
@@ -12,7 +14,9 @@ import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
   parameters: {
-    viewport: { viewports: customViewports },
+    viewport: { 
+      options: customViewports
+    },
   },
 };
 
