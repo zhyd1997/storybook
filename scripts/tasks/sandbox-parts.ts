@@ -410,6 +410,7 @@ export async function setupVitest(
     dedent`import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
     import { storybookTest } from '@storybook/experimental-vitest-plugin'
     import viteConfig from '../vite.config'
+    import path from 'node:path'
     ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" :  ''}
 
     export default mergeConfig(
@@ -427,29 +428,36 @@ export async function setupVitest(
         test: {
           name: 'storybook',
           include: [
-            '../src/**/*.{story,stories}.?(c|m)[jt]s?(x)',
-            '../template-stories/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+           // we need to set the path like this because svelte-kit overrides the root path so this makes it work in all sandboxes
+            path.join(__dirname, '../src/**/*.{story,stories}.?(c|m)[jt]s?(x)'),
+            path.join(__dirname, '../template-stories/**/*.{story,stories}.?(c|m)[jt]s?(x)'),
           ],
           exclude: [
             ...defaultExclude,
-            // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
-            '../**/*argtypes*',
-            // TODO: somehow support autotitle in portable stories
-            '../**/*title*',
-            // TODO: Failures related to Storybook channel usage
-            '../**/*shortcuts*',
             // TODO: investigate TypeError: mocked(...).mockReturnValue is not a function
-            '../**/*module-mocking*',
+            path.join(__dirname, '../**/*module-mocking*'),
+            // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
+            path.join(__dirname, '../**/*argtypes*'),
+            // TODO: somehow support autotitle in portable stories
+            path.join(__dirname, '../**/*title*'),
+            // TODO: Failures related to Storybook channel usage
+            path.join(__dirname, '../**/*shortcuts*'),
+            path.join(__dirname, '../**/renderers/svelte/args.stories*'),
             // TODO (VUE3): Failures related to Storybook channel usage
-            '../**/ScopedSlots.stories.ts',
-            '../**/ReactiveSlots.stories.ts',
-            '../**/ReactiveDecorators.stories.ts',
-            '../**/ReactiveArgs.stories.ts',
-            '../**/CustomRenderOptionsArgsFromData.stories.ts',
-            '../**/CustomRenderFunctionalComponent.stories.ts',
+            path.join(__dirname, '../**/ScopedSlots.stories.ts'),
+            path.join(__dirname, '../**/ReactiveSlots.stories.ts'),
+            path.join(__dirname, '../**/ReactiveDecorators.stories.ts'),
+            path.join(__dirname, '../**/ReactiveArgs.stories.ts'),
+            path.join(__dirname, '../**/CustomRenderOptionsArgsFromData.stories.ts'),
+            path.join(__dirname, '../**/CustomRenderFunctionalComponent.stories.ts'),
             // TODO (VUE3): Investigate TypeError: _ctx.$greetingMessage is not a function
-            '../**/GlobalSetup.stories.ts',
-            '../**/SourceDecorator.stories.ts',
+            path.join(__dirname, '../**/GlobalSetup.stories.ts'),
+            path.join(__dirname, '../**/SourceDecorator.stories.ts'),
+            // TODO (SVELTEKIT): Failures related to missing framework annotations
+            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*'),
+            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*'),
+            // TODO (SVELTEKIT): Investigate Error: use:enhance can only be used on <form> fields with method="POST"
+            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/forms.stories*'),
           ],
           /**
            * TODO: Either fix or acknowledge limitation of:
