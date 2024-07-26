@@ -713,7 +713,7 @@ workflows:
       #     requires:
       #       - build-sandboxes
       - vitest-integration:
-          parallelism: 6
+          parallelism: 5
           requires:
             - create-sandboxes
       # - bench:
@@ -779,7 +779,7 @@ workflows:
       #     requires:
       #       - build-sandboxes
       - vitest-integration:
-          parallelism: 8
+          parallelism: 6
           requires:
             - create-sandboxes
       - test-portable-stories:
@@ -846,7 +846,7 @@ workflows:
       #     requires:
       #       - build-sandboxes
       - vitest-integration:
-          parallelism: 16
+          parallelism: 13
           requires:
             - create-sandboxes
       - test-portable-stories:

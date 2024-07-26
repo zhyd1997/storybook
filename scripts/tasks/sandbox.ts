@@ -87,7 +87,7 @@ export const sandbox: Task = {
     const extraDeps = details.template.modifications?.extraDependencies ?? [];
 
     if (
-      details.sandboxDir.includes('vite') &&
+      (details.sandboxDir.includes('svelte-kit') || details.sandboxDir.includes('vite')) &&
       !details.sandboxDir.includes('html') &&
       !details.sandboxDir.includes('lit')
     ) {

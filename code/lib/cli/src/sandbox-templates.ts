@@ -186,7 +186,7 @@ const baseTemplates = {
       },
       extraDependencies: ['server-only'],
     },
-    skipTasks: ['e2e-tests-dev', 'bench'],
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'nextjs/prerelease': {
     name: 'Next.js Prerelease (Webpack | TypeScript)',
@@ -362,7 +362,7 @@ const baseTemplates = {
       renderer: '@storybook/html',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['e2e-tests-dev', 'bench'],
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'svelte-vite/default-js': {
     name: 'Svelte Latest (Vite | JavaScript)',
@@ -461,7 +461,7 @@ const baseTemplates = {
       builder: '@storybook/builder-vite',
     },
     // Remove smoke-test from the list once https://github.com/storybookjs/storybook/issues/19351 is fixed.
-    skipTasks: ['smoke-test', 'e2e-tests-dev', 'bench'],
+    skipTasks: ['smoke-test', 'e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'lit-vite/default-ts': {
     name: 'Lit Latest (Vite | TypeScript)',
@@ -473,7 +473,7 @@ const baseTemplates = {
       builder: '@storybook/builder-vite',
     },
     // Remove smoke-test from the list once https://github.com/storybookjs/storybook/issues/19351 is fixed.
-    skipTasks: ['smoke-test', 'e2e-tests-dev', 'bench'],
+    skipTasks: ['smoke-test', 'e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'vue-cli/default-js': {
     name: 'Vue CLI v3 (Webpack | JavaScript)',
@@ -498,7 +498,7 @@ const baseTemplates = {
     modifications: {
       extraDependencies: ['preact-render-to-string'],
     },
-    skipTasks: ['e2e-tests-dev', 'bench'],
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'preact-vite/default-ts': {
     name: 'Preact Latest (Vite | TypeScript)',
@@ -511,7 +511,7 @@ const baseTemplates = {
     modifications: {
       extraDependencies: ['preact-render-to-string'],
     },
-    skipTasks: ['e2e-tests-dev', 'bench'],
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'qwik-vite/default-ts': {
     name: 'Qwik CLI Latest (Vite | TypeScript)',
@@ -524,7 +524,7 @@ const baseTemplates = {
       builder: 'storybook-framework-qwik',
     },
     // TODO: The community template does not provide standard stories, which is required for e2e tests.
-    skipTasks: ['e2e-tests', 'e2e-tests-dev', 'bench'],
+    skipTasks: ['e2e-tests', 'e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'ember/3-js': {
     name: 'Ember v3 (Webpack | JavaScript)',

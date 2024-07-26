@@ -410,7 +410,7 @@ export async function setupVitest(
     dedent`import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
     import { storybookTest } from '@storybook/experimental-vitest-plugin'
     import viteConfig from '../vite.config'
-    ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite" :  ''}
+    ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" :  ''}
 
     export default mergeConfig(
       viteConfig,
