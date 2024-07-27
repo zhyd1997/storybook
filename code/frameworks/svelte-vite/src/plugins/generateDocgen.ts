@@ -116,6 +116,8 @@ function convertType(type: ts.Type, checker: ts.TypeChecker): Type | undefined {
         return t !== undefined && t.type !== 'undefined';
       }) as Type[];
 
+    // Boolean is represented as 'true' | 'false' in TypeScript's type checker,
+    // so we need to merge them into a single 'boolean' type.
     const idxTrue = types.findIndex((t) => t.type === 'literal' && t.value === true);
     const idxFalse = types.findIndex((t) => t.type === 'literal' && t.value === false);
     if (idxTrue !== -1 && idxFalse !== -1) {
@@ -152,6 +154,7 @@ function initializerToDefaultValue(
       }
       const type = checker.getTypeAtLocation(expr);
       if (type.isLiteral()) {
+        // string or number
         return { text: JSON.stringify(type.value) };
       } else if (type.flags & ts.TypeFlags.Null) {
         return { text: 'null' };
@@ -159,6 +162,12 @@ function initializerToDefaultValue(
         return { text: checker.typeToString(type) };
       }
     }
+  } else if (
+    ts.isArrayLiteralExpression(expr) ||
+    ts.isObjectLiteralExpression(expr) ||
+    ts.isNewExpression(expr)
+  ) {
+    return { text: expr.getText() };
   }
   switch (expr.kind) {
     case ts.SyntaxKind.TrueKeyword:
@@ -168,7 +177,7 @@ function initializerToDefaultValue(
     case ts.SyntaxKind.NullKeyword:
       return { text: 'null' };
   }
-  return undefined;
+  return { text: '...' };
 }
 
 function loadCompilerOptions(basepath: string): ts.CompilerOptions {
@@ -179,6 +188,7 @@ function loadCompilerOptions(basepath: string): ts.CompilerOptions {
   const forcedOptions = {
     sourceMap: false,
     noEmit: true,
+    strict: true,
     allowJs: true,
     checkJs: true,
     skipLibCheck: true,
@@ -348,21 +358,16 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         propsType = checker.getTypeOfSymbolAtLocation(retObjProp, decl);
         propsType.getProperties().forEach((prop) => {
           const name = prop.getName();
-          const optional = (prop.flags & ts.SymbolFlags.Optional) !== 0;
           let docText = ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
 
           // Type from TS type annotation
-          let propType = checker.getTypeOfSymbolAtLocation(prop, decl);
+          const propType = checker.getTypeOfSymbolAtLocation(prop, decl);
 
           if (prop.valueDeclaration) {
             // Type and comment from JSDoc '@type {type} comment'
             const typeTag = ts.getJSDocTypeTag(prop.valueDeclaration);
             if (typeTag?.comment) {
               docText = ((docText || '') + '\n' + typeTag.comment).trim();
-            }
-            const typeNode = ts.getJSDocType(prop.valueDeclaration);
-            if (typeNode) {
-              propType = checker.getTypeFromTypeNode(typeNode);
             }
           }
 
@@ -374,6 +379,15 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
               .fileName.includes('node_modules/svelte/elements.d.ts')
           ) {
             return;
+          }
+
+          // Check if this prop is optional
+          let optional = (prop.flags & ts.SymbolFlags.Optional) !== 0;
+          if (
+            propType.flags & (ts.TypeFlags.Any | ts.TypeFlags.Undefined) ||
+            (propType.isUnion() && propType.types.find((t) => t.flags & ts.TypeFlags.Undefined))
+          ) {
+            optional = true;
           }
 
           propMap.set(name, {

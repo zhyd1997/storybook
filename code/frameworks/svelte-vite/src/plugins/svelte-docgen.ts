@@ -110,7 +110,7 @@ function transformToSvelteDocParserType(type: Type): JSDocType {
  */
 function transformToSvelteDocParserDataItems(docgen: Docgen): SvelteDataItem[] {
   return docgen.props.map((p) => {
-    const required = p.optional === false;
+    const required = p.optional === false && p.defaultValue === undefined;
     return {
       name: p.name,
       visibility: 'public',
