@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-
   import type { LiteralNumbers, LiteralStrings } from './types';
+  import { MyEnum } from './types';
 
   type MyObject = {
     foo: string;
@@ -32,17 +32,29 @@
      */
     trueLiteral?: true;
     /**
+     * Symbol
+     */
+    symbol?: symbol;
+    /**
+     * Null
+     */
+    nullValue?: null;
+    /**
      * Undefined
      */
-    undefined: undefined;
+    undefinedValue?: undefined;
     /**
      * Any
      */
-    any: any;
+    any?: any;
     /**
-     * Array of number
+     * Array of numbers
      */
-    arrayOfNumber: number[];
+    arrayOfNumbers?: number[];
+    /**
+     * Enum
+     */
+    enumValue?: MyEnum;
     /**
      * Union of literal strings
      */
@@ -93,9 +105,12 @@
     string = 'default',
     stringRequired,
     number = 123,
-    arrayOfNumber = [1, 20, 300],
+    nullValue = null,
+    arrayOfNumbers = [1, 20, 300],
+    enumValue = MyEnum.FOO,
     record = { a: 1, b: 2 },
     date = new Date('20 Jan 1983'),
+    unionTypes = 123,
     func = () => 10,
   }: PropsA & PropsB = $props();
 </script>

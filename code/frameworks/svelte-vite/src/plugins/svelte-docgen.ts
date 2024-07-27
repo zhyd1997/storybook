@@ -72,16 +72,16 @@ function transformToSvelteDocParserType(type: Type): JSDocType {
       return { kind: 'type', type: 'number', text: 'number' };
     case 'boolean':
       return { kind: 'type', type: 'boolean', text: 'boolean' };
+    case 'symbol':
+      return { kind: 'type', type: 'other', text: 'symbol' };
     case 'null':
       return { kind: 'type', type: 'other', text: 'null' };
     case 'undefined':
       return { kind: 'type', type: 'other', text: 'undefined' };
-    case 'null':
-      return { kind: 'type', type: 'other', text: 'null' };
-    case 'any':
-      return { kind: 'type', type: 'other', text: 'any' };
     case 'void':
       return { kind: 'type', type: 'other', text: 'void' };
+    case 'any':
+      return { kind: 'type', type: 'any', text: 'any' };
     case 'object':
       return { kind: 'type', type: 'object', text: type.text };
     case 'array':

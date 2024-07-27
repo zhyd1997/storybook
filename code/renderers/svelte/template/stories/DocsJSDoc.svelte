@@ -33,36 +33,46 @@
    * True literal
    * @type {true=}
    */
-  export let trueLiteral;
+  export let trueLiteral = undefined;
+  /**
+   * Null
+   * @type {null}
+   */
+  export let nullValue = null;
   /**
    * Undefined
    * @type {undefined}
    */
-  export let undefined;
+  export let undefinedValue = undefined;
   /**
-   * Array of number
+   * Any
+   * @type {any}
+   */
+  export let any = null;
+  /**
+   * Array of numbers
    * @type {number[]}
    */
-  export let arrayOfNumber = [1, 20, 300];
+  export let arrayOfNumbers = [1, 20, 300];
   /**
    * Union of literal strings
    * @type {LiteralStrings=}
    */
-  export let unionLiteralStrings;
+  export let unionLiteralStrings = 'apple';
   /**
    * Union of literal numbers
    * @type {LiteralNumbers=}
    */
-  export let unionLiteralNumbers;
+  export let unionLiteralNumbers = 1000;
   /**
    * @type {MyObject=} Object
    */
-  export let object;
+  export let object = undefined;
   /**
    * Inline object
    * @type {{ foo: string; bar: number } =}
    */
-  export let inlineObject;
+  export let inlineObject = undefined;
   /**
    * Record
    * @type {Record<string, number>}
@@ -77,12 +87,12 @@
    * Union of types
    * @type {number | string =}
    */
-  export let unionTypes;
+  export let unionTypes = 123;
   /**
    * Intersection of types
    * @type {{ a: number } & { b: string } =}
    */
-  export let intersection;
+  export let intersection = undefined;
   /**
    * Event callback function
    * @type {(event: MouseEvent) => number}

@@ -103,8 +103,6 @@ const parseTypeToControl = (type: JSDocType | undefined): any => {
     switch (type.type) {
       case 'string':
         return { control: { type: 'text' } };
-      case 'enum':
-        return { control: { type: 'radio' } };
       case 'any':
         return { control: { type: 'object' } };
       default:

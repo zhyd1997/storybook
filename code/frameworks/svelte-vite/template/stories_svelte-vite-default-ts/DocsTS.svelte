@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { LiteralNumbers, LiteralStrings } from './types';
+  import { MyEnum } from './types';
 
   type MyObject = {
     foo: string;
@@ -15,33 +16,57 @@
    */
   export let string: string = 'default';
   /**
+   * String (required)
+   */
+  export let stringRequired: string;
+  /**
    * Number
    */
   export let number: number = 123;
   /**
    * True literal
    */
-  export let trueLiteral: true | undefined;
+  export let trueLiteral: true | undefined = undefined;
+  /**
+   * Symbol
+   */
+  export let symbol: symbol | undefined = undefined;
+  /**
+   * Null
+   */
+  export let nullValue: null = null;
   /**
    * Undefined
    */
-  export let undefined: undefined;
+  export let undefinedValue: undefined = undefined;
   /**
-   * Array of number
+   * Any
    */
-  export let arrayOfNumber: number[] = [1, 20, 300];
+  export let any: any = null;
+  /**
+   * Date
+   */
+  export let date: Date = new Date('20 Jan 1983');
+  /**
+   * Array of numbers
+   */
+  export let arrayOfNumbers: number[] = [1, 20, 300];
+  /**
+   * Enum
+   */
+  export let enumValue: MyEnum = MyEnum.FOO;
   /**
    * Union of literal strings
    */
-  export let unionLiteralStrings: LiteralStrings | undefined;
+  export let unionLiteralStrings: LiteralStrings = 'apple';
   /**
    * Union of literal numbers
    */
-  export let unionLiteralNumbers: LiteralNumbers | undefined;
+  export let unionLiteralNumbers: LiteralNumbers = 100;
   /**
    * Object
    */
-  export let object: MyObject | undefined;
+  export let object: MyObject | undefined = undefined;
   /**
    * Inline object
    */
@@ -50,7 +75,7 @@
         foo: string;
         bar: number;
       }
-    | undefined;
+    | undefined = undefined;
   /**
    * Record
    */
@@ -58,11 +83,11 @@
   /**
    * Union of types
    */
-  export let unionTypes: number | string | undefined;
+  export let unionTypes: number | string = 123;
   /**
    * Intersection of types
    */
-  export let intersection: ({ a: number } & { b: string }) | undefined;
+  export let intersection: ({ a: number } & { b: string }) | undefined = undefined;
   /**
    * Event callback function
    */
