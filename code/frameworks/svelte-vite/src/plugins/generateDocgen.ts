@@ -278,10 +278,11 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
           return sourceFileCache.hashToSourceFiles[digest];
         }
 
+        const isTsFile = /<script\s+[^>]*?lang=('|")(ts|typescript)('|")/.test(content);
+
         const tsx = svelte2tsx.svelte2tsx(content, {
           version: VERSION,
-          isTsFile: true,
-          emitOnTemplateError: true,
+          isTsFile: isTsFile,
           mode: 'dts',
         });
 
@@ -290,7 +291,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
           tsx.code,
           languageVersion,
           true,
-          ts.ScriptKind.JS // Set to 'JS' to enable TypeScript to parse JSDoc.
+          isTsFile ? ts.ScriptKind.TS : ts.ScriptKind.JS // Set to 'JS' to enable TypeScript to parse JSDoc.
         );
 
         sourceFileCache.hashToSourceFiles[digest] = sourceFile;
@@ -363,6 +364,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
   if (signature && signature.declaration) {
     // Get props type from ReturnType<render>
     const type = checker.getReturnTypeOfSignature(signature);
+
     type.getProperties().forEach((retObjProp) => {
       if (retObjProp.name === 'props') {
         const decl = signature.getDeclaration();
@@ -409,13 +411,18 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
     if (ts.isVariableStatement(node)) {
       node.declarationList.declarations.forEach((declaration) => {
         // Extract default values from:
-        //     let { <name> = <defaultValue>, ... }: <propsType> = ...
-        if (
-          propsType &&
-          declaration.type &&
-          propsType === checker.getTypeFromTypeNode(declaration.type) &&
-          ts.isObjectBindingPattern(declaration.name)
-        ) {
+        //     let { <name> = <defaultValue>, ... }: <propsType> = $props();
+
+        const isPropsRune =
+          declaration.initializer &&
+          ts.isCallExpression(declaration.initializer) &&
+          ts.isIdentifier(declaration.initializer.expression) &&
+          declaration.initializer.expression.text === '$props';
+
+        const isPropsType =
+          declaration.type && propsType === checker.getTypeFromTypeNode(declaration.type);
+
+        if (ts.isObjectBindingPattern(declaration.name) && (isPropsRune || isPropsType)) {
           propsRuneUsed = true;
           declaration.name.elements.forEach((element) => {
             const name = element.name.getText();
@@ -438,6 +445,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         ) {
           const prop = propMap.get(declaration.name.text);
           if (prop && declaration.initializer) {
+            prop.optional = true;
             const defaultValue = initializerToDefaultValue(declaration.initializer, checker);
             if (defaultValue) {
               prop.defaultValue = defaultValue;

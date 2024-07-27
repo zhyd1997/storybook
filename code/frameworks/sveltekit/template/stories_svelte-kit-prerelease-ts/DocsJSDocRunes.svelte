@@ -24,7 +24,7 @@
    * @property {Date=} date Date
    * @property {number | string =} unionTypes Union of types
    * @property {{ a: number } & { b: string } =} intersection Intersection of types
-   * @property {import("svelte").Snippet=} children Snippet contents
+   * @property {import("svelte").Snippet} children Snippet contents
    * @property {(event: MouseEvent) => number =} func Event callback function
    */
 
@@ -52,4 +52,4 @@
   } = $props();
 </script>
 
-<div>Docs: JSDoc + Runes (<code>svelte2tsx@0.7.13</code> does not support this yet.)</div>
+<div>Docs: JSDoc + Runes</div>
