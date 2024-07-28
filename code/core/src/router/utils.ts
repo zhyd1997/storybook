@@ -175,7 +175,7 @@ interface Query {
 }
 
 export const queryFromString = memoize(1000)(
-  (s?: string): Query => (s !== undefined ? parse(s) : {})
+  (s?: string): Query => (s !== undefined ? parse(s, QS_OPTIONS) : {})
 );
 export const queryFromLocation = (location: Partial<Location>) =>
   queryFromString(location.search ? location.search.slice(1) : '');
