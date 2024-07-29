@@ -53,7 +53,7 @@ export async function renderToCanvas(
   }: RenderContext<ReactRenderer>,
   canvasElement: ReactRenderer['canvasElement']
 ) {
-  const { renderElement, unmountElement } = (await import('@storybook/react-dom-shim')).default;
+  const { renderElement, unmountElement } = await import('@storybook/react-dom-shim');
   const Story = unboundStoryFn as FC<StoryContext<ReactRenderer>>;
 
   const content = (

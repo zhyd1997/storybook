@@ -21,7 +21,7 @@ const WithCallback: FC<{ callback: () => void; children: ReactElement }> = ({
   return children;
 };
 
-const renderElement = async (node: ReactElement, el: Element, rootOptions?: RootOptions) => {
+export const renderElement = async (node: ReactElement, el: Element, rootOptions?: RootOptions) => {
   // Create Root Element conditionally for new React 18 Root Api
   const root = await getReactRoot(el, rootOptions);
 
@@ -30,7 +30,7 @@ const renderElement = async (node: ReactElement, el: Element, rootOptions?: Root
   });
 };
 
-const unmountElement = (el: Element, shouldUseNewRootApi?: boolean) => {
+export const unmountElement = (el: Element, shouldUseNewRootApi?: boolean) => {
   const root = nodes.get(el);
 
   if (root) {
@@ -49,5 +49,3 @@ const getReactRoot = async (el: Element, rootOptions?: RootOptions): Promise<Rea
 
   return root;
 };
-
-export default { renderElement, unmountElement };
