@@ -10,10 +10,7 @@ export type WithKeyboardCycleProps = {
 
 export const withKeyboardCycle = (Component: React.ComponentType<ToolbarMenuProps>) => {
   const WithKeyboardCycle = (props: ToolbarMenuProps) => {
-    const {
-      id,
-      toolbar: { items, shortcuts },
-    } = props;
+    const { id, items, shortcuts } = props;
 
     const api = useStorybookApi();
     const [globals, updateGlobals] = useGlobals();

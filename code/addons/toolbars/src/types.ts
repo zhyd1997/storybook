@@ -34,9 +34,7 @@ export interface NormalizedToolbarConfig {
   dynamicTitle?: boolean;
 }
 
-export type NormalizedToolbarArgType = InputType & {
-  toolbar: NormalizedToolbarConfig;
-};
+export type NormalizedToolbarArgType = InputType & NormalizedToolbarConfig;
 
 export type ToolbarConfig = NormalizedToolbarConfig & {
   items: string[] | ToolbarItem[];
