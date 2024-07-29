@@ -12,7 +12,7 @@ import type {
 import { logger } from 'storybook/internal/node-logger';
 import { preprocess } from 'svelte/compiler';
 import { replace, typescript } from 'svelte-preprocess';
-import { generateDocgen, createSourceFileCache, type Docgen, type Type } from './generateDocgen';
+import { generateDocgen, createDocgenCache, type Docgen, type Type } from './generateDocgen';
 
 /*
  * Patch sveltedoc-parser internal options.
@@ -135,7 +135,7 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
   const { createFilter } = await import('vite');
 
   const filter = createFilter(include);
-  const sourceFileCache = createSourceFileCache();
+  const sourceFileCache = createDocgenCache();
 
   let docPreprocessOptions: Parameters<typeof preprocess>[1] | undefined;
 
@@ -152,7 +152,7 @@ export async function svelteDocgen(svelteOptions: Record<string, any> = {}): Pro
 
       let componentDoc: SvelteComponentDoc & { keywords?: string[] } = {};
 
-      if (!docgen.runePropsUsed) {
+      if (!docgen.propsRuneUsed) {
         // Retain sveltedoc-parser for backward compatibility, as it can extract slot information from HTML comments.
         // See: https://github.com/alexprey/sveltedoc-parser/issues/61
         //

@@ -2,11 +2,10 @@ import ts from 'typescript';
 import svelte2tsx from 'svelte2tsx';
 import path from 'path';
 import { VERSION } from 'svelte/compiler';
-import crypto from 'crypto';
 
 export type Docgen = {
   name?: string;
-  runePropsUsed?: boolean;
+  propsRuneUsed?: boolean;
   props: PropInfo[];
 };
 
@@ -190,7 +189,7 @@ function initializerToDefaultValue(
   return { text: '...' };
 }
 
-function loadCompilerOptions(basepath: string): ts.CompilerOptions {
+function loadConfig(basepath: string): [ts.CompilerOptions, Set<string>] {
   const jsConfigPath = ts.findConfigFile(basepath, ts.sys.fileExists, 'jsconfig.json');
   const tsConfigPath = ts.findConfigFile(basepath, ts.sys.fileExists);
   const configPath = jsConfigPath || tsConfigPath;
@@ -205,7 +204,7 @@ function loadCompilerOptions(basepath: string): ts.CompilerOptions {
     skipDefaultLibCheck: true,
   };
   if (!configPath) {
-    return forcedOptions;
+    return [forcedOptions, new Set()];
   }
 
   const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
@@ -215,45 +214,90 @@ function loadCompilerOptions(basepath: string): ts.CompilerOptions {
     path.dirname(configPath),
     undefined,
     configPath,
-    undefined
+    undefined,
+    [
+      {
+        extension: 'svelte',
+        isMixedContent: true,
+        scriptKind: ts.ScriptKind.Deferred,
+      },
+    ]
   );
 
+  const fileNames = new Set(
+    config.fileNames
+      .filter((fileName) => fileName.endsWith('.svelte'))
+      .map((fileName) => fileName + '.tsx')
+  );
+
+  return [
+    {
+      ...config.options,
+      ...forcedOptions,
+    },
+    fileNames,
+  ];
+}
+
+export interface DocgenCache {
+  filenameToModifiedTime: Record<string, Date | undefined>;
+  filenameToSourceFile: Record<string, ts.SourceFile>;
+  fileCache: Record<string, string>;
+  oldProgram?: ts.Program;
+  options?: ts.CompilerOptions;
+  rootNames?: Set<string>;
+}
+
+export function createDocgenCache(): DocgenCache {
   return {
-    ...config.options,
-    ...forcedOptions,
+    filenameToModifiedTime: {},
+    filenameToSourceFile: {},
+    fileCache: {},
   };
 }
 
-export interface SourceFileCache {
-  filenameToSourceFiles: Record<string, ts.SourceFile>;
-  hashToSourceFiles: Record<string, ts.SourceFile>;
-}
-
-export function createSourceFileCache(): SourceFileCache {
-  return {
-    filenameToSourceFiles: {},
-    hashToSourceFiles: {},
-  };
-}
-
-export function generateDocgen(targetFileName: string, sourceFileCache: SourceFileCache): Docgen {
+export function generateDocgen(targetFileName: string, cache: DocgenCache): Docgen {
   if (targetFileName.endsWith('.svelte')) {
     targetFileName = targetFileName + '.tsx';
   }
   let propsRuneUsed = false;
 
-  const options = loadCompilerOptions(targetFileName);
+  if (cache.options === undefined || !cache.rootNames?.has(targetFileName)) {
+    [cache.options, cache.rootNames] = loadConfig(targetFileName);
+
+    const shimFilename = require.resolve('svelte2tsx/svelte-shims-v4.d.ts');
+    cache.rootNames.add(shimFilename);
+    cache.rootNames.add(targetFileName);
+  }
 
   // Create a custom host
-  const originalHost = ts.createCompilerHost(options);
+  const originalHost = ts.createCompilerHost(cache.options);
   const host: ts.CompilerHost = {
     ...originalHost,
+    readFile(fileName) {
+      // Cache package.json
+      const isCacheTarget = fileName.endsWith(path.sep + 'package.json');
+      if (isCacheTarget && cache.fileCache[fileName]) {
+        return cache.fileCache[fileName];
+      }
+      const content = originalHost.readFile(fileName);
+      if (content && isCacheTarget) {
+        cache.fileCache[fileName] = content;
+      }
+      return content;
+    },
     fileExists(fileName) {
+      const isCacheTarget = fileName.endsWith(path.sep + 'package.json');
+      if (isCacheTarget && cache.fileCache[fileName]) {
+        return true;
+      }
+
       let exists = originalHost.fileExists(fileName);
       if (exists) {
         return exists;
       }
 
+      // Virtual .svelte.tsx file
       if (fileName.endsWith('.svelte.tsx') || fileName.endsWith('.svelte.jsx')) {
         fileName = fileName.slice(0, -4); // remove .tsx or .jsx
         exists = originalHost.fileExists(fileName);
@@ -267,22 +311,27 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         // .svelte file (`import ... from './path/to/file.svelte'`)
 
         const realFileName = fileName.slice(0, -4); // remove .tsx or .jsx
+
+        const modifiedTime: Date | undefined = ts.sys.getModifiedTime
+          ? ts.sys.getModifiedTime(realFileName)
+          : undefined;
+        if (modifiedTime) {
+          const cachedModifiedTime = cache.filenameToModifiedTime[fileName];
+          if (cachedModifiedTime?.getTime() === modifiedTime.getTime()) {
+            return cache.filenameToSourceFile[fileName];
+          }
+        }
+
         const content = originalHost.readFile(realFileName);
         if (content === undefined) {
           return;
-        }
-
-        const digest = crypto.createHash('sha256').update(content).digest('hex');
-
-        if (sourceFileCache.hashToSourceFiles[digest]) {
-          return sourceFileCache.hashToSourceFiles[digest];
         }
 
         const isTsFile = /<script\s+[^>]*?lang=('|")(ts|typescript)('|")/.test(content);
 
         const tsx = svelte2tsx.svelte2tsx(content, {
           version: VERSION,
-          isTsFile: isTsFile,
+          isTsFile,
           mode: 'dts',
         });
 
@@ -294,50 +343,61 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
           isTsFile ? ts.ScriptKind.TS : ts.ScriptKind.JS // Set to 'JS' to enable TypeScript to parse JSDoc.
         );
 
-        sourceFileCache.hashToSourceFiles[digest] = sourceFile;
+        // update cache
+        cache.filenameToSourceFile[fileName] = sourceFile;
+        cache.filenameToModifiedTime[fileName] = modifiedTime;
+
         return sourceFile;
       } else {
         // non-svelte file
 
-        // We can significantly speed up the docgen process by caching common source files.
-        if (sourceFileCache.filenameToSourceFiles[fileName]) {
-          return sourceFileCache.filenameToSourceFiles[fileName];
+        let staticCaching = false;
+        staticCaching ||= fileName
+          .split(path.sep)
+          .some((part) => part.toLowerCase() === 'node_modules');
+
+        // We can significantly speed up the docgen process by caching source files.
+        const cachedSourceFile = cache.filenameToSourceFile[fileName];
+        if (cachedSourceFile && staticCaching) {
+          return cachedSourceFile;
+        }
+        const modifiedTime: Date | undefined = ts.sys.getModifiedTime
+          ? ts.sys.getModifiedTime(fileName)
+          : undefined;
+        if (modifiedTime) {
+          const cachedModifiedTime = cache.filenameToModifiedTime[fileName];
+          if (cachedModifiedTime?.getTime() === modifiedTime.getTime()) {
+            return cache.filenameToSourceFile[fileName];
+          }
         }
 
         const content = originalHost.readFile(fileName);
         if (content === undefined) {
           return;
         }
-        const digest = crypto.createHash('sha256').update(content).digest('hex');
-
-        if (sourceFileCache.hashToSourceFiles[digest]) {
-          return sourceFileCache.hashToSourceFiles[digest];
-        }
 
         const sourceFile = ts.createSourceFile(fileName, content, languageVersion, true);
-        if (sourceFile) {
-          let shouldCacheByFileName = false;
-          shouldCacheByFileName ||= fileName
-            .split(path.sep)
-            .some((part) => part.toLowerCase() === 'node_modules');
-          if (shouldCacheByFileName) {
-            // cache by filename
-            sourceFileCache.filenameToSourceFiles[fileName] = sourceFile;
-          }
-          // cache by digest
-          sourceFileCache.hashToSourceFiles[digest] = sourceFile;
-        }
+
+        // update cache
+        cache.filenameToSourceFile[fileName] = sourceFile;
+        cache.filenameToModifiedTime[fileName] = modifiedTime;
+
         return sourceFile;
       }
     },
     writeFile() {
-      // do nothing
+      // Write nothing
     },
   };
 
-  const shimFilename = require.resolve('svelte2tsx/svelte-shims-v4.d.ts');
+  const program = ts.createProgram({
+    rootNames: Array.from(cache.rootNames),
+    options: cache.options,
+    host,
+    oldProgram: cache.oldProgram,
+  });
+  cache.oldProgram = program;
 
-  const program = ts.createProgram([targetFileName, shimFilename], options, host);
   const checker = program.getTypeChecker();
   const sourceFile = program.getSourceFile(targetFileName);
   if (sourceFile === undefined) {
@@ -361,6 +421,7 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
   let propsType: ts.Type | undefined;
 
   const signature = checker.getSignatureFromDeclaration(renderFunction);
+
   if (signature && signature.declaration) {
     // Get props type from ReturnType<render>
     const type = checker.getReturnTypeOfSignature(signature);
@@ -371,16 +432,17 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         propsType = checker.getTypeOfSymbolAtLocation(retObjProp, decl);
         propsType.getProperties().forEach((prop) => {
           const name = prop.getName();
-          let docText = ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
+          let description =
+            ts.displayPartsToString(prop.getDocumentationComment(checker)) || undefined;
 
-          // Type from TS type annotation
+          // Infer prop type
           const propType = checker.getTypeOfSymbolAtLocation(prop, decl);
 
           if (prop.valueDeclaration) {
-            // Type and comment from JSDoc '@type {type} comment'
+            // Comment from JSDoc '@type {type} comment'
             const typeTag = ts.getJSDocTypeTag(prop.valueDeclaration);
             if (typeTag?.comment) {
-              docText = ((docText || '') + '\n' + typeTag.comment).trim();
+              description = ((description || '') + '\n' + typeTag.comment).trim();
             }
           }
 
@@ -397,9 +459,9 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
           // Check if this prop is optional
           const optional = (prop.flags & ts.SymbolFlags.Optional) !== 0;
           propMap.set(name, {
-            name: name,
-            optional: optional,
-            description: docText,
+            name,
+            optional,
+            description,
             type: convertType(propType, checker),
           });
         });
@@ -413,27 +475,29 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
         // Extract default values from:
         //     let { <name> = <defaultValue>, ... }: <propsType> = $props();
 
-        const isPropsRune =
-          declaration.initializer &&
-          ts.isCallExpression(declaration.initializer) &&
-          ts.isIdentifier(declaration.initializer.expression) &&
-          declaration.initializer.expression.text === '$props';
+        if (ts.isObjectBindingPattern(declaration.name)) {
+          const isPropsRune =
+            declaration.initializer &&
+            ts.isCallExpression(declaration.initializer) &&
+            ts.isIdentifier(declaration.initializer.expression) &&
+            declaration.initializer.expression.text === '$props';
 
-        const isPropsType =
-          declaration.type && propsType === checker.getTypeFromTypeNode(declaration.type);
+          const isPropsType =
+            declaration.type && propsType === checker.getTypeFromTypeNode(declaration.type);
 
-        if (ts.isObjectBindingPattern(declaration.name) && (isPropsRune || isPropsType)) {
-          propsRuneUsed = true;
-          declaration.name.elements.forEach((element) => {
-            const name = element.name.getText();
-            const prop = propMap.get(name);
-            if (prop && element.initializer) {
-              const defaultValue = initializerToDefaultValue(element.initializer, checker);
-              if (defaultValue) {
-                prop.defaultValue = defaultValue;
+          if (isPropsRune || isPropsType) {
+            propsRuneUsed = true;
+            declaration.name.elements.forEach((element) => {
+              const name = element.name.getText();
+              const prop = propMap.get(name);
+              if (prop && element.initializer) {
+                const defaultValue = initializerToDefaultValue(element.initializer, checker);
+                if (defaultValue) {
+                  prop.defaultValue = defaultValue;
+                }
               }
-            }
-          });
+            });
+          }
         }
 
         // Extract default values from:
@@ -458,6 +522,6 @@ export function generateDocgen(targetFileName: string, sourceFileCache: SourceFi
 
   return {
     props: Array.from(propMap.values()),
-    runePropsUsed: propsRuneUsed,
+    propsRuneUsed,
   };
 }
