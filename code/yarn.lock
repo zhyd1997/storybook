@@ -5419,7 +5419,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/addon-vitest@workspace:addons/vitest":
+"@storybook/addon-vitest@workspace:*, @storybook/addon-vitest@workspace:addons/vitest":
   version: 0.0.0-use.local
   resolution: "@storybook/addon-vitest@workspace:addons/vitest"
   dependencies:
@@ -6517,6 +6517,7 @@ __metadata:
     "@storybook/addon-storysource": "workspace:*"
     "@storybook/addon-toolbars": "workspace:*"
     "@storybook/addon-viewport": "workspace:*"
+    "@storybook/addon-vitest": "workspace:*"
     "@storybook/angular": "workspace:*"
     "@storybook/bench": "npm:next"
     "@storybook/blocks": "workspace:*"

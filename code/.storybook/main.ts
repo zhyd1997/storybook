@@ -65,6 +65,10 @@ const config: StorybookConfig = {
       titlePrefix: 'addons/viewport',
     },
     {
+      directory: '../addons/vitest/src',
+      titlePrefix: 'addons/vitest',
+    },
+    {
       directory: '../addons/toolbars/template/stories',
       titlePrefix: 'addons/toolbars',
     },
@@ -88,6 +92,7 @@ const config: StorybookConfig = {
     '@storybook/addon-storysource',
     '@storybook/addon-designs',
     '@storybook/addon-a11y',
+    '@storybook/addon-vitest',
     '@chromatic-com/storybook',
   ],
   previewAnnotations: [
