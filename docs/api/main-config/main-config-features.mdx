@@ -13,6 +13,7 @@ Type:
 {
   argTypeTargetsV7?: boolean;
   legacyDecoratorFileOrder?: boolean;
+  addonToolbarParameters?: boolean;
   viewportStoryGlobals?: boolean;
   backgroundsStoryGlobals?: boolean;
 }
@@ -50,7 +51,7 @@ Filter args with a "target" on the type from the render function.
 
 Type: `boolean`
 
-Configures the [Viewports addon](../../essentials/backgrounds.mdx) to opt-in to the new story globals API for configuring viewports.
+Configures the [Viewports addon](../../essentials/viewports.mdx) to opt-in to the new story globals API for configuring viewports.
 
 {/* prettier-ignore-start */}
 
@@ -69,3 +70,10 @@ Configures the [Backgrounds addon](../../essentials/backgrounds.mdx) to opt-in t
 <CodeSnippets path="main-config-features-backgrounds-story-globals.md" />
 
 {/* prettier-ignore-end */}
+
+## `addonToolbarParameters`
+
+Type: `boolean`
+
+Configures the [Backgrounds addon](../../essentials/toolbars.mdx) to opt-in to the new method fo configuring via parameters instead of globalTypes.
+
