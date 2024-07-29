@@ -1,10 +1,9 @@
 ```js filename=".storybook/preview.js" renderer="common" language="js"
 const preview = {
-  globalTypes: {
-    locale: {
-      description: 'Internationalization locale',
-      defaultValue: 'en',
-      toolbar: {
+  parameters: {
+    toolbars: {
+      locale: {
+        description: 'Internationalization locale',
         icon: 'globe',
         items: [
           { value: 'en', right: '🇺🇸', title: 'English' },
@@ -15,6 +14,9 @@ const preview = {
         ],
       },
     },
+  },
+  initialGlobals: {
+    locale: 'en',
   },
 };
 
@@ -26,11 +28,10 @@ export default preview;
 import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
-  globalTypes: {
-    locale: {
-      description: 'Internationalization locale',
-      defaultValue: 'en',
-      toolbar: {
+  parameters: {
+    toolbars: {
+      locale: {
+        description: 'Internationalization locale',
         icon: 'globe',
         items: [
           { value: 'en', right: '🇺🇸', title: 'English' },
@@ -42,6 +43,9 @@ const preview: Preview = {
       },
     },
   },
+  initialGlobals: {
+    locale: 'en',
+  },
 };
 
 export default preview;
@@ -52,11 +56,10 @@ export default preview;
 import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
-  globalTypes: {
-    locale: {
-      description: 'Internationalization locale',
-      defaultValue: 'en',
-      toolbar: {
+  parameters: {
+    toolbars: {
+      locale: {
+        description: 'Internationalization locale',
         icon: 'globe',
         items: [
           { value: 'en', right: '🇺🇸', title: 'English' },
@@ -67,6 +70,9 @@ const preview: Preview = {
         ],
       },
     },
+  },
+  initialGlobals: {
+    locale: 'en',
   },
 };
 

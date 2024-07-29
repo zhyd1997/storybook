@@ -1,12 +1,13 @@
 ```js filename=".storybook/preview.js" renderer="common" language="js"
 const preview = {
-  globalTypes: {
-    theme: {
-      description: 'Global theme for components',
-      defaultValue: 'light',
-      toolbar: {
-        // The label to show for this toolbar item
+  parameters: {
+    toolbars: {
+      //👇 The name of the global
+      theme: {
+        //👇 The label to show for this toolbar item
         title: 'Theme',
+        description: 'Global theme for components',
+      
         icon: 'circlehollow',
         // Array of plain string values or MenuItem shape (see below)
         items: ['light', 'dark'],
@@ -14,6 +15,9 @@ const preview = {
         dynamicTitle: true,
       },
     },
+  },
+  initialGlobals: {
+    theme: 'light',
   },
 };
 
@@ -25,13 +29,15 @@ export default preview;
 import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
-  globalTypes: {
-    theme: {
-      description: 'Global theme for components',
-      defaultValue: 'light',
-      toolbar: {
-        // The label to show for this toolbar item
+  parameters: {
+    toolbars: {
+      //👇 The name of the global
+      theme: {
+        //👇 The label to show for this toolbar item
         title: 'Theme',
+        description: 'Global theme for components',
+
+        // The label to show for this toolbar item
         icon: 'circlehollow',
         // Array of plain string values or MenuItem shape (see below)
         items: ['light', 'dark'],
@@ -39,6 +45,9 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+  },
+  initialGlobals: {
+    theme: 'light',
   },
 };
 
@@ -50,13 +59,15 @@ export default preview;
 import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
-  globalTypes: {
-    theme: {
-      description: 'Global theme for components',
-      defaultValue: 'light',
-      toolbar: {
-        // The label to show for this toolbar item
+  parameters: {
+    toolbars: {
+      //👇 The name of the global
+      theme: {
+        //👇 The label to show for this toolbar item
         title: 'Theme',
+        description: 'Global theme for components',
+
+        // The label to show for this toolbar item
         icon: 'circlehollow',
         // Array of plain string values or MenuItem shape (see below)
         items: ['light', 'dark'],
@@ -64,6 +75,9 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+  },
+  initialGlobals: {
+    theme: 'light',
   },
 };
 
