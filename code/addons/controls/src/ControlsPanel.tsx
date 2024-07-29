@@ -34,7 +34,7 @@ interface ControlsParameters {
   sort?: SortType;
   expanded?: boolean;
   presetColors?: PresetColor[];
-  disableSave?: boolean;
+  disableSaveFromUI?: boolean;
 }
 
 interface ControlsPanelProps {
@@ -51,7 +51,7 @@ export const ControlsPanel = ({ saveStory, createStory }: ControlsPanelProps) =>
     expanded,
     sort,
     presetColors,
-    disableSave = false,
+    disableSaveFromUI = false,
   } = useParameter<ControlsParameters>(PARAM_KEY, {});
   const { path, previewInitialized } = useStorybookState();
 
@@ -93,7 +93,7 @@ export const ControlsPanel = ({ saveStory, createStory }: ControlsPanelProps) =>
       {hasControls &&
         hasUpdatedArgs &&
         global.CONFIG_TYPE === 'DEVELOPMENT' &&
-        disableSave !== true && <SaveStory {...{ resetArgs, saveStory, createStory }} />}
+        disableSaveFromUI !== true && <SaveStory {...{ resetArgs, saveStory, createStory }} />}
     </AddonWrapper>
   );
 };
