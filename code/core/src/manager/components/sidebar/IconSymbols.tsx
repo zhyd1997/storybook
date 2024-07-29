@@ -66,12 +66,20 @@ export const IconSymbols: FC = () => {
         />
       </symbol>
       <symbol id={ERROR_ID}>
-        <circle cx="7" cy="7" r="3" fill="none" stroke="currentColor" />
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M7 4a3 3 0 100 6 3 3 0 000-6zM3 7a4 4 0 118 0 4 4 0 01-8 0z"
+          fill="currentColor"
+        />
       </symbol>
       <symbol id={WARNING_ID}>
-        <path d="M3.5 9.5H10.5" stroke="currentColor" strokeLinecap="round" />
-        <path d="M7 3.5L10.5 9.5" stroke="currentColor" strokeLinecap="round" />
-        <path d="M3.5 9.5L7 3.5" stroke="currentColor" strokeLinecap="round" />
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M7.206 3.044a.498.498 0 01.23.212l3.492 5.985a.494.494 0 01.006.507.497.497 0 01-.443.252H3.51a.499.499 0 01-.437-.76l3.492-5.984a.497.497 0 01.642-.212zM7 4.492L4.37 9h5.26L7 4.492z"
+          fill="currentColor"
+        />
       </symbol>
       <symbol id={DOT_ID}>
         <circle cx="3" cy="3" r="3" fill="currentColor" />

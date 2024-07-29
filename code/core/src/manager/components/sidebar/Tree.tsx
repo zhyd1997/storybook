@@ -11,18 +11,18 @@ import { styled, useTheme } from '@storybook/core/theming';
 import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/core/components';
 import { transparentize } from 'polished';
 import type { ComponentProps, MutableRefObject } from 'react';
-import React, { useCallback, useContext, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 
 import { PRELOAD_ENTRIES } from '@storybook/core/core-events';
 import {
   ExpandAltIcon,
   CollapseIcon as CollapseIconSvg,
-  AlertIcon,
-  CheckIcon,
   SyncIcon,
-  CircleHollowIcon,
+  StatusFailIcon,
+  StatusWarnIcon,
+  StatusPassIcon,
 } from '@storybook/icons';
-import type { StoryId, API_StatusValue, API_StatusState, API_StatusObject } from '@storybook/types';
+import type { StoryId, API_StatusValue } from '@storybook/types';
 
 import { ComponentNode, DocumentNode, GroupNode, RootNode, StoryNode } from './TreeNode';
 
@@ -261,9 +261,9 @@ const Node = React.memo<NodeProps>(function Node({
                     title: value.title,
                     description: value.description,
                     icon: {
-                      success: <CheckIcon size={12} color={theme.color.positive} />,
-                      error: <CircleHollowIcon size={12} color={theme.color.negative} />,
-                      warn: <AlertIcon size={12} color={theme.color.warning} />,
+                      success: <StatusPassIcon color={theme.color.positive} />,
+                      error: <StatusFailIcon color={theme.color.negative} />,
+                      warn: <StatusWarnIcon color={theme.color.warning} />,
                       pending: <SyncIcon size={12} color={theme.color.defaultText} />,
                       unknown: null,
                     }[value.status],
@@ -339,7 +339,7 @@ const Node = React.memo<NodeProps>(function Node({
       if (counts.error) {
         links.push({
           id: 'errors',
-          icon: <CircleHollowIcon size={12} color={theme.color.negative} />,
+          icon: <StatusFailIcon color={theme.color.negative} />,
           title: `${counts.error} ${counts.error === 1 ? 'story' : 'stories'} with errors`,
           onClick: () => {
             const [firstStoryId, [firstError]] = Object.entries(statuses.error)[0];
@@ -352,7 +352,7 @@ const Node = React.memo<NodeProps>(function Node({
       if (counts.warn) {
         links.push({
           id: 'warnings',
-          icon: <AlertIcon size={12} color={theme.color.gold} />,
+          icon: <StatusWarnIcon color={theme.color.gold} />,
           title: `${counts.warn} ${counts.warn === 1 ? 'story' : 'stories'} with warnings`,
           onClick: () => {
             const [firstStoryId, [firstWarning]] = Object.entries(statuses.warn)[0];

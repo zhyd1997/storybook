@@ -200,18 +200,20 @@ const ListItem = ({
 
   return (
     <Item {...rest} {...commonProps} {...itemProps}>
-      {icon && <Left {...commonProps}>{icon}</Left>}
-      {title || center ? (
-        <Center isIndented={!!(!icon && isIndented)}>
-          {title && (
-            <Title {...commonProps} loading={loading}>
-              {title}
-            </Title>
-          )}
-          {center && <CenterText {...commonProps}>{center}</CenterText>}
-        </Center>
-      ) : null}
-      {right && <Right {...commonProps}>{right}</Right>}
+      <>
+        {icon && <Left {...commonProps}>{icon}</Left>}
+        {title || center ? (
+          <Center isIndented={!!(!icon && isIndented)}>
+            {title && (
+              <Title {...commonProps} loading={loading}>
+                {title}
+              </Title>
+            )}
+            {center && <CenterText {...commonProps}>{center}</CenterText>}
+          </Center>
+        ) : null}
+        {right && <Right {...commonProps}>{right}</Right>}
+      </>
     </Item>
   );
 };
