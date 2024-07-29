@@ -51,6 +51,7 @@ const BranchNode = styled.button<{
 }));
 
 const LeafNode = styled.a<{ depth?: number }>(({ theme, depth = 0 }) => ({
+  width: '100%',
   cursor: 'pointer',
   color: 'inherit',
   display: 'flex',
@@ -60,11 +61,17 @@ const LeafNode = styled.a<{ depth?: number }>(({ theme, depth = 0 }) => ({
   paddingLeft: `${22 + depth * 18}px`,
   paddingTop: 5,
   paddingBottom: 4,
+  paddingRight: 28,
   fontSize: `${theme.typography.size.s2}px`,
   textDecoration: 'none',
   overflowWrap: 'break-word',
   wordWrap: 'break-word',
   wordBreak: 'break-word',
+
+  '&:hover, &:focus': {
+    background: transparentize(0.93, theme.color.secondary),
+    outline: 'none',
+  },
 }));
 
 export const RootNode = styled.div(({ theme }) => ({

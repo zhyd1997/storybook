@@ -18,6 +18,9 @@ const GROUP_ID = 'icon--group';
 const COMPONENT_ID = 'icon--component';
 const DOCUMENT_ID = 'icon--document';
 const STORY_ID = 'icon--story';
+const ERROR_ID = 'icon--error';
+const WARNING_ID = 'icon--warning';
+const DOT_ID = 'icon--dot';
 
 export const IconSymbols: FC = () => {
   return (
@@ -62,14 +65,30 @@ export const IconSymbols: FC = () => {
           fill="currentColor"
         />
       </symbol>
+      <symbol id={ERROR_ID}>
+        <circle cx="7" cy="7" r="3" fill="none" stroke="currentColor" />
+      </symbol>
+      <symbol id={WARNING_ID}>
+        <path d="M3.5 9.5H10.5" stroke="currentColor" strokeLinecap="round" />
+        <path d="M7 3.5L10.5 9.5" stroke="currentColor" strokeLinecap="round" />
+        <path d="M3.5 9.5L7 3.5" stroke="currentColor" strokeLinecap="round" />
+      </symbol>
+      <symbol id={DOT_ID}>
+        <circle cx="3" cy="3" r="3" fill="currentColor" />
+      </symbol>
     </Svg>
   );
 };
 
-export const UseSymbol: FC<{ type: 'group' | 'component' | 'document' | 'story' }> = ({ type }) => {
+export const UseSymbol: FC<{
+  type: 'group' | 'component' | 'document' | 'story' | 'error' | 'warning' | 'dot';
+}> = ({ type }) => {
   if (type === 'group') return <use xlinkHref={`#${GROUP_ID}`} />;
   if (type === 'component') return <use xlinkHref={`#${COMPONENT_ID}`} />;
   if (type === 'document') return <use xlinkHref={`#${DOCUMENT_ID}`} />;
   if (type === 'story') return <use xlinkHref={`#${STORY_ID}`} />;
+  if (type === 'error') return <use xlinkHref={`#${ERROR_ID}`} />;
+  if (type === 'warning') return <use xlinkHref={`#${WARNING_ID}`} />;
+  if (type === 'dot') return <use xlinkHref={`#${DOT_ID}`} />;
   return null;
 };
