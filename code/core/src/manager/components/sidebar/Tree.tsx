@@ -326,9 +326,7 @@ const Node = React.memo<NodeProps>(function Node({
   }
 
   if (item.type === 'component' || item.type === 'group') {
-    const { errors, warnings } = useStatusSummary(item);
-    const errorCount = Object.values(errors).length;
-    const warningCount = Object.values(warnings).length;
+    const { counts, statuses } = useStatusSummary(item);
 
     const itemStatus = groupStatus?.[item.id];
     const color = itemStatus ? statusMapping[itemStatus][1] : null;
@@ -338,26 +336,26 @@ const Node = React.memo<NodeProps>(function Node({
       onHide
     ) => {
       const links = [];
-      if (errorCount) {
+      if (counts.error) {
         links.push({
           id: 'errors',
           icon: <CircleHollowIcon size={12} color={theme.color.negative} />,
-          title: `${errorCount} ${errorCount === 1 ? 'story' : 'stories'} with errors`,
+          title: `${counts.error} ${counts.error === 1 ? 'story' : 'stories'} with errors`,
           onClick: () => {
-            const [firstStoryId, [firstError]] = Object.entries(errors)[0];
+            const [firstStoryId, [firstError]] = Object.entries(statuses.error)[0];
             onSelectStoryId(firstStoryId);
             firstError.onClick?.();
             onHide();
           },
         });
       }
-      if (warningCount) {
+      if (counts.warn) {
         links.push({
           id: 'warnings',
           icon: <AlertIcon size={12} color={theme.color.gold} />,
-          title: `${warningCount} ${warningCount === 1 ? 'story' : 'stories'} with warnings`,
+          title: `${counts.warn} ${counts.warn === 1 ? 'story' : 'stories'} with warnings`,
           onClick: () => {
-            const [firstStoryId, [firstWarning]] = Object.entries(warnings)[0];
+            const [firstStoryId, [firstWarning]] = Object.entries(statuses.warn)[0];
             onSelectStoryId(firstStoryId);
             firstWarning.onClick?.();
             onHide();

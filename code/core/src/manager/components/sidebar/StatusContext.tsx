@@ -11,27 +11,28 @@ export const StatusContext = createContext<{
 
 export const useStatusSummary = (item: GroupEntry | ComponentEntry) => {
   const { data, status, groupStatus } = useContext(StatusContext);
+  const summary: {
+    counts: Record<API_StatusValue, number>;
+    statuses: Record<API_StatusValue, Record<StoryId, API_StatusObject[]>>;
+  } = {
+    counts: { pending: 0, success: 0, error: 0, warn: 0, unknown: 0 },
+    statuses: { pending: {}, success: {}, error: {}, warn: {}, unknown: {} },
+  };
+
   if (
-    !data ||
-    !status ||
-    !groupStatus ||
-    !['pending', 'warn', 'error'].includes(groupStatus[item.id])
+    data &&
+    status &&
+    groupStatus &&
+    ['pending', 'warn', 'error'].includes(groupStatus[item.id])
   ) {
-    return { errors: {}, warnings: {} };
+    for (const storyId of getDescendantIds(data, item.id, false)) {
+      for (const value of Object.values(status[storyId] || {})) {
+        summary.counts[value.status]++;
+        summary.statuses[value.status][storyId] = summary.statuses[value.status][storyId] || [];
+        summary.statuses[value.status][storyId].push(value);
+      }
+    }
   }
 
-  return getDescendantIds(data, item.id, false).reduce<{
-    errors: Record<StoryId, API_StatusObject[]>;
-    warnings: Record<StoryId, API_StatusObject[]>;
-  }>(
-    (acc, storyId) => {
-      const statuses = Object.values(status[storyId] || {});
-      const errs = statuses.filter((v) => v.status === 'error');
-      const warns = statuses.filter((v) => v.status === 'warn');
-      if (errs.length) acc.errors[storyId] = errs;
-      if (warns.length) acc.warnings[storyId] = warns;
-      return acc;
-    },
-    { errors: {}, warnings: {} }
-  );
+  return summary;
 };
