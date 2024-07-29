@@ -17,9 +17,9 @@ Globals in Storybook represents “global” (as in not story-specific) inputs t
 
 When the globals change, the story re-renders, and the decorators rerun with the new values. The easiest way to change globals is to create a toolbar item for them.
 
-## Global types and the toolbar annotation
+## Toolbar confguration via parameters
 
-Storybook has a simple, declarative syntax for configuring toolbar menus. In your [`.storybook/preview.js|ts`](../configure/index.mdx#configure-story-rendering), you can add your own toolbars by creating `globalTypes` with a `toolbar` annotation:
+Storybook has a simple, declarative syntax for configuring toolbar menus. In your [`.storybook/preview.js|ts`](../configure/index.mdx#configure-story-rendering), you can add your own toolbars by creating `parameters` with a `toolbar` annotation:
 
 {/* prettier-ignore-start */}
 
