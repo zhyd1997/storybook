@@ -136,31 +136,17 @@ Update your story through [parameters](../writing-stories/parameters.mdx) to inc
 
 If you need, you can edit them on the shortcuts page.
 
-## Setting value
+## Customizing viewports with globals
 
-You can set the viewport in the toolbar by clicking on the viewport you want to use.
+By default, the Viewport addon allows you to customize the viewport enabled for a story by selecting from the list of existing viewports in the toolbar. If you need, you can opt into the globals API to configure viewports to ensure that a story always uses a specific viewport regardless of the existing configuration.
 
-If you want to enforce a story to use a viewport, you can do so by setting the `viewport` global in the story:
+To enable it, you'll need to include the [`viewportStoryGlobals`](../api/main-config/main-config-features.mdx#viewportstoryglobals) option in your Storybook configuration (i.e., [`.storybook/main.js|ts`](../configure/index.mdx#configure-your-storybook-project)) and adjust your stories to use this API.
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9"
-// Replace your-framework with the name of your framework
-import type { Meta, StoryObj } from '@storybook/your-framework';
+{/* prettier-ignore-start */}
 
-import { Button } from './Button';
+<CodeSnippets path="storybook-addon-viewports-global-api.md" usesCsf3 />
 
-const meta = {
-  component: Button,
-} satisfies Meta<typeof Button>;
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Large: Story = {
-  global: {
-    viewport: { value: 'phone', isRotated: false },
-  },
-};
-```
+{/* prettier-ignore-end */}
 
 ## API
 

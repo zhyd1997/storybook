@@ -69,33 +69,17 @@ You can set the background color in the toolbar by clicking on the color you wan
 
 If you want to enforce a story to use a specific background color, you can do so by setting the `backgrounds` global in the story:
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9"
-// Replace your-framework with the name of your framework
-import type { Meta, StoryObj } from '@storybook/your-framework';
+## Overriding backgrounds with globals
 
-import { Button } from './Button';
+By default, the Backgrounds addon enables you to change the background color applied to a story by selecting from the list of predefined background colors in the toolbar. If you need, you can opt into the globals API to configure backgrounds to ensure that a story always uses a specific background color regardless of the existing configuration.
 
-const meta = {
-  component: Button,
-  parameters: {
-    backgrounds: {
-      options: {
-        maroon: { name: 'Maroon', value: '#400' },
-      },
-    },
-  },
+To enable it, you'll need to include the [`backgroundsStoryGlobals`](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) option in your Storybook configuration (i.e., [`.storybook/main.js|ts`](../configure/index.mdx#configure-your-storybook-project)) and adjust your stories to use this API.
 
-} satisfies Meta<typeof Button>;
+{/* prettier-ignore-start */}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+<CodeSnippets path="storybook-addon-backgrounds-global-api.md" usesCsf3 />
 
-export const Large: Story = {
-  global: {
-    backgrounds: { value: 'maroon', grid: false },
-  },
-};
-```
+{/* prettier-ignore-end */}
 
 ## API
 
