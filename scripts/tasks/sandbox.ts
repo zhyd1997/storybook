@@ -87,7 +87,9 @@ export const sandbox: Task = {
     const extraDeps = details.template.modifications?.extraDependencies ?? [];
 
     if (
-      (details.sandboxDir.includes('svelte-kit') || details.sandboxDir.includes('vite')) &&
+      (details.sandboxDir.includes('svelte-kit') ||
+        details.sandboxDir.includes('vite') ||
+        details.sandboxDir.includes('nextjs')) &&
       !details.sandboxDir.includes('html') &&
       !details.sandboxDir.includes('lit')
     ) {
@@ -102,6 +104,10 @@ export const sandbox: Task = {
         '@storybook/experimental-vitest-plugin@0.0.1--canary.2.bbfa711.0',
         testingLibraryPackage
       );
+
+      if (details.sandboxDir.includes('nextjs')) {
+        extraDeps.push('vite-plugin-storybook-nextjs');
+      }
 
       await setupVitest(details, { renderer, testingLibraryPackage });
     }

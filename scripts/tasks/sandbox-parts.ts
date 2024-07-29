@@ -371,10 +371,14 @@ export async function setupVitest(
 ) {
   const { renderer, testingLibraryPackage } = options;
   const { sandboxDir, template } = details;
+
+  const isSvelte = template.expected.renderer === '@storybook/svelte';
+  const isNextjs = template.expected.framework === '@storybook/nextjs';
+  const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
   await writeFile(
     join(sandboxDir, '.storybook/setupTests.ts'),
     dedent`import { beforeAll, beforeEach } from 'vitest'
-    import { setProjectAnnotations } from '${template.expected.renderer}'
+    import { setProjectAnnotations } from '${storybookPackage}'
     import {
       render as testingLibraryRender,
       cleanup,
@@ -404,14 +408,15 @@ export async function setupVitest(
     beforeAll(annotations.beforeAll!)`
   );
 
-  const isSvelte = template.expected.renderer === '@storybook/svelte';
   await writeFile(
     join(sandboxDir, '.storybook/vitest.config.ts'),
     dedent`import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
     import { storybookTest } from '@storybook/experimental-vitest-plugin'
     import viteConfig from '../vite.config'
     import path from 'node:path'
-    ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" :  ''}
+    ${isNextjs ? "import { getPackageAliases } from '@storybook/nextjs/export-mocks'" : ''}
+    ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
+    ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" : ''}
 
     export default mergeConfig(
       viteConfig,
@@ -420,10 +425,12 @@ export async function setupVitest(
           storybookTest({
             renderer: '${renderer}',
           }),
-          ${isSvelte ? "svelteTesting()" :  ''}
+          ${isSvelte ? 'svelteTesting(),' : ''}
+          ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
         ],
         resolve: {
           preserveSymlinks: true,
+          ${isNextjs ? 'alias: getPackageAliases(),' : ''}
         },
         test: {
           name: 'storybook',
