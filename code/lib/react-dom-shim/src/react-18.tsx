@@ -1,7 +1,7 @@
 import type { FC, ReactElement } from 'react';
-import React, { useLayoutEffect, useRef } from 'react';
+import * as React from 'react';
 import type { Root as ReactRoot, RootOptions } from 'react-dom/client';
-import ReactDOM from 'react-dom/client';
+import * as ReactDOM from 'react-dom/client';
 
 // A map of all rendered React 18 nodes
 const nodes = new Map<Element, ReactRoot>();
@@ -11,8 +11,8 @@ const WithCallback: FC<{ callback: () => void; children: ReactElement }> = ({
   children,
 }) => {
   // See https://github.com/reactwg/react-18/discussions/5#discussioncomment-2276079
-  const once = useRef<() => void>();
-  useLayoutEffect(() => {
+  const once = React.useRef<() => void>();
+  React.useLayoutEffect(() => {
     if (once.current === callback) return;
     once.current = callback;
     callback();
@@ -21,7 +21,7 @@ const WithCallback: FC<{ callback: () => void; children: ReactElement }> = ({
   return children;
 };
 
-export const renderElement = async (node: ReactElement, el: Element, rootOptions?: RootOptions) => {
+const renderElement = async (node: ReactElement, el: Element, rootOptions?: RootOptions) => {
   // Create Root Element conditionally for new React 18 Root Api
   const root = await getReactRoot(el, rootOptions);
 
@@ -30,7 +30,7 @@ export const renderElement = async (node: ReactElement, el: Element, rootOptions
   });
 };
 
-export const unmountElement = (el: Element, shouldUseNewRootApi?: boolean) => {
+const unmountElement = (el: Element, shouldUseNewRootApi?: boolean) => {
   const root = nodes.get(el);
 
   if (root) {
@@ -49,3 +49,5 @@ const getReactRoot = async (el: Element, rootOptions?: RootOptions): Promise<Rea
 
   return root;
 };
+
+export default { renderElement, unmountElement };

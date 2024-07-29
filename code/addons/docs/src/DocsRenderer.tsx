@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import React, { Component } from 'react';
-import { renderElement, unmountElement } from '@storybook/react-dom-shim';
+import ReactDomShim from '@storybook/react-dom-shim';
 import type {
   Renderer,
   Parameters,
@@ -62,7 +62,7 @@ export class DocsRenderer<TRenderer extends Renderer> {
         import('@mdx-js/react')
           .then(({ MDXProvider }) =>
             // We use a `key={}` here to reset the `hasError` state each time we render ErrorBoundary
-            renderElement(
+            ReactDomShim.renderElement(
               <ErrorBoundary showException={reject} key={Math.random()}>
                 <MDXProvider components={components}>
                   <TDocs context={context} docsParameter={docsParameter} />
@@ -76,7 +76,7 @@ export class DocsRenderer<TRenderer extends Renderer> {
     };
 
     this.unmount = (element: HTMLElement) => {
-      unmountElement(element);
+      ReactDomShim.unmountElement(element);
     };
   }
 }
