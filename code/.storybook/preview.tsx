@@ -177,7 +177,7 @@ export const decorators = [
       theme = 'light';
       showPlayFnNotice = true;
     } else if (isChromatic() && !storyGlobals.theme && !playFunction) {
-      theme = 'side-by-side';
+      theme = 'stacked';
     }
 
     switch (theme) {

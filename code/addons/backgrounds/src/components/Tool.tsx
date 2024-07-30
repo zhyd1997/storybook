@@ -17,7 +17,6 @@ export const BackgroundTool = memo(function BackgroundSelector() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   const { options = emptyBackgroundMap, disable = true } = config || {};
-
   if (disable) {
     return null;
   }
