@@ -176,7 +176,7 @@ export const decorators = [
     if (playFunction && args.autoplay !== false && !(theme === 'light' || theme === 'dark')) {
       theme = 'light';
       showPlayFnNotice = true;
-    } else if (isChromatic() && !storyGlobals.theme) {
+    } else if (isChromatic() && !storyGlobals.theme && !playFunction) {
       theme = 'side-by-side';
     }
 
