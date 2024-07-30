@@ -100,6 +100,7 @@ const config: StorybookConfig = {
     './addons/toolbars/template/stories/preview.ts',
     './renderers/react/template/components/index.js',
   ],
+  staticDirs: ['../addons/vitest/static'],
   build: {
     test: {
       // we have stories for the blocks here, we can't exclude them
