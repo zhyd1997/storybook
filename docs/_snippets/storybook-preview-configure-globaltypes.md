@@ -1,13 +1,11 @@
 ```js filename=".storybook/preview.js" renderer="common" language="js"
 const preview = {
-  parameters: {
-    toolbars: {
-      //👇 The name of the global
-      theme: {
-        //👇 The label to show for this toolbar item
+  globalTypes: {
+    theme: {
+      description: 'Global theme for components',
+      toolbar: {
+        // The label to show for this toolbar item
         title: 'Theme',
-        description: 'Global theme for components',
-      
         icon: 'circlehollow',
         // Array of plain string values or MenuItem shape (see below)
         items: ['light', 'dark'],
@@ -29,15 +27,12 @@ export default preview;
 import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
-  parameters: {
-    toolbars: {
-      //👇 The name of the global
-      theme: {
-        //👇 The label to show for this toolbar item
-        title: 'Theme',
-        description: 'Global theme for components',
-
+  globalTypes: {
+    theme: {
+      description: 'Global theme for components',
+      toolbar: {
         // The label to show for this toolbar item
+        title: 'Theme',
         icon: 'circlehollow',
         // Array of plain string values or MenuItem shape (see below)
         items: ['light', 'dark'],
@@ -59,15 +54,12 @@ export default preview;
 import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
-  parameters: {
-    toolbars: {
-      //👇 The name of the global
-      theme: {
-        //👇 The label to show for this toolbar item
-        title: 'Theme',
-        description: 'Global theme for components',
-
+  globalTypes: {
+    theme: {
+      description: 'Global theme for components',
+      toolbar: {
         // The label to show for this toolbar item
+        title: 'Theme',
         icon: 'circlehollow',
         // Array of plain string values or MenuItem shape (see below)
         items: ['light', 'dark'],

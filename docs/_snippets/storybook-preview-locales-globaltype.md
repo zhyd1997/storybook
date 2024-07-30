@@ -1,9 +1,9 @@
 ```js filename=".storybook/preview.js" renderer="common" language="js"
 const preview = {
-  parameters: {
-    toolbars: {
-      locale: {
-        description: 'Internationalization locale',
+  globalTypes: {
+    locale: {
+      description: 'Internationalization locale',
+      toolbar: {
         icon: 'globe',
         items: [
           { value: 'en', right: '🇺🇸', title: 'English' },
@@ -28,10 +28,10 @@ export default preview;
 import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
-  parameters: {
-    toolbars: {
-      locale: {
-        description: 'Internationalization locale',
+  globalTypes: {
+    locale: {
+      description: 'Internationalization locale',
+      toolbar: {
         icon: 'globe',
         items: [
           { value: 'en', right: '🇺🇸', title: 'English' },
@@ -56,10 +56,10 @@ export default preview;
 import { Preview } from '@storybook/your-framework';
 
 const preview: Preview = {
-  parameters: {
-    toolbars: {
-      locale: {
-        description: 'Internationalization locale',
+  globalTypes: {
+    locale: {
+      description: 'Internationalization locale',
+      toolbar: {
         icon: 'globe',
         items: [
           { value: 'en', right: '🇺🇸', title: 'English' },
