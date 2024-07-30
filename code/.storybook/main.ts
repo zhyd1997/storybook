@@ -121,7 +121,6 @@ const config: StorybookConfig = {
     viewportStoryGlobals: true,
     themesStoryGlobals: true,
     backgroundsStoryGlobals: true,
-    addonToolbarParameters: true,
   },
   viteFinal: (viteConfig, { configType }) =>
     mergeConfig(viteConfig, {
