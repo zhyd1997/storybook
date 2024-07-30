@@ -48,7 +48,7 @@ export const UnsetCustom = {
 export const Disabled = {
   parameters: {
     backgrounds: {
-      disabled: true,
+      disable: true,
     },
   },
 };

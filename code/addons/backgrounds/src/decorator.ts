@@ -25,7 +25,7 @@ export const withBackgroundAndGrid = (
   context: StoryContext<Renderer>
 ) => {
   const { globals, parameters, viewMode, id } = context;
-  const { options = {}, disabled, grid = defaultGrid } = (parameters[KEY] || {}) as Config;
+  const { options = {}, disable, grid = defaultGrid } = (parameters[KEY] || {}) as Config;
   const data = globals[KEY] || {};
   const backgroundName: string = data.value;
 
@@ -33,7 +33,7 @@ export const withBackgroundAndGrid = (
   const value = item?.value || 'transparent';
 
   const showGrid = data.grid || false;
-  const shownBackground = !!item && !disabled;
+  const shownBackground = !!item && !disable;
 
   const backgroundSelector = viewMode === 'docs' ? `#anchor--${id} .docs-story` : '.sb-show-main';
   const gridSelector = viewMode === 'docs' ? `#anchor--${id} .docs-story` : '.sb-show-main';

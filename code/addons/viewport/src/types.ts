@@ -21,5 +21,8 @@ export type ViewportMap = Record<string, Viewport>;
 
 export interface Config {
   options: Record<string, ModernViewport>;
-  disabled: boolean;
+  disable: boolean;
 }
+
+export type GlobalState = { value: string | undefined; isRotated: boolean };
+export type GlobalStateUpdate = Partial<GlobalState>;
