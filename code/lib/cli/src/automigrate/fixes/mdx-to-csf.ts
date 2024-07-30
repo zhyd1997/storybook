@@ -1,6 +1,6 @@
 import picocolors from 'picocolors';
-import dedent from 'ts-dedent';
-import type { StoriesEntry } from '@storybook/types';
+import { dedent } from 'ts-dedent';
+import type { StoriesEntry } from '@storybook/core/types';
 import { updateMainConfig } from '../helpers/mainConfigFile';
 import type { Fix } from '../types';
 import { runCodemod } from '@storybook/codemod';
@@ -41,7 +41,7 @@ export const mdxToCSF: Fix<BareMdxStoriesGlobRunOptions> = {
     if (!existingStoriesEntries) {
       throw new Error(dedent`
         ❌ Unable to determine Storybook stories globs in ${picocolors.blue(
-          mainConfig
+          JSON.stringify(mainConfig, null, 2)
         )}, skipping ${picocolors.cyan(this.id)} fix.
         
         In Storybook 7, we have deprecated defining stories in MDX files, and consequently have changed the suffix to simply .mdx.
