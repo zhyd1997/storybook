@@ -34,10 +34,6 @@ export const parameters = {
   } satisfies Partial<Config>,
 };
 
-export const globalTypes = {
-  [KEY]: {},
-};
-
 export const initialGlobals = {
-  [KEY]: null as any,
+  [KEY]: { background: undefined, grid: false },
 };
