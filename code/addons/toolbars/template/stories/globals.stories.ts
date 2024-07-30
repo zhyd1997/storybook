@@ -32,8 +32,21 @@ export default {
 
 export const Basic = {};
 
-export const Override = {
+export const OverrideLocale = {
   globals: {
     locale: 'kr',
+  },
+};
+
+export const OverrideTheme = {
+  globals: {
+    theme: 'dark',
+  },
+};
+
+export const OverrideBoth = {
+  globals: {
+    locale: 'kr',
+    theme: 'dark',
   },
 };
