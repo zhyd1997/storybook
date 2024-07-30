@@ -34,6 +34,7 @@ export const parameters = {
   } satisfies Partial<Config>,
 };
 
-export const initialGlobals: Record<string, GlobalState> = {
+const modern: Record<string, GlobalState> = {
   [KEY]: { value: undefined, grid: false },
 };
+export const initialGlobals = FEATURES?.backgroundsStoryGlobals ? modern : { [KEY]: null };
