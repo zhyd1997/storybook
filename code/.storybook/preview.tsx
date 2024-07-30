@@ -161,9 +161,16 @@ export const decorators = [
    * This decorator renders the stories side-by-side, stacked or default based on the theme switcher in the toolbar
    */
   (StoryFn, { globals, playFunction, args, userGlobals, storyGlobals }) => {
-    const defaultTheme =
-      isChromatic() && !playFunction && args.autoplay !== true ? 'stacked' : 'light';
-    const theme = storyGlobals.theme || userGlobals.theme || globals.theme || defaultTheme;
+    let theme = globals.theme;
+
+    if (
+      isChromatic() &&
+      !playFunction &&
+      args.autoplay !== true &&
+      (theme === 'side-by-side' || theme === 'stacked')
+    ) {
+      theme = 'light';
+    }
 
     switch (theme) {
       case 'side-by-side': {

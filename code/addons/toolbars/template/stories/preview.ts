@@ -42,3 +42,8 @@ export const globalTypes = {
     },
   },
 };
+
+export const initialGlobals = {
+  theme: 'light',
+  locale: 'en',
+};
