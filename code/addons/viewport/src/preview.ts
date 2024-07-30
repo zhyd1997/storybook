@@ -1,7 +1,11 @@
 import { PARAM_KEY as KEY } from './constants';
+import type { GlobalState } from './types';
 
-export const initialGlobals = FEATURES?.viewportStoryGlobals
-  ? {
-      [KEY]: { value: 'reset', isRotated: false },
-    }
-  : { viewport: 'reset', viewportRotated: false };
+const modern: Record<string, GlobalState> = {
+  [KEY]: { value: 'reset', isRotated: false },
+};
+
+// TODO: remove in 9.0
+const legacy = { viewport: 'reset', viewportRotated: false };
+
+export const initialGlobals = FEATURES?.viewportStoryGlobals ? modern : legacy;

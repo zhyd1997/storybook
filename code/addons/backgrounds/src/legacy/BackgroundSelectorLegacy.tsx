@@ -83,7 +83,7 @@ export const BackgroundToolLegacy: FC = memo(function BackgroundSelector() {
     DEFAULT_BACKGROUNDS_CONFIG
   );
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [globals, updateGlobals, storyGlobals] = useGlobals();
+  const [globals, updateGlobals] = useGlobals();
 
   const globalsBackgroundColor = globals[BACKGROUNDS_PARAM_KEY]?.value;
 
@@ -112,8 +112,6 @@ export const BackgroundToolLegacy: FC = memo(function BackgroundSelector() {
     return null;
   }
 
-  const isDisabled = BACKGROUNDS_PARAM_KEY in storyGlobals;
-
   return (
     <WithTooltip
       placement="top"
@@ -137,7 +135,6 @@ export const BackgroundToolLegacy: FC = memo(function BackgroundSelector() {
       onVisibleChange={setIsTooltipVisible}
     >
       <IconButton
-        disabled={isDisabled}
         key="background"
         title="Change the background of the preview"
         active={selectedBackgroundColor !== 'transparent' || isTooltipVisible}

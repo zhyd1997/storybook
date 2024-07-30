@@ -115,7 +115,7 @@ const getStyles = (
   return isRotated ? flip(result) : result;
 };
 
-export const ViewportTool: FC = memo(function Tool() {
+export const ViewportToolLegacy: FC = memo(function Tool() {
   const [globals, updateGlobals] = useGlobals();
 
   const {

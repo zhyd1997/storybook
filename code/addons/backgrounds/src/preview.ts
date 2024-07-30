@@ -3,7 +3,7 @@ import { withBackground } from './legacy/withBackgroundLegacy';
 import { withGrid } from './legacy/withGridLegacy';
 import { PARAM_KEY as KEY } from './constants';
 import { withBackgroundAndGrid } from './decorator';
-import type { Config } from './types';
+import type { Config, GlobalState } from './types';
 
 export const decorators: Addon_DecoratorFunction[] = FEATURES?.backgroundsStoryGlobals
   ? [withBackgroundAndGrid]
@@ -16,7 +16,7 @@ export const parameters = {
       opacity: 0.5,
       cellAmount: 5,
     },
-    disabled: false,
+    disable: false,
     ...(FEATURES?.backgroundsStoryGlobals
       ? {
           options: {
@@ -34,6 +34,6 @@ export const parameters = {
   } satisfies Partial<Config>,
 };
 
-export const initialGlobals = {
-  [KEY]: { background: undefined, grid: false },
+export const initialGlobals: Record<string, GlobalState> = {
+  [KEY]: { value: undefined, grid: false },
 };
