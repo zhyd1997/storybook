@@ -26,7 +26,12 @@ export const statusPriority: API_StatusValue[] = ['unknown', 'pending', 'success
 export const statusMapping: Record<API_StatusValue, [ReactElement | null, string | null]> = {
   unknown: [null, null],
   pending: [<LoadingIcons key="icon" />, 'currentColor'],
-  success: [<SmallIcons key="icon" style={{ color: 'green' }} />, 'currentColor'],
+  success: [
+    <svg key="icon" viewBox="0 0 14 14" width="14" height="14">
+      <UseSymbol type="success" />
+    </svg>,
+    'currentColor',
+  ],
   warn: [
     <svg key="icon" viewBox="0 0 14 14" width="14" height="14">
       <UseSymbol type="warning" />

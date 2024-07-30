@@ -18,6 +18,7 @@ const GROUP_ID = 'icon--group';
 const COMPONENT_ID = 'icon--component';
 const DOCUMENT_ID = 'icon--document';
 const STORY_ID = 'icon--story';
+const SUCCESS_ID = 'icon--success';
 const ERROR_ID = 'icon--error';
 const WARNING_ID = 'icon--warning';
 const DOT_ID = 'icon--dot';
@@ -65,6 +66,14 @@ export const IconSymbols: FC = () => {
           fill="currentColor"
         />
       </symbol>
+      <symbol id={SUCCESS_ID}>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M10.854 4.146a.5.5 0 010 .708l-5 5a.5.5 0 01-.708 0l-2-2a.5.5 0 11.708-.708L5.5 8.793l4.646-4.647a.5.5 0 01.708 0z"
+          fill="currentColor"
+        />
+      </symbol>
       <symbol id={ERROR_ID}>
         <path
           fillRule="evenodd"
@@ -89,12 +98,13 @@ export const IconSymbols: FC = () => {
 };
 
 export const UseSymbol: FC<{
-  type: 'group' | 'component' | 'document' | 'story' | 'error' | 'warning' | 'dot';
+  type: 'group' | 'component' | 'document' | 'story' | 'success' | 'error' | 'warning' | 'dot';
 }> = ({ type }) => {
   if (type === 'group') return <use xlinkHref={`#${GROUP_ID}`} />;
   if (type === 'component') return <use xlinkHref={`#${COMPONENT_ID}`} />;
   if (type === 'document') return <use xlinkHref={`#${DOCUMENT_ID}`} />;
   if (type === 'story') return <use xlinkHref={`#${STORY_ID}`} />;
+  if (type === 'success') return <use xlinkHref={`#${SUCCESS_ID}`} />;
   if (type === 'error') return <use xlinkHref={`#${ERROR_ID}`} />;
   if (type === 'warning') return <use xlinkHref={`#${WARNING_ID}`} />;
   if (type === 'dot') return <use xlinkHref={`#${DOT_ID}`} />;
