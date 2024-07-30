@@ -39,7 +39,7 @@ export const UnsetCustom = {
   parameters: {
     backgrounds: {
       options: {
-        pink: { value: '#d45a00', name: 'hot' },
+        pink: { value: '#Ff5CB7', name: 'hot pink' },
       },
     },
   },
