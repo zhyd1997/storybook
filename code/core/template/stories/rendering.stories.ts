@@ -24,9 +24,6 @@ export const ForceRemount = {
    */
   parameters: { chromatic: { disableSnapshot: true } },
   play: async ({ canvasElement, id }: PlayFunctionContext<any>) => {
-    if (window?.navigator.userAgent.match(/StorybookTestRunner/)) {
-      return;
-    }
     const channel = globalThis.__STORYBOOK_ADDONS_CHANNEL__;
     const button = await within(canvasElement).findByRole('button');
 
