@@ -409,17 +409,16 @@ export async function setupVitest(
   );
 
   await writeFile(
-    join(sandboxDir, '.storybook/vitest.config.ts'),
-    dedent`import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
+    join(sandboxDir, '.storybook/vitest.config.mts'),
+    dedent`import path from 'node:path'
+    import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
     import { storybookTest } from '@storybook/experimental-vitest-plugin'
-    import viteConfig from '../vite.config'
-    import path from 'node:path'
-    ${isNextjs ? "import { getPackageAliases } from '@storybook/nextjs/export-mocks'" : ''}
+    ${!isNextjs ? "import viteConfig from '../vite.config'" : ""}
     ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
     ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" : ''}
 
     export default mergeConfig(
-      viteConfig,
+      ${!isNextjs ? 'viteConfig' : '{}'},
       defineConfig({
         plugins: [
           storybookTest({
@@ -430,7 +429,6 @@ export async function setupVitest(
         ],
         resolve: {
           preserveSymlinks: true,
-          ${isNextjs ? 'alias: getPackageAliases(),' : ''}
         },
         test: {
           name: 'storybook',

@@ -152,7 +152,7 @@ const baseTemplates = {
       },
       extraDependencies: ['server-only'],
     },
-    skipTasks: ['e2e-tests-dev', 'bench'],
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'nextjs/default-js': {
     name: 'Next.js Latest (Webpack | JavaScript)',
@@ -203,7 +203,7 @@ const baseTemplates = {
       },
       extraDependencies: ['server-only'],
     },
-    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
+    skipTasks: ['e2e-tests-dev', 'bench'],
   },
   'react-vite/default-js': {
     name: 'React Latest (Vite | JavaScript)',

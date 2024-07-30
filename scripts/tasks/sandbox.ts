@@ -101,7 +101,7 @@ export const sandbox: Task = {
         'happy-dom',
         'vitest',
         '@vitest/browser',
-        '@storybook/experimental-vitest-plugin@0.0.1--canary.2.bbfa711.0',
+        '@storybook/experimental-vitest-plugin',
         testingLibraryPackage
       );
 
