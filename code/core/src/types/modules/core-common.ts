@@ -385,10 +385,6 @@ export interface StorybookConfigRaw {
      */
     backgroundsStoryGlobals?: boolean;
     /**
-     * use parameters configure the toolbar addon
-     */
-    addonToolbarParameters?: boolean;
-    /**
      * use globals & globalTypes for configuring the themes addon
      */
     themesStoryGlobals?: boolean;

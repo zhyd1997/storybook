@@ -9,18 +9,14 @@ import { getSelectedIcon, getSelectedTitle } from '../utils/get-selected';
 import type { ToolbarMenuProps } from '../types';
 import { ToolbarMenuListItem } from './ToolbarMenuListItem';
 
-export type ToolbarMenuListProps = ToolbarMenuProps & WithKeyboardCycleProps;
+type ToolbarMenuListProps = ToolbarMenuProps & WithKeyboardCycleProps;
 
 export const ToolbarMenuList: FC<ToolbarMenuListProps> = withKeyboardCycle(
   ({
     id,
     name,
     description,
-    icon: _icon,
-    items,
-    title: _title,
-    preventDynamicIcon,
-    dynamicTitle,
+    toolbar: { icon: _icon, items, title: _title, preventDynamicIcon, dynamicTitle },
   }) => {
     const [globals, updateGlobals, storyGlobals] = useGlobals();
     const [isTooltipVisible, setIsTooltipVisible] = useState(false);
