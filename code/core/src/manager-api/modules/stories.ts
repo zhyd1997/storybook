@@ -41,6 +41,7 @@ import {
   DOCS_PREPARED,
   SET_CURRENT_STORY,
   SET_CONFIG,
+  SET_FILTER,
 } from '@storybook/core/core-events';
 import { logger } from '@storybook/core/client-logger';
 
@@ -662,6 +663,8 @@ export const init: ModuleFn<SubAPI, SubState> = ({
       Object.entries(refs).forEach(([refId, { internal_index, ...ref }]) => {
         fullAPI.setRef(refId, { ...ref, storyIndex: internal_index }, true);
       });
+
+      provider.channel?.emit(SET_FILTER, { id });
     },
   };
 
