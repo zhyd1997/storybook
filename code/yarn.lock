@@ -5424,7 +5424,7 @@ __metadata:
   resolution: "@storybook/addon-vitest@workspace:addons/vitest"
   dependencies:
     "@radix-ui/react-dialog": "npm:^1.0.5"
-    "@storybook/icons": "npm:^1.2.5"
+    "@storybook/icons": "npm:^1.2.10"
     "@storybook/react": "workspace:*"
     framer-motion: "npm:^11.0.3"
     react: "npm:^18.2.0"
