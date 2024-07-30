@@ -11,6 +11,12 @@ const loadReport = async (api: API) => {
   const [index, report] = await Promise.all([indexPromise, reportPromise]).catch(() => []);
   if (!index || !report) return;
 
+  const onClick = () => {
+    api.setSelectedPanel('storybook/interactions/panel');
+    api.togglePanelPosition('bottom');
+    api.togglePanel(true);
+  };
+
   const storiesByPath = Object.values(index.entries).reduce(
     (acc, story) => {
       acc[story.importPath] = acc[story.importPath] || {};
@@ -41,10 +47,11 @@ const loadReport = async (api: API) => {
           result
             ? {
                 status: { error: 'error', failure: 'warn', skipped: 'unknown' }[result.tagName],
-                title: result.getAttribute('message')?.trim() || '',
-                description: result.textContent?.trim() || '',
+                title: `Vitest: ${result.getAttribute('type') || `Test ${result.tagName}`}`,
+                description: '',
+                onClick,
               }
-            : { status: 'success', title: 'Tests passed', description: '' },
+            : { status: 'success', title: 'Vitest: Tests passed', description: '', onClick },
         ];
       })
     )
