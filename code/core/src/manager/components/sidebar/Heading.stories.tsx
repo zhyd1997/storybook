@@ -230,6 +230,7 @@ export const SkipToCanvasLinkFocused: StoryObj<typeof Heading> = {
     extra: [],
     isLoading: false,
   },
+  globals: { sb_theme: 'light' },
   parameters: { layout: 'padded', chromatic: { delay: 300 } },
   play: () => {
     // focus each instance for chromatic/storybook's stacked theme

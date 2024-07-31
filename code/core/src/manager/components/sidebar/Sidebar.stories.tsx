@@ -282,6 +282,7 @@ export const Scrolled: Story = {
   args: {
     storyId: 'group-1--child-b1',
   },
+  globals: { sb_theme: 'light' },
   decorators: [
     (StoryFn) => (
       <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
