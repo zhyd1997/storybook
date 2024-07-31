@@ -157,7 +157,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
 
   const play = async (extraContext?: Partial<StoryContext<TRenderer, Partial<TArgs>>>) => {
     const context = initializeContext();
-    context.canvasElement ??= globalThis.document.body;
+    context.canvasElement ??= globalThis?.document?.body;
     if (loadedContext) {
       context.loaded = loadedContext.loaded;
     }
