@@ -22,6 +22,7 @@ const meta = {
   args: {
     menu: fakemenu,
   },
+  globals: { sb_theme: 'side-by-side' },
   decorators: [(storyFn) => <LayoutProvider>{storyFn()}</LayoutProvider>],
 } satisfies Meta<typeof SidebarMenu>;
 export default meta;
