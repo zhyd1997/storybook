@@ -284,7 +284,11 @@ async function getTsConfigReferences(tsConfigPath: string) {
  * HTMLElement, MouseEvent) are used.
  */
 function removeNestedSchemas(schema: PropertyMetaSchema) {
-  if (typeof schema !== 'object') {
+  if (typeof schema !== 'object') return;
+  if (schema.kind === 'enum') {
+    // for enum types, we do not want to remove the schemas because otherwise the controls will be missing
+    // instead we remove the nested schemas for the enum entries to prevent out of memory errors for types like "HTMLElement | MouseEvent"
+    schema.schema?.forEach((enumSchema) => removeNestedSchemas(enumSchema));
     return;
   }
   delete schema.schema;
