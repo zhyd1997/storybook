@@ -19,7 +19,7 @@ const meta = {
     (Story, context) => {
       const [container, setContainer] = useState<HTMLElement | null>(null);
 
-      if (context.globals.theme === 'side-by-side') {
+      if (context.globals.sb_theme === 'side-by-side') {
         return (
           <div
             ref={(element) => {

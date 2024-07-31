@@ -22,7 +22,7 @@ export default {
     },
     chromatic: { viewports: [700] },
   },
-  globals: { theme: 'light' },
+  globals: { sb_theme: 'light' },
 };
 
 const style: CSSProperties = {

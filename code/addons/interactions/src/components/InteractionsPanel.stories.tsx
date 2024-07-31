@@ -34,7 +34,7 @@ const meta = {
     ),
   ],
   parameters: { layout: 'fullscreen' },
-  globals: { theme: 'light' },
+  globals: { sb_theme: 'light' },
   args: {
     calls: new Map(getCalls(CallStates.DONE).map((call) => [call.id, call])),
     controls: SubnavStories.args.controls,

@@ -40,7 +40,7 @@ export default {
   parameters: {
     layout: 'fullscreen',
   },
-  globals: { theme: 'light' },
+  globals: { sb_theme: 'light' },
   title: 'Errors',
   args: {
     id: 'sb-errordisplay',

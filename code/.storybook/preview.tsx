@@ -166,7 +166,7 @@ export const decorators = [
    * This decorator renders the stories side-by-side, stacked or default based on the theme switcher in the toolbar
    */
   (StoryFn, { globals, playFunction, args, storyGlobals, parameters }) => {
-    let theme = globals.theme;
+    let theme = globals.sb_theme;
     let showPlayFnNotice = false;
 
     // this makes the decorator be out of 'phase' with the actually selected theme in the toolbar
@@ -314,6 +314,9 @@ export const parameters = {
   },
   viewport: {
     options: MINIMAL_VIEWPORTS,
+  },
+  themes: {
+    disable: true,
   },
   backgrounds: {
     options: {
