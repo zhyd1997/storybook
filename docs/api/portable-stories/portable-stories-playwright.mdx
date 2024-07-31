@@ -61,7 +61,7 @@ sidebar:
 
   (⚠️ **Experimental**)
 
-  Instead of using Playwright's own `test` function, you can use Storybook's special `createTest` function to [extend Playwright's base fixture](https://playwright.dev/docs/test-fixtures#creating-a-fixture) and override the `mount` function to load, render, and run the story. This function is experimental and is subject to changes.
+  Instead of using Playwright's own `test` function, you can use Storybook's special `createTest` function to [extend Playwright's base fixture](https://playwright.dev/docs/test-fixtures#creating-a-fixture) and override the `mount` function to load, render, and play the story. This function is experimental and is subject to changes.
 
   {/* prettier-ignore-start */}
 
@@ -116,7 +116,7 @@ sidebar:
   ## setProjectAnnotations
 
   This API should be called once, before the tests run, in [`playwright/index.ts`](https://playwright.dev/docs/test-components#step-1-install-playwright-test-for-components-for-your-respective-framework). This will make sure that when `mount` is called, the project annotations are taken into account as well.
-  
+
   These are the configurations needed in the setup file:
   - preview annotations: those defined in `.storybook/preview.ts`
   - addon annotations (optional): those exported by addons
