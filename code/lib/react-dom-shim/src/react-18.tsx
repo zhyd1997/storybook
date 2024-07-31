@@ -2,6 +2,7 @@ import type { FC, ReactElement } from 'react';
 import * as React from 'react';
 import type { Root as ReactRoot, RootOptions } from 'react-dom/client';
 import * as ReactDOM from 'react-dom/client';
+import { preventActChecks } from './preventActChecks';
 
 // A map of all rendered React 18 nodes
 const nodes = new Map<Element, ReactRoot>();
@@ -26,7 +27,9 @@ export const renderElement = async (node: ReactElement, el: Element, rootOptions
   const root = await getReactRoot(el, rootOptions);
 
   return new Promise((resolve) => {
-    root.render(<WithCallback callback={() => resolve(null)}>{node}</WithCallback>);
+    preventActChecks(() =>
+      root.render(<WithCallback callback={() => resolve(null)}>{node}</WithCallback>)
+    );
   });
 };
 
@@ -34,7 +37,7 @@ export const unmountElement = (el: Element, shouldUseNewRootApi?: boolean) => {
   const root = nodes.get(el);
 
   if (root) {
-    root.unmount();
+    preventActChecks(() => root.unmount());
     nodes.delete(el);
   }
 };

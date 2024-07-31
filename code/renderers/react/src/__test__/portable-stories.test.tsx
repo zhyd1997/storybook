@@ -14,7 +14,7 @@ import { setProjectAnnotations, composeStories, composeStory } from '..';
 import type { Button } from './Button';
 import * as stories from './Button.stories';
 
-setProjectAnnotations([{ testingLibraryRender: render }]);
+setProjectAnnotations([]);
 
 // example with composeStories, returns an object with all stories composed with args/decorators
 const { CSF3Primary, LoaderStory, MountInPlayFunction } = composeStories(stories);
@@ -77,7 +77,6 @@ describe('projectAnnotations', () => {
   it('renders with default projectAnnotations', () => {
     setProjectAnnotations([
       {
-        testingLibraryRender: render,
         parameters: { injected: true },
         globalTypes: {
           locale: { defaultValue: 'en' },

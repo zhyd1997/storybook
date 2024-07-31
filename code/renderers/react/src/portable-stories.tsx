@@ -47,9 +47,7 @@ export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<ReactRende
   ...reactProjectAnnotations,
   renderToCanvas: (renderContext, canvasElement) => {
     if (renderContext.storyContext.testingLibraryRender == null) {
-      throw new TestingLibraryMustBeConfiguredError();
-      // Enable for 8.3
-      // return reactProjectAnnotations.renderToCanvas(renderContext, canvasElement);
+      return reactProjectAnnotations.renderToCanvas(renderContext, canvasElement);
     }
     const {
       storyContext: { context, unboundStoryFn: Story, testingLibraryRender: render },

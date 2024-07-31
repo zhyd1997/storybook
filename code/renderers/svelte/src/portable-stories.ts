@@ -65,9 +65,7 @@ export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<SvelteRend
   ...svelteProjectAnnotations,
   renderToCanvas: (renderContext, canvasElement) => {
     if (renderContext.storyContext.testingLibraryRender == null) {
-      throw new TestingLibraryMustBeConfiguredError();
-      // Enable for 8.3
-      // return svelteProjectAnnotations.renderToCanvas(renderContext, canvasElement);
+      return svelteProjectAnnotations.renderToCanvas(renderContext, canvasElement);
     }
     const {
       storyFn,

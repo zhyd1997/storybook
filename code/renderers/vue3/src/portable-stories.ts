@@ -55,9 +55,7 @@ export const vueProjectAnnotations: ProjectAnnotations<VueRenderer> = {
   ...defaultProjectAnnotations,
   renderToCanvas: (renderContext, canvasElement) => {
     if (renderContext.storyContext.testingLibraryRender == null) {
-      throw new TestingLibraryMustBeConfiguredError();
-      // Enable for 8.3
-      // return defaultProjectAnnotations.renderToCanvas(renderContext, canvasElement);
+      return defaultProjectAnnotations.renderToCanvas(renderContext, canvasElement);
     }
     const {
       storyFn,
