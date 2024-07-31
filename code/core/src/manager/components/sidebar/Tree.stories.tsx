@@ -20,7 +20,7 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     viewport: {
-      viewports: {
+      options: {
         sized: {
           name: 'Sized',
           styles: {
@@ -206,11 +206,6 @@ export const SkipToCanvasLinkFocused: Story = {
   ...DocsOnlySingleStoryComponents,
   parameters: {
     chromatic: { disable: true },
-    viewport: {
-      defaultViewport: 'sized',
-      viewports: customViewports,
-      defaultOrientation: 'landscape',
-    },
   },
   play: async ({ canvasElement }) => {
     const screen = await within(canvasElement);
