@@ -85,11 +85,11 @@ export const sandbox: Task = {
     }
 
     const extraDeps = details.template.modifications?.extraDependencies ?? [];
-
+    const isNextjs = details.sandboxDir.includes('nextjs')
     if (
       (details.sandboxDir.includes('svelte-kit') ||
         details.sandboxDir.includes('vite') ||
-        details.sandboxDir.includes('nextjs')) &&
+        isNextjs) &&
       !details.sandboxDir.includes('html') &&
       !details.sandboxDir.includes('lit')
     ) {
@@ -98,14 +98,14 @@ export const sandbox: Task = {
       // Remove numbers so that vue3 becomes vue
       const testingLibraryPackage = `@testing-library/${renderer.replace(/\d/g, '')}`;
       extraDeps.push(
-        'happy-dom',
+        isNextjs ? 'jsdom' : 'happy-dom',
         'vitest',
         '@vitest/browser',
         '@storybook/experimental-vitest-plugin',
         testingLibraryPackage
       );
 
-      if (details.sandboxDir.includes('nextjs')) {
+      if (isNextjs) {
         extraDeps.push('vite-plugin-storybook-nextjs');
       }
 

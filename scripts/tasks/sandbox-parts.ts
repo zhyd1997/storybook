@@ -375,15 +375,12 @@ export async function setupVitest(
   const isSvelte = template.expected.renderer === '@storybook/svelte';
   const isNextjs = template.expected.framework === '@storybook/nextjs';
   const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
+  const storybookRenderer = isNextjs ? 'nextjs' : renderer
+
   await writeFile(
     join(sandboxDir, '.storybook/setupTests.ts'),
     dedent`import { beforeAll, beforeEach } from 'vitest'
     import { setProjectAnnotations } from '${storybookPackage}'
-    import {
-      render as testingLibraryRender,
-      cleanup,
-    } from '${testingLibraryPackage}'
-
     import * as rendererDocsAnnotations from '${template.expected.renderer}/dist/entry-preview-docs.mjs'
     import * as addonActionsAnnotations from '@storybook/addon-actions/preview'
     import * as addonInteractionsAnnotations from '@storybook/addon-interactions/preview'
@@ -392,6 +389,10 @@ export async function setupVitest(
     import * as toolbarAnnotations from '../template-stories/addons/toolbars/preview'
     import * as projectAnnotations from './preview'
     
+    const { cleanup, render: testingLibraryRender } = await import(
+      '${testingLibraryPackage}'
+    )
+
     beforeEach(cleanup)
     
     const annotations = setProjectAnnotations([
@@ -422,7 +423,7 @@ export async function setupVitest(
       defineConfig({
         plugins: [
           storybookTest({
-            renderer: '${renderer}',
+            renderer: '${storybookRenderer}',
           }),
           ${isSvelte ? 'svelteTesting(),' : ''}
           ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
