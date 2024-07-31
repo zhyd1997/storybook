@@ -11,9 +11,8 @@ const loadReport = async (api: API) => {
   const [index, report] = await Promise.all([indexPromise, reportPromise]).catch(() => []);
   if (!index || !report) return;
 
-  const onClick = () => {
+  const openInteractionsPanel = () => {
     api.setSelectedPanel('storybook/interactions/panel');
-    api.togglePanelPosition('bottom');
     api.togglePanel(true);
   };
 
@@ -49,9 +48,14 @@ const loadReport = async (api: API) => {
                 status: { error: 'error', failure: 'warn', skipped: 'unknown' }[result.tagName],
                 title: `Vitest: ${result.getAttribute('type') || `Test ${result.tagName}`}`,
                 description: '',
-                onClick,
+                onClick: openInteractionsPanel,
               }
-            : { status: 'success', title: 'Vitest: Tests passed', description: '', onClick },
+            : {
+                status: 'success',
+                title: 'Vitest: Tests passed',
+                description: '',
+                onClick: openInteractionsPanel,
+              },
         ];
       })
     )
