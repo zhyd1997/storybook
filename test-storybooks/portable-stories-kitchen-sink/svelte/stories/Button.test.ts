@@ -144,17 +144,3 @@ it.each(testCases)('Renders %s story', async (_storyName, Story) => {
   await Story.run();
   expect(document.body).toMatchSnapshot();
 });
-
-const meta = {
-  decorators: [BrowserRouter]
-}
-
-const bla = defineStory({
-  play: () => {}
-});
-const bla2 = {
-  render: () => {
-    return <div><bla.OriginalComponent/></div>
-  },
-  play: () => {}
-};
