@@ -98,7 +98,7 @@ export const sandbox: Task = {
       // Remove numbers so that vue3 becomes vue
       const testingLibraryPackage = `@testing-library/${renderer.replace(/\d/g, '')}`;
       extraDeps.push(
-        isNextjs ? 'jsdom' : 'happy-dom',
+        'happy-dom',
         'vitest',
         '@vitest/browser',
         '@storybook/experimental-vitest-plugin',
@@ -106,7 +106,7 @@ export const sandbox: Task = {
       );
 
       if (isNextjs) {
-        extraDeps.push('vite-plugin-storybook-nextjs');
+        extraDeps.push('vite-plugin-storybook-nextjs', 'jsdom');
       }
 
       await setupVitest(details, { renderer, testingLibraryPackage });
