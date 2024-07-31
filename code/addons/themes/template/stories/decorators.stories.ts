@@ -43,6 +43,9 @@ export default {
   args: {
     text: 'Testing the themes',
   },
+  globals: {
+    sb_theme: 'light',
+  },
   parameters: {
     chromatic: { disable: true },
     themes: { disable: false },

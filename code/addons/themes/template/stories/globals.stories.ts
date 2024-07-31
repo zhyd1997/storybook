@@ -1,9 +1,5 @@
 import { global as globalThis } from '@storybook/global';
-import {
-  withThemeByClassName,
-  withThemeByDataAttribute,
-  withThemeFromJSXProvider,
-} from '@storybook/addon-themes';
+import { withThemeByClassName } from '@storybook/addon-themes';
 import { useEffect } from 'storybook/internal/preview-api';
 
 const cleanup = () => {
@@ -46,6 +42,9 @@ export default {
   parameters: {
     chromatic: { disable: true },
     themes: { disable: false },
+  },
+  globals: {
+    sb_theme: 'light',
   },
   decorators: [addStyleSheetDecorator],
 };

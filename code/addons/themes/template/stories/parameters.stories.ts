@@ -1,9 +1,5 @@
 import { global as globalThis } from '@storybook/global';
-import {
-  withThemeByClassName,
-  withThemeByDataAttribute,
-  withThemeFromJSXProvider,
-} from '@storybook/addon-themes';
+import { withThemeByClassName } from '@storybook/addon-themes';
 import { useEffect } from 'storybook/internal/preview-api';
 
 const cleanup = () => {
@@ -42,6 +38,9 @@ export default {
   component: globalThis.Components.Pre,
   args: {
     text: 'Testing the themes',
+  },
+  globals: {
+    sb_theme: 'light',
   },
   parameters: {
     chromatic: { disable: true },
