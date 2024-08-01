@@ -200,6 +200,8 @@ const testCases = Object.values(composeStories(stories)).map(
 );
 it.each(testCases)('Renders %s story', async (_storyName, Story) => {
   if (_storyName === 'CSF2StoryWithLocale') return;
+  globalThis.IS_REACT_ACT_ENVIRONMENT = false;
   await Story.run();
+  globalThis.IS_REACT_ACT_ENVIRONMENT = true;
   expect(document.body).toMatchSnapshot();
 });
