@@ -120,7 +120,6 @@ const config: StorybookConfig = {
   features: {
     viewportStoryGlobals: true,
     backgroundsStoryGlobals: true,
-    // themesStoryGlobals: true,
   },
   viteFinal: (viteConfig, { configType }) =>
     mergeConfig(viteConfig, {
