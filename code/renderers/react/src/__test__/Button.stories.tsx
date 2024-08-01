@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { within, userEvent, fn, expect } from '@storybook/test';
 import type { StoryFn as CSF2Story, StoryObj as CSF3Story, Meta } from '..';
 
@@ -85,6 +85,33 @@ export const CSF3ButtonWithRender: CSF3Story<ButtonProps> = {
       <Button {...args} />
     </div>
   ),
+};
+
+export const HooksStory: CSF3Story = {
+  render: function Component() {
+    const [isClicked, setClicked] = useState(false);
+    return (
+      <>
+        <input data-testid="input" />
+        <br />
+        <button onClick={() => setClicked(!isClicked)}>
+          I am {isClicked ? 'clicked' : 'not clicked'}
+        </button>
+      </>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    console.log('start of play function');
+    const canvas = within(canvasElement);
+    await step('Step label', async () => {
+      const inputEl = canvas.getByTestId('input');
+      const buttonEl = canvas.getByRole('button');
+      await userEvent.click(buttonEl);
+      await userEvent.type(inputEl, 'Hello world!');
+      await expect(inputEl).toHaveValue('Hello world!');
+    });
+    console.log('end of play function');
+  },
 };
 
 export const CSF3InputFieldFilled: CSF3Story = {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-constraint */
 import type { FC, ReactElement } from 'react';
 import * as React from 'react';
 import type { Root as ReactRoot, RootOptions } from 'react-dom/client';
@@ -22,15 +23,26 @@ const WithCallback: FC<{ callback: () => void; children: ReactElement }> = ({
   return children;
 };
 
+// pony-fill
+if (typeof Promise.withResolvers === 'undefined') {
+  Promise.withResolvers = <T extends unknown>() => {
+    let resolve: PromiseWithResolvers<T>['resolve'] = null!;
+    let reject: PromiseWithResolvers<T>['reject'] = null!;
+    const promise = new Promise<T>((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+    return { promise, resolve, reject };
+  };
+}
+
 export const renderElement = async (node: ReactElement, el: Element, rootOptions?: RootOptions) => {
   // Create Root Element conditionally for new React 18 Root Api
   const root = await getReactRoot(el, rootOptions);
 
-  return new Promise((resolve) => {
-    preventActChecks(() =>
-      root.render(<WithCallback callback={() => resolve(null)}>{node}</WithCallback>)
-    );
-  });
+  const { promise, resolve } = Promise.withResolvers<void>();
+  preventActChecks(() => root.render(<WithCallback callback={resolve}>{node}</WithCallback>));
+  return promise;
 };
 
 export const unmountElement = (el: Element, shouldUseNewRootApi?: boolean) => {

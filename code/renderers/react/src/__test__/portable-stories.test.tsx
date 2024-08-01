@@ -144,6 +144,15 @@ describe('CSF3', () => {
 
     document.body.removeChild(div);
   });
+
+  it('renders with hooks', async () => {
+    const HooksStory = composeStory(stories.HooksStory, stories.default);
+
+    await HooksStory.run();
+
+    const input = screen.getByTestId('input') as HTMLInputElement;
+    expect(input.value).toEqual('Hello world!');
+  });
 });
 
 // common in addons that need to communicate between manager and preview

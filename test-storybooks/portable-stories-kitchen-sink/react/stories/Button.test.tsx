@@ -88,15 +88,6 @@ describe('CSF3', () => {
     render(<Primary />);
     expect(screen.getByTestId('custom-render')).not.toBeNull();
   });
-
-  it('renders with play function', async () => {
-    const CSF3InputFieldFilled = composeStory(stories.CSF3InputFieldFilled, stories.default);
-
-    await CSF3InputFieldFilled.run();
-
-    const input = screen.getByTestId('input') as HTMLInputElement;
-    expect(input.value).toEqual('Hello world!');
-  });
 });
 
 // common in addons that need to communicate between manager and preview
