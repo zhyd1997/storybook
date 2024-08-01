@@ -51,3 +51,11 @@ export const NoRationDefined = {
     },
   },
 };
+
+export const Disabled = {
+  parameters: {
+    viewport: {
+      disable: true,
+    },
+  },
+};

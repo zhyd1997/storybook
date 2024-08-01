@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import React, { useState, Fragment, useCallback, useMemo, memo } from 'react';
+import type { FC, ReactElement } from 'react';
+import React, { useState, useCallback, useMemo, memo } from 'react';
 import memoize from 'memoizerific';
 
 import { useParameter, useGlobals } from 'storybook/internal/manager-api';
@@ -9,13 +9,28 @@ import { IconButton, WithTooltip, TooltipLinkList } from 'storybook/internal/com
 import { PhotoIcon } from '@storybook/icons';
 import { PARAM_KEY as BACKGROUNDS_PARAM_KEY } from '../constants';
 import { ColorIcon } from './ColorIcon';
-import type {
-  BackgroundSelectorItem,
-  Background,
-  BackgroundsParameter,
-  GlobalState,
-} from '../types';
+import type { Background } from '../types';
 import { getBackgroundColorByName } from './getBackgroundColorByName';
+
+export interface DeprecatedGlobalState {
+  name: string | undefined;
+  selected: string | undefined;
+}
+
+export interface BackgroundsParameter {
+  default?: string | null;
+  disable?: boolean;
+  values: Background[];
+}
+
+export interface BackgroundSelectorItem {
+  id: string;
+  title: string;
+  onClick: () => void;
+  value: string;
+  active: boolean;
+  right?: ReactElement;
+}
 
 const createBackgroundSelectorItem = memoize(1000)(
   (
@@ -68,7 +83,7 @@ export const BackgroundToolLegacy: FC = memo(function BackgroundSelector() {
     DEFAULT_BACKGROUNDS_CONFIG
   );
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [globals, updateGlobals, storyGlobals] = useGlobals();
+  const [globals, updateGlobals] = useGlobals();
 
   const globalsBackgroundColor = globals[BACKGROUNDS_PARAM_KEY]?.value;
 
@@ -97,8 +112,6 @@ export const BackgroundToolLegacy: FC = memo(function BackgroundSelector() {
     return null;
   }
 
-  const isDisabled = BACKGROUNDS_PARAM_KEY in storyGlobals;
-
   return (
     <WithTooltip
       placement="top"
@@ -109,7 +122,7 @@ export const BackgroundToolLegacy: FC = memo(function BackgroundSelector() {
             links={getDisplayedItems(
               backgroundsConfig.values,
               selectedBackgroundColor,
-              ({ selected }: GlobalState) => {
+              ({ selected }: DeprecatedGlobalState) => {
                 if (selectedBackgroundColor !== selected) {
                   onBackgroundChange(selected);
                 }
@@ -122,7 +135,6 @@ export const BackgroundToolLegacy: FC = memo(function BackgroundSelector() {
       onVisibleChange={setIsTooltipVisible}
     >
       <IconButton
-        disabled={isDisabled}
         key="background"
         title="Change the background of the preview"
         active={selectedBackgroundColor !== 'transparent' || isTooltipVisible}

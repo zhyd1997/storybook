@@ -1,11 +1,11 @@
-import React, { useState, memo, Fragment } from 'react';
+import React, { useState, memo, Fragment, useCallback } from 'react';
 
 import { useGlobals, useParameter } from 'storybook/internal/manager-api';
 import { IconButton, WithTooltip, TooltipLinkList } from 'storybook/internal/components';
 
 import { CircleIcon, GridIcon, PhotoIcon, RefreshIcon } from '@storybook/icons';
 import { PARAM_KEY as KEY } from '../constants';
-import type { Background, BackgroundMap, Config } from '../types';
+import type { Background, BackgroundMap, Config, GlobalStateUpdate } from '../types';
 
 type Link = Parameters<typeof TooltipLinkList>['0']['links'][0];
 
@@ -16,9 +16,8 @@ export const BackgroundTool = memo(function BackgroundSelector() {
   const [globals, updateGlobals, storyGlobals] = useGlobals();
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
-  const { options = emptyBackgroundMap, disabled = true } = config || {};
-
-  if (disabled) {
+  const { options = emptyBackgroundMap, disable = true } = config || {};
+  if (disable) {
     return null;
   }
 
@@ -71,6 +70,16 @@ const Pure = memo(function PureTool(props: PureProps) {
     isGridActive: isGrid,
     isTooltipVisible,
   } = props;
+
+  const update = useCallback(
+    (input: GlobalStateUpdate) => {
+      updateGlobals({
+        [KEY]: input,
+      });
+    },
+    [updateGlobals]
+  );
+
   return (
     <Fragment>
       <IconButton
@@ -78,11 +87,7 @@ const Pure = memo(function PureTool(props: PureProps) {
         active={isGrid}
         disabled={isLocked}
         title="Apply a grid to the preview"
-        onClick={() =>
-          updateGlobals({
-            [KEY]: { value: backgroundName, grid: !isGrid },
-          })
-        }
+        onClick={() => update({ value: backgroundName, grid: !isGrid })}
       >
         <GridIcon />
       </IconButton>
@@ -103,9 +108,7 @@ const Pure = memo(function PureTool(props: PureProps) {
                           title: 'Reset background',
                           icon: <RefreshIcon />,
                           onClick: () => {
-                            updateGlobals({
-                              [KEY]: { value: undefined, grid: isGrid },
-                            });
+                            update({ value: undefined, grid: isGrid });
                             onHide();
                           },
                         },
@@ -117,9 +120,7 @@ const Pure = memo(function PureTool(props: PureProps) {
                     icon: <CircleIcon color={value?.value || 'grey'} />,
                     active: k === backgroundName,
                     onClick: () => {
-                      updateGlobals({
-                        [KEY]: { value: k, grid: isGrid },
-                      });
+                      update({ value: k, grid: isGrid });
                       onHide();
                     },
                   })),

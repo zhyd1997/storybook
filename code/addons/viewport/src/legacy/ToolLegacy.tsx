@@ -1,5 +1,5 @@
 import type { ReactNode, FC } from 'react';
-import React, { useState, Fragment, useEffect, useRef } from 'react';
+import React, { useState, Fragment, useEffect, useRef, memo } from 'react';
 import memoize from 'memoizerific';
 
 import { styled, Global } from 'storybook/internal/theming';
@@ -11,7 +11,7 @@ import { GrowIcon, TransferIcon } from '@storybook/icons';
 import { registerShortcuts } from '../shortcuts';
 import { PARAM_KEY } from '../constants';
 import { MINIMAL_VIEWPORTS } from '../defaults';
-import type { Styles, ViewportMap, ViewportStyles } from '../types';
+import type { ViewportMap, ViewportStyles, Styles } from '../types';
 import type { ViewportAddonParameter } from './ViewportAddonParameter';
 
 interface ViewportItem {
@@ -115,9 +115,8 @@ const getStyles = (
   return isRotated ? flip(result) : result;
 };
 
-export const ViewportToolLegacy: FC = () => {
-  const [globals, updateGlobals, storyGlobals] = useGlobals();
-  const isDisabled = PARAM_KEY in storyGlobals;
+export const ViewportToolLegacy: FC = memo(function Tool() {
+  const [globals, updateGlobals] = useGlobals();
 
   const {
     viewports = MINIMAL_VIEWPORTS,
@@ -137,14 +136,10 @@ export const ViewportToolLegacy: FC = () => {
   }
 
   useEffect(() => {
-    registerShortcuts(api, globals.viewport, updateGlobals, Object.keys(viewports));
-  }, [viewports, globals.viewport, updateGlobals, api]);
+    registerShortcuts(api, globals, updateGlobals, Object.keys(viewports));
+  }, [viewports, globals, globals.viewport, updateGlobals, api]);
 
   useEffect(() => {
-    if (isDisabled) {
-      return;
-    }
-
     const defaultRotated = defaultOrientation === 'landscape';
 
     if (
@@ -198,7 +193,6 @@ export const ViewportToolLegacy: FC = () => {
         onVisibleChange={setIsTooltipVisible}
       >
         <IconButtonWithLabel
-          disabled={isDisabled}
           key="viewport"
           title="Change the size of the preview"
           active={isTooltipVisible || !!styles}
@@ -215,20 +209,18 @@ export const ViewportToolLegacy: FC = () => {
         </IconButtonWithLabel>
       </WithTooltip>
 
-      {styles && (
-        <Global
-          styles={{
-            [`iframe[data-is-storybook="true"]`]: {
-              ...(styles || {
-                width: '100%',
-                height: '100%',
-              }),
-            },
-          }}
-        />
-      )}
-      {styles && !isDisabled ? (
+      {styles ? (
         <ActiveViewportSize>
+          <Global
+            styles={{
+              [`iframe[data-is-storybook="true"]`]: {
+                ...(styles || {
+                  width: '100%',
+                  height: '100%',
+                }),
+              },
+            }}
+          />
           <ActiveViewportLabel title="Viewport width">
             {styles.width.replace('px', '')}
           </ActiveViewportLabel>
@@ -248,4 +240,4 @@ export const ViewportToolLegacy: FC = () => {
       ) : null}
     </Fragment>
   );
-};
+});
