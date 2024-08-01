@@ -27,9 +27,9 @@ export const withBackgroundAndGrid = (
   const { globals, parameters, viewMode, id } = context;
   const { options = {}, disable, grid = defaultGrid } = (parameters[KEY] || {}) as Config;
   const data = globals[KEY] || {};
-  const backgroundName: string = data.value;
+  const backgroundName: string | undefined = data.value;
 
-  const item = options[backgroundName];
+  const item = backgroundName ? options[backgroundName] : undefined;
   const value = item?.value || 'transparent';
 
   const showGrid = data.grid || false;

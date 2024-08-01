@@ -295,6 +295,7 @@ export class StoryStore<TRenderer extends Renderer> {
     );
   }
 
+  // TODO: Remove in 9.0
   getSetStoriesPayload() {
     const stories = this.extract({ includeDocsOnly: true });
 
@@ -315,6 +316,7 @@ export class StoryStore<TRenderer extends Renderer> {
     };
   }
 
+  // TODO: Remove in 9.0
   // NOTE: this is legacy `stories.json` data for the `extract` script.
   // It is used to allow v7 Storybooks to be composed in v6 Storybooks, which expect a
   // `stories.json` file with legacy fields (`kind` etc).

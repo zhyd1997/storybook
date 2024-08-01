@@ -1,5 +1,5 @@
 export const globalTypes = {
-  theme: {
+  sb_theme: {
     name: 'Theme',
     description: 'Global theme for components',
     toolbar: {
@@ -44,6 +44,6 @@ export const globalTypes = {
 };
 
 export const initialGlobals = {
-  theme: 'light',
+  sb_theme: 'light',
   locale: 'en',
 };

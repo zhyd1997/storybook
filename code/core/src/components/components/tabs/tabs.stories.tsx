@@ -181,7 +181,7 @@ export const StatefulDynamicWithOpenTooltip = {
     },
     chromatic: { viewports: [380] },
   },
-  globals: { theme: 'light', viewport: 'sized' },
+  globals: { sb_theme: 'light', viewport: 'sized' },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
