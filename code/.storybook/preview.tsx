@@ -55,7 +55,6 @@ const ThemeBlock = styled.div<{ side: 'left' | 'right'; layout: string }>(
 const ThemeStack = styled.div<{ layout: string }>(
   {
     position: 'relative',
-    // minHeight: 'calc(50vh - 15px)',
     flex: 1,
   },
   ({ theme }) => ({

@@ -384,10 +384,6 @@ export interface StorybookConfigRaw {
      * use globals & globalTypes for configuring the backgrounds addon
      */
     backgroundsStoryGlobals?: boolean;
-    /**
-     * use globals & globalTypes for configuring the themes addon
-     */
-    themesStoryGlobals?: boolean;
   };
 
   build?: TestBuildConfig;
