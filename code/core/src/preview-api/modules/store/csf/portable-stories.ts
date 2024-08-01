@@ -122,8 +122,10 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
     const context: StoryContext<TRenderer> = prepareContext({
       hooks: new HooksContext(),
       globals: {
+        // TODO: remove loading from globalTypes in 9.0
         ...globalsFromGlobalTypes,
         ...normalizedProjectAnnotations.initialGlobals,
+        ...story.storyGlobals,
       },
       args: { ...story.initialArgs },
       viewMode: 'story',

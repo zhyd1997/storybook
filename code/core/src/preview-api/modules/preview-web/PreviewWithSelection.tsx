@@ -407,7 +407,13 @@ export class PreviewWithSelection<TRenderer extends Renderer> extends Preview<TR
 
       // We need to update globals whenever we go in or out of an overridden story.
       // As an optimization we could check if that's the case, but it seems complex and error-prone
-      super.onUpdateGlobals({ globals: {} });
+      const { initialGlobals, globals } = this.storyStoreValue.userGlobals;
+      this.channel.emit(GLOBALS_UPDATED, {
+        globals,
+        initialGlobals,
+        storyGlobals: {},
+        userGlobals: globals,
+      });
 
       if (isCsfDocsRender(render) || render.entry.tags?.includes(ATTACHED_MDX_TAG)) {
         if (!render.csfFiles) throw new MdxFileWithNoCsfReferencesError({ storyId });
