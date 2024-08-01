@@ -54,7 +54,7 @@ export const Disabled: Story = {
 
 export const Hovered: Story = {
   ...Done,
-  globals: { theme: 'light' },
+  globals: { sb_theme: 'light' },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.hover(canvas.getByRole('button'));

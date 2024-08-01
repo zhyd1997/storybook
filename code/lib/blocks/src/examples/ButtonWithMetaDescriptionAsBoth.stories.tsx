@@ -14,7 +14,7 @@ const meta = {
     backgroundColor: { control: 'color' },
   },
   // Stop *this* story from being stacked in Chromatic
-  globals: { theme: 'default' },
+  globals: { sb_theme: 'default' },
   parameters: {
     docs: {
       description: {

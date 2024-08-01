@@ -12,7 +12,7 @@ const meta = {
     backgroundColor: { control: 'color' },
   },
   // Stop *this* story from being stacked in Chromatic
-  globals: { theme: 'default' },
+  globals: { sb_theme: 'default' },
   parameters: {
     // these are to test the deprecated features of the Description block
     notes: 'These are notes for the Button stories',

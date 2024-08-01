@@ -86,10 +86,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  globals: { theme: 'light' },
+  globals: { sb_theme: 'light' },
 };
 export const Dark: Story = {
-  globals: { theme: 'dark' },
+  globals: { sb_theme: 'dark' },
   parameters: { chromatic: { disable: true } },
 };
 
