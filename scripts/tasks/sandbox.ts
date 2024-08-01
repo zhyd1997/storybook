@@ -85,14 +85,7 @@ export const sandbox: Task = {
     }
 
     const extraDeps = details.template.modifications?.extraDependencies ?? [];
-    const isNextjs = details.sandboxDir.includes('nextjs')
-    if (
-      (details.sandboxDir.includes('svelte-kit') ||
-        details.sandboxDir.includes('vite') ||
-        isNextjs) &&
-      !details.sandboxDir.includes('html') &&
-      !details.sandboxDir.includes('lit')
-    ) {
+    if (!details.template.skipTasks?.includes('vitest-integration')) {
       const renderer = details.template.expected.renderer.replace('@storybook/', '');
 
       // Remove numbers so that vue3 becomes vue
@@ -105,7 +98,7 @@ export const sandbox: Task = {
         testingLibraryPackage
       );
 
-      if (isNextjs) {
+      if (details.template.expected.framework === '@storybook/nextjs') {
         extraDeps.push('vite-plugin-storybook-nextjs', 'jsdom');
       }
 
