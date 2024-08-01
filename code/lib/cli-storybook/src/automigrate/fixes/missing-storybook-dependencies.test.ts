@@ -9,9 +9,11 @@ vi.mock('globby', () => ({
   globby: vi.fn().mockResolvedValue(['.storybook/manager.ts', 'path/to/file.stories.tsx']),
 }));
 
-vi.mock('node:fs/promises', () => ({
-  __esModule: true,
-  readFile: vi.fn().mockResolvedValue(`
+vi.mock('node:fs/promises', async (importOriginal) => {
+  const original = (await importOriginal()) as typeof import('node:fs/promises');
+  return {
+    ...original,
+    readFile: vi.fn().mockResolvedValue(`
     // these are NOT installed, will be reported
     import { someFunction } from '@storybook/preview-api';
     import { anotherFunction } from '@storybook/manager-api';
@@ -19,7 +21,8 @@ vi.mock('node:fs/promises', () => ({
     // this IS installed, will not be reported
     import { yetAnotherFunction } from '@storybook/theming';
   `),
-}));
+  };
+});
 
 vi.mock('../../helpers', () => ({
   getStorybookVersionSpecifier: vi.fn().mockReturnValue('^8.1.10'),
@@ -111,12 +114,12 @@ describe('missingStorybookDependencies', () => {
       expect(mockPackageManager.addDependencies).toHaveBeenNthCalledWith(
         1,
         { installAsDevDependencies: true },
-        ['@storybook/preview-api@8.1.10', '@storybook/manager-api@8.1.10']
+        ['@storybook/preview-api@8.1.0', '@storybook/manager-api@8.1.0']
       );
       expect(mockPackageManager.addDependencies).toHaveBeenNthCalledWith(
         2,
         { installAsDevDependencies: true, skipInstall: true, packageJson: expect.anything() },
-        ['@storybook/preview-api@^8.1.10', '@storybook/manager-api@^8.1.10']
+        ['@storybook/preview-api@8.1.0', '@storybook/manager-api@8.1.0']
       );
     });
   });
