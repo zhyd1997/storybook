@@ -682,9 +682,9 @@ workflows:
       - script-checks:
           requires:
             - build
-      # - chromatic-internal-storybook:
-      #     requires:
-      #       - build
+      - chromatic-internal-storybook:
+          requires:
+            - build
       - coverage:
           requires:
             - unit-tests
@@ -692,34 +692,34 @@ workflows:
           parallelism: 13
           requires:
             - build
-      # - build-sandboxes:
-      #     parallelism: 13
-      #     requires:
-      #       - create-sandboxes
-      # - chromatic-sandboxes:
-      #     parallelism: 10
-      #     requires:
-      #       - build-sandboxes
-      # - e2e-production:
-      #     parallelism: 8
-      #     requires:
-      #       - build-sandboxes
-      # - e2e-dev:
-      #     parallelism: 2
-      #     requires:
-      #       - create-sandboxes
-      # - test-runner-production:
-      #     parallelism: 8
-      #     requires:
-      #       - build-sandboxes
+      - build-sandboxes:
+          parallelism: 13
+          requires:
+            - create-sandboxes
+      - chromatic-sandboxes:
+          parallelism: 10
+          requires:
+            - build-sandboxes
+      - e2e-production:
+          parallelism: 8
+          requires:
+            - build-sandboxes
+      - e2e-dev:
+          parallelism: 2
+          requires:
+            - create-sandboxes
+      - test-runner-production:
+          parallelism: 8
+          requires:
+            - build-sandboxes
       - vitest-integration:
           parallelism: 5
           requires:
             - create-sandboxes
-      # - bench:
-      #     parallelism: 5
-      #     requires:
-      #       - build-sandboxes
+      - bench:
+          parallelism: 5
+          requires:
+            - build-sandboxes
       - test-portable-stories:
           requires:
             - build
@@ -748,9 +748,9 @@ workflows:
       - script-checks:
           requires:
             - build
-      # - chromatic-internal-storybook:
-      #     requires:
-      #       - build
+      - chromatic-internal-storybook:
+          requires:
+            - build
       - coverage:
           requires:
             - unit-tests
@@ -758,26 +758,26 @@ workflows:
           parallelism: 19
           requires:
             - build
-      # - build-sandboxes:
-      #     parallelism: 19
-      #     requires:
-      #       - create-sandboxes
-      # - chromatic-sandboxes:
-      #     parallelism: 16
-      #     requires:
-      #       - build-sandboxes
-      # - e2e-production:
-      #     parallelism: 14
-      #     requires:
-      #       - build-sandboxes
-      # - e2e-dev:
-      #     parallelism: 2
-      #     requires:
-      #       - create-sandboxes
-      # - test-runner-production:
-      #     parallelism: 14
-      #     requires:
-      #       - build-sandboxes
+      - build-sandboxes:
+          parallelism: 19
+          requires:
+            - create-sandboxes
+      - chromatic-sandboxes:
+          parallelism: 16
+          requires:
+            - build-sandboxes
+      - e2e-production:
+          parallelism: 14
+          requires:
+            - build-sandboxes
+      - e2e-dev:
+          parallelism: 2
+          requires:
+            - create-sandboxes
+      - test-runner-production:
+          parallelism: 14
+          requires:
+            - build-sandboxes
       - vitest-integration:
           parallelism: 5
           requires:
@@ -788,10 +788,10 @@ workflows:
           matrix:
             parameters:
               directory: ["react", "vue3", "nextjs", "svelte"]
-      # - bench:
-      #     parallelism: 5
-      #     requires:
-      #       - build-sandboxes
+      - bench:
+          parallelism: 5
+          requires:
+            - build-sandboxes
       # TODO: reenable once we find out the source of flakyness
       # - test-runner-dev:
       #     parallelism: 4
@@ -815,9 +815,9 @@ workflows:
       - script-checks:
           requires:
             - build
-      # - chromatic-internal-storybook:
-      #     requires:
-      #       - build
+      - chromatic-internal-storybook:
+          requires:
+            - build
       - create-sandboxes:
           parallelism: 37
           requires:
@@ -825,26 +825,26 @@ workflows:
       # - smoke-test-sandboxes: # disabled for now
       #     requires:
       #       - create-sandboxes
-      # - build-sandboxes:
-      #     parallelism: 37
-      #     requires:
-      #       - create-sandboxes
-      # - chromatic-sandboxes:
-      #     parallelism: 34
-      #     requires:
-      #       - build-sandboxes
-      # - e2e-production:
-      #     parallelism: 32
-      #     requires:
-      #       - build-sandboxes
-      # - e2e-dev:
-      #     parallelism: 2
-      #     requires:
-      #       - create-sandboxes
-      # - test-runner-production:
-      #     parallelism: 32
-      #     requires:
-      #       - build-sandboxes
+      - build-sandboxes:
+          parallelism: 37
+          requires:
+            - create-sandboxes
+      - chromatic-sandboxes:
+          parallelism: 34
+          requires:
+            - build-sandboxes
+      - e2e-production:
+          parallelism: 32
+          requires:
+            - build-sandboxes
+      - e2e-dev:
+          parallelism: 2
+          requires:
+            - create-sandboxes
+      - test-runner-production:
+          parallelism: 32
+          requires:
+            - build-sandboxes
       - vitest-integration:
           parallelism: 12
           requires:
@@ -855,28 +855,28 @@ workflows:
           matrix:
             parameters:
               directory: ["react", "vue3", "nextjs", "svelte"]
-      # - test-empty-init:
-      #     requires:
-      #       - build
-      #     matrix:
-      #       parameters:
-      #         packageManager:
-      #           - "npm"
-      #           # TODO: reenable once we find out the source of failure
-      #           # - "yarn1"
-      #           # - "yarn2"
-      #           # - "pnpm"
-      #         template:
-      #           - "react-vite-ts"
-      #           - "nextjs-ts"
-      #           - "vue-vite-ts"
-      #           # --smoke-test is not supported for the angular builder right now
-      #           # - "angular-cli"
-      #           - "lit-vite-ts"
-      # - bench:
-      #     parallelism: 5
-      #     requires:
-      #       - build-sandboxes
+      - test-empty-init:
+          requires:
+            - build
+          matrix:
+            parameters:
+              packageManager:
+                - "npm"
+                # TODO: reenable once we find out the source of failure
+                # - "yarn1"
+                # - "yarn2"
+                # - "pnpm"
+              template:
+                - "react-vite-ts"
+                - "nextjs-ts"
+                - "vue-vite-ts"
+                # --smoke-test is not supported for the angular builder right now
+                # - "angular-cli"
+                - "lit-vite-ts"
+      - bench:
+          parallelism: 5
+          requires:
+            - build-sandboxes
 
       # TODO: reenable once we find out the source of flakyness
       # - test-runner-dev:
