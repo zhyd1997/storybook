@@ -12,7 +12,6 @@ import type {
   StoriesWithPartialProps,
   ComposedStoryFn,
 } from 'storybook/internal/types';
-import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
 import { h } from 'vue';
 
 import * as defaultProjectAnnotations from './entry-preview';
