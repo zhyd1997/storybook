@@ -50,6 +50,7 @@
     "storybook:ui:chromatic": "../scripts/node_modules/.bin/chromatic --build-script-name storybook:ui:build --storybook-base-dir ./ --exit-zero-on-changes --exit-once-uploaded",
     "task": "yarn --cwd ../scripts task",
     "test": "NODE_OPTIONS=--max_old_space_size=4096 vitest run",
+    "storybook:vitest": "NODE_OPTIONS=--max_old_space_size=4096 vitest run -c .storybook/vitest.config.ts",
     "test:watch": "NODE_OPTIONS=--max_old_space_size=4096 vitest watch"
   },
   "husky": {
@@ -279,5 +280,8 @@
         "Dependency Upgrades"
       ]
     ]
+  },
+  "devDependencies": {
+    "@storybook/experimental-vitest-plugin": "0.0.4--canary.4.9eb1657.0"
   }
 }

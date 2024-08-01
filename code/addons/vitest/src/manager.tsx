@@ -33,7 +33,7 @@ const loadReport = async (api: API) => {
     Object.fromEntries(
       Array.from(xmlDoc.getElementsByTagName('testcase')).map((testcase) => {
         const storyFile = testcase.getAttribute('classname');
-        const storyName = testcase.getAttribute('name');
+        const storyName = testcase.getAttribute('name')?.replace(/ /g,'');
         if (!storyFile || !storyName) return [];
 
         const stories = storiesByPath[storyFile] || storiesByPath[`./${storyFile}`];
