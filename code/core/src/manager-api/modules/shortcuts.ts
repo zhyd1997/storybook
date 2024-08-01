@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { global } from '@storybook/global';
-import { FORCE_REMOUNT, PREVIEW_KEYDOWN, STORIES_COLLAPSE_ALL } from '@storybook/core/core-events';
+import {
+  FORCE_REMOUNT,
+  PREVIEW_KEYDOWN,
+  STORIES_COLLAPSE_ALL,
+  STORIES_EXPAND_ALL,
+} from '@storybook/core/core-events';
 
 import type { ModuleFn } from '../lib/types';
 
@@ -360,7 +365,7 @@ export const init: ModuleFn = ({ store, fullAPI, provider }) => {
           break;
         }
         case 'expandAll': {
-          fullAPI.expandAll();
+          fullAPI.emit(STORIES_EXPAND_ALL);
           break;
         }
         case 'remount': {
