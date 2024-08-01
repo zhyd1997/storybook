@@ -47,7 +47,8 @@ export function setProjectAnnotations(
 // This will not be necessary once we have auto preset loading
 const defaultProjectAnnotations: ProjectAnnotations<ReactRenderer> = composeConfigs([
   reactAnnotations,
-  rscAnnotations,
+  // we only provide the RSC decorator, but not the feature flag. Should be set by the user
+  { decorators: rscAnnotations.decorators },
   nextJsAnnotations,
 ]);
 
