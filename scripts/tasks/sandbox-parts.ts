@@ -10,13 +10,14 @@ import {
   readFileSync,
   readJson,
   writeJson,
+  writeFile,
 } from 'fs-extra';
 import { join, resolve, sep } from 'path';
 import JSON5 from 'json5';
 import { createRequire } from 'module';
 import slash from 'slash';
 
-import type { Task } from '../task';
+import type { Task, TemplateDetails } from '../task';
 import { executeCLIStep, steps } from '../utils/cli-step';
 import {
   installYarn2,
@@ -43,6 +44,7 @@ import { babelParse } from '../../code/core/src/csf-tools/babelParse';
 import { CODE_DIRECTORY, REPROS_DIRECTORY } from '../utils/constants';
 import type { TemplateKey } from '../../code/lib/cli/src/sandbox-templates';
 import { isFunction } from 'lodash';
+import dedent from 'ts-dedent';
 
 const logger = console;
 
@@ -361,6 +363,150 @@ async function linkPackageStories(
       }
     })
   );
+}
+
+export async function setupVitest(
+  details: TemplateDetails,
+  options: { renderer: string; testingLibraryPackage: string }
+) {
+  const { renderer, testingLibraryPackage } = options;
+  const { sandboxDir, template } = details;
+
+  const isSvelte = template.expected.renderer === '@storybook/svelte';
+  const isNextjs = template.expected.framework === '@storybook/nextjs';
+  const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
+  const storybookRenderer = isNextjs ? 'nextjs' : renderer
+
+  await writeFile(
+    join(sandboxDir, '.storybook/setupTests.ts'),
+    dedent`import { beforeAll, beforeEach } from 'vitest'
+    import { setProjectAnnotations } from '${storybookPackage}'
+    import * as rendererDocsAnnotations from '${template.expected.renderer}/dist/entry-preview-docs.mjs'
+    import * as addonActionsAnnotations from '@storybook/addon-actions/preview'
+    import * as addonInteractionsAnnotations from '@storybook/addon-interactions/preview'
+    import * as componentAnnotations from '../src/stories/components'
+    import * as coreAnnotations from '../template-stories/core/preview'
+    import * as toolbarAnnotations from '../template-stories/addons/toolbars/preview'
+    import * as projectAnnotations from './preview'
+    
+    const { cleanup, render: testingLibraryRender } = await import(
+      '${testingLibraryPackage}'
+    )
+
+    beforeEach(cleanup)
+    
+    const annotations = setProjectAnnotations([
+      rendererDocsAnnotations,
+      projectAnnotations,
+      componentAnnotations,
+      coreAnnotations,
+      toolbarAnnotations,
+      addonActionsAnnotations,
+      addonInteractionsAnnotations,
+      { testingLibraryRender },
+    ])
+
+    beforeAll(annotations.beforeAll!)`
+  );
+
+  await writeFile(
+    join(sandboxDir, '.storybook/vitest.config.mts'),
+    dedent`import path from 'node:path'
+    import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
+    import { storybookTest } from '@storybook/experimental-vitest-plugin'
+    ${!isNextjs ? "import viteConfig from '../vite.config'" : ""}
+    ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
+    ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" : ''}
+
+    export default mergeConfig(
+      ${!isNextjs ? 'viteConfig' : '{}'},
+      defineConfig({
+        plugins: [
+          storybookTest({
+            renderer: '${storybookRenderer}',
+          }),
+          ${isSvelte ? 'svelteTesting(),' : ''}
+          ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
+        ],
+        resolve: {
+          preserveSymlinks: true,
+        },
+        test: {
+          name: 'storybook',
+          include: [
+           // we need to set the path like this because svelte-kit overrides the root path so this makes it work in all sandboxes
+            path.join(__dirname, '../src/**/*.{story,stories}.?(c|m)[jt]s?(x)'),
+            path.join(__dirname, '../template-stories/**/*.{story,stories}.?(c|m)[jt]s?(x)'),
+          ],
+          exclude: [
+            ...defaultExclude,
+            // TODO: investigate TypeError: mocked(...).mockReturnValue is not a function
+            path.join(__dirname, '../**/*module-mocking*'),
+            // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
+            path.join(__dirname, '../**/*argtypes*'),
+            // TODO: somehow support autotitle in portable stories
+            path.join(__dirname, '../**/*title*'),
+            // TODO: Failures related to Storybook channel usage
+            path.join(__dirname, '../**/*shortcuts*'),
+            path.join(__dirname, '../**/renderers/svelte/args.stories*'),
+            // TODO (VUE3): Failures related to Storybook channel usage
+            path.join(__dirname, '../**/ScopedSlots.stories.ts'),
+            path.join(__dirname, '../**/ReactiveSlots.stories.ts'),
+            path.join(__dirname, '../**/ReactiveDecorators.stories.ts'),
+            path.join(__dirname, '../**/ReactiveArgs.stories.ts'),
+            path.join(__dirname, '../**/CustomRenderOptionsArgsFromData.stories.ts'),
+            path.join(__dirname, '../**/CustomRenderFunctionalComponent.stories.ts'),
+            // TODO (VUE3): Investigate TypeError: _ctx.$greetingMessage is not a function
+            path.join(__dirname, '../**/GlobalSetup.stories.ts'),
+            path.join(__dirname, '../**/SourceDecorator.stories.ts'),
+            // TODO (SVELTEKIT): Failures related to missing framework annotations
+            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*'),
+            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*'),
+            // TODO (SVELTEKIT): Investigate Error: use:enhance can only be used on <form> fields with method="POST"
+            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/forms.stories*'),
+          ],
+          /**
+           * TODO: Either fix or acknowledge limitation of:
+           * - Storybook channel usage:
+           * -- KeydownDuringPlay, Hooks, Events, ChangeArgs
+           * - @storybook/core/preview-api hooks:
+           * -- UseState
+           * - Targeted args:
+           * -- Targets (This one can be ignored as targeted args implementation has been abandoned)
+           */
+          testNamePattern: /^(?!.*(KeydownDuringPlay|Hooks|Events|ChangeArgs|Targets|UseState)).*$/,
+          browser: {
+            // enabled: true,
+            name: 'chromium',
+            provider: 'playwright',
+            headless: true,
+            screenshotFailures: false,
+          },
+          setupFiles: ['./.storybook/setupTests.ts'],
+          environment: 'happy-dom',
+        },
+      })
+    )`
+  );
+
+  await writeFile(
+    join(sandboxDir, 'vitest.workspace.ts'),
+    dedent`
+      import { defineWorkspace } from 'vitest/config'
+
+      export default defineWorkspace(['.storybook'])
+  `
+  );
+
+  const packageJsonPath = join(sandboxDir, 'package.json');
+  const packageJson = await readJson(packageJsonPath);
+
+  packageJson.scripts = {
+    ...packageJson.scripts,
+    vitest: 'vitest',
+  };
+
+  await writeJson(packageJsonPath, packageJson, { spaces: 2 });
 }
 
 export async function addExtraDependencies({
