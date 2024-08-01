@@ -472,7 +472,7 @@ export async function setupVitest(
            * - @storybook/core/preview-api hooks:
            * -- UseState
            * - Targeted args:
-           * -- Targets
+           * -- Targets (This one can be ignored as targeted args implementation has been abandoned)
            */
           testNamePattern: /^(?!.*(KeydownDuringPlay|Hooks|Events|ChangeArgs|Targets|UseState)).*$/,
           browser: {
