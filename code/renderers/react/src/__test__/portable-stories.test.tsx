@@ -23,6 +23,10 @@ afterEach(() => {
   cleanup();
 });
 
+declare const globalThis: {
+  IS_REACT_ACT_ENVIRONMENT?: boolean;
+};
+
 // example with composeStory, returns a single story composed with args/decorators
 const Secondary = composeStory(stories.CSF2Secondary, stories.default);
 describe('renders', () => {
@@ -146,12 +150,15 @@ describe('CSF3', () => {
   });
 
   it('renders with hooks', async () => {
+    // TODO find out why act is not working here
+    globalThis.IS_REACT_ACT_ENVIRONMENT = false;
     const HooksStory = composeStory(stories.HooksStory, stories.default);
 
     await HooksStory.run();
 
     const input = screen.getByTestId('input') as HTMLInputElement;
     expect(input.value).toEqual('Hello world!');
+    globalThis.IS_REACT_ACT_ENVIRONMENT = true;
   });
 });
 

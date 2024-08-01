@@ -7,6 +7,7 @@ import { Button } from './Button';
 import type { HandlerFunction } from '@storybook/addon-actions';
 import { action } from '@storybook/addon-actions';
 import { mocked } from '@storybook/test';
+import { act } from 'react-dom/test-utils';
 
 const meta = {
   title: 'Example/Button',
@@ -108,6 +109,7 @@ export const HooksStory: CSF3Story = {
       const buttonEl = canvas.getByRole('button');
       await userEvent.click(buttonEl);
       await userEvent.type(inputEl, 'Hello world!');
+
       await expect(inputEl).toHaveValue('Hello world!');
     });
     console.log('end of play function');
