@@ -43,61 +43,12 @@ import { useLayout } from '../layout/LayoutProvider';
 import { IconSymbols, UseSymbol } from './IconSymbols';
 import { CollapseIcon } from './components/CollapseIcon';
 import { StatusContext, useStatusSummary } from './StatusContext';
+import { StatusButton } from './StatusButton';
 
 const Container = styled.div<{ hasOrphans: boolean }>((props) => ({
   marginTop: props.hasOrphans ? 20 : 0,
   marginBottom: 20,
 }));
-
-export const Action = styled(IconButton)<{
-  height?: number;
-  width?: number;
-  status: API_StatusValue;
-  selectedItem?: boolean;
-}>(
-  ({ theme, height, width, status }) => {
-    const defaultColor =
-      theme.base === 'light'
-        ? transparentize(0.3, theme.color.defaultText)
-        : transparentize(0.6, theme.color.defaultText);
-
-    return {
-      transition: 'none',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: width || 28,
-      height: height || 28,
-      color: {
-        pending: defaultColor,
-        success: theme.color.positive,
-        error: theme.color.negative,
-        warn: theme.color.warning,
-        unknown: defaultColor,
-      }[status],
-
-      '&:hover': {
-        color: theme.color.secondary,
-      },
-
-      '&:focus': {
-        color: theme.color.secondary,
-        borderColor: theme.color.secondary,
-
-        '&:not(:focus-visible)': {
-          borderColor: 'transparent',
-        },
-      },
-    };
-  },
-  ({ theme, selectedItem }) =>
-    selectedItem && {
-      '&:hover': {
-        boxShadow: `inset 0 0 0 2px ${theme.color.secondary}`,
-        background: 'rgba(255, 255, 255, 0.2)',
-      },
-    }
-);
 
 const CollapseButton = styled.button(({ theme }) => ({
   all: 'unset',
@@ -125,6 +76,11 @@ export const LeafNodeStyleWrapper = styled.div(({ theme }) => ({
   background: 'transparent',
   minHeight: 28,
   borderRadius: 4,
+
+  '&:hover, &:focus': {
+    background: transparentize(0.93, theme.color.secondary),
+    outline: 'none',
+  },
 
   '&[data-selected="true"]': {
     color: theme.color.lightest,
@@ -249,7 +205,6 @@ const Node = React.memo<NodeProps>(function Node({
             closeOnOutsideClick
             onClick={(event) => event.stopPropagation()}
             placement="bottom"
-            style={{ position: 'absolute', right: 0, top: 0 }}
             tooltip={() => (
               <TooltipLinkList
                 links={Object.entries(status || {})
@@ -275,9 +230,9 @@ const Node = React.memo<NodeProps>(function Node({
               />
             )}
           >
-            <Action type="button" status={statusValue} selectedItem={isSelected}>
+            <StatusButton type="button" status={statusValue} selectedItem={isSelected}>
               {icon}
-            </Action>
+            </StatusButton>
           </WithTooltip>
         ) : null}
       </LeafNodeStyleWrapper>
@@ -406,14 +361,13 @@ const Node = React.memo<NodeProps>(function Node({
             closeOnOutsideClick
             onClick={(event) => event.stopPropagation()}
             placement="bottom"
-            style={{ position: 'absolute', right: 0, top: 0 }}
             tooltip={({ onHide }) => <TooltipLinkList links={createLinks(onHide)} />}
           >
-            <Action type="button" status={itemStatus}>
+            <StatusButton type="button" status={itemStatus}>
               <svg key="icon" viewBox="0 0 6 6" width="6" height="6" type="dot">
                 <UseSymbol type="dot" />
               </svg>
-            </Action>
+            </StatusButton>
           </WithTooltip>
         )}
       </LeafNodeStyleWrapper>
