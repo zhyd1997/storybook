@@ -365,7 +365,7 @@ async function linkPackageStories(
   );
 }
 
-export async function setupVitest(details: TemplateDetails, options: { renderer: string }) {
+export async function setupVitest(details: TemplateDetails) {
   const { sandboxDir, template } = details;
 
   const isSvelte = template.expected.renderer === '@storybook/svelte';
