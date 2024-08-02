@@ -92,7 +92,7 @@ const config: StorybookConfig = {
     '@storybook/addon-storysource',
     '@storybook/addon-designs',
     '@storybook/addon-a11y',
-    '@storybook/addon-vitest',
+    '@storybook/experimental-addon-vitest',
     '@chromatic-com/storybook',
   ],
   previewAnnotations: [
