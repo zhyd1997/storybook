@@ -5505,7 +5505,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/addon-themes@workspace:addons/themes":
+"@storybook/addon-themes@workspace:*, @storybook/addon-themes@workspace:addons/themes":
   version: 0.0.0-use.local
   resolution: "@storybook/addon-themes@workspace:addons/themes"
   dependencies:
@@ -6621,6 +6621,7 @@ __metadata:
     "@storybook/addon-onboarding": "workspace:*"
     "@storybook/addon-outline": "workspace:*"
     "@storybook/addon-storysource": "workspace:*"
+    "@storybook/addon-themes": "workspace:*"
     "@storybook/addon-toolbars": "workspace:*"
     "@storybook/addon-viewport": "workspace:*"
     "@storybook/angular": "workspace:*"
@@ -7972,9 +7973,9 @@ __metadata:
   linkType: hard
 
 "@types/qs@npm:*":
-  version: 6.9.15
-  resolution: "@types/qs@npm:6.9.15"
-  checksum: 10c0/49c5ff75ca3adb18a1939310042d273c9fc55920861bd8e5100c8a923b3cda90d759e1a95e18334092da1c8f7b820084687770c83a1ccef04fb2c6908117c823
+  version: 6.9.10
+  resolution: "@types/qs@npm:6.9.10"
+  checksum: 10c0/6be12e5f062d1b41eb037d59bf9cb65bc9410cedd5e6da832dfd7c8e2b3f4c91e81c9b90b51811140770e5052c6c4e8361181bd9437ddcd4515dc128b7c00353
   languageName: node
   linkType: hard
 
