@@ -443,12 +443,12 @@ export const parameters = {
 
 Setting an override value should now be done via a `globals` property on your component/meta or story itself:
 
-```diff
+```ts
 // Button.stories.ts
 export default {
   component: Button,
   globals: {
-    backgrounds: { default: 'twitter' },
+    backgrounds: { value: 'twitter' },
   },
 };
 ```
@@ -489,7 +489,7 @@ export const parameters = {
 
 Setting an override value should now be done via a `globals` property on your component/meta or story itself:
 
-```diff
+```ts
 // Button.stories.ts
 export default {
   component: Button,
