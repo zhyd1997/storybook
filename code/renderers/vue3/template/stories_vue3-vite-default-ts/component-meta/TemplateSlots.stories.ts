@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import Component from './template-slots/component.vue';
+import { h } from 'vue';
 
 const meta = {
   component: Component,
@@ -13,6 +14,12 @@ export const Default: Story = {
   args: {
     default: ({ num }) => `Default slot: num=${num}`,
     named: ({ str }) => `Named slot: str=${str}`,
-    vbind: ({ num, str }) => `Named v-bind slot: num=${num}, str=${str}`,
+    vbind: ({ num, str, obj }) => [
+      `Named v-bind slot: num=${num}, str=${str}, obj.title=${obj.title}`,
+      h('br'),
+      h('button', obj, 'button'),
+      h('br'),
+      h('button', { disabled: true, ...obj }, 'merged props'),
+    ],
   },
 };
