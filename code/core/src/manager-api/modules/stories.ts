@@ -619,11 +619,14 @@ export const init: ModuleFn<SubAPI, SubState> = ({
 
       const update = typeof input === 'function' ? input(status) : input;
 
-      if (Object.keys(update).length === 0) {
+      if (!id || Object.keys(update).length === 0) {
         return;
       }
 
       Object.entries(update).forEach(([storyId, value]) => {
+        if (!storyId || typeof value !== 'object') {
+          return;
+        }
         newStatus[storyId] = { ...(newStatus[storyId] || {}) };
         if (value === null) {
           delete newStatus[storyId][id];

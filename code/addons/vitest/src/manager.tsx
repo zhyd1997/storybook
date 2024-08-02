@@ -1,12 +1,21 @@
 import { global } from '@storybook/global';
-import type { IndexEntry, StoryIndex } from '@storybook/types';
+import type { IndexEntry, StoryId, StoryIndex } from '@storybook/types';
 import { addons, type API } from 'storybook/internal/manager-api';
 
 import { ADDON_ID } from './constants';
 
+const lastStoryIds = new Set<StoryId>();
+
 const loadReport = async (api: API) => {
   const indexPromise: Promise<StoryIndex> = fetch('index.json').then((res) => res.json());
   const reportPromise = fetch('vitest-report.xml').then((res) => res.text());
+
+  // Clear old statuses to avoid stale data
+  api.experimental_updateStatus(
+    ADDON_ID,
+    Object.fromEntries(Array.from(lastStoryIds).map((id) => [id, null]))
+  );
+  lastStoryIds.clear();
 
   const [index, report] = await Promise.all([indexPromise, reportPromise]).catch(() => []);
   if (!index || !report) return;
@@ -33,12 +42,14 @@ const loadReport = async (api: API) => {
     Object.fromEntries(
       Array.from(xmlDoc.getElementsByTagName('testcase')).map((testcase) => {
         const storyFile = testcase.getAttribute('classname');
-        const storyName = testcase.getAttribute('name')?.replace(/ /g,'');
+        const storyName = testcase.getAttribute('name')?.replace(/ /g, '');
         if (!storyFile || !storyName) return [];
 
         const stories = storiesByPath[storyFile] || storiesByPath[`./${storyFile}`];
         const story = stories?.[storyName];
-        if (!story) return [];
+        if (!story?.id) return [];
+
+        lastStoryIds.add(story.id);
 
         const result = testcase.querySelector('error, failure, skipped');
         return [
