@@ -31,15 +31,16 @@ import { MountMustBeDestructuredError } from '@storybook/core/preview-errors';
 
 let globalProjectAnnotations: ProjectAnnotations<any> = {};
 
-declare const window: {
-  defaultProjectAnnotations: ProjectAnnotations<any>;
-};
+declare global {
+  // eslint-disable-next-line no-var
+  var defaultProjectAnnotations: ProjectAnnotations<any>;
+}
 
 export function setDefaultProjectAnnotations<TRenderer extends Renderer = Renderer>(
   _defaultProjectAnnotations: ProjectAnnotations<TRenderer>
 ) {
   // Use a variable once we figure out the ESM/CJS issues
-  window.defaultProjectAnnotations = _defaultProjectAnnotations;
+  globalThis.defaultProjectAnnotations = _defaultProjectAnnotations;
 }
 
 const DEFAULT_STORY_TITLE = 'ComposedStory';
@@ -104,7 +105,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
     composeConfigs([
       defaultConfig && Object.keys(defaultConfig).length > 0
         ? defaultConfig
-        : window.defaultProjectAnnotations,
+        : globalThis.defaultProjectAnnotations,
       globalProjectAnnotations,
       projectAnnotations ?? {},
     ])
