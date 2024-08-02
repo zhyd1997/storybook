@@ -72,9 +72,9 @@ export function normalizeStory<TRenderer extends Renderer>(
     argTypes: normalizeInputTypes(argTypes),
     loaders,
     beforeEach,
+    globals,
     ...(render && { render }),
     ...(userStoryFn && { userStoryFn }),
     ...(play && { play }),
-    globals,
   };
 }

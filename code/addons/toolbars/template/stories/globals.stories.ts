@@ -40,13 +40,13 @@ export const OverrideLocale = {
 
 export const OverrideTheme = {
   globals: {
-    theme: 'dark',
+    sb_theme: 'dark',
   },
 };
 
 export const OverrideBoth = {
   globals: {
     locale: 'kr',
-    theme: 'dark',
+    sb_theme: 'dark',
   },
 };

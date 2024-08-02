@@ -52,6 +52,7 @@ export type SetStoriesPayload =
     } & Record<string, never>);
 
 export interface SetGlobalsPayload {
+  // userGlobals
   globals: Globals;
   globalTypes: GlobalTypes;
 }

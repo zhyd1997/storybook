@@ -15,7 +15,7 @@ export default {
     onSuccess: fn(),
   },
   globals: {
-    theme: 'light',
+    sb_theme: 'light',
   },
 };
 

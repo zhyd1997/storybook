@@ -34,7 +34,7 @@ const ThemeBlock = styled.div<{ side: 'left' | 'right'; layout: string }>(
     overflow: 'auto',
   },
   ({ layout }) => ({
-    padding: layout === 'fullscreen' ? 0 : 10,
+    padding: layout === 'fullscreen' ? 0 : '1rem',
   }),
   ({ theme }) => ({
     background: theme.background.content,
@@ -55,14 +55,14 @@ const ThemeBlock = styled.div<{ side: 'left' | 'right'; layout: string }>(
 const ThemeStack = styled.div<{ layout: string }>(
   {
     position: 'relative',
-    minHeight: 'calc(50vh - 15px)',
+    flex: 1,
   },
   ({ theme }) => ({
     background: theme.background.content,
     color: theme.color.defaultText,
   }),
   ({ layout }) => ({
-    padding: layout === 'fullscreen' ? 0 : 10,
+    padding: layout === 'fullscreen' ? 0 : '1rem',
   })
 );
 
@@ -84,6 +84,25 @@ const PlayFnNotice = styled.div(
     background: '#fffbd9',
     color: theme.color.defaultText,
   })
+);
+
+const StackContainer = ({ children, layout }) => (
+  <div
+    style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      // margin: layout === 'fullscreen' ? 0 : '-1rem',
+    }}
+  >
+    <style dangerouslySetInnerHTML={{ __html: 'html, body, #storybook-root { height: 100%; }' }} />
+    {layout === 'fullscreen' ? null : (
+      <style
+        dangerouslySetInnerHTML={{ __html: 'html, body { padding: 0!important; margin: 0; }' }}
+      />
+    )}
+    {children}
+  </div>
 );
 
 const ThemedSetRoot = () => {
@@ -166,7 +185,7 @@ export const decorators = [
    * This decorator renders the stories side-by-side, stacked or default based on the theme switcher in the toolbar
    */
   (StoryFn, { globals, playFunction, args, storyGlobals, parameters }) => {
-    let theme = globals.theme;
+    let theme = globals.sb_theme;
     let showPlayFnNotice = false;
 
     // this makes the decorator be out of 'phase' with the actually selected theme in the toolbar
@@ -176,7 +195,7 @@ export const decorators = [
     if (playFunction && args.autoplay !== false && !(theme === 'light' || theme === 'dark')) {
       theme = 'light';
       showPlayFnNotice = true;
-    } else if (isChromatic() && !storyGlobals.theme && !playFunction) {
+    } else if (isChromatic() && !storyGlobals.sb_theme && !playFunction) {
       theme = 'stacked';
     }
 
@@ -206,16 +225,18 @@ export const decorators = [
             <ThemeProvider theme={convert(themes.light)}>
               <Global styles={createReset} />
             </ThemeProvider>
-            <ThemeProvider theme={convert(themes.light)}>
-              <ThemeStack data-side="left" layout={parameters.layout}>
-                <StoryFn />
-              </ThemeStack>
-            </ThemeProvider>
-            <ThemeProvider theme={convert(themes.dark)}>
-              <ThemeStack data-side="right" layout={parameters.layout}>
-                <StoryFn />
-              </ThemeStack>
-            </ThemeProvider>
+            <StackContainer layout={parameters.layout}>
+              <ThemeProvider theme={convert(themes.light)}>
+                <ThemeStack data-side="left" layout={parameters.layout}>
+                  <StoryFn />
+                </ThemeStack>
+              </ThemeProvider>
+              <ThemeProvider theme={convert(themes.dark)}>
+                <ThemeStack data-side="right" layout={parameters.layout}>
+                  <StoryFn />
+                </ThemeStack>
+              </ThemeProvider>
+            </StackContainer>
           </Fragment>
         );
       }
@@ -314,6 +335,9 @@ export const parameters = {
   },
   viewport: {
     options: MINIMAL_VIEWPORTS,
+  },
+  themes: {
+    disable: true,
   },
   backgrounds: {
     options: {

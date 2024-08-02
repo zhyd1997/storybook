@@ -59,7 +59,7 @@ export const ViewportTool: FC<{ api: API }> = ({ api }) => {
 
   if (typeof item.styles === 'function') {
     console.warn(
-      'addon viewport no longer supports dynamic styles using a function, use css calc() instead'
+      'Addon Viewport no longer supports dynamic styles using a function, use css calc() instead'
     );
     return null;
   }
@@ -78,7 +78,7 @@ export const ViewportTool: FC<{ api: API }> = ({ api }) => {
         updateGlobals,
         viewportMap: options,
         viewportName,
-        isRotated: isRotated,
+        isRotated,
         setIsTooltipVisible,
         isLocked,
         isActive,
