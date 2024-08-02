@@ -30,12 +30,16 @@ import { normalizeProjectAnnotations } from './normalizeProjectAnnotations';
 import { MountMustBeDestructuredError } from '@storybook/core/preview-errors';
 
 let globalProjectAnnotations: ProjectAnnotations<any> = {};
-let defaultProjectAnnotations: ProjectAnnotations<any> = {};
+
+declare const window: {
+  defaultProjectAnnotations: ProjectAnnotations<any>;
+};
 
 export function setDefaultProjectAnnotations<TRenderer extends Renderer = Renderer>(
   _defaultProjectAnnotations: ProjectAnnotations<TRenderer>
 ) {
-  defaultProjectAnnotations = _defaultProjectAnnotations;
+  // Use a variable once we figure out the ESM/CJS issues
+  window.defaultProjectAnnotations = _defaultProjectAnnotations;
 }
 
 const DEFAULT_STORY_TITLE = 'ComposedStory';
@@ -98,7 +102,9 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
 
   const normalizedProjectAnnotations = normalizeProjectAnnotations<TRenderer>(
     composeConfigs([
-      defaultConfig ?? defaultProjectAnnotations,
+      defaultConfig && Object.keys(defaultConfig).length > 0
+        ? defaultConfig
+        : window.defaultProjectAnnotations,
       globalProjectAnnotations,
       projectAnnotations ?? {},
     ])

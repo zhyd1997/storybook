@@ -2,6 +2,7 @@ import {
   composeStory as originalComposeStory,
   composeStories as originalComposeStories,
   setProjectAnnotations as originalSetProjectAnnotations,
+  setDefaultProjectAnnotations,
 } from 'storybook/internal/preview-api';
 import type {
   Args,
@@ -56,6 +57,7 @@ export function setProjectAnnotations(
     | NamedOrDefaultProjectAnnotations<SvelteRenderer>
     | NamedOrDefaultProjectAnnotations<SvelteRenderer>[]
 ): ProjectAnnotations<SvelteRenderer> {
+  setDefaultProjectAnnotations(INTERNAL_DEFAULT_PROJECT_ANNOTATIONS);
   return originalSetProjectAnnotations<SvelteRenderer>(projectAnnotations);
 }
 

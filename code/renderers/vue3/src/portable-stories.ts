@@ -2,6 +2,7 @@ import {
   composeStory as originalComposeStory,
   composeStories as originalComposeStories,
   setProjectAnnotations as originalSetProjectAnnotations,
+  setDefaultProjectAnnotations,
 } from 'storybook/internal/preview-api';
 import type {
   Args,
@@ -46,6 +47,7 @@ export function setProjectAnnotations(
     | NamedOrDefaultProjectAnnotations<VueRenderer>
     | NamedOrDefaultProjectAnnotations<VueRenderer>[]
 ): ProjectAnnotations<VueRenderer> {
+  setDefaultProjectAnnotations(vueProjectAnnotations);
   return originalSetProjectAnnotations<VueRenderer>(projectAnnotations);
 }
 
