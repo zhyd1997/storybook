@@ -5,10 +5,10 @@ Storybook is developed against a specific node version which is defined in an `.
 ## Ensure you have the required system utilities
 
 You will need to have the following installed:
+
 - git
 - node
 - yarn
-- [bun](https://bun.sh/)
 
 ## Using fnm as a Node version manager
 
