@@ -197,10 +197,32 @@ const baseTemplates = {
       builder: '@storybook/builder-webpack5',
     },
     modifications: {
+      extraDependencies: ['server-only'],
+    },
+    skipTasks: ['e2e-tests-dev', 'bench'],
+  },
+  'nextjs-vite/default-ts': {
+    name: 'Next.js Latest (Vite | TypeScript)',
+    script:
+      'yarn create next-app {{beforeDir}} --typescript --eslint --tailwind --app --import-alias="@/*" --src-dir',
+    inDevelopment: true,
+    expected: {
+      framework: '@storybook/nextjs-vite',
+      renderer: '@storybook/react',
+      builder: '@storybook/builder-vite',
+    },
+
+    modifications: {
       mainConfig: {
+        framework: '@storybook/nextjs-vite',
         features: { experimentalRSC: true },
       },
-      extraDependencies: ['server-only'],
+      extraDependencies: [
+        'server-only',
+        'vite-plugin-storybook-nextjs',
+        '@storybook/nextjs-vite',
+        'vite',
+      ],
     },
     skipTasks: ['e2e-tests-dev', 'bench'],
   },

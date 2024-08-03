@@ -44,6 +44,7 @@ export default {
   '@storybook/html-vite': '8.3.0-alpha.3',
   '@storybook/html-webpack5': '8.3.0-alpha.3',
   '@storybook/nextjs': '8.3.0-alpha.3',
+  '@storybook/nextjs-vite': '8.3.0-alpha.3',
   '@storybook/preact-vite': '8.3.0-alpha.3',
   '@storybook/preact-webpack5': '8.3.0-alpha.3',
   '@storybook/react-vite': '8.3.0-alpha.3',
