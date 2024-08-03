@@ -1171,6 +1171,62 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oven/bun-darwin-aarch64@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@oven/bun-darwin-aarch64@npm:1.1.21"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oven/bun-darwin-x64-baseline@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@oven/bun-darwin-x64-baseline@npm:1.1.21"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oven/bun-darwin-x64@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@oven/bun-darwin-x64@npm:1.1.21"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oven/bun-linux-aarch64@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@oven/bun-linux-aarch64@npm:1.1.21"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oven/bun-linux-x64-baseline@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@oven/bun-linux-x64-baseline@npm:1.1.21"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oven/bun-linux-x64@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@oven/bun-linux-x64@npm:1.1.21"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oven/bun-windows-x64-baseline@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@oven/bun-windows-x64-baseline@npm:1.1.21"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oven/bun-windows-x64@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@oven/bun-windows-x64@npm:1.1.21"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -1432,6 +1488,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^1.6.0"
     ansi-regex: "npm:^6.0.1"
     browser-assert: "npm:^1.2.1"
+    bun: "npm:^1.1.21"
     chalk: "npm:^4.1.0"
     chromatic: "npm:^11.5.5"
     codecov: "npm:^3.8.1"
@@ -1445,7 +1502,6 @@ __metadata:
     ejs-lint: "npm:^2.0.0"
     esbuild: "npm:^0.23.0"
     esbuild-plugin-alias: "npm:^0.2.1"
-    esbuild-register: "npm:^3.5.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb-typescript: "npm:^18.0.0"
     eslint-config-prettier: "npm:^9.1.0"
@@ -1469,6 +1525,7 @@ __metadata:
     glob: "npm:^10.4.5"
     http-server: "npm:^14.1.1"
     husky: "npm:^4.3.7"
+    jiti: "npm:^1.21.6"
     json5: "npm:^2.2.3"
     junit-xml: "npm:^1.2.0"
     lint-staged: "npm:^15.2.7"
@@ -3637,6 +3694,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bun@npm:^1.1.21":
+  version: 1.1.21
+  resolution: "bun@npm:1.1.21"
+  dependencies:
+    "@oven/bun-darwin-aarch64": "npm:1.1.21"
+    "@oven/bun-darwin-x64": "npm:1.1.21"
+    "@oven/bun-darwin-x64-baseline": "npm:1.1.21"
+    "@oven/bun-linux-aarch64": "npm:1.1.21"
+    "@oven/bun-linux-x64": "npm:1.1.21"
+    "@oven/bun-linux-x64-baseline": "npm:1.1.21"
+    "@oven/bun-windows-x64": "npm:1.1.21"
+    "@oven/bun-windows-x64-baseline": "npm:1.1.21"
+  dependenciesMeta:
+    "@oven/bun-darwin-aarch64":
+      optional: true
+    "@oven/bun-darwin-x64":
+      optional: true
+    "@oven/bun-darwin-x64-baseline":
+      optional: true
+    "@oven/bun-linux-aarch64":
+      optional: true
+    "@oven/bun-linux-x64":
+      optional: true
+    "@oven/bun-linux-x64-baseline":
+      optional: true
+    "@oven/bun-windows-x64":
+      optional: true
+    "@oven/bun-windows-x64-baseline":
+      optional: true
+  bin:
+    bun: bin/bun.exe
+    bunx: bin/bun.exe
+  checksum: 10c0/768260211b6c082cfa486d55976ff82e0c0928f83bd6ce5bb3e94bffbb382c1ecd666de2befe824d4a8f3e44cc026e817ae5228d86b6148344976b08f929f98c
+  conditions: (os=darwin | os=linux | os=win32) & (cpu=arm64 | cpu=x64)
+  languageName: node
+  linkType: hard
+
 "bundle-require@npm:^4.0.0":
   version: 4.0.2
   resolution: "bundle-require@npm:4.0.2"
@@ -5212,17 +5306,6 @@ __metadata:
   version: 0.2.1
   resolution: "esbuild-plugin-alias@npm:0.2.1"
   checksum: 10c0/a67bc6bc2744fc8637f7321f00c1f00e4fae86c182662421738ebfabf3ad344967b9c667185c6c34d9edd5b289807d34bfdceef94620e94e0a45683534af69e0
-  languageName: node
-  linkType: hard
-
-"esbuild-register@npm:^3.5.0":
-  version: 3.5.0
-  resolution: "esbuild-register@npm:3.5.0"
-  dependencies:
-    debug: "npm:^4.3.4"
-  peerDependencies:
-    esbuild: ">=0.12 <1"
-  checksum: 10c0/9ccd0573cb66018e4cce3c1416eed0f5f3794c7026ce469a94e2f8761335abed8e363fc8e8bb036ab9ad7e579bb4296b8568a04ae5626596c123576b0d9c9bde
   languageName: node
   linkType: hard
 
@@ -7953,6 +8036,15 @@ __metadata:
     graceful-fs: "npm:^4.2.9"
     picomatch: "npm:^2.2.3"
   checksum: 10c0/bc55a8f49fdbb8f51baf31d2a4f312fb66c9db1483b82f602c9c990e659cdd7ec529c8e916d5a89452ecbcfae4949b21b40a7a59d4ffc0cd813a973ab08c8150
+  languageName: node
+  linkType: hard
+
+"jiti@npm:^1.21.6":
+  version: 1.21.6
+  resolution: "jiti@npm:1.21.6"
+  bin:
+    jiti: bin/jiti.js
+  checksum: 10c0/05b9ed58cd30d0c3ccd3c98209339e74f50abd9a17e716f65db46b6a35812103f6bde6e134be7124d01745586bca8cc5dae1d0d952267c3ebe55171949c32e56
   languageName: node
   linkType: hard
 
