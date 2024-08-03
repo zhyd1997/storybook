@@ -200,6 +200,8 @@ Specifies the default viewport used when viewing a story. Must match a key in th
 
 #### `disabled`
 
+Requires: [globals API](#customizing-viewports-with-globals)
+
 Type: `boolean`
 
 Turn off this addon's behavior. If you wish to turn off this addon for the entire Storybook, you should do so when registering `addon-essentials`. See the [essential addon's docs](../essentials/index.mdx#disabling-addons) for more information.
@@ -214,7 +216,7 @@ The `disabled` parameter is only available with the globals API introduced in St
 
 #### `options`
 
-Available only with the [globals API](#customizing-viewports-with-globals).
+Requires: [globals API](#customizing-viewports-with-globals)
 
 Type:
 

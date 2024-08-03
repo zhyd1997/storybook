@@ -23,7 +23,6 @@ But you're not restricted to these backgrounds, you can configure your own set o
 
 If you define the `default` property, the addon will apply it to all stories. Otherwise, it's only listed as an available color.
 
-
 ### Overriding backgrounds with globals
 
 The Backgrounds addon enables you to change the background color applied to a story by selecting from the list of predefined background colors in the toolbar. If you need, you can opt into the globals API to configure backgrounds to ensure that a story always uses a specific background color regardless of the existing configuration.
@@ -115,9 +114,15 @@ Default background color. Must match the `name` property of one of the [availabl
 
 #### `options`
 
+Requires: [globals API](#overriding-backgrounds-with-globals)
+
 Type: `Record<string, { name: string; value: string }>`
 
+Defines the background colors. See above for a [usage example](#configuration).
+
 #### `disabled`
+
+Requires: [globals API](#overriding-backgrounds-with-globals)
 
 Type: `boolean`
 
@@ -196,4 +201,4 @@ The opacity of the grid lines.
 
 Type: `{ name: string; value: string }[]`
 
-Available background colors. See above for a [usage example](#configuration).
+Available background colors. See above for a [usage example](#configuration). Required if you haven't opted into the [globals API](#overriding-backgrounds-with-globals).
