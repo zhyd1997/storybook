@@ -77,6 +77,7 @@
   "resolutions": {
     "@playwright/test": "1.36.0",
     "@types/node": "^18.0.0",
+    "@vitest/expect@npm:2.0.5": "patch:@vitest/expect@npm%3A2.0.5#~/.yarn/patches/@vitest-expect-npm-2.0.5-8933466cce.patch",
     "esbuild": "^0.23.0",
     "playwright": "1.36.0",
     "playwright-core": "1.36.0",

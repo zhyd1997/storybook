@@ -4,7 +4,8 @@ import { UpgradeStorybookToLowerVersionError } from 'storybook/internal/server-e
 import { doUpgrade, getStorybookVersion } from './upgrade';
 import { logger } from '@storybook/core/node-logger';
 
-const findInstallationsMock = vi.fn<string[], Promise<sbcc.InstallationMetadata | undefined>>();
+const findInstallationsMock =
+  vi.fn<(arg: string[]) => Promise<sbcc.InstallationMetadata | undefined>>();
 
 vi.mock('@storybook/core/telemetry');
 vi.mock('@storybook/core/common', async (importOriginal) => {
