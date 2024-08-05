@@ -4,7 +4,7 @@ index ea14a7a52838ff2fb3010996a47f82507315019f..d5248b4daac4333ecdf250952cec3fbd
 +++ b/dist/index.js
 @@ -6,7 +6,9 @@ import { processError } from '@vitest/utils/error';
  import { use, util } from 'chai';
- 
+
  const MATCHERS_OBJECT = Symbol.for("matchers-object");
 -const JEST_MATCHERS_OBJECT = Symbol.for("$$jest-matchers-object");
 +// Patched this symbol for storybook, so that @storybook/test can be used in a jest environment as well.
@@ -14,7 +14,7 @@ index ea14a7a52838ff2fb3010996a47f82507315019f..d5248b4daac4333ecdf250952cec3fbd
  const ASYMMETRIC_MATCHERS_OBJECT = Symbol.for(
    "asymmetric-matchers-object"
 @@ -14,20 +16,24 @@ const ASYMMETRIC_MATCHERS_OBJECT = Symbol.for(
- 
+
  if (!Object.prototype.hasOwnProperty.call(globalThis, MATCHERS_OBJECT)) {
    const globalState = /* @__PURE__ */ new WeakMap();
 -  const matchers = /* @__PURE__ */ Object.create(null);
