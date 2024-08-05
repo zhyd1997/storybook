@@ -82,9 +82,11 @@ Storybook for Next.js is a [framework](../../contribute/framework.mdx) that make
 
   {/* prettier-ignore-end */}
 
-  #### @storybook/nextjs-vite - Experimental Vite support
+  #### With Vite
 
-  You can use our freshly baked experimental `@storybook/nextjs-vite` framework, which is based on Vite and removes the bloat of Webpack and Babel.
+  (⚠️ **Experimental**)
+
+  You can use our freshly baked, experimental `@storybook/experimental-nextjs-vite` framework, which is based on Vite and removes the need for Webpack and Babel. It supports all of the features documented here.
 
   {/* prettier-ignore-start */}
 
@@ -191,7 +193,7 @@ Storybook for Next.js is a [framework](../../contribute/framework.mdx) that make
   #### `staticDir` mapping
 
   <Callout variant="info">
-    You can safely skip this section if you are using `@storybook/nextjs-vite` instead of `@storybook/nextjs`. The vite-based framework takes care of the mapping automatically.
+    You can safely skip this section if you are using [`@storybook/experimental-nextjs-vite`](#with-vite) instead of `@storybook/nextjs`. The Vite-based framework takes care of the mapping automatically.
   </Callout>
 
   You have to tell Storybook where the `fonts` directory is located, via the [`staticDirs` configuration](../../api/main-config/main-config-static-dirs.mdx#with-configuration-objects). The `from` value is relative to the `.storybook` directory. The `to` value is relative to the execution context of Storybook. Very likely it is the root of your project.
