@@ -49,7 +49,7 @@
     "@testing-library/dom": "10.1.0",
     "@testing-library/jest-dom": "6.4.5",
     "@testing-library/user-event": "14.5.2",
-    "@vitest/expect": "patch:@vitest/expect@npm%3A2.0.5#~/.yarn/patches/@vitest-expect-npm-2.0.5-8933466cce.patch",
+    "@vitest/expect": "2.0.5",
     "@vitest/spy": "2.0.5",
     "util": "^0.12.4"
   },
