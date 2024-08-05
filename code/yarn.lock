@@ -6767,7 +6767,7 @@ __metadata:
     "@testing-library/dom": "npm:10.1.0"
     "@testing-library/jest-dom": "npm:6.4.5"
     "@testing-library/user-event": "npm:14.5.2"
-    "@vitest/expect": "patch:@vitest/expect@npm%3A2.0.5#~/.yarn/patches/@vitest-expect-npm-2.0.5-8933466cce.patch"
+    "@vitest/expect": "npm:2.0.5"
     "@vitest/spy": "npm:2.0.5"
     chai: "npm:^5.1.1"
     tinyspy: "npm:^3.0.0"
