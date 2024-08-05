@@ -94,7 +94,7 @@
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/experimental-utils": "^5.62.0",
     "@typescript-eslint/parser": "^7.16.0",
-    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/coverage-v8": "^2.0.5",
     "ansi-regex": "^6.0.1",
     "browser-assert": "^1.2.1",
     "chalk": "^4.1.0",
