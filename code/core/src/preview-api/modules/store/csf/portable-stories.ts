@@ -29,12 +29,15 @@ import { getValuesFromArgTypes } from './getValuesFromArgTypes';
 import { normalizeProjectAnnotations } from './normalizeProjectAnnotations';
 import { MountMustBeDestructuredError } from '@storybook/core/preview-errors';
 
-let globalProjectAnnotations: ProjectAnnotations<any> = {};
-
+// TODO we should get to the bottom of the singleton issues caused by dual ESM/CJS modules
 declare global {
+  // eslint-disable-next-line no-var
+  var globalProjectAnnotations: ProjectAnnotations<any>;
   // eslint-disable-next-line no-var
   var defaultProjectAnnotations: ProjectAnnotations<any>;
 }
+
+globalThis.globalProjectAnnotations ??= {};
 
 export function setDefaultProjectAnnotations<TRenderer extends Renderer = Renderer>(
   _defaultProjectAnnotations: ProjectAnnotations<TRenderer>
@@ -63,9 +66,9 @@ export function setProjectAnnotations<TRenderer extends Renderer = Renderer>(
     | NamedOrDefaultProjectAnnotations<TRenderer>[]
 ): ProjectAnnotations<TRenderer> {
   const annotations = Array.isArray(projectAnnotations) ? projectAnnotations : [projectAnnotations];
-  globalProjectAnnotations = composeConfigs(annotations.map(extractAnnotation));
+  globalThis.globalProjectAnnotations = composeConfigs(annotations.map(extractAnnotation));
 
-  return globalProjectAnnotations;
+  return globalThis.globalProjectAnnotations;
 }
 
 const cleanups: CleanupCallback[] = [];
@@ -106,7 +109,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
       defaultConfig && Object.keys(defaultConfig).length > 0
         ? defaultConfig
         : globalThis.defaultProjectAnnotations ?? {},
-      globalProjectAnnotations,
+      globalThis.globalProjectAnnotations,
       projectAnnotations ?? {},
     ])
   );
