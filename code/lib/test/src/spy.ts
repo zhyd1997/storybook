@@ -33,6 +33,7 @@ export const spyOn: typeof vitestSpyOn = (...args) => {
 
 type Procedure = (...args: any[]) => any;
 
+// TODO: Remove in 9.0
 export type Mock<T extends Procedure | any[], R = any> = T extends Procedure
   ? MockV2<T>
   : T extends any[]
@@ -41,6 +42,7 @@ export type Mock<T extends Procedure | any[], R = any> = T extends Procedure
 
 // V2
 export function fn<T extends Procedure = Procedure>(implementation?: T): Mock<T>;
+// TODO: Remove in 9.0
 // V1
 export function fn<TArgs extends any[] = any, R = any>(): Mock<(...args: TArgs) => R>;
 export function fn<TArgs extends any[] = any[], R = any>(
