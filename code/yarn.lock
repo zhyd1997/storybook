@@ -3776,6 +3776,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/sourcemap-codec@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@jridgewell/sourcemap-codec@npm:1.5.0"
+  checksum: 10c0/2eb864f276eb1096c3c11da3e9bb518f6d9fc0023c78344cdc037abadc725172c70314bdb360f2d4b7bffec7f5d657ce006816bc5d4ecb35e61b66132db00c18
+  languageName: node
+  linkType: hard
+
 "@jridgewell/trace-mapping@npm:0.3.9":
   version: 0.3.9
   resolution: "@jridgewell/trace-mapping@npm:0.3.9"
@@ -6294,14 +6301,14 @@ __metadata:
     sharp: "npm:^0.33.3"
     styled-jsx: "npm:5.1.6"
     typescript: "npm:^5.3.2"
-    vite-plugin-storybook-nextjs: "npm:^0.0.13"
+    vite-plugin-storybook-nextjs: "npm:^1.0.0"
   peerDependencies:
     next: ^14.2.5
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     storybook: "workspace:^"
     vite: ^5.0.0
-    vite-plugin-storybook-nextjs: ^0.0.13
+    vite-plugin-storybook-nextjs: ^1.0.0
   dependenciesMeta:
     sharp:
       optional: true
@@ -19111,6 +19118,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"magic-string@npm:^0.30.11":
+  version: 0.30.11
+  resolution: "magic-string@npm:0.30.11"
+  dependencies:
+    "@jridgewell/sourcemap-codec": "npm:^1.5.0"
+  checksum: 10c0/b9eb370773d0bd90ca11a848753409d8e5309b1ad56d2a1aa49d6649da710a6d2fe7237ad1a643c5a5d3800de2b9946ed9690acdfc00e6cc1aeafff3ab1752c4
+  languageName: node
+  linkType: hard
+
 "magicast@npm:^0.3.3":
   version: 0.3.3
   resolution: "magicast@npm:0.3.3"
@@ -28147,12 +28163,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-storybook-nextjs@npm:^0.0.13":
-  version: 0.0.13
-  resolution: "vite-plugin-storybook-nextjs@npm:0.0.13"
+"vite-plugin-storybook-nextjs@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "vite-plugin-storybook-nextjs@npm:1.0.0"
   dependencies:
     "@next/env": "npm:^14.2.5"
     image-size: "npm:^1.1.1"
+    magic-string: "npm:^0.30.11"
     module-alias: "npm:^2.2.3"
     sharp: "npm:^0.33.4"
     ts-dedent: "npm:^2.2.0"
@@ -28164,7 +28181,7 @@ __metadata:
   dependenciesMeta:
     sharp:
       optional: true
-  checksum: 10c0/331e43c91f6c395e3ed87b6a2f372f1372fa7dfc00d0cb8e0a9daad129d779f6f56b5d01fb4b1ab6c231917c458189c02535ecbe2d9d447bc8bf4c3939cc42aa
+  checksum: 10c0/6ca17326e0387044d7bfa4373e6ccb64e8bb5bec1f19898ba9b8338c7817d8bea0fb01169adfb623f652fded5e6f59170129f7c8c4d4c3c54ca3764727e5a195
   languageName: node
   linkType: hard
 

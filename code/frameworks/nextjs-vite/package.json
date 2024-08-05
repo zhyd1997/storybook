@@ -99,7 +99,7 @@
     "@types/node": "^18.0.0",
     "next": "^14.2.5",
     "typescript": "^5.3.2",
-    "vite-plugin-storybook-nextjs": "^0.0.13"
+    "vite-plugin-storybook-nextjs": "^1.0.0"
   },
   "peerDependencies": {
     "next": "^14.2.5",
@@ -107,7 +107,7 @@
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta",
     "storybook": "workspace:^",
     "vite": "^5.0.0",
-    "vite-plugin-storybook-nextjs": "^0.0.13"
+    "vite-plugin-storybook-nextjs": "^1.0.0"
   },
   "peerDependenciesMeta": {
     "typescript": {
