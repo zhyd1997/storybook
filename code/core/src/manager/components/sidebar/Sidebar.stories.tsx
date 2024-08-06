@@ -72,6 +72,7 @@ const meta = {
       </ManagerContext.Provider>
     ),
   ],
+  globals: { sb_theme: 'side-by-side' },
 } satisfies Meta<typeof Sidebar>;
 
 export default meta;
@@ -207,6 +208,14 @@ export const StatusesOpen: Story = {
 export const Searching: Story = {
   ...StatusesOpen,
   parameters: { chromatic: { delay: 2200 } },
+  globals: { sb_theme: 'light' },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
   play: async ({ canvasElement, step }) => {
     await step('wait 2000ms', () => wait(2000));
     const canvas = await within(canvasElement);
@@ -260,12 +269,21 @@ export const Scrolled: Story = {
   args: {
     storyId: 'group-1--child-b1',
   },
+  globals: { sb_theme: 'light' },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+
   render: (args) => {
     const [, setState] = React.useState(0);
     return (
       <>
         <button
-          style={{ position: 'absolute', zIndex: 10 }}
+          style={{ position: 'absolute', zIndex: 10, bottom: 0, right: 0 }}
           onClick={() => setState(() => Math.random())}
         >
           Change state

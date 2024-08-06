@@ -102,7 +102,15 @@ export const sandbox: Task = {
         extraDeps.push('vite-plugin-storybook-nextjs', 'jsdom');
       }
 
-      await setupVitest(details, { renderer, testingLibraryPackage });
+      // if (details.template.expected.renderer === '@storybook/svelte') {
+      //   extraDeps.push(`@testing-library/svelte`);
+      // }
+      //
+      // if (details.template.expected.framework === '@storybook/angular') {
+      //   extraDeps.push('@testing-library/angular', '@analogjs/vitest-angular');
+      // }
+
+      await setupVitest(details, { renderer });
     }
 
     await addExtraDependencies({

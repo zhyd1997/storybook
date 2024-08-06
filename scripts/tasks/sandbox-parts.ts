@@ -365,45 +365,33 @@ async function linkPackageStories(
   );
 }
 
-export async function setupVitest(
-  details: TemplateDetails,
-  options: { renderer: string; testingLibraryPackage: string }
-) {
-  const { renderer, testingLibraryPackage } = options;
+export async function setupVitest(details: TemplateDetails) {
   const { sandboxDir, template } = details;
 
   const isSvelte = template.expected.renderer === '@storybook/svelte';
   const isNextjs = template.expected.framework === '@storybook/nextjs';
+  // const isAngular = template.expected.framework === '@storybook/angular';
   const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
-  const storybookRenderer = isNextjs ? 'nextjs' : renderer;
 
   await writeFile(
     join(sandboxDir, '.storybook/setupTests.ts'),
-    dedent`import { beforeAll, beforeEach } from 'vitest'
+    dedent`import { beforeAll } from 'vitest'
     import { setProjectAnnotations } from '${storybookPackage}'
     import * as rendererDocsAnnotations from '${template.expected.renderer}/dist/entry-preview-docs.mjs'
     import * as addonActionsAnnotations from '@storybook/addon-actions/preview'
     import * as addonInteractionsAnnotations from '@storybook/addon-interactions/preview'
-    import * as componentAnnotations from '../src/stories/components'
+    import '../src/stories/components'
     import * as coreAnnotations from '../template-stories/core/preview'
     import * as toolbarAnnotations from '../template-stories/addons/toolbars/preview'
     import * as projectAnnotations from './preview'
     
-    const { cleanup, render: testingLibraryRender } = await import(
-      '${testingLibraryPackage}'
-    )
-
-    beforeEach(cleanup)
-    
     const annotations = setProjectAnnotations([
       rendererDocsAnnotations,
       projectAnnotations,
-      componentAnnotations,
       coreAnnotations,
       toolbarAnnotations,
       addonActionsAnnotations,
       addonInteractionsAnnotations,
-      { testingLibraryRender },
     ])
 
     beforeAll(annotations.beforeAll!)`
@@ -422,9 +410,7 @@ export async function setupVitest(
       ${!isNextjs ? 'viteConfig' : '{}'},
       defineConfig({
         plugins: [
-          storybookTest({
-            renderer: '${storybookRenderer}',
-          }),
+          storybookTest(),
           ${isSvelte ? 'svelteTesting(),' : ''}
           ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
         ],
