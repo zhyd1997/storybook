@@ -1,10 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { join } from 'node:path';
-import type { Plugin } from 'vite';
+import type { Plugin } from 'vitest/config';
+import { createRequire } from 'node:module';
 import { transform } from './transformer';
 import type { InternalOptions, UserOptions } from './types';
 import { log } from './utils';
-import { createRequire } from 'node:module';
 
 const DEFAULT_CONFIG_DIR = '.storybook';
 
@@ -23,8 +23,7 @@ const defaultOptions: UserOptions = {
   },
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: The type should ideally be Plugin from vite, but that causes issues in user land
-export const storybookTest = (options?: UserOptions): any => {
+export const storybookTest = (options?: UserOptions): Plugin => {
   const finalOptions = {
     ...defaultOptions,
     ...options,
@@ -46,20 +45,18 @@ export const storybookTest = (options?: UserOptions): any => {
 
   return {
     name: 'vite-plugin-storybook-test',
-    enforce: 'pre' as const,
+    enforce: 'pre',
     async configureServer() {
       // this might be useful in the future
       if (!finalOptions.configDir) {
         finalOptions.configDir = join(process.cwd(), options?.configDir ?? DEFAULT_CONFIG_DIR);
       }
     },
-    // biome-ignore lint: fix types later
-    async configResolved(config: any) {
+    async config(config) {
       // If we end up needing to know if we are running in browser mode later
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
       //   plugin.name?.startsWith('vitest:browser')
       // )
-
       config.test ??= {};
 
       config.test.env ??= {};
@@ -112,7 +109,7 @@ export const storybookTest = (options?: UserOptions): any => {
         });
       }
     },
-  } satisfies Plugin;
+  };
 };
 
 export default storybookTest;

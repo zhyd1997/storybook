@@ -7,7 +7,7 @@ export default mergeConfig(
     plugins: [
       import('@storybook/experimental-addon-vitest/plugin').then(({ storybookTest }) =>
         storybookTest({
-          renderer: 'react',
+          storybookScript: 'yarn storybook:ui --ci',
         })
       ),
     ],

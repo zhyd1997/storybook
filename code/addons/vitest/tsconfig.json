@@ -3,7 +3,8 @@
   "compilerOptions": {
     "rootDir": "../../../",
     "module": "Preserve",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "types": ["vitest"]
   },
   "include": ["src/**/*", "./typings.d.ts"]
 }

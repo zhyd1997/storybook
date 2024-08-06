@@ -181,6 +181,11 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   }
 
   if (nodeEntries.length > 0) {
+    const { dtsConfig, tsConfigExists } = await getDTSConfigs({
+      formats: ['esm'],
+      entries: nodeEntries,
+      optimized,
+    });
     tasks.push(
       build({
         ...commonOptions,
@@ -198,6 +203,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
     tasks.push(
       build({
         ...commonOptions,
+        ...(optimized ? dtsConfig : {}),
         entry: nodeEntries.map((e: string) => slash(join(cwd, e))),
         format: ['esm'],
         target: 'node18',
@@ -221,6 +227,10 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         },
       })
     );
+
+    if (tsConfigExists && !optimized) {
+      tasks.push(...nodeEntries.map(generateDTSMapperFile));
+    }
   }
 
   await Promise.all(tasks);
