@@ -1,27 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 import type { BrowserPage } from '@vitest/browser/context';
-import { INITIAL_VIEWPORTS } from '../../viewport/src/defaults';
+
+import { INITIAL_VIEWPORTS } from '../../../viewport/src/defaults';
+import type { ViewportMap, ViewportStyles } from '../../../viewport/src/models';
+
 declare global {
   // eslint-disable-next-line no-var, @typescript-eslint/naming-convention
   var __vitest_browser__: boolean;
-}
-
-type Styles = ViewportStyles | null;
-// | ((s: ViewportStyles | undefined) => ViewportStyles)
-
-interface Viewport {
-  name: string;
-  styles: Styles;
-  type: 'desktop' | 'mobile' | 'tablet' | 'other';
-}
-
-interface ViewportStyles {
-  height: string;
-  width: string;
-}
-
-interface ViewportMap {
-  [key: string]: Viewport;
 }
 
 interface ViewportsParam {

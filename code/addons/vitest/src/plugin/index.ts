@@ -92,7 +92,7 @@ export const storybookTest = (options?: UserOptions): any => {
       config.test.server.deps ??= {};
       config.test.server.deps.inline ??= [];
       if (Array.isArray(config.test.server.deps.inline)) {
-        config.test.server.deps.inline.push('@storybook/experimental-vitest-plugin');
+        config.test.server.deps.inline.push('@storybook/experimental-addon-vitest');
       }
 
       log('Final plugin options:', finalOptions);

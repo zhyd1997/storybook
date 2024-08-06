@@ -375,7 +375,7 @@ export async function setupVitest(
   const isSvelte = template.expected.renderer === '@storybook/svelte';
   const isNextjs = template.expected.framework === '@storybook/nextjs';
   const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
-  const storybookRenderer = isNextjs ? 'nextjs' : renderer
+  const storybookRenderer = isNextjs ? 'nextjs' : renderer;
 
   await writeFile(
     join(sandboxDir, '.storybook/setupTests.ts'),
@@ -413,8 +413,8 @@ export async function setupVitest(
     join(sandboxDir, '.storybook/vitest.config.mts'),
     dedent`import path from 'node:path'
     import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
-    import { storybookTest } from '@storybook/experimental-vitest-plugin'
-    ${!isNextjs ? "import viteConfig from '../vite.config'" : ""}
+    import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
+    ${!isNextjs ? "import viteConfig from '../vite.config'" : ''}
     ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
     ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" : ''}
 
@@ -522,15 +522,16 @@ export async function addExtraDependencies({
 }) {
   const extraDevDeps = ['@storybook/test-runner@next'];
   if (debug) logger.log('🎁 Adding extra dev deps', extraDevDeps);
-  let packageManager: JsPackageManager;
-  if (!dryRun) {
-    packageManager = JsPackageManagerFactory.getPackageManager({}, cwd);
-    await packageManager.addDependencies({ installAsDevDependencies: true }, extraDevDeps);
-  }
+  if (dryRun) return;
+
+  const packageManager = JsPackageManagerFactory.getPackageManager({}, cwd);
+  await packageManager.addDependencies({ installAsDevDependencies: true }, extraDevDeps);
+
   if (extraDeps) {
     if (debug) logger.log('🎁 Adding extra deps', extraDeps);
-    await packageManager.addDependencies({ installAsDevDependencies: false }, extraDeps);
+    await packageManager.addDependencies({ installAsDevDependencies: true }, extraDeps);
   }
+  await packageManager.installDependencies();
 }
 
 export const addStories: Task['run'] = async (

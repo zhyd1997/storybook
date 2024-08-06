@@ -1,6 +1,6 @@
 import MagicString from 'magic-string';
 import typescript from 'typescript';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 import type { InternalOptions } from './types';
 
 // Main transform function for the Vitest plugin
@@ -57,6 +57,7 @@ export async function transform({
   ) as typescript.ExportAssignment;
 
   if (!defaultExportNode) {
+    // eslint-disable-next-line local-rules/no-uncategorized-errors
     throw new Error(
       'The Storybook vitest plugin could not detect the meta (default export) object in the story file. \n\nPlease make sure you have a default export with the meta object. If you are using a different export format that is not supported, please file an issue with details about your use case.'
     );
@@ -137,7 +138,7 @@ export async function transform({
     dedent`\n
       import { test as __test } from 'vitest';
       import { composeStories as __composeStories } from 'storybook/internal/preview-api';
-      import { testStory as __testStory } from '@storybook/experimental-vitest-plugin/dist/test-utils';
+      import { testStory as __testStory } from '@storybook/experimental-addon-vitest/dist/test-utils';
     `
   );
 

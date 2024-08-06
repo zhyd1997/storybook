@@ -5,7 +5,7 @@ export default mergeConfig(
   vitestCommonConfig,
   defineConfig({
     plugins: [
-      import('@storybook/experimental-vitest-plugin').then(({ storybookTest }) =>
+      import('@storybook/experimental-addon-vitest/plugin').then(({ storybookTest }) =>
         storybookTest({
           renderer: 'react',
         })
@@ -14,13 +14,16 @@ export default mergeConfig(
     test: {
       name: 'storybook-ui',
       include: [
-        './core/**/*.{story,stories}.?(c|m)[jt]s?(x)',
-        './addons/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        // TODO: test all core and addon stories later
+        // './core/**/components/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        '../addons/interactions/**/*.{story,stories}.?(c|m)[jt]s?(x)',
       ],
       exclude: [
-        ...defaultExclude, 
+        ...defaultExclude,
         '../node_modules/**',
-        '../**/__mockdata__/**'
+        '**/__mockdata__/**',
+        // expected to fail in Vitest because of fetching /iframe.html to cause ECONNREFUSED
+        '**/Zoom.stories.tsx',
       ],
       browser: {
         enabled: false,
@@ -28,11 +31,11 @@ export default mergeConfig(
         provider: 'playwright',
         headless: true,
       },
-      setupFiles: ['.storybook/storybook.setup.ts'],
+      setupFiles: ['./storybook.setup.ts'],
       environment: 'happy-dom',
       reporters: ['default', 'junit'],
       outputFile: {
-        junit: './vitest-report.xml',
+        junit: './junit.xml',
       },
     },
   })

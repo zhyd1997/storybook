@@ -11,6 +11,7 @@ import { exec } from '../utils/exec';
 import { globalPackages as globalPreviewPackages } from '../../code/core/src/preview/globals/globals';
 import { globalPackages as globalManagerPackages } from '../../code/core/src/manager/globals/globals';
 import { glob } from 'glob';
+import { builtinModules } from 'node:module';
 
 /* TYPES */
 
@@ -31,6 +32,12 @@ type PackageJsonWithBundlerConfig = PackageJson & {
 type DtsConfigSection = Pick<Options, 'dts' | 'tsconfig'>;
 
 /* MAIN */
+
+export const nodeInternals = [
+  'module',
+  'node:module',
+  ...builtinModules.flatMap((m: string) => [m, `node:${m}`]),
+];
 
 const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   const {
@@ -184,6 +191,32 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         external: commonExternals,
         esbuildOptions: (c) => {
           c.platform = 'node';
+          Object.assign(c, getESBuildOptions(optimized));
+        },
+      })
+    );
+    tasks.push(
+      build({
+        ...commonOptions,
+        entry: nodeEntries.map((e: string) => slash(join(cwd, e))),
+        format: ['esm'],
+        target: 'node18',
+        platform: 'neutral',
+        banner: {
+          js: dedent`
+            import ESM_COMPAT_Module from "node:module";
+            import { fileURLToPath as ESM_COMPAT_fileURLToPath } from 'node:url';
+            import { dirname as ESM_COMPAT_dirname } from 'node:path';
+            const __filename = ESM_COMPAT_fileURLToPath(import.meta.url);
+            const __dirname = ESM_COMPAT_dirname(__filename);
+            const require = ESM_COMPAT_Module.createRequire(import.meta.url);
+          `,
+        },
+        external: [...commonExternals, ...nodeInternals],
+        esbuildOptions: (c) => {
+          c.mainFields = ['main', 'module', 'node'];
+          c.conditions = ['node', 'module', 'import', 'require'];
+          c.platform = 'neutral';
           Object.assign(c, getESBuildOptions(optimized));
         },
       })

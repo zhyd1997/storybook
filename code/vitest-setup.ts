@@ -29,9 +29,8 @@ const throwMessage = (type: any, message: any) => {
 const throwWarning = (message: any) => throwMessage('warn: ', message);
 const throwError = (message: any) => throwMessage('error: ', message);
 
-// TODO: bring this back later
-// vi.spyOn(console, 'warn').mockImplementation(throwWarning);
-// vi.spyOn(console, 'error').mockImplementation(throwError);
+vi.spyOn(console, 'warn').mockImplementation(throwWarning);
+vi.spyOn(console, 'error').mockImplementation(throwError);
 
 expect.extend({
   toMatchPaths(regex: RegExp, paths: string[]) {

@@ -22,26 +22,38 @@
     "url": "https://opencollective.com/storybook"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "node": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "node": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
-    "./plugin": "./dist/plugin/index.js",
-    "./dist/test-utils": "./dist/plugin/test-utils.js",
+    "./plugin": {
+      "types": "./dist/plugin/index.d.ts",
+      "require": "./dist/plugin/index.cjs",
+      "import": "./dist/plugin/index.js"
+    },
+    "./dist/test-utils": {
+      "types": "./dist/plugin/test-utils.d.ts",
+      "require": "./dist/plugin/test-utils.cjs",
+      "import": "./dist/plugin/test-utils.js"
+    },
     "./manager": "./dist/manager.js",
-    "./preset": "./dist/preset.js",
+    "./preset": "./dist/preset.cjs",
+    "./postinstall": "./dist/postinstall.cjs",
     "./package.json": "./package.json"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*",
     "README.md",
+    "*.mjs",
     "*.js",
+    "*.cjs",
     "*.d.ts",
     "!src/**/*"
   ],
@@ -70,13 +82,18 @@
   },
   "bundler": {
     "exportEntries": [
-      "./src/index.ts"
+      "./src/index.ts",
+      "./src/plugin/test-utils.ts",
+      "./src/plugin/setup-file.ts"
     ],
     "managerEntries": [
       "./src/manager.tsx"
     ],
     "nodeEntries": [
-      "./src/preset.ts"
+      "./src/preset.ts",
+      "./src/plugin/index.ts",
+      "./src/plugin/global-setup.ts",
+      "./src/postinstall.ts"
     ]
   }
 }

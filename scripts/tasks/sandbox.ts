@@ -94,7 +94,7 @@ export const sandbox: Task = {
         'happy-dom',
         'vitest',
         '@vitest/browser',
-        '@storybook/experimental-vitest-plugin',
+        '@storybook/experimental-addon-vitest',
         testingLibraryPackage
       );
 

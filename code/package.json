@@ -48,7 +48,7 @@
     "storybook:ui": "NODE_OPTIONS=\"--preserve-symlinks --preserve-symlinks-main\" ./lib/cli/bin/index.cjs dev --port 6006 --config-dir ./.storybook",
     "storybook:ui:build": "NODE_OPTIONS=\"--preserve-symlinks --preserve-symlinks-main\" ./lib/cli/bin/index.cjs build --config-dir ./.storybook --webpack-stats-json",
     "storybook:ui:chromatic": "../scripts/node_modules/.bin/chromatic --build-script-name storybook:ui:build --storybook-base-dir ./ --exit-zero-on-changes --exit-once-uploaded",
-    "storybook:vitest": "NODE_OPTIONS=--max_old_space_size=4096 vitest run -c .storybook/vitest.config.ts",
+    "storybook:vitest": "yarn test --browser --project storybook-ui",
     "task": "yarn --cwd ../scripts task",
     "test": "NODE_OPTIONS=--max_old_space_size=4096 vitest run",
     "test:watch": "NODE_OPTIONS=--max_old_space_size=4096 vitest watch"
@@ -175,6 +175,7 @@
     "@typescript-eslint/experimental-utils": "^5.62.0",
     "@typescript-eslint/parser": "^6.18.1",
     "@vitejs/plugin-react": "^3.0.1",
+    "@vitest/browser": "1.6.0",
     "@vitest/coverage-v8": "^1.2.2",
     "cross-env": "^7.0.3",
     "danger": "^12.3.3",
@@ -210,9 +211,6 @@
     "vite": "^4.0.0",
     "vitest": "^1.6.0",
     "wait-on": "^7.0.1"
-  },
-  "devDependencies": {
-    "@storybook/experimental-vitest-plugin": "0.0.4--canary.4.9eb1657.0"
   },
   "dependenciesMeta": {
     "ejs": {

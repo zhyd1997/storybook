@@ -87,6 +87,7 @@ const config: StorybookConfig = {
     '@storybook/addon-interactions',
     '@storybook/addon-storysource',
     '@storybook/addon-designs',
+    '@storybook/experimental-addon-vitest',
     '@storybook/addon-a11y',
     '@chromatic-com/storybook',
   ],
@@ -95,7 +96,6 @@ const config: StorybookConfig = {
     './addons/toolbars/template/stories/preview.ts',
     './renderers/react/template/components/index.js',
   ],
-  staticDirs: ['../test-report'],
   build: {
     test: {
       // we have stories for the blocks here, we can't exclude them

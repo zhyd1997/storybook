@@ -1,12 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 import { afterAll } from 'vitest';
-import type { Task, TaskMeta } from 'vitest';
+import type { RunnerTask, TaskMeta } from 'vitest';
 
 type ExtendedMeta = TaskMeta & { storyId: string; hasPlayFunction: boolean };
 
 // The purpose of this set up file is to modify the error message of failed tests
 // and inject a link to the story in Storybook
-const modifyErrorMessage = (currentTask: Task) => {
+const modifyErrorMessage = (currentTask: RunnerTask) => {
   const meta = currentTask.meta as ExtendedMeta;
   if (
     currentTask.type === 'test' &&
