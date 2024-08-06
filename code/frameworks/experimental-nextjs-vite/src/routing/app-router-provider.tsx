@@ -18,7 +18,7 @@ import type { RouteParams } from './types';
 // is the only way to achieve it actually being a singleton
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore we must ignore types here as during compilation they are not generated yet
-import { getRouter } from '@storybook/nextjs-vite/navigation.mock';
+import { getRouter } from '@storybook/experimental-nextjs-vite/navigation.mock';
 
 type AppRouterProviderProps = {
   routeParams: RouteParams;

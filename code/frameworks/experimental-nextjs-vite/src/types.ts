@@ -4,7 +4,7 @@ import type {
 } from 'storybook/internal/types';
 import type { StorybookConfigVite, BuilderOptions } from '@storybook/builder-vite';
 
-type FrameworkName = CompatibleString<'@storybook/nextjs-vite'>;
+type FrameworkName = CompatibleString<'@storybook/experimental-nextjs-vite'>;
 type BuilderName = CompatibleString<'@storybook/builder-vite'>;
 
 export type FrameworkOptions = {

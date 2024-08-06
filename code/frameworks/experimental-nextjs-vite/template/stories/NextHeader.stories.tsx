@@ -2,7 +2,7 @@ import NextHeader from './NextHeader';
 import type { Meta } from '@storybook/react';
 import type { StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from '@storybook/test';
-import { cookies, headers } from '@storybook/nextjs-vite/headers.mock';
+import { cookies, headers } from '@storybook/experimental-nextjs-vite/headers.mock';
 
 export default {
   component: NextHeader,

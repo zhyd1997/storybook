@@ -6171,6 +6171,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/experimental-nextjs-vite@workspace:frameworks/experimental-nextjs-vite":
+  version: 0.0.0-use.local
+  resolution: "@storybook/experimental-nextjs-vite@workspace:frameworks/experimental-nextjs-vite"
+  dependencies:
+    "@storybook/builder-vite": "workspace:*"
+    "@storybook/react": "workspace:*"
+    "@storybook/test": "workspace:*"
+    "@types/node": "npm:^18.0.0"
+    next: "npm:^14.2.5"
+    sharp: "npm:^0.33.3"
+    styled-jsx: "npm:5.1.6"
+    typescript: "npm:^5.3.2"
+    vite-plugin-storybook-nextjs: "npm:^1.0.0"
+  peerDependencies:
+    next: ^14.2.5
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
+    storybook: "workspace:^"
+    vite: ^5.0.0
+    vite-plugin-storybook-nextjs: ^1.0.0
+  dependenciesMeta:
+    sharp:
+      optional: true
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@storybook/global@npm:^5.0.0":
   version: 5.0.0
   resolution: "@storybook/global@npm:5.0.0"
@@ -6286,35 +6315,6 @@ __metadata:
   resolution: "@storybook/manager@workspace:deprecated/manager"
   peerDependencies:
     storybook: "workspace:^"
-  languageName: unknown
-  linkType: soft
-
-"@storybook/nextjs-vite@workspace:frameworks/nextjs-vite":
-  version: 0.0.0-use.local
-  resolution: "@storybook/nextjs-vite@workspace:frameworks/nextjs-vite"
-  dependencies:
-    "@storybook/builder-vite": "workspace:*"
-    "@storybook/react": "workspace:*"
-    "@storybook/test": "workspace:*"
-    "@types/node": "npm:^18.0.0"
-    next: "npm:^14.2.5"
-    sharp: "npm:^0.33.3"
-    styled-jsx: "npm:5.1.6"
-    typescript: "npm:^5.3.2"
-    vite-plugin-storybook-nextjs: "npm:^1.0.0"
-  peerDependencies:
-    next: ^14.2.5
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
-    storybook: "workspace:^"
-    vite: ^5.0.0
-    vite-plugin-storybook-nextjs: ^1.0.0
-  dependenciesMeta:
-    sharp:
-      optional: true
-  peerDependenciesMeta:
-    typescript:
-      optional: true
   languageName: unknown
   linkType: soft
 

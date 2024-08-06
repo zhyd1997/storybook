@@ -201,26 +201,26 @@ const baseTemplates = {
     },
     skipTasks: ['e2e-tests-dev', 'bench'],
   },
-  'nextjs-vite/default-ts': {
+  'experimental-nextjs-vite/default-ts': {
     name: 'Next.js Latest (Vite | TypeScript)',
     script:
       'yarn create next-app {{beforeDir}} --typescript --eslint --tailwind --app --import-alias="@/*" --src-dir',
     inDevelopment: true,
     expected: {
-      framework: '@storybook/nextjs-vite',
+      framework: '@storybook/experimental-nextjs-vite',
       renderer: '@storybook/react',
       builder: '@storybook/builder-vite',
     },
 
     modifications: {
       mainConfig: {
-        framework: '@storybook/nextjs-vite',
+        framework: '@storybook/experimental-nextjs-vite',
         features: { experimentalRSC: true },
       },
       extraDependencies: [
         'server-only',
         'vite-plugin-storybook-nextjs',
-        '@storybook/nextjs-vite',
+        '@storybook/experimental-nextjs-vite',
         'vite',
       ],
     },

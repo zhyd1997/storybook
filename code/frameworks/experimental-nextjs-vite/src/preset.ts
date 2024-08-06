@@ -24,7 +24,7 @@ export const core: PresetProperty<'core'> = async (config, options) => {
 };
 
 export const previewAnnotations: PresetProperty<'previewAnnotations'> = (entry = []) => {
-  const nextDir = dirname(require.resolve('@storybook/nextjs-vite/package.json'));
+  const nextDir = dirname(require.resolve('@storybook/experimental-nextjs-vite/package.json'));
   const result = [...entry, join(nextDir, 'dist/preview.mjs')];
   return result;
 };

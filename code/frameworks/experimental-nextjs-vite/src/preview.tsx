@@ -7,10 +7,10 @@ import { HeadManagerDecorator } from './head-manager/decorator';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore we must ignore types here as during compilation they are not generated yet
-import { createRouter } from '@storybook/nextjs-vite/router.mock';
+import { createRouter } from '@storybook/experimental-nextjs-vite/router.mock';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore we must ignore types here as during compilation they are not generated yet
-import { createNavigation } from '@storybook/nextjs-vite/navigation.mock';
+import { createNavigation } from '@storybook/experimental-nextjs-vite/navigation.mock';
 import { isNextRouterError } from 'next/dist/client/components/is-next-router-error';
 
 function addNextHeadCount() {
