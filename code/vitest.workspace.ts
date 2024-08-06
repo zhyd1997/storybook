@@ -30,6 +30,7 @@ export const vitestCommonConfig = defineConfig({
     globals: true,
     testTimeout: 10000,
     environment: 'node',
+    pool: 'threads',
     poolOptions: {
       threads: {
         minThreads: threadCount,
