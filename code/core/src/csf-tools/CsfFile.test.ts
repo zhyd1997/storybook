@@ -1976,6 +1976,36 @@ describe('CsfFile', () => {
     });
   });
 
+  describe('globals', () => {
+    it('basic', () => {
+      expect(
+        parse(
+          dedent`
+          export default { title: 'foo/bar' };
+          export const A = {
+            globals: { foo: 'bar' }
+          };
+        `
+        )
+      ).toMatchInlineSnapshot(`
+        meta:
+          title: foo/bar
+        stories:
+          - id: foo-bar--a
+            name: A
+            __stats:
+              play: false
+              render: false
+              loaders: false
+              beforeEach: false
+              globals: true
+              storyFn: false
+              mount: false
+              moduleMock: false
+      `);
+    });
+  });
+
   describe('module mocks', () => {
     it('alias', () => {
       expect(
