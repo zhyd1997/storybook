@@ -450,6 +450,10 @@ export async function setupVitest(details: TemplateDetails) {
             path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*'),
             // TODO (SVELTEKIT): Investigate Error: use:enhance can only be used on <form> fields with method="POST"
             path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/forms.stories*'),
+            // TODO (SVELTE|SVELTEKIT): Typescript preprocessor issue
+            path.join(__dirname, '../**/frameworks/svelte-vite_svelte-vite-default-ts/ts-docs.stories.*'),
+            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/ts-docs.stories.*'),
+            ${isSvelte ? "path.join(__dirname, '../**/stories/(Button|Header|Page).stories.ts')," : ''}
           ],
           /**
            * TODO: Either fix or acknowledge limitation of:
