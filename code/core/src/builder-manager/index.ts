@@ -122,8 +122,14 @@ export const executor = {
  *
  * I am sorry for making you read about generators today :')
  */
-const starter: StarterFunction = async function* starterGeneratorFn({ startTime, options, app }) {
-  logger.info('=> Starting manager..');
+const starter: StarterFunction = async function* starterGeneratorFn({
+  startTime,
+  options,
+  app,
+}) {
+  if (!options.quiet) {
+    logger.info('=> Starting manager..');
+  }
 
   const {
     config,

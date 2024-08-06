@@ -3,7 +3,7 @@ import dedent from 'ts-dedent';
 import { existsSync, readFileSync } from 'node:fs';
 import { findUpSync } from 'find-up';
 import path from 'node:path';
-import { FindPackageVersionsError } from '@storybook/core-events/server-errors';
+import { FindPackageVersionsError } from '@storybook/core/server-errors';
 
 import { JsPackageManager } from './JsPackageManager';
 import type { PackageJson } from './PackageJson';
@@ -90,6 +90,15 @@ export class PNPMProxy extends JsPackageManager {
     });
   }
 
+  public async getRegistryURL() {
+    const res = await this.executeCommand({
+      command: 'pnpm',
+      args: ['config', 'get', 'registry'],
+    });
+    const url = res.trim();
+    return url === 'undefined' ? undefined : url;
+  }
+
   async runPackageCommand(command: string, args: string[], cwd?: string): Promise<string> {
     return this.executeCommand({
       command: 'pnpm',
@@ -98,16 +107,16 @@ export class PNPMProxy extends JsPackageManager {
     });
   }
 
-  public async findInstallations(pattern: string[]) {
-    const commandResult = await this.executeCommand({
-      command: 'pnpm',
-      args: ['list', pattern.map((p) => `"${p}"`).join(' '), '--json', '--depth=99'],
-      env: {
-        FORCE_COLOR: 'false',
-      },
-    });
-
+  public async findInstallations(pattern: string[], { depth = 99 }: { depth?: number } = {}) {
     try {
+      const commandResult = await this.executeCommand({
+        command: 'pnpm',
+        args: ['list', pattern.map((p) => `"${p}"`).join(' '), '--json', `--depth=${depth}`],
+        env: {
+          FORCE_COLOR: 'false',
+        },
+      });
+
       const parsedOutput = JSON.parse(commandResult);
       return this.mapDependencies(parsedOutput, pattern);
     } catch (e) {

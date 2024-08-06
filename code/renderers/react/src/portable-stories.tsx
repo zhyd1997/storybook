@@ -10,6 +10,7 @@ import type {
   Store_CSFExports,
   StoriesWithPartialProps,
   ProjectAnnotations,
+  ComposedStoryFn,
 } from 'storybook/internal/types';
 
 import * as reactProjectAnnotations from './entry-preview';
@@ -44,11 +45,16 @@ export function setProjectAnnotations(
 // This will not be necessary once we have auto preset loading
 export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<ReactRenderer> = {
   ...reactProjectAnnotations,
-  renderToCanvas: ({
-    storyContext: { context, unboundStoryFn: Story, testingLibraryRender: render, canvasElement },
-  }) => {
-    if (render == null) throw new TestingLibraryMustBeConfiguredError();
-    const { unmount } = render(<Story {...context} />, { baseElement: context.canvasElement });
+  renderToCanvas: (renderContext, canvasElement) => {
+    if (renderContext.storyContext.testingLibraryRender == null) {
+      throw new TestingLibraryMustBeConfiguredError();
+      // Enable for 8.3
+      // return reactProjectAnnotations.renderToCanvas(renderContext, canvasElement);
+    }
+    const {
+      storyContext: { context, unboundStoryFn: Story, testingLibraryRender: render },
+    } = renderContext;
+    const { unmount } = render(<Story {...context} />, { container: context.canvasElement });
     return unmount;
   },
 };
@@ -85,7 +91,7 @@ export function composeStory<TArgs extends Args = Args>(
   componentAnnotations: Meta<TArgs | any>,
   projectAnnotations?: ProjectAnnotations<ReactRenderer>,
   exportsName?: string
-) {
+): ComposedStoryFn<ReactRenderer, Partial<TArgs>> {
   return originalComposeStory<ReactRenderer, TArgs>(
     story as StoryAnnotationsOrFn<ReactRenderer, Args>,
     componentAnnotations,
