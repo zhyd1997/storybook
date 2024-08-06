@@ -20,7 +20,7 @@ export default defineWorkspace([
  * @see https://circleci.com/docs/configuration-reference/#x86
  * @see .circleci/config.yml#L214
  */
-const threadCount = process.env.CI ? 4 : undefined;
+const threadCount = process.env.CI ? 8 : undefined;
 
 export const vitestCommonConfig = defineConfig({
   test: {
