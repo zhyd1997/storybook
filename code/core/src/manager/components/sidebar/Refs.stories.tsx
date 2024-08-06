@@ -12,6 +12,7 @@ export default {
   title: 'Sidebar/Refs',
   excludeStories: /.*Data$/,
   parameters: { layout: 'fullscreen' },
+  globals: { sb_theme: 'side-by-side' },
   decorators: [
     (storyFn: any) => (
       <ManagerContext.Provider value={{ state: { docsOptions: {} } } as any}>
@@ -133,6 +134,16 @@ const refs: Record<string, RefType> = {
     },
     previewInitialized: true,
   },
+  withSourceCode: {
+    id: 'sourceCode',
+    title: 'This has source code',
+    url: 'https://example.com',
+    sourceUrl: 'https://github.com/storybookjs/storybook',
+    previewInitialized: false,
+    type: 'lazy',
+    // @ts-expect-error (invalid input)
+    index,
+  },
 };
 
 export const Optimized = () => (
@@ -228,6 +239,17 @@ export const Auth = () => (
 export const Long = () => (
   <Ref
     {...refs.long}
+    isLoading={false}
+    isBrowsing
+    selectedStoryId=""
+    highlightedRef={{ current: null }}
+    setHighlighted={() => {}}
+  />
+);
+
+export const WithSourceCode = () => (
+  <Ref
+    {...refs.withSourceCode}
     isLoading={false}
     isBrowsing
     selectedStoryId=""

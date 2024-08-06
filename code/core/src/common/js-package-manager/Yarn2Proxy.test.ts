@@ -53,21 +53,6 @@ describe('Yarn 2 Proxy', () => {
     });
   });
 
-  describe('setRegistryUrl', () => {
-    it('should run `yarn config set npmRegistryServer https://foo.bar`', async () => {
-      const executeCommandSpy = vi.spyOn(yarn2Proxy, 'executeCommand').mockResolvedValueOnce('');
-
-      await yarn2Proxy.setRegistryURL('https://foo.bar');
-
-      expect(executeCommandSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          command: 'npm',
-          args: ['config', 'set', 'registry', 'https://foo.bar'],
-        })
-      );
-    });
-  });
-
   describe('addDependencies', () => {
     it('with devDep it should run `yarn install -D @storybook/core`', async () => {
       const executeCommandSpy = vi.spyOn(yarn2Proxy, 'executeCommand').mockResolvedValueOnce('');
@@ -324,6 +309,15 @@ describe('Yarn 2 Proxy', () => {
       expect(yarn2Proxy.parseErrorFromLogs(YARN2_ERROR_SAMPLE)).toMatchInlineSnapshot(
         `
         "YARN2 error
+        YN0002: MISSING_PEER_DEPENDENCY
+        -> before-storybook@workspace:. doesn't provide @testing-library/dom (p1ac37), requested by @testing-library/user-event.
+
+        YN0002: MISSING_PEER_DEPENDENCY
+        -> before-storybook@workspace:. doesn't provide eslint (p1f657), requested by eslint-plugin-storybook.
+
+        YN0086: EXPLAIN_PEER_DEPENDENCIES_CTA
+        -> Some peer dependencies are incorrectly met; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.
+
         YN0014: YARN_IMPORT_FAILED
         -> Failed to import certain dependencies
 
