@@ -20,8 +20,7 @@ export const setViewport = async (viewportsParam: ViewportsParam = {} as Viewpor
 
   let page: BrowserPage;
   try {
-    const importPath = '/@id/__x00__@vitest/browser/context';
-    const vitestContext = await import(/* @vite-ignore */ importPath);
+    const vitestContext = await import('@vitest/browser/context');
     page = vitestContext.page;
   } catch (e) {
     return;
