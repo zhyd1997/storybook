@@ -2,7 +2,7 @@
 import type { BrowserPage } from '@vitest/browser/context';
 
 import { INITIAL_VIEWPORTS } from '../../../viewport/src/defaults';
-import type { ViewportMap, ViewportStyles } from '../../../viewport/src/models';
+import type { ViewportMap, ViewportStyles } from '../../../viewport/src/types';
 
 declare global {
   // eslint-disable-next-line no-var, @typescript-eslint/naming-convention
