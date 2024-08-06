@@ -34,11 +34,7 @@ import { detectLanguage } from '../../code/core/src/cli/detect';
 import { SupportedLanguage } from '../../code/core/src/cli/project_types';
 import { updatePackageScripts } from '../utils/package-json';
 import { addPreviewAnnotations, readMainConfig } from '../utils/main-js';
-import {
-  type JsPackageManager,
-  versions as storybookPackages,
-  JsPackageManagerFactory,
-} from '../../code/core/src/common';
+import { versions as storybookPackages, JsPackageManagerFactory } from '../../code/core/src/common';
 import { workspacePath } from '../utils/workspace';
 import { babelParse } from '../../code/core/src/csf-tools/babelParse';
 import { CODE_DIRECTORY, REPROS_DIRECTORY } from '../utils/constants';
