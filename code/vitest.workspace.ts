@@ -20,6 +20,14 @@ export default defineWorkspace([
  * @see https://circleci.com/docs/configuration-reference/#x86
  * @see .circleci/config.yml#L214
  */
-const threadCount = process.env.CI ? 8 : undefined;
 
-export const vitestCommonConfig = defineConfig({});
+export const vitestCommonConfig = defineConfig({
+  test: {
+    passWithNoTests: true,
+    clearMocks: true,
+    setupFiles: [resolve(__dirname, './vitest-setup.ts')],
+    globals: true,
+    testTimeout: 10000,
+    environment: 'node',
+  },
+});
