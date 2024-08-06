@@ -5,7 +5,7 @@ import { getPortableStoriesFileCountUncached } from './get-portable-stories-usag
 describe('getPortableStoriesFileCountUncached', () => {
   it('should ignores node_modules, non-source files', async () => {
     const usage = await getPortableStoriesFileCountUncached();
-    // verify git grep -m1 -c composeStor | wc -l
+    // you can verify with: `git grep -m1 -c composeStor | wc -l`
     expect(usage).toMatchInlineSnapshot(`14`);
   });
 });
