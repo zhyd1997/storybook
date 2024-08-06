@@ -22,20 +22,4 @@ export default defineWorkspace([
  */
 const threadCount = process.env.CI ? 8 : undefined;
 
-export const vitestCommonConfig = defineConfig({
-  test: {
-    passWithNoTests: true,
-    clearMocks: true,
-    setupFiles: [resolve(__dirname, './vitest-setup.ts')],
-    globals: true,
-    testTimeout: 10000,
-    environment: 'node',
-    pool: 'threads',
-    poolOptions: {
-      threads: {
-        minThreads: threadCount,
-        maxThreads: threadCount,
-      },
-    },
-  },
-});
+export const vitestCommonConfig = defineConfig({});
