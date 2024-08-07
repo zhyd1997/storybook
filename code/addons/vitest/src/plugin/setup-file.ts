@@ -1,8 +1,18 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-underscore-dangle */
-import { afterAll } from 'vitest';
+import { afterAll, vi } from 'vitest';
+import { Channel } from 'storybook/internal/channels';
 import type { RunnerTask, TaskMeta } from 'vitest';
 
+declare global {
+  // eslint-disable-next-line no-var
+  var __STORYBOOK_ADDONS_CHANNEL__: Channel;
+}
+
 type ExtendedMeta = TaskMeta & { storyId: string; hasPlayFunction: boolean };
+
+const transport = { setHandler: vi.fn(), send: vi.fn() };
+globalThis.__STORYBOOK_ADDONS_CHANNEL__ = new Channel({ transport });
 
 // The purpose of this set up file is to modify the error message of failed tests
 // and inject a link to the story in Storybook
