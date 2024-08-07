@@ -1,5 +1,6 @@
 import { relative } from 'node:path';
-import { process, chalk, limit, Bun } from '../../../../scripts/prepare/tools';
+import { dts, spawn } from '../../../../scripts/prepare/tools';
+import { process, chalk, limit } from '../../../../scripts/prepare/tools';
 import type { getEntries } from '../entries';
 
 export async function generateTypesFiles(
@@ -15,36 +16,46 @@ export async function generateTypesFiles(
     // we limit the number of concurrent processes to 3, because we don't want to overload the host machine
     // by trial and error, 3 seems to be the sweet spot between perf and consistency
     const limited = limit(3);
-    let processes: ReturnType<(typeof Bun)['spawn']>[] = [];
+    let processes: ReturnType<typeof spawn>[] = [];
 
     await Promise.all(
       dtsEntries.map(async (fileName, index) => {
         return limited(async () => {
           const getDtsProcess = () =>
-            Bun.spawn(['bun', './scripts/dts.ts', index.toString()], {
+            spawn('jiti', ['./scripts/dts.ts', index.toString()], {
               cwd,
               stdio: ['ignore', 'pipe', 'inherit'],
             });
           let timer: ReturnType<typeof setTimeout> | undefined;
-          let dtsProcess = getDtsProcess();
+          const dtsProcess = getDtsProcess();
           processes.push(dtsProcess);
+
           await Promise.race([
-            dtsProcess.exited.catch(async () => {
-              await dtsProcess.kill();
-              dtsProcess = getDtsProcess();
-              return dtsProcess.exited;
+            new Promise((resolve, reject) => {
+              dtsProcess.on('exit', () => {
+                resolve(void 0);
+              });
+              dtsProcess.on('error', () => {
+                resolve(void 0);
+              });
+              dtsProcess.on('close', () => {
+                resolve(void 0);
+              });
             }),
-            new Promise((_, reject) => {
+            new Promise((resolve) => {
               timer = setTimeout(() => {
                 console.log(index, fileName);
 
-                reject(new Error('timed out'));
+                dtsProcess.kill(408); // timed out
+                resolve(void 0);
               }, 60000);
             }),
           ]);
+
           if (timer) {
             clearTimeout(timer);
           }
+
           if (dtsProcess.exitCode !== 0) {
             // If any fail, kill all the other processes and exit (bail)
             processes.forEach((p) => p.kill());
