@@ -61,12 +61,14 @@ async function run() {
   const files = measure(generateSourceFiles);
   const packageJson = measure(() => generatePackageJsonFile(entries));
   const dist = files.then(() => measure(generateDistFiles));
-  const types = measure(async () => {
-    await generateTypesMapperFiles(entries);
-    await modifyThemeTypes();
-    await generateTypesFiles(entries, isOptimized, cwd);
-    await modifyThemeTypes();
-  });
+  const types = files.then(() =>
+    measure(async () => {
+      await generateTypesMapperFiles(entries);
+      await modifyThemeTypes();
+      await generateTypesFiles(entries, isOptimized, cwd);
+      await modifyThemeTypes();
+    })
+  );
 
   const [filesTime, packageJsonTime, distTime, typesTime] = await Promise.all([
     files,
