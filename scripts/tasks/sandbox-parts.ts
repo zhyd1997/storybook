@@ -411,6 +411,9 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
         plugins: [
           storybookTest({
             storybookScript: 'yarn storybook --ci',
+            tags: {
+              include: ['vitest'],
+            }
           }),
           ${isSvelte ? 'svelteTesting(),' : ''}
           ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
@@ -428,22 +431,10 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
           ],
           exclude: [
             ...defaultExclude,
-            // TODO: investigate TypeError: mocked(...).mockReturnValue is not a function
-            path.join(__dirname, '../**/*module-mocking*'),
             // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
             path.join(__dirname, '../**/*argtypes*'),
             // TODO: somehow support autotitle in portable stories
             path.join(__dirname, '../**/*title*'),
-            // TODO: Failures related to Storybook channel usage
-            path.join(__dirname, '../**/*shortcuts*'),
-            path.join(__dirname, '../**/renderers/svelte/args.stories*'),
-            // TODO (VUE3): Failures related to Storybook channel usage
-            path.join(__dirname, '../**/ScopedSlots.stories.ts'),
-            path.join(__dirname, '../**/ReactiveSlots.stories.ts'),
-            path.join(__dirname, '../**/ReactiveDecorators.stories.ts'),
-            path.join(__dirname, '../**/ReactiveArgs.stories.ts'),
-            path.join(__dirname, '../**/CustomRenderOptionsArgsFromData.stories.ts'),
-            path.join(__dirname, '../**/CustomRenderFunctionalComponent.stories.ts'),
             // TODO (SVELTEKIT): Failures related to missing framework annotations
             path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*'),
             path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*'),
@@ -456,14 +447,10 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
           ],
           /**
            * TODO: Either fix or acknowledge limitation of:
-           * - Storybook channel usage:
-           * -- KeydownDuringPlay, Hooks, Events, ChangeArgs
            * - @storybook/core/preview-api hooks:
            * -- UseState
-           * - Targeted args:
-           * -- Targets (This one can be ignored as targeted args implementation has been abandoned)
            */
-          testNamePattern: /^(?!.*(KeydownDuringPlay|Hooks|Events|ChangeArgs|Targets|UseState)).*$/,
+          testNamePattern: /^(?!.*(UseState)).*$/,
           browser: {
             enabled: true,
             name: 'chromium',
