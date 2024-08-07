@@ -246,7 +246,7 @@ jobs:
   unit-tests:
     executor:
       class: xlarge
-      name: sb_node_18_browsers
+      name: sb_playwright
     steps:
       - git-shallow-clone/checkout_advanced:
           clone_options: "--depth 1 --verbose"
