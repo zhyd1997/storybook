@@ -2,6 +2,7 @@ import type { getEntries } from '../entries';
 import { join, relative } from 'node:path';
 import { dedent } from '../../../../scripts/prepare/tools';
 import { writeFile } from 'node:fs/promises';
+import { ensureFile } from 'fs-extra';
 
 const cwd = process.cwd();
 
@@ -27,11 +28,10 @@ export async function generateTypesMapperFiles(entries: ReturnType<typeof getEnt
   const all = entries.filter((e) => e.dts).map((e) => e.file);
 
   await Promise.all(
-    all.map(async (filePath) =>
-      writeFile(
-        filePath.replace('src', 'dist').replace(/\.tsx?/, '.d.ts'),
-        await generateTypesMapperContent(filePath)
-      )
-    )
+    all.map(async (filePath) => {
+      const location = filePath.replace('src', 'dist').replace(/\.tsx?/, '.d.ts');
+      await ensureFile(location);
+      await writeFile(location, await generateTypesMapperContent(filePath), {});
+    })
   );
 }

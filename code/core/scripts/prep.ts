@@ -1,7 +1,7 @@
 /* eslint-disable local-rules/no-uncategorized-errors */
 
 import { watch } from 'node:fs';
-import { rmdir } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import {
   esbuild,
@@ -46,7 +46,8 @@ async function run() {
   }
 
   if (isReset) {
-    await rmdir(join(cwd, 'dist'), { recursive: true });
+    await rm(join(cwd, 'dist'), { recursive: true }).catch(() => {});
+    await mkdir(join(cwd, 'dist'));
   }
 
   const entries = getEntries(cwd);
