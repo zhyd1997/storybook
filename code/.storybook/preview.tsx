@@ -1,5 +1,6 @@
 import { global } from '@storybook/global';
-import React, { Fragment, useEffect } from 'react';
+import * as React from 'react';
+import { Fragment, useEffect } from 'react';
 import { isChromatic } from './isChromatic';
 import {
   Global,
@@ -12,7 +13,7 @@ import {
 } from 'storybook/internal/theming';
 import { useArgs, DocsContext as DocsContextProps } from 'storybook/internal/preview-api';
 import type { PreviewWeb } from 'storybook/internal/preview-api';
-import type { ReactRenderer, Decorator } from '@storybook/react';
+import type { ReactRenderer, Decorator, Loader } from '@storybook/react';
 import type { Channel } from 'storybook/internal/channels';
 
 import { DocsContext } from '@storybook/blocks';
@@ -158,7 +159,7 @@ export const loaders = [
     }
     return { docsContext };
   },
-];
+] as Loader[];
 
 export const decorators = [
   // This decorator adds the DocsContext created in the loader above

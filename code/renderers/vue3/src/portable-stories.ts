@@ -12,6 +12,7 @@ import type {
   Store_CSFExports,
   StoriesWithPartialProps,
   ComposedStoryFn,
+  NormalizedProjectAnnotations,
 } from 'storybook/internal/types';
 import { h } from 'vue';
 
@@ -43,12 +44,12 @@ type MapToJSXAble<T> = {
  * @param projectAnnotations - e.g. (import projectAnnotations from '../.storybook/preview')
  */
 export function setProjectAnnotations(
-  projectAnnotations:
-    | NamedOrDefaultProjectAnnotations<VueRenderer>
-    | NamedOrDefaultProjectAnnotations<VueRenderer>[]
-): ProjectAnnotations<VueRenderer> {
+  projectAnnotations: NamedOrDefaultProjectAnnotations | NamedOrDefaultProjectAnnotations[]
+): NormalizedProjectAnnotations<VueRenderer> {
   setDefaultProjectAnnotations(vueProjectAnnotations);
-  return originalSetProjectAnnotations<VueRenderer>(projectAnnotations);
+  return originalSetProjectAnnotations(
+    projectAnnotations
+  ) as NormalizedProjectAnnotations<VueRenderer>;
 }
 
 // This will not be necessary once we have auto preset loading

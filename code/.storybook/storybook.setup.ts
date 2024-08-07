@@ -19,4 +19,4 @@ const annotations = setProjectAnnotations([
   { testingLibraryRender },
 ]);
 
-beforeAll(annotations.beforeAll!);
+beforeAll(annotations.beforeAll);
