@@ -2,6 +2,7 @@ import {
   composeStory as originalComposeStory,
   composeStories as originalComposeStories,
   setProjectAnnotations as originalSetProjectAnnotations,
+  setDefaultProjectAnnotations,
   composeConfigs,
 } from 'storybook/internal/preview-api';
 import type {
@@ -41,11 +42,12 @@ export function setProjectAnnotations(
     | NamedOrDefaultProjectAnnotations<ReactRenderer>
     | NamedOrDefaultProjectAnnotations<ReactRenderer>[]
 ): ProjectAnnotations<ReactRenderer> {
+  setDefaultProjectAnnotations(INTERNAL_DEFAULT_PROJECT_ANNOTATIONS);
   return originalSetProjectAnnotations<ReactRenderer>(projectAnnotations);
 }
 
 // This will not be necessary once we have auto preset loading
-const defaultProjectAnnotations: ProjectAnnotations<ReactRenderer> = composeConfigs([
+const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<ReactRenderer> = composeConfigs([
   reactAnnotations,
   // we only provide the RSC decorator, but not the feature flag. Should be set by the user
   { decorators: rscAnnotations.decorators },
@@ -89,7 +91,7 @@ export function composeStory<TArgs extends Args = Args>(
     story as StoryAnnotationsOrFn<ReactRenderer, Args>,
     componentAnnotations,
     projectAnnotations,
-    defaultProjectAnnotations,
+    INTERNAL_DEFAULT_PROJECT_ANNOTATIONS,
     exportsName
   );
 }
