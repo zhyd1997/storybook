@@ -365,6 +365,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
   const { sandboxDir, template } = details;
 
   const isSvelte = template.expected.renderer === '@storybook/svelte';
+  const isVue = template.expected.renderer === '@storybook/vue3';
   const isNextjs = template.expected.framework === '@storybook/nextjs';
   // const isAngular = template.expected.framework === '@storybook/angular';
   const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
@@ -380,7 +381,8 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     import * as coreAnnotations from '../template-stories/core/preview'
     import * as toolbarAnnotations from '../template-stories/addons/toolbars/preview'
     import * as projectAnnotations from './preview'
-    
+    ${isVue ? 'import * as vueAnnotations from "../src/stories/renderers/vue3/preview.js"' : ''}
+
     const annotations = setProjectAnnotations([
       rendererDocsAnnotations,
       projectAnnotations,
@@ -388,6 +390,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
       toolbarAnnotations,
       addonActionsAnnotations,
       addonInteractionsAnnotations,
+      ${isVue ? 'vueAnnotations,' : ''}
     ])
 
     beforeAll(annotations.beforeAll!)`
@@ -414,6 +417,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
         ],
         resolve: {
           preserveSymlinks: true,
+          ${isVue ? "alias: { vue: 'vue/dist/vue.esm-bundler.js' }," : ''}
         },
         test: {
           name: 'storybook',
@@ -440,9 +444,6 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
             path.join(__dirname, '../**/ReactiveArgs.stories.ts'),
             path.join(__dirname, '../**/CustomRenderOptionsArgsFromData.stories.ts'),
             path.join(__dirname, '../**/CustomRenderFunctionalComponent.stories.ts'),
-            // TODO (VUE3): Investigate TypeError: _ctx.$greetingMessage is not a function
-            path.join(__dirname, '../**/GlobalSetup.stories.ts'),
-            path.join(__dirname, '../**/SourceDecorator.stories.ts'),
             // TODO (SVELTEKIT): Failures related to missing framework annotations
             path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*'),
             path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*'),
@@ -464,7 +465,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
            */
           testNamePattern: /^(?!.*(KeydownDuringPlay|Hooks|Events|ChangeArgs|Targets|UseState)).*$/,
           browser: {
-            // enabled: true,
+            enabled: true,
             name: 'chromium',
             provider: 'playwright',
             headless: true,
