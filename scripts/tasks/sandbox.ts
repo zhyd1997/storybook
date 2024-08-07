@@ -93,6 +93,7 @@ export const sandbox: Task = {
       extraDeps.push(
         'happy-dom',
         'vitest',
+        'playwright',
         '@vitest/browser',
         '@storybook/experimental-vitest-plugin@0.0.5--canary.6.bbeaab3.0',
         testingLibraryPackage
