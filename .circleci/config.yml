@@ -238,7 +238,7 @@ jobs:
           name: Run tests
           command: |
             cd scripts
-            yarn test --coverage --coverage.all=false
+            yarn test --coverage
       - store_test_results:
           path: scripts/junit.xml
       - report-workflow-on-failure
@@ -246,7 +246,7 @@ jobs:
   unit-tests:
     executor:
       class: xlarge
-      name: sb_node_18_browsers
+      name: sb_playwright
     steps:
       - git-shallow-clone/checkout_advanced:
           clone_options: "--depth 1 --verbose"
@@ -256,7 +256,7 @@ jobs:
           name: Test
           command: |
             cd code
-            yarn test --coverage --coverage.all=false
+            yarn test --coverage
       - store_test_results:
           path: code/junit.xml
       - persist_to_workspace:

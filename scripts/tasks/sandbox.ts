@@ -95,7 +95,7 @@ export const sandbox: Task = {
         'vitest',
         'playwright',
         '@vitest/browser',
-        '@storybook/experimental-vitest-plugin@0.0.5--canary.6.bbeaab3.0',
+        '@storybook/experimental-addon-vitest',
         testingLibraryPackage
       );
 

@@ -40,10 +40,10 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
   const [showErrors, setShowErrors] = React.useState(false);
 
   const warnings = Object.values(status).filter((statusByAddonId) =>
-    Object.values(statusByAddonId).some((value) => value.status === 'warn')
+    Object.values(statusByAddonId).some((value) => value?.status === 'warn')
   );
   const errors = Object.values(status).filter((statusByAddonId) =>
-    Object.values(statusByAddonId).some((value) => value.status === 'error')
+    Object.values(statusByAddonId).some((value) => value?.status === 'error')
   );
   const hasWarnings = warnings.length > 0;
   const hasErrors = errors.length > 0;
