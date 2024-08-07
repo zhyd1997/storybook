@@ -49,6 +49,6 @@ async function run() {
 }
 
 run().catch((e) => {
-  process.stderr.write(e.stack);
+  process.stderr.write(e.toString());
   process.exit(1);
 });
