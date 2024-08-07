@@ -26,19 +26,19 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "node": "./dist/index.cjs",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "node": "./dist/index.cjs"
     },
     "./plugin": {
       "types": "./dist/plugin/index.d.ts",
-      "require": "./dist/plugin/index.cjs",
-      "import": "./dist/plugin/index.js"
+      "import": "./dist/plugin/index.js",
+      "require": "./dist/plugin/index.cjs"
     },
     "./dist/test-utils": {
       "types": "./dist/plugin/test-utils.d.ts",
-      "require": "./dist/plugin/test-utils.cjs",
-      "import": "./dist/plugin/test-utils.js"
+      "import": "./dist/plugin/test-utils.js",
+      "require": "./dist/plugin/test-utils.cjs"
     },
     "./manager": "./dist/manager.js",
     "./preset": "./dist/preset.cjs",
