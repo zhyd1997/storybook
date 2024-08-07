@@ -93,6 +93,7 @@ export const sandbox: Task = {
       extraDeps.push(
         'happy-dom',
         'vitest',
+        'playwright',
         '@vitest/browser',
         '@storybook/experimental-addon-vitest',
         testingLibraryPackage
