@@ -39,6 +39,8 @@ async function run() {
   const all = entries.filter((e) => e.dts);
   const list = selection === 'all' ? all : [all[Number(selection)]];
 
+  console.log('Generating d.ts files for', list.map((i) => i.file).join(', '));
+
   await Promise.all(
     list.map(async (i) => {
       await dts(i.file, [...external, ...i.externals], join(__dirname, '..', 'tsconfig.json'));
@@ -47,6 +49,6 @@ async function run() {
 }
 
 run().catch((e) => {
-  console.error(e);
+  process.stderr.write(e.stack);
   process.exit(1);
 });

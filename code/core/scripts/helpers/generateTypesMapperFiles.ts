@@ -31,7 +31,7 @@ export async function generateTypesMapperFiles(entries: ReturnType<typeof getEnt
     all.map(async (filePath) => {
       const location = filePath.replace('src', 'dist').replace(/\.tsx?/, '.d.ts');
       await ensureFile(location);
-      await writeFile(location, await generateTypesMapperContent(filePath), {});
+      await writeFile(location, await generateTypesMapperContent(filePath));
     })
   );
 }
