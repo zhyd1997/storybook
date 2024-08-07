@@ -28,19 +28,19 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "node": "./dist/index.cjs",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "node": "./dist/index.cjs"
     },
     "./bin/index.cjs": {
-      "node": "./bin/index.cjs",
-      "require": "./bin/index.cjs"
+      "require": "./bin/index.cjs",
+      "node": "./bin/index.cjs"
     },
     "./core-path": {
       "types": "./dist/core-path.d.ts",
-      "node": "./dist/core-path.cjs",
       "import": "./dist/core-path.js",
-      "require": "./dist/core-path.cjs"
+      "require": "./dist/core-path.cjs",
+      "node": "./dist/core-path.cjs"
     },
     "./package.json": "./package.json",
     "./core": {
