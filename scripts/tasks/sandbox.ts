@@ -111,7 +111,7 @@ export const sandbox: Task = {
       //   extraDeps.push('@testing-library/angular', '@analogjs/vitest-angular');
       // }
 
-      await setupVitest(details, { renderer });
+      await setupVitest(details, options);
     }
 
     await addExtraDependencies({

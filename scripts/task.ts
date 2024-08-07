@@ -190,7 +190,7 @@ export const options = createOptions({
   },
 });
 
-type PassedOptionValues = Omit<OptionValues<typeof options>, 'task' | 'startFrom' | 'junit'>;
+export type PassedOptionValues = Omit<OptionValues<typeof options>, 'task' | 'startFrom' | 'junit'>;
 
 const logger = console;
 

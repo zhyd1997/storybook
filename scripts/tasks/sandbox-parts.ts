@@ -17,7 +17,7 @@ import JSON5 from 'json5';
 import { createRequire } from 'module';
 import slash from 'slash';
 
-import type { Task, TemplateDetails } from '../task';
+import type { PassedOptionValues, Task, TemplateDetails } from '../task';
 import { executeCLIStep, steps } from '../utils/cli-step';
 import {
   installYarn2,
@@ -361,7 +361,7 @@ async function linkPackageStories(
   );
 }
 
-export async function setupVitest(details: TemplateDetails) {
+export async function setupVitest(details: TemplateDetails, options: PassedOptionValues) {
   const { sandboxDir, template } = details;
 
   const isSvelte = template.expected.renderer === '@storybook/svelte';
@@ -494,14 +494,15 @@ export async function setupVitest(details: TemplateDetails) {
     vitest: 'vitest',
   };
 
-  const vitestAddonPath = relative(sandboxDir, join(CODE_DIRECTORY, 'addons', 'vitest'));
-
   // This workaround is needed because Vitest seems to have issues in link mode
   // so the /setup-file and /global-setup files from the vitest addon won't work in portal protocol
-  packageJson.resolutions = {
-    ...packageJson.resolutions,
-    '@storybook/experimental-addon-vitest': `file:${vitestAddonPath}`,
-  };
+  if (options.link) {
+    const vitestAddonPath = relative(sandboxDir, join(CODE_DIRECTORY, 'addons', 'vitest'));
+    packageJson.resolutions = {
+      ...packageJson.resolutions,
+      '@storybook/experimental-addon-vitest': `file:${vitestAddonPath}`,
+    };
+  }
 
   await writeJson(packageJsonPath, packageJson, { spaces: 2 });
 }
