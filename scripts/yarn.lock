@@ -1415,7 +1415,7 @@ __metadata:
     "@types/http-server": "npm:^0.12.4"
     "@types/jest": "npm:^29.5.12"
     "@types/lodash": "npm:^4.17.6"
-    "@types/node": "npm:^18.19.39"
+    "@types/node": "npm:^20.0.0"
     "@types/prettier": "npm:^3.0.0"
     "@types/pretty-hrtime": "npm:^1.0.3"
     "@types/prompts": "npm:2.4.9"
@@ -1886,15 +1886,6 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/d6e383a09139efdedd91f4e8b584bb9b7537382d3dd276296a68b20a7819a562ae651efdd007a60036116f286b9c9a8a31af698f93b4024e569b0d129f293165
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^18.19.39":
-  version: 18.19.39
-  resolution: "@types/node@npm:18.19.39"
-  dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 10c0/a9eb33bc093beba6bd5d4e839de7d1d1f496cd7e741c2f6c7161318dba0f37227bb25d8306907194992488d6c59a7363a419d72298549483d33402227a2d435b
   languageName: node
   linkType: hard
 
