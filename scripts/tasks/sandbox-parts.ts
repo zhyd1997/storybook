@@ -410,7 +410,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
       defineConfig({
         plugins: [
           storybookTest({
-            storybookScript: 'yarn storybook --ci'
+            storybookScript: 'yarn storybook --ci',
           }),
           ${isSvelte ? 'svelteTesting(),' : ''}
           ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
