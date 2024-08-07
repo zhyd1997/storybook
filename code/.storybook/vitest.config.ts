@@ -1,9 +1,9 @@
-import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config';
+import { mergeConfig, defaultExclude, defineProject } from 'vitest/config';
 import { vitestCommonConfig } from '../vitest.workspace';
 
 export default mergeConfig(
   vitestCommonConfig,
-  defineConfig({
+  defineProject({
     plugins: [
       import('@storybook/experimental-addon-vitest/plugin').then(({ storybookTest }) =>
         storybookTest({
@@ -33,10 +33,6 @@ export default mergeConfig(
       },
       setupFiles: ['./storybook.setup.ts'],
       environment: 'happy-dom',
-      reporters: ['default', 'junit'],
-      outputFile: {
-        junit: './junit.xml',
-      },
     },
   })
 );
