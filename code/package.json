@@ -48,6 +48,7 @@
     "storybook:ui": "NODE_OPTIONS=\"--preserve-symlinks --preserve-symlinks-main\" ./lib/cli/bin/index.cjs dev --port 6006 --config-dir ./.storybook",
     "storybook:ui:build": "NODE_OPTIONS=\"--preserve-symlinks --preserve-symlinks-main\" ./lib/cli/bin/index.cjs build --config-dir ./.storybook --webpack-stats-json",
     "storybook:ui:chromatic": "../scripts/node_modules/.bin/chromatic --build-script-name storybook:ui:build --storybook-base-dir ./ --exit-zero-on-changes --exit-once-uploaded",
+    "storybook:vitest": "yarn test --browser --project storybook-ui",
     "task": "yarn --cwd ../scripts task",
     "test": "NODE_OPTIONS=--max_old_space_size=4096 vitest run",
     "test:watch": "NODE_OPTIONS=--max_old_space_size=4096 vitest watch"
@@ -77,12 +78,12 @@
   "resolutions": {
     "@playwright/test": "1.36.0",
     "@types/node": "^18.0.0",
+    "@vitest/expect@npm:2.0.5": "patch:@vitest/expect@npm%3A2.0.5#~/.yarn/patches/@vitest-expect-npm-2.0.5-8933466cce.patch",
     "esbuild": "^0.23.0",
     "playwright": "1.36.0",
     "playwright-core": "1.36.0",
     "serialize-javascript": "^3.1.0",
-    "type-fest": "~2.19",
-    "@vitest/expect@npm:2.0.5": "patch:@vitest/expect@npm%3A2.0.5#~/.yarn/patches/@vitest-expect-npm-2.0.5-8933466cce.patch"
+    "type-fest": "~2.19"
   },
   "dependencies": {
     "@chromatic-com/storybook": "^1.6.1",
@@ -122,6 +123,7 @@
     "@storybook/csf-plugin": "workspace:*",
     "@storybook/ember": "workspace:*",
     "@storybook/eslint-config-storybook": "^4.0.0",
+    "@storybook/experimental-addon-vitest": "workspace:*",
     "@storybook/global": "^5.0.0",
     "@storybook/html": "workspace:*",
     "@storybook/html-vite": "workspace:*",
@@ -173,6 +175,8 @@
     "@typescript-eslint/experimental-utils": "^5.62.0",
     "@typescript-eslint/parser": "^6.18.1",
     "@vitejs/plugin-react": "^3.0.1",
+    "@vitest/browser": "^2.0.5",
+    "@vitest/coverage-istanbul": "^2.0.5",
     "@vitest/coverage-v8": "^2.0.5",
     "create-storybook": "workspace:*",
     "cross-env": "^7.0.3",

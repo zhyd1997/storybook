@@ -12,7 +12,7 @@ import {
   writeJson,
   writeFile,
 } from 'fs-extra';
-import { join, resolve, sep } from 'path';
+import { join, resolve, sep, relative } from 'path';
 import JSON5 from 'json5';
 import { createRequire } from 'module';
 import slash from 'slash';
@@ -34,11 +34,7 @@ import { detectLanguage } from '../../code/core/src/cli/detect';
 import { SupportedLanguage } from '../../code/core/src/cli/project_types';
 import { updatePackageScripts } from '../utils/package-json';
 import { addPreviewAnnotations, readMainConfig } from '../utils/main-js';
-import {
-  type JsPackageManager,
-  versions as storybookPackages,
-  JsPackageManagerFactory,
-} from '../../code/core/src/common';
+import { versions as storybookPackages, JsPackageManagerFactory } from '../../code/core/src/common';
 import { workspacePath } from '../utils/workspace';
 import { babelParse } from '../../code/core/src/csf-tools/babelParse';
 import { CODE_DIRECTORY, REPROS_DIRECTORY } from '../utils/constants';
@@ -401,7 +397,7 @@ export async function setupVitest(details: TemplateDetails) {
     join(sandboxDir, '.storybook/vitest.config.mts'),
     dedent`import path from 'node:path'
     import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
-    import { storybookTest } from '@storybook/experimental-vitest-plugin'
+    import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
     ${!isNextjs ? "import viteConfig from '../vite.config'" : ''}
     ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
     ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" : ''}
@@ -498,6 +494,15 @@ export async function setupVitest(details: TemplateDetails) {
     vitest: 'vitest',
   };
 
+  const vitestAddonPath = relative(sandboxDir, join(CODE_DIRECTORY, 'addons', 'vitest'));
+
+  // This workaround is needed because Vitest seems to have issues in link mode
+  // so the /setup-file and /global-setup files from the vitest addon won't work in portal protocol
+  packageJson.resolutions = {
+    ...packageJson.resolutions,
+    '@storybook/experimental-addon-vitest': `file:${vitestAddonPath}`,
+  };
+
   await writeJson(packageJsonPath, packageJson, { spaces: 2 });
 }
 
@@ -514,15 +519,16 @@ export async function addExtraDependencies({
 }) {
   const extraDevDeps = ['@storybook/test-runner@next'];
   if (debug) logger.log('🎁 Adding extra dev deps', extraDevDeps);
-  let packageManager: JsPackageManager;
-  if (!dryRun) {
-    packageManager = JsPackageManagerFactory.getPackageManager({}, cwd);
-    await packageManager.addDependencies({ installAsDevDependencies: true }, extraDevDeps);
-  }
+  if (dryRun) return;
+
+  const packageManager = JsPackageManagerFactory.getPackageManager({}, cwd);
+  await packageManager.addDependencies({ installAsDevDependencies: true }, extraDevDeps);
+
   if (extraDeps) {
     if (debug) logger.log('🎁 Adding extra deps', extraDeps);
-    await packageManager.addDependencies({ installAsDevDependencies: false }, extraDeps);
+    await packageManager.addDependencies({ installAsDevDependencies: true }, extraDeps);
   }
+  await packageManager.installDependencies();
 }
 
 export const addStories: Task['run'] = async (
