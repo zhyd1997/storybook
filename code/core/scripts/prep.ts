@@ -320,8 +320,8 @@ async function run() {
            */
 
           // if (out.metafile) {
-          //   await Bun.write('report/meta.json', JSON.stringify(out.metafile, null, 2));
-          //   await Bun.write(
+          //   await writeFile('report/meta.json', JSON.stringify(out.metafile, null, 2));
+          //   await writeFile(
           //     'report/meta.txt',
           //     await esbuild.analyzeMetafile(out.metafile, { color: false, verbose: false })
           //   );
