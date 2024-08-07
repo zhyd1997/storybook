@@ -35,7 +35,16 @@
       "import": "./dist/plugin/index.js",
       "require": "./dist/plugin/index.cjs"
     },
-    "./dist/test-utils": {
+    "./internal/global-setup": {
+      "types": "./dist/plugin/global-setup.d.ts",
+      "import": "./dist/plugin/global-setup.js",
+      "require": "./dist/plugin/global-setup.cjs"
+    },
+    "./internal/setup-file": {
+      "types": "./dist/plugin/setup-file.d.ts",
+      "import": "./dist/plugin/setup-file.js"
+    },
+    "./internal/test-utils": {
       "types": "./dist/plugin/test-utils.d.ts",
       "import": "./dist/plugin/test-utils.js",
       "require": "./dist/plugin/test-utils.cjs"

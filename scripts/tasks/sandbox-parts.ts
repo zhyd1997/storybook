@@ -12,7 +12,7 @@ import {
   writeJson,
   writeFile,
 } from 'fs-extra';
-import { join, resolve, sep } from 'path';
+import { join, resolve, sep, relative } from 'path';
 import JSON5 from 'json5';
 import { createRequire } from 'module';
 import slash from 'slash';
@@ -492,6 +492,15 @@ export async function setupVitest(details: TemplateDetails) {
   packageJson.scripts = {
     ...packageJson.scripts,
     vitest: 'vitest',
+  };
+
+  const vitestAddonPath = relative(sandboxDir, join(CODE_DIRECTORY, 'addons', 'vitest'));
+
+  // This workaround is needed because Vitest seems to have issues in link mode
+  // so the /setup-file and /global-setup files from the vitest addon won't work in portal protocol
+  packageJson.resolutions = {
+    ...packageJson.resolutions,
+    '@storybook/experimental-addon-vitest': `file:${vitestAddonPath}`,
   };
 
   await writeJson(packageJsonPath, packageJson, { spaces: 2 });

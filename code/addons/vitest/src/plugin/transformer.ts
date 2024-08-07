@@ -138,7 +138,7 @@ export async function transform({
     dedent`\n
       import { test as __test } from 'vitest';
       import { composeStories as __composeStories } from 'storybook/internal/preview-api';
-      import { testStory as __testStory } from '@storybook/experimental-addon-vitest/dist/test-utils';
+      import { testStory as __testStory } from '@storybook/experimental-addon-vitest/internal/test-utils';
     `
   );
 

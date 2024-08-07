@@ -74,7 +74,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       if (typeof config.test.setupFiles === 'string') {
         config.test.setupFiles = [config.test.setupFiles];
       }
-      config.test.setupFiles.push(require.resolve('./setup-file.js'));
+      config.test.setupFiles.push('@storybook/experimental-addon-vitest/internal/setup-file');
 
       // when a Storybook script is provided, we spawn Storybook for the user when in watch mode
       if (finalOptions.storybookScript) {
@@ -82,7 +82,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         if (typeof config.test.globalSetup === 'string') {
           config.test.globalSetup = [config.test.globalSetup];
         }
-        config.test.globalSetup.push(require.resolve('./global-setup.js'));
+        config.test.globalSetup.push('@storybook/experimental-addon-vitest/internal/global-setup');
       }
 
       config.test.server ??= {};
