@@ -29,6 +29,19 @@ executors:
         environment:
           NODE_OPTIONS: --max_old_space_size=6144
     resource_class: <<parameters.class>>
+  sb_node_18_browsers:
+    parameters:
+      class:
+        description: The Resource class
+        type: enum
+        enum: ["small", "medium", "medium+", "large", "xlarge"]
+        default: "small"
+    working_directory: /tmp/storybook
+    docker:
+      - image: cimg/node:18.20.3-browsers
+        environment:
+          NODE_OPTIONS: --max_old_space_size=6144
+    resource_class: <<parameters.class>>
   sb_node_22_browsers:
     parameters:
       class:
@@ -323,7 +336,7 @@ jobs:
         type: integer
     executor:
       class: medium
-      name: sb_node_22_browsers
+      name: sb_node_18_browsers
     parallelism: << parameters.parallelism >>
     steps:
       - git-shallow-clone/checkout_advanced:
