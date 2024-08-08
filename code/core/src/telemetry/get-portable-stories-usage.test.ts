@@ -6,6 +6,6 @@ describe('getPortableStoriesFileCountUncached', () => {
   it('should ignores node_modules, non-source files', async () => {
     const usage = await getPortableStoriesFileCountUncached();
     // you can verify with: `git grep -m1 -c composeStor | wc -l`
-    expect(usage).toMatchInlineSnapshot(`14`);
+    expect(usage).toMatchInlineSnapshot(`15`);
   });
 });
