@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
 
+// @ts-ignore-error (this only errors during compilation for production)
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ImageContext as ImageContextValue } from '@storybook/nextjs/dist/image-context';
 
 import type * as _NextImage from 'next/image';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore-error (this only errors during compilation for production)
+// @ts-ignore import is aliased in webpack config
 import * as NextImageNamespace from 'sb-original/next/image';
 
 import { type ImageContext as ImageContextType } from '../image-context';

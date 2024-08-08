@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import {
   GoogleFontsDownloadError,
   GoogleFontsLoadingError,
@@ -9,6 +7,8 @@ import { fetchCSSFromGoogleFonts } from 'next/dist/compiled/@next/font/dist/goog
 import { getFontAxes } from 'next/dist/compiled/@next/font/dist/google/get-font-axes';
 import { getGoogleFontsUrl } from 'next/dist/compiled/@next/font/dist/google/get-google-fonts-url';
 import { validateGoogleFontFunctionCall } from 'next/dist/compiled/@next/font/dist/google/validate-google-font-function-call';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import loaderUtils from 'next/dist/compiled/loader-utils3';
 
 import type { LoaderOptions } from '../types';
