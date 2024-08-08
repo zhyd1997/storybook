@@ -1,6 +1,9 @@
-import { beforeEach, expect, vi, it } from 'vitest';
 import * as fs_ from 'node:fs';
+
+import { beforeEach, expect, it, vi } from 'vitest';
+
 import { dedent } from 'ts-dedent';
+
 import jscodeshift, { nameToValidExport } from '../mdx-to-csf';
 
 expect.addSnapshotSerializer({

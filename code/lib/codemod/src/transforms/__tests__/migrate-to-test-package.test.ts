@@ -1,6 +1,8 @@
 import { expect, test } from 'vitest';
-import transform from '../migrate-to-test-package';
+
 import { dedent } from 'ts-dedent';
+
+import transform from '../migrate-to-test-package';
 
 expect.addSnapshotSerializer({
   serialize: (val: any) => (typeof val === 'string' ? val : val.toString()),

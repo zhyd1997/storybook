@@ -1,7 +1,10 @@
-import { describe, beforeEach, afterEach, it, expect } from 'vitest';
-import mock from 'mock-fs';
-import { getPreviewHeadTemplate, getPreviewBodyTemplate } from '../template';
 import { dirname } from 'node:path';
+
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+
+import mock from 'mock-fs';
+
+import { getPreviewBodyTemplate, getPreviewHeadTemplate } from '../template';
 
 const HEAD_HTML_CONTENTS = '<script>console.log("custom script!");</script>';
 const BASE_HTML_CONTENTS = '<script>console.log("base script!");</script>';

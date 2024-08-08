@@ -1,15 +1,17 @@
 import type { ComponentProps, FC } from 'react';
 import React, { Component } from 'react';
-import { styled, keyframes } from '@storybook/core/theming';
+
+import { Button, Form } from '@storybook/core/components';
+import { keyframes, styled } from '@storybook/core/theming';
+import { CheckIcon } from '@storybook/icons';
 
 import {
   eventToShortcut,
-  shortcutToHumanString,
   shortcutMatchesShortcut,
+  shortcutToHumanString,
 } from '@storybook/core/manager-api';
-import { Button, Form } from '@storybook/core/components';
+
 import SettingsFooter from './SettingsFooter';
-import { CheckIcon } from '@storybook/icons';
 
 const Header = styled.header(({ theme }) => ({
   marginBottom: 20,

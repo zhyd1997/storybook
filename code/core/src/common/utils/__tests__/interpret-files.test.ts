@@ -1,5 +1,7 @@
-import { describe, afterEach, it, expect } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+
 import mock from 'mock-fs';
+
 import { getInterpretedFile } from '../interpret-files';
 
 describe('interpret-files', () => {

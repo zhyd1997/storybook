@@ -1,10 +1,9 @@
-import { dirname, join, isAbsolute } from 'path';
-import rehypeSlug from 'rehype-slug';
-import rehypeExternalLinks from 'rehype-external-links';
-
+import { logger } from 'storybook/internal/node-logger';
 import type { DocsOptions, Options, PresetProperty } from 'storybook/internal/types';
 import type { CsfPluginOptions } from '@storybook/csf-plugin';
-import { logger } from 'storybook/internal/node-logger';
+import { dirname, isAbsolute, join } from 'path';
+import rehypeExternalLinks from 'rehype-external-links';
+import rehypeSlug from 'rehype-slug';
 import type { CompileOptions } from './compiler';
 
 /**

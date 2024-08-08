@@ -1,10 +1,9 @@
 // @vitest-environment happy-dom
-
-import path from 'path';
-import { vi, describe, it, expect } from 'vitest';
-import fs from 'fs';
-import tmp from 'tmp';
+import { describe, expect, it, vi } from 'vitest';
 import { sync as spawnSync } from 'cross-spawn';
+import fs from 'fs';
+import path from 'path';
+import tmp from 'tmp';
 import { extractArgTypesFromElements } from './custom-elements';
 
 // File hierarchy:
