@@ -60,7 +60,7 @@ export const Description = styled.div({
 export type ValidationStates = 'valid' | 'error' | 'warn';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore-error (this errors only when compiling for production mode)
+// @ts-ignore-error (this only errors during compilation for production)
 export const TextInput: FC<ComponentProps<typeof Form.Input> & { valid: ValidationStates }> =
   styled(Form.Input)<{ valid: ValidationStates }>(
     ({ valid, theme }) =>
