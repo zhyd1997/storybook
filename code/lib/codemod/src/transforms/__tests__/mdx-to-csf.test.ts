@@ -510,6 +510,7 @@ it('story child is jsx', async () => {
 
   expect(csf).toMatchInlineSnapshot(`
     import { Button } from './button';
+
     export default {};
 
     export const Primary = {
@@ -538,6 +539,7 @@ it('story child is CSF3', async () => {
 
   expect(csf).toMatchInlineSnapshot(`
     import { Button } from './button';
+
     export default {};
 
     export const Primary = {
@@ -567,6 +569,7 @@ it('story child is arrow function', async () => {
 
   expect(csf).toMatchInlineSnapshot(`
     import { Button } from './button';
+
     export default {};
 
     export const Primary = {
@@ -592,6 +595,7 @@ it('story child is identifier', async () => {
 
   expect(csf).toMatchInlineSnapshot(`
     import { Button } from './button';
+
     export default {};
 
     export const Primary = {

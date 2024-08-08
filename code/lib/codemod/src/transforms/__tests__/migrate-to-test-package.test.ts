@@ -20,7 +20,7 @@ test('replace jest and testing-library with the test package', async () => {
 
   expect(await tsTransform(input)).toMatchInlineSnapshot(`
     import { expect } from '@storybook/test';
-    import { within, userEvent } from '@storybook/test';
+    import { userEvent, within } from '@storybook/test';
   `);
 });
 
@@ -38,7 +38,7 @@ test('Make jest imports namespace imports', async () => {
   expect(await tsTransform(input)).toMatchInlineSnapshot(`
     import { expect } from '@storybook/test';
     import * as test from '@storybook/test';
-    import { within, userEvent } from '@storybook/test';
+    import { userEvent, within } from '@storybook/test';
 
     const onFocusMock = test.fn();
     const onSearchMock = test.fn();

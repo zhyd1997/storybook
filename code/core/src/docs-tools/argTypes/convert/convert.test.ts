@@ -510,6 +510,7 @@ describe('storybook type system', () => {
       const input = readFixture('proptypes/scalars.js');
       expect(input).toMatchInlineSnapshot(`
         "import React from 'react';
+
         import PropTypes from 'prop-types';
 
         export const Component = (props) => <>JSON.stringify(props)</>;
@@ -546,6 +547,7 @@ describe('storybook type system', () => {
       const input = readFixture('proptypes/arrays.js');
       expect(input).toMatchInlineSnapshot(`
         "import React from 'react';
+
         import PropTypes from 'prop-types';
 
         export const Component = (props) => <>JSON.stringify(props)</>;
@@ -589,6 +591,7 @@ describe('storybook type system', () => {
       const input = readFixture('proptypes/enums.js');
       expect(input).toMatchInlineSnapshot(`
         "import React from 'react';
+
         import PropTypes from 'prop-types';
 
         export const Component = (props) => <>JSON.stringify(props)</>;
@@ -640,6 +643,7 @@ describe('storybook type system', () => {
       const input = readFixture('proptypes/misc.js');
       expect(input).toMatchInlineSnapshot(`
         "import React from 'react';
+
         import PropTypes from 'prop-types';
 
         export const Component = (props) => <>JSON.stringify(props)</>;
@@ -688,6 +692,7 @@ describe('storybook type system', () => {
       const input = readFixture('proptypes/objects.js');
       expect(input).toMatchInlineSnapshot(`
         "import React from 'react';
+
         import PropTypes from 'prop-types';
 
         export const Component = (props) => <>JSON.stringify(props)</>;
@@ -745,6 +750,7 @@ describe('storybook type system', () => {
       const input = readFixture('proptypes/react.js');
       expect(input).toMatchInlineSnapshot(`
         "import React from 'react';
+
         import PropTypes from 'prop-types';
 
         export const Component = (props) => <>JSON.stringify(props)</>;
