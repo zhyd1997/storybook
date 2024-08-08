@@ -1,7 +1,7 @@
 import glob from 'fast-glob';
-import path from 'path';
-import fsSync from 'node:fs';
 import JSON5 from 'json5';
+import fsSync from 'node:fs';
+import path from 'path';
 
 const files = glob.sync('**/*/tsconfig.json', {
   absolute: true,

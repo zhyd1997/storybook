@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { createCommand } from 'commander';
+import { describe, expect, it } from 'vitest';
 
 import { areOptionsSatisfied, createOptions, getCommand, getOptions } from './options';
 
