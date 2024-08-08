@@ -3,6 +3,7 @@ import {
   createSummaryValue,
   isTooLongForDefaultValueSummary,
 } from 'storybook/internal/docs-tools';
+
 import { ARRAY_CAPTION } from '../captions';
 import { generateArrayCode } from '../generateCode';
 import type { InspectionArray, InspectionResult } from '../inspection';

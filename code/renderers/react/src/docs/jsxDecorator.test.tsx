@@ -1,11 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import type { FC, PropsWithChildren } from 'react';
 import React, { Profiler, StrictMode, createElement } from 'react';
+
 import { SNIPPET_RENDERED } from 'storybook/internal/docs-tools';
 import { addons, useEffect } from 'storybook/internal/preview-api';
+
 import PropTypes from 'prop-types';
+
 import { getReactSymbolName, jsxDecorator, renderJsx } from './jsxDecorator';
 
 vi.mock('storybook/internal/preview-api');

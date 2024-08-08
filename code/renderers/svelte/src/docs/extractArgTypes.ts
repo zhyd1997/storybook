@@ -1,6 +1,7 @@
 import { logger } from 'storybook/internal/client-logger';
 import type { ArgTypesExtractor } from 'storybook/internal/docs-tools';
 import type { SBScalarType, StrictArgTypes } from 'storybook/internal/types';
+
 import type {
   JSDocKeyword,
   JSDocType,

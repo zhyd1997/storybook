@@ -9,7 +9,9 @@ import type {
   DecoratorFunction,
   StoryContext,
 } from 'storybook/internal/types';
+
 import type { SvelteComponentDoc } from 'sveltedoc-parser';
+
 import type { SvelteRenderer, SvelteStoryResult } from '../types';
 
 /**

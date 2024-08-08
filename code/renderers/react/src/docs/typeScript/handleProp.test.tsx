@@ -1,12 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import { describe, expect, it } from 'vitest';
+
 import React from 'react';
+
 import {
   type DocgenInfo,
   type DocgenPropDefaultValue,
   type PropDef,
   extractComponentProps,
 } from 'storybook/internal/docs-tools';
+
 import { enhanceTypeScriptProp } from './handleProp';
 
 type Component = any;

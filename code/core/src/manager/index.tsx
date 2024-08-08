@@ -1,5 +1,6 @@
 import type { ComponentProps, FC } from 'react';
 import React, { useCallback, useMemo } from 'react';
+import { createRoot } from 'react-dom/client';
 
 import { Location, LocationProvider, useNavigate } from '@storybook/core/router';
 import { ThemeProvider, ensure as ensureTheme } from '@storybook/core/theming';
@@ -10,7 +11,6 @@ import { Provider as ManagerProvider, types } from '@storybook/core/manager-api'
 import type { Combo } from '@storybook/core/manager-api';
 import { ProviderDoesNotExtendBaseProviderError } from '@storybook/core/manager-errors';
 
-import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 
 import { App } from './App';

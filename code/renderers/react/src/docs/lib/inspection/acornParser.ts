@@ -2,6 +2,7 @@ import { Parser } from 'acorn';
 import jsx from 'acorn-jsx';
 import * as acornWalk from 'acorn-walk';
 import type estree from 'estree';
+
 import type {
   InspectionArray,
   InspectionClass,

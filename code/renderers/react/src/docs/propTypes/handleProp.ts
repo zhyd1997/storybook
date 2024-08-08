@@ -1,4 +1,5 @@
 import type { ExtractedProp, PropDef } from 'storybook/internal/docs-tools';
+
 import { createDefaultValue, createDefaultValueFromRawDefaultProp } from '../lib/defaultValues';
 import { createType } from './createType';
 import { rawDefaultPropTypeResolvers } from './rawDefaultPropResolvers';

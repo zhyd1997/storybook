@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+
 import { dedent } from 'ts-dedent';
+
 import { compile, compileSync } from './index';
 
 expect.addSnapshotSerializer({

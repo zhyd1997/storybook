@@ -2,6 +2,7 @@
 import { SNIPPET_RENDERED, SourceType } from 'storybook/internal/docs-tools';
 import { addons, useEffect } from 'storybook/internal/preview-api';
 import type { DecoratorFunction } from 'storybook/internal/types';
+
 import type { StoryFn } from '../public-types';
 import type { HtmlRenderer } from '../types';
 

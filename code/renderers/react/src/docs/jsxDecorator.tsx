@@ -1,12 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import type { ReactElement, ReactNode } from 'react';
 import React, { createElement, isValidElement } from 'react';
+
 import { logger } from 'storybook/internal/client-logger';
 import { SNIPPET_RENDERED, SourceType, getDocgenSection } from 'storybook/internal/docs-tools';
 import { addons, useEffect } from 'storybook/internal/preview-api';
 import type { ArgsStoryFn, PartialStoryFn, StoryContext } from 'storybook/internal/types';
+
 import type { Options } from 'react-element-to-jsx-string';
 import reactElementToJSXString from 'react-element-to-jsx-string';
+
 import type { ReactRenderer } from '../types';
 import { isForwardRef, isMemo } from './lib';
 

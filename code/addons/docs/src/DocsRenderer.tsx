@@ -1,12 +1,15 @@
 import type { PropsWithChildren } from 'react';
 import React, { Component } from 'react';
+
 import type {
   DocsContextProps,
   DocsRenderFunction,
   Parameters,
   Renderer,
 } from 'storybook/internal/types';
+
 import { AnchorMdx, CodeOrSourceMdx, Docs, HeadersMdx } from '@storybook/blocks';
+
 import { renderElement, unmountElement } from '@storybook/react-dom-shim';
 
 // TS doesn't like that we export a component with types that it doesn't know about (TS4203)

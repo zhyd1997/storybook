@@ -1,9 +1,8 @@
 import React, { Suspense, lazy } from 'react';
+import ReactDOM from 'react-dom';
 
 import { STORY_SPECIFIED } from 'storybook/internal/core-events';
 import { addons } from 'storybook/internal/manager-api';
-
-import ReactDOM from 'react-dom';
 
 const Onboarding = lazy(() => import('./Onboarding'));
 
