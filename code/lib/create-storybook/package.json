@@ -21,13 +21,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "node": "./dist/index.cjs",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "node": "./dist/index.cjs"
+      "require": "./dist/index.cjs"
     },
     "./bin/index.cjs": {
-      "require": "./bin/index.cjs",
-      "node": "./bin/index.cjs"
+      "node": "./bin/index.cjs",
+      "require": "./bin/index.cjs"
     },
     "./package.json": "./package.json"
   },

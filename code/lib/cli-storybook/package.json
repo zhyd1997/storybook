@@ -23,8 +23,8 @@
   "type": "module",
   "exports": {
     "./bin/index.cjs": {
-      "require": "./bin/index.cjs",
-      "node": "./bin/index.cjs"
+      "node": "./bin/index.cjs",
+      "require": "./bin/index.cjs"
     },
     "./package.json": "./package.json"
   },
