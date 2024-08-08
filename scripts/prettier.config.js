@@ -29,6 +29,7 @@ export default {
 
   importOrder: [
     '^node:',
+    '^(vitest|@testing-library)',
     '^react$',
     '^storybook/internal',
     '^@storybook/[^-]*$',
