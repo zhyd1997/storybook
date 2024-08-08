@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
+import { describe, expect, it, vi } from 'vitest';
+
 import * as fsExtraImp from 'fs-extra';
 import path from 'path';
 import * as simpleGitImp from 'simple-git';
-import { describe, expect, it, vi } from 'vitest';
 
 import type * as MockedFSExtra from '../../../code/__mocks__/fs-extra';
 import type * as MockedSimpleGit from '../../__mocks__/simple-git';

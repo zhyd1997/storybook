@@ -1,6 +1,7 @@
+import { beforeEach, expect, it, vi } from 'vitest';
+
 import ansiRegex from 'ansi-regex';
 import type { LogResult } from 'simple-git';
-import { beforeEach, expect, it, vi } from 'vitest';
 
 import { run } from '../label-patches';
 import * as githubInfo_ from '../utils/get-github-info';

@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
+import { describe, expect, it, vi } from 'vitest';
+
 import { execaCommand } from 'execa';
 import * as fsExtraImp from 'fs-extra';
 import path from 'path';
-import { describe, expect, it, vi } from 'vitest';
 
 import type * as MockedFSToExtra from '../../../code/__mocks__/fs-extra';
 import { run as version } from '../version';
