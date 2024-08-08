@@ -7,6 +7,10 @@ import { PREVIEW_KEYDOWN } from '@storybook/core/core-events';
 export default {
   component: globalThis.Components.Form,
   tags: ['autodocs'],
+  args: {
+    onSubmit: fn(),
+    onSuccess: fn(),
+  },
 };
 
 export const KeydownDuringPlay = {

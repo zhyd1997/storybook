@@ -1,12 +1,18 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import mock from 'mock-fs';
+import { vol } from 'memfs';
 
 import { getInterpretedFile } from '../interpret-files';
 
+vi.mock('fs', async () => {
+  const memfs = await vi.importActual('memfs');
+
+  return { default: memfs.fs, ...(memfs as any).fs };
+});
+
 describe('interpret-files', () => {
   it('will interpret file as file.ts when it exists in fs', () => {
-    mock({
+    vol.fromNestedJSON({
       'path/to/file.ts': 'ts file contents',
     });
 
@@ -16,7 +22,7 @@ describe('interpret-files', () => {
   });
 
   it('will interpret file as file.js when both are in fs', () => {
-    mock({
+    vol.fromNestedJSON({
       'path/to/file.js': 'js file contents',
       'path/to/file.ts': 'ts file contents',
     });
@@ -27,7 +33,7 @@ describe('interpret-files', () => {
   });
 
   it('will interpret file even if extension is already present', () => {
-    mock({
+    vol.fromNestedJSON({
       'path/to/file.js': 'js file contents',
       'path/to/file.ts': 'ts file contents',
     });
@@ -38,7 +44,7 @@ describe('interpret-files', () => {
   });
 
   it('will return undefined if there is no candidate of a file in fs', () => {
-    mock({
+    vol.fromNestedJSON({
       'path/to/file.js': 'js file contents',
     });
 
@@ -48,7 +54,7 @@ describe('interpret-files', () => {
   });
 
   it('will interpret file as file.mts when it exists in fs', () => {
-    mock({
+    vol.fromNestedJSON({
       'path/to/file.mts': 'ts file contents',
     });
 
@@ -58,7 +64,7 @@ describe('interpret-files', () => {
   });
 
   it('will interpret file as file.cts when it exists in fs', () => {
-    mock({
+    vol.fromNestedJSON({
       'path/to/file.cts': 'ts file contents',
     });
 
@@ -67,5 +73,5 @@ describe('interpret-files', () => {
     expect(file).toEqual('path/to/file.cts');
   });
 
-  afterEach(mock.restore);
+  afterEach(() => vol.reset());
 });
