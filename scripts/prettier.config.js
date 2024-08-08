@@ -16,7 +16,13 @@ export default {
   ],
   plugins: ['@trivago/prettier-plugin-sort-imports'],
 
-  importOrder: ['^node:', '^storybook/internal', '^@storybook/(.*)$', '^[./]'],
+  importOrder: [
+    '^node:',
+    '^storybook/internal',
+    '^@storybook/(.*)$',
+    '<THIRD_PARTY_MODULES>',
+    '^[./]',
+  ],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 
