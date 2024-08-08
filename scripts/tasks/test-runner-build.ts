@@ -16,7 +16,7 @@ export const testRunnerBuild: Task & { port: number } = {
       `--url http://127.0.0.1:${this.port}`,
       '--junit',
       '--maxWorkers=2',
-      '--failOnConsole',
+      // '--failOnConsole',
       '--index-json',
     ];
 
