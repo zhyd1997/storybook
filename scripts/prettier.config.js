@@ -18,7 +18,7 @@ export default {
       options: { parser: 'babel-ts' },
     },
     {
-      files: ['**/docs/**/*.*', '*.md'],
+      files: ['*.md', '*.mdx'],
       options: {
         importOrderSeparation: false,
         importOrderSortSpecifiers: false,
@@ -30,7 +30,7 @@ export default {
   importOrder: [
     '^node:',
     '^(vitest|@testing-library)',
-    '^react$',
+    '^react(-dom(/client)?(/server)?)?$',
     '^storybook/internal',
     '^@storybook/[^-]*$',
     '^@storybook/(?!addon-)(.*)$',
