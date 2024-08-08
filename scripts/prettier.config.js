@@ -13,13 +13,27 @@ export default {
       files: '*.component.html',
       options: { parser: 'angular' },
     },
+    {
+      files: ['**/frameworks/angular/src/**/*.ts', '**/frameworks/angular/template/**/*.ts'],
+      options: { parser: 'babel-ts' },
+    },
+    {
+      files: ['**/docs/**/*.*', '*.md'],
+      options: {
+        importOrderSeparation: false,
+        importOrderSortSpecifiers: false,
+      },
+    },
   ],
   plugins: ['@trivago/prettier-plugin-sort-imports'],
 
   importOrder: [
     '^node:',
+    '^react$',
     '^storybook/internal',
-    '^@storybook/(.*)$',
+    '^@storybook/[^-]*$',
+    '^@storybook/(?!addon-)(.*)$',
+    '^@storybook/addon-(.*)$',
     '<THIRD_PARTY_MODULES>',
     '^[./]',
   ],
