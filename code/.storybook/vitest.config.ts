@@ -20,7 +20,9 @@ export default mergeConfig(
   defineProject({
     plugins: [
       import('@storybook/experimental-addon-vitest/plugin').then(({ storybookTest }) =>
-        storybookTest()
+        storybookTest({
+          configDir: process.cwd(),
+        })
       ),
       ...extraPlugins,
     ],
