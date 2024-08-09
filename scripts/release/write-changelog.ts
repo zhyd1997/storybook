@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import program from 'commander';
+import { program } from 'commander';
 import { readFile, writeFile, writeJson } from 'fs-extra';
 import path from 'path';
 import semver from 'semver';

@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import program from 'commander';
+import { program } from 'commander';
 import { execaCommand } from 'execa';
 import { readJSON } from 'fs-extra';
 import { posix, resolve, sep } from 'path';

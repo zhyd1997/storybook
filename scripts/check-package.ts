@@ -2,7 +2,7 @@
 // without having to build dts files for all packages in the monorepo.
 // It is not implemented yet for angular, svelte and vue.
 import chalk from 'chalk';
-import program from 'commander';
+import { program } from 'commander';
 import { execaCommand } from 'execa';
 import { readJSON } from 'fs-extra';
 import { resolve } from 'path';

@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { exec } from 'child_process';
-import program from 'commander';
+import { program } from 'commander';
 import { execa, execaSync } from 'execa';
 import { pathExists, readJSON, remove } from 'fs-extra';
 import { mkdir } from 'fs/promises';
