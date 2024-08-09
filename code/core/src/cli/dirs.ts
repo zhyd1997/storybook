@@ -3,12 +3,14 @@ import { dirname, join } from 'path';
 import downloadTarballDefault from '@ndelangen/get-tarball';
 import getNpmTarballUrlDefault from 'get-npm-tarball-url';
 
-import invariant from 'tiny-invariant';
-import { externalFrameworks } from './project_types';
-import type { SupportedRenderers } from './project_types';
 import type { JsPackageManager } from '@storybook/core/common';
 import { temporaryDirectory, versions } from '@storybook/core/common';
 import type { SupportedFrameworks } from '@storybook/core/types';
+
+import invariant from 'tiny-invariant';
+
+import { externalFrameworks } from './project_types';
+import type { SupportedRenderers } from './project_types';
 
 const resolveUsingBranchInstall = async (packageManager: JsPackageManager, request: string) => {
   const tempDirectory = await temporaryDirectory();
