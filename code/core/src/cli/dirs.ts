@@ -1,7 +1,7 @@
 import { dirname, join } from 'path';
 
 import downloadTarball from '@ndelangen/get-tarball';
-import getNpmTarballUrl from 'get-npm-tarball-url';
+import getNpmTarballUrlDefault from 'get-npm-tarball-url';
 
 import invariant from 'tiny-invariant';
 import { externalFrameworks } from './project_types';
@@ -16,6 +16,10 @@ const resolveUsingBranchInstall = async (packageManager: JsPackageManager, reque
 
   // FIXME: this might not be the right version for community packages
   const version = versions[name] || (await packageManager.latestVersion(request));
+
+  // an artifact of esbuild + type=commonjs + exportmap
+  // @ts-expect-error (default export)
+  const getNpmTarballUrl = getNpmTarballUrlDefault.default || getNpmTarballUrlDefault;
 
   const url = getNpmTarballUrl(request, version, {
     registry: await packageManager.getRegistryURL(),
