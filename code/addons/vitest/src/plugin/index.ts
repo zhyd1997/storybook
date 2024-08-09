@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+import { resolve, join } from 'node:path';
 import type { Plugin } from 'vitest/config';
 import { loadAllPresets, validateConfigurationFiles } from 'storybook/internal/common';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
@@ -9,7 +10,7 @@ import type { StoriesEntry } from 'storybook/internal/types';
 
 const defaultOptions: UserOptions = {
   storybookScript: undefined,
-  configDir: '.storybook',
+  configDir: undefined,
   storybookUrl: 'http://localhost:6006',
   snapshot: false,
   skipRunningStorybook: false,
@@ -42,9 +43,34 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
   let stories: StoriesEntry[];
 
+  if (!finalOptions.configDir) {
+    finalOptions.configDir = resolve(join(process.cwd(), '.storybook'));
+  } else {
+    finalOptions.configDir = resolve(process.cwd(), finalOptions.configDir);
+  }
+
   return {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
+    async buildStart() {
+      try {
+        await validateConfigurationFiles(finalOptions.configDir);
+      } catch (err) {
+        throw new MainFileMissingError({
+          location: finalOptions.configDir,
+          source: 'vitest',
+        });
+      }
+
+      const presets = await loadAllPresets({
+        configDir: finalOptions.configDir,
+        corePresets: [],
+        overridePresets: [],
+        packageJson: {},
+      });
+
+      stories = await presets.apply('stories', []);
+    },
     async config(config) {
       // If we end up needing to know if we are running in browser mode later
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
@@ -89,32 +115,12 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       return config;
     },
     async transform(code, id) {
+      console.log('FROM transform', process.cwd());
       if (process.env.VITEST !== 'true') {
         return code;
       }
 
       if (id.match(/(story|stories)\.[cm]?[jt]sx?$/)) {
-        // we process presets here instead of buildStart/configureServer because of a bug with esbuild
-        if (!stories) {
-          try {
-            await validateConfigurationFiles(finalOptions.configDir);
-          } catch (err) {
-            throw new MainFileMissingError({
-              location: finalOptions.configDir,
-              source: 'vitest',
-            });
-          }
-
-          const presets = await loadAllPresets({
-            configDir: finalOptions.configDir,
-            corePresets: [],
-            overridePresets: [],
-            packageJson: {},
-          });
-
-          stories = await presets.apply('stories', []);
-        }
-
         return transform({
           code,
           id,

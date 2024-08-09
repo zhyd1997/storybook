@@ -410,6 +410,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
       defineConfig({
         plugins: [
           storybookTest({
+            configDir: process.cwd(),
             storybookScript: 'yarn storybook --ci',
             tags: {
               include: ['vitest'],
