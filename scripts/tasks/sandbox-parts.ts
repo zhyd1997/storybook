@@ -410,6 +410,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
       defineConfig({
         plugins: [
           storybookTest({
+            configDir: process.cwd(),
             storybookScript: 'yarn storybook --ci',
             tags: {
               include: ['vitest'],
@@ -433,8 +434,6 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
             ...defaultExclude,
             // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
             path.join(__dirname, '../**/*argtypes*'),
-            // TODO: somehow support autotitle in portable stories
-            path.join(__dirname, '../**/*title*'),
             // TODO (SVELTEKIT): Failures related to missing framework annotations
             path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*'),
             path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*'),
