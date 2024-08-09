@@ -421,35 +421,41 @@
 
 ### New parameters format for addon backgrounds
 
-The `addon-backgrounds` addon now uses a new format for parameters. The `backgrounds` parameter is now an object with a `values` key that contains the background values.
+> [!NOTE]
+> You need to set the feature flag `backgroundsStoryGlobals` to `true` in your `.storybook/main.ts` to use the new format and set the value with `globals`.
 
-> ! You need to set the feature flag `backgroundsStoryGlobals` to `true` in your `.storybook/main.ts` to use the new format.
+The `addon-backgrounds` addon now uses a new format for parameters. The `backgrounds` parameter is now an object with an `options` property that is assigned to an object of background values, where the key is used when setting the global value.
 
 ```diff
 // .storybook/preview.js
 export const parameters = {
   backgrounds: {
--    values: [
--      { name: 'twitter', value: '#00aced' },
--      { name: 'facebook', value: '#3b5998' },
--    ],
-+    options: {
-+      twitter: { name: 'twitter', value: '#00aced' },
-+      facebook: { name: 'facebook', value: '#3b5998' },
-+    },
+-   values: [
+-     { name: 'twitter', value: '#00aced' },
+-     { name: 'facebook', value: '#3b5998' },
+-   ],
++   options: {
++     twitter: { name: 'Twitter', value: '#00aced' },
++     facebook: { name: 'Facebook', value: '#3b5998' },
++   },
   },
 };
 ```
 
 Setting an override value should now be done via a `globals` property on your component/meta or story itself:
 
-```ts
+```diff
 // Button.stories.ts
 export default {
   component: Button,
-  globals: {
-    backgrounds: { value: 'twitter' },
-  },
+- parameters: {
+-   backgrounds: {
+-     default: "twitter",
+-   },
+- },
++ globals: {
++   backgrounds: { value: "twitter" },
++ },
 };
 ```
 
@@ -457,49 +463,59 @@ This locks that story to the `twitter` background, it cannot be changed by the a
 
 ### New parameters format for addon viewport
 
-> ! You need to set the feature flag `viewportStoryGlobals` to `true` in your `.storybook/main.ts` to use the new format.
+> [!NOTE]
+> You need to set the feature flag `viewportStoryGlobals` to `true` in your `.storybook/main.ts` to use the new format and set the value with `globals`.
 
-The `addon-viewport` addon now uses a new format for parameters. The `viewport` parameter is now an object with a `viewports` key that contains the viewport values.
+The `addon-viewport` addon now uses a new format for parameters. The `viewport` parameter is now an object with an `options` property that is assigned to an object of viewport values, where the key is used when setting the global value.
 
 ```diff
 // .storybook/preview.js
 export const parameters = {
   viewport: {
--    viewports: {
--      iphone5: {
--        name: 'phone',
--        styles: {
--          width: '320px',
--          height: '568px',
--        },
--      },
+-   viewports: {
+-     iphone5: {
+-       name: 'phone',
+-       styles: {
+-         width: '320px',
+-         height: '568px',
+-       },
 -     },
-+    options: {
-+      iphone5: {
-+        name: 'phone',
-+        styles: {
-+          width: '320px',
-+          height: '568px',
-+        },
-+      },
-+    },
+-    },
++   options: {
++     iphone5: {
++       name: 'phone',
++       styles: {
++         width: '320px',
++         height: '568px',
++       },
++     },
++   },
   },
 };
 ```
 
-Setting an override value should now be done via a `globals` property on your component/meta or story itself:
+Setting an override value should now be done via a `globals` property on your component/meta or story itself. Also note the change from `defaultOrientation: "landscape"` to `isRotated: true`.
 
-```ts
+```diff
 // Button.stories.ts
 export default {
   component: Button,
-  globals: {
-    viewport: { value: 'phone' },
-  },
+- parameters: {
+-   viewport: {
+-     defaultViewport: "iphone5",
+-     defaultOrientation: "landscape",
+-   },
+- },
++ globals: {
++   viewport: {
++     value: "iphone5",
++     isRotated: true,
++   },
++ },
 };
 ```
 
-This locks that story to the `phone` viewport, it cannot be changed by the addon UI.
+This locks that story to the `iphone5` viewport in landscape orientation, it cannot be changed by the addon UI.
 
 ## From version 8.1.x to 8.2.x
 
