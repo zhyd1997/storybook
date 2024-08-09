@@ -1,17 +1,15 @@
 /* eslint-disable no-underscore-dangle */
-import { join } from 'node:path';
 import type { Plugin } from 'vitest/config';
-import { loadAllPresets } from 'storybook/internal/common';
+import { loadAllPresets, validateConfigurationFiles } from 'storybook/internal/common';
+import { MainFileMissingError } from 'storybook/internal/server-errors';
 import { transform } from './transformer';
 import type { InternalOptions, UserOptions } from './types';
 import { log } from './utils';
 import type { StoriesEntry } from 'storybook/internal/types';
 
-const DEFAULT_CONFIG_DIR = '.storybook';
-
 const defaultOptions: UserOptions = {
   storybookScript: undefined,
-  configDir: undefined,
+  configDir: '.storybook',
   storybookUrl: 'http://localhost:6006',
   snapshot: false,
   skipRunningStorybook: false,
@@ -88,7 +86,6 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       }
 
       log('Final plugin options:', finalOptions);
-
       return config;
     },
     async transform(code, id) {
@@ -97,7 +94,17 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       }
 
       if (id.match(/(story|stories)\.[cm]?[jt]sx?$/)) {
+        // we process presets here instead of buildStart/configureServer because of a bug with esbuild
         if (!stories) {
+          try {
+            await validateConfigurationFiles(finalOptions.configDir);
+          } catch (err) {
+            throw new MainFileMissingError({
+              location: finalOptions.configDir,
+              source: 'vitest',
+            });
+          }
+
           const presets = await loadAllPresets({
             configDir: finalOptions.configDir,
             corePresets: [],
