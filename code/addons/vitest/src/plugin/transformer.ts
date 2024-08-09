@@ -52,7 +52,8 @@ export async function transform({
       );
 
       if (metaDeclaration) {
-        const metaObjectLiteral = metaDeclaration.declarationList.declarations[0].initializer;
+        const metaObjectLiteral = metaDeclaration.declarationList.declarations[0]
+          .initializer as typescript.Node;
         if (
           typescript.isObjectLiteralExpression(metaObjectLiteral) &&
           !metaObjectLiteral.properties.some(

@@ -115,7 +115,6 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       return config;
     },
     async transform(code, id) {
-      console.log('FROM transform', process.cwd());
       if (process.env.VITEST !== 'true') {
         return code;
       }
