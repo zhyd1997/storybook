@@ -1,14 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import { join } from 'node:path';
 import type { Plugin } from 'vitest/config';
-import { createRequire } from 'node:module';
+import { loadAllPresets } from 'storybook/internal/common';
 import { transform } from './transformer';
 import type { InternalOptions, UserOptions } from './types';
 import { log } from './utils';
+import type { StoriesEntry } from 'storybook/internal/types';
 
 const DEFAULT_CONFIG_DIR = '.storybook';
-
-const require = createRequire(import.meta.url);
 
 const defaultOptions: UserOptions = {
   storybookScript: undefined,
@@ -43,15 +42,11 @@ export const storybookTest = (options?: UserOptions): Plugin => {
   process.env.__STORYBOOK_URL__ = storybookUrl;
   process.env.__STORYBOOK_SCRIPT__ = finalOptions.storybookScript;
 
+  let stories: StoriesEntry[];
+
   return {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
-    async configureServer() {
-      // this might be useful in the future
-      if (!finalOptions.configDir) {
-        finalOptions.configDir = join(process.cwd(), options?.configDir ?? DEFAULT_CONFIG_DIR);
-      }
-    },
     async config(config) {
       // If we end up needing to know if we are running in browser mode later
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
@@ -102,10 +97,22 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       }
 
       if (id.match(/(story|stories)\.[cm]?[jt]sx?$/)) {
+        if (!stories) {
+          const presets = await loadAllPresets({
+            configDir: finalOptions.configDir,
+            corePresets: [],
+            overridePresets: [],
+            packageJson: {},
+          });
+
+          stories = await presets.apply('stories', []);
+        }
+
         return transform({
           code,
           id,
           options: finalOptions,
+          stories,
         });
       }
     },
