@@ -608,6 +608,19 @@ jobs:
                   IN_STORYBOOK_SANDBOX: true
                   STORYBOOK_INIT_EMPTY_TYPE: << parameters.template >>
                   STORYBOOK_DISABLE_TELEMETRY: true
+      - run:
+          name: Storybook init from empty directory (--skip-install)
+          command: |
+            cd code
+            yarn local-registry --open &
+            cd ../../
+            mkdir empty-<< parameters.template >>
+            cd empty-<< parameters.template >>
+            npx storybook init --yes --skip-install
+          environment:
+            IN_STORYBOOK_SANDBOX: true
+            STORYBOOK_INIT_EMPTY_TYPE: << parameters.template >>
+            STORYBOOK_DISABLE_TELEMETRY: true
       - report-workflow-on-failure
   test-portable-stories:
     parameters:
