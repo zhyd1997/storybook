@@ -1,6 +1,6 @@
 import { dirname, join } from 'path';
 
-import downloadTarball from '@ndelangen/get-tarball';
+import downloadTarballDefault from '@ndelangen/get-tarball';
 import getNpmTarballUrlDefault from 'get-npm-tarball-url';
 
 import invariant from 'tiny-invariant';
@@ -20,6 +20,8 @@ const resolveUsingBranchInstall = async (packageManager: JsPackageManager, reque
   // an artifact of esbuild + type=commonjs + exportmap
   // @ts-expect-error (default export)
   const getNpmTarballUrl = getNpmTarballUrlDefault.default || getNpmTarballUrlDefault;
+  // @ts-expect-error (default export)
+  const downloadTarball = downloadTarballDefault.default || downloadTarballDefault;
 
   const url = getNpmTarballUrl(request, version, {
     registry: await packageManager.getRegistryURL(),

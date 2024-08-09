@@ -120,7 +120,7 @@ async function run() {
       target: 'node18',
       splitting: false,
       platform: 'neutral',
-      mainFields: ['module', 'main', 'node'],
+      mainFields: ['main', 'module', 'node'],
       conditions: ['node', 'module', 'import', 'require'],
     } satisfies EsbuildContextOptions;
 
