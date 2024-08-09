@@ -3,7 +3,6 @@
  * This is necessary because the sandbox package.json is used to run the tests and the resolutions are needed to run the tests.
  * The vite-ecosystem-ci, though, sets the resolutions in the root package.json.
  */
-
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
