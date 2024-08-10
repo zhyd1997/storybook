@@ -1,4 +1,4 @@
-import path, { dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 
 import type { NpmOptions } from 'storybook/internal/cli';
 import type { Builder, SupportedRenderers } from 'storybook/internal/cli';
@@ -362,7 +362,7 @@ export async function baseGenerator(
         : addons,
       extensions,
       language,
-      ...(staticDir ? { staticDirs: [path.join('..', staticDir)] } : null),
+      ...(staticDir ? { staticDirs: [join('..', staticDir)] } : null),
       ...extraMain,
       ...(type !== 'framework'
         ? {
@@ -397,7 +397,7 @@ export async function baseGenerator(
       packageManager,
       language,
       destination: componentsDestinationPath,
-      commonAssetsDir: path.join(getCliDir(), 'rendererAssets', 'common'),
+      commonAssetsDir: join(getCliDir(), 'rendererAssets', 'common'),
     });
   }
 }
