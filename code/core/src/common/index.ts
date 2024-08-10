@@ -1,3 +1,5 @@
+import versions from './versions';
+
 /// <reference types="@types/compression" />
 
 export * from './presets';
@@ -42,7 +44,6 @@ export * from './utils/get-story-id';
 export * from './utils/posix';
 export * from './js-package-manager';
 
-import versions from './versions';
 export { versions };
 
 export { createFileSystemCache } from './utils/file-cache';
