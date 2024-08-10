@@ -1,3 +1,5 @@
+import path, { dirname } from 'node:path';
+
 import type { NpmOptions } from 'storybook/internal/cli';
 import type { Builder, SupportedRenderers } from 'storybook/internal/cli';
 import { SupportedLanguage, externalFrameworks } from 'storybook/internal/cli';
@@ -10,7 +12,6 @@ import type { SupportedFrameworks } from 'storybook/internal/types';
 
 import fse from 'fs-extra';
 import ora from 'ora';
-import path, { dirname } from 'path';
 import invariant from 'tiny-invariant';
 import { dedent } from 'ts-dedent';
 

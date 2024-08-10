@@ -1,10 +1,9 @@
+import { readFile } from 'node:fs/promises';
 import path, { relative } from 'node:path';
 
 import type { StorybookConfig } from '@storybook/core/types';
 
 import { MainFileESMOnlyImportError, MainFileEvaluationError } from '@storybook/core/server-errors';
-
-import { readFile } from 'fs/promises';
 
 import { serverRequire, serverResolve } from './interpret-require';
 import { validateConfigurationFiles } from './validate-configuration-files';
