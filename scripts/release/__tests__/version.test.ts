@@ -280,7 +280,7 @@ describe('Version', () => {
         { spaces: 2 }
       );
       expect(execaCommand).toHaveBeenCalledWith('yarn install --mode=update-lockfile', {
-        cwd: path.join(CODE_DIR_PATH),
+        cwd: join(CODE_DIR_PATH),
         cleanup: true,
         stdio: undefined,
       });
