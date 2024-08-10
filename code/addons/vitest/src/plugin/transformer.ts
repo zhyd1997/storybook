@@ -1,9 +1,11 @@
 import { getStoryTitle } from 'storybook/internal/common';
-import MagicString from 'magic-string';
-import typescript from 'typescript';
-import { dedent } from 'ts-dedent';
-import type { InternalOptions } from './types';
 import type { StoriesEntry } from 'storybook/internal/types';
+
+import MagicString from 'magic-string';
+import { dedent } from 'ts-dedent';
+import typescript from 'typescript';
+
+import type { InternalOptions } from './types';
 
 // Main transform function for the Vitest plugin
 export async function transform({
@@ -33,8 +35,6 @@ export async function transform({
 
   let metaExportName = '__STORYBOOK_META__';
 
-  const title = getStoryTitle({ storyFilePath: id, configDir: options.configDir, stories });
-
   const modifyMeta = (node: typescript.ExportAssignment) => {
     const exportExpression = node.expression;
 
@@ -63,8 +63,10 @@ export async function transform({
               prop.name.getText() === 'title'
           )
         ) {
-          const insertPos = metaObjectLiteral.getStart() + 2;
-          s.appendLeft(insertPos, `title: '${title}',\n`);
+          const title = getStoryTitle({ storyFilePath: id, configDir: options.configDir, stories });
+
+          const insertPos = metaObjectLiteral.getStart() + 1;
+          s.appendLeft(insertPos, `\n\ttitle: '${title}',\n`);
         }
       }
     } else if (typescript.isObjectLiteralExpression(exportExpression)) {
@@ -77,8 +79,10 @@ export async function transform({
       );
 
       if (!hasTitleProperty) {
-        const insertPos = exportExpression.getStart() + 2;
-        s.appendLeft(insertPos, `title: '${title}',\n`);
+        const title = getStoryTitle({ storyFilePath: id, configDir: options.configDir, stories });
+
+        const insertPos = exportExpression.getStart() + 1;
+        s.appendLeft(insertPos, `\n\ttitle: '${title}',\n`);
       }
 
       // Replace inline export with a variable
