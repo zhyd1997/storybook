@@ -10,11 +10,11 @@ import type {
   Args,
   ComposedStoryFn,
   NamedOrDefaultProjectAnnotations,
+  NormalizedProjectAnnotations,
   ProjectAnnotations,
   Store_CSFExports,
   StoriesWithPartialProps,
   StoryAnnotationsOrFn,
-  NormalizedProjectAnnotations,
 } from 'storybook/internal/types';
 
 import * as reactProjectAnnotations from './entry-preview';

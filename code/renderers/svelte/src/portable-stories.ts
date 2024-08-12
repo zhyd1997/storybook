@@ -8,11 +8,11 @@ import type {
   Args,
   ComposedStoryFn,
   NamedOrDefaultProjectAnnotations,
+  NormalizedProjectAnnotations,
   ProjectAnnotations,
   Store_CSFExports,
   StoriesWithPartialProps,
   StoryAnnotationsOrFn,
-  NormalizedProjectAnnotations,
 } from 'storybook/internal/types';
 
 import PreviewRender from '@storybook/svelte/internal/PreviewRender.svelte';
