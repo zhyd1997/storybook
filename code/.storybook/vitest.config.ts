@@ -1,5 +1,7 @@
+import { defaultExclude, defineProject, mergeConfig } from 'vitest/config';
+
 import Inspect from 'vite-plugin-inspect';
-import { mergeConfig, defaultExclude, defineProject } from 'vitest/config';
+
 import { vitestCommonConfig } from '../vitest.workspace';
 
 const extraPlugins: any[] = [];

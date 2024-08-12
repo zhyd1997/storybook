@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
 /* eslint-disable no-underscore-dangle */
 import { afterAll, vi } from 'vitest';
-import { Channel } from 'storybook/internal/channels';
 import type { RunnerTask, TaskMeta } from 'vitest';
+
+import { Channel } from 'storybook/internal/channels';
 
 declare global {
   // eslint-disable-next-line no-var
