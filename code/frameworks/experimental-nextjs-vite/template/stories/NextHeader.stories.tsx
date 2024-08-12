@@ -1,8 +1,10 @@
-import NextHeader from './NextHeader';
 import type { Meta } from '@storybook/react';
 import type { StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from '@storybook/test';
+
 import { cookies, headers } from '@storybook/experimental-nextjs-vite/headers.mock';
+
+import NextHeader from './NextHeader';
 
 export default {
   component: NextHeader,

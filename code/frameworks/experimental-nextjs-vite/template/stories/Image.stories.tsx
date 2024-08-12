@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
+
+import type { Meta, StoryObj } from '@storybook/react';
+
 import Image from 'next/image';
 
 import Accessibility from '../../assets/accessibility.svg';
 import AvifImage from '../../assets/avif-test-image.avif';
-import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
   component: Image,

@@ -1,8 +1,10 @@
-import Head from 'next/head';
 import React from 'react';
-import { waitFor, expect } from '@storybook/test';
+
 import type { Meta } from '@storybook/react';
 import type { StoryObj } from '@storybook/react';
+import { expect, waitFor } from '@storybook/test';
+
+import Head from 'next/head';
 
 function Component() {
   return (

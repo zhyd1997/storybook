@@ -1,6 +1,8 @@
-import dynamic from 'next/dynamic';
 import React, { Suspense } from 'react';
+
 import type { Meta, StoryObj } from '@storybook/react';
+
+import dynamic from 'next/dynamic';
 
 const DynamicComponent = dynamic(() => import('./DynamicImport'), {
   ssr: false,

@@ -1,17 +1,19 @@
 import type { Addon_DecoratorFunction, Addon_LoaderFunction } from 'storybook/internal/types';
-import './config/preview';
-import { ImageDecorator } from './images/decorator';
-import { RouterDecorator } from './routing/decorator';
-import { StyledJsxDecorator } from './styledJsx/decorator';
-import { HeadManagerDecorator } from './head-manager/decorator';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore we must ignore types here as during compilation they are not generated yet
-import { createRouter } from '@storybook/experimental-nextjs-vite/router.mock';
+import { createNavigation } from '@storybook/experimental-nextjs-vite/navigation.mock';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore we must ignore types here as during compilation they are not generated yet
-import { createNavigation } from '@storybook/experimental-nextjs-vite/navigation.mock';
+import { createRouter } from '@storybook/experimental-nextjs-vite/router.mock';
+
 import { isNextRouterError } from 'next/dist/client/components/is-next-router-error';
+
+import './config/preview';
+import { HeadManagerDecorator } from './head-manager/decorator';
+import { ImageDecorator } from './images/decorator';
+import { RouterDecorator } from './routing/decorator';
+import { StyledJsxDecorator } from './styledJsx/decorator';
 
 function addNextHeadCount() {
   const meta = document.createElement('meta');

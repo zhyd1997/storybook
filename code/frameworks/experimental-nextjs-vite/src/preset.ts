@@ -1,9 +1,12 @@
 // https://storybook.js.org/docs/react/addons/writing-presets
-import type { StorybookConfigVite } from '@storybook/builder-vite';
-import { dirname, join } from 'path';
 import type { PresetProperty } from 'storybook/internal/types';
+
+import type { StorybookConfigVite } from '@storybook/builder-vite';
+
+import { dirname, join } from 'path';
 // @ts-expect-error - tsconfig settings have to be moduleResolution=Bundler and module=Preserve
 import vitePluginStorybookNextjs from 'vite-plugin-storybook-nextjs';
+
 import type { StorybookConfig } from './types';
 
 export const core: PresetProperty<'core'> = async (config, options) => {

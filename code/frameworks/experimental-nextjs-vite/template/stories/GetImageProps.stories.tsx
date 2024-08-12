@@ -1,6 +1,8 @@
-import { type ImageProps, getImageProps } from 'next/image';
 import React from 'react';
+
 import type { Meta, StoryObj } from '@storybook/react';
+
+import { type ImageProps, getImageProps } from 'next/image';
 
 import Accessibility from '../../assets/accessibility.svg';
 import Testing from '../../assets/testing.png';
