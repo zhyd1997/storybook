@@ -365,7 +365,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
 
   const isSvelte = template.expected.renderer === '@storybook/svelte';
   const isVue = template.expected.renderer === '@storybook/vue3';
-  const isNextjs = template.expected.framework === '@storybook/nextjs';
+  const isNextjs = template.expected.framework.includes('nextjs');
   // const isAngular = template.expected.framework === '@storybook/angular';
   const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
 
