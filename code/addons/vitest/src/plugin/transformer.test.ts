@@ -16,7 +16,7 @@ expect.addSnapshotSerializer({
 });
 
 const transform = async ({
-  code,
+  code = '',
   id = 'src/components/Button.stories.js',
   options = {
     tags: { include: [], exclude: [], skip: [] },

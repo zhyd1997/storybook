@@ -1,9 +1,13 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-underscore-dangle */
-export { setViewport } from './viewports';
-import type { TaskContext, RunnerTask, TaskMeta } from 'vitest';
+import type { RunnerTask, TaskContext, TaskMeta } from 'vitest';
+
 import type { UserOptions } from './types';
 import { setViewport } from './viewports';
+
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @typescript-eslint/naming-convention */
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable no-underscore-dangle */
+export { setViewport } from './viewports';
 
 type TagsFilter = Required<UserOptions['tags']>;
 

@@ -1,12 +1,15 @@
 /* eslint-disable no-underscore-dangle */
-import { resolve, join } from 'node:path';
+import { join, resolve } from 'node:path';
+
 import type { Plugin } from 'vitest/config';
+
 import { loadAllPresets, validateConfigurationFiles } from 'storybook/internal/common';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
+import type { StoriesEntry } from 'storybook/internal/types';
+
 import { transform } from './transformer';
 import type { InternalOptions, UserOptions } from './types';
 import { log } from './utils';
-import type { StoriesEntry } from 'storybook/internal/types';
 
 const defaultOptions: UserOptions = {
   storybookScript: undefined,
