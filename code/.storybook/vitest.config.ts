@@ -1,5 +1,19 @@
+import Inspect from 'vite-plugin-inspect';
 import { mergeConfig, defaultExclude, defineProject } from 'vitest/config';
 import { vitestCommonConfig } from '../vitest.workspace';
+
+const extraPlugins: any[] = [];
+if (process.env.INSPECT === 'true') {
+  // this plugin assists in inspecting the Storybook Vitest plugin's transformation and sourcemaps
+  extraPlugins.push(
+    Inspect({
+      outputDir: '../.vite-inspect',
+      build: true,
+      open: true,
+      include: ['**/*.stories.*'],
+    })
+  );
+}
 
 export default mergeConfig(
   vitestCommonConfig,
@@ -7,9 +21,10 @@ export default mergeConfig(
     plugins: [
       import('@storybook/experimental-addon-vitest/plugin').then(({ storybookTest }) =>
         storybookTest({
-          storybookScript: 'yarn storybook:ui --ci',
+          configDir: process.cwd(),
         })
       ),
+      ...extraPlugins,
     ],
     test: {
       name: 'storybook-ui',
@@ -30,6 +45,7 @@ export default mergeConfig(
         name: 'chromium',
         provider: 'playwright',
         headless: true,
+        screenshotFailures: true,
       },
       setupFiles: ['./storybook.setup.ts'],
       environment: 'happy-dom',
