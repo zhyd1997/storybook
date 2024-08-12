@@ -198,6 +198,9 @@ const baseTemplates = {
     },
     modifications: {
       extraDependencies: ['server-only'],
+      mainConfig: {
+        features: { experimentalRSC: true },
+      },
     },
     skipTasks: ['e2e-tests-dev', 'bench'],
   },
