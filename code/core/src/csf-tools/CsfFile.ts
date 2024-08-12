@@ -140,6 +140,11 @@ const MODULE_MOCK_REGEX = /^[.\/#].*\.mock($|\.[^.]*$)/i;
 export interface CsfOptions {
   fileName?: string;
   makeTitle: (userTitle: string) => string;
+  /**
+   * If an inline meta is detected e.g. `export default { title: 'foo' }`
+   * it will be transformed into a constant format e.g. `export const __STORYBOOK_META__ = { title: 'foo' }; export default __STORYBOOK_META__;`
+   */
+  transformInlineMeta?: boolean;
 }
 
 export class NoMetaError extends Error {
@@ -169,11 +174,9 @@ export interface StaticStory extends Pick<StoryAnnotations, 'name' | 'parameters
 export class CsfFile {
   _ast: t.File;
 
-  _fileName: string;
+  _options: CsfOptions;
 
   _rawComponentPath?: string;
-
-  _makeTitle: (title: string) => string;
 
   _meta?: StaticMeta;
 
@@ -187,7 +190,9 @@ export class CsfFile {
 
   _metaNode: t.Expression | undefined;
 
-  _storyStatements: Record<string, t.ExportNamedDeclaration> = {};
+  _metaVariableName: string | undefined;
+
+  _storyStatements: Record<string, t.ExportNamedDeclaration | t.Expression> = {};
 
   _storyAnnotations: Record<string, Record<string, t.Node>> = {};
 
@@ -197,11 +202,10 @@ export class CsfFile {
 
   imports: string[];
 
-  constructor(ast: t.File, { fileName, makeTitle }: CsfOptions) {
+  constructor(ast: t.File, options: CsfOptions) {
     this._ast = ast;
-    this._fileName = fileName as string;
+    this._options = options;
     this.imports = [];
-    this._makeTitle = makeTitle;
   }
 
   _parseTitle(value: t.Node) {
@@ -216,7 +220,7 @@ export class CsfFile {
     }
 
     throw new Error(dedent`
-      CSF: unexpected dynamic title ${formatLocation(node, this._fileName)}
+      CSF: unexpected dynamic title ${formatLocation(node, this._options.fileName)}
 
       More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#string-literal-titles
     `);
@@ -295,14 +299,35 @@ export class CsfFile {
     const self = this;
     traverse(this._ast, {
       ExportDefaultDeclaration: {
-        enter({ node, parent }) {
-          let metaNode: t.ObjectExpression | undefined;
+        enter(path) {
+          const { node, parent } = path;
           const isVariableReference = t.isIdentifier(node.declaration) && t.isProgram(parent);
+
+          if (
+            self._options.transformInlineMeta &&
+            !isVariableReference &&
+            t.isExpression(node.declaration)
+          ) {
+            self._metaVariableName = '__STORYBOOK_META__';
+            const nodes = [
+              t.variableDeclaration('const', [
+                t.variableDeclarator(t.identifier(self._metaVariableName), node.declaration),
+              ]),
+              t.exportDefaultDeclaration(t.identifier(self._metaVariableName)),
+            ];
+
+            // Preserve sourcemaps location
+            nodes.forEach((_node: t.Node) => (_node.loc = path.node.loc));
+            path.replaceWithMultiple(nodes);
+          }
+
+          let metaNode: t.ObjectExpression | undefined;
           let decl;
           if (isVariableReference) {
             // const meta = { ... };
             // export default meta;
             const variableName = (node.declaration as t.Identifier).name;
+            self._metaVariableName = variableName;
             const isVariableDeclarator = (declaration: t.VariableDeclarator) =>
               t.isIdentifier(declaration.id) && declaration.id.name === variableName;
 
@@ -339,7 +364,7 @@ export class CsfFile {
             throw new NoMetaError(
               'default export must be an object',
               self._metaStatement,
-              self._fileName
+              self._options.fileName
             );
           }
         },
@@ -429,11 +454,12 @@ export class CsfFile {
             node.specifiers.forEach((specifier) => {
               if (t.isExportSpecifier(specifier) && t.isIdentifier(specifier.exported)) {
                 const { name: exportName } = specifier.exported;
+                const decl = t.isProgram(parent)
+                  ? findVarInitialization(specifier.local.name, parent)
+                  : specifier.local;
+
                 if (exportName === 'default') {
                   let metaNode: t.ObjectExpression | undefined;
-                  const decl = t.isProgram(parent)
-                    ? findVarInitialization(specifier.local.name, parent)
-                    : specifier.local;
 
                   if (t.isObjectExpression(decl)) {
                     // export default { ... };
@@ -451,6 +477,7 @@ export class CsfFile {
                   }
                 } else {
                   self._storyAnnotations[exportName] = {};
+                  self._storyStatements[exportName] = decl;
                   self._stories[exportName] = {
                     id: 'FIXME',
                     name: exportName,
@@ -507,7 +534,7 @@ export class CsfFile {
           const { callee } = node;
           if (t.isIdentifier(callee) && callee.name === 'storiesOf') {
             throw new Error(dedent`
-              Unexpected \`storiesOf\` usage: ${formatLocation(node, self._fileName)}.
+              Unexpected \`storiesOf\` usage: ${formatLocation(node, self._options.fileName)}.
 
               SB8 does not support \`storiesOf\`. 
             `);
@@ -527,12 +554,12 @@ export class CsfFile {
     });
 
     if (!self._meta) {
-      throw new NoMetaError('missing default export', self._ast, self._fileName);
+      throw new NoMetaError('missing default export', self._ast, self._options.fileName);
     }
 
     // default export can come at any point in the file, so we do this post processing last
     const entries = Object.entries(self._stories);
-    self._meta.title = this._makeTitle(self._meta?.title as string);
+    self._meta.title = this._options.makeTitle(self._meta?.title as string);
     if (self._metaAnnotations.play) {
       self._meta.tags = [...(self._meta.tags || []), 'play-fn'];
     }
@@ -586,6 +613,7 @@ export class CsfFile {
       if (!isExportStory(key, self._meta as StaticMeta)) {
         delete self._storyExports[key];
         delete self._storyAnnotations[key];
+        delete self._storyStatements[key];
       }
     });
 
@@ -616,7 +644,8 @@ export class CsfFile {
   }
 
   public get indexInputs(): IndexInput[] {
-    if (!this._fileName) {
+    const { fileName } = this._options;
+    if (!fileName) {
       throw new Error(
         dedent`Cannot automatically create index inputs with CsfFile.indexInputs because the CsfFile instance was created without a the fileName option.
         Either add the fileName option when creating the CsfFile instance, or create the index inputs manually.`
@@ -628,7 +657,7 @@ export class CsfFile {
       const tags = [...(this._meta?.tags ?? []), ...(story.tags ?? [])];
       return {
         type: 'story',
-        importPath: this._fileName,
+        importPath: fileName,
         rawComponentPath: this._rawComponentPath,
         exportName,
         name: story.name,
@@ -672,7 +701,7 @@ export const readCsf = async (fileName: string, options: CsfOptions) => {
 };
 
 export const writeCsf = async (csf: CsfFile, fileName?: string) => {
-  const fname = fileName || csf._fileName;
+  const fname = fileName || csf._options.fileName;
   if (!fname) throw new Error('Please specify a fileName for writeCsf');
   await writeFile(fileName as string, printCsf(csf).code);
 };

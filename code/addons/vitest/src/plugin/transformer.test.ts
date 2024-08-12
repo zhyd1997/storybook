@@ -63,7 +63,7 @@ describe('transformer', () => {
 
       const result = await transform({ code });
 
-      // expect(getStoryTitle).toHaveBeenCalled();
+      expect(getStoryTitle).toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -87,7 +87,7 @@ describe('transformer', () => {
 
       const result = await transform({ code });
 
-      // expect(getStoryTitle).not.toHaveBeenCalled();
+      expect(getStoryTitle).not.toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -112,7 +112,7 @@ describe('transformer', () => {
 
       const result = await transform({ code });
 
-      // expect(getStoryTitle).toHaveBeenCalled();
+      expect(getStoryTitle).toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -138,7 +138,7 @@ describe('transformer', () => {
 
       const result = await transform({ code });
 
-      // expect(getStoryTitle).not.toHaveBeenCalled();
+      expect(getStoryTitle).not.toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -157,7 +157,6 @@ describe('transformer', () => {
     it('should add test statement to inline exported stories', async () => {
       const code = `
       export default {
-        title: 'Button',
         component: Button,
       }
       export const Primary = {
@@ -174,8 +173,8 @@ describe('transformer', () => {
         import { composeStory as __composeStory } from "storybook/internal/preview-api";
         import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const __STORYBOOK_META__ = {
-          title: 'Button',
-          component: Button
+          component: Button,
+          title: "automatic/calculated/title"
         };
         export default __STORYBOOK_META__;
         export const Primary = {
@@ -192,7 +191,7 @@ describe('transformer', () => {
 
     it('should add test statement to const declared exported stories', async () => {
       const code = `
-      export default {}
+      export default {};
       const Primary = {
         args: {
           label: 'Primary Button',
@@ -230,7 +229,7 @@ describe('transformer', () => {
       export default {
         title: 'Button',
         component: Button,
-        excludeStories: 'nonStory',
+        excludeStories: ['nonStory'],
       }
       export const nonStory = 123
     `;
@@ -244,17 +243,19 @@ describe('transformer', () => {
         const __STORYBOOK_META__ = {
           title: 'Button',
           component: Button,
-          excludeStories: 'nonStory'
+          excludeStories: ['nonStory']
         };
         export default __STORYBOOK_META__;
+        export const nonStory = 123;
       `);
     });
   });
 
   describe('source map calculation', () => {
     it('should remap the location of an inline named export to its relative testStory function', async () => {
-      const originalCode = `
+      const originalCode = dedent`
         const meta = {
+          title: 'Button',
           component: Button,
         }
         export default meta;
@@ -270,8 +271,8 @@ describe('transformer', () => {
         import { composeStory as __composeStory } from "storybook/internal/preview-api";
         import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const meta = {
-          component: Button,
-          title: "automatic/calculated/title"
+          title: 'Button',
+          component: Button
         };
         export default meta;
         export const Primary = {};
@@ -298,74 +299,14 @@ describe('transformer', () => {
 
       // Locate `export const Primary` in the original code
       const originalPrimaryLine =
-        originalCode.split('\n').findIndex((line) => line.includes('const Primary')) + 1;
+        originalCode.split('\n').findIndex((line) => line.includes('export const Primary')) + 1;
       const originalPrimaryColumn = originalCode
         .split('\n')
-        [originalPrimaryLine - 1].indexOf('const Primary');
+        [originalPrimaryLine - 1].indexOf('export const Primary');
 
       // The original locations of the transformed code should match with the ones of the original code
-      expect(originalPosition.line).toBe(originalPrimaryLine);
-      expect(originalPosition.column).toBe(originalPrimaryColumn);
-
-      consumer.destroy();
-    });
-
-    it('should remap the location of a const declared named export to its relative testStory function', async () => {
-      const originalCode = `
-        const meta = {
-          component: Button,
-        }
-        export default meta;
-        const Primary = {};
-        export { Primary };
-      `;
-
-      const { code: transformedCode, map } = await transform({
-        code: originalCode,
-      });
-
-      expect(transformedCode).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
-        const meta = {
-          component: Button,
-          title: "automatic/calculated/title"
-        };
-        export default meta;
-        const Primary = {};
-        export { Primary };
-        const ___PrimaryComposed = __composeStory(Primary, meta);
-        if (__isValidTest(___PrimaryComposed, meta, {"include":[],"exclude":[],"skip":[]})) {
-          __test("Primary", __testStory(___PrimaryComposed, {"include":[],"exclude":[],"skip":[]}));
-        }
-      `);
-
-      const consumer = await new SourceMapConsumer(map as RawSourceMap);
-
-      // Locate `__test("Primary"...` in the transformed code
-      const testPrimaryLine =
-        transformedCode.split('\n').findIndex((line) => line.includes('__test("Primary"')) + 1;
-      const testPrimaryColumn = transformedCode
-        .split('\n')
-        [testPrimaryLine - 1].indexOf('__test("Primary"');
-
-      // Get the original position from the source map for `__test("Primary"...`
-      const originalPosition = consumer.originalPositionFor({
-        line: testPrimaryLine,
-        column: testPrimaryColumn,
-      });
-
-      // Locate `export const Primary` in the original code
-      const originalPrimaryLine =
-        originalCode.split('\n').findIndex((line) => line.includes('const Primary')) + 1;
-      const originalPrimaryColumn = originalCode
-        .split('\n')
-        [originalPrimaryLine - 1].indexOf('const Primary');
-
-      // The original locations of the transformed code should match with the ones of the original code
-      expect(originalPosition.line).toBe(originalPrimaryLine);
-      expect(originalPosition.column).toBe(originalPrimaryColumn);
+      expect(originalPosition.line, 'original line location').toBe(originalPrimaryLine);
+      expect(originalPosition.column, 'original column location').toBe(originalPrimaryColumn);
 
       consumer.destroy();
     });
