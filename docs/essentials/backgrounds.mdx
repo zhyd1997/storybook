@@ -9,29 +9,19 @@ The backgrounds toolbar addon allows you to set the background color on which th
 
 <Video src="../_assets/essentials/addon-backgrounds-optimized.mp4" />
 
+<Callout variant="warning" icon="🆕" id="globals-api">
+  **`globals` API**
+
+  This addon has been updated to use the `globals` API when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled. With `globals`, when you specify a background value for a story, it cannot be overridden from the toolbar. This ensures a consistent experience while navigating between stories. This will be the default behavior and API in Storybook 9.
+</Callout>
+
 ## Configuration
 
 By default, the backgrounds toolbar includes a light and dark background.
 
-But you're not restricted to these backgrounds. You can configure your own set of colors with the `backgrounds` [parameter](../writing-stories/parameters.mdx) in your [`.storybook/preview.js`](../configure/index.mdx#configure-story-rendering). There are two ways to configure the backgrounds:
+But you're not restricted to these backgrounds. You can configure your own set of colors with the `backgrounds` [parameter](../writing-stories/parameters.mdx) in your [`.storybook/preview.js`](../configure/index.mdx#configure-story-rendering).
 
-### Using `options`
-
-<Callout variant="info">
-  This API can only be used when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
-</Callout>
-
-The available background colors are defined using the `options` property:
-
-{/* prettier-ignore-start */}
-
-<CodeSnippets path="addon-backgrounds-options-in-preview.md" />
-
-{/* prettier-ignore-end */}
-
-### Using `values`
-
-If you're not using the `globals` API, you can define the available background colors using the `values` property:
+You can define the available background colors using the `values` property:
 
 {/* prettier-ignore-start */}
 
@@ -39,31 +29,29 @@ If you're not using the `globals` API, you can define the available background c
 
 {/* prettier-ignore-end */}
 
+<Callout variant="warning" icon="🆕">
+
+  **With the [`globals` API](#globals-api)**
+
+  When using the `globals` API, you must define the available background colors using the `options` property:
+
+  {/* prettier-ignore-start */}
+
+  <CodeSnippets path="addon-backgrounds-options-in-preview.md" />
+
+  {/* prettier-ignore-end */}
+
+</Callout>
+
 With either method, available backgrounds can be defined at the project, component, and story levels.
 
 To apply a default background color, assign the `default` property to one of the available colors.
 
 ## Overriding the background for a story
 
-The Backgrounds addon enables you to change the background color applied to a story by selecting from the list of predefined background colors in the toolbar. If needed, you can force a story to use a specific background color. There are two ways to do this, which have different behaviors:
+The Backgrounds addon enables you to change the background color applied to a story by selecting from the list of predefined background colors in the toolbar. If needed, you can force a story to use a specific background color.
 
-### Using `globals`
-
-<Callout variant="info">
-  This feature is available when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
-</Callout>
-
-When you specify a background color for a story (or a component's stories) using `globals`, the background color is applied and cannot be changed using the toolbar. This is useful when you want to ensure that a story is always rendered on a specific background color.
-
-{/* prettier-ignore-start */}
-
-<CodeSnippets path="addon-backgrounds-override-globals.md" usesCsf3 />
-
-{/* prettier-ignore-end */}
-
-### Using `parameters`
-
-If you're not yet using the `globals` API, you can set the default background color for a story using the `parameters.backgrounds.default` parameter:
+You can set the default background color for a story using the `parameters.backgrounds.default` parameter:
 
 {/* prettier-ignore-start */}
 
@@ -73,27 +61,25 @@ If you're not yet using the `globals` API, you can set the default background co
 
 As implied by the name, this method only sets the default background color for a story. You can still change the background color using the toolbar when viewing the story.
 
-## Extending the configuration
+<Callout variant="warning" icon="🆕">
 
-You can also define backgrounds per-component or per-story basis through [parameter inheritance](../writing-stories/parameters.mdx#component-parameters).
+  **With the [`globals` API](#globals-api)**
 
-### Using `options`
+  When you specify a background color for a story (or a component's stories) using `globals`, the background color is applied and cannot be changed using the toolbar. This is useful when you want to ensure that a story is always rendered on a specific background color.
 
-<Callout variant="info">
-  This API can only be used when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
+  {/* prettier-ignore-start */}
+
+  <CodeSnippets path="addon-backgrounds-override-globals.md" usesCsf3 />
+
+  {/* prettier-ignore-end */}
+
 </Callout>
 
-The available background colors are defined using the `options` property. In this example, we'll adjust the colors for all of the Button component's stories:
+## Extending the configuration
 
-{/* prettier-ignore-start */}
+You can also configure backgrounds per-component or per-story basis through [parameter inheritance](../writing-stories/parameters.mdx#component-parameters).
 
-<CodeSnippets path="addon-backgrounds-options-in-meta.md" />
-
-{/* prettier-ignore-end */}
-
-### Using `values`
-
-If you're not using the `globals` API, you can define the available background colors using the `values` property. In this example, we'll adjust the colors for all of the Button component's stories:
+To set the available background colors, use the `values` property. In this example, we'll adjust the colors for all of the Button component's stories:
 
 {/* prettier-ignore-start */}
 
@@ -101,12 +87,30 @@ If you're not using the `globals` API, you can define the available background c
 
 {/* prettier-ignore-end */}
 
+<Callout variant="warning" icon="🆕">
+
+  **With the [`globals` API](#globals-api)**
+
+  The available background colors are defined using the `options` property. In this example, we'll adjust the colors for all of the Button component's stories:
+
+  {/* prettier-ignore-start */}
+
+  <CodeSnippets path="addon-backgrounds-options-in-meta.md" />
+
+  {/* prettier-ignore-end */}
+
+</Callout>
+
 ## Disable backgrounds
 
 If you want to turn off backgrounds in a story, you can do so by setting the `backgrounds` parameter like so:
 
-<Callout variant="info">
-  Note that the property name changes when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
+<Callout variant="warning" icon="🆕">
+
+  **With the [`globals` API](#globals-api)**
+
+  Note that the property has been renamed to `disabled`.
+
 </Callout>
 
 {/* prettier-ignore-start */}
@@ -129,25 +133,27 @@ You don't need additional configuration to get started. But its properties are f
 
 ## API
 
-### Globals
+<Callout variant="warning" icon="🆕">
 
-This addon contributes the following globals to Storybook, under the `backgrounds` namespace:
+  **With the [`globals` API](#globals-api)**
 
-<Callout variant="info">
-  These globals are only available when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
+  ### Globals
+
+  This addon contributes the following globals to Storybook, under the `backgrounds` namespace:
+
+  #### `grid`
+
+  Type: Boolean
+
+  Whether the [grid](#grid) is displayed.
+
+  #### `value`
+
+  Type: `string`
+
+  When set, the background color is applied and cannot be changed using the toolbar. Must match the key of one of the [available colors](#options).
+
 </Callout>
-
-#### `grid`
-
-Type: Boolean
-
-Whether the [grid](#grid) is displayed.
-
-#### `value`
-
-Type: `string`
-
-When set, the background color is applied and cannot be changed using the toolbar. Must match the key of one of the [available colors](#using-options). 
 
 ### Parameters
 
@@ -163,20 +169,12 @@ Default background color. Must match the `name` property of one of the [availabl
 
 #### `disable`
 
-<Callout variant="info">
-  This API is deprecated when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
-</Callout>
+<Callout variant="warning" icon="🆕">
 
-Type: `boolean`
+  **With the [`globals` API](#globals-api)**
 
-Turn off this addon's behavior. If you wish to turn off this addon for the entire Storybook, you should do so when registering `addon-essentials`. See the [essential addon's docs](../essentials/index.mdx#disabling-addons) for more information.
+  Note that the property has been renamed to `disabled`.
 
-This parameter is most useful to allow overriding at more specific levels. For example, if this parameter is set to `true` at the project level, it could be re-enabled by setting it to `false` at the meta (component) or story level.
-
-#### `disabled`
-
-<Callout variant="info">
-  This API is only available when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
 </Callout>
 
 Type: `boolean`
@@ -248,30 +246,28 @@ Default: `0.5`
 
 The opacity of the grid lines.
 
-#### `options`
+<Callout variant="warning" icon="🆕">
 
-<Callout variant="info">
-  This API is only available when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
+  **With the [`globals` API](#globals-api)**
+
+  #### `options`
+
+  Type: `Record<string, { name: string; value: string }>`
+
+  Required: See description
+
+  Defines the background colors. Replaces [`values`](#values). See above for a [usage example](#configuration).
+
+  Required when defining `backgrounds` parameter at project level.
+
 </Callout>
-
-Type: `Record<string, { name: string; value: string }>`
-
-Required: See description
-
-Defines the background colors. See above for a [usage example](#with-options).
-
-Required when defining `backgrounds` parameter at project level.
 
 #### `values`
-
-<Callout variant="info">
-  This API is deprecated when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled.
-</Callout>
 
 Type: `{ name: string; value: string }[]`
 
 Required: See description
 
-Available background colors. See above for a [usage example](#using-values).
+Available background colors. See above for a [usage example](#configuration).
 
 Required when defining `backgrounds` parameter at project level.

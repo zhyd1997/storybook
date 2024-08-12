@@ -1,4 +1,4 @@
-```js filename="Button.stories.js|jsx" renderer="common" language="js" tabTitle="Without story globals"
+```js filename="Button.stories.js|jsx" renderer="common" language="js" tabTitle="Without globals API"
 import { Button } from './Button';
 
 export default {
@@ -12,7 +12,7 @@ export const Large = {
 };
 ```
 
-```js filename="Button.stories.js|jsx" renderer="common" language="js" tabTitle="With story globals enabled"
+```js filename="Button.stories.js|jsx" renderer="common" language="js" tabTitle="With globals API"
 import { Button } from './Button';
 
 export default {
@@ -26,7 +26,7 @@ export const Large = {
 };
 ```
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9" tabTitle="Without story globals"
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9" tabTitle="Without globals API"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
 
@@ -46,7 +46,7 @@ export const Large: Story = {
 };
 ```
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9" tabTitle="With story globals enabled"
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9" tabTitle="With globals API"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
 
@@ -66,7 +66,7 @@ export const Large: Story = {
 };
 ```
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts" tabTitle="Without story globals"
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts" tabTitle="Without globals API"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
 
@@ -86,7 +86,7 @@ export const Large: Story = {
 };
 ```
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts" tabTitle="With story globals enabled"
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts" tabTitle="With globals API"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
 
