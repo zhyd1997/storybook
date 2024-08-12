@@ -40,9 +40,9 @@ import * as nextJsAnnotations from './preview';
  */
 export function setProjectAnnotations(
   projectAnnotations: NamedOrDefaultProjectAnnotations | NamedOrDefaultProjectAnnotations
-): NormalizedProjectAnnotations {
+): NormalizedProjectAnnotations<ReactRenderer> {
   setDefaultProjectAnnotations(INTERNAL_DEFAULT_PROJECT_ANNOTATIONS);
-  return originalSetProjectAnnotations(projectAnnotations);
+  return originalSetProjectAnnotations(projectAnnotations) as NormalizedProjectAnnotations<ReactRenderer>;
 }
 
 // This will not be necessary once we have auto preset loading
