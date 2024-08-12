@@ -2,7 +2,7 @@ import aliasPlugin from 'esbuild-plugin-alias';
 import * as fs from 'fs-extra';
 import { glob } from 'glob';
 import { builtinModules } from 'node:module';
-import { dirname, join, relative } from 'path';
+import { dirname, join, parse, posix, relative, sep } from 'path';
 import slash from 'slash';
 import { dedent } from 'ts-dedent';
 import type { Options } from 'tsup';
