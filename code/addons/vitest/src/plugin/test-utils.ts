@@ -47,9 +47,7 @@ export const testStory = (Story: ComposedStoryFn, tagsFilter: TagsFilter) => {
       meta: TaskMeta & { storyId: string; hasPlayFunction: boolean };
     };
     _task.meta.storyId = Story.id;
-    _task.meta.hasPlayFunction = !!Story.play;
     await setViewport(Story.parameters.viewport);
-    const runFn = Story.run ?? Story.play;
-    await runFn();
+    await Story.run();
   };
 };

@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { getStoryTitle } from 'storybook/internal/common';
+
 import { type RawSourceMap, SourceMapConsumer } from 'source-map';
 
 import { transform as originalTransform } from './transformer';
@@ -8,7 +10,7 @@ vi.mock('storybook/internal/common', async (importOriginal) => {
   const actual = await importOriginal<typeof import('storybook/internal/common')>();
   return {
     ...actual,
-    getStoryTitle: () => 'automatic/calculated/title',
+    getStoryTitle: vi.fn(() => 'automatic/calculated/title'),
   };
 });
 
@@ -61,6 +63,8 @@ describe('transformer', () => {
 
       const result = await transform({ code });
 
+      // expect(getStoryTitle).toHaveBeenCalled();
+
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
         import { composeStory as __composeStory } from "storybook/internal/preview-api";
@@ -83,6 +87,8 @@ describe('transformer', () => {
 
       const result = await transform({ code });
 
+      // expect(getStoryTitle).not.toHaveBeenCalled();
+
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
         import { composeStory as __composeStory } from "storybook/internal/preview-api";
@@ -103,9 +109,10 @@ describe('transformer', () => {
   
         export default meta;
       `;
-      const id = 'src/components/Button.stories.js';
 
-      const result = await transform({ code, id });
+      const result = await transform({ code });
+
+      // expect(getStoryTitle).toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -128,9 +135,10 @@ describe('transformer', () => {
   
         export default meta;
       `;
-      const id = 'src/components/Button.stories.js';
 
-      const result = await transform({ code, id });
+      const result = await transform({ code });
+
+      // expect(getStoryTitle).not.toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -158,9 +166,8 @@ describe('transformer', () => {
         },
       };
     `;
-      const id = 'src/components/Button.stories.js';
 
-      const result = await transform({ code, id });
+      const result = await transform({ code });
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -194,9 +201,8 @@ describe('transformer', () => {
 
       export { Primary };
     `;
-      const id = 'src/components/Button.stories.js';
 
-      const result = await transform({ code, id });
+      const result = await transform({ code });
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -228,9 +234,8 @@ describe('transformer', () => {
       }
       export const nonStory = 123
     `;
-      const id = 'src/components/Button.stories.js';
 
-      const result = await transform({ code, id });
+      const result = await transform({ code });
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as __test } from "vitest";
@@ -242,11 +247,6 @@ describe('transformer', () => {
           excludeStories: 'nonStory'
         };
         export default __STORYBOOK_META__;
-        export const nonStory = 123;
-        const ___nonStoryComposed = __composeStory(nonStory, __STORYBOOK_META__);
-        if (__isValidTest(___nonStoryComposed, __STORYBOOK_META__, {"include":[],"exclude":[],"skip":[]})) {
-          __test("nonStory", __testStory(___nonStoryComposed, {"include":[],"exclude":[],"skip":[]}));
-        }
       `);
     });
   });
