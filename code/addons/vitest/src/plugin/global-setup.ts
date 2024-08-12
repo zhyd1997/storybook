@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { spawn, type ChildProcess } from 'node:child_process';
-import { log } from './utils';
+import { type ChildProcess, spawn } from 'node:child_process';
 
 import type { GlobalSetupContext } from 'vitest/node';
+
+import { log } from './utils';
 
 let storybookProcess: ChildProcess | null = null;
 
