@@ -71,8 +71,11 @@
     "prep": "jiti ../../../scripts/prepare/addon-bundle.ts"
   },
   "dependencies": {
-    "magic-string": "^0.30.10",
-    "typescript": "^5.3.2"
+    "@babel/core": "^7.25.2",
+    "@babel/generator": "^7.25.0",
+    "@babel/parser": "^7.25.3",
+    "@babel/types": "^7.25.2",
+    "@storybook/csf": "^0.1.11"
   },
   "devDependencies": {
     "ts-dedent": "^2.2.0",

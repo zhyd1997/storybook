@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
+/* eslint-disable no-underscore-dangle */
 import type { RunnerTask, TaskContext, TaskMeta } from 'vitest';
+
+import type { ComponentAnnotations, ComposedStoryFn } from 'storybook/internal/types';
+
+import { isExportStory } from '@storybook/csf';
 
 import type { UserOptions } from './types';
 import { setViewport } from './viewports';
 
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable @typescript-eslint/naming-convention */
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable no-underscore-dangle */
 export { setViewport } from './viewports';
 
 type TagsFilter = Required<UserOptions['tags']>;
@@ -25,14 +28,17 @@ export const shouldSkip = (storyTags: string[], tagsFilter: TagsFilter) => {
   );
 };
 
-export const testStory = (
-  exportName: string,
-  modulePath: string,
-  composeStoriesFn: ComposeStoriesFn,
+export const isValidTest = (
+  story: ComposedStoryFn,
+  meta: ComponentAnnotations,
   tagsFilter: TagsFilter
 ) => {
+  const isValidStory = isExportStory(story.storyName, meta);
+  return isValidStory && shouldRun(story.tags, tagsFilter);
+};
+
+export const testStory = (Story: ComposedStoryFn, tagsFilter: TagsFilter) => {
   return async ({ task, skip }: TaskContext) => {
-    const Story = (await getStories(modulePath, composeStoriesFn))[exportName];
     if (Story === undefined || shouldSkip(Story.tags, tagsFilter)) {
       skip();
     }
@@ -46,18 +52,4 @@ export const testStory = (
     const runFn = Story.run ?? Story.play;
     await runFn();
   };
-};
-
-type ComposedStories = Record<string, any>;
-type ComposeStoriesFn = (module: any) => ComposedStories;
-
-let _cached: ComposedStories | null = null;
-export const getStories = async (
-  modulePath: string,
-  composeStoriesFn: ComposeStoriesFn
-): Promise<ComposedStories> => {
-  if (_cached) return _cached;
-  const stories = (await import(/* @vite-ignore */ modulePath)) as unknown;
-  _cached = composeStoriesFn(stories);
-  return _cached;
 };

@@ -43,11 +43,11 @@ export default mergeConfig(
         '**/Zoom.stories.tsx',
       ],
       browser: {
-        enabled: true,
+        // enabled: true,
         name: 'chromium',
         provider: 'playwright',
         headless: true,
-        screenshotFailures: true,
+        screenshotFailures: false,
       },
       setupFiles: ['./storybook.setup.ts'],
       environment: 'happy-dom',
