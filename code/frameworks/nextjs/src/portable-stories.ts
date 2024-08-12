@@ -9,6 +9,7 @@ import type {
   Args,
   ComposedStoryFn,
   NamedOrDefaultProjectAnnotations,
+  NormalizedProjectAnnotations,
   ProjectAnnotations,
   Store_CSFExports,
   StoriesWithPartialProps,
@@ -38,12 +39,12 @@ import * as nextJsAnnotations from './preview';
  * @param projectAnnotations - e.g. (import projectAnnotations from '../.storybook/preview')
  */
 export function setProjectAnnotations(
-  projectAnnotations:
-    | NamedOrDefaultProjectAnnotations<ReactRenderer>
-    | NamedOrDefaultProjectAnnotations<ReactRenderer>[]
-): ProjectAnnotations<ReactRenderer> {
+  projectAnnotations: NamedOrDefaultProjectAnnotations | NamedOrDefaultProjectAnnotations[]
+): NormalizedProjectAnnotations<ReactRenderer> {
   setDefaultProjectAnnotations(INTERNAL_DEFAULT_PROJECT_ANNOTATIONS);
-  return originalSetProjectAnnotations<ReactRenderer>(projectAnnotations);
+  return originalSetProjectAnnotations(
+    projectAnnotations
+  ) as NormalizedProjectAnnotations<ReactRenderer>;
 }
 
 // This will not be necessary once we have auto preset loading

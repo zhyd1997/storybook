@@ -35,4 +35,4 @@ const annotations = setProjectAnnotations([
   },
 ]);
 
-beforeAll(annotations.beforeAll!);
+beforeAll(annotations.beforeAll);
