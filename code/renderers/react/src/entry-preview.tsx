@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import semver from 'semver';
+
 import type { Decorator } from './public-types';
 
 export const parameters = { renderer: 'react' };
