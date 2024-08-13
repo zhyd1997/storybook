@@ -419,6 +419,14 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
           ${isSvelte ? 'svelteTesting(),' : ''}
           ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
         ],
+        optimizeDeps: {
+          include: [
+            "next/image",
+            "next/dist/compiled/react",
+            "sb-original/default-loader",
+            "sb-original/image-context",
+          ],
+        },
         resolve: {
           preserveSymlinks: true,
           ${isVue ? "alias: { vue: 'vue/dist/vue.esm-bundler.js' }," : ''}
