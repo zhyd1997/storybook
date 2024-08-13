@@ -428,9 +428,9 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
             "sb-original/default-loader",
             "sb-original/image-context",
           ],
-        }`
+        },`
             : ''
-        },
+        }
         resolve: {
           preserveSymlinks: true,
           ${isVue ? "alias: { vue: 'vue/dist/vue.esm-bundler.js' }," : ''}

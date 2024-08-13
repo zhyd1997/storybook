@@ -49,7 +49,7 @@ export async function vitestTransform({
         logger.warn(
           dedent`
             [Storybook]: Could not calculate story title for "${fileName}".
-            Please make sure that this file matches the globs included in the "stories" array in your Storybook configuration at "${configDir}".
+            Please make sure that this file matches the globs included in the "stories" field in your Storybook configuration at "${configDir}".
           `
         );
       }
@@ -128,6 +128,16 @@ export async function vitestTransform({
   };
 
   Object.entries(parsed._storyStatements).forEach(([exportName, node]) => {
+    if (node === null) {
+      logger.warn(
+        dedent`
+          [Storybook]: Could not transform "${exportName}" story into test at "${fileName}".
+          Please make sure to define stories in the same file and not re-export stories coming from other files".
+        `
+      );
+      return;
+    }
+
     ast.program.body.push(
       ...getTestStatementForStory({
         exportName,

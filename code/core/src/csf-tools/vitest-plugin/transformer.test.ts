@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getStoryTitle } from '@storybook/core/common';
 
@@ -27,7 +27,7 @@ const transform = async ({
     exclude: [],
     skip: [],
   },
-  configDir = '',
+  configDir = '.storybook',
   stories = [],
 }) => {
   const transformed = await originalTransform({ code, fileName, configDir, stories, tagsFilter });
@@ -51,7 +51,7 @@ describe('transformer', () => {
   });
 
   describe('default exports (meta)', () => {
-    it('should add title to inline default export in story file if not present', async () => {
+    it('should add title to inline default export if not present', async () => {
       const code = `
         import { _test } from 'bla';
         export default {
@@ -76,7 +76,7 @@ describe('transformer', () => {
       `);
     });
 
-    it('should NOT add title to inline default export in story file if already present', async () => {
+    it('should overwrite title to inline default export if already present', async () => {
       const code = `
         export default {
           title: 'Button',
@@ -86,21 +86,21 @@ describe('transformer', () => {
 
       const result = await transform({ code });
 
-      expect(getStoryTitle).not.toHaveBeenCalled();
+      expect(getStoryTitle).toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as _test } from "vitest";
         import { composeStory as _composeStory } from "storybook/internal/preview-api";
         import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const _meta = {
-          title: 'Button',
+          title: "automatic/calculated/title",
           component: Button
         };
         export default _meta;
       `);
     });
 
-    it('should add title to const declared default export in story file if not present', async () => {
+    it('should add title to const declared default export if not present', async () => {
       const code = `
         const meta = {
           component: Button,
@@ -125,7 +125,7 @@ describe('transformer', () => {
       `);
     });
 
-    it('should NOT add title to const declared default export in story file if already present', async () => {
+    it('should overwrite title to const declared default export if already present', async () => {
       const code = `
         const meta = {
           title: 'Button',
@@ -137,14 +137,14 @@ describe('transformer', () => {
 
       const result = await transform({ code });
 
-      expect(getStoryTitle).not.toHaveBeenCalled();
+      expect(getStoryTitle).toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
         import { test as _test } from "vitest";
         import { composeStory as _composeStory } from "storybook/internal/preview-api";
         import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const meta = {
-          title: 'Button',
+          title: "automatic/calculated/title",
           component: Button
         };
         export default meta;
@@ -181,7 +181,7 @@ describe('transformer', () => {
             label: 'Primary Button'
           }
         };
-        const _composedPrimary = _composeStory(Primary, _meta);
+        const _composedPrimary = _composeStory(Primary, _meta, undefined, undefined, "Primary");
         if (_isValidTest(_composedPrimary.tags, {"include":["test"],"exclude":[],"skip":[]})) {
           _test("Primary", _testStory(_composedPrimary, {"include":["test"],"exclude":[],"skip":[]}));
         }
@@ -216,7 +216,7 @@ describe('transformer', () => {
           }
         };
         export { Primary };
-        const _composedPrimary = _composeStory(Primary, _meta);
+        const _composedPrimary = _composeStory(Primary, _meta, undefined, undefined, "Primary");
         if (_isValidTest(_composedPrimary.tags, {"include":["test"],"exclude":[],"skip":[]})) {
           _test("Primary", _testStory(_composedPrimary, {"include":["test"],"exclude":[],"skip":[]}));
         }
@@ -240,7 +240,7 @@ describe('transformer', () => {
         import { composeStory as _composeStory } from "storybook/internal/preview-api";
         import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const _meta = {
-          title: 'Button',
+          title: "automatic/calculated/title",
           component: Button,
           excludeStories: ['nonStory']
         };
@@ -270,12 +270,12 @@ describe('transformer', () => {
         import { composeStory as _composeStory } from "storybook/internal/preview-api";
         import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const meta = {
-          title: 'Button',
+          title: "automatic/calculated/title",
           component: Button
         };
         export default meta;
         export const Primary = {};
-        const _composedPrimary = _composeStory(Primary, meta);
+        const _composedPrimary = _composeStory(Primary, meta, undefined, undefined, "Primary");
         if (_isValidTest(_composedPrimary.tags, {"include":["test"],"exclude":[],"skip":[]})) {
           _test("Primary", _testStory(_composedPrimary, {"include":["test"],"exclude":[],"skip":[]}));
         }
@@ -306,6 +306,46 @@ describe('transformer', () => {
       // The original locations of the transformed code should match with the ones of the original code
       expect(originalPosition.line, 'original line location').toBe(originalPrimaryLine);
       expect(originalPosition.column, 'original column location').toBe(originalPrimaryColumn);
+    });
+  });
+
+  describe('error handling', () => {
+    const warnSpy = vi.spyOn(console, 'warn');
+    beforeEach(() => {
+      vi.mocked(getStoryTitle).mockRestore();
+      warnSpy.mockReset();
+    });
+
+    it('should warn when autotitle is not successful', async () => {
+      const code = `
+        export default {}
+        export const Primary = {};
+      `;
+
+      vi.mocked(getStoryTitle).mockImplementation(() => undefined);
+
+      warnSpy.mockImplementation(() => {});
+
+      await transform({ code });
+      expect(warnSpy.mock.calls[0]).toMatchInlineSnapshot(`
+        [Storybook]: Could not calculate story title for "src/components/Button.stories.js".
+        Please make sure that this file matches the globs included in the "stories" field in your Storybook configuration at ".storybook".
+      `);
+    });
+
+    it('should warn when on unsupported story formats', async () => {
+      const code = `
+        export default {}
+        export { Primary } from './Button.stories';
+      `;
+
+      warnSpy.mockImplementation(() => {});
+
+      await transform({ code });
+      expect(warnSpy.mock.calls[0]).toMatchInlineSnapshot(`
+        [Storybook]: Could not transform "Primary" story into test at "src/components/Button.stories.js".
+        Please make sure to define stories in the same file and not re-export stories coming from other files".
+      `);
     });
   });
 });
