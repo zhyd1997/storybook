@@ -490,7 +490,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
 
   packageJson.scripts = {
     ...packageJson.scripts,
-    vitest: 'vitest',
+    vitest: 'vitest --pass-with-no-tests',
   };
 
   // This workaround is needed because Vitest seems to have issues in link mode
