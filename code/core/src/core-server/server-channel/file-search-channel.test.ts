@@ -42,6 +42,7 @@ describe('file-search-channel', () => {
   const searchResultChannelListener = vi.fn();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     transport.setHandler.mockClear();
     transport.send.mockClear();
     searchResultChannelListener.mockClear();
