@@ -11,7 +11,8 @@ import type {
 } from '@storybook/core/types';
 import { isExportStory, storyNameFromExport, toId } from '@storybook/csf';
 
-import * as bc from '@babel/core';
+// @ts-expect-error File is not yet exposed, see https://github.com/babel/babel/issues/11350#issuecomment-644118606
+import { File as BabelFileClass } from '@babel/core';
 import bg, { type GeneratorOptions } from '@babel/generator';
 import bt from '@babel/traverse';
 import * as t from '@babel/types';
@@ -29,6 +30,18 @@ const traverse = (bt.default || bt) as typeof bt;
 const generate = (bg.default || bg) as typeof bg;
 
 const logger = console;
+
+// We add this BabelFile as a temporary workaround to deal with a BabelFileClass "ImportEquals should have a literal source" issue in no link mode with tsup
+interface BabelFile {
+  ast: t.File;
+  opts: any;
+  hub: any;
+  metadata: object;
+  path: any;
+  scope: any;
+  inputMap: object | null;
+  code: string;
+}
 
 function parseIncludeExclude(prop: t.Node) {
   if (t.isArrayExpression(prop)) {
@@ -175,7 +188,7 @@ export interface StaticStory extends Pick<StoryAnnotations, 'name' | 'parameters
 export class CsfFile {
   _ast: t.File;
 
-  _file: bc.BabelFile;
+  _file: BabelFile;
 
   _options: CsfOptions;
 
@@ -219,7 +232,7 @@ export class CsfFile {
     return this._options.makeTitle;
   }
 
-  constructor(ast: t.File, options: CsfOptions, file: bc.BabelFile) {
+  constructor(ast: t.File, options: CsfOptions, file: BabelFile) {
     this._ast = ast;
     this._file = file;
     this._options = options;
@@ -699,9 +712,8 @@ export const babelParseFile = ({
   code: string;
   filename?: string;
   ast?: t.File;
-}): bc.BabelFile => {
-  // @ts-expect-error File is not yet exposed, see https://github.com/babel/babel/issues/11350#issuecomment-644118606
-  return new bc.File({ filename }, { code, ast: ast ?? babelParse(code) });
+}): BabelFile => {
+  return new BabelFileClass({ filename }, { code, ast: ast ?? babelParse(code) });
 };
 
 export const loadCsf = (code: string, options: CsfOptions) => {
