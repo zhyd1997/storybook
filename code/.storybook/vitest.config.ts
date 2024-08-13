@@ -43,7 +43,7 @@ export default mergeConfig(
         '**/Zoom.stories.tsx',
       ],
       browser: {
-        // enabled: true,
+        enabled: true,
         name: 'chromium',
         provider: 'playwright',
         headless: true,
