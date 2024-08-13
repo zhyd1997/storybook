@@ -19,6 +19,7 @@ type GetStoryIdOptions = StoryIdData & {
   configDir: string;
   stories: StoriesEntry[];
   workingDir?: string;
+  userTitle?: string;
   storyFilePath: string;
 };
 
@@ -51,6 +52,7 @@ export function getStoryTitle({
   configDir,
   stories,
   workingDir = process.cwd(),
+  userTitle,
 }: Omit<GetStoryIdOptions, 'exportedStoryName'>) {
   const normalizedStories = normalizeStories(stories, {
     configDir,
@@ -61,6 +63,6 @@ export function getStoryTitle({
   const importPath = posix(normalizeStoryPath(relativePath));
 
   return normalizedStories
-    .map((normalizeStory) => userOrAutoTitleFromSpecifier(importPath, normalizeStory))
+    .map((normalizeStory) => userOrAutoTitleFromSpecifier(importPath, normalizeStory, userTitle))
     .filter(Boolean)[0];
 }

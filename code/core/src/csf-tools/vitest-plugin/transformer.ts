@@ -38,13 +38,12 @@ export async function vitestTransform({
     transformInlineMeta: true,
     makeTitle: (title) => {
       const result =
-        title ||
         getStoryTitle({
           storyFilePath: fileName,
           configDir,
           stories,
-        }) ||
-        'unknown';
+          userTitle: title,
+        }) || 'unknown';
 
       if (result === 'unknown') {
         logger.warn(
@@ -64,13 +63,16 @@ export async function vitestTransform({
 
   const metaNode = parsed._metaNode as t.ObjectExpression;
 
-  const hasTitleProperty = metaNode.properties.some(
+  const metaTitleProperty = metaNode.properties.find(
     (prop) => t.isObjectProperty(prop) && t.isIdentifier(prop.key) && prop.key.name === 'title'
   );
 
-  if (!hasTitleProperty) {
-    const title = parsed._meta?.title || 'unknown';
-    metaNode.properties.push(t.objectProperty(t.identifier('title'), t.stringLiteral(title)));
+  const metaTitle = t.stringLiteral(parsed._meta?.title || 'unknown');
+  if (!metaTitleProperty) {
+    metaNode.properties.push(t.objectProperty(t.identifier('title'), metaTitle));
+  } else {
+    // If the title is present in meta, overwrite it because autotitle can still affect existing titles
+    metaTitleProperty.value = metaTitle;
   }
 
   if (!metaNode || !parsed._meta) {
