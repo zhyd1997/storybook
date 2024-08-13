@@ -2,7 +2,7 @@
  * Use commander and prompts to gather a list of options for a script
  */
 import chalk from 'chalk';
-import { program } from 'commander';
+import { type Command, type Option as CommanderOption, program } from 'commander';
 // eslint-disable-next-line import/extensions
 import kebabCase from 'lodash/kebabCase.js';
 import prompts from 'prompts';
@@ -116,7 +116,7 @@ function longFlag(key: OptionId, option: Option) {
   return inverse ? `no-${kebabCase(key)}` : kebabCase(key);
 }
 
-function optionFlags(key: OptionId, option: Option, existingOptions: program.Option[]) {
+function optionFlags(key: OptionId, option: Option, existingOptions: CommanderOption[]) {
   const optionShortFlag = `-${shortFlag(key, option)}`;
   let base;
   if (existingOptions.some((opt) => opt.short === optionShortFlag)) {
@@ -131,7 +131,7 @@ function optionFlags(key: OptionId, option: Option, existingOptions: program.Opt
 }
 
 export function getOptions<TOptions extends OptionSpecifier>(
-  command: program.Command,
+  command: Command,
   options: TOptions,
   argv: string[]
 ): MaybeOptionValues<TOptions> {
