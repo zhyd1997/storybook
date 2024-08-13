@@ -869,7 +869,7 @@ workflows:
           requires:
             - build-sandboxes
       - vitest-integration:
-          parallelism: 12
+          parallelism: 13
           requires:
             - create-sandboxes
       - test-portable-stories:
