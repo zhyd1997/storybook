@@ -253,7 +253,7 @@ describe('transformer', () => {
 
   describe('source map calculation', () => {
     it('should remap the location of an inline named export to its relative testStory function', async () => {
-      const originalCode = dedent`
+      const originalCode = `
         const meta = {
           title: 'Button',
           component: Button,
