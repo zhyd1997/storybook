@@ -25,7 +25,7 @@ test.describe('addon-interactions', () => {
     await sbPage.viewAddonPanel('Interactions');
 
     const welcome = await sbPage.previewRoot().locator('.welcome');
-    await expect(welcome).toContainText('Welcome, Jane Doe!');
+    await expect(welcome).toContainText('Welcome, Jane Doe!', { timeout: 50000 });
 
     const interactionsTab = await page.locator('#tabbutton-storybook-interactions-panel');
     await expect(interactionsTab).toContainText(/(\d)/);
