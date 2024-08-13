@@ -383,6 +383,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     ${isVue ? 'import * as vueAnnotations from "../src/stories/renderers/vue3/preview.js"' : ''}
 
     const annotations = setProjectAnnotations([
+      { tags: ['vitest'] },
       rendererDocsAnnotations,
       projectAnnotations,
       coreAnnotations,
