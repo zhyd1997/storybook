@@ -70,7 +70,7 @@ export async function vitestTransform({
   const metaTitle = t.stringLiteral(parsed._meta?.title || 'unknown');
   if (!metaTitleProperty) {
     metaNode.properties.push(t.objectProperty(t.identifier('title'), metaTitle));
-  } else {
+  } else if (t.isObjectProperty(metaTitleProperty)) {
     // If the title is present in meta, overwrite it because autotitle can still affect existing titles
     metaTitleProperty.value = metaTitle;
   }
