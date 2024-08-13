@@ -111,7 +111,6 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       }
 
       log('Final plugin options:', finalOptions);
-      return config;
     },
     async transform(code, id) {
       if (process.env.VITEST !== 'true') {
