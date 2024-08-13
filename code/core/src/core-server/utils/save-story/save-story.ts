@@ -49,6 +49,8 @@ const removeExtraNewlines = (code: string, name: string) => {
     : code;
 };
 
+const IS_CLI_EXAMPLE = /^example-(button|header|page)--/;
+
 export function initializeSaveStory(channel: Channel, options: Options, coreConfig: CoreConfig) {
   channel.on(SAVE_STORY_REQUEST, async ({ id, payload }: RequestData<SaveStoryRequestPayload>) => {
     const { csfId, importPath, args, name } = payload;
@@ -120,7 +122,9 @@ export function initializeSaveStory(channel: Channel, options: Options, coreConf
         error: null,
       } satisfies ResponseData<SaveStoryResponsePayload>);
 
-      if (!coreConfig.disableTelemetry) {
+      // don't take credit for save-from-controls actions against CLI example stories
+      const isCLIExample = IS_CLI_EXAMPLE.test(newStoryId ?? '');
+      if (!coreConfig.disableTelemetry && !isCLIExample) {
         await telemetry('save-story', {
           action: name ? 'createStory' : 'updateStory',
           success: true,
