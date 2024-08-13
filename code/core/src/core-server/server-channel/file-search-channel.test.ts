@@ -109,12 +109,9 @@ describe('file-search-channel', () => {
         payload: {},
       } satisfies RequestData<FileComponentSearchRequestPayload>);
 
-      await vi.waitFor(
-        () => {
-          expect(searchResultChannelListener).toHaveBeenCalled();
-        },
-        { timeout: 2000 }
-      );
+      await vi.waitFor(() => {
+        expect(searchResultChannelListener).toHaveBeenCalled();
+      });
 
       expect(searchResultChannelListener).toHaveBeenCalledWith({
         id: data.searchQuery,
