@@ -25,6 +25,8 @@ const logger = console;
 
 const root = resolvePath(__dirname, '..');
 
+const opts = program.opts();
+
 const startVerdaccio = async () => {
   const ready = {
     proxy: false,
@@ -193,13 +195,13 @@ const run = async () => {
 
   logger.log(`📦 found ${packages.length} storybook packages at version ${chalk.blue(version)}`);
 
-  if (program.publish) {
+  if (opts.publish) {
     await publish(packages, 'http://localhost:6002');
   }
 
   await execa('npx', ['rimraf', '.npmrc'], { cwd: root });
 
-  if (!program.open) {
+  if (!opts.open) {
     verdaccioServer.close();
     process.exit(0);
   }
