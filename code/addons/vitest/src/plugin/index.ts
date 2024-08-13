@@ -4,10 +4,10 @@ import { join, resolve } from 'node:path';
 import type { Plugin } from 'vitest/config';
 
 import { loadAllPresets, validateConfigurationFiles } from 'storybook/internal/common';
+import { vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { StoriesEntry } from 'storybook/internal/types';
 
-import { transform } from './transformer';
 import type { InternalOptions, UserOptions } from './types';
 import { log } from './utils';
 
@@ -17,11 +17,6 @@ const defaultOptions: UserOptions = {
   storybookUrl: 'http://localhost:6006',
   snapshot: false,
   skipRunningStorybook: false,
-  tags: {
-    skip: [],
-    exclude: [],
-    include: ['test'],
-  },
 };
 
 export const storybookTest = (options?: UserOptions): Plugin => {
@@ -29,8 +24,9 @@ export const storybookTest = (options?: UserOptions): Plugin => {
     ...defaultOptions,
     ...options,
     tags: {
-      ...defaultOptions.tags,
-      ...options?.tags,
+      include: options?.tags?.include ?? ['test'],
+      exclude: options?.tags?.exclude ?? [],
+      skip: options?.tags?.skip ?? [],
     },
   } as InternalOptions;
 
@@ -123,10 +119,11 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       }
 
       if (id.match(/(story|stories)\.[cm]?[jt]sx?$/)) {
-        return transform({
+        return vitestTransform({
           code,
-          id,
-          options: finalOptions,
+          fileName: id,
+          configDir: finalOptions.configDir,
+          tagsFilter: finalOptions.tags,
           stories,
         });
       }

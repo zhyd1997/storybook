@@ -33,7 +33,7 @@ export default mergeConfig(
       include: [
         // TODO: test all core and addon stories later
         // './core/**/components/**/*.{story,stories}.?(c|m)[jt]s?(x)',
-        '../addons/interactions/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        '../addons/interactions/src/**/*.{story,stories}.?(c|m)[jt]s?(x)',
       ],
       exclude: [
         ...defaultExclude,
@@ -47,7 +47,7 @@ export default mergeConfig(
         name: 'chromium',
         provider: 'playwright',
         headless: true,
-        screenshotFailures: true,
+        screenshotFailures: false,
       },
       setupFiles: ['./storybook.setup.ts'],
       environment: 'happy-dom',
