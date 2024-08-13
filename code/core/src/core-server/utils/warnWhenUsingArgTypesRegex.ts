@@ -1,5 +1,4 @@
 import type { StorybookConfig } from '@storybook/core/types';
-import { readFile } from 'fs-extra';
 
 import { babelParse } from '@storybook/core/csf-tools';
 
