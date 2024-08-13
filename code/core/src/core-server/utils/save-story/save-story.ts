@@ -16,7 +16,7 @@ import { storyNameFromExport, toId } from '@storybook/csf';
 import { printCsf, readCsf } from '@storybook/core/csf-tools';
 import { logger } from '@storybook/core/node-logger';
 import type { CoreConfig, Options } from '@storybook/core/types';
-import { telemetry } from '@storybook/core/telemetry';
+import { telemetry, isExampleStoryId } from '@storybook/core/telemetry';
 
 import { basename, join } from 'node:path';
 import { updateArgsInCsfFile } from './update-args-in-csf-file';
@@ -48,8 +48,6 @@ const removeExtraNewlines = (code: string, name: string) => {
     ? before + story.replaceAll(/(\r\n|\r|\n)(\r\n|\r|\n)([ \t]*[a-z0-9_]+): /gi, '$2$3:') + after
     : code;
 };
-
-const IS_CLI_EXAMPLE = /^example-(button|header|page)--/;
 
 export function initializeSaveStory(channel: Channel, options: Options, coreConfig: CoreConfig) {
   channel.on(SAVE_STORY_REQUEST, async ({ id, payload }: RequestData<SaveStoryRequestPayload>) => {
@@ -123,7 +121,7 @@ export function initializeSaveStory(channel: Channel, options: Options, coreConf
       } satisfies ResponseData<SaveStoryResponsePayload>);
 
       // don't take credit for save-from-controls actions against CLI example stories
-      const isCLIExample = IS_CLI_EXAMPLE.test(newStoryId ?? '');
+      const isCLIExample = isExampleStoryId(newStoryId ?? csfId);
       if (!coreConfig.disableTelemetry && !isCLIExample) {
         await telemetry('save-story', {
           action: name ? 'createStory' : 'updateStory',
