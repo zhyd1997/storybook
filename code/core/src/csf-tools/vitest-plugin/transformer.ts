@@ -92,9 +92,16 @@ export async function vitestTransform({
     const composeStoryCall = t.variableDeclaration('const', [
       t.variableDeclarator(
         composedStoryId,
-        t.callExpression(composeStoryId, [t.identifier(exportName), t.identifier(metaExportName)])
+        t.callExpression(composeStoryId, [
+          t.identifier(exportName),
+          t.identifier(metaExportName),
+          t.identifier('undefined'),
+          t.identifier('undefined'),
+          t.stringLiteral(exportName),
+        ])
       ),
     ]);
+
     // Preserve sourcemaps location
     composeStoryCall.loc = node.loc;
 
