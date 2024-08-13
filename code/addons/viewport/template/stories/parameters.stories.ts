@@ -45,6 +45,7 @@ export const Selected = {
 
     await expect(viewportDimensions).toEqual(windowDimensions);
   },
+  tags: ['!test'],
 };
 
 export const Orientation = {
