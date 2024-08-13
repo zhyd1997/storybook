@@ -57,10 +57,10 @@ describe('CsfFile', () => {
           { transformInlineMeta: true }
         )
       ).toMatchInlineSnapshot(`
-        "const __STORYBOOK_META__ = {
+        "const _meta = {
           title: 'foo/bar'
         };
-        export default __STORYBOOK_META__;"
+        export default _meta;"
       `);
     });
 

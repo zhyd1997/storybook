@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { getStoryTitle } from 'storybook/internal/common';
+import { getStoryTitle } from '@storybook/core/common';
 
 import { type RawSourceMap, SourceMapConsumer } from 'source-map';
 
-import { transform as originalTransform } from './transformer';
+import { vitestTransform as originalTransform } from './transformer';
 
-vi.mock('storybook/internal/common', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('storybook/internal/common')>();
+vi.mock('@storybook/core/common', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@storybook/core/common')>();
   return {
     ...actual,
     getStoryTitle: vi.fn(() => 'automatic/calculated/title'),
@@ -21,19 +21,15 @@ expect.addSnapshotSerializer({
 
 const transform = async ({
   code = '',
-  id = 'src/components/Button.stories.js',
-  options = {
-    tags: { include: [], exclude: [], skip: [] },
-    configDir: '',
-    storybookScript: '',
-    skipRunningStorybook: true,
-    snapshot: false,
-    storybookUrl: '',
-    debug: false,
+  fileName = 'src/components/Button.stories.js',
+  tagsFilter = {
+    include: [],
+    exclude: [],
   },
+  configDir = '',
   stories = [],
 }) => {
-  const transformed = await originalTransform({ code, id, options, stories });
+  const transformed = await originalTransform({ code, fileName, configDir, stories, tagsFilter });
   if (typeof transformed === 'string') {
     return { code: transformed, map: null };
   }
@@ -45,9 +41,9 @@ describe('transformer', () => {
   describe('no-op', () => {
     it('should return original code if the file is not a story file', async () => {
       const code = `console.log('Not a story file');`;
-      const id = 'src/components/Button.js';
+      const fileName = 'src/components/Button.js';
 
-      const result = await transform({ code, id });
+      const result = await transform({ code, fileName });
 
       expect(result.code).toMatchInlineSnapshot(`console.log('Not a story file');`);
     });
@@ -56,6 +52,7 @@ describe('transformer', () => {
   describe('default exports (meta)', () => {
     it('should add title to inline default export in story file if not present', async () => {
       const code = `
+        import { _test } from 'bla';
         export default {
           component: Button,
         };
@@ -66,14 +63,15 @@ describe('transformer', () => {
       expect(getStoryTitle).toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
-        const __STORYBOOK_META__ = {
+        import { test as _test2 } from "vitest";
+        import { composeStory as _composeStory } from "storybook/internal/preview-api";
+        import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
+        import { _test } from 'bla';
+        const _meta = {
           component: Button,
           title: "automatic/calculated/title"
         };
-        export default __STORYBOOK_META__;
+        export default _meta;
       `);
     });
 
@@ -90,14 +88,14 @@ describe('transformer', () => {
       expect(getStoryTitle).not.toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
-        const __STORYBOOK_META__ = {
+        import { test as _test } from "vitest";
+        import { composeStory as _composeStory } from "storybook/internal/preview-api";
+        import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
+        const _meta = {
           title: 'Button',
           component: Button
         };
-        export default __STORYBOOK_META__;
+        export default _meta;
       `);
     });
 
@@ -115,9 +113,9 @@ describe('transformer', () => {
       expect(getStoryTitle).toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
+        import { test as _test } from "vitest";
+        import { composeStory as _composeStory } from "storybook/internal/preview-api";
+        import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const meta = {
           component: Button,
           title: "automatic/calculated/title"
@@ -141,9 +139,9 @@ describe('transformer', () => {
       expect(getStoryTitle).not.toHaveBeenCalled();
 
       expect(result.code).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
+        import { test as _test } from "vitest";
+        import { composeStory as _composeStory } from "storybook/internal/preview-api";
+        import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const meta = {
           title: 'Button',
           component: Button
@@ -169,22 +167,22 @@ describe('transformer', () => {
       const result = await transform({ code });
 
       expect(result.code).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
-        const __STORYBOOK_META__ = {
+        import { test as _test } from "vitest";
+        import { composeStory as _composeStory } from "storybook/internal/preview-api";
+        import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
+        const _meta = {
           component: Button,
           title: "automatic/calculated/title"
         };
-        export default __STORYBOOK_META__;
+        export default _meta;
         export const Primary = {
           args: {
             label: 'Primary Button'
           }
         };
-        const ___PrimaryComposed = __composeStory(Primary, __STORYBOOK_META__);
-        if (__isValidTest(___PrimaryComposed, __STORYBOOK_META__, {"include":[],"exclude":[],"skip":[]})) {
-          __test("Primary", __testStory(___PrimaryComposed, {"include":[],"exclude":[],"skip":[]}));
+        const _composedPrimary = _composeStory(Primary, _meta);
+        if (_isValidTest(_composedPrimary, _meta, {"include":[],"exclude":[]})) {
+          _test("Primary", _testStory(_composedPrimary, {"include":[],"exclude":[]}));
         }
       `);
     });
@@ -204,22 +202,22 @@ describe('transformer', () => {
       const result = await transform({ code });
 
       expect(result.code).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
-        const __STORYBOOK_META__ = {
+        import { test as _test } from "vitest";
+        import { composeStory as _composeStory } from "storybook/internal/preview-api";
+        import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
+        const _meta = {
           title: "automatic/calculated/title"
         };
-        export default __STORYBOOK_META__;
+        export default _meta;
         const Primary = {
           args: {
             label: 'Primary Button'
           }
         };
         export { Primary };
-        const ___PrimaryComposed = __composeStory(Primary, __STORYBOOK_META__);
-        if (__isValidTest(___PrimaryComposed, __STORYBOOK_META__, {"include":[],"exclude":[],"skip":[]})) {
-          __test("Primary", __testStory(___PrimaryComposed, {"include":[],"exclude":[],"skip":[]}));
+        const _composedPrimary = _composeStory(Primary, _meta);
+        if (_isValidTest(_composedPrimary, _meta, {"include":[],"exclude":[]})) {
+          _test("Primary", _testStory(_composedPrimary, {"include":[],"exclude":[]}));
         }
       `);
     });
@@ -237,15 +235,15 @@ describe('transformer', () => {
       const result = await transform({ code });
 
       expect(result.code).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
-        const __STORYBOOK_META__ = {
+        import { test as _test } from "vitest";
+        import { composeStory as _composeStory } from "storybook/internal/preview-api";
+        import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
+        const _meta = {
           title: 'Button',
           component: Button,
           excludeStories: ['nonStory']
         };
-        export default __STORYBOOK_META__;
+        export default _meta;
         export const nonStory = 123;
       `);
     });
@@ -267,29 +265,29 @@ describe('transformer', () => {
       });
 
       expect(transformedCode).toMatchInlineSnapshot(`
-        import { test as __test } from "vitest";
-        import { composeStory as __composeStory } from "storybook/internal/preview-api";
-        import { testStory as __testStory, isValidTest as __isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
+        import { test as _test } from "vitest";
+        import { composeStory as _composeStory } from "storybook/internal/preview-api";
+        import { testStory as _testStory, isValidTest as _isValidTest } from "@storybook/experimental-addon-vitest/internal/test-utils";
         const meta = {
           title: 'Button',
           component: Button
         };
         export default meta;
         export const Primary = {};
-        const ___PrimaryComposed = __composeStory(Primary, meta);
-        if (__isValidTest(___PrimaryComposed, meta, {"include":[],"exclude":[],"skip":[]})) {
-          __test("Primary", __testStory(___PrimaryComposed, {"include":[],"exclude":[],"skip":[]}));
+        const _composedPrimary = _composeStory(Primary, meta);
+        if (_isValidTest(_composedPrimary, meta, {"include":[],"exclude":[]})) {
+          _test("Primary", _testStory(_composedPrimary, {"include":[],"exclude":[]}));
         }
       `);
 
-      const consumer = await new SourceMapConsumer(map as RawSourceMap);
+      const consumer = await new SourceMapConsumer(map as unknown as RawSourceMap);
 
       // Locate `__test("Primary"...` in the transformed code
       const testPrimaryLine =
-        transformedCode.split('\n').findIndex((line) => line.includes('__test("Primary"')) + 1;
+        transformedCode.split('\n').findIndex((line) => line.includes('_test("Primary"')) + 1;
       const testPrimaryColumn = transformedCode
         .split('\n')
-        [testPrimaryLine - 1].indexOf('__test("Primary"');
+        [testPrimaryLine - 1].indexOf('_test("Primary"');
 
       // Get the original position from the source map for `__test("Primary"...`
       const originalPosition = consumer.originalPositionFor({
@@ -307,8 +305,6 @@ describe('transformer', () => {
       // The original locations of the transformed code should match with the ones of the original code
       expect(originalPosition.line, 'original line location').toBe(originalPrimaryLine);
       expect(originalPosition.column, 'original column location').toBe(originalPrimaryColumn);
-
-      consumer.destroy();
     });
   });
 });

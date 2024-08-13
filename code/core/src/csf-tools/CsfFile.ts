@@ -11,6 +11,7 @@ import type {
 } from '@storybook/core/types';
 import { isExportStory, storyNameFromExport, toId } from '@storybook/csf';
 
+import * as bc from '@babel/core';
 import bg, { type GeneratorOptions } from '@babel/generator';
 import bt from '@babel/traverse';
 import * as t from '@babel/types';
@@ -174,6 +175,8 @@ export interface StaticStory extends Pick<StoryAnnotations, 'name' | 'parameters
 export class CsfFile {
   _ast: t.File;
 
+  _file: bc.BabelFile;
+
   _options: CsfOptions;
 
   _rawComponentPath?: string;
@@ -202,8 +205,9 @@ export class CsfFile {
 
   imports: string[];
 
-  constructor(ast: t.File, options: CsfOptions) {
+  constructor(ast: t.File, options: CsfOptions, file: bc.BabelFile) {
     this._ast = ast;
+    this._file = file;
     this._options = options;
     this.imports = [];
   }
@@ -308,12 +312,11 @@ export class CsfFile {
             !isVariableReference &&
             t.isExpression(node.declaration)
           ) {
-            self._metaVariableName = '__STORYBOOK_META__';
+            const metaId = path.scope.generateUidIdentifier('meta');
+            self._metaVariableName = metaId.name;
             const nodes = [
-              t.variableDeclaration('const', [
-                t.variableDeclarator(t.identifier(self._metaVariableName), node.declaration),
-              ]),
-              t.exportDefaultDeclaration(t.identifier(self._metaVariableName)),
+              t.variableDeclaration('const', [t.variableDeclarator(metaId, node.declaration)]),
+              t.exportDefaultDeclaration(metaId),
             ];
 
             // Preserve sourcemaps location
@@ -671,9 +674,26 @@ export class CsfFile {
   }
 }
 
+/**
+ * Using new babel.File is more powerful and give access to API such as buildCodeFrameError
+ */
+export const babelParseFile = ({
+  code,
+  filename = '',
+  ast,
+}: {
+  code: string;
+  filename?: string;
+  ast?: t.File;
+}): bc.BabelFile => {
+  // @ts-expect-error File is not yet exposed, see https://github.com/babel/babel/issues/11350#issuecomment-644118606
+  return new bc.File({ filename }, { code, ast: ast ?? babelParse(code) });
+};
+
 export const loadCsf = (code: string, options: CsfOptions) => {
   const ast = babelParse(code);
-  return new CsfFile(ast, options);
+  const file = babelParseFile({ code, filename: options.fileName, ast });
+  return new CsfFile(ast, options, file);
 };
 
 export const formatCsf = (
