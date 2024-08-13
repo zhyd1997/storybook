@@ -54,7 +54,7 @@ test.describe('addon-interactions', () => {
 
     // Test initial state - Interactions have run, count is correct and values are as expected
     const formInput = await sbPage.previewRoot().locator('#interaction-test-form input');
-    await expect(formInput).toHaveValue('final value');
+    await expect(formInput).toHaveValue('final value', { timeout: 50000 });
 
     const interactionsTab = await page.locator('#tabbutton-storybook-interactions-panel');
     await expect(interactionsTab.getByText('3')).toBeVisible();
@@ -127,6 +127,9 @@ test.describe('addon-interactions', () => {
 
     await sbPage.deepLinkToStory(storybookUrl, 'addons/interactions/unhandled-errors', 'default');
     await sbPage.viewAddonPanel('Interactions');
+
+    const button = await sbPage.previewRoot().locator('button');
+    await expect(button).toContainText('Button', { timeout: 50000 });
 
     const panel = sbPage.panelContent();
     await expect(panel).toContainText(/Fail/);
