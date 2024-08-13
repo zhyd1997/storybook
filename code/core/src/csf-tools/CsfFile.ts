@@ -143,7 +143,7 @@ export interface CsfOptions {
   makeTitle: (userTitle: string) => string;
   /**
    * If an inline meta is detected e.g. `export default { title: 'foo' }`
-   * it will be transformed into a constant format e.g. `export const __STORYBOOK_META__ = { title: 'foo' }; export default __STORYBOOK_META__;`
+   * it will be transformed into a constant format e.g. `export const _meta = { title: 'foo' }; export default _meta;`
    */
   transformInlineMeta?: boolean;
 }

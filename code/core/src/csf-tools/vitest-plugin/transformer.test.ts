@@ -23,8 +23,9 @@ const transform = async ({
   code = '',
   fileName = 'src/components/Button.stories.js',
   tagsFilter = {
-    include: [],
+    include: ['test'],
     exclude: [],
+    skip: [],
   },
   configDir = '',
   stories = [],
@@ -181,8 +182,8 @@ describe('transformer', () => {
           }
         };
         const _composedPrimary = _composeStory(Primary, _meta);
-        if (_isValidTest(_composedPrimary, _meta, {"include":[],"exclude":[]})) {
-          _test("Primary", _testStory(_composedPrimary, {"include":[],"exclude":[]}));
+        if (_isValidTest(_composedPrimary.tags, {"include":["test"],"exclude":[],"skip":[]})) {
+          _test("Primary", _testStory(_composedPrimary, {"include":["test"],"exclude":[],"skip":[]}));
         }
       `);
     });
@@ -216,8 +217,8 @@ describe('transformer', () => {
         };
         export { Primary };
         const _composedPrimary = _composeStory(Primary, _meta);
-        if (_isValidTest(_composedPrimary, _meta, {"include":[],"exclude":[]})) {
-          _test("Primary", _testStory(_composedPrimary, {"include":[],"exclude":[]}));
+        if (_isValidTest(_composedPrimary.tags, {"include":["test"],"exclude":[],"skip":[]})) {
+          _test("Primary", _testStory(_composedPrimary, {"include":["test"],"exclude":[],"skip":[]}));
         }
       `);
     });
@@ -275,8 +276,8 @@ describe('transformer', () => {
         export default meta;
         export const Primary = {};
         const _composedPrimary = _composeStory(Primary, meta);
-        if (_isValidTest(_composedPrimary, meta, {"include":[],"exclude":[]})) {
-          _test("Primary", _testStory(_composedPrimary, {"include":[],"exclude":[]}));
+        if (_isValidTest(_composedPrimary.tags, {"include":["test"],"exclude":[],"skip":[]})) {
+          _test("Primary", _testStory(_composedPrimary, {"include":["test"],"exclude":[],"skip":[]}));
         }
       `);
 

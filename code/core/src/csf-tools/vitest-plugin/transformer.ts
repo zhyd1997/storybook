@@ -24,6 +24,7 @@ export async function vitestTransform({
   tagsFilter: {
     include: string[];
     exclude: string[];
+    skip: string[];
   };
   stories: StoriesEntry[];
 }) {
@@ -99,8 +100,7 @@ export async function vitestTransform({
 
     const isValidTestCall = t.ifStatement(
       t.callExpression(isValidTestId, [
-        composedStoryId,
-        t.identifier(metaExportName),
+        t.memberExpression(composedStoryId, t.identifier('tags')),
         tagsFilterId,
       ]),
       t.blockStatement([

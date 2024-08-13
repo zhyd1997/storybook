@@ -17,11 +17,6 @@ const defaultOptions: UserOptions = {
   storybookUrl: 'http://localhost:6006',
   snapshot: false,
   skipRunningStorybook: false,
-  tags: {
-    skip: [],
-    exclude: [],
-    include: ['test'],
-  },
 };
 
 export const storybookTest = (options?: UserOptions): Plugin => {
@@ -29,8 +24,9 @@ export const storybookTest = (options?: UserOptions): Plugin => {
     ...defaultOptions,
     ...options,
     tags: {
-      ...defaultOptions.tags,
-      ...options?.tags,
+      include: options?.tags?.include ?? ['test'],
+      exclude: options?.tags?.exclude ?? [],
+      skip: options?.tags?.skip ?? [],
     },
   } as InternalOptions;
 
