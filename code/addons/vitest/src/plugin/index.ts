@@ -9,14 +9,11 @@ import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { StoriesEntry } from 'storybook/internal/types';
 
 import type { InternalOptions, UserOptions } from './types';
-import { log } from './utils';
 
 const defaultOptions: UserOptions = {
   storybookScript: undefined,
   configDir: undefined,
   storybookUrl: 'http://localhost:6006',
-  snapshot: false,
-  skipRunningStorybook: false,
 };
 
 export const storybookTest = (options?: UserOptions): Plugin => {
@@ -109,8 +106,6 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       if (Array.isArray(config.test.server.deps.inline)) {
         config.test.server.deps.inline.push('@storybook/experimental-addon-vitest');
       }
-
-      log('Final plugin options:', finalOptions);
     },
     async transform(code, id) {
       if (process.env.VITEST !== 'true') {

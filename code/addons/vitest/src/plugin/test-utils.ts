@@ -8,8 +8,6 @@ import type { ComposedStoryFn } from 'storybook/internal/types';
 import type { UserOptions } from './types';
 import { setViewport } from './viewports';
 
-export { setViewport } from './viewports';
-
 type TagsFilter = Required<UserOptions['tags']>;
 
 export const isValidTest = (storyTags: string[], tagsFilter: TagsFilter) => {

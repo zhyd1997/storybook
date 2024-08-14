@@ -7,6 +7,8 @@ import type { RunnerTask, TaskMeta } from 'vitest';
 import { Channel } from 'storybook/internal/channels';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - The module is augmented elsewhere but we need to duplicate it to avoid issues in no-link mode.
   // eslint-disable-next-line no-var
   var __STORYBOOK_ADDONS_CHANNEL__: Channel;
 }
@@ -29,8 +31,6 @@ const modifyErrorMessage = (currentTask: RunnerTask) => {
     const currentError = currentTask.result.errors[0];
     const storybookUrl = import.meta.env.__STORYBOOK_URL__;
     const storyUrl = `${storybookUrl}/?path=/story/${meta.storyId}&addonPanel=storybook/interactions/panel`;
-    // TODO: figure out why this is being called twice. For now we just do not modify the message again
-    if (currentError.message.includes(storyUrl)) return;
     currentError.message = `\n\x1B[34mClick to debug the error directly in Storybook: ${storyUrl}\x1B[39m\n\n${currentError.message}`;
   }
 };
