@@ -137,7 +137,7 @@ export function getOptions<TOptions extends OptionSpecifier>(
 ): MaybeOptionValues<TOptions> {
   Object.entries(options)
     .reduce((acc, [key, option]) => {
-      const flags = optionFlags(key, option, acc.options);
+      const flags = optionFlags(key, option, acc.options as any);
 
       if (option.type === 'boolean') {
         return acc.option(flags, option.description, !!option.inverse);
