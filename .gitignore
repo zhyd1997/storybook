@@ -54,4 +54,5 @@ code/bench-results/
 
 /packs
 code/.nx/cache
+.nx/cache
 !**/fixtures/**/yarn.lock
