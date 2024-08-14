@@ -64,21 +64,13 @@ module.exports = {
     },
     {
       // this package depends on a lot of peerDependencies we don't want to specify, because npm would install them
-      files: ['**/*.ts', '**/*.tsx'],
-      rules: {
-        'no-shadow': 'off',
-        '@typescript-eslint/ban-types': 'warn', // should become error, in the future
-      },
-    },
-    {
-      // this package depends on a lot of peerDependencies we don't want to specify, because npm would install them
       files: ['**/builder-vite/**/*.html'],
       rules: {
         '@typescript-eslint/no-unused-expressions': 'off', // should become error, in the future
       },
     },
     {
-      files: ['**/.storybook/**'],
+      files: ['**/.storybook/**', '**/scripts/**/*', 'vitest.d.ts', '**/vitest.config.*'],
       rules: {
         'import/no-extraneous-dependencies': [
           'error',
@@ -86,21 +78,17 @@ module.exports = {
         ],
       },
     },
-
     {
       files: [
         '*.test.*',
         '*.spec.*',
-        '**/template/**/*',
-        '**/vitest.config.*',
         '**/addons/docs/**/*',
         '**/__tests__/**',
         '**/__testfixtures__/**',
         '**/*.test.*',
         '**/*.stories.*',
-        '**/scripts/**/*',
         '**/*.mockdata.*',
-        'vitest.d.ts',
+        '**/template/**/*',
       ],
       rules: {
         'import/no-extraneous-dependencies': 'off',
