@@ -74,9 +74,11 @@
     "@storybook/csf": "^0.1.11"
   },
   "devDependencies": {
+    "@vitest/browser": "^2.0.0",
     "vitest": "^2.0.0"
   },
   "peerDependencies": {
+    "@vitest/browser": "^2.0.0",
     "storybook": "workspace:^",
     "vitest": "^2.0.0"
   },
