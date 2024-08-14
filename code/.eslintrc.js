@@ -59,18 +59,6 @@ module.exports = {
       },
     },
     {
-      files: [
-        '*.test.*',
-        '*.spec.*',
-        '**/template/**/*',
-        '**/vitest.config.ts',
-        '**/addons/docs/**/*',
-      ],
-      rules: {
-        'import/no-extraneous-dependencies': 'off',
-      },
-    },
-    {
       files: ['*.js', '*.jsx', '*.json', '*.html', '**/.storybook/*.ts', '**/.storybook/*.tsx'],
       parserOptions: {
         project: null,
@@ -142,10 +130,28 @@ module.exports = {
       },
     })),
     {
+      files: [
+        '*.test.*',
+        '*.spec.*',
+        '**/template/**/*',
+        '**/vitest.config.*',
+        '**/addons/docs/**/*',
+        '**/__tests__/**',
+        '**/__testfixtures__/**',
+        '**/*.test.*',
+        '**/*.stories.*',
+        '**/scripts/**/*',
+        '**/*.mockdata.*',
+        'vitest.d.ts',
+      ],
+      rules: {
+        'import/no-extraneous-dependencies': 'off',
+      },
+    },
+    {
       files: ['**/__tests__/**', '**/__testfixtures__/**', '**/*.test.*', '**/*.stories.*'],
       rules: {
         '@typescript-eslint/no-empty-function': 'off',
-        'import/no-extraneous-dependencies': 'off',
       },
     },
     {
