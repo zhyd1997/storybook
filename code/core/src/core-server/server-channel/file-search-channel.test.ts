@@ -18,8 +18,6 @@ import {
 import { searchFiles } from '../utils/search-files';
 import { initFileSearchChannel } from './file-search-channel';
 
-// In theory this is exactly what vi.mock should do without factory
-// But for some reason it doesn't work
 vi.mock(import('../utils/search-files'), async (importOriginal) => {
   const actual = await importOriginal();
   return { searchFiles: vi.fn(actual.searchFiles) };
