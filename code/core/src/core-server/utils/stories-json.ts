@@ -1,15 +1,17 @@
-import type { Server } from './server-connect';
 import { basename } from 'node:path';
-import { writeJSON } from 'fs-extra';
 
 import type { NormalizedStoriesSpecifier, StoryIndex } from '@storybook/core/types';
-import debounce from 'lodash/debounce.js';
 
 import { STORY_INDEX_INVALIDATED } from '@storybook/core/core-events';
+
+import { writeJSON } from 'fs-extra';
+import debounce from 'lodash/debounce.js';
+
 import type { StoryIndexGenerator } from './StoryIndexGenerator';
+import type { ServerChannel } from './get-server-channel';
+import type { Server } from './server-connect';
 import { watchStorySpecifiers } from './watch-story-specifiers';
 import { watchConfig } from './watchConfig';
-import type { ServerChannel } from './get-server-channel';
 
 export const DEBOUNCE = 100;
 

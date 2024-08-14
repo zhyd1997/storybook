@@ -1,8 +1,10 @@
 import { logger } from '@storybook/core/node-logger';
-import type { Server } from './server-connect';
+
 import { readFile } from 'fs-extra';
 import http from 'http';
 import https from 'https';
+
+import type { Server } from './server-connect';
 
 export async function getServer(
   app: Server,

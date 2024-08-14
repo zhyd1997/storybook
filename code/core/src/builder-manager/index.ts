@@ -1,17 +1,16 @@
 import { dirname, join, parse } from 'node:path';
-import fs from 'fs-extra';
-import sirv from 'sirv';
 
+import { stringifyProcessEnvs } from '@storybook/core/common';
+
+import { globalsModuleInfoMap } from '@storybook/core/manager/globals-module-info';
 import { logger } from '@storybook/core/node-logger';
 
 import { globalExternals } from '@fal-works/esbuild-plugin-global-externals';
 import { pnpPlugin } from '@yarnpkg/esbuild-plugin-pnp';
 import aliasPlugin from 'esbuild-plugin-alias';
+import fs from 'fs-extra';
+import sirv from 'sirv';
 
-import { stringifyProcessEnvs } from '@storybook/core/common';
-import { globalsModuleInfoMap } from '@storybook/core/manager/globals-module-info';
-import { getTemplatePath, renderHTML } from './utils/template';
-import { wrapManagerEntries } from './utils/managerEntries';
 import type {
   BuilderBuildResult,
   BuilderFunction,
@@ -20,11 +19,12 @@ import type {
   ManagerBuilder,
   StarterFunction,
 } from './types';
-
 import { getData } from './utils/data';
-import { safeResolve } from './utils/safeResolve';
 import { readOrderedFiles } from './utils/files';
 import { buildFrameworkGlobalsFromOptions } from './utils/framework';
+import { wrapManagerEntries } from './utils/managerEntries';
+import { safeResolve } from './utils/safeResolve';
+import { getTemplatePath, renderHTML } from './utils/template';
 
 const isRootPath = /^\/($|\?)/;
 let compilation: Compilation;
@@ -122,11 +122,7 @@ export const executor = {
  *
  * I am sorry for making you read about generators today :')
  */
-const starter: StarterFunction = async function* starterGeneratorFn({
-  startTime,
-  options,
-  app,
-}) {
+const starter: StarterFunction = async function* starterGeneratorFn({ startTime, options, app }) {
   if (!options.quiet) {
     logger.info('=> Starting manager..');
   }

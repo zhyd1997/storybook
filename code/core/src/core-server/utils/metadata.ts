@@ -1,6 +1,8 @@
-import { writeJSON } from 'fs-extra';
-import type { Server } from './server-connect';
 import { getStorybookMetadata } from '@storybook/core/telemetry';
+
+import { writeJSON } from 'fs-extra';
+
+import type { Server } from './server-connect';
 
 export async function extractStorybookMetadata(outputFile: string, configDir: string) {
   const storybookMetadata = await getStorybookMetadata(configDir);

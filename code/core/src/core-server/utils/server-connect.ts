@@ -1,6 +1,5 @@
-import * as http from 'http';
-
 import connect from 'connect';
+import * as http from 'http';
 
 export { connect };
 
