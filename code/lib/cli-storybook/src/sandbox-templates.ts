@@ -450,7 +450,8 @@ const baseTemplates = {
       renderer: '@storybook/svelte',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['e2e-tests-dev', 'bench'],
+    // TODO: remove vitest-integration filter once project annotations exist for sveltekit
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'svelte-kit/skeleton-ts': {
     name: 'SvelteKit Latest (Vite | TypeScript)',
@@ -461,7 +462,8 @@ const baseTemplates = {
       renderer: '@storybook/svelte',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['e2e-tests-dev', 'bench'],
+    // TODO: remove vitest-integration filter once project annotations exist for sveltekit
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'svelte-kit/prerelease-ts': {
     name: 'SvelteKit Prerelease (Vite | TypeScript)',
