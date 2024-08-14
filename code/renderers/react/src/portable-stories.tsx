@@ -37,7 +37,9 @@ import type { ReactRenderer } from './types';
  * @param projectAnnotations - e.g. (import * as projectAnnotations from '../.storybook/preview')
  */
 export function setProjectAnnotations(
-  projectAnnotations: NamedOrDefaultProjectAnnotations | NamedOrDefaultProjectAnnotations[]
+  projectAnnotations:
+    | NamedOrDefaultProjectAnnotations<any>
+    | NamedOrDefaultProjectAnnotations<any>[]
 ): NormalizedProjectAnnotations<ReactRenderer> {
   setDefaultProjectAnnotations(INTERNAL_DEFAULT_PROJECT_ANNOTATIONS);
   return originalSetProjectAnnotations(

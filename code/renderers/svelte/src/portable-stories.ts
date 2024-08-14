@@ -55,7 +55,9 @@ type MapToComposed<TModule> = {
  * @param projectAnnotations - e.g. (import projectAnnotations from '../.storybook/preview')
  */
 export function setProjectAnnotations(
-  projectAnnotations: NamedOrDefaultProjectAnnotations | NamedOrDefaultProjectAnnotations[]
+  projectAnnotations:
+    | NamedOrDefaultProjectAnnotations<any>
+    | NamedOrDefaultProjectAnnotations<any>[]
 ): NormalizedProjectAnnotations<SvelteRenderer> {
   setDefaultProjectAnnotations(INTERNAL_DEFAULT_PROJECT_ANNOTATIONS);
   return originalSetProjectAnnotations(
