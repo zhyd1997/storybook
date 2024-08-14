@@ -18,10 +18,9 @@ import {
 import { searchFiles } from '../utils/search-files';
 import { initFileSearchChannel } from './file-search-channel';
 
-vi.mock(import('../utils/search-files'), async (importOriginal) => {
-  const actual = await importOriginal();
-  return { searchFiles: vi.fn(actual.searchFiles) };
-});
+vi.mock(import('../utils/search-files'), async (importOriginal) => ({
+  searchFiles: vi.fn((await importOriginal()).searchFiles),
+}));
 
 vi.mock('@storybook/core/common');
 
