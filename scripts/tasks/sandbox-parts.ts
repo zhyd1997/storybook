@@ -403,7 +403,6 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
     ${!isNextjs ? "import viteConfig from '../vite.config'" : ''}
     ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
-    ${isSvelte ? "import { svelteTesting } from '@testing-library/svelte/vite'" : ''}
 
     export default mergeConfig(
       ${!isNextjs ? 'viteConfig' : '{}'},
@@ -416,7 +415,6 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
               include: ['vitest'],
             }
           }),
-          ${isSvelte ? 'svelteTesting(),' : ''}
           ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
         ],
         ${
