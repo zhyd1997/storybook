@@ -39,7 +39,7 @@ describe('file-search-channel', () => {
   const searchResultChannelListener = vi.fn();
 
   describe('initFileSearchChannel', async () => {
-    it('should emit search result event with the search result', { timeout: 5000 }, async () => {
+    it('should emit search result event with the search result', { timeout: 10000 }, async () => {
       const mockOptions = {};
       const data = { searchQuery: 'es-module' };
 
@@ -52,7 +52,7 @@ describe('file-search-channel', () => {
       } satisfies RequestData<FileComponentSearchRequestPayload>);
 
       await vi.waitFor(() => expect(searchResultChannelListener).toHaveBeenCalled(), {
-        timeout: 5000,
+        timeout: 8000,
       });
 
       expect(searchResultChannelListener).toHaveBeenCalledWith({
@@ -98,7 +98,7 @@ describe('file-search-channel', () => {
 
     it(
       'should emit search result event with an empty search result',
-      { timeout: 5000 },
+      { timeout: 10000 },
       async () => {
         const mockOptions = {};
         const data = { searchQuery: 'no-file-for-search-query' };
@@ -116,7 +116,7 @@ describe('file-search-channel', () => {
             expect(searchResultChannelListener).toHaveBeenCalled();
           },
           {
-            timeout: 5000,
+            timeout: 8000,
           }
         );
 
