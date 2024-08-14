@@ -215,7 +215,7 @@ export async function detectLanguage(packageManager: JsPackageManager) {
     // No direct dependency on TypeScript, but could be a transitive dependency
     // This is eg the case for Nuxt projects, which support a recent version of TypeScript
     // Check for tsconfig.json (https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
-    if (fs.existsSync('tsconfig.json')) {
+    if (existsSync('tsconfig.json')) {
       language = SupportedLanguage.TYPESCRIPT_4_9;
     }
   }
