@@ -38,7 +38,7 @@ export const ForceRemount = {
     // By forcing the component to remount, we reset the focus state
     await channel.emit(FORCE_REMOUNT, { storyId: id });
   },
-  tags: ['!test'],
+  tags: ['!test', '!vitest'],
 };
 
 export const ChangeArgs = {
