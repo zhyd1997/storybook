@@ -1,14 +1,16 @@
+import { readFile, stat } from 'node:fs/promises';
+import { dirname, join, parse, relative, resolve } from 'node:path';
+
 import findPackageJson from 'find-package-json';
-import fs from 'fs/promises';
 import MagicString from 'magic-string';
-import path from 'path';
 import type { PluginOption } from 'vite';
 import {
+  type ComponentMeta,
+  type MetaCheckerOptions,
+  type PropertyMetaSchema,
   TypeMeta,
   createChecker,
   createCheckerByJson,
-  type ComponentMeta,
-  type MetaCheckerOptions,
 } from 'vue-component-meta';
 import { parseMulti } from 'vue-docgen-api';
 
@@ -49,6 +51,19 @@ export async function vueComponentMeta(tsconfigPath = 'tsconfig.json'): Promise<
           if (isEmpty || meta.type === TypeMeta.Unknown) return;
 
           const exportName = exportNames[index];
+
+          // we remove nested object schemas here since they are not used inside Storybook (we don't generate controls for object properties)
+          // and they can cause "out of memory" issues for large/complex schemas (e.g. HTMLElement)
+          // it also reduced the bundle size when running "storybook build" when such schemas are used
+          (['props', 'events', 'slots', 'exposed'] as const).forEach((key) => {
+            meta[key].forEach((value) => {
+              if (Array.isArray(value.schema)) {
+                value.schema.forEach((eventSchema) => removeNestedSchemas(eventSchema));
+              } else {
+                removeNestedSchemas(value.schema);
+              }
+            });
+          });
 
           const exposed =
             // the meta also includes duplicated entries in the "exposed" array with "on"
@@ -137,7 +152,7 @@ async function createVueComponentMetaChecker(tsconfigPath = 'tsconfig.json') {
   };
 
   const projectRoot = getProjectRoot();
-  const projectTsConfigPath = path.join(projectRoot, tsconfigPath);
+  const projectTsConfigPath = join(projectRoot, tsconfigPath);
 
   const defaultChecker = createCheckerByJson(projectRoot, { include: ['**/*'] }, checkerOptions);
 
@@ -160,17 +175,17 @@ async function createVueComponentMetaChecker(tsconfigPath = 'tsconfig.json') {
 function getProjectRoot() {
   const projectRoot = findPackageJson().next().value?.path ?? '';
 
-  const currentFileDir = path.dirname(__filename);
-  const relativePathToProjectRoot = path.relative(currentFileDir, projectRoot);
+  const currentFileDir = dirname(__filename);
+  const relativePathToProjectRoot = relative(currentFileDir, projectRoot);
 
-  return path.resolve(currentFileDir, relativePathToProjectRoot);
+  return resolve(currentFileDir, relativePathToProjectRoot);
 }
 
 /**
  * Gets the filename without file extension.
  */
 function getFilenameWithoutExtension(filename: string) {
-  return path.parse(filename).name;
+  return parse(filename).name;
 }
 
 /**
@@ -185,7 +200,7 @@ function lowercaseFirstLetter(string: string) {
  */
 async function fileExists(fullPath: string) {
   try {
-    await fs.stat(fullPath);
+    await stat(fullPath);
     return true;
   } catch {
     return false;
@@ -236,17 +251,26 @@ async function applyTempFixForEventDescriptions(filename: string, componentMeta:
 }
 
 /**
- * Gets a list of tsconfig references for the given tsconfig path.
+ * Gets a list of tsconfig references for the given tsconfig
  * This is only needed for the temporary workaround/fix for:
  * https://github.com/vuejs/language-tools/issues/3896
  */
 async function getTsConfigReferences(tsConfigPath: string) {
   try {
-    const content = JSON.parse(await fs.readFile(tsConfigPath, 'utf-8'));
+    const content = JSON.parse(await readFile(tsConfigPath, 'utf-8'));
     if (!('references' in content) || !Array.isArray(content.references)) return [];
     return content.references as unknown[];
   } catch {
     // invalid project tsconfig
     return [];
   }
+}
+
+/**
+ * Removes any nested schemas from the given main schema (e.g. from a prop, event, slot or exposed).
+ * Useful to drastically reduce build size and prevent out of memory issues when large schemas (e.g. HTMLElement, MouseEvent) are used.
+ */
+function removeNestedSchemas(schema: PropertyMetaSchema) {
+  if (typeof schema !== 'object') return;
+  delete schema.schema;
 }

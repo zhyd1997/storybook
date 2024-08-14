@@ -1,23 +1,24 @@
+import React from 'react';
+
 import {
-  composeStory as originalComposeStory,
   composeStories as originalComposeStories,
+  composeStory as originalComposeStory,
   setProjectAnnotations as originalSetProjectAnnotations,
 } from 'storybook/internal/preview-api';
+import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
 import type {
   Args,
+  ComposedStoryFn,
   NamedOrDefaultProjectAnnotations,
-  StoryAnnotationsOrFn,
+  ProjectAnnotations,
   Store_CSFExports,
   StoriesWithPartialProps,
-  ProjectAnnotations,
-  ComposedStoryFn,
+  StoryAnnotationsOrFn,
 } from 'storybook/internal/types';
 
 import * as reactProjectAnnotations from './entry-preview';
 import type { Meta } from './public-types';
 import type { ReactRenderer } from './types';
-import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
-import React from 'react';
 
 /** Function that sets the globalConfig of your storybook. The global config is the preview module of your .storybook folder.
  *
@@ -45,11 +46,16 @@ export function setProjectAnnotations(
 // This will not be necessary once we have auto preset loading
 export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<ReactRenderer> = {
   ...reactProjectAnnotations,
-  renderToCanvas: ({
-    storyContext: { context, unboundStoryFn: Story, testingLibraryRender: render, canvasElement },
-  }) => {
-    if (render == null) throw new TestingLibraryMustBeConfiguredError();
-    const { unmount } = render(<Story {...context} />, { baseElement: context.canvasElement });
+  renderToCanvas: (renderContext, canvasElement) => {
+    if (renderContext.storyContext.testingLibraryRender == null) {
+      throw new TestingLibraryMustBeConfiguredError();
+      // Enable for 8.3
+      // return reactProjectAnnotations.renderToCanvas(renderContext, canvasElement);
+    }
+    const {
+      storyContext: { context, unboundStoryFn: Story, testingLibraryRender: render },
+    } = renderContext;
+    const { unmount } = render(<Story {...context} />, { container: context.canvasElement });
     return unmount;
   },
 };

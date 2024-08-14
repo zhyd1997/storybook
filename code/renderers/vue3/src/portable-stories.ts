@@ -1,18 +1,19 @@
 import {
-  composeStory as originalComposeStory,
   composeStories as originalComposeStories,
+  composeStory as originalComposeStory,
   setProjectAnnotations as originalSetProjectAnnotations,
 } from 'storybook/internal/preview-api';
+import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
 import type {
   Args,
+  ComposedStoryFn,
   NamedOrDefaultProjectAnnotations,
   ProjectAnnotations,
-  StoryAnnotationsOrFn,
   Store_CSFExports,
   StoriesWithPartialProps,
-  ComposedStoryFn,
+  StoryAnnotationsOrFn,
 } from 'storybook/internal/types';
-import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
+
 import { h } from 'vue';
 
 import * as defaultProjectAnnotations from './entry-preview';
@@ -53,9 +54,17 @@ export function setProjectAnnotations(
 // This will not be necessary once we have auto preset loading
 export const vueProjectAnnotations: ProjectAnnotations<VueRenderer> = {
   ...defaultProjectAnnotations,
-  renderToCanvas: ({ storyFn, storyContext: { testingLibraryRender: render, canvasElement } }) => {
-    if (render == null) throw new TestingLibraryMustBeConfiguredError();
-    const { unmount } = render(storyFn(), { baseElement: canvasElement });
+  renderToCanvas: (renderContext, canvasElement) => {
+    if (renderContext.storyContext.testingLibraryRender == null) {
+      throw new TestingLibraryMustBeConfiguredError();
+      // Enable for 8.3
+      // return defaultProjectAnnotations.renderToCanvas(renderContext, canvasElement);
+    }
+    const {
+      storyFn,
+      storyContext: { testingLibraryRender: render },
+    } = renderContext;
+    const { unmount } = render(storyFn(), { container: canvasElement });
     return unmount;
   },
 };

@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useRef } from 'react';
+
 import type { LayoutState } from './Layout';
 
 // the distance from the edge of the screen at which the panel/sidebar will snap to the edge
@@ -37,7 +38,7 @@ export function useDragging({
   useEffect(() => {
     const panelResizer = panelResizerRef.current;
     const sidebarResizer = sidebarResizerRef.current;
-    const previewIframe = document.querySelector('#storybook-preview-iframe') as HTMLIFrameElement;
+    const previewIframe = document.querySelector('#storybook-preview-wrapper') as HTMLIFrameElement;
     let draggedElement: typeof panelResizer | typeof sidebarResizer | null = null;
 
     const onDragStart = (e: MouseEvent) => {

@@ -1,19 +1,22 @@
-import { dequal as deepEqual } from 'dequal';
 import React, { useEffect, useMemo, useState } from 'react';
-import { global } from '@storybook/global';
+
 import {
+  useArgTypes,
   useArgs,
   useGlobals,
-  useArgTypes,
   useParameter,
   useStorybookState,
 } from 'storybook/internal/manager-api';
-import { PureArgsTable as ArgsTable, type PresetColor, type SortType } from '@storybook/blocks';
 import { styled } from 'storybook/internal/theming';
 import type { ArgTypes } from 'storybook/internal/types';
 
-import { PARAM_KEY } from './constants';
+import { PureArgsTable as ArgsTable, type PresetColor, type SortType } from '@storybook/blocks';
+import { global } from '@storybook/global';
+
+import { dequal as deepEqual } from 'dequal';
+
 import { SaveStory } from './SaveStory';
+import { PARAM_KEY } from './constants';
 
 // Remove undefined values (top-level only)
 const clean = (obj: { [key: string]: any }) =>
@@ -34,6 +37,7 @@ interface ControlsParameters {
   sort?: SortType;
   expanded?: boolean;
   presetColors?: PresetColor[];
+  disableSaveFromUI?: boolean;
 }
 
 interface ControlsPanelProps {
@@ -46,7 +50,12 @@ export const ControlsPanel = ({ saveStory, createStory }: ControlsPanelProps) =>
   const [args, updateArgs, resetArgs, initialArgs] = useArgs();
   const [globals] = useGlobals();
   const rows = useArgTypes();
-  const { expanded, sort, presetColors } = useParameter<ControlsParameters>(PARAM_KEY, {});
+  const {
+    expanded,
+    sort,
+    presetColors,
+    disableSaveFromUI = false,
+  } = useParameter<ControlsParameters>(PARAM_KEY, {});
   const { path, previewInitialized } = useStorybookState();
 
   // If the story is prepared, then show the args table
@@ -84,9 +93,10 @@ export const ControlsPanel = ({ saveStory, createStory }: ControlsPanelProps) =>
         sort={sort}
         isLoading={isLoading}
       />
-      {hasControls && hasUpdatedArgs && global.CONFIG_TYPE === 'DEVELOPMENT' && (
-        <SaveStory {...{ resetArgs, saveStory, createStory }} />
-      )}
+      {hasControls &&
+        hasUpdatedArgs &&
+        global.CONFIG_TYPE === 'DEVELOPMENT' &&
+        disableSaveFromUI !== true && <SaveStory {...{ resetArgs, saveStory, createStory }} />}
     </AddonWrapper>
   );
 };

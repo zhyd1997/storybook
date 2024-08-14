@@ -1,16 +1,20 @@
 // @vitest-environment happy-dom
 
 /* eslint-disable import/namespace */
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import React from 'react';
-import { vi, it, expect, afterEach, describe } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+
 import { addons } from 'storybook/internal/preview-api';
 
-import * as addonActionsPreview from '@storybook/addon-actions/preview';
 import type { Meta } from '@storybook/react';
+
+import * as addonActionsPreview from '@storybook/addon-actions/preview';
+
 import { expectTypeOf } from 'expect-type';
 
-import { setProjectAnnotations, composeStories, composeStory } from '..';
+import { composeStories, composeStory, setProjectAnnotations } from '..';
 import type { Button } from './Button';
 import * as stories from './Button.stories';
 
@@ -53,7 +57,7 @@ describe('renders', () => {
   });
 
   it('should render component mounted in play function', async () => {
-    await MountInPlayFunction.play();
+    await MountInPlayFunction.run();
 
     expect(screen.getByTestId('spy-data').textContent).toEqual('mockFn return value');
     expect(screen.getByTestId('loaded-data').textContent).toEqual('loaded data');
@@ -65,7 +69,7 @@ describe('renders', () => {
     expect(getByTestId('spy-data').textContent).toEqual('mockFn return value');
     expect(getByTestId('loaded-data').textContent).toEqual('loaded data');
     // spy assertions happen in the play function and should work
-    await LoaderStory.play!();
+    await LoaderStory.run!();
   });
 });
 
@@ -125,7 +129,7 @@ describe('CSF3', () => {
 
   it('renders with play function without canvas element', async () => {
     const CSF3InputFieldFilled = composeStory(stories.CSF3InputFieldFilled, stories.default);
-    await CSF3InputFieldFilled.play();
+    await CSF3InputFieldFilled.run();
 
     const input = screen.getByTestId('input') as HTMLInputElement;
     expect(input.value).toEqual('Hello world!');
@@ -135,10 +139,9 @@ describe('CSF3', () => {
     const CSF3InputFieldFilled = composeStory(stories.CSF3InputFieldFilled, stories.default);
 
     const div = document.createElement('div');
-    console.log(div.tagName);
     document.body.appendChild(div);
 
-    await CSF3InputFieldFilled.play({ canvasElement: div });
+    await CSF3InputFieldFilled.run({ canvasElement: div });
 
     const input = screen.getByTestId('input') as HTMLInputElement;
     expect(input.value).toEqual('Hello world!');
@@ -185,6 +188,6 @@ const testCases = Object.values(composeStories(stories)).map(
 );
 it.each(testCases)('Renders %s story', async (_storyName, Story) => {
   if (_storyName === 'CSF2StoryWithLocale') return;
-  await Story.play();
+  await Story.run();
   expect(document.body).toMatchSnapshot();
 });

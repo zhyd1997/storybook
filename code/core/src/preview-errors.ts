@@ -1,4 +1,5 @@
 import { dedent } from 'ts-dedent';
+
 import { StorybookError } from './storybook-error';
 
 /**
@@ -214,6 +215,7 @@ export class MountMustBeDestructuredError extends StorybookError {
       category: Category.PREVIEW_API,
       code: 12,
       message: dedent`
+      Incorrect use of mount in the play function.
       
       To use mount in the play function, you must satisfy the following two requirements: 
       

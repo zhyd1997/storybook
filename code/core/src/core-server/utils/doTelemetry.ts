@@ -1,12 +1,14 @@
+import { getPrecedingUpgrade, telemetry } from '@storybook/core/telemetry';
+import type { CoreConfig, Options } from '@storybook/core/types';
+
 import invariant from 'tiny-invariant';
-import type { CoreConfig, Options, StoryIndex } from '@storybook/core/types';
-import { telemetry, getPrecedingUpgrade } from '@storybook/core/telemetry';
-import { useStorybookMetadata } from './metadata';
-import type { StoryIndexGenerator } from './StoryIndexGenerator';
-import { summarizeIndex } from './summarizeIndex';
-import { router } from './router';
-import { versionStatus } from './versionStatus';
+
 import { sendTelemetryError } from '../withTelemetry';
+import type { StoryIndexGenerator } from './StoryIndexGenerator';
+import { useStorybookMetadata } from './metadata';
+import { router } from './router';
+import { summarizeIndex } from './summarizeIndex';
+import { versionStatus } from './versionStatus';
 
 export async function doTelemetry(
   core: CoreConfig,
@@ -15,9 +17,9 @@ export async function doTelemetry(
 ) {
   if (!core?.disableTelemetry) {
     initializedStoryIndexGenerator.then(async (generator) => {
-      let storyIndex: StoryIndex | undefined;
+      let indexAndStats;
       try {
-        storyIndex = await generator?.getIndex();
+        indexAndStats = await generator?.getIndexAndStats();
       } catch (err) {
         // If we fail to get the index, treat it as a recoverable error, but send it up to telemetry
         // as if we crashed. In the future we will revisit this to send a distinct error
@@ -36,10 +38,11 @@ export async function doTelemetry(
       const payload = {
         precedingUpgrade: await getPrecedingUpgrade(),
       };
-      if (storyIndex) {
+      if (indexAndStats) {
         Object.assign(payload, {
           versionStatus: versionUpdates && versionCheck ? versionStatus(versionCheck) : 'disabled',
-          storyIndex: summarizeIndex(storyIndex),
+          storyIndex: summarizeIndex(indexAndStats.storyIndex),
+          storyStats: indexAndStats.stats,
         });
       }
       telemetry('dev', payload, { configDir: options.configDir });
