@@ -11,6 +11,10 @@ export default {
       },
     },
   },
+  initialGlobals: {
+    // 👇 Set the initial background color
+    backgrounds: { value: 'light' },
+  },
 };
 ```
 
@@ -29,6 +33,10 @@ const preview: Preview = {
         maroon: { name: 'Maroon', value: '#400' },
       },
     },
+  },
+  initialGlobals: {
+    // 👇 Set the initial background color
+    backgrounds: { value: 'light' },
   },
 };
 

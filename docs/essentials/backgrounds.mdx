@@ -21,7 +21,7 @@ By default, the backgrounds toolbar includes a light and dark background.
 
 But you're not restricted to these backgrounds. You can configure your own set of colors with the `backgrounds` [parameter](../writing-stories/parameters.mdx) in your [`.storybook/preview.js`](../configure/index.mdx#configure-story-rendering).
 
-You can define the available background colors using the `values` property:
+You can define the available background colors using the [`values` property](#values) and set the initial background color using the [`default` property](#default):
 
 {/* prettier-ignore-start */}
 
@@ -33,7 +33,7 @@ You can define the available background colors using the `values` property:
 
   **With the [`globals` API](#globals-api)**
 
-  When using the `globals` API, you must define the available background colors using the `options` property:
+  When using the `globals` API, you must define the available background colors using the [`options` property](#options). The initial background color can be set using the `initialGlobals` property, which accepts the same object properties as the [`globals`](#globals) for this addon.
 
   {/* prettier-ignore-start */}
 
@@ -43,19 +43,13 @@ You can define the available background colors using the `values` property:
 
 </Callout>
 
-With either method, available backgrounds can be defined at the project, component, and story levels.
+## Defining the background for a story
 
-To apply a default background color, assign the `default` property to one of the available colors.
-
-## Overriding the background for a story
-
-The Backgrounds addon enables you to change the background color applied to a story by selecting from the list of predefined background colors in the toolbar. If needed, you can force a story to use a specific background color.
-
-You can set the default background color for a story using the `parameters.backgrounds.default` parameter:
+The Backgrounds addon enables you to change the background color applied to a story by selecting from the list of predefined background colors in the toolbar. If needed, you can set a story to default to a specific background color, by using the `parameters.backgrounds.default` parameter:
 
 {/* prettier-ignore-start */}
 
-<CodeSnippets path="addon-backgrounds-override-parameters-default.md" usesCsf3 />
+<CodeSnippets path="addon-backgrounds-define-default.md" usesCsf3 />
 
 {/* prettier-ignore-end */}
 
@@ -69,7 +63,7 @@ As implied by the name, this method only sets the default background color for a
 
   {/* prettier-ignore-start */}
 
-  <CodeSnippets path="addon-backgrounds-override-globals.md" usesCsf3 />
+  <CodeSnippets path="addon-backgrounds-define-globals.md" usesCsf3 />
 
   {/* prettier-ignore-end */}
 
@@ -79,7 +73,7 @@ As implied by the name, this method only sets the default background color for a
 
 You can also configure backgrounds per-component or per-story basis through [parameter inheritance](../writing-stories/parameters.mdx#component-parameters).
 
-To set the available background colors, use the `values` property. In this example, we'll adjust the colors for all of the Button component's stories:
+To set the available background colors, use the [`values` property](#values). In this example, we'll adjust the colors for all of the Button component's stories:
 
 {/* prettier-ignore-start */}
 
@@ -91,7 +85,7 @@ To set the available background colors, use the `values` property. In this examp
 
   **With the [`globals` API](#globals-api)**
 
-  The available background colors are defined using the `options` property. In this example, we'll adjust the colors for all of the Button component's stories:
+  The available background colors are defined using the [`options` property](#options). In this example, we'll adjust the colors for all of the Button component's stories:
 
   {/* prettier-ignore-start */}
 
@@ -103,7 +97,7 @@ To set the available background colors, use the `values` property. In this examp
 
 ## Disable backgrounds
 
-If you want to turn off backgrounds in a story, you can do so by setting the `backgrounds` parameter like so:
+If you want to turn off backgrounds in a story, you can do so by configuring the `backgrounds` parameter like so:
 
 <Callout variant="warning" icon="🆕">
 
@@ -143,7 +137,7 @@ You don't need additional configuration to get started. But its properties are f
 
   #### `grid`
 
-  Type: Boolean
+  Type: `boolean`
 
   Whether the [grid](#grid) is displayed.
 
@@ -165,7 +159,7 @@ Type: `string`
 
 Required: See description
 
-Default background color. Must match the `name` property of one of the [available colors](#values).
+Default background color. Must match the `name` property of one of the available colors defined in the [`values`](#values) (or [`options`](#options)) property.
 
 #### `disable`
 
@@ -189,12 +183,12 @@ Type:
 
 ```ts
 {
- cellAmount?: number;
- cellSize?: number;
- disable?: boolean;
- offsetX?: number;
- offsetY?: number;
- opacity?: number;
+  cellAmount?: number;
+  cellSize?: number;
+  disable?: boolean;
+  offsetX?: number;
+  offsetY?: number;
+  opacity?: number;
 }
 ```
 
@@ -252,13 +246,22 @@ The opacity of the grid lines.
 
   #### `options`
 
-  Type: `Record<string, { name: string; value: string }>`
+  Type:
+
+  ```ts
+  {
+    [key: string]: {
+      name: string;
+      value: string;
+    };
+  }
+  ```
 
   Required: See description
 
-  Defines the background colors. Replaces [`values`](#values). See above for a [usage example](#configuration).
+  Defines the background colors. Replaces [`values`](#values). The key is used to reference the color, and the value is an object to define it. See above for a [usage example](#configuration).
 
-  Required when defining `backgrounds` parameter at project level.
+  When defining the `backgrounds` parameter at the project level (in `.storybook/preview.js|ts`), you _must_ define the `options` property.
 
 </Callout>
 
@@ -270,4 +273,4 @@ Required: See description
 
 Available background colors. See above for a [usage example](#configuration).
 
-Required when defining `backgrounds` parameter at project level.
+When defining the `backgrounds` parameter at the project level (in `.storybook/preview.js|ts`), you _must_ define the `values` property.
