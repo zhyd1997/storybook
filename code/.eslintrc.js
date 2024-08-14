@@ -1,14 +1,6 @@
 const path = require('path');
-const fs = require('fs');
 
 const scriptPath = path.join(__dirname, '..', 'scripts');
-
-const addonsPackages = fs
-  .readdirSync(path.join(__dirname, 'addons'))
-  .filter((p) => fs.statSync(path.join(__dirname, 'addons', p)).isDirectory());
-const libPackages = fs
-  .readdirSync(path.join(__dirname, 'lib'))
-  .filter((p) => fs.statSync(path.join(__dirname, 'lib', p)).isDirectory());
 
 module.exports = {
   root: true,
@@ -86,17 +78,6 @@ module.exports = {
       },
     },
     {
-      // these packages use pre-bundling, dependencies will be bundled, and will be in devDepenencies
-      files: ['frameworks/**/*', 'builders/**/*', 'deprecated/**/*', 'renderers/**/*'],
-      excludedFiles: ['frameworks/angular/**/*', 'frameworks/ember/**/*', 'core/**/*'],
-      rules: {
-        'import/no-extraneous-dependencies': [
-          'error',
-          { bundledDependencies: false, devDependencies: true, peerDependencies: true },
-        ],
-      },
-    },
-    {
       files: ['**/.storybook/**'],
       rules: {
         'import/no-extraneous-dependencies': [
@@ -105,30 +86,7 @@ module.exports = {
         ],
       },
     },
-    ...addonsPackages.map((directory) => ({
-      files: [path.join('**', 'addons', directory, '**', '*.*')],
-      rules: {
-        'import/no-extraneous-dependencies': [
-          'error',
-          {
-            packageDir: [__dirname, path.join(__dirname, 'addons', directory)],
-            devDependencies: true,
-          },
-        ],
-      },
-    })),
-    ...libPackages.map((directory) => ({
-      files: [path.join('**', 'lib', directory, '**', '*.*')],
-      rules: {
-        'import/no-extraneous-dependencies': [
-          'error',
-          {
-            packageDir: [__dirname, path.join(__dirname, 'lib', directory)],
-            devDependencies: true,
-          },
-        ],
-      },
-    })),
+
     {
       files: [
         '*.test.*',
@@ -208,13 +166,6 @@ module.exports = {
       files: ['**/builder-vite/input/iframe.html'],
       rules: {
         'no-undef': 'off', // ignore "window" undef errors
-      },
-    },
-    {
-      // Because those templates reference css files in other directory.
-      files: ['**/template/cli/**/*'],
-      rules: {
-        'import/no-unresolved': 'off',
       },
     },
     {

@@ -8,7 +8,6 @@ module.exports = {
       },
       rules: {
         'react/no-this-in-sfc': "off",
-        'import/no-unresolved': "off",
         'react/react-in-jsx-scope': "off",
         'global-require': "off",
         'no-redeclare': "off",
@@ -22,7 +21,6 @@ module.exports = {
       },
       rules: {
         'jsx-a11y/anchor-is-valid': "off",
-        'import/no-unresolved': "off",
         'react/prop-types': "off",
         'react/react-in-jsx-scope': "off",
         'import/extensions': "off",
