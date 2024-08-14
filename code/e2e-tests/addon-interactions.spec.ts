@@ -40,11 +40,15 @@ test.describe('addon-interactions', () => {
     await expect(done).toBeVisible();
   });
 
-  test('should step through interactions', async ({ page }) => {
+  test('should step through interactions', async ({ page, browserName }) => {
     // templateName is e.g. 'vue-cli/default-js'
     test.skip(
       /^(lit)/i.test(`${templateName}`),
       `Skipping ${templateName}, which does not support addon-interactions`
+    );
+    test.skip(
+      browserName === 'firefox',
+      `Skipping on FIreFox, which has trouble with "initial value"`
     );
 
     const sbPage = new SbPage(page);
