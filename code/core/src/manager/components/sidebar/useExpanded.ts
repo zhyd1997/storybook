@@ -189,7 +189,6 @@ export const useExpanded = ({
       }
 
       const target = event.target as Element;
-      // @ts-expect-error (non strict)
 
       // @ts-expect-error (non strict)
       if (!isAncestor(menuElement, target) && !isAncestor(target, menuElement)) {
