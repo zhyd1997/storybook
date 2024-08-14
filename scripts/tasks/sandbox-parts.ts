@@ -433,6 +433,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
           },
           test: {
             name: "storybook",
+            pool: 'threads',
             include: [
               // we need to set the path like this because svelte-kit overrides the root path so this makes it work in all sandboxes
               "src/**/*.{story,stories}.?(c|m)[jt]s?(x)",
