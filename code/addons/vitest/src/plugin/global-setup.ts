@@ -9,9 +9,7 @@ let storybookProcess: ChildProcess | null = null;
 
 const checkStorybookRunning = async (storybookUrl: string): Promise<boolean> => {
   try {
-    const response = await fetch(`${storybookUrl}/iframe.html`, {
-      method: 'HEAD',
-    });
+    const response = await fetch(`${storybookUrl}/iframe.html`, { method: 'HEAD' });
     return response.ok;
   } catch {
     return false;

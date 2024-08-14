@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /* eslint-disable no-underscore-dangle */
-import type { RunnerTask, TaskContext, TaskMeta } from 'vitest';
+import { type RunnerTask, type TaskContext, type TaskMeta, type TestContext } from 'vitest';
 
 import type { ComposedStoryFn } from 'storybook/internal/types';
 
@@ -21,15 +21,16 @@ export const isValidTest = (storyTags: string[], tagsFilter: TagsFilter) => {
 };
 
 export const testStory = (Story: ComposedStoryFn, tagsFilter: TagsFilter) => {
-  return async ({ task, skip }: TaskContext) => {
+  return async (context: TestContext & TaskContext & { story: ComposedStoryFn }) => {
     if (Story === undefined || tagsFilter?.skip.some((tag) => Story.tags.includes(tag))) {
-      skip();
+      context.skip();
     }
 
-    const _task = task as RunnerTask & {
-      meta: TaskMeta & { storyId: string; hasPlayFunction: boolean };
-    };
+    context.story = Story;
+
+    const _task = context.task as RunnerTask & { meta: TaskMeta & { storyId: string } };
     _task.meta.storyId = Story.id;
+
     await setViewport(Story.parameters.viewport);
     await Story.run();
   };
