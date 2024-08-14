@@ -51,12 +51,9 @@ describe('file-search-channel', () => {
         payload: {},
       } satisfies RequestData<FileComponentSearchRequestPayload>);
 
-      await vi.waitFor(
-        () => {
-          expect(searchResultChannelListener).toHaveBeenCalled();
-        },
-        { timeout: 2000 }
-      );
+      await vi.waitFor(() => expect(searchResultChannelListener).toHaveBeenCalled(), {
+        timeout: 2000,
+      });
 
       expect(searchResultChannelListener).toHaveBeenCalledWith({
         id: data.searchQuery,
@@ -139,9 +136,7 @@ describe('file-search-channel', () => {
 
       vi.mocked(searchFiles).mockRejectedValue(new Error('ENOENT: no such file or directory'));
 
-      await vi.waitFor(() => {
-        expect(searchResultChannelListener).toHaveBeenCalled();
-      });
+      await vi.waitFor(() => expect(searchResultChannelListener).toHaveBeenCalled());
 
       expect(searchResultChannelListener).toHaveBeenCalledWith({
         id: data.searchQuery,
