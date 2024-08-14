@@ -1,8 +1,10 @@
-import { parse, type Options } from 'picoquery';
-import { dedent } from 'ts-dedent';
-import { once } from '@storybook/core/client-logger';
-import isPlainObject from 'lodash/isPlainObject.js';
 import type { Args } from '@storybook/core/types';
+
+import { once } from '@storybook/core/client-logger';
+
+import isPlainObject from 'lodash/isPlainObject.js';
+import { type Options, parse } from 'picoquery';
+import { dedent } from 'ts-dedent';
 
 // Keep this in sync with validateArgs in router/src/utils.ts
 const VALIDATION_REGEXP = /^[a-zA-Z0-9 _-]*$/;

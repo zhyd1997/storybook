@@ -1,9 +1,10 @@
 import { once } from '@storybook/core/client-logger';
+
 import { dequal as deepEqual } from 'dequal';
 import isPlainObject from 'lodash/isPlainObject.js';
 import memoize from 'memoizerific';
 import type { Options as QueryOptions } from 'picoquery';
-import { stringify, parse } from 'picoquery';
+import { parse, stringify } from 'picoquery';
 import { dedent } from 'ts-dedent';
 
 export interface StoryData {

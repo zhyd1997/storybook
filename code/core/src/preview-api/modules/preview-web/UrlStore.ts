@@ -1,9 +1,10 @@
+import type { ViewMode } from '@storybook/core/types';
 import { global } from '@storybook/global';
+
 import { parse, stringify } from 'picoquery';
 
+import type { Selection, SelectionSpecifier, SelectionStore } from './SelectionStore';
 import { parseArgsParam } from './parseArgsParam';
-import type { SelectionSpecifier, SelectionStore, Selection } from './SelectionStore';
-import type { ViewMode } from '@storybook/core/types';
 
 const { history, document } = global;
 
