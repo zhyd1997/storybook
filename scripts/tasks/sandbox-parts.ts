@@ -363,14 +363,13 @@ async function linkPackageStories(
 export async function setupVitest(details: TemplateDetails, options: PassedOptionValues) {
   const { sandboxDir, template } = details;
 
-  const isSvelte = template.expected.renderer === '@storybook/svelte';
   const isVue = template.expected.renderer === '@storybook/vue3';
   const isNextjs = template.expected.framework.includes('nextjs');
   // const isAngular = template.expected.framework === '@storybook/angular';
   const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
 
   await writeFile(
-    join(sandboxDir, '.storybook/setupTests.ts'),
+    join(sandboxDir, '.storybook/vitest.setup.ts'),
     dedent`import { beforeAll } from 'vitest'
     import { setProjectAnnotations } from '${storybookPackage}'
     import * as rendererDocsAnnotations from '${template.expected.renderer}/dist/entry-preview-docs.mjs'
@@ -397,89 +396,80 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
   );
 
   await writeFile(
-    join(sandboxDir, '.storybook/vitest.config.mts'),
-    dedent`import path from 'node:path'
-    import { defineConfig, mergeConfig, defaultExclude } from 'vitest/config'
-    import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
-    ${!isNextjs ? "import viteConfig from '../vite.config'" : ''}
-    ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
-
-    export default mergeConfig(
-      ${!isNextjs ? 'viteConfig' : '{}'},
-      defineConfig({
-        plugins: [
-          storybookTest({
-            configDir: process.cwd(),
-            storybookScript: 'yarn storybook --ci',
-            tags: {
-              include: ['vitest'],
-            }
-          }),
-          ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
-        ],
-        ${
-          isNextjs
-            ? `optimizeDeps: {
-          include: [
-            "next/image",
-            "next/dist/compiled/react",
-            "sb-original/default-loader",
-            "sb-original/image-context",
-          ],
-        },`
-            : ''
-        }
-        resolve: {
-          preserveSymlinks: true,
-          ${isVue ? "alias: { vue: 'vue/dist/vue.esm-bundler.js' }," : ''}
-        },
-        test: {
-          name: 'storybook',
-          include: [
-           // we need to set the path like this because svelte-kit overrides the root path so this makes it work in all sandboxes
-            path.join(__dirname, '../src/**/*.{story,stories}.?(c|m)[jt]s?(x)'),
-            path.join(__dirname, '../template-stories/**/*.{story,stories}.?(c|m)[jt]s?(x)'),
-          ],
-          exclude: [
-            ...defaultExclude,
-            // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
-            path.join(__dirname, '../**/*argtypes*'),
-            // TODO (SVELTEKIT): Failures related to missing framework annotations
-            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*'),
-            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*'),
-            // TODO (SVELTEKIT): Investigate Error: use:enhance can only be used on <form> fields with method="POST"
-            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/forms.stories*'),
-            // TODO (SVELTE|SVELTEKIT): Typescript preprocessor issue
-            path.join(__dirname, '../**/frameworks/svelte-vite_svelte-vite-default-ts/ts-docs.stories.*'),
-            path.join(__dirname, '../**/frameworks/sveltekit_svelte-kit-skeleton-ts/ts-docs.stories.*'),
-            ${isSvelte ? "path.join(__dirname, '../**/stories/(Button|Header|Page).stories.ts')," : ''}
-          ],
-          /**
-           * TODO: Either fix or acknowledge limitation of:
-           * - @storybook/core/preview-api hooks:
-           * -- UseState
-           */
-          testNamePattern: /^(?!.*(UseState)).*$/,
-          browser: {
-            enabled: true,
-            name: 'chromium',
-            provider: 'playwright',
-            headless: true,
-            screenshotFailures: false,
-          },
-          setupFiles: ['./.storybook/setupTests.ts'],
-          environment: 'happy-dom',
-        },
-      })
-    )`
-  );
-
-  await writeFile(
     join(sandboxDir, 'vitest.workspace.ts'),
     dedent`
-      import { defineWorkspace } from 'vitest/config'
+      import { defineWorkspace, defaultExclude } from "vitest/config";
+      import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
+      ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
 
-      export default defineWorkspace(['.storybook'])
+      export default defineWorkspace([
+        {
+          ${!isNextjs ? 'extends: "vite.config.ts",' : ''}
+          plugins: [
+            storybookTest({
+              storybookScript: "yarn storybook --ci",
+              tags: {
+                include: ["vitest"],
+              },
+            }),
+           ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
+          ],
+          ${
+            isNextjs
+              ? `optimizeDeps: {
+            include: [
+              "next/image",
+              "next/legacy/image",
+              "next/dist/compiled/react",
+              "sb-original/default-loader",
+              "sb-original/image-context",
+            ],
+          },`
+              : ''
+          }
+          resolve: {
+            preserveSymlinks: true,
+            ${isVue ? "alias: { vue: 'vue/dist/vue.esm-bundler.js' }," : ''}
+          },
+          test: {
+            name: "storybook",
+            include: [
+              // we need to set the path like this because svelte-kit overrides the root path so this makes it work in all sandboxes
+              "src/**/*.{story,stories}.?(c|m)[jt]s?(x)",
+              "template-stories/**/*.{story,stories}.?(c|m)[jt]s?(x)",
+            ],
+            exclude: [
+              ...defaultExclude,
+              // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
+              "**/*argtypes*",
+              // TODO (SVELTEKIT): Failures related to missing framework annotations
+              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*",
+              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*",
+              // TODO (SVELTEKIT): Investigate Error: use:enhance can only be used on <form> fields with method="POST"
+              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/forms.stories*",
+              // TODO (SVELTE|SVELTEKIT): Typescript preprocessor issue
+              "**/frameworks/svelte-vite_svelte-vite-default-ts/ts-docs.stories.*",
+              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/ts-docs.stories.*",
+            ],
+            /**
+             * TODO: Either fix or acknowledge limitation of:
+             * - @storybook/core/preview-api hooks:
+             * -- UseState
+             */
+            // @ts-expect-error this type does not exist but the property does!
+            testNamePattern: /^(?!.*(UseState)).*$/,
+            browser: {
+              enabled: true,
+              name: "chromium",
+              provider: "playwright",
+              headless: true,
+              screenshotFailures: false,
+            },
+            setupFiles: ["./.storybook/vitest.setup.ts"],
+            environment: "happy-dom",
+          },
+        },
+      ]);
   `
   );
 
