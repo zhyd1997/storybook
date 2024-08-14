@@ -1,6 +1,6 @@
 {
   "name": "@storybook/web-components-webpack5",
-  "version": "8.3.0-alpha.4",
+  "version": "8.3.0-alpha.5",
   "description": "Storybook for web-components: View web components snippets in isolation with Hot Reloading.",
   "keywords": [
     "lit",
@@ -52,7 +52,7 @@
   "dependencies": {
     "@storybook/builder-webpack5": "workspace:*",
     "@storybook/web-components": "workspace:*",
-    "@types/node": "^18.0.0"
+    "@types/node": "^22.0.0"
   },
   "devDependencies": {
     "lit": "2.3.1",

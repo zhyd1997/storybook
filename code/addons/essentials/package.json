@@ -1,6 +1,6 @@
 {
   "name": "@storybook/addon-essentials",
-  "version": "8.3.0-alpha.4",
+  "version": "8.3.0-alpha.5",
   "description": "Curated addons to bring out the best of Storybook",
   "keywords": [
     "addon",
@@ -24,9 +24,9 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "node": "./dist/index.js",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "node": "./dist/index.js"
     },
     "./actions/preview": {
       "types": "./dist/actions/preview.d.ts",
