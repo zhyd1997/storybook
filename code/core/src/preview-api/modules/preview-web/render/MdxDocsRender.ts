@@ -14,13 +14,14 @@ import type { Render, RenderType } from './Render';
 import { PREPARE_ABORTED } from './Render';
 
 /**
- * A MdxDocsRender is a render of a docs entry that comes from a true MDX file,
- * that is a `.mdx` file that doesn't get compiled to a CSF file.
+ * A MdxDocsRender is a render of a docs entry that comes from a true MDX file, that is a `.mdx`
+ * file that doesn't get compiled to a CSF file.
  *
  * A MDX render can reference (import) zero or more CSF files that contain stories.
  *
  * Use cases:
- *  - *.mdx file that may or may not reference a specific CSF file with `<Meta of={} />`
+ *
+ * - *.mdx file that may or may not reference a specific CSF file with `<Meta of={} />`
  */
 
 export class MdxDocsRender<TRenderer extends Renderer> implements Render<TRenderer> {

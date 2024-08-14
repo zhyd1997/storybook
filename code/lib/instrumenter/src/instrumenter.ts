@@ -88,9 +88,7 @@ const getRetainedState = (state: State, isDebugging = false) => {
   return { cursor: calls.length, calls, callRefsByResult };
 };
 
-/**
- * This class is not supposed to be used directly. Use the `instrument` function below instead.
- */
+/** This class is not supposed to be used directly. Use the `instrument` function below instead. */
 export class Instrumenter {
   channel: Channel;
 
@@ -644,10 +642,10 @@ export class Instrumenter {
 }
 
 /**
- * Instruments an object or module by traversing its properties, patching any functions (methods)
- * to enable debugging. Patched functions will emit a `call` event when invoked.
- * When intercept = true, patched functions will return a Promise when the debugger stops before
- * this function. As such, "interceptable" functions will have to be `await`-ed.
+ * Instruments an object or module by traversing its properties, patching any functions (methods) to
+ * enable debugging. Patched functions will emit a `call` event when invoked. When intercept = true,
+ * patched functions will return a Promise when the debugger stops before this function. As such,
+ * "interceptable" functions will have to be `await`-ed.
  */
 export function instrument<TObj extends Record<string, any>>(
   obj: TObj,

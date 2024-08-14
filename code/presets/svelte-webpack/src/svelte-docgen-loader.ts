@@ -61,8 +61,9 @@ function getNameFromFilename(filename: string) {
 }
 
 /**
- * webpack loader for sveltedoc-parser
- * @param source raw svelte component
+ * Webpack loader for `sveltedoc-parser`
+ *
+ * @param source Raw svelte component
  */
 export default async function svelteDocgen(this: any, source: string) {
   // eslint-disable-next-line no-underscore-dangle

@@ -21,8 +21,8 @@ export function decorateStory<TRenderer extends Renderer>(
 }
 
 /**
- * Currently StoryContextUpdates are allowed to have any key in the type.
- * However, you cannot overwrite any of the build-it "static" keys.
+ * Currently StoryContextUpdates are allowed to have any key in the type. However, you cannot
+ * overwrite any of the build-it "static" keys.
  *
  * @param inputContextUpdate StoryContextUpdate
  * @returns StoryContextUpdate
@@ -62,11 +62,11 @@ export function defaultDecorateStory<TRenderer extends Renderer>(
    * When you call the story function inside a decorator, e.g.:
    *
    * ```jsx
-   * <div>{storyFn({ foo: 'bar' })}</div>
+   * <div>{storyFn({ foo: 'bar' })}</div>;
    * ```
    *
-   * This will override the `foo` property on the `innerContext`, which gets
-   * merged in with the default context
+   * This will override the `foo` property on the `innerContext`, which gets merged in with the
+   * default context
    */
   const bindWithContext =
     (decoratedStoryFn: LegacyStoryFn<TRenderer>): PartialStoryFn<TRenderer> =>

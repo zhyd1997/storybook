@@ -105,17 +105,11 @@ export type API = addons.SubAPI &
   Other;
 
 interface DeprecatedState {
-  /**
-   * @deprecated use index
-   */
+  /** @deprecated Use index */
   storiesHash: API_IndexHash;
-  /**
-   * @deprecated use previewInitialized
-   */
+  /** @deprecated Use previewInitialized */
   storiesConfigured: boolean;
-  /**
-   * @deprecated use indexError
-   */
+  /** @deprecated Use indexError */
   storiesFailed?: Error;
 }
 
@@ -337,7 +331,7 @@ export function useStorybookApi(): API {
 }
 
 export type {
-  /** @deprecated now IndexHash */
+  /** @deprecated Now IndexHash */
   API_IndexHash as StoriesHash,
   API_IndexHash as IndexHash,
   API_RootEntry as RootEntry,

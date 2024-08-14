@@ -369,15 +369,15 @@ export class ConfigFile {
 
   /**
    * Returns the name of a node in a given path, supporting the following formats:
+   *
    * 1. { framework: 'value' }
    * 2. { framework: { name: 'value', options: {} } }
    */
   /**
    * Returns the name of a node in a given path, supporting the following formats:
-   * @example
-   * // 1. { framework: 'framework-name' }
-   * // 2. { framework: { name: 'framework-name', options: {} }
-   * getNameFromPath(['framework']) // => 'framework-name'
+   *
+   * @example // 1. { framework: 'framework-name' } // 2. { framework: { name: 'framework-name',
+   * options: {} } getNameFromPath(['framework']); // => 'framework-name'
    */
   getNameFromPath(path: string[]): string | undefined {
     const node = this.getFieldNode(path);
@@ -390,16 +390,9 @@ export class ConfigFile {
 
   /**
    * Returns an array of names of a node in a given path, supporting the following formats:
-   * @example
-   * const config = {
-   *   addons: [
-   *     'first-addon',
-   *     { name: 'second-addon', options: {} }
-   *   ]
-   * }
-   * // => ['first-addon', 'second-addon']
-   * getNamesFromPath(['addons'])
    *
+   * @example Const config = { addons: ['first-addon', { name: 'second-addon', options: {} }], }; //
+   * => ['first-addon', 'second-addon'] getNamesFromPath(['addons']);
    */
   getNamesFromPath(path: string[]): string[] | undefined {
     const node = this.getFieldNode(path);
@@ -429,6 +422,7 @@ export class ConfigFile {
 
   /**
    * Given a node and a fallback property, returns a **non-evaluated** string value of the node.
+   *
    * 1. { node: 'value' }
    * 2. { node: { fallbackProperty: 'value' } }
    */
@@ -555,8 +549,8 @@ export class ConfigFile {
   }
 
   /**
-   * Specialized helper to remove addons or other array entries
-   * that can either be strings or objects with a name property.
+   * Specialized helper to remove addons or other array entries that can either be strings or
+   * objects with a name property.
    */
   removeEntryFromArray(path: string[], value: string) {
     const current = this.getFieldNode(path);
@@ -646,15 +640,14 @@ export class ConfigFile {
 
   /**
    * Import specifiers for a specific require import
-   * @param importSpecifiers - The import specifiers to set. If a string is passed in, a default import will be set. Otherwise, an array of named imports will be set
+   *
+   * @example // const { foo } = require('bar'); setRequireImport(['foo'], 'bar');
+   *
+   * // const foo = require('bar'); setRequireImport('foo', 'bar');
+   *
+   * @param importSpecifiers - The import specifiers to set. If a string is passed in, a default
+   *   import will be set. Otherwise, an array of named imports will be set
    * @param fromImport - The module to import from
-   * @example
-   * // const { foo } = require('bar');
-   * setRequireImport(['foo'], 'bar');
-   *
-   * // const foo = require('bar');
-   * setRequireImport('foo', 'bar');
-   *
    */
   setRequireImport(importSpecifier: string[] | string, fromImport: string) {
     const requireDeclaration = this._ast.program.body.find(
@@ -671,9 +664,8 @@ export class ConfigFile {
 
     /**
      * Returns true, when the given import declaration has the given import specifier
-     * @example
-     * // const { foo } = require('bar');
-     * hasImportSpecifier(declaration, 'foo');
+     *
+     * @example // const { foo } = require('bar'); hasImportSpecifier(declaration, 'foo');
      */
     const hasRequireSpecifier = (name: string) =>
       t.isObjectPattern(requireDeclaration?.declarations[0].id) &&
@@ -686,9 +678,8 @@ export class ConfigFile {
 
     /**
      * Returns true, when the given import declaration has the given default import specifier
-     * @example
-     * // import foo from 'bar';
-     * hasImportSpecifier(declaration, 'foo');
+     *
+     * @example // import foo from 'bar'; hasImportSpecifier(declaration, 'foo');
      */
     const hasDefaultRequireSpecifier = (declaration: t.VariableDeclaration, name: string) =>
       declaration.declarations.length === 1 &&
@@ -747,16 +738,16 @@ export class ConfigFile {
 
   /**
    * Set import specifiers for a given import statement.
-   * @description Does not support setting type imports (yet)
-   * @param importSpecifiers - The import specifiers to set. If a string is passed in, a default import will be set. Otherwise, an array of named imports will be set
+   *
+   * Does not support setting type imports (yet)
+   *
+   * @example // import { foo } from 'bar'; setImport(['foo'], 'bar');
+   *
+   * // import foo from 'bar'; setImport('foo', 'bar');
+   *
+   * @param importSpecifiers - The import specifiers to set. If a string is passed in, a default
+   *   import will be set. Otherwise, an array of named imports will be set
    * @param fromImport - The module to import from
-   * @example
-   * // import { foo } from 'bar';
-   * setImport(['foo'], 'bar');
-   *
-   * // import foo from 'bar';
-   * setImport('foo', 'bar');
-   *
    */
   setImport(importSpecifier: string[] | string, fromImport: string) {
     const getNewImportSpecifier = (specifier: string) =>
@@ -764,9 +755,8 @@ export class ConfigFile {
 
     /**
      * Returns true, when the given import declaration has the given import specifier
-     * @example
-     * // import { foo } from 'bar';
-     * hasImportSpecifier(declaration, 'foo');
+     *
+     * @example // import { foo } from 'bar'; hasImportSpecifier(declaration, 'foo');
      */
     const hasImportSpecifier = (declaration: t.ImportDeclaration, name: string) =>
       declaration.specifiers.find(
@@ -778,9 +768,8 @@ export class ConfigFile {
 
     /**
      * Returns true, when the given import declaration has the given default import specifier
-     * @example
-     * // import foo from 'bar';
-     * hasImportSpecifier(declaration, 'foo');
+     *
+     * @example // import foo from 'bar'; hasImportSpecifier(declaration, 'foo');
      */
     const hasDefaultImportSpecifier = (declaration: t.ImportDeclaration, name: string) =>
       declaration.specifiers.find((specifier) => t.isImportDefaultSpecifier(specifier));

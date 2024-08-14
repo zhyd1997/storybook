@@ -68,17 +68,12 @@ function resolvePresetFunction<T = any>(
  * Parse an addon into either a managerEntries or a preset. Throw on invalid input.
  *
  * Valid inputs:
- * - '@storybook/addon-actions/manager'
- *   =>  { type: 'virtual', item }
  *
- * - '@storybook/addon-docs/preset'
- *   =>  { type: 'presets', item }
- *
- * - '@storybook/addon-docs'
- *   =>  { type: 'presets', item: '@storybook/addon-docs/preset' }
- *
- * - { name: '@storybook/addon-docs(/preset)?', options: { ... } }
- *   =>  { type: 'presets', item: { name: '@storybook/addon-docs/preset', options } }
+ * - '@storybook/addon-actions/manager' => { type: 'virtual', item }
+ * - '@storybook/addon-docs/preset' => { type: 'presets', item }
+ * - '@storybook/addon-docs' => { type: 'presets', item: '@storybook/addon-docs/preset' }
+ * - { name: '@storybook/addon-docs(/preset)?', options: { ... } } => { type: 'presets', item: { name:
+ *   '@storybook/addon-docs/preset', options } }
  */
 
 export const resolveAddonName = (

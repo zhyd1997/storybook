@@ -16,12 +16,13 @@ import { PREPARE_ABORTED } from './Render';
 /**
  * A CsfDocsRender is a render of a docs entry that is rendered based on a CSF file.
  *
- * The expectation is the primary CSF file which is the `importPath` for the entry will
- * define a story which may contain the actual rendered JSX code for the template in the
- * `docs.page` parameter.
+ * The expectation is the primary CSF file which is the `importPath` for the entry will define a
+ * story which may contain the actual rendered JSX code for the template in the `docs.page`
+ * parameter.
  *
  * Use cases:
- *  - Autodocs, where there is no story, and we fall back to the globally defined template.
+ *
+ * - Autodocs, where there is no story, and we fall back to the globally defined template.
  */
 export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRenderer> {
   public readonly type: RenderType = 'docs';

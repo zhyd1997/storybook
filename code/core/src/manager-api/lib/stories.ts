@@ -141,9 +141,9 @@ export const transformStoryIndexV3toV4 = (index: StoryIndexV3): API_PreparedStor
 };
 
 /**
- * Storybook 8.0 and below did not automatically tag stories with 'dev'.
- * Therefore Storybook 8.1 and above would not show composed 8.0 stories by default.
- * This function adds the 'dev' tag to all stories in the index to workaround this issue.
+ * Storybook 8.0 and below did not automatically tag stories with 'dev'. Therefore Storybook 8.1 and
+ * above would not show composed 8.0 stories by default. This function adds the 'dev' tag to all
+ * stories in the index to workaround this issue.
  */
 export const transformStoryIndexV4toV5 = (
   index: API_PreparedStoryIndex

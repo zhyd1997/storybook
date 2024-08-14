@@ -50,5 +50,8 @@ export default {
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 
+  jsdocPreferCodeFences: true,
+  tsdoc: true,
+
   // braceStyle: '1tbs',
 };

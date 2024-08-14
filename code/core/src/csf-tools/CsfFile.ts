@@ -155,8 +155,8 @@ export interface CsfOptions {
   fileName?: string;
   makeTitle: (userTitle: string) => string;
   /**
-   * If an inline meta is detected e.g. `export default { title: 'foo' }`
-   * it will be transformed into a constant format e.g. `export const _meta = { title: 'foo' }; export default _meta;`
+   * If an inline meta is detected e.g. `export default { title: 'foo' }` it will be transformed
+   * into a constant format e.g. `export const _meta = { title: 'foo' }; export default _meta;`
    */
   transformInlineMeta?: boolean;
 }
@@ -218,16 +218,12 @@ export class CsfFile {
 
   imports: string[];
 
-  /**
-   * @deprecated use `_options.fileName` instead
-   */
+  /** @deprecated Use `_options.fileName` instead */
   get _fileName() {
     return this._options.fileName;
   }
 
-  /**
-   * @deprecated use `_options.makeTitle` instead
-   */
+  /** @deprecated Use `_options.makeTitle` instead */
   get _makeTitle() {
     return this._options.makeTitle;
   }
@@ -701,9 +697,7 @@ export class CsfFile {
   }
 }
 
-/**
- * Using new babel.File is more powerful and give access to API such as buildCodeFrameError
- */
+/** Using new babel.File is more powerful and give access to API such as buildCodeFrameError */
 export const babelParseFile = ({
   code,
   filename = '',
@@ -734,9 +728,7 @@ export const formatCsf = (
   return result.code;
 };
 
-/**
- * Use this function, if you want to preserve styles. Uses recast under the hood.
- */
+/** Use this function, if you want to preserve styles. Uses recast under the hood. */
 export const printCsf = (csf: CsfFile, options: Options = {}): PrintResultType => {
   return recast.print(csf._ast, options);
 };
