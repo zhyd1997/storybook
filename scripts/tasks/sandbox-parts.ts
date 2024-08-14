@@ -367,6 +367,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
   const isNextjs = template.expected.framework.includes('nextjs');
   // const isAngular = template.expected.framework === '@storybook/angular';
   const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
+  const viteConfigPath = template.name.includes('JavaScript') ? 'vite.config.js' : 'vite.config.ts';
 
   await writeFile(
     join(sandboxDir, '.storybook/vitest.setup.ts'),
@@ -404,7 +405,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
 
       export default defineWorkspace([
         {
-          ${!isNextjs ? 'extends: "vite.config.ts",' : ''}
+          ${!isNextjs ? `extends: "${viteConfigPath}",` : ''}
           plugins: [
             storybookTest({
               storybookScript: "yarn storybook --ci",
@@ -412,7 +413,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
                 include: ["vitest"],
               },
             }),
-           ${isNextjs ? "vitePluginNext({ dir: path.join(__dirname, '..') })," : ''}
+           ${isNextjs ? 'vitePluginNext(),' : ''}
           ],
           ${
             isNextjs
