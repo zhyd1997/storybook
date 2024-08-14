@@ -107,7 +107,9 @@ const addRefIds = (input: API_IndexHash, ref: API_ComposedRef): API_IndexHash =>
 async function handleRequest(
   request: Response | Promise<Response | boolean> | boolean
 ): Promise<API_SetRefData> {
-  if (!request) return {};
+  if (!request) {
+    return {};
+  }
 
   try {
     const response = await request;

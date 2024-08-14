@@ -46,14 +46,20 @@ interface BabelFile {
 function parseIncludeExclude(prop: t.Node) {
   if (t.isArrayExpression(prop)) {
     return prop.elements.map((e) => {
-      if (t.isStringLiteral(e)) return e.value;
+      if (t.isStringLiteral(e)) {
+        return e.value;
+      }
       throw new Error(`Expected string literal: ${e}`);
     });
   }
 
-  if (t.isStringLiteral(prop)) return new RegExp(prop.value);
+  if (t.isStringLiteral(prop)) {
+    return new RegExp(prop.value);
+  }
 
-  if (t.isRegExpLiteral(prop)) return new RegExp(prop.pattern, prop.flags);
+  if (t.isRegExpLiteral(prop)) {
+    return new RegExp(prop.pattern, prop.flags);
+  }
 
   throw new Error(`Unknown include/exclude: ${prop}`);
 }
@@ -64,7 +70,9 @@ function parseTags(prop: t.Node) {
   }
 
   return prop.elements.map((e) => {
-    if (t.isStringLiteral(e)) return e.value;
+    if (t.isStringLiteral(e)) {
+      return e.value;
+    }
     throw new Error(`CSF: Expected tag to be string literal`);
   }) as Tag[];
 }
@@ -125,7 +133,10 @@ const sortExports = (exportByName: Record<string, any>, order: string[]) => {
   return order.reduce(
     (acc, name) => {
       const namedExport = exportByName[name];
-      if (namedExport) acc[name] = namedExport;
+
+      if (namedExport) {
+        acc[name] = namedExport;
+      }
       return acc;
     },
     {} as Record<string, any>
@@ -549,7 +560,10 @@ export class CsfFile {
             if (annotationKey === 'storyName' && t.isStringLiteral(annotationValue)) {
               const storyName = annotationValue.value;
               const story = self._stories[exportName];
-              if (!story) return;
+
+              if (!story) {
+                return;
+              }
               story.name = storyName;
             }
           }
@@ -740,6 +754,9 @@ export const readCsf = async (fileName: string, options: CsfOptions) => {
 
 export const writeCsf = async (csf: CsfFile, fileName?: string) => {
   const fname = fileName || csf._options.fileName;
-  if (!fname) throw new Error('Please specify a fileName for writeCsf');
+
+  if (!fname) {
+    throw new Error('Please specify a fileName for writeCsf');
+  }
   await writeFile(fileName as string, printCsf(csf).code);
 };

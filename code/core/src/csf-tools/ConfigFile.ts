@@ -43,8 +43,13 @@ const getCsfParsingErrorMessage = ({
 };
 
 const propKey = (p: t.ObjectProperty) => {
-  if (t.isIdentifier(p.key)) return p.key.name;
-  if (t.isStringLiteral(p.key)) return p.key.value;
+  if (t.isIdentifier(p.key)) {
+    return p.key.name;
+  }
+
+  if (t.isStringLiteral(p.key)) {
+    return p.key.value;
+  }
   return null;
 };
 
@@ -76,7 +81,11 @@ const _getPathProperties = (path: string[], node: t.Node): t.ObjectProperty[] | 
     const field = (node.properties as t.ObjectProperty[]).find((p) => propKey(p) === first);
     if (field) {
       // FXIME handle spread etc.
-      if (rest.length === 0) return node.properties as t.ObjectProperty[];
+
+      // FXIME handle spread etc.
+      if (rest.length === 0) {
+        return node.properties as t.ObjectProperty[];
+      }
 
       return _getPathProperties(rest, (field as t.ObjectProperty).value);
     }
@@ -123,7 +132,9 @@ const _findVarInitialization = (identifier: string, program: t.Program) => {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _makeObjectExpression = (path: string[], value: t.Expression): t.Expression => {
-  if (path.length === 0) return value;
+  if (path.length === 0) {
+    return value;
+  }
   const [first, ...rest] = path;
   const innerExpression = _makeObjectExpression(rest, value);
   return t.objectExpression([t.objectProperty(t.identifier(first), innerExpression)]);
@@ -307,14 +318,20 @@ export class ConfigFile {
   getFieldNode(path: string[]) {
     const [root, ...rest] = path;
     const exported = this._exports[root];
-    if (!exported) return undefined;
+
+    if (!exported) {
+      return undefined;
+    }
     return _getPath(rest, exported);
   }
 
   getFieldProperties(path: string[]) {
     const [root, ...rest] = path;
     const exported = this._exports[root];
-    if (!exported) return undefined;
+
+    if (!exported) {
+      return undefined;
+    }
     return _getPathProperties(rest, exported);
   }
 
@@ -522,7 +539,10 @@ export class ConfigFile {
           removedRootProperty = true;
         }
       });
-      if (removedRootProperty) return;
+
+      if (removedRootProperty) {
+        return;
+      }
     }
 
     const properties = this.getFieldProperties(path) as t.ObjectProperty[];
@@ -534,7 +554,10 @@ export class ConfigFile {
 
   appendValueToArray(path: string[], value: any) {
     const node = this.valueToNode(value);
-    if (node) this.appendNodeToArray(path, node);
+
+    if (node) {
+      this.appendNodeToArray(path, node);
+    }
   }
 
   appendNodeToArray(path: string[], node: t.Expression) {
@@ -554,7 +577,10 @@ export class ConfigFile {
    */
   removeEntryFromArray(path: string[], value: string) {
     const current = this.getFieldNode(path);
-    if (!current) return;
+
+    if (!current) {
+      return;
+    }
     if (t.isArrayExpression(current)) {
       const index = current.elements.findIndex((element) => {
         if (t.isStringLiteral(element)) {
@@ -838,6 +864,9 @@ export const readConfig = async (fileName: string) => {
 
 export const writeConfig = async (config: ConfigFile, fileName?: string) => {
   const fname = fileName || config.fileName;
-  if (!fname) throw new Error('Please specify a fileName for writeConfig');
+
+  if (!fname) {
+    throw new Error('Please specify a fileName for writeConfig');
+  }
   await writeFile(fname, formatConfig(config));
 };

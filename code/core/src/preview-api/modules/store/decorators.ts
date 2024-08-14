@@ -73,7 +73,12 @@ export function defaultDecorateStory<TRenderer extends Renderer>(
     (update) => {
       // This code path isn't possible because we always set `contextStore.value` before calling
       // `decoratedWithContextStore`, but TS doesn't know that.
-      if (!contextStore.value) throw new Error('Decorated function called without init');
+
+      // This code path isn't possible because we always set `contextStore.value` before calling
+      // `decoratedWithContextStore`, but TS doesn't know that.
+      if (!contextStore.value) {
+        throw new Error('Decorated function called without init');
+      }
       contextStore.value = {
         ...contextStore.value,
         ...sanitizeStoryContextUpdate(update),

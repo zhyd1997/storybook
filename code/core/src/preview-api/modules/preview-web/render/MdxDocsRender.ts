@@ -61,7 +61,10 @@ export class MdxDocsRender<TRenderer extends Renderer> implements Render<TRender
   async prepare() {
     this.preparing = true;
     const { entryExports, csfFiles = [] } = await this.store.loadEntry(this.id);
-    if (this.torndown) throw PREPARE_ABORTED;
+
+    if (this.torndown) {
+      throw PREPARE_ABORTED;
+    }
 
     this.csfFiles = csfFiles;
     this.exports = entryExports;
@@ -78,7 +81,12 @@ export class MdxDocsRender<TRenderer extends Renderer> implements Render<TRender
   }
 
   docsContext(renderStoryToElement: DocsContextProps<TRenderer>['renderStoryToElement']) {
-    if (!this.csfFiles) throw new Error('Cannot render docs before preparing');
+    if (!this.csfFiles) {
+      throw new Error('Cannot render docs before preparing');
+    }
+
+    // NOTE we do *not* attach any CSF file yet. We wait for `referenceMeta(..., true)`
+    // ie the CSF file is attached via `<Meta of={} />`
 
     // NOTE we do *not* attach any CSF file yet. We wait for `referenceMeta(..., true)`
     // ie the CSF file is attached via `<Meta of={} />`
@@ -94,16 +102,19 @@ export class MdxDocsRender<TRenderer extends Renderer> implements Render<TRender
     canvasElement: TRenderer['canvasElement'],
     renderStoryToElement: DocsContextProps<TRenderer>['renderStoryToElement']
   ) {
-    if (!this.exports || !this.csfFiles || !this.store.projectAnnotations)
+    if (!this.exports || !this.csfFiles || !this.store.projectAnnotations) {
       throw new Error('Cannot render docs before preparing');
+    }
 
     const docsContext = this.docsContext(renderStoryToElement);
 
     const { docs } = this.store.projectAnnotations.parameters || {};
-    if (!docs)
+
+    if (!docs) {
       throw new Error(
         `Cannot render a story in viewMode=docs if \`@storybook/addon-docs\` is not installed`
       );
+    }
 
     const docsParameter = { ...docs, page: this.exports.default };
     const renderer = await docs.renderer();
@@ -120,7 +131,9 @@ export class MdxDocsRender<TRenderer extends Renderer> implements Render<TRender
 
     this.rerender = async () => renderDocs();
     this.teardownRender = async ({ viewModeChanged }: { viewModeChanged?: boolean } = {}) => {
-      if (!viewModeChanged || !canvasElement) return;
+      if (!viewModeChanged || !canvasElement) {
+        return;
+      }
       renderer.unmount(canvasElement);
       this.torndown = true;
     };

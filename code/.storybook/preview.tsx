@@ -135,7 +135,9 @@ export const loaders = [
    * The DocsContext will then be added via the decorator below.
    */
   async ({ parameters: { relativeCsfPaths, attached = true } }) => {
-    if (!relativeCsfPaths) return {};
+    if (!relativeCsfPaths) {
+      return {};
+    }
     const csfFiles = await Promise.all(
       (relativeCsfPaths as string[]).map(async (blocksRelativePath) => {
         const projectRelativePath = `./lib/blocks/src/${blocksRelativePath.replace(

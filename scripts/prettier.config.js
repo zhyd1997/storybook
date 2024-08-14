@@ -29,13 +29,14 @@ export default {
   ],
   plugins: [
     '@trivago/prettier-plugin-sort-imports',
-    // 'prettier-plugin-brace-style',
-    // 'prettier-plugin-curly',
+    'prettier-plugin-brace-style',
+    'prettier-plugin-curly',
     'prettier-plugin-jsdoc',
     'prettier-plugin-css-order',
     'prettier-plugin-merge',
   ],
 
+  // @trivago/prettier-plugin-sort-imports
   importOrder: [
     '^node:',
     '^(vitest|@testing-library)',
@@ -50,8 +51,10 @@ export default {
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 
+  // prettier-plugin-jsdoc
   jsdocPreferCodeFences: true,
   tsdoc: true,
 
-  // braceStyle: '1tbs',
+  // prettier-plugin-brace-style
+  braceStyle: '1tbs',
 };

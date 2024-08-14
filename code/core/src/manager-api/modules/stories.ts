@@ -444,7 +444,9 @@ export const init: ModuleFn<SubAPI, SubState> = ({
         // Find the entry (group, component or story) that is referred to
         const entry = titleOrId ? hash[titleOrId] || hash[sanitize(titleOrId)] : hash[kindSlug];
 
-        if (!entry) throw new Error(`Unknown id or title: '${titleOrId}'`);
+        if (!entry) {
+          throw new Error(`Unknown id or title: '${titleOrId}'`);
+        }
 
         store.setState({
           settings: { ...store.getState().settings, lastTrackedStoryId: entry.id },
@@ -537,7 +539,10 @@ export const init: ModuleFn<SubAPI, SubState> = ({
     fetchIndex: async () => {
       try {
         const result = await fetch(STORY_INDEX_PATH);
-        if (result.status !== 200) throw new Error(await result.text());
+
+        if (result.status !== 200) {
+          throw new Error(await result.text());
+        }
 
         const storyIndex = (await result.json()) as StoryIndex;
 

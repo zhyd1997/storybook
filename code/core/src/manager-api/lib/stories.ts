@@ -55,7 +55,9 @@ export const transformSetStoriesStoryDataToPreparedStoryIndex = (
 ): API_PreparedStoryIndex => {
   const entries: API_PreparedStoryIndex['entries'] = Object.entries(stories).reduce(
     (acc, [id, story]) => {
-      if (!story) return acc;
+      if (!story) {
+        return acc;
+      }
 
       const { docsOnly, fileName, ...parameters } = story.parameters;
       const base = {
@@ -326,7 +328,9 @@ export const transformStoryIndexToStoriesHash = (
 };
 
 export const addPreparedStories = (newHash: API_IndexHash, oldHash?: API_IndexHash) => {
-  if (!oldHash) return newHash;
+  if (!oldHash) {
+    return newHash;
+  }
 
   return Object.fromEntries(
     Object.entries(newHash).map(([id, newEntry]) => {

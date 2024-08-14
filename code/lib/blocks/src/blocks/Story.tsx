@@ -64,7 +64,9 @@ export const getStoryId = (props: StoryProps, context: DocsContextProps): StoryI
     throw new Error('Unexpected `of={undefined}`, did you mistype a CSF file reference?');
   }
 
-  if (meta) context.referenceMeta(meta, false);
+  if (meta) {
+    context.referenceMeta(meta, false);
+  }
   const resolved = context.resolveOf(of || 'story', ['story']);
   return resolved.story.id;
 };

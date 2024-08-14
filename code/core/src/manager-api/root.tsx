@@ -131,7 +131,11 @@ export type ManagerProviderProps = RouterData &
 export const combineParameters = (...parameterSets: Parameters[]) =>
   mergeWith({}, ...parameterSets, (objValue: any, srcValue: any) => {
     // Treat arrays as scalars:
-    if (Array.isArray(srcValue)) return srcValue;
+
+    // Treat arrays as scalars:
+    if (Array.isArray(srcValue)) {
+      return srcValue;
+    }
 
     return undefined;
   });

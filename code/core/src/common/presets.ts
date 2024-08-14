@@ -106,7 +106,9 @@ export const resolveAddonName = (
   }
 
   const checkExists = (exportName: string) => {
-    if (resolve(`${name}${exportName}`)) return `${name}${exportName}`;
+    if (resolve(`${name}${exportName}`)) {
+      return `${name}${exportName}`;
+    }
     return undefined;
   };
 

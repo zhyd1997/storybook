@@ -61,7 +61,10 @@ export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRender
   async prepare() {
     this.preparing = true;
     const { entryExports, csfFiles = [] } = await this.store.loadEntry(this.id);
-    if (this.torndown) throw PREPARE_ABORTED;
+
+    if (this.torndown) {
+      throw PREPARE_ABORTED;
+    }
 
     const { importPath, title } = this.entry;
     const primaryCsfFile = this.store.processCSFFileWithCache<TRenderer>(
@@ -92,7 +95,9 @@ export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRender
   }
 
   docsContext(renderStoryToElement: DocsContextProps<TRenderer>['renderStoryToElement']) {
-    if (!this.csfFiles) throw new Error('Cannot render docs before preparing');
+    if (!this.csfFiles) {
+      throw new Error('Cannot render docs before preparing');
+    }
     const docsContext = new DocsContext<TRenderer>(
       this.channel,
       this.store,
@@ -110,16 +115,19 @@ export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRender
     canvasElement: TRenderer['canvasElement'],
     renderStoryToElement: DocsContextProps<TRenderer>['renderStoryToElement']
   ) {
-    if (!this.story || !this.csfFiles) throw new Error('Cannot render docs before preparing');
+    if (!this.story || !this.csfFiles) {
+      throw new Error('Cannot render docs before preparing');
+    }
 
     const docsContext = this.docsContext(renderStoryToElement);
 
     const { docs: docsParameter } = this.story.parameters || {};
 
-    if (!docsParameter)
+    if (!docsParameter) {
       throw new Error(
         `Cannot render a story in viewMode=docs if \`@storybook/addon-docs\` is not installed`
       );
+    }
 
     const renderer = await docsParameter.renderer();
     const { render } = renderer as { render: DocsRenderFunction<TRenderer> };
@@ -135,7 +143,9 @@ export class CsfDocsRender<TRenderer extends Renderer> implements Render<TRender
 
     this.rerender = async () => renderDocs();
     this.teardownRender = async ({ viewModeChanged }: { viewModeChanged?: boolean }) => {
-      if (!viewModeChanged || !canvasElement) return;
+      if (!viewModeChanged || !canvasElement) {
+        return;
+      }
       renderer.unmount(canvasElement);
     };
 

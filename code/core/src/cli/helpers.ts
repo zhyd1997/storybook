@@ -222,7 +222,11 @@ export async function copyTemplateFiles({
   if (commonAssetsDir) {
     let rendererType = frameworkToRenderer[renderer] || 'react';
     // This is only used for docs links and the docs site uses `vue` for both `vue` & `vue3` renderers
-    if (rendererType === 'vue3') rendererType = 'vue';
+
+    // This is only used for docs links and the docs site uses `vue` for both `vue` & `vue3` renderers
+    if (rendererType === 'vue3') {
+      rendererType = 'vue';
+    }
     await adjustTemplate(join(destinationPath, 'Configure.mdx'), { renderer: rendererType });
   }
 }
