@@ -258,7 +258,7 @@ export interface Addon_BaseMeta<ComponentType> {
    * @example
    *
    * ```ts
-   * export default { ... title: 'Design System/Atoms/Button' }
+   * export default { title: 'Design System/Atoms/Button' };
    * ```
    *
    * @see [Story Hierarchy](https://storybook.js.org/docs/basics/writing-stories/#story-hierarchy)
