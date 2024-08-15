@@ -169,8 +169,6 @@ export class DocsContext<TRenderer extends Renderer> implements DocsContextProps
     }
 
     // If the export isn't a module, default or story export, we assume it is a component
-
-    // If the export isn't a module, default or story export, we assume it is a component
     return { type: 'component', component: moduleExportOrType } as TResolvedExport;
   }
 
