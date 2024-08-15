@@ -87,9 +87,6 @@ export class MdxDocsRender<TRenderer extends Renderer> implements Render<TRender
 
     // NOTE we do *not* attach any CSF file yet. We wait for `referenceMeta(..., true)`
     // ie the CSF file is attached via `<Meta of={} />`
-
-    // NOTE we do *not* attach any CSF file yet. We wait for `referenceMeta(..., true)`
-    // ie the CSF file is attached via `<Meta of={} />`
     return new DocsContext<TRenderer>(
       this.channel,
       this.store,
