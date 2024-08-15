@@ -53,10 +53,19 @@ export const writeFileAsJson = (jsonPath: string, content: unknown) => {
  * Detect if any babel dependencies need to be added to the project This is currently used by
  * react-native generator
  *
- * @example Const babelDependencies = await getBabelDependencies( packageManager, npmOptions,
- * packageJson ); // you can then spread the result when using installDependencies
- * installDependencies(npmOptions, [ `@storybook/react@${storybookVersion}`, ...babelDependencies,
+ * @example
+ *
+ * ```ts
+ * const babelDependencies = await getBabelDependencies(
+ *   packageManager,
+ *   npmOptions,
+ *   packageJson
+ * ); // you can then spread the result when using installDependencies
+ * installDependencies(npmOptions, [
+ *   `@storybook/react@${storybookVersion}`,
+ *   ...babelDependencies,
  * ]);
+ * ```
  *
  * @param {Object} packageJson The current package.json so we can inspect its contents
  * @returns {Array} Contains the packages and versions that need to be installed

@@ -100,18 +100,35 @@ export function getEnvConfig(program: Record<string, any>, configEnv: Record<str
  * log file which you can manage with the returned functions. You can then decide whether to move
  * the log file to the users project, or remove it.
  *
- * @example Const { logStream, moveLogFile, removeLogFile, clearLogFile, readLogFile } = await
- * createLogStream('my-log-file.log');
+ * @example
  *
- * // SCENARIO 1: // you can write custom messages to generate a log file logStream.write('my log
- * message'); await moveLogFile();
+ * ```ts
+ * const { logStream, moveLogFile, removeLogFile, clearLogFile, readLogFile } =
+ *   await createLogStream('my-log-file.log');
  *
- * // SCENARIO 2: // or you can pass it to stdio and capture the output of that command try { await
- * this.executeCommand({ command: 'pnpm', args: ['info', packageName, ...args], // do not output to
- * the user, and send stdio and stderr to log file stdio: ['ignore', logStream, logStream], }); }
- * catch (err) { // do something with the log file content const output = await readLogFile(); //
- * move the log file to the users project await moveLogFile(); } // success, no need to keep the log
- * file await removeLogFile();
+ * // SCENARIO 1:
+ * // you can write custom messages to generate a log file
+ * logStream.write('my log message');
+ * await moveLogFile();
+ *
+ * // SCENARIO 2:
+ * // or you can pass it to stdio and capture the output of that command
+ * try {
+ *   await this.executeCommand({
+ *     command: 'pnpm',
+ *     args: ['info', packageName, ...args],
+ *     // do not output to the user, and send stdio and stderr to log file
+ *     stdio: ['ignore', logStream, logStream],
+ *   });
+ * } catch (err) {
+ *   // do something with the log file content
+ *   const output = await readLogFile();
+ *   // move the log file to the users project
+ *   await moveLogFile();
+ * }
+ * // success, no need to keep the log file
+ * await removeLogFile();
+ * ```
  */
 export const createLogStream = async (
   logFileName = 'storybook.log'

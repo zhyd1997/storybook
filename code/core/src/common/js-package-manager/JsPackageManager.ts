@@ -213,9 +213,16 @@ export abstract class JsPackageManager {
   /**
    * Add dependencies to a project using `yarn add` or `npm install`.
    *
-   * @example AddDependencies(options, [ `@storybook/react@${storybookVersion}`,
-   * `@storybook/addon-actions@${actionsVersion}`, `@storybook/addon-links@${linksVersion}`,
-   * `@storybook/preview-api@${addonsVersion}`, ]);
+   * @example
+   *
+   * ```ts
+   * addDependencies(options, [
+   *   `@storybook/react@${storybookVersion}`,
+   *   `@storybook/addon-actions@${actionsVersion}`,
+   *   `@storybook/addon-links@${linksVersion}`,
+   *   `@storybook/preview-api@${addonsVersion}`,
+   * ]);
+   * ```
    *
    * @param {Object} options Contains `skipInstall`, `packageJson` and `installAsDevDependencies`
    *   which we use to determine how we install packages.
@@ -266,7 +273,11 @@ export abstract class JsPackageManager {
   /**
    * Remove dependencies from a project using `yarn remove` or `npm uninstall`.
    *
-   * @example RemoveDependencies(options, [`@storybook/react`, `@storybook/addon-actions`]);
+   * @example
+   *
+   * ```ts
+   * removeDependencies(options, [`@storybook/react`, `@storybook/addon-actions`]);
+   * ```
    *
    * @param {Object} options Contains `skipInstall`, `packageJson` and `installAsDevDependencies`
    *   which we use to determine how we install packages.

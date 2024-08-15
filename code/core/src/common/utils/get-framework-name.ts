@@ -24,8 +24,12 @@ export async function getFrameworkName(options: Options) {
  * Extracts the proper framework name from the given framework field. The framework field can be the
  * framework package name or a path to the framework package.
  *
- * @example ExtractProperFrameworkName('/path/to/@storybook/angular'); // => '@storybook/angular'
+ * @example
+ *
+ * ```ts
+ * ExtractProperFrameworkName('/path/to/@storybook/angular'); // => '@storybook/angular'
  * extractProperFrameworkName('@third-party/framework'); // => '@third-party/framework'
+ * ```
  */
 export const extractProperFrameworkName = (framework: string) => {
   const normalizedPath = normalizePath(framework);

@@ -511,8 +511,13 @@ export interface EventMap {
 /**
  * Subscribes to events emitted by the Storybook channel and returns a function to emit events.
  *
- * @example // Subscribe to an event and emit it const emit = useChannel({ 'my-event': (arg1, arg2)
- * => console.log(arg1, arg2) }); emit('my-event', 'Hello', 'world!');
+ * @example
+ *
+ * ```ts
+ * // Subscribe to an event and emit it
+ * const emit = useChannel({ 'my-event': (arg1, arg2) => console.log(arg1, arg2) });
+ * emit('my-event', 'Hello', 'world!');
+ * ```
  *
  * @param {EventMap} eventMap A map of event listeners to subscribe to.
  * @param {any[]} [deps=[]] An optional array of dependencies. If any of the dependencies change,
