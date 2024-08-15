@@ -7,7 +7,7 @@ import type { Renderer, StepRunner } from '@storybook/core/types';
  *
  * @example
  *
- * ```
+ * ```ts
  * step('label', () => {});
  * ```
  *
