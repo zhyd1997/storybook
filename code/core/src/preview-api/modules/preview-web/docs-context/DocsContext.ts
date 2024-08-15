@@ -120,8 +120,6 @@ export class DocsContext<TRenderer extends Renderer> implements DocsContextProps
 
     if (moduleExportType === 'story') {
       // If passed a type, we return the attached file, component or primary story
-
-      // If passed a type, we return the attached file, component or primary story
       if (!this.primaryStory) {
         throw new Error(
           `No primary story attached to this docs file, did you forget to use <Meta of={} />?`
