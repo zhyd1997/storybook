@@ -85,8 +85,8 @@ export const useHighlighted = ({
     let lastRequestId: number;
     const navigateTree = (event: KeyboardEvent) => {
       if (isLoading || !isBrowsing || !containerRef.current) {
-        return;
-      } // allow event.repeat // allow event.repeat
+        return; // allow event.repeat // allow event.repeat
+      }
 
       // allow event.repeat
       if (!matchesModifiers(false, event)) {
