@@ -1,6 +1,7 @@
-import { global as globalThis } from '@storybook/global';
 import type { PlayFunctionContext } from '@storybook/core/types';
-import { within, waitFor, expect } from '@storybook/test';
+import { global as globalThis } from '@storybook/global';
+import { expect, waitFor, within } from '@storybook/test';
+
 import {
   FORCE_REMOUNT,
   RESET_STORY_ARGS,
@@ -13,6 +14,7 @@ export default {
   args: {
     label: 'Click me',
   },
+  tags: ['!vitest'],
 };
 
 export const ForceRemount = {
@@ -36,7 +38,7 @@ export const ForceRemount = {
     // By forcing the component to remount, we reset the focus state
     await channel.emit(FORCE_REMOUNT, { storyId: id });
   },
-  tags: ['!test'],
+  tags: ['!test', '!vitest'],
 };
 
 export const ChangeArgs = {

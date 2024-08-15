@@ -1,6 +1,7 @@
 <h1>Migration</h1>
 
 - [From version 8.2.x to 8.3.x](#from-version-82x-to-83x)
+  - [Removed `experimental_SIDEBAR_BOTTOM` and deprecated `experimental_SIDEBAR_TOP` addon types](#removed-experimental_sidebar_bottom-and-deprecated-experimental_sidebar_top-addon-types)
   - [New parameters format for addon backgrounds](#new-parameters-format-for-addon-backgrounds)
   - [New parameters format for addon viewport](#new-parameters-format-for-addon-viewport)
 - [From version 8.1.x to 8.2.x](#from-version-81x-to-82x)
@@ -418,6 +419,12 @@
   - [Deprecated embedded addons](#deprecated-embedded-addons)
 
 ## From version 8.2.x to 8.3.x
+
+### Removed `experimental_SIDEBAR_BOTTOM` and deprecated `experimental_SIDEBAR_TOP` addon types
+
+The experimental SIDEBAR_BOTTOM addon type was removed in favor of a built-in filter UI. The enum type definition will remain available until Storybook 9.0 but will be ignored. Similarly the experimental SIDEBAR_TOP addon type is deprecated and will be removed in a future version.
+
+These APIs allowed addons to render arbitrary content in the Storybook sidebar. Due to potential conflicts between addons and challenges regarding styling, these APIs are/will be removed. In the future, Storybook will provide declarative API hooks to allow addons to add content to the sidebar without risk of conflicts or UI inconsistencies. One such API is `experimental_updateStatus` which allow addons to set a status for stories. The SIDEBAR_BOTTOM slot is now used to allow filtering stories with a given status.
 
 ### New parameters format for addon backgrounds
 
@@ -2427,8 +2434,8 @@ export default config;
 
 #### Vite builder uses Vite config automatically
 
-When using a [Vite-based framework](#framework-field-mandatory), Storybook will automatically use your `vite.config.(ctm)js` config file starting in 7.0.  
-Some settings will be overridden by Storybook so that it can function properly, and the merged settings can be modified using `viteFinal` in `.storybook/main.js` (see the [Storybook Vite configuration docs](https://storybook.js.org/docs/react/builders/vite#configuration)).  
+When using a [Vite-based framework](#framework-field-mandatory), Storybook will automatically use your `vite.config.(ctm)js` config file starting in 7.0.
+Some settings will be overridden by Storybook so that it can function properly, and the merged settings can be modified using `viteFinal` in `.storybook/main.js` (see the [Storybook Vite configuration docs](https://storybook.js.org/docs/react/builders/vite#configuration)).
 If you were using `viteFinal` in 6.5 to simply merge in your project's standard Vite config, you can now remove it.
 
 For Svelte projects this means that the `svelteOptions` property in the `main.js` config should be omitted, as it will be loaded automatically via the project's `vite.config.js`.
@@ -2506,13 +2513,13 @@ This means also, that there is no root ngModule anymore. Previously you were abl
 For example, if you want to configure BrowserAnimationModule in your stories, please extract the necessary providers the following way and provide them via the `applicationConfig` decorator:
 
 ```js
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { importProvidersFrom } from '@angular/core';
-import { applicationConfig, Meta, StoryObj } from '@storybook/angular';
-import {ExampleComponent} from './example.component';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { importProvidersFrom } from "@angular/core";
+import { applicationConfig, Meta, StoryObj } from "@storybook/angular";
+import { ExampleComponent } from "./example.component";
 
 const meta: Meta = {
-  title: 'Example',
+  title: "Example",
   component: ExampleComponent,
   decorators: [
     // Define application-wide providers with the applicationConfig decorator
@@ -2522,20 +2529,20 @@ const meta: Meta = {
         // Extract all providers (and nested ones) from a ModuleWithProviders
         importProvidersFrom(SomeOtherModule.forRoot()),
       ],
-    }
+    }),
   ],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ExampleComponent>
+type Story = StoryObj<typeof ExampleComponent>;
 
 export const Default: Story = {
   render: () => ({
     // Define application-wide providers directly in the render function
     applicationConfig: {
       providers: [importProvidersFrom(BrowserAnimationsModule)],
-    }
+    },
   }),
 };
 ```

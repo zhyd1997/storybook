@@ -1,26 +1,28 @@
 import {
-  composeStory as originalComposeStory,
   composeStories as originalComposeStories,
+  composeStory as originalComposeStory,
   setProjectAnnotations as originalSetProjectAnnotations,
+  setDefaultProjectAnnotations,
 } from 'storybook/internal/preview-api';
 import type {
   Args,
-  ProjectAnnotations,
-  StoryAnnotationsOrFn,
-  Store_CSFExports,
-  StoriesWithPartialProps,
   ComposedStoryFn,
   NamedOrDefaultProjectAnnotations,
+  NormalizedProjectAnnotations,
+  ProjectAnnotations,
+  Store_CSFExports,
+  StoriesWithPartialProps,
+  StoryAnnotationsOrFn,
 } from 'storybook/internal/types';
+
+import PreviewRender from '@storybook/svelte/internal/PreviewRender.svelte';
+// @ts-expect-error Don't know why TS doesn't pick up the types export here
+import { createSvelte5Props } from '@storybook/svelte/internal/createSvelte5Props';
 
 import * as svelteProjectAnnotations from './entry-preview';
 import type { Meta } from './public-types';
 import type { SvelteRenderer } from './types';
-import PreviewRender from '@storybook/svelte/internal/PreviewRender.svelte';
-// @ts-expect-error Don't know why TS doesn't pick up the types export here
-import { createSvelte5Props } from '@storybook/svelte/internal/createSvelte5Props';
 import { IS_SVELTE_V4 } from './utils';
-import { TestingLibraryMustBeConfiguredError } from 'storybook/internal/preview-errors';
 
 type ComposedStory<TArgs extends Args = any> = ComposedStoryFn<SvelteRenderer, TArgs> & {
   Component: typeof PreviewRender;
@@ -54,10 +56,13 @@ type MapToComposed<TModule> = {
  */
 export function setProjectAnnotations(
   projectAnnotations:
-    | NamedOrDefaultProjectAnnotations<SvelteRenderer>
-    | NamedOrDefaultProjectAnnotations<SvelteRenderer>[]
-): ProjectAnnotations<SvelteRenderer> {
-  return originalSetProjectAnnotations<SvelteRenderer>(projectAnnotations);
+    | NamedOrDefaultProjectAnnotations<any>
+    | NamedOrDefaultProjectAnnotations<any>[]
+): NormalizedProjectAnnotations<SvelteRenderer> {
+  setDefaultProjectAnnotations(INTERNAL_DEFAULT_PROJECT_ANNOTATIONS);
+  return originalSetProjectAnnotations(
+    projectAnnotations
+  ) as NormalizedProjectAnnotations<SvelteRenderer>;
 }
 
 // This will not be necessary once we have auto preset loading
@@ -65,9 +70,7 @@ export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<SvelteRend
   ...svelteProjectAnnotations,
   renderToCanvas: (renderContext, canvasElement) => {
     if (renderContext.storyContext.testingLibraryRender == null) {
-      throw new TestingLibraryMustBeConfiguredError();
-      // Enable for 8.3
-      // return svelteProjectAnnotations.renderToCanvas(renderContext, canvasElement);
+      return svelteProjectAnnotations.renderToCanvas(renderContext, canvasElement);
     }
     const {
       storyFn,

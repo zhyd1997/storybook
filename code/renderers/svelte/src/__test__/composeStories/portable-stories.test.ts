@@ -1,17 +1,18 @@
 // @vitest-environment happy-dom
-
 /// <reference types="@testing-library/jest-dom" />;
-import { it, expect, vi, describe, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/svelte';
+import { cleanup, render, screen } from '@testing-library/svelte';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 // import '@testing-library/svelte/vitest';
 import { expectTypeOf } from 'expect-type';
+
 import type { Meta } from '../..';
+import { composeStories, composeStory, setProjectAnnotations } from '../../portable-stories';
 import * as stories from './Button.stories';
 // import type Button from './Button.svelte';
 import type Button from './Button.svelte';
-import { composeStories, composeStory, setProjectAnnotations } from '../../portable-stories';
 
-setProjectAnnotations({ testingLibraryRender: render });
+setProjectAnnotations([]);
 
 // example with composeStories, returns an object with all stories composed with args/decorators
 const { CSF3Primary, LoaderStory } = composeStories(stories);
@@ -82,7 +83,6 @@ describe('projectAnnotations', () => {
         globalTypes: {
           locale: { defaultValue: 'en' },
         },
-        testingLibraryRender: render,
       },
     ]);
     const WithEnglishText = composeStory(stories.CSF2StoryWithLocale, stories.default);

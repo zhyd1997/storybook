@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { DocsOptions } from './core-common';
-import type { Args, ArgTypes, Parameters, ComponentTitle, StoryId, Path, Tag } from './csf';
+import type { ArgTypes, Args, ComponentTitle, Parameters, Path, StoryId, Tag } from './csf';
 import type { IndexEntry } from './indexer';
 
 export interface API_BaseEntry {
@@ -125,6 +125,7 @@ export interface API_StatusObject {
   title: string;
   description: string;
   data?: any;
+  onClick?: () => void;
 }
 
 export type API_StatusState = Record<StoryId, Record<string, API_StatusObject>>;

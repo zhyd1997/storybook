@@ -1,6 +1,6 @@
 {
   "name": "@storybook/cli",
-  "version": "8.3.0-alpha.4",
+  "version": "8.3.0-alpha.6",
   "description": "Storybook CLI",
   "keywords": [
     "storybook"
@@ -36,8 +36,8 @@
     "!src/**/*"
   ],
   "scripts": {
-    "check": "node --loader ../../../scripts/node_modules/esbuild-register/loader.js -r ../../../scripts/node_modules/esbuild-register/register.js ../../../scripts/prepare/check.ts",
-    "prep": "node --loader ../../../scripts/node_modules/esbuild-register/loader.js -r ../../../scripts/node_modules/esbuild-register/register.js ../../../scripts/prepare/bundle.ts"
+    "check": "jiti  ../../../scripts/prepare/check.ts",
+    "prep": "jiti  ../../../scripts/prepare/bundle.ts"
   },
   "dependencies": {
     "@babel/core": "^7.24.4",
@@ -53,6 +53,7 @@
     "find-up": "^5.0.0",
     "fs-extra": "^11.1.0",
     "giget": "^1.0.0",
+    "glob": "^10.0.0",
     "globby": "^14.0.1",
     "jscodeshift": "^0.15.1",
     "leven": "^3.1.0",
