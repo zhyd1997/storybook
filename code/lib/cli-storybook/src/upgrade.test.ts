@@ -86,7 +86,7 @@ describe('Upgrade errors', () => {
     });
 
     // Mock as a throw, so that we don't have to mock the content of the doUpgrade fn that comes after it
-    vi.spyOn(logger, 'warn').mockImplementation((error) => {
+    vi.spyOn(logger, 'warn').mockImplementation((error: any) => {
       throw error;
     });
 
