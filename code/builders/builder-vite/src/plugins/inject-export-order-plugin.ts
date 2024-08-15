@@ -19,10 +19,6 @@ export async function injectExportOrderPlugin() {
       // TODO: Maybe convert `injectExportOrderPlugin` to function that returns object,
       //  and run `await init;` once and then call `parse()` without `await`,
       //  instead of calling `await parse()` every time.
-
-      // TODO: Maybe convert `injectExportOrderPlugin` to function that returns object,
-      //  and run `await init;` once and then call `parse()` without `await`,
-      //  instead of calling `await parse()` every time.
       const [, exports] = await parse(code);
 
       const exportNames = exports.map((e) => code.substring(e.s, e.e));
