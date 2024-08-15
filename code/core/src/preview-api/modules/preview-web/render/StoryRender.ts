@@ -227,7 +227,6 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
           await this.runPhase(abortSignal, 'rendering', async () => {
             mountReturn = await story.mount(context)(...args);
           });
-          // start playing phase if mount is used inside a play function
 
           // start playing phase if mount is used inside a play function
           if (isMountDestructured) {
