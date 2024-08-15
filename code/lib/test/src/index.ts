@@ -1,3 +1,5 @@
+import type { BoundFunctions } from '@testing-library/dom';
+
 import type { LoaderFunction } from '@storybook/csf';
 import { global } from '@storybook/global';
 import { instrument } from '@storybook/instrumenter';
@@ -17,7 +19,7 @@ import { type queries, within } from './testing-library';
 
 export * from './spy';
 
-type Queries = ReturnType<typeof within<typeof queries>>;
+type Queries = BoundFunctions<typeof queries>;
 
 declare module '@storybook/csf' {
   interface Canvas extends Queries {}
