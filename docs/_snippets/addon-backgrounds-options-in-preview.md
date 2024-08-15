@@ -19,8 +19,8 @@ export default {
 ```
 
 ```ts filename=".storybook/preview.ts" renderer="common" language="ts"
-// Replace your-framework with the framework you are using (e.g., react, vue3)
-import { Preview } from '@storybook/your-framework';
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+import { Preview } from '@storybook/your-renderer';
 
 const preview: Preview = {
   parameters: {

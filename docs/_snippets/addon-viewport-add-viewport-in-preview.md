@@ -31,8 +31,8 @@ export default {
 ```
 
 ```ts filename=".storybook/preview.ts" renderer="common" language="ts" tabTitle="Without globals API"
-// Replace your-framework with the framework you are using (e.g., react, vue3)
-import type { Preview } from '@storybook/your-framework';
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+import { Preview } from '@storybook/your-renderer';
 import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 
 const kindleViewports = {

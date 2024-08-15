@@ -37,7 +37,7 @@ export default {
 ```
 
 ```ts filename="Button.stories.ts" renderer="web-components" language="ts"
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Meta } from '@storybook/web-components';
 
 const meta: Meta = {
   component: 'demo-button',
