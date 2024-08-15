@@ -283,15 +283,14 @@ export class StoryIndexGenerator {
     return [...this.specifierToCache.values()].flatMap((cache: SpecifierStoriesCache) =>
       Object.entries(cache)
         .filter(([fileName, cacheEntry]) => {
-          // We are only interested in stories cache entries (and assume they've been processed already)
-          // If we found a match in the cache that's still null or not a stories file,
-          // it is a docs file and it isn't a dependency / storiesImport.
-          // See https://github.com/storybookjs/storybook/issues/20958
-
-          // We are only interested in stories cache entries (and assume they've been processed already)
-          // If we found a match in the cache that's still null or not a stories file,
-          // it is a docs file and it isn't a dependency / storiesImport.
-          // See https://github.com/storybookjs/storybook/issues/20958
+          /**
+           * We are only interested in stories cache entries (and assume they've been processed
+           * already) If we found a match in the cache that's still null or not a stories file, it
+           * is a docs file and it isn't a dependency / storiesImport.
+           *
+           * @see
+           * https://github.com/storybookjs/storybook/issues/20958
+           */
           if (!cacheEntry || cacheEntry.type !== 'stories') {
             return false;
           }
@@ -439,8 +438,6 @@ export class StoryIndexGenerator {
       const result = await analyze(content);
 
       // Templates are not indexed
-
-      // Templates are not indexed
       if (result.isTemplate) {
         return false;
       }
@@ -556,8 +553,6 @@ export class StoryIndexGenerator {
     const changeDocsName = 'Use `<Meta of={} name="Other Name">` to distinguish them.';
 
     // This shouldn't be possible, but double check and use for typing
-
-    // This shouldn't be possible, but double check and use for typing
     if (worseEntry.type === 'story') {
       throw new IndexingError(`Duplicate stories with id: ${firstEntry.id}`, [
         firstEntry.importPath,
@@ -590,8 +585,6 @@ export class StoryIndexGenerator {
       }
 
       // If you link a file to a tagged CSF file, you have probably made a mistake
-
-      // If you link a file to a tagged CSF file, you have probably made a mistake
       if (
         worseEntry.tags?.includes(AUTODOCS_TAG) &&
         !(this.options.docs.autodocs === true || projectTags?.includes(AUTODOCS_TAG))
@@ -601,8 +594,6 @@ export class StoryIndexGenerator {
           [betterEntry.importPath, worseEntry.importPath]
         );
       }
-
-      // Otherwise the existing entry is created by project-level autodocs which is allowed to be overridden.
 
       // Otherwise the existing entry is created by project-level autodocs which is allowed to be overridden.
     } else {

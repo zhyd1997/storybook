@@ -259,7 +259,7 @@ export const SearchResults: FC<{
         const target = event.target as Element;
 
         if (target?.id === 'storybook-explorer-searchfield') {
-          return; // handled by downshift // handled by downshift
+          return; // handled by downshift
         }
         event.preventDefault();
         closeMenu();

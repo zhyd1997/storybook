@@ -43,15 +43,9 @@ export async function getErrorLevel({
   }
 
   // If we are running init or similar, we just have to go with true here
-
-  // If we are running init or similar, we just have to go with true here
-
-  // If we are running init or similar, we just have to go with true here
   if (!presetOptions) {
     return 'full';
   }
-
-  // should we load the preset?
 
   // should we load the preset?
   const presets = await loadAllPresets(presetOptions);
@@ -67,8 +61,6 @@ export async function getErrorLevel({
   if (core?.disableTelemetry) {
     return 'none';
   }
-
-  // Deal with typo, remove in future version (7.1?)
 
   // Deal with typo, remove in future version (7.1?)
   const valueFromCache =

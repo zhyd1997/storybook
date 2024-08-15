@@ -103,8 +103,6 @@ const parseDefault = (defaultExpr: t.Expression, program: t.Program): t.Expressi
 
 export const getStorySortParameter = (previewCode: string) => {
   // don't even try to process the file
-
-  // don't even try to process the file
   if (!previewCode.includes('storySort')) {
     return undefined;
   }

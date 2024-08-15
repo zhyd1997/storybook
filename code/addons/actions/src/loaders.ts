@@ -31,8 +31,6 @@ const logActionsWhenMockCalled: LoaderFunction = (context) => {
       }
 
       // TODO: Make this a configurable API in 8.2
-
-      // TODO: Make this a configurable API in 8.2
       if (
         !/^next\/.*::/.test(name) ||
         [

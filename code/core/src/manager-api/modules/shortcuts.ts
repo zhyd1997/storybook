@@ -234,7 +234,6 @@ export const init: ModuleFn = ({ store, fullAPI, provider }) => {
       if (!enableShortcuts) {
         return;
       }
-      // Event.prototype.preventDefault is missing when received from the MessageChannel.
 
       // Event.prototype.preventDefault is missing when received from the MessageChannel.
       if (event?.preventDefault) {

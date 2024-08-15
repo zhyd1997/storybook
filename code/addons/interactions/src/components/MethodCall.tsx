@@ -421,8 +421,6 @@ export const MethodCall = ({
   callsById: Map<Call['id'], Call>;
 }) => {
   // Call might be undefined during initial render, can be safely ignored.
-
-  // Call might be undefined during initial render, can be safely ignored.
   if (!call) {
     return null;
   }

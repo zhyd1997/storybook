@@ -81,8 +81,6 @@ const _getPathProperties = (path: string[], node: t.Node): t.ObjectProperty[] | 
     const field = (node.properties as t.ObjectProperty[]).find((p) => propKey(p) === first);
     if (field) {
       // FXIME handle spread etc.
-
-      // FXIME handle spread etc.
       if (rest.length === 0) {
         return node.properties as t.ObjectProperty[];
       }

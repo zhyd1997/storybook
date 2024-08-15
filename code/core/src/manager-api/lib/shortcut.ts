@@ -85,10 +85,10 @@ export const shortcutMatchesShortcut = (
   }
 
   if (inputShortcut.join('').startsWith('shift/')) {
+    // shift is optional for `/`
     inputShortcut.shift();
-  } // shift is optional for `/` // shift is optional for `/`
+  }
 
-  // shift is optional for `/`
   if (inputShortcut.length !== shortcut.length) {
     return false;
   }
