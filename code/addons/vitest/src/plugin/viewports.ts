@@ -21,7 +21,10 @@ export const DEFAULT_VIEWPORT_DIMENSIONS = {
 
 export const setViewport = async (viewportsParam: ViewportsParam = {} as ViewportsParam) => {
   const defaultViewport = viewportsParam.defaultViewport;
-  if (!page || !globalThis.__vitest_browser__ || !defaultViewport) return null;
+
+  if (!page || !globalThis.__vitest_browser__ || !defaultViewport) {
+    return null;
+  }
 
   const viewports = {
     ...INITIAL_VIEWPORTS,

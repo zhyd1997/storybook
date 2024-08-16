@@ -4,7 +4,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { page } from '@vitest/browser/context';
 
 import { DEFAULT_VIEWPORT_DIMENSIONS, type ViewportsParam, setViewport } from './viewports';
-import { INITIAL_VIEWPORTS } from '../../../viewport/src/defaults';
 
 vi.mock('@vitest/browser/context', () => ({
   page: {
