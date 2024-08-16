@@ -1,3 +1,10 @@
+## 8.3.0-alpha.7
+
+- Addon Vitest: Set screenshotFailures to false by default - [#28908](https://github.com/storybookjs/storybook/pull/28908), thanks @yannbf!
+- Core: Add Rsbuild frameworks to known frameworks - [#28694](https://github.com/storybookjs/storybook/pull/28694), thanks @fi3ework!
+- Test: Fix support for TS < 4.7 - [#28887](https://github.com/storybookjs/storybook/pull/28887), thanks @ndelangen!
+- Vitest Addon: Fix error message logic in set up file - [#28906](https://github.com/storybookjs/storybook/pull/28906), thanks @yannbf!
+
 ## 8.3.0-alpha.6
 
 - Addon Vitest: Add experimental vitest integration - [#28768](https://github.com/storybookjs/storybook/pull/28768), thanks @kasperpeulen!
