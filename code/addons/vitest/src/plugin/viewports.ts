@@ -23,7 +23,7 @@ export const setViewport = async (viewportsParam: ViewportsParam = {} as Viewpor
   const defaultViewport = viewportsParam.defaultViewport;
 
   if (!page || !globalThis.__vitest_browser__ || !defaultViewport) {
-    return null;
+    return;
   }
 
   const viewports = {
@@ -47,5 +47,5 @@ export const setViewport = async (viewportsParam: ViewportsParam = {} as Viewpor
     }
   }
 
-  return page.viewport(viewportWidth, viewportHeight);
+  await page.viewport(viewportWidth, viewportHeight);
 };
