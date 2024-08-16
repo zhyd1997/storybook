@@ -2,7 +2,7 @@
 
 /* eslint-disable no-underscore-dangle */
 import { afterEach, vi } from 'vitest';
-import type { RunnerTask, TaskMeta } from 'vitest';
+import type { RunnerTask } from 'vitest';
 
 import { Channel } from 'storybook/internal/channels';
 
@@ -13,13 +13,15 @@ declare global {
   var __STORYBOOK_ADDONS_CHANNEL__: Channel;
 }
 
-type ExtendedMeta = TaskMeta & { storyId: string; hasPlayFunction: boolean };
+export type Task = Partial<RunnerTask> & {
+  meta: Record<string, any>;
+};
 
 const transport = { setHandler: vi.fn(), send: vi.fn() };
-globalThis.__STORYBOOK_ADDONS_CHANNEL__ = new Channel({ transport });
+globalThis.__STORYBOOK_ADDONS_CHANNEL__ ??= new Channel({ transport });
 
-const modifyErrorMessage = ({ task }: { task: RunnerTask }) => {
-  const meta = task.meta as ExtendedMeta;
+export const modifyErrorMessage = ({ task }: { task: Task }) => {
+  const meta = task.meta;
   if (
     task.type === 'test' &&
     task.result?.state === 'fail' &&
