@@ -21,14 +21,23 @@ describe('setViewport', () => {
     globalThis.__vitest_browser__ = false;
   });
 
-  it('should do nothing if __vitest_browser__ is false', async () => {
+  it('should no op outside when not in Vitest browser mode', async () => {
     globalThis.__vitest_browser__ = false;
 
     await setViewport();
     expect(page.viewport).not.toHaveBeenCalled();
   });
 
-  it('should set the viewport to the specified dimensions from INITIAL_VIEWPORTS', async () => {
+  it('should fall back to DEFAULT_VIEWPORT_DIMENSIONS if defaultViewport does not exist', async () => {
+    const viewportsParam: any = {
+      defaultViewport: 'nonExistentViewport',
+    };
+
+    await setViewport(viewportsParam);
+    expect(page.viewport).toHaveBeenCalledWith(1200, 900);
+  });
+
+  it('should set the dimensions of viewport from INITIAL_VIEWPORTS', async () => {
     const viewportsParam: any = {
       // supported by default in addon viewports
       defaultViewport: 'ipad',
@@ -38,49 +47,8 @@ describe('setViewport', () => {
     expect(page.viewport).toHaveBeenCalledWith(768, 1024);
   });
 
-  it('should set the viewport to the specified dimensions if defaultViewport is valid', async () => {
-    const viewportsParam: ViewportsParam = {
-      defaultViewport: 'small',
-      viewports: {
-        small: {
-          name: 'Small screen',
-          type: 'mobile',
-          styles: {
-            width: '375px',
-            height: '667px',
-          },
-        },
-      },
-    };
-
-    await setViewport(viewportsParam);
-    expect(page.viewport).toHaveBeenCalledWith(375, 667);
-  });
-
-  it('should set the viewport to DEFAULT_VIEWPORT_DIMENSIONS if defaultViewport has unparseable styles', async () => {
-    const viewportsParam: ViewportsParam = {
-      defaultViewport: 'oddSizes',
-      viewports: {
-        oddSizes: {
-          name: 'foo',
-          type: 'other',
-          styles: {
-            width: 'calc(100vw - 20px)',
-            height: '100%',
-          },
-        },
-      },
-    };
-
-    await setViewport(viewportsParam);
-    expect(page.viewport).toHaveBeenCalledWith(
-      DEFAULT_VIEWPORT_DIMENSIONS.width,
-      DEFAULT_VIEWPORT_DIMENSIONS.height
-    );
-  });
-
-  it('should merge provided viewports with initial viewports', async () => {
-    const viewportsParam: ViewportsParam = {
+  it('should set custom defined viewport dimensions', async () => {
+     const viewportsParam: ViewportsParam = {
       defaultViewport: 'customViewport',
       viewports: {
         customViewport: {
@@ -98,12 +66,86 @@ describe('setViewport', () => {
     expect(page.viewport).toHaveBeenCalledWith(800, 600);
   });
 
-  it('should fallback to DEFAULT_VIEWPORT_DIMENSIONS if defaultViewport does not exist', async () => {
-    const viewportsParam: any = {
-      defaultViewport: 'nonExistentViewport',
+  it('should correctly handle percentage-based dimensions', async () => {
+    const viewportsParam: ViewportsParam = {
+      defaultViewport: 'percentageViewport',
+      viewports: {
+        percentageViewport: {
+          name: 'Percentage Viewport',
+          type: 'desktop',
+          styles: {
+            width: '50%',
+            height: '50%',
+          },
+        },
+      },
     };
 
     await setViewport(viewportsParam);
-    expect(page.viewport).toHaveBeenCalledWith(1200, 900);
+    expect(page.viewport).toHaveBeenCalledWith(600, 450); // 50% of 1920 and 1080
+  });
+
+  it('should correctly handle vw and vh based dimensions', async () => {
+    const viewportsParam: ViewportsParam = {
+      defaultViewport: 'viewportUnits',
+      viewports: {
+        viewportUnits: {
+          name: 'VW/VH Viewport',
+          type: 'desktop',
+          styles: {
+            width: '50vw',
+            height: '50vh',
+          },
+        },
+      },
+    };
+
+    await setViewport(viewportsParam);
+    expect(page.viewport).toHaveBeenCalledWith(600, 450); // 50% of 1920 and 1080
+  });
+
+  it('should correctly handle em based dimensions', async () => {
+    const viewportsParam: ViewportsParam = {
+      defaultViewport: 'viewportUnits',
+      viewports: {
+        viewportUnits: {
+          name: 'em/rem Viewport',
+          type: 'mobile',
+          styles: {
+            width: '20em',
+            height: '40rem',
+          },
+        },
+      },
+    };
+
+    await setViewport(viewportsParam);
+    expect(page.viewport).toHaveBeenCalledWith(320, 640); // dimensions * 16
+  });
+
+  it('should throw an error for unsupported dimension values', async () => {
+    const viewportsParam: ViewportsParam = {
+      defaultViewport: 'invalidViewport',
+      viewports: {
+        invalidViewport: {
+          name: 'Invalid Viewport',
+          type: 'desktop',
+          styles: {
+            width: 'calc(100vw - 20px)',
+            height: '10pc',
+          },
+        },
+      },
+    };
+
+    await expect(setViewport(viewportsParam)).rejects.toThrowErrorMatchingInlineSnapshot(`
+      [SB_ADDON_VITEST_0001 (UnsupportedViewportDimensionError): Encountered an unsupported value "calc(100vw - 20px)" when setting the viewport width dimension.
+
+      The Storybook plugin only supports values in the following units:
+      - px, vh, vw, em, rem and %.
+
+      You can either change the viewport for this story or use one of the supported units.]
+    `);
+    expect(page.viewport).not.toHaveBeenCalled();
   });
 });
