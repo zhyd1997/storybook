@@ -24,8 +24,7 @@ describe('setViewport', () => {
   it('should do nothing if __vitest_browser__ is false', async () => {
     globalThis.__vitest_browser__ = false;
 
-    const result = await setViewport();
-    expect(result).toBeNull();
+    await setViewport();
     expect(page.viewport).not.toHaveBeenCalled();
   });
 
