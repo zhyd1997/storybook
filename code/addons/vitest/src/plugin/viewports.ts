@@ -9,33 +9,40 @@ declare global {
   var __vitest_browser__: boolean;
 }
 
-interface ViewportsParam {
+export interface ViewportsParam {
   defaultViewport: string;
   viewports: ViewportMap;
 }
 
+export const DEFAULT_VIEWPORT_DIMENSIONS = {
+  width: 1200,
+  height: 900,
+};
+
 export const setViewport = async (viewportsParam: ViewportsParam = {} as ViewportsParam) => {
   const defaultViewport = viewportsParam.defaultViewport;
-
-  if (!page || !globalThis.__vitest_browser__ || !defaultViewport) {
-    return null;
-  }
+  if (!page || !globalThis.__vitest_browser__ || !defaultViewport) return null;
 
   const viewports = {
     ...INITIAL_VIEWPORTS,
     ...viewportsParam.viewports,
   };
 
+  let viewportWidth = DEFAULT_VIEWPORT_DIMENSIONS.width;
+  let viewportHeight = DEFAULT_VIEWPORT_DIMENSIONS.height;
+
   if (defaultViewport in viewports) {
     const styles = viewports[defaultViewport].styles as ViewportStyles;
     if (styles?.width && styles?.height) {
-      const { width, height } = {
-        width: Number.parseInt(styles.width, 10),
-        height: Number.parseInt(styles.height, 10),
-      };
-      await page.viewport(width, height);
+      const validPixelOrNumber = /^\d+(px)?$/;
+
+      // if both dimensions are not valid numbers e.g. 'calc(100vh - 10px)' or '100%', use the default dimensions instead
+      if (validPixelOrNumber.test(styles.width) && validPixelOrNumber.test(styles.height)) {
+        viewportWidth = Number.parseInt(styles.width, 10);
+        viewportHeight = Number.parseInt(styles.height, 10);
+      }
     }
   }
 
-  return null;
+  return page.viewport(viewportWidth, viewportHeight);
 };
