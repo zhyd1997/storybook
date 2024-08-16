@@ -10,9 +10,7 @@ import type {
 } from 'storybook/internal/types';
 
 import type { SvelteRenderer } from '@storybook/svelte';
-
-// TODO: investigate whether we need to prebundle this or can just import from the renderer package
-import { INTERNAL_DEFAULT_PROJECT_ANNOTATIONS as svelteAnnotations } from '../../../renderers/svelte/src/portable-stories';
+import { INTERNAL_DEFAULT_PROJECT_ANNOTATIONS as svelteAnnotations } from '@storybook/svelte';
 import * as svelteKitAnnotations from './preview';
 
 /**
