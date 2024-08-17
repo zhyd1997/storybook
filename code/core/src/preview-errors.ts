@@ -320,7 +320,7 @@ export class UnknownArgTypesError extends StorybookError {
 }
 
 export class UnsupportedViewportDimensionError extends StorybookError {
-  constructor(public data: { dimension: string; value: string; }) {
+  constructor(public data: { dimension: string; value: string }) {
     super({
       category: Category.ADDON_VITEST,
       code: 1,

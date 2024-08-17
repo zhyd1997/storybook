@@ -48,7 +48,7 @@ describe('setViewport', () => {
   });
 
   it('should set custom defined viewport dimensions', async () => {
-     const viewportsParam: ViewportsParam = {
+    const viewportsParam: ViewportsParam = {
       defaultViewport: 'customViewport',
       viewports: {
         customViewport: {
