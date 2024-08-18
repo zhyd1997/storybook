@@ -58,7 +58,9 @@ export async function useStatics(app: Server, options: Options): Promise<void> {
 
       statics.push({ targetEndpoint, staticPath });
     } catch (e) {
-      if (e instanceof Error) logger.warn(e.message);
+      if (e instanceof Error) {
+        logger.warn(e.message);
+      }
     }
   }
 
