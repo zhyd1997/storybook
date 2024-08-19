@@ -1,14 +1,14 @@
 import { dedent } from 'ts-dedent';
+
 import { StorybookError } from './storybook-error';
 
 /**
- * If you can't find a suitable category for your error, create one
- * based on the package name/file path of which the error is thrown.
- * For instance:
- * If it's from @storybook/client-logger, then CLIENT-LOGGER
+ * If you can't find a suitable category for your error, create one based on the package name/file
+ * path of which the error is thrown. For instance: If it's from `@storybook/client-logger`, then
+ * CLIENT-LOGGER
  *
- * Categories are prefixed by a logical grouping, e.g. PREVIEW_ or FRAMEWORK_
- * to prevent manager and preview errors from having the same category and error code.
+ * Categories are prefixed by a logical grouping, e.g. PREVIEW_ or FRAMEWORK_ to prevent manager and
+ * preview errors from having the same category and error code.
  */
 export enum Category {
   BLOCKS = 'BLOCKS',
@@ -30,6 +30,7 @@ export enum Category {
   RENDERER_VUE3 = 'RENDERER_VUE3',
   RENDERER_WEB_COMPONENTS = 'RENDERER_WEB-COMPONENTS',
   FRAMEWORK_NEXTJS = 'FRAMEWORK_NEXTJS',
+  ADDON_VITEST = 'ADDON_VITEST',
 }
 
 export class MissingStoryAfterHmrError extends StorybookError {
@@ -210,66 +211,27 @@ export class StoryStoreAccessedBeforeInitializationError extends StorybookError 
 
 export class MountMustBeDestructuredError extends StorybookError {
   constructor(public data: { playFunction: string }) {
-    const transpiled =
-      /function\s*\*|regeneratorRuntime|asyncToGenerator|_ref|param|_0|__async/.test(
-        data.playFunction
-      );
-
     super({
       category: Category.PREVIEW_API,
       code: 12,
       message: dedent`
+      Incorrect use of mount in the play function.
       
-      To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
-
-      ${
-        !transpiled
-          ? ''
-          : dedent`
-          It seems that your builder is configured to transpile destructuring.
-          To use the mount prop of the story context, you must configure your builder to transpile to no earlier than ES2017.          
-          `
-      }
-      More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test
+      To use mount in the play function, you must satisfy the following two requirements: 
+      
+      1. You *must* destructure the mount property from the \`context\` (the argument passed to your play function). 
+         This makes sure that Storybook does not start rendering the story before the play function begins.
+      
+      2. Your Storybook framework or builder must be configured to transpile to ES2017 or newer. 
+         This is because destructuring statements and async/await usages are otherwise transpiled away, 
+         which prevents Storybook from recognizing your usage of \`mount\`.
+      
+      Note that Angular is not supported. As async/await is transpiled to support the zone.js polyfill. 
+      
+      More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-the-component-gets-rendered
       
       Received the following play function:
       ${data.playFunction}`,
-    });
-  }
-}
-
-export class TestingLibraryMustBeConfiguredError extends StorybookError {
-  constructor() {
-    super({
-      category: Category.PREVIEW_API,
-      code: 13,
-      message: dedent`
-        You must configure testingLibraryRender to use play in portable stories.
-        
-        import { render } from '@testing-library/[renderer]';
-        
-        setProjectAnnotations({
-          testingLibraryRender: render,
-        });
-        
-        For other testing renderers, you can configure \`renderToCanvas\` like so:
-        
-        import { render } from 'your-test-renderer';
-        
-        setProjectAnnotations({
-          renderToCanvas: ({ storyFn }) => {
-            const Story = storyFn();
-            
-            // Svelte
-            render(Story.Component, Story.props);
-            
-            // Vue
-            render(Story);
-            
-            // or for React
-            render(<Story/>);
-          },
-        });`,
     });
   }
 }
@@ -352,6 +314,25 @@ export class UnknownArgTypesError extends StorybookError {
 
         This type is either not supported or it is a bug in the docgen generation in Storybook.
         If you think this is a bug, please detail it as much as possible in the Github issue.
+      `,
+    });
+  }
+}
+
+export class UnsupportedViewportDimensionError extends StorybookError {
+  constructor(public data: { dimension: string; value: string }) {
+    super({
+      category: Category.ADDON_VITEST,
+      code: 1,
+      // TODO: Add documentation about viewports support
+      // documentation: '',
+      message: dedent`
+        Encountered an unsupported value "${data.value}" when setting the viewport ${data.dimension} dimension.
+        
+        The Storybook plugin only supports values in the following units:
+        - px, vh, vw, em, rem and %.
+        
+        You can either change the viewport for this story to use one of the supported units or skip the test by adding '!test' to the story's tags per https://storybook.js.org/docs/writing-stories/tags
       `,
     });
   }

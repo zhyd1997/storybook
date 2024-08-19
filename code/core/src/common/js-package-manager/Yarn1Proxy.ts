@@ -1,8 +1,10 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+import { FindPackageVersionsError } from '@storybook/core/server-errors';
+
+import { findUp } from 'find-up';
 import dedent from 'ts-dedent';
-import { findUpSync } from 'find-up';
-import path from 'node:path';
-import { FindPackageVersionsError } from '@storybook/core-events/server-errors';
 
 import { createLogStream } from '../utils/cli';
 import { JsPackageManager } from './JsPackageManager';
@@ -68,9 +70,9 @@ export class Yarn1Proxy extends JsPackageManager {
     packageName: string,
     basePath = this.cwd
   ): Promise<PackageJson | null> {
-    const packageJsonPath = await findUpSync(
+    const packageJsonPath = await findUp(
       (dir) => {
-        const possiblePath = path.join(dir, 'node_modules', packageName, 'package.json');
+        const possiblePath = join(dir, 'node_modules', packageName, 'package.json');
         return existsSync(possiblePath) ? possiblePath : undefined;
       },
       { cwd: basePath }
@@ -83,16 +85,31 @@ export class Yarn1Proxy extends JsPackageManager {
     return JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as Record<string, any>;
   }
 
-  public async findInstallations(pattern: string[]) {
-    const commandResult = await this.executeCommand({
+  public async getRegistryURL() {
+    const res = await this.executeCommand({
       command: 'yarn',
-      args: ['list', '--pattern', pattern.map((p) => `"${p}"`).join(' '), '--recursive', '--json'],
-      env: {
-        FORCE_COLOR: 'false',
-      },
+      args: ['config', 'get', 'registry'],
     });
+    const url = res.trim();
+    return url === 'undefined' ? undefined : url;
+  }
+
+  public async findInstallations(pattern: string[], { depth = 99 }: { depth?: number } = {}) {
+    const yarnArgs = ['list', '--pattern', pattern.map((p) => `"${p}"`).join(' '), '--json'];
+
+    if (depth !== 0) {
+      yarnArgs.push('--recursive');
+    }
 
     try {
+      const commandResult = await this.executeCommand({
+        command: 'yarn',
+        args: yarnArgs.concat(pattern),
+        env: {
+          FORCE_COLOR: 'false',
+        },
+      });
+
       const parsedOutput = JSON.parse(commandResult);
       return this.mapDependencies(parsedOutput, pattern);
     } catch (e) {

@@ -1,13 +1,17 @@
+import type { ComponentProps, FC, FocusEvent, SyntheticEvent } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { Button, Form, IconButton } from 'storybook/internal/components';
+import { type Theme, styled, useTheme } from 'storybook/internal/theming';
+
 import { global } from '@storybook/global';
-import cloneDeep from 'lodash/cloneDeep.js';
-import type { ComponentProps, SyntheticEvent, FC, FocusEvent } from 'react';
-import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
-import { styled, useTheme, type Theme } from 'storybook/internal/theming';
-import { Form, IconButton, Button } from 'storybook/internal/components';
 import { AddIcon, EyeCloseIcon, EyeIcon, SubtractIcon } from '@storybook/icons';
-import { JsonTree } from './react-editable-json-tree';
+
+import cloneDeep from 'lodash/cloneDeep.js';
+
 import { getControlId, getControlSetterButtonId } from './helpers';
-import type { ControlProps, ObjectValue, ObjectConfig } from './types';
+import { JsonTree } from './react-editable-json-tree';
+import type { ControlProps, ObjectConfig, ObjectValue } from './types';
 
 const { window: globalWindow } = global;
 
@@ -249,12 +253,15 @@ export const ObjectControl: FC<ObjectProps> = ({ name, value, onChange, argType 
   const data = useMemo(() => value && cloneDeep(value), [value]);
   const hasData = data !== null && data !== undefined;
   const [showRaw, setShowRaw] = useState(!hasData);
+
   const [parseError, setParseError] = useState<Error>(null);
   const readonly = !!argType?.table?.readonly;
   const updateRaw: (raw: string) => void = useCallback(
     (raw) => {
       try {
-        if (raw) onChange(JSON.parse(raw));
+        if (raw) {
+          onChange(JSON.parse(raw));
+        }
         setParseError(undefined);
       } catch (e) {
         setParseError(e);
@@ -271,7 +278,9 @@ export const ObjectControl: FC<ObjectProps> = ({ name, value, onChange, argType 
 
   const htmlElRef = useRef(null);
   useEffect(() => {
-    if (forceVisible && htmlElRef.current) htmlElRef.current.select();
+    if (forceVisible && htmlElRef.current) {
+      htmlElRef.current.select();
+    }
   }, [forceVisible]);
 
   if (!hasData) {

@@ -1,10 +1,11 @@
-import type { FC, ChangeEvent } from 'react';
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { styled } from 'storybook/internal/theming';
-import { Button, Form } from 'storybook/internal/components';
-import { getControlId, getControlSetterButtonId } from './helpers';
+import type { ChangeEvent, FC } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { ControlProps, NumberValue, NumberConfig } from './types';
+import { Button, Form } from 'storybook/internal/components';
+import { styled } from 'storybook/internal/theming';
+
+import { getControlId, getControlSetterButtonId } from './helpers';
+import type { ControlProps, NumberConfig, NumberValue } from './types';
 
 const Wrapper = styled.label({
   display: 'flex',
@@ -62,7 +63,9 @@ export const NumberControl: FC<NumberProps> = ({
 
   const htmlElRef = useRef(null);
   useEffect(() => {
-    if (forceVisible && htmlElRef.current) htmlElRef.current.select();
+    if (forceVisible && htmlElRef.current) {
+      htmlElRef.current.select();
+    }
   }, [forceVisible]);
 
   useEffect(() => {

@@ -1,15 +1,17 @@
 import type { Mock } from 'vitest';
-import { expect, describe, beforeEach, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { themes } from '@storybook/core/theming';
 import type { API_Provider } from '@storybook/core/types';
+
 import EventEmitter from 'events';
-import type { SubAPI, SubState } from '../modules/layout';
-import type { SubState as AddonsSubState } from '../modules/addons';
-import { defaultLayoutState, init as initLayout } from '../modules/layout';
-import type Store from '../store';
-import type { API, State } from '../root';
+
 import type { ModuleArgs } from '../lib/types';
+import type { SubState as AddonsSubState } from '../modules/addons';
+import type { SubAPI, SubState } from '../modules/layout';
+import { defaultLayoutState, init as initLayout } from '../modules/layout';
+import type { API, State } from '../root';
+import type Store from '../store';
 
 describe('layout API', () => {
   let layoutApi: SubAPI;
@@ -471,14 +473,14 @@ describe('layout API', () => {
     });
 
     it('should set selectedPanel initially', () => {
-      const panelName = '@storybook/core/a11y/panel';
+      const panelName = 'storybook/a11y/panel';
       layoutApi.setOptions({ selectedPanel: panelName });
 
       expect(getLastSetStateArgs()[0].selectedPanel).toEqual(panelName);
     });
 
     it('should change selectedPanel if it is defined in the options and is different', () => {
-      const panelName = '@storybook/core/a11y/panel';
+      const panelName = 'storybook/a11y/panel';
       layoutApi.setOptions({});
       layoutApi.setOptions({ selectedPanel: panelName });
 

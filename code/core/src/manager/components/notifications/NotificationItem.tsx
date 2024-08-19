@@ -1,12 +1,15 @@
 import type { FC, SyntheticEvent } from 'react';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { type State } from '@storybook/core/manager-api';
-import { Link } from '@storybook/core/router';
-import { keyframes, styled, useTheme } from '@storybook/core/theming';
+
 import type { IconsProps } from '@storybook/core/components';
 import { IconButton, Icons } from '@storybook/core/components';
-import { transparentize } from 'polished';
+import { Link } from '@storybook/core/router';
+import { keyframes, styled, useTheme } from '@storybook/core/theming';
 import { CloseAltIcon } from '@storybook/icons';
+
+import { type State } from '@storybook/core/manager-api';
+
+import { transparentize } from 'polished';
 
 const slideIn = keyframes({
   '0%': {
@@ -59,7 +62,7 @@ const Notification = styled.div<{ duration?: number }>(
     }
 );
 
-const NotificationWithInteractiveStates = styled(Notification)(() => ({
+const NotificationWithInteractiveStates = styled(Notification)({
   cursor: 'pointer',
   border: 'none',
   outline: 'none',
@@ -80,7 +83,7 @@ const NotificationWithInteractiveStates = styled(Notification)(() => ({
     boxShadow:
       'rgba(2,156,253,1) 0 0 0 1px inset, 0 1px 3px 0 rgba(30,167,253,0.5), 0 2px 5px 0 rgba(0,0,0,0.05), 0 5px 15px 0 rgba(0,0,0,0.1)',
   },
-}));
+});
 const NotificationButton = NotificationWithInteractiveStates.withComponent('div');
 const NotificationLink = NotificationWithInteractiveStates.withComponent(Link);
 
@@ -184,12 +187,17 @@ const NotificationItem: FC<{
 }) => {
   const onTimeout = useCallback(() => {
     onDismissNotification(id);
-    if (onClear) onClear({ dismissed: false, timeout: true });
+
+    if (onClear) {
+      onClear({ dismissed: false, timeout: true });
+    }
   }, [onDismissNotification, onClear]);
 
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    if (!duration) return;
+    if (!duration) {
+      return;
+    }
     timer.current = setTimeout(onTimeout, duration);
     // @ts-expect-error (non strict)
     return () => clearTimeout(timer.current);
@@ -199,7 +207,10 @@ const NotificationItem: FC<{
     // @ts-expect-error (non strict)
     clearTimeout(timer.current);
     onDismissNotification(id);
-    if (onClear) onClear({ dismissed: true, timeout: false });
+
+    if (onClear) {
+      onClear({ dismissed: true, timeout: false });
+    }
   }, [onDismissNotification, onClear]);
 
   if (link) {

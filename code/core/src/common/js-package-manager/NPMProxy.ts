@@ -1,16 +1,18 @@
-import sort from 'semver/functions/sort';
-import { platform } from 'os';
-import dedent from 'ts-dedent';
-import { findUpSync } from 'find-up';
 import { existsSync, readFileSync } from 'node:fs';
-import path from 'node:path';
+import { platform } from 'node:os';
+import { join } from 'node:path';
+
 import { logger } from '@storybook/core/node-logger';
 import { FindPackageVersionsError } from '@storybook/core/server-errors';
 
+import { findUp } from 'find-up';
+import sort from 'semver/functions/sort.js';
+import dedent from 'ts-dedent';
+
+import { createLogStream } from '../utils/cli';
 import { JsPackageManager } from './JsPackageManager';
 import type { PackageJson } from './PackageJson';
 import type { InstallationMetadata, PackageMetadata } from './types';
-import { createLogStream } from '../utils/cli';
 
 type NpmDependency = {
   version: string;
@@ -87,9 +89,9 @@ export class NPMProxy extends JsPackageManager {
     packageName: string,
     basePath = this.cwd
   ): Promise<PackageJson | null> {
-    const packageJsonPath = await findUpSync(
+    const packageJsonPath = await findUp(
       (dir) => {
-        const possiblePath = path.join(dir, 'node_modules', packageName, 'package.json');
+        const possiblePath = join(dir, 'node_modules', packageName, 'package.json');
         return existsSync(possiblePath) ? possiblePath : undefined;
       },
       { cwd: basePath }
@@ -132,12 +134,12 @@ export class NPMProxy extends JsPackageManager {
     });
   }
 
-  public async findInstallations(pattern: string[]) {
-    const exec = async ({ depth }: { depth: number }) => {
+  public async findInstallations(pattern: string[], { depth = 99 }: { depth?: number } = {}) {
+    const exec = async ({ packageDepth }: { packageDepth: number }) => {
       const pipeToNull = platform() === 'win32' ? '2>NUL' : '2>/dev/null';
       return this.executeCommand({
         command: 'npm',
-        args: ['ls', '--json', `--depth=${depth}`, pipeToNull],
+        args: ['ls', '--json', `--depth=${packageDepth}`, pipeToNull],
         env: {
           FORCE_COLOR: 'false',
         },
@@ -145,7 +147,7 @@ export class NPMProxy extends JsPackageManager {
     };
 
     try {
-      const commandResult = await exec({ depth: 99 });
+      const commandResult = await exec({ packageDepth: depth });
       const parsedOutput = JSON.parse(commandResult);
 
       return this.mapDependencies(parsedOutput, pattern);
@@ -153,7 +155,7 @@ export class NPMProxy extends JsPackageManager {
       // when --depth is higher than 0, npm can return a non-zero exit code
       // in case the user's project has peer dependency issues. So we try again with no depth
       try {
-        const commandResult = await exec({ depth: 0 });
+        const commandResult = await exec({ packageDepth: 0 });
         const parsedOutput = JSON.parse(commandResult);
 
         return this.mapDependencies(parsedOutput, pattern);
@@ -179,6 +181,17 @@ export class NPMProxy extends JsPackageManager {
       args: ['install', ...this.getInstallArgs()],
       stdio: 'inherit',
     });
+  }
+
+  public async getRegistryURL() {
+    const res = await this.executeCommand({
+      command: 'npm',
+      // "npm config" commands are not allowed in workspaces per default
+      // https://github.com/npm/cli/issues/6099#issuecomment-1847584792
+      args: ['config', 'get', 'registry', '-ws=false', '-iwr'],
+    });
+    const url = res.trim();
+    return url === 'undefined' ? undefined : url;
   }
 
   protected async runAddDeps(dependencies: string[], installAsDevDependencies: boolean) {
@@ -251,7 +264,6 @@ export class NPMProxy extends JsPackageManager {
   }
 
   /**
-   *
    * @param input The output of `npm ls --json`
    * @param pattern A list of package names to filter the result. * can be used as a placeholder
    */

@@ -1,11 +1,12 @@
-/* eslint-disable storybook/use-storybook-testing-library */
 // @TODO: use addon-interactions and remove the rule disable above
 import React from 'react';
-import type { Meta, StoryObj, StoryFn } from '@storybook/react';
+
 import { ThemeProvider, useTheme } from '@storybook/core/theming';
 import type { Theme } from '@storybook/core/theming';
+import type { Meta, StoryFn, StoryObj } from '@storybook/react';
+import { screen } from '@storybook/test';
+
 import { action } from '@storybook/addon-actions';
-import { screen } from '@testing-library/dom';
 
 import { Heading } from './Heading';
 
@@ -16,6 +17,7 @@ export default {
   title: 'Sidebar/Heading',
   excludeStories: /.*Data$/,
   parameters: { layout: 'fullscreen' },
+  globals: { sb_theme: 'side-by-side' },
   decorators: [
     (storyFn) => <div style={{ padding: '0 20px', maxWidth: '230px' }}>{storyFn()}</div>,
   ],
@@ -230,6 +232,7 @@ export const SkipToCanvasLinkFocused: StoryObj<typeof Heading> = {
     extra: [],
     isLoading: false,
   },
+  globals: { sb_theme: 'light' },
   parameters: { layout: 'padded', chromatic: { delay: 300 } },
   play: () => {
     // focus each instance for chromatic/storybook's stacked theme
