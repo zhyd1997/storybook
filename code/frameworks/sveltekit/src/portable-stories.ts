@@ -11,6 +11,7 @@ import type {
 
 import type { SvelteRenderer } from '@storybook/svelte';
 import { INTERNAL_DEFAULT_PROJECT_ANNOTATIONS as svelteAnnotations } from '@storybook/svelte';
+
 import * as svelteKitAnnotations from './preview';
 
 /**

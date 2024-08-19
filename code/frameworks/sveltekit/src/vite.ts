@@ -1,5 +1,5 @@
-import { mockSveltekitStores } from './plugins/mock-sveltekit-stores'
+import { mockSveltekitStores } from './plugins/mock-sveltekit-stores';
 
 export const storybookSveltekitPlugin = () => {
-  return [mockSveltekitStores()]
-}
+  return [mockSveltekitStores()];
+};
