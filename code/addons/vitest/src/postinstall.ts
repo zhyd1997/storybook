@@ -23,14 +23,19 @@ export default async function postInstall(options: PostinstallOptions) {
 
   const info = await getFrameworkInfo(options);
 
-  if (info.builderPackageName !== '@storybook/builder-vite') {
-    logger.info('Only @storybook/builder-vite is supported');
+  if (
+    info.frameworkPackageName !== '@storybook/nextjs' &&
+    info.builderPackageName !== '@storybook/builder-vite'
+  ) {
+    logger.info('The vitest addon can only be used with a vite framework or nextjs.');
     return;
   }
 
   const configFile = resolve('vitest.config.ts');
   if (existsSync(configFile)) {
-    logger.info('You already have a vitest.config.ts file. Check our docs:');
+    logger.info(
+      'Check our docs how to configure vitest to test stories: https://storybook.js.org/docs/configure/vitest'
+    );
     return;
   }
 
@@ -47,7 +52,7 @@ export default async function postInstall(options: PostinstallOptions) {
       : null;
 
   if (!annotationsImport) {
-    logger.info('Your framework is not yet supported for the vitest addon.');
+    logger.info('The vitest addon cannot yet be used with: ' + info.frameworkPackageName);
     return;
   }
 
@@ -58,6 +63,7 @@ export default async function postInstall(options: PostinstallOptions) {
   logger.info(packages.join(', '));
   await packageManager.addDependencies({ installAsDevDependencies: true }, packages);
 
+  logger.info(c.bold('Executing npx playwright install chromium --with-deps ...'));
   await packageManager.executeCommand({
     command: 'npx',
     args: ['playwright', 'install', 'chromium', '--with-deps'],
@@ -92,7 +98,6 @@ export default async function postInstall(options: PostinstallOptions) {
             name: 'chromium',
             provider: 'playwright',
             headless: true,
-            screenshotFailures: false,
           },
           isolate: false,
           setupFiles: ['./.storybook/vitest.setup.ts'],
