@@ -69,6 +69,7 @@ export default async function postInstall(options: PostinstallOptions) {
     args: ['playwright', 'install', 'chromium', '--with-deps'],
   });
 
+  logger.info(c.bold('Writing .storybook/vitest.setup.ts file...'));
   await writeFile(
     resolve(options.configDir, 'vitest.setup.ts'),
     dedent`
@@ -81,6 +82,8 @@ export default async function postInstall(options: PostinstallOptions) {
       beforeAll(project.beforeAll)
     `
   );
+
+  logger.info(c.bold('Writing vitest.config.ts file...'));
   await writeFile(
     configFile,
     dedent`
