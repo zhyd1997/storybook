@@ -92,7 +92,7 @@ export default async function postInstall(options: PostinstallOptions) {
           storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginCall : ''}
         ],
         test: {
-          include: ['**/*.{stories}.?(m)[jt]s?(x)'],
+          include: ['**/*.stories.?(m)[jt]s?(x)'],
           browser: {
             enabled: true,
             name: 'chromium',
