@@ -360,17 +360,40 @@ async function linkPackageStories(
   );
 }
 
+const getVitestPluginInfo = (details: TemplateDetails) => {
+  let frameworkPluginImport = '';
+  let frameworkPluginCall = '';
+
+  const framework = details.template.expected.framework;
+  const isNextjs = framework.includes('nextjs');
+  const isSveltekit = framework.includes('sveltekit');
+
+  if (isNextjs) {
+    frameworkPluginImport = "import vitePluginNext from 'vite-plugin-storybook-nextjs'";
+    frameworkPluginCall = 'vitePluginNext()';
+  }
+
+  if (isSveltekit) {
+    frameworkPluginImport = "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite'";
+    frameworkPluginCall = 'storybookSveltekitPlugin()';
+  }
+
+  return { frameworkPluginImport, frameworkPluginCall };
+};
+
 export async function setupVitest(details: TemplateDetails, options: PassedOptionValues) {
   const { sandboxDir, template } = details;
 
   const isVue = template.expected.renderer === '@storybook/vue3';
   const isNextjs = template.expected.framework.includes('nextjs');
+  const { frameworkPluginCall, frameworkPluginImport } = getVitestPluginInfo(details);
   // const isAngular = template.expected.framework === '@storybook/angular';
 
   const portableStoriesFrameworks = [
     '@storybook/nextjs',
     '@storybook/experimental-nextjs-vite',
-    // TODO: add sveltekit and angular once we enable their sandboxes
+    '@storybook/sveltekit',
+    // TODO: add angular once we enable their sandboxes
   ];
   const storybookPackage = portableStoriesFrameworks.includes(template.expected.framework)
     ? template.expected.framework
@@ -409,7 +432,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     dedent`
       import { defineWorkspace, defaultExclude } from "vitest/config";
       import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
-      ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
+      ${frameworkPluginImport}
 
       export default defineWorkspace([
         {
@@ -421,7 +444,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
                 include: ["vitest"],
               },
             }),
-           ${isNextjs ? 'vitePluginNext(),' : ''}
+           ${frameworkPluginCall}
           ],
           ${
             isNextjs
@@ -452,14 +475,6 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
               ...defaultExclude,
               // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
               "**/*argtypes*",
-              // TODO (SVELTEKIT): Failures related to missing framework annotations
-              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*",
-              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*",
-              // TODO (SVELTEKIT): Investigate Error: use:enhance can only be used on <form> fields with method="POST"
-              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/forms.stories*",
-              // TODO (SVELTE|SVELTEKIT): Typescript preprocessor issue
-              "**/frameworks/svelte-vite_svelte-vite-default-ts/ts-docs.stories.*",
-              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/ts-docs.stories.*",
             ],
             /**
              * TODO: Either fix or acknowledge limitation of:
