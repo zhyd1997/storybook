@@ -189,8 +189,7 @@ export async function vitestTransform({
       return { isRunningFromThisFileDeclaration, isRunningFromThisFileId };
     }
 
-    const { isRunningFromThisFileDeclaration, isRunningFromThisFileId } =
-      getTestGuardDeclaration();
+    const { isRunningFromThisFileDeclaration, isRunningFromThisFileId } = getTestGuardDeclaration();
 
     ast.program.body.push(isRunningFromThisFileDeclaration);
 
