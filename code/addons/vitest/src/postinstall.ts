@@ -85,7 +85,7 @@ export default async function postInstall(options: PostinstallOptions) {
   });
 
   if (rootConfig) {
-    const extname = rootConfig ? path.extname(rootConfig) : 'ts';
+    const extname = rootConfig ? path.extname(rootConfig) : '.ts';
     const browserWorkspaceFile = resolve(dirname(rootConfig), `vitest.workspace${extname}`);
     if (existsSync(browserWorkspaceFile)) {
       logger.info(
