@@ -239,7 +239,7 @@ export async function vitestTransform({
           node,
         });
       })
-      .filter((st) => !!st);
+      .filter((st) => !!st) as t.ExpressionStatement[];
 
     const testBlock = t.ifStatement(isRunningFromThisFileId, t.blockStatement(storyTestStatements));
 
