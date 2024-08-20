@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import { writeFile } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import * as path from 'node:path';
 
 import {
@@ -100,9 +100,8 @@ export default async function postInstall(options: PostinstallOptions) {
         import { defineWorkspace } from 'vitest/config'
 
         export default defineWorkspace([
-          'vitest.config.ts',
+          '${relative(dirname(browserWorkspaceFile), rootConfig)}',
           {
-            extends: 'vitest.config${extname}',
             plugins: [
               storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginCall : ''}
             ],
