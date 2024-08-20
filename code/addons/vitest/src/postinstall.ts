@@ -1,7 +1,8 @@
 import { existsSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import { writeFile } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import * as path from 'node:path';
 
 import {
   JsPackageManagerFactory,
@@ -11,6 +12,7 @@ import {
 } from 'storybook/internal/common';
 import { logger } from 'storybook/internal/node-logger';
 
+import { findUp } from 'find-up';
 import c from 'tinyrainbow';
 import dedent from 'ts-dedent';
 
@@ -28,14 +30,6 @@ export default async function postInstall(options: PostinstallOptions) {
     info.builderPackageName !== '@storybook/builder-vite'
   ) {
     logger.info('The vitest addon can only be used with a vite framework or nextjs.');
-    return;
-  }
-
-  const configFile = resolve('vitest.config.ts');
-  if (existsSync(configFile)) {
-    logger.info(
-      'Check our docs how to configure vitest to test stories: https://storybook.js.org/docs/configure/vitest'
-    );
     return;
   }
 
@@ -83,9 +77,55 @@ export default async function postInstall(options: PostinstallOptions) {
     `
   );
 
+  const extensions = ['.ts', '.mts', '.cts', '.js', '.mjs', '.cjs'];
+  const configFiles = extensions.map((ext) => 'vitest.config' + ext);
+
+  const rootConfig = await findUp(configFiles, {
+    cwd: process.cwd(),
+  });
+
+  if (rootConfig) {
+    const extname = rootConfig ? path.extname(rootConfig) : 'ts';
+    const browserWorkspaceFile = resolve(dirname(rootConfig), `vitest.workspace${extname}`);
+    if (existsSync(browserWorkspaceFile)) {
+      logger.info(
+        'A workspace file already exists. Check our docs how to configure vitest to test stories: https://storybook.js.org/docs/configure/vitest'
+      );
+      return;
+    }
+    logger.info(c.bold('Writing vitest.workspace.ts file...'));
+    await writeFile(
+      browserWorkspaceFile,
+      dedent`
+        import { defineWorkspace } from 'vitest/config'
+
+        export default defineWorkspace([
+          'vitest.config.ts',
+          {
+            extends: 'vitest.config${extname}',
+            plugins: [
+              storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginCall : ''}
+            ],
+            test: {
+              include: ['**/*.stories.?(m)[jt]s?(x)'],
+              browser: {
+                enabled: true,
+                name: 'chromium',
+                provider: 'playwright',
+                headless: true,
+              },
+              isolate: false,
+              setupFiles: ['./.storybook/vitest.setup.ts'],
+            },
+          },
+        ])
+      `
+    );
+    return;
+  }
   logger.info(c.bold('Writing vitest.config.ts file...'));
   await writeFile(
-    configFile,
+    resolve('vitest.config.ts'),
     dedent`
       import { defineConfig } from "vitest/config";
       import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
