@@ -95,7 +95,7 @@ export async function vitestTransform({
   }
 
   // Filter out stories based on the passed tags filter
-  let validStories: (typeof parsed)['_storyStatements'] = {};
+  const validStories: (typeof parsed)['_storyStatements'] = {};
   Object.keys(parsed._stories).map((key) => {
     const finalTags = combineTags(
       'test',
@@ -135,7 +135,6 @@ export async function vitestTransform({
     ast.program.body.unshift(...imports);
   } else {
     const vitestExpectId = parsed._file.path.scope.generateUidIdentifier('expect');
-    const composeStoryId = parsed._file.path.scope.generateUidIdentifier('composeStory');
     const testStoryId = parsed._file.path.scope.generateUidIdentifier('testStory');
     const skipTagsId = t.identifier(JSON.stringify(tagsFilter.skip));
 
@@ -147,7 +146,7 @@ export async function vitestTransform({
      * Const isRunningFromThisFile = import.meta.url.includes(expect.getState().testPath ??
      * globalThis.**vitest_worker**.filepath) if(isRunningFromThisFile) { ... }
      */
-    function getTestGuardDeclaration(vitestExpectId: t.Identifier) {
+    function getTestGuardDeclaration() {
       const isRunningFromThisFileId =
         parsed._file.path.scope.generateUidIdentifier('isRunningFromThisFile');
 
