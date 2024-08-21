@@ -18,6 +18,8 @@ import dedent from 'ts-dedent';
 
 import { type PostinstallOptions } from '../../../lib/cli-storybook/src/add';
 
+const extensions = ['.ts', '.mts', '.cts', '.js', '.mjs', '.cjs'];
+
 export default async function postInstall(options: PostinstallOptions) {
   const packageManager = JsPackageManagerFactory.getPackageManager({
     force: options.packageManager,
@@ -53,6 +55,9 @@ export default async function postInstall(options: PostinstallOptions) {
   const vitestInfo = getVitestPluginInfo(info.frameworkPackageName);
 
   const packages = ['vitest@latest', '@vitest/browser@latest', 'playwright@latest'];
+  if (info.frameworkPackageName === '@storybook/nextjs') {
+    packages.push('vite-plugin-storybook-nextjs@latest');
+  }
   logger.info(c.bold('Installing packages...'));
   logger.info(packages.join(', '));
   await packageManager.addDependencies({ installAsDevDependencies: true }, packages);
@@ -64,20 +69,24 @@ export default async function postInstall(options: PostinstallOptions) {
   });
 
   logger.info(c.bold('Writing .storybook/vitest.setup.ts file...'));
+
+  const previewExists = extensions
+    .map((ext) => path.resolve(path.join(options.configDir, `preview${ext}`)))
+    .some((config) => existsSync(config));
+
   await writeFile(
     resolve(options.configDir, 'vitest.setup.ts'),
     dedent`
       import { beforeAll } from 'vitest'
       import { setProjectAnnotations } from '${annotationsImport}'
-      import * as projectAnnotations from './preview'
+      ${previewExists ? `import * as projectAnnotations from './preview'` : ''}
       
-      const project = setProjectAnnotations(projectAnnotations)
+      const project = setProjectAnnotations(${previewExists ? 'projectAnnotations' : '[]'})
       
       beforeAll(project.beforeAll)
     `
   );
 
-  const extensions = ['.ts', '.mts', '.cts', '.js', '.mjs', '.cjs'];
   const configFiles = extensions.map((ext) => 'vitest.config' + ext);
 
   const rootConfig = await findUp(configFiles, {
@@ -113,6 +122,8 @@ export default async function postInstall(options: PostinstallOptions) {
                 provider: 'playwright',
                 headless: true,
               },
+              // Disabling isolation is faster and should work for most storybooks.
+              // Consider removing this, if you have flaky tests.
               isolate: false,
               setupFiles: ['./.storybook/vitest.setup.ts'],
             },
@@ -181,6 +192,7 @@ async function getFrameworkInfo({ configDir, packageManager: pkgMgr }: Postinsta
 
   const frameworkPackageName = extractProperFrameworkName(frameworkName);
 
+  console.log(configDir);
   const presets = await loadAllPresets({
     corePresets: [join(frameworkName, 'preset')],
     overridePresets: [
