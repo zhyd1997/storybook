@@ -107,7 +107,8 @@ export default async function postInstall(options: PostinstallOptions) {
       browserWorkspaceFile,
       dedent`
         import { defineWorkspace } from 'vitest/config'
-
+        import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
+        ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
         export default defineWorkspace([
           '${relative(dirname(browserWorkspaceFile), rootConfig)}',
           {
@@ -122,7 +123,7 @@ export default async function postInstall(options: PostinstallOptions) {
                 provider: 'playwright',
                 headless: true,
               },
-              // Disabling isolation is faster and should work for most storybooks.
+              // Disabling isolation is faster and is similar to how tests are isolated in storybook itself.
               // Consider removing this, if you have flaky tests.
               isolate: false,
               setupFiles: ['./.storybook/vitest.setup.ts'],
@@ -152,6 +153,8 @@ export default async function postInstall(options: PostinstallOptions) {
             provider: 'playwright',
             headless: true,
           },
+          // Disabling isolation is faster and is similar to how tests are isolated in storybook itself.
+          // Consider removing this, if you have flaky tests.
           isolate: false,
           setupFiles: ['./.storybook/vitest.setup.ts'],
         },
