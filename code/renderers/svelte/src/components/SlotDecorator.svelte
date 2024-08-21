@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { VERSION as SVELTE_VERSION } from 'svelte/compiler';
+  import { VERSION } from 'svelte/compiler';
 
   export let decorator = undefined;
   export let Component;
@@ -11,8 +11,8 @@
   let instance;
   let decoratorInstance;
 
-  const IS_SVELTE_V4 = Number(SVELTE_VERSION[0]) <= 4;
-
+  const svelteVersion = VERSION[0];
+  
   /*
     Svelte Docgen will create argTypes for events with the name 'event_eventName'
     The Actions addon will convert these to args because they are type: 'action'
@@ -23,7 +23,7 @@
     Object.entries(props).filter(([key]) => !key.startsWith('event_'))
   );
 
-  if (argTypes && IS_SVELTE_V4) {
+  if (argTypes && svelteVersion < 5) {
     const eventsFromArgTypes = Object.fromEntries(
       Object.entries(argTypes)
         .filter(([key, value]) => value.action && props[key] != null)
