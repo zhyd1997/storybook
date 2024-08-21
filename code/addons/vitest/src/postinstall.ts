@@ -55,6 +55,14 @@ export default async function postInstall(options: PostinstallOptions) {
   const vitestInfo = getVitestPluginInfo(info.frameworkPackageName);
 
   const packages = ['vitest@latest', '@vitest/browser@latest', 'playwright@latest'];
+
+  logger.info(
+    dedent`
+      We detected that you're using Next.js. 
+      We will configure the vite-plugin-storybook-nextjs plugin to allow you to run tests in Vitest.
+    `
+  );
+
   if (info.frameworkPackageName === '@storybook/nextjs') {
     packages.push('vite-plugin-storybook-nextjs@latest');
   }
@@ -98,14 +106,17 @@ export default async function postInstall(options: PostinstallOptions) {
     const browserWorkspaceFile = resolve(dirname(rootConfig), `vitest.workspace${extname}`);
     if (existsSync(browserWorkspaceFile)) {
       logger.info(
-        'A workspace file already exists. Check our docs how to configure vitest to test stories: https://storybook.js.org/docs/configure/vitest'
+        dedent`
+          We detected that you have Vitest and workspaces configured, so we couldn't automatically set the plugin for you. 
+          Please refer to the documentation on how to complete the set up:
+          https://storybook.js.org/docs/configure/vitest
+        `
       );
-      return;
-    }
-    logger.info(c.bold('Writing vitest.workspace.ts file...'));
-    await writeFile(
-      browserWorkspaceFile,
-      dedent`
+    } else {
+      logger.info(c.bold('Writing vitest.workspace.ts file...'));
+      await writeFile(
+        browserWorkspaceFile,
+        dedent`
         import { defineWorkspace } from 'vitest/config'
         import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
         ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
@@ -131,13 +142,13 @@ export default async function postInstall(options: PostinstallOptions) {
           },
         ])
       `
-    );
-    return;
-  }
-  logger.info(c.bold('Writing vitest.config.ts file...'));
-  await writeFile(
-    resolve('vitest.config.ts'),
-    dedent`
+      );
+    }
+  } else {
+    logger.info(c.bold('Writing vitest.config.ts file...'));
+    await writeFile(
+      resolve('vitest.config.ts'),
+      dedent`
       import { defineConfig } from "vitest/config";
       import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
       ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
@@ -159,6 +170,15 @@ export default async function postInstall(options: PostinstallOptions) {
           setupFiles: ['./.storybook/vitest.setup.ts'],
         },
       })
+    `
+    );
+  }
+
+  logger.info(
+    dedent`
+      The Vitest addon is now configured and you're ready to run your tests! 
+      Check the documentation for more information about its features and configurations at:
+      https://storybook.js.org/docs/configure/vitest
     `
   );
 }
