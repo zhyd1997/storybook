@@ -9,6 +9,7 @@ import {
   extractProperFrameworkName,
   loadAllPresets,
   loadMainConfig,
+  validateFrameworkName,
 } from 'storybook/internal/common';
 import { logger } from 'storybook/internal/node-logger';
 
@@ -208,11 +209,7 @@ async function getFrameworkInfo({ configDir, packageManager: pkgMgr }: Postinsta
   const { framework } = config;
 
   const frameworkName = typeof framework === 'string' ? framework : framework?.name;
-
-  if (!frameworkName) {
-    throw new Error('Could not detect your storybook framework.');
-  }
-
+  validateFrameworkName(frameworkName);
   const frameworkPackageName = extractProperFrameworkName(frameworkName);
 
   console.log(configDir);
