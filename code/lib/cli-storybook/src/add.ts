@@ -102,11 +102,11 @@ export async function add(
     return;
   }
 
-  // if (checkInstalled(addonName, requireMain(configDir))) {
-  //   throw new Error(dedent`
-  //     Addon ${addonName} is already installed; we skipped adding it to your ${mainConfig}.
-  //   `);
-  // }
+  if (checkInstalled(addonName, requireMain(configDir))) {
+    throw new Error(dedent`
+      Addon ${addonName} is already installed; we skipped adding it to your ${mainConfig}.
+    `);
+  }
 
   const main = await readConfig(mainConfig);
   logger.log(`Verifying ${addonName}`);
@@ -135,9 +135,9 @@ export async function add(
   logger.log(`Installing ${addonWithVersion}`);
   await packageManager.addDependencies({ installAsDevDependencies: true }, [addonWithVersion]);
 
-  // logger.log(`Adding '${addon}' to main.js addons field.`);
-  // main.appendValueToArray(['addons'], addonName);
-  // await writeConfig(main);
+  logger.log(`Adding '${addon}' to main.js addons field.`);
+  main.appendValueToArray(['addons'], addonName);
+  await writeConfig(main);
 
   if (!skipPostinstall && isCoreAddon(addonName)) {
     await postinstallAddon(addonName, { packageManager: packageManager.type, configDir });
