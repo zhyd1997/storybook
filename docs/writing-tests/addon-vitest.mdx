@@ -5,47 +5,43 @@ sidebar:
   title: Test runner with Vitest
 ---
 
-TK - Intro
+(⚠️ **Experimental**)
 
-## Set up
+Storybook's test runner with Vitest uses a Vitest plugin to transform your [stories](../writing-stories/index.mdx) into tests. You can then run those tests just like any other in Vitest, which will check that the story renders without errors and, if a [play function](../writing-stories/play-function.mdx) is defined, that it runs as expected and any [assertions made](../writing-tests/interaction-testing.mdx#assert-tests-with-vitests-apis) within it are validated.
 
-To get started, run the following command to install and configure the addon:
+By using Vitest's browser mode, those tests are run in a real browser environment, which gives you more reliable results for UI components that commonly rely on browser APIs or features.
+
+## Setup
+
+Get started by installing and configuring the plugin in your project.
+
+### Automatic
+
+Run the following command to install and configure the addon, which contains the plugin to run your stories as tests using Vitest:
 
 {/* TODO: Snippetize */}
 ```sh
 npx storybook@latest add @storybook/experimental-addon-vitest
 ```
 
-That command will do the following:
-
-1. Install and register the Vitest addon, which contains the plugin to run your stories as tests
-1. Inspect your project's Vite and Vitest setup
-    1. If Vite is not installed and you're using the [`nextjs` framework](../get-started/frameworks/nextjs.mdx), it will install and configure Vite for you, as well as `vite-plugin-storybook-nextjs` (necessary to have your Next.js components function in Vitest).
-    1. Otherwise, if Vite is not installed, it will stop and point you to these instructions to continue setting it up in your project.
-    1. If Vite is installed, it will then check for Vitest.
-        1. If Vitest is not installed, it will:
-            1. Install `vitest`, `@vitest/browser`, and `playwright`
-            1. Run `npx playwright install chromium` to install the Chromium browser engine
-            1. Create a Vitest config file (`vitest.config.ts`) and a Vitest setup file (`storybook.setup.ts`)
-        1. If Vitest is installed, it will stop and point you to these instructions to continue setting it up in your project.
+That command will install and register the Vitest addon. It will also inspect your project's Vite and Vitest setup, and install and configure them if necessary.
 
 <If renderer="vue">
 	<Callout variant="info">
-		If your stories use template-based Vue components, you may need to [alias the `vue` module](https://vuejs.org/guide/scaling-up/tooling#note-on-in-browser-template-compilation) to resolve correctly in the Playwright CT environment. You can do this via the [`ctViteConfig` property](https://playwright.dev/docs/test-components#i-have-a-project-that-already-uses-vite-can-i-reuse-the-config):
+		If your stories use template-based Vue components, you may need to [alias the `vue` module](https://vuejs.org/guide/scaling-up/tooling#note-on-in-browser-template-compilation) to resolve correctly in the test environment:
 
 		<details>
-			<summary>Example Playwright configuration</summary>
+			<summary>Example Vite configuration</summary>
 
 ```ts
-// playwright-config.ts
-import { defineConfig } from '@playwright/experimental-ct-vue';
+// vite.config.ts
+import { defineConfig } from 'vite/config';
 
 export default defineConfig({
-  ctViteConfig: {
-    resolve: {
-      alias: {
-        vue: 'vue/dist/vue.esm-bundler.js',
-      },
+  // ...
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.esm-bundler.js',
     },
   },
 });
@@ -55,6 +51,47 @@ export default defineConfig({
 </If>
 
 The configuration produced by the `add` command will attempt to set some sensible defaults for your project. However, you may need to adjust the configuration to fit your project's needs. The full configuration options can be found in the [API section](#options), below.
+
+### Manual
+
+For some project setups, the `add` command may be unable to automate the plugin setup and ask you to complete additional setup steps. Here's what to do:
+
+1. Install the addon, `@storybook/experimental-addon-vitest`, in your project and [register it in your Storybook configuration](http://storybook.js.org/docs/addons/install-addons#manual-installation).
+1. Make sure Vite and Vitest are configured in your project.
+1. Make sure Vitest is configured to use [browser mode](https://vitest.dev/guide/browser/).
+1. If you're using Next.js, make sure you're using [`vite-plugin-storybook-nextjs`](https://github.com/storybookjs/vite-plugin-storybook-nextjs).
+1. If you're using SvelteKit, make sure you're using `@storybook/sveltekit/vite`.
+1. Create a [test setup file](../api/portable-stories/portable-stories-vitest.mdx#setprojectannotations), `storybook.setup.ts`, in the root of your project.
+1. Adjust your Vitest configuration to include the plugin(s) and reference the setup file. Here's an example:
+
+{/* TODO: Nextjs & SvelteKit examples */}
+```ts title="vitest.config.ts"
+import { defineConfig, mergeConfig } from 'vitest/config'
+import viteConfig from '../vite.config'
+import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
+
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    plugins: [
+      storybookTest({
+        storybookScript: 'yarn storybook --ci',
+      }),
+    ],
+    // Glob pattern to find story files
+    include: ['../src/**/*.stories.?(m)[jt]s?(x)'],
+    // Enable browser mode
+    browser: {
+      enabled: true,
+      name: 'chromium',
+      // Make sure to install Playwright
+      provider: 'playwright',
+      headless: true,
+    },
+    setupFiles: ['./storybook.setup.ts'],
+  })
+)
+```
 
 ### Example configuration files
 
@@ -162,45 +199,51 @@ For the most part, running your Storybook tests in CI is done [via the CLI](#cli
 
 Here's an example using GitHub Actions. The steps are similar for other CI providers, though details in the syntax or configuration may vary.
 
-First, we run a command to build and publish Storybook. In this case, we'll use Chromatic. This gives us a URL to the published Storybook instance. We then pass that URL to the plugin configuration using an environment variable. Finally, we update the plugin configuration to use that environment variable in the `storybookUrl` option.
+When actions for services like Vercel, Netlify and others run a deployment job, they follow a pattern of emitting a `deployment_status` event containing the newly generated URL under `deployment_status.target_url`. This is the URL to the published Storybook instance. We then pass that URL to the plugin configuration using an environment variable, `SB_URL`. Finally, we update the plugin configuration to use that environment variable in the `storybookUrl` option.
 
 ```yaml
-TK
+name: Storybook Tests
+on: deployment_status
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    if: github.event.deployment_status.state == 'success'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+      - name: Install dependencies
+        run: yarn
+      - name: Run Storybook tests
+        run: yarn test-storybook
+        env:
+          SB_URL: '${{ github.event.deployment_status.target_url }}'
 ```
 
 ```js title="vitest.workspace.ts"
-process.env.SB_URL
+storybookTest({
+  storybookScript: 'yarn storybook --ci',
+  storybookUrl: process.env.SB_URL
+}),
 ```
 
 ## Configuration
 
 Most of the configuration for the Vitest plugin's behavior is done in the Vitest configuration files. However, you can also define configuration in your stories themselves, using [tags](../writing-stories/tags.mdx), to control how they are tested.
 
-In this example, the Default story will not be tested, and the Primary story will.
-
-{/* TODO: Snippetize */}
-```js title="Button.stories.tsx"
-import { Button } from './Button'
-
-export default {
-  component: Button,
-  // 👇 Apply `test` tag to all stories in this file
-  tags: ['test'],
-}
-
-export const Default = {
-  // 👇 Remove `test` tag from this story
-  tags: ['!test'],
-}
-
-export const Primary = {
-  args: { primary: true }
-}
-```
-
 By default, the plugin will run all stories with the `test` tag. You can adjust this behavior by providing the [`tags` option](#tags) in the plugin configuration. This allows you to include, exclude, or skip stories based on their tags.
 
-Here's an example of how you might configure the plugin to only run stories with the `test` and `spec` tags, while excluding stories with the `docs-only` tag:
+In this example, we'll apply the `stable` tag to all of the Button component's stories, except for ExperimentalFeatureStory, which will have the `experimental` tag:
+
+{/* prettier-ignore-start */}
+
+<CodeSnippets path="tags-remove-in-story.md" />
+
+{/* prettier-ignore-end */}
+
+To connect those tags to our test behavior, we can adjust the plugin configuration to exclude the `experimental` tag:
 
 {/* TODO: Snippetize */}
 ```js title="vitest.workspace.ts"
@@ -208,8 +251,8 @@ Here's an example of how you might configure the plugin to only run stories with
   plugins: [
     storybookTest({
       tags: {
-        include: ['test', 'spec'],
-        exclude: ['docs-only'],
+        include: ['test'],
+        exclude: ['experimental'],
       },
     }),
   ],
@@ -222,11 +265,7 @@ If the same tag is in both the `include` and `exclude` arrays, the `exclude` beh
 
 ### How to ensure my tests can find assets in the public directory?
 
-If your stories use assets in the public directory and you're not using the default public directory location (`public`), you need to adjust the Vitest configuration to include the public directory. You can do this by providing the `publicDir` option in the Vitest configuration file.
-
-```ts
-TK
-```
+If your stories use assets in the public directory and you're not using the default public directory location (`public`), you need to adjust the Vitest configuration to include the public directory. You can do this by providing the [`publicDir` option in the Vitest configuration file](https://vitejs.dev/config/shared-options.html#publicdir).
 
 ### How to debug my tests in Storybook?
 
@@ -249,51 +288,45 @@ TK
 
 ### Why do we recommend browser mode?
 
-```
-1. It’s a real browser environment. JSDom/HappyDom are simulations with shortcomings.
-2. https://vitest.dev/guide/browser/#motivation
-```
+Vitest's browser mode runs your tests in a real browser (Chromium, via Playwright, in the default configuration). The alternative is a simulated browser environment, like JSDom or HappyDom, which can have differences in behavior compared to a real browser. For UI components, which can often depend on browser APIs or features, running tests in a real browser is more accurate.
+
+For more, see [Vitest's guide on using browser mode effectively](https://vitest.dev/guide/browser/#motivation).
 
 ### How to use WebDriver instead of Playwright?
 
-```
-https://vitest.dev/config/#browser-provider
-```
+We recommend running tests in a browser using Playwright, but you can use WebDriverIO instead. To do so, you need to adjust the [browser provider in the Vitest configuration file](https://vitest.dev/config/#browser-provider).
 
 ### How to use a browser other than Chromium
 
-```
-https://vitest.dev/config/#browser-46-name
-```
+We recommend using Chromium, because it is most likely to best match the experience of a majority of your users. However, you can use other browsers by adjusting the [browser name in the Vitest configuration file](https://vitest.dev/config/#browser-name). Note that [Playwright and WebDriverIO support different browsers](https://vitest.dev/guide/browser/#browser-option-types).
 
-### How is this different from the test runner?
+### How is this different from the previous test runner?
 
-```
-1. TR requires an SB instance to be running; this does not (except for debugging)
-2. TR runs SB and listens to results; this transforms stories (using portable stories) into tests
-3. TR is based on Jest; this is based on Vitest
-4. This is more configurable and more simple than TR
-    1. TR is always a separate command; this is just Vitest (`yarn test`)
-5. This is faster than TR
-    1. Needs benchmarks
-        1. a sandbox run in our monorepo
-            1. Vitest plugin: 1m 6s
-            2. Test-runner: 1m 14s + SB build & publish time
-```
+The [previous test runner](./test-runner.mdx) requires a running Storybook instance to test your stories, because it visits each one, executes the play function, and listens for results. This plugin, however, transforms your stories into tests using Vite and portable stories, so it does not need to run Storybook to test your stories. Beyond that core difference, there are a few other distinctions:
 
-### Why does the `add` command stop in some cases?
+Additionally, the previous test runner ran your stories as orchestrated tests in Jest, and that orchestration came with some complexity. By comparison, this plugin transforms your stories into real tests and then runs them using Vitest, which is simpler and more configurable.
 
-TK
+Finally, because of the simpler architecture and the use of Vitest, this plugin should be faster than the previous test runner for most projects. We'll do more benchmarking to quantify this in the future.
 
 ## API
 
 ### Exports
 
-`@storybook/experimental-addon-vitest/plugin`
+This addon contributes the following exports to Storybook:
 
-TK
+```js
+import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
+```
+
+#### `storybookTest`
+
+Type: `function`
+
+A [Vitest plugin](https://vitejs.dev/guide/api-plugin) that transforms your stories into tests. It accepts an [options object](#options) for configuration.
 
 ### Options
+
+The plugin is configured using an options object. Here are the available properties:
 
 #### `configDir`
 
@@ -301,7 +334,9 @@ Type: `string`
 
 Default: `.storybook`
 
-The directory where the Storybook configuration is located, relative to CWD. If not provided, the plugin will use `.storybook` in the current working directory.
+The directory where the Storybook configuration is located, relative to the current working directory.
+
+If your [Storybook configuration](../configure/index.mdx) is not in the default location, you **must** specify the location here so the plugin can function correctly.
 
 #### `storybookScript`
 
@@ -341,6 +376,6 @@ Default:
 
 Tags to include, exclude, or skip. These tags are defined as annotations in your story, meta, or preview.
 
-- `include`: `string[]` - Tags to include.
-- `exclude`: `string[]` - Tags to exclude.
-- `skip`: `string[]` - Tags to skip.
+- **`include`**: Stories with these tags will be tested
+- **`exclude`**: Stories with these tags will not be tested, and will not be counted in the test results
+- **`skip`**: Stories with these tags will not be tested, and will be counted in the test results
