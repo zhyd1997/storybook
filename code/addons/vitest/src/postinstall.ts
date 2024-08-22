@@ -32,7 +32,7 @@ export default async function postInstall(options: PostinstallOptions) {
     info.frameworkPackageName !== '@storybook/nextjs' &&
     info.builderPackageName !== '@storybook/builder-vite'
   ) {
-    logger.info('The vitest addon can only be used with a vite framework or nextjs.');
+    logger.info('The Vitest addon can only be used with a Vite-based Storybook framework or Next.js.');
     return;
   }
 
