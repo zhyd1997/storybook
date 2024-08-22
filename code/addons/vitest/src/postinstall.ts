@@ -138,7 +138,7 @@ export default async function postInstall(options: PostinstallOptions) {
                 headless: true,
               },
               // Disabling isolation is faster and is similar to how tests are isolated in storybook itself.
-              // Consider removing this, if you have flaky tests.
+              // Consider removing this if you are seeing problems with your tests.
               isolate: false,
               setupFiles: ['./.storybook/vitest.setup.ts'],
             },
