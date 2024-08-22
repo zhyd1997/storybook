@@ -121,7 +121,7 @@ export default async function postInstall(options: PostinstallOptions) {
         browserWorkspaceFile,
         dedent`
         import { defineWorkspace } from 'vitest/config';
-        import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
+        import { storybookTest } from '@storybook/experimental-addon-vitest/plugin';
         ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
         export default defineWorkspace([
           '${relative(dirname(browserWorkspaceFile), rootConfig)}',
