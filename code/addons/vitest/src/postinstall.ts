@@ -178,8 +178,8 @@ export default async function postInstall(options: PostinstallOptions) {
   logger.info(
     dedent`
       The Vitest addon is now configured and you're ready to run your tests! 
-      Check the documentation for more information about its features and configurations at:
-      https://storybook.js.org/docs/configure/vitest
+      Check the documentation for more information about its features and options at:
+      https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
     `
   );
 }
