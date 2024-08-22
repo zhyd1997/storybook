@@ -120,7 +120,7 @@ export default async function postInstall(options: PostinstallOptions) {
       await writeFile(
         browserWorkspaceFile,
         dedent`
-        import { defineWorkspace } from 'vitest/config'
+        import { defineWorkspace } from 'vitest/config';
         import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
         ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
         export default defineWorkspace([
@@ -143,7 +143,7 @@ export default async function postInstall(options: PostinstallOptions) {
               setupFiles: ['./.storybook/vitest.setup.ts'],
             },
           },
-        ])
+        ]);
       `
       );
     }
@@ -172,7 +172,7 @@ export default async function postInstall(options: PostinstallOptions) {
           isolate: false,
           setupFiles: ['./.storybook/vitest.setup.ts'],
         },
-      })
+      });
     `
     );
   }
