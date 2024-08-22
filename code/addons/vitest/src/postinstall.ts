@@ -32,7 +32,9 @@ export default async function postInstall(options: PostinstallOptions) {
     info.frameworkPackageName !== '@storybook/nextjs' &&
     info.builderPackageName !== '@storybook/builder-vite'
   ) {
-    logger.info('The Vitest addon can only be used with a Vite-based Storybook framework or Next.js.');
+    logger.info(
+      'The Vitest addon can only be used with a Vite-based Storybook framework or Next.js.'
+    );
     return;
   }
 
@@ -108,7 +110,7 @@ export default async function postInstall(options: PostinstallOptions) {
     if (existsSync(browserWorkspaceFile)) {
       logger.info(
         dedent`
-          We detected that you are using Vitest with workspaces, so we do not have enough information to continue setting up the plugin automatically.
+          We can not automatically setup the plugin when you use Vitest with workspaces.
           Please refer to the documentation to complete the setup manually:
           https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual
         `
