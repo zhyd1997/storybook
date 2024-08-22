@@ -108,9 +108,9 @@ export default async function postInstall(options: PostinstallOptions) {
     if (existsSync(browserWorkspaceFile)) {
       logger.info(
         dedent`
-          We detected that you have Vitest and workspaces configured, so we couldn't automatically set the plugin for you. 
-          Please refer to the documentation on how to complete the set up:
-          https://storybook.js.org/docs/configure/vitest
+          We detected that you are using Vitest with workspaces, so we do not have enough information to continue setting up the plugin automatically.
+          Please refer to the documentation to complete the setup manually:
+          https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual
         `
       );
     } else {
