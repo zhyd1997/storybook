@@ -49,7 +49,7 @@ export default async function postInstall(options: PostinstallOptions) {
       : null;
 
   if (!annotationsImport) {
-    logger.info('The vitest addon cannot yet be used with: ' + info.frameworkPackageName);
+    logger.info('The Vitest addon cannot yet be used with: ' + info.frameworkPackageName);
     return;
   }
 
