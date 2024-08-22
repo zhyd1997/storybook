@@ -14,14 +14,14 @@ The Viewport toolbar item allows you to adjust the dimensions of the iframe your
 <Callout variant="warning" icon="🆕" id="globals-api">
   **`globals` API**
 
-  This addon has been updated to use the `globals` API when the [`viewportStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#viewportstoryglobals) is enabled. With `globals`, when you specify a viewport for a story, it cannot be overridden from the toolbar. This ensures a consistent experience while navigating between stories. This will be the default behavior and API in Storybook 9.
+  This addon has been updated to use the `globals` API when the [`viewportStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#viewportstoryglobals) is enabled. With `globals`, when you specify a viewport for a story, it cannot be overridden from the toolbar, which ensures a consistent experience while navigating between stories. This will be the default behavior and API in Storybook 9.
 </Callout>
 
 ## Configuration
 
 Out of the box, the Viewport addon offers you a standard set of viewports that you can use. If you want to change the default set of viewports, you can configure your own viewports with the `viewport` [parameter](../writing-stories/parameters.mdx) in your [`.storybook/preview.js`](../configure/index.mdx#configure-story-rendering).
 
-You can define the available viewports using the [`viewports` property](#viewports) and set the initial viewport using the [`defaultViewport` property](#default):
+You can define the available viewports using the [`viewports` property](#viewports) and set the initial viewport using the [`defaultViewport` property](#defaultViewport):
 
 {/* prettier-ignore-start */}
 
@@ -229,6 +229,22 @@ Turn off this addon's behavior. If you wish to turn off this addon for the entir
 
 This parameter is most useful to allow overriding at more specific levels. For example, if this parameter is set to `true` at the project level, it could be re-enabled by setting it to `false` at the meta (component) or story level.
 
+#### `viewports`
+
+Type:
+
+```ts
+{
+  [key: string]: {
+    name: string;
+    styles: { height: string, width: string };
+    type: 'desktop' | 'mobile' | 'tablet';
+  };
+}
+```
+
+Specify the available viewports. See [usage example](#add-new-devices) above. The `width` and `height` values must include the unit, e.g. `'320px'`.
+
 <Callout variant="warning" icon="🆕">
 
   **With the [`globals` API](#globals-api)**
@@ -247,25 +263,11 @@ This parameter is most useful to allow overriding at more specific levels. For e
   }
   ```
 
-  Specify the available viewports. Replaces [`viewports`](#viewports). The key is used to reference the viewport, and the value is an object to define it. See [usage example](#add-new-devices) above. The `width` and `height` values must include the unit, e.g. `'320px'`.
+  Replaces: [`viewports`](#viewports)
+
+  Specify the available viewports. See [usage example](#add-new-devices) above. The `width` and `height` values must include the unit, e.g. `'320px'`.
 
 </Callout>
-
-#### `viewports`
-
-Type:
-
-```ts
-{
-  [key: string]: {
-    name: string;
-    styles: { height: string, width: string };
-    type: 'desktop' | 'mobile' | 'tablet';
-  };
-}
-```
-
-Specify the available viewports. The key is used to reference the viewport, and the value is an object to define it. See [usage example](#add-new-devices) above. The `width` and `height` values must include the unit, e.g. `'320px'`.
 
 ### Exports
 

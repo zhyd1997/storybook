@@ -82,7 +82,7 @@ We have a `global` implemented. Let's wire it up! We can consume our new `theme`
 ## Setting globals on a story
 
 <Callout variant="warning" icon="🆕">
-  The ability to set globals on a story or component is available in Storybook 8.3+. Some addons, like [backgrounds](./backgrounds.mdx) and [viewport](./viewport.mdx), have been updated to use the `globals` API when a feature flag is enabled.
+  The ability to set globals on a story or component is available in Storybook 8.3+. Some addons, like [backgrounds](./backgrounds.mdx) and [viewport](./viewport.mdx), have been updated to use the `globals` API when a [feature flag](../api/main-config/main-config-features.mdx) is enabled.
 </Callout>
 
 When a global value is changed with a toolbar menu in Storybook, that value continues to be used as you navigate between stories. But sometimes a story requires a specific value to render correctly, e.g., when testing against a particular environment.
@@ -95,7 +95,7 @@ To ensure that a story always uses a specific global value, regardless of what h
 
 {/* prettier-ignore-end */}
 
-In the example above, Storybook will force all Button stories to use a gray background color, except the `OnDark` story, which will use the dark background. For all Buttons stories, the toolbar menu will be disabled for the `backgrounds` global, with a tooltip explaining that the global is set at the story level.
+In the example above, Storybook will force all Button stories to use a gray background color, except the `OnDark` story, which will use the dark background. For all Button stories, the toolbar menu will be disabled for the `backgrounds` global, with a tooltip explaining that the global is set at the story level.
 
 <Callout variant="info" icon="💡">
 

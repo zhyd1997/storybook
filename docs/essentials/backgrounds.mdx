@@ -12,7 +12,7 @@ The backgrounds toolbar addon allows you to set the background color on which th
 <Callout variant="warning" icon="🆕" id="globals-api">
   **`globals` API**
 
-  This addon has been updated to use the `globals` API when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled. With `globals`, when you specify a background value for a story, it cannot be overridden from the toolbar. This ensures a consistent experience while navigating between stories. This will be the default behavior and API in Storybook 9.
+  This addon has been updated to use the `globals` API when the [`backgroundsStoryGlobals` feature flag](../api/main-config/main-config-features.mdx#backgroundsstoryglobals) is enabled. With `globals`, when you specify a background value for a story, it cannot be overridden from the toolbar, which ensures a consistent experience while navigating between stories. This will be the default behavior and API in Storybook 9.
 </Callout>
 
 ## Configuration
@@ -240,11 +240,23 @@ Default: `0.5`
 
 The opacity of the grid lines.
 
+#### `values`
+
+(Required, see description)
+
+Type: `{ name: string; value: string }[]`
+
+Available background colors. See above for a [usage example](#configuration).
+
+When defining the `backgrounds` parameter at the project level (in `.storybook/preview.js|ts`), you _must_ define the `values` property.
+
 <Callout variant="warning" icon="🆕">
 
   **With the [`globals` API](#globals-api)**
 
   #### `options`
+
+  (Required, see description)
 
   Type:
 
@@ -257,20 +269,10 @@ The opacity of the grid lines.
   }
   ```
 
-  Required: See description
+  Replaces: [`values`](#values)
 
-  Defines the background colors. Replaces [`values`](#values). The key is used to reference the color, and the value is an object to define it. See above for a [usage example](#configuration).
+  Available background colors. See above for a [usage example](#configuration).
 
   When defining the `backgrounds` parameter at the project level (in `.storybook/preview.js|ts`), you _must_ define the `options` property.
 
 </Callout>
-
-#### `values`
-
-Type: `{ name: string; value: string }[]`
-
-Required: See description
-
-Available background colors. See above for a [usage example](#configuration).
-
-When defining the `backgrounds` parameter at the project level (in `.storybook/preview.js|ts`), you _must_ define the `values` property.

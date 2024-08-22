@@ -27,8 +27,8 @@ export const Large = {
 ```
 
 ```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9" tabTitle="Without globals API"
-// Replace your-framework with the name of your framework
-import type { Meta, StoryObj } from '@storybook/your-framework';
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+import { Meta, StoryObj } from '@storybook/your-renderer';
 
 import { Button } from './Button';
 
@@ -47,8 +47,8 @@ export const Large: Story = {
 ```
 
 ```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9" tabTitle="With globals API"
-// Replace your-framework with the name of your framework
-import type { Meta, StoryObj } from '@storybook/your-framework';
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+import { Meta, StoryObj } from '@storybook/your-renderer';
 
 import { Button } from './Button';
 
@@ -67,8 +67,8 @@ export const Large: Story = {
 ```
 
 ```ts filename="Button.stories.ts|tsx" renderer="common" language="ts" tabTitle="Without globals API"
-// Replace your-framework with the name of your framework
-import type { Meta, StoryObj } from '@storybook/your-framework';
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+import { Meta, StoryObj } from '@storybook/your-renderer';
 
 import { Button } from './Button';
 
@@ -87,8 +87,8 @@ export const Large: Story = {
 ```
 
 ```ts filename="Button.stories.ts|tsx" renderer="common" language="ts" tabTitle="With globals API"
-// Replace your-framework with the name of your framework
-import type { Meta, StoryObj } from '@storybook/your-framework';
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+import { Meta, StoryObj } from '@storybook/your-renderer';
 
 import { Button } from './Button';
 

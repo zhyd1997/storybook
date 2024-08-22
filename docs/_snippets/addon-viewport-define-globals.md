@@ -42,8 +42,8 @@ export const OnPhone = {
 ```
 
 ```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9"
-// Replace your-framework with the name of your framework
-import type { Meta, StoryObj } from '@storybook/your-framework';
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+import type { Meta, StoryObj } from '@storybook/your-renderer';
 
 import { Button } from './Button';
 
@@ -67,8 +67,8 @@ export const OnPhone: Story = {
 ```
 
 ```ts filename="Button.stories.ts|tsx" renderer="common" language="ts"
-// Replace your-framework with the name of your framework
-import type { Meta, StoryObj } from '@storybook/your-framework';
+// Replace your-renderer with the renderer you are using (e.g., react, vue3, angular, etc.)
+import type { Meta, StoryObj } from '@storybook/your-renderer';
 
 import { Button } from './Button';
 
