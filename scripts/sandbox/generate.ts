@@ -2,7 +2,7 @@ import * as ghActions from '@actions/core';
 import { program } from 'commander';
 import type { Options as ExecaOptions } from 'execa';
 import { execaCommand } from 'execa';
-import { copy, emptyDir, ensureDir, move, remove, rename, writeFile } from 'fs-extra';
+import { copy, emptyDir, ensureDir, move, remove, writeFile } from 'fs-extra';
 import pLimit from 'p-limit';
 import { join, relative } from 'path';
 import prettyTime from 'pretty-hrtime';
@@ -126,7 +126,7 @@ const addStorybook = async ({
     throw e;
   }
 
-  await rename(tmpDir, afterDir);
+  await copy(tmpDir, afterDir);
 };
 
 export const runCommand = async (script: string, options: ExecaOptions, debug = false) => {
