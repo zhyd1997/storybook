@@ -44,7 +44,8 @@ export default async function postInstall(options: PostinstallOptions) {
     '@storybook/sveltekit',
   ].includes(info.frameworkPackageName)
     ? info.frameworkPackageName
-    : ['@storybook/react', '@storybook/svelte', '@storybook/vue3'].includes(
+    : info.rendererPackageName &&
+        ['@storybook/react', '@storybook/svelte', '@storybook/vue3'].includes(
           info.rendererPackageName
         )
       ? info.rendererPackageName
@@ -239,8 +240,7 @@ async function getFrameworkInfo({ configDir, packageManager: pkgMgr }: Postinsta
   );
   const builderPackageName = JSON.parse(builderPackageJson).name;
 
-  let rendererPackageName;
-
+  let rendererPackageName: string | undefined;
   if (renderer) {
     const rendererPackageJson = await fs.readFile(`${renderer}/package.json`, 'utf8');
     rendererPackageName = JSON.parse(rendererPackageJson).name;
