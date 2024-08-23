@@ -229,8 +229,8 @@ async function getFrameworkInfo({ configDir, packageManager: pkgMgr }: Postinsta
 
   const { builder, renderer } = core;
 
-  if (!builder || !renderer) {
-    throw new Error('Could not detect your Storybook framework.');
+  if (!builder) {
+    throw new Error('Could not detect your Storybook builder.');
   }
 
   const builderPackageJson = await fs.readFile(
@@ -239,8 +239,12 @@ async function getFrameworkInfo({ configDir, packageManager: pkgMgr }: Postinsta
   );
   const builderPackageName = JSON.parse(builderPackageJson).name;
 
-  const rendererPackageJson = await fs.readFile(`${renderer}/package.json`, 'utf8');
-  const rendererPackageName = JSON.parse(rendererPackageJson).name;
+  let rendererPackageName;
+
+  if (renderer) {
+    const rendererPackageJson = await fs.readFile(`${renderer}/package.json`, 'utf8');
+    rendererPackageName = JSON.parse(rendererPackageJson).name;
+  }
 
   return {
     frameworkPackageName,
