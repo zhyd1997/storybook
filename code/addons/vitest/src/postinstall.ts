@@ -13,7 +13,7 @@ import {
 } from 'storybook/internal/common';
 import { logger } from 'storybook/internal/node-logger';
 
-import findUp from 'find-up';
+import { findUp } from 'find-up';
 import c from 'tinyrainbow';
 import dedent from 'ts-dedent';
 
