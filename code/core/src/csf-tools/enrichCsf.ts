@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { generate, types } from '@storybook/core/babel';
+import { generate, types as t } from '@storybook/core/babel';
 
 import type { CsfFile } from './CsfFile';
 
@@ -19,14 +19,11 @@ export const enrichCsfStory = (
   const description =
     !options?.disableDescription && extractDescription(csfSource._storyStatements[key]);
   const parameters = [];
-  const originalParameters = types.memberExpression(
-    types.identifier(key),
-    types.identifier('parameters')
-  );
-  parameters.push(types.spreadElement(originalParameters));
-  const optionalDocs = types.optionalMemberExpression(
+  const originalParameters = t.memberExpression(t.identifier(key), t.identifier('parameters'));
+  parameters.push(t.spreadElement(originalParameters));
+  const optionalDocs = t.optionalMemberExpression(
     originalParameters,
-    types.identifier('docs'),
+    t.identifier('docs'),
     false,
     true
   );
@@ -34,19 +31,19 @@ export const enrichCsfStory = (
 
   // docs: { source: { originalSource: %%source%% } },
   if (source) {
-    const optionalSource = types.optionalMemberExpression(
+    const optionalSource = t.optionalMemberExpression(
       optionalDocs,
-      types.identifier('source'),
+      t.identifier('source'),
       false,
       true
     );
 
     extraDocsParameters.push(
-      types.objectProperty(
-        types.identifier('source'),
-        types.objectExpression([
-          types.objectProperty(types.identifier('originalSource'), types.stringLiteral(source)),
-          types.spreadElement(optionalSource),
+      t.objectProperty(
+        t.identifier('source'),
+        t.objectExpression([
+          t.objectProperty(t.identifier('originalSource'), t.stringLiteral(source)),
+          t.spreadElement(optionalSource),
         ])
       )
     );
@@ -54,18 +51,18 @@ export const enrichCsfStory = (
 
   // docs: { description: { story: %%description%% } },
   if (description) {
-    const optionalDescription = types.optionalMemberExpression(
+    const optionalDescription = t.optionalMemberExpression(
       optionalDocs,
-      types.identifier('description'),
+      t.identifier('description'),
       false,
       true
     );
     extraDocsParameters.push(
-      types.objectProperty(
-        types.identifier('description'),
-        types.objectExpression([
-          types.objectProperty(types.identifier('story'), types.stringLiteral(description)),
-          types.spreadElement(optionalDescription),
+      t.objectProperty(
+        t.identifier('description'),
+        t.objectExpression([
+          t.objectProperty(t.identifier('story'), t.stringLiteral(description)),
+          t.spreadElement(optionalDescription),
         ])
       )
     );
@@ -73,26 +70,26 @@ export const enrichCsfStory = (
 
   if (extraDocsParameters.length > 0) {
     parameters.push(
-      types.objectProperty(
-        types.identifier('docs'),
-        types.objectExpression([types.spreadElement(optionalDocs), ...extraDocsParameters])
+      t.objectProperty(
+        t.identifier('docs'),
+        t.objectExpression([t.spreadElement(optionalDocs), ...extraDocsParameters])
       )
     );
-    const addParameter = types.expressionStatement(
-      types.assignmentExpression('=', originalParameters, types.objectExpression(parameters))
+    const addParameter = t.expressionStatement(
+      t.assignmentExpression('=', originalParameters, t.objectExpression(parameters))
     );
     csf._ast.program.body.push(addParameter);
   }
 };
 
 const addComponentDescription = (
-  node: types.ObjectExpression,
+  node: t.ObjectExpression,
   path: string[],
-  value: types.ObjectProperty
+  value: t.ObjectProperty
 ) => {
   if (!path.length) {
     const hasExistingComponent = node.properties.find(
-      (p) => types.isObjectProperty(p) && types.isIdentifier(p.key) && p.key.name === 'component'
+      (p) => t.isObjectProperty(p) && t.isIdentifier(p.key) && p.key.name === 'component'
     );
     if (!hasExistingComponent) {
       // make this the lowest-priority so that if the user is object-spreading on top of it,
@@ -104,17 +101,17 @@ const addComponentDescription = (
   const [first, ...rest] = path;
   const existing = node.properties.find(
     (p) =>
-      types.isObjectProperty(p) &&
-      types.isIdentifier(p.key) &&
+      t.isObjectProperty(p) &&
+      t.isIdentifier(p.key) &&
       p.key.name === first &&
-      types.isObjectExpression(p.value)
+      t.isObjectExpression(p.value)
   );
-  let subNode: types.ObjectExpression;
+  let subNode: t.ObjectExpression;
   if (existing) {
-    subNode = (existing as types.ObjectProperty).value as types.ObjectExpression;
+    subNode = (existing as t.ObjectProperty).value as t.ObjectExpression;
   } else {
-    subNode = types.objectExpression([]);
-    node.properties.push(types.objectProperty(types.identifier(first), subNode));
+    subNode = t.objectExpression([]);
+    node.properties.push(t.objectProperty(t.identifier(first), subNode));
   }
   addComponentDescription(subNode, rest, value);
 };
@@ -124,11 +121,11 @@ export const enrichCsfMeta = (csf: CsfFile, csfSource: CsfFile, options?: Enrich
   // docs: { description: { component: %%description%% } },
   if (description) {
     const metaNode = csf._metaNode;
-    if (metaNode && types.isObjectExpression(metaNode)) {
+    if (metaNode && t.isObjectExpression(metaNode)) {
       addComponentDescription(
         metaNode,
         ['parameters', 'docs', 'description'],
-        types.objectProperty(types.identifier('component'), types.stringLiteral(description))
+        t.objectProperty(t.identifier('component'), t.stringLiteral(description))
       );
     }
   }
@@ -141,13 +138,13 @@ export const enrichCsf = (csf: CsfFile, csfSource: CsfFile, options?: EnrichCsfO
   });
 };
 
-export const extractSource = (node: types.Node) => {
-  const src = types.isVariableDeclarator(node) ? node.init : node;
-  const { code } = generate(src as types.Node, {});
+export const extractSource = (node: t.Node) => {
+  const src = t.isVariableDeclarator(node) ? node.init : node;
+  const { code } = generate(src as t.Node, {});
   return code;
 };
 
-export const extractDescription = (node?: types.Node) => {
+export const extractDescription = (node?: t.Node) => {
   if (!node?.leadingComments) {
     return '';
   }
