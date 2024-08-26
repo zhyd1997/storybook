@@ -277,6 +277,7 @@
     "prep": "jiti ./scripts/prep.ts"
   },
   "dependencies": {
+    "@babel/traverse": "^7.24.1",
     "@storybook/csf": "^0.1.11",
     "@types/express": "^4.17.21",
     "browser-assert": "^1.2.1",
@@ -294,7 +295,6 @@
     "@babel/generator": "^7.24.4",
     "@babel/parser": "^7.24.4",
     "@babel/preset-react": "^7.24.1",
-    "@babel/traverse": "^7.24.1",
     "@babel/types": "^7.24.0",
     "@discoveryjs/json-ext": "^0.5.3",
     "@emotion/cache": "^11.11.0",

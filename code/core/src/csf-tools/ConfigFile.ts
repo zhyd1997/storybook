@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { readFile, writeFile } from 'node:fs/promises';
 
-import { type RecastOptions, generate, recast, traverse, types } from '@storybook/core/babel';
+import { type RecastOptions, generate, recast, types as t, traverse } from '@storybook/core/babel';
 
 import { dedent } from 'ts-dedent';
 
@@ -34,53 +34,50 @@ const getCsfParsingErrorMessage = ({
     `;
 };
 
-const propKey = (p: types.ObjectProperty) => {
-  if (types.isIdentifier(p.key)) {
+const propKey = (p: t.ObjectProperty) => {
+  if (t.isIdentifier(p.key)) {
     return p.key.name;
   }
 
-  if (types.isStringLiteral(p.key)) {
+  if (t.isStringLiteral(p.key)) {
     return p.key.value;
   }
   return null;
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _getPath = (path: string[], node: types.Node): types.Node | undefined => {
+const _getPath = (path: string[], node: t.Node): t.Node | undefined => {
   if (path.length === 0) {
     return node;
   }
-  if (types.isObjectExpression(node)) {
+  if (t.isObjectExpression(node)) {
     const [first, ...rest] = path;
-    const field = (node.properties as types.ObjectProperty[]).find((p) => propKey(p) === first);
+    const field = (node.properties as t.ObjectProperty[]).find((p) => propKey(p) === first);
     if (field) {
-      return _getPath(rest, (field as types.ObjectProperty).value);
+      return _getPath(rest, (field as t.ObjectProperty).value);
     }
   }
   return undefined;
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _getPathProperties = (
-  path: string[],
-  node: types.Node
-): types.ObjectProperty[] | undefined => {
+const _getPathProperties = (path: string[], node: t.Node): t.ObjectProperty[] | undefined => {
   if (path.length === 0) {
-    if (types.isObjectExpression(node)) {
-      return node.properties as types.ObjectProperty[];
+    if (t.isObjectExpression(node)) {
+      return node.properties as t.ObjectProperty[];
     }
     throw new Error('Expected object expression');
   }
-  if (types.isObjectExpression(node)) {
+  if (t.isObjectExpression(node)) {
     const [first, ...rest] = path;
-    const field = (node.properties as types.ObjectProperty[]).find((p) => propKey(p) === first);
+    const field = (node.properties as t.ObjectProperty[]).find((p) => propKey(p) === first);
     if (field) {
       // FXIME handle spread etc.
       if (rest.length === 0) {
-        return node.properties as types.ObjectProperty[];
+        return node.properties as t.ObjectProperty[];
       }
 
-      return _getPathProperties(rest, (field as types.ObjectProperty).value);
+      return _getPathProperties(rest, (field as t.ObjectProperty).value);
     }
   }
   return undefined;
@@ -88,26 +85,23 @@ const _getPathProperties = (
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _findVarDeclarator = (
   identifier: string,
-  program: types.Program
-): types.VariableDeclarator | null | undefined => {
-  let declarator: types.VariableDeclarator | null | undefined = null;
-  let declarations: types.VariableDeclarator[] | null = null;
-  program.body.find((node: types.Node) => {
-    if (types.isVariableDeclaration(node)) {
+  program: t.Program
+): t.VariableDeclarator | null | undefined => {
+  let declarator: t.VariableDeclarator | null | undefined = null;
+  let declarations: t.VariableDeclarator[] | null = null;
+  program.body.find((node: t.Node) => {
+    if (t.isVariableDeclaration(node)) {
       declarations = node.declarations;
-    } else if (
-      types.isExportNamedDeclaration(node) &&
-      types.isVariableDeclaration(node.declaration)
-    ) {
+    } else if (t.isExportNamedDeclaration(node) && t.isVariableDeclaration(node.declaration)) {
       declarations = node.declaration.declarations;
     }
 
     return (
       declarations &&
-      declarations.find((decl: types.VariableDeclarator) => {
+      declarations.find((decl: t.VariableDeclarator) => {
         if (
-          types.isVariableDeclarator(decl) &&
-          types.isIdentifier(decl.id) &&
+          t.isVariableDeclarator(decl) &&
+          t.isIdentifier(decl.id) &&
           decl.id.name === identifier
         ) {
           declarator = decl;
@@ -121,36 +115,32 @@ const _findVarDeclarator = (
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _findVarInitialization = (identifier: string, program: types.Program) => {
+const _findVarInitialization = (identifier: string, program: t.Program) => {
   const declarator = _findVarDeclarator(identifier, program);
   return declarator?.init;
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _makeObjectExpression = (path: string[], value: types.Expression): types.Expression => {
+const _makeObjectExpression = (path: string[], value: t.Expression): t.Expression => {
   if (path.length === 0) {
     return value;
   }
   const [first, ...rest] = path;
   const innerExpression = _makeObjectExpression(rest, value);
-  return types.objectExpression([types.objectProperty(types.identifier(first), innerExpression)]);
+  return t.objectExpression([t.objectProperty(t.identifier(first), innerExpression)]);
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _updateExportNode = (
-  path: string[],
-  expr: types.Expression,
-  existing: types.ObjectExpression
-) => {
+const _updateExportNode = (path: string[], expr: t.Expression, existing: t.ObjectExpression) => {
   const [first, ...rest] = path;
-  const existingField = (existing.properties as types.ObjectProperty[]).find(
+  const existingField = (existing.properties as t.ObjectProperty[]).find(
     (p) => propKey(p) === first
-  ) as types.ObjectProperty;
+  ) as t.ObjectProperty;
   if (!existingField) {
     existing.properties.push(
-      types.objectProperty(types.identifier(first), _makeObjectExpression(rest, expr))
+      t.objectProperty(t.identifier(first), _makeObjectExpression(rest, expr))
     );
-  } else if (types.isObjectExpression(existingField.value) && rest.length > 0) {
+  } else if (t.isObjectExpression(existingField.value) && rest.length > 0) {
     _updateExportNode(rest, expr, existingField.value);
   } else {
     existingField.value = _makeObjectExpression(rest, expr);
@@ -158,18 +148,18 @@ const _updateExportNode = (
 };
 
 export class ConfigFile {
-  _ast: types.File;
+  _ast: t.File;
 
   _code: string;
 
-  _exports: Record<string, types.Expression> = {};
+  _exports: Record<string, t.Expression> = {};
 
   // FIXME: this is a hack. this is only used in the case where the user is
   // modifying a named export that's a scalar. The _exports map is not suitable
   // for that. But rather than refactor the whole thing, we just use this as a stopgap.
-  _exportDecls: Record<string, types.VariableDeclarator> = {};
+  _exportDecls: Record<string, t.VariableDeclarator> = {};
 
-  _exportsObject: types.ObjectExpression | undefined;
+  _exportsObject: t.ObjectExpression | undefined;
 
   _quotes: 'single' | 'double' | undefined;
 
@@ -177,7 +167,7 @@ export class ConfigFile {
 
   hasDefaultExport = false;
 
-  constructor(ast: types.File, code: string, fileName?: string) {
+  constructor(ast: t.File, code: string, fileName?: string) {
     this._ast = ast;
     this._code = code;
     this.fileName = fileName;
@@ -191,27 +181,24 @@ export class ConfigFile {
         enter({ node, parent }) {
           self.hasDefaultExport = true;
           let decl =
-            types.isIdentifier(node.declaration) && types.isProgram(parent)
+            t.isIdentifier(node.declaration) && t.isProgram(parent)
               ? _findVarInitialization(node.declaration.name, parent)
               : node.declaration;
 
-          if (types.isTSAsExpression(decl) || types.isTSSatisfiesExpression(decl)) {
+          if (t.isTSAsExpression(decl) || t.isTSSatisfiesExpression(decl)) {
             decl = decl.expression;
           }
 
-          if (types.isObjectExpression(decl)) {
+          if (t.isObjectExpression(decl)) {
             self._exportsObject = decl;
-            (decl.properties as types.ObjectProperty[]).forEach((p) => {
+            (decl.properties as t.ObjectProperty[]).forEach((p) => {
               const exportName = propKey(p);
               if (exportName) {
                 let exportVal = p.value;
-                if (types.isIdentifier(exportVal)) {
-                  exportVal = _findVarInitialization(
-                    exportVal.name,
-                    parent as types.Program
-                  ) as any;
+                if (t.isIdentifier(exportVal)) {
+                  exportVal = _findVarInitialization(exportVal.name, parent as t.Program) as any;
                 }
-                self._exports[exportName] = exportVal as types.Expression;
+                self._exports[exportName] = exportVal as t.Expression;
               }
             });
           } else {
@@ -227,17 +214,14 @@ export class ConfigFile {
       },
       ExportNamedDeclaration: {
         enter({ node, parent }) {
-          if (types.isVariableDeclaration(node.declaration)) {
+          if (t.isVariableDeclaration(node.declaration)) {
             // export const X = ...;
             node.declaration.declarations.forEach((decl) => {
-              if (types.isVariableDeclarator(decl) && types.isIdentifier(decl.id)) {
+              if (t.isVariableDeclarator(decl) && t.isIdentifier(decl.id)) {
                 const { name: exportName } = decl.id;
-                let exportVal = decl.init as types.Expression;
-                if (types.isIdentifier(exportVal)) {
-                  exportVal = _findVarInitialization(
-                    exportVal.name,
-                    parent as types.Program
-                  ) as any;
+                let exportVal = decl.init as t.Expression;
+                if (t.isIdentifier(exportVal)) {
+                  exportVal = _findVarInitialization(exportVal.name, parent as t.Program) as any;
                 }
                 self._exports[exportName] = exportVal;
                 self._exportDecls[exportName] = decl;
@@ -247,13 +231,13 @@ export class ConfigFile {
             // export { X };
             node.specifiers.forEach((spec) => {
               if (
-                types.isExportSpecifier(spec) &&
-                types.isIdentifier(spec.local) &&
-                types.isIdentifier(spec.exported)
+                t.isExportSpecifier(spec) &&
+                t.isIdentifier(spec.local) &&
+                t.isIdentifier(spec.exported)
               ) {
                 const { name: localName } = spec.local;
                 const { name: exportName } = spec.exported;
-                const decl = _findVarDeclarator(localName, parent as types.Program) as any;
+                const decl = _findVarDeclarator(localName, parent as t.Program) as any;
                 self._exports[exportName] = decl.init;
                 self._exportDecls[exportName] = decl;
               }
@@ -271,40 +255,37 @@ export class ConfigFile {
       },
       ExpressionStatement: {
         enter({ node, parent }) {
-          if (types.isAssignmentExpression(node.expression) && node.expression.operator === '=') {
+          if (t.isAssignmentExpression(node.expression) && node.expression.operator === '=') {
             const { left, right } = node.expression;
             if (
-              types.isMemberExpression(left) &&
-              types.isIdentifier(left.object) &&
+              t.isMemberExpression(left) &&
+              t.isIdentifier(left.object) &&
               left.object.name === 'module' &&
-              types.isIdentifier(left.property) &&
+              t.isIdentifier(left.property) &&
               left.property.name === 'exports'
             ) {
               let exportObject = right;
-              if (types.isIdentifier(right)) {
-                exportObject = _findVarInitialization(right.name, parent as types.Program) as any;
+              if (t.isIdentifier(right)) {
+                exportObject = _findVarInitialization(right.name, parent as t.Program) as any;
               }
 
-              if (
-                types.isTSAsExpression(exportObject) ||
-                types.isTSSatisfiesExpression(exportObject)
-              ) {
+              if (t.isTSAsExpression(exportObject) || t.isTSSatisfiesExpression(exportObject)) {
                 exportObject = exportObject.expression;
               }
 
-              if (types.isObjectExpression(exportObject)) {
+              if (t.isObjectExpression(exportObject)) {
                 self._exportsObject = exportObject;
-                (exportObject.properties as types.ObjectProperty[]).forEach((p) => {
+                (exportObject.properties as t.ObjectProperty[]).forEach((p) => {
                   const exportName = propKey(p);
                   if (exportName) {
-                    let exportVal = p.value as types.Expression;
-                    if (types.isIdentifier(exportVal)) {
+                    let exportVal = p.value as t.Expression;
+                    if (t.isIdentifier(exportVal)) {
                       exportVal = _findVarInitialization(
                         exportVal.name,
-                        parent as types.Program
+                        parent as t.Program
                       ) as any;
                     }
-                    self._exports[exportName] = exportVal as types.Expression;
+                    self._exports[exportName] = exportVal as t.Expression;
                   }
                 });
               } else {
@@ -334,7 +315,7 @@ export class ConfigFile {
     return _getPath(rest, exported);
   }
 
-  getFieldProperties(path: string[]) {
+  getFieldProperties(path: string[]): ReturnType<typeof _getPathProperties> {
     const [root, ...rest] = path;
     const exported = this._exports[root];
 
@@ -364,13 +345,13 @@ export class ConfigFile {
     return undefined;
   }
 
-  setFieldNode(path: string[], expr: types.Expression) {
+  setFieldNode(path: string[], expr: t.Expression) {
     const [first, ...rest] = path;
     const exportNode = this._exports[first];
     if (this._exportsObject) {
       _updateExportNode(path, expr, this._exportsObject);
       this._exports[path[0]] = expr;
-    } else if (exportNode && types.isObjectExpression(exportNode) && rest.length > 0) {
+    } else if (exportNode && t.isObjectExpression(exportNode) && rest.length > 0) {
       _updateExportNode(rest, expr, exportNode);
     } else if (exportNode && rest.length === 0 && this._exportDecls[path[0]]) {
       const decl = this._exportDecls[path[0]];
@@ -385,10 +366,8 @@ export class ConfigFile {
     } else {
       // create a new named export and add it to the top level
       const exportObj = _makeObjectExpression(rest, expr);
-      const newExport = types.exportNamedDeclaration(
-        types.variableDeclaration('const', [
-          types.variableDeclarator(types.identifier(first), exportObj),
-        ])
+      const newExport = t.exportNamedDeclaration(
+        t.variableDeclaration('const', [t.variableDeclarator(t.identifier(first), exportObj)])
       );
       this._exports[first] = exportObj;
       this._ast.program.body.push(newExport);
@@ -436,8 +415,8 @@ export class ConfigFile {
     }
 
     const pathNames: string[] = [];
-    if (types.isArrayExpression(node)) {
-      (node.elements as types.Expression[]).forEach((element) => {
+    if (t.isArrayExpression(node)) {
+      (node.elements as t.Expression[]).forEach((element) => {
         pathNames.push(this._getPresetValue(element, 'name'));
       });
     }
@@ -445,10 +424,10 @@ export class ConfigFile {
     return pathNames;
   }
 
-  _getPnpWrappedValue(node: types.Node) {
-    if (types.isCallExpression(node)) {
+  _getPnpWrappedValue(node: t.Node) {
+    if (t.isCallExpression(node)) {
       const arg = node.arguments[0];
-      if (types.isStringLiteral(arg)) {
+      if (t.isStringLiteral(arg)) {
         return arg.value;
       }
     }
@@ -461,19 +440,19 @@ export class ConfigFile {
    * 1. `{ node: 'value' }`
    * 2. `{ node: { fallbackProperty: 'value' } }`
    */
-  _getPresetValue(node: types.Node, fallbackProperty: string) {
+  _getPresetValue(node: t.Node, fallbackProperty: string) {
     let value;
-    if (types.isStringLiteral(node)) {
+    if (t.isStringLiteral(node)) {
       value = node.value;
-    } else if (types.isObjectExpression(node)) {
+    } else if (t.isObjectExpression(node)) {
       node.properties.forEach((prop) => {
         // { framework: { name: 'value' } }
         if (
-          types.isObjectProperty(prop) &&
-          types.isIdentifier(prop.key) &&
+          t.isObjectProperty(prop) &&
+          t.isIdentifier(prop.key) &&
           prop.key.name === fallbackProperty
         ) {
-          if (types.isStringLiteral(prop.value)) {
+          if (t.isStringLiteral(prop.value)) {
             value = prop.value.value;
           } else {
             value = this._getPnpWrappedValue(prop.value);
@@ -482,10 +461,10 @@ export class ConfigFile {
 
         // { "framework": { "name": "value" } }
         if (
-          types.isObjectProperty(prop) &&
-          types.isStringLiteral(prop.key) &&
+          t.isObjectProperty(prop) &&
+          t.isStringLiteral(prop.key) &&
           prop.key.value === 'name' &&
-          types.isStringLiteral(prop.value)
+          t.isStringLiteral(prop.value)
         ) {
           value = prop.value.value;
         }
@@ -502,11 +481,11 @@ export class ConfigFile {
   }
 
   removeField(path: string[]) {
-    const removeProperty = (properties: types.ObjectProperty[], prop: string) => {
+    const removeProperty = (properties: t.ObjectProperty[], prop: string) => {
       const index = properties.findIndex(
         (p) =>
-          (types.isIdentifier(p.key) && p.key.name === prop) ||
-          (types.isStringLiteral(p.key) && p.key.value === prop)
+          (t.isIdentifier(p.key) && p.key.name === prop) ||
+          (t.isStringLiteral(p.key) && p.key.value === prop)
       );
       if (index >= 0) {
         properties.splice(index, 1);
@@ -519,40 +498,40 @@ export class ConfigFile {
       // removing the root export
       this._ast.program.body.forEach((node) => {
         // named export
-        if (types.isExportNamedDeclaration(node) && types.isVariableDeclaration(node.declaration)) {
+        if (t.isExportNamedDeclaration(node) && t.isVariableDeclaration(node.declaration)) {
           const decl = node.declaration.declarations[0];
-          if (types.isIdentifier(decl.id) && decl.id.name === path[0]) {
+          if (t.isIdentifier(decl.id) && decl.id.name === path[0]) {
             this._ast.program.body.splice(this._ast.program.body.indexOf(node), 1);
             removedRootProperty = true;
           }
         }
         // default export
-        if (types.isExportDefaultDeclaration(node)) {
-          let decl: types.Expression | undefined | null = node.declaration as types.Expression;
-          if (types.isIdentifier(decl)) {
+        if (t.isExportDefaultDeclaration(node)) {
+          let decl: t.Expression | undefined | null = node.declaration as t.Expression;
+          if (t.isIdentifier(decl)) {
             decl = _findVarInitialization(decl.name, this._ast.program);
           }
-          if (types.isTSAsExpression(decl) || types.isTSSatisfiesExpression(decl)) {
+          if (t.isTSAsExpression(decl) || t.isTSSatisfiesExpression(decl)) {
             decl = decl.expression;
           }
-          if (types.isObjectExpression(decl)) {
-            const properties = decl.properties as types.ObjectProperty[];
+          if (t.isObjectExpression(decl)) {
+            const properties = decl.properties as t.ObjectProperty[];
             removeProperty(properties, path[0]);
             removedRootProperty = true;
           }
         }
         // module.exports
         if (
-          types.isExpressionStatement(node) &&
-          types.isAssignmentExpression(node.expression) &&
-          types.isMemberExpression(node.expression.left) &&
-          types.isIdentifier(node.expression.left.object) &&
+          t.isExpressionStatement(node) &&
+          t.isAssignmentExpression(node.expression) &&
+          t.isMemberExpression(node.expression.left) &&
+          t.isIdentifier(node.expression.left.object) &&
           node.expression.left.object.name === 'module' &&
-          types.isIdentifier(node.expression.left.property) &&
+          t.isIdentifier(node.expression.left.property) &&
           node.expression.left.property.name === 'exports' &&
-          types.isObjectExpression(node.expression.right)
+          t.isObjectExpression(node.expression.right)
         ) {
-          const properties = node.expression.right.properties as types.ObjectProperty[];
+          const properties = node.expression.right.properties as t.ObjectProperty[];
           removeProperty(properties, path[0]);
           removedRootProperty = true;
         }
@@ -563,7 +542,7 @@ export class ConfigFile {
       }
     }
 
-    const properties = this.getFieldProperties(path) as types.ObjectProperty[];
+    const properties = this.getFieldProperties(path) as t.ObjectProperty[];
     if (properties) {
       const lastPath = path.at(-1) as string;
       removeProperty(properties, lastPath);
@@ -578,11 +557,11 @@ export class ConfigFile {
     }
   }
 
-  appendNodeToArray(path: string[], node: types.Expression) {
+  appendNodeToArray(path: string[], node: t.Expression) {
     const current = this.getFieldNode(path);
     if (!current) {
-      this.setFieldNode(path, types.arrayExpression([node]));
-    } else if (types.isArrayExpression(current)) {
+      this.setFieldNode(path, t.arrayExpression([node]));
+    } else if (t.isArrayExpression(current)) {
       current.elements.push(node);
     } else {
       throw new Error(`Expected array at '${path.join('.')}', got '${current.type}'`);
@@ -599,16 +578,16 @@ export class ConfigFile {
     if (!current) {
       return;
     }
-    if (types.isArrayExpression(current)) {
+    if (t.isArrayExpression(current)) {
       const index = current.elements.findIndex((element) => {
-        if (types.isStringLiteral(element)) {
+        if (t.isStringLiteral(element)) {
           return element.value === value;
         }
-        if (types.isObjectExpression(element)) {
+        if (t.isObjectExpression(element)) {
           const name = this._getPresetValue(element, 'name');
           return name === value;
         }
-        return this._getPnpWrappedValue(element as types.Node) === value;
+        return this._getPnpWrappedValue(element as t.Node) === value;
       });
       if (index >= 0) {
         current.elements.splice(index, 1);
@@ -637,21 +616,21 @@ export class ConfigFile {
     return this._quotes;
   }
 
-  valueToNode(value: any) {
+  valueToNode(value: any): t.Expression | undefined {
     const quotes = this._inferQuotes();
     let valueNode;
     // we do this rather than types.valueToNode because apparently
     // babel only preserves quotes if they are parsed from the original code.
     if (quotes === 'single') {
-      const { code } = generate(types.valueToNode(value), { jsescOption: { quotes } });
+      const { code } = generate(t.valueToNode(value), { jsescOption: { quotes } });
       const program = babelParse(`const __x = ${code}`);
       traverse(program, {
         VariableDeclaration: {
           enter({ node }) {
             if (
               node.declarations.length === 1 &&
-              types.isVariableDeclarator(node.declarations[0]) &&
-              types.isIdentifier(node.declarations[0].id) &&
+              t.isVariableDeclarator(node.declarations[0]) &&
+              t.isIdentifier(node.declarations[0].id) &&
               node.declarations[0].id.name === '__x'
             ) {
               valueNode = node.declarations[0].init;
@@ -661,7 +640,7 @@ export class ConfigFile {
       });
     } else {
       // double quotes is the default so we can skip all that
-      valueNode = types.valueToNode(value);
+      valueNode = t.valueToNode(value);
     }
     return valueNode;
   }
@@ -674,11 +653,11 @@ export class ConfigFile {
     this.setFieldNode(path, valueNode);
   }
 
-  getBodyDeclarations() {
+  getBodyDeclarations(): t.Statement[] {
     return this._ast.program.body;
   }
 
-  setBodyDeclaration(declaration: types.Declaration) {
+  setBodyDeclaration(declaration: t.Declaration) {
     this._ast.program.body.push(declaration);
   }
 
@@ -702,15 +681,15 @@ export class ConfigFile {
   setRequireImport(importSpecifier: string[] | string, fromImport: string) {
     const requireDeclaration = this._ast.program.body.find(
       (node) =>
-        types.isVariableDeclaration(node) &&
+        t.isVariableDeclaration(node) &&
         node.declarations.length === 1 &&
-        types.isVariableDeclarator(node.declarations[0]) &&
-        types.isCallExpression(node.declarations[0].init) &&
-        types.isIdentifier(node.declarations[0].init.callee) &&
+        t.isVariableDeclarator(node.declarations[0]) &&
+        t.isCallExpression(node.declarations[0].init) &&
+        t.isIdentifier(node.declarations[0].init.callee) &&
         node.declarations[0].init.callee.name === 'require' &&
-        types.isStringLiteral(node.declarations[0].init.arguments[0]) &&
+        t.isStringLiteral(node.declarations[0].init.arguments[0]) &&
         node.declarations[0].init.arguments[0].value === fromImport
-    ) as types.VariableDeclaration | undefined;
+    ) as t.VariableDeclaration | undefined;
 
     /**
      * Returns true, when the given import declaration has the given import specifier
@@ -723,11 +702,11 @@ export class ConfigFile {
      * ```
      */
     const hasRequireSpecifier = (name: string) =>
-      types.isObjectPattern(requireDeclaration?.declarations[0].id) &&
+      t.isObjectPattern(requireDeclaration?.declarations[0].id) &&
       requireDeclaration?.declarations[0].id.properties.find(
         (specifier) =>
-          types.isObjectProperty(specifier) &&
-          types.isIdentifier(specifier.key) &&
+          t.isObjectProperty(specifier) &&
+          t.isIdentifier(specifier.key) &&
           specifier.key.name === name
       );
 
@@ -741,10 +720,10 @@ export class ConfigFile {
      * hasImportSpecifier(declaration, 'foo');
      * ```
      */
-    const hasDefaultRequireSpecifier = (declaration: types.VariableDeclaration, name: string) =>
+    const hasDefaultRequireSpecifier = (declaration: t.VariableDeclaration, name: string) =>
       declaration.declarations.length === 1 &&
-      types.isVariableDeclarator(declaration.declarations[0]) &&
-      types.isIdentifier(declaration.declarations[0].id) &&
+      t.isVariableDeclarator(declaration.declarations[0]) &&
+      t.isIdentifier(declaration.declarations[0].id) &&
       declaration.declarations[0].id.name === name;
 
     // if the import specifier is a string, we're dealing with default imports
@@ -752,10 +731,10 @@ export class ConfigFile {
       // If the import declaration with the given source exists
       const addDefaultRequireSpecifier = () => {
         this._ast.program.body.unshift(
-          types.variableDeclaration('const', [
-            types.variableDeclarator(
-              types.identifier(importSpecifier),
-              types.callExpression(types.identifier('require'), [types.stringLiteral(fromImport)])
+          t.variableDeclaration('const', [
+            t.variableDeclarator(
+              t.identifier(importSpecifier),
+              t.callExpression(t.identifier('require'), [t.stringLiteral(fromImport)])
             ),
           ])
         );
@@ -775,31 +754,21 @@ export class ConfigFile {
     } else if (requireDeclaration) {
       importSpecifier.forEach((specifier) => {
         if (!hasRequireSpecifier(specifier)) {
-          (requireDeclaration.declarations[0].id as types.ObjectPattern).properties.push(
-            types.objectProperty(
-              types.identifier(specifier),
-              types.identifier(specifier),
-              undefined,
-              true
-            )
+          (requireDeclaration.declarations[0].id as t.ObjectPattern).properties.push(
+            t.objectProperty(t.identifier(specifier), t.identifier(specifier), undefined, true)
           );
         }
       });
     } else {
       this._ast.program.body.unshift(
-        types.variableDeclaration('const', [
-          types.variableDeclarator(
-            types.objectPattern(
+        t.variableDeclaration('const', [
+          t.variableDeclarator(
+            t.objectPattern(
               importSpecifier.map((specifier) =>
-                types.objectProperty(
-                  types.identifier(specifier),
-                  types.identifier(specifier),
-                  undefined,
-                  true
-                )
+                t.objectProperty(t.identifier(specifier), t.identifier(specifier), undefined, true)
               )
             ),
-            types.callExpression(types.identifier('require'), [types.stringLiteral(fromImport)])
+            t.callExpression(t.identifier('require'), [t.stringLiteral(fromImport)])
           ),
         ])
       );
@@ -827,7 +796,7 @@ export class ConfigFile {
    */
   setImport(importSpecifier: string[] | string, fromImport: string) {
     const getNewImportSpecifier = (specifier: string) =>
-      types.importSpecifier(types.identifier(specifier), types.identifier(specifier));
+      t.importSpecifier(t.identifier(specifier), t.identifier(specifier));
 
     /**
      * Returns true, when the given import declaration has the given import specifier
@@ -839,11 +808,11 @@ export class ConfigFile {
      * hasImportSpecifier(declaration, 'foo');
      * ```
      */
-    const hasImportSpecifier = (declaration: types.ImportDeclaration, name: string) =>
+    const hasImportSpecifier = (declaration: t.ImportDeclaration, name: string) =>
       declaration.specifiers.find(
         (specifier) =>
-          types.isImportSpecifier(specifier) &&
-          types.isIdentifier(specifier.imported) &&
+          t.isImportSpecifier(specifier) &&
+          t.isIdentifier(specifier.imported) &&
           specifier.imported.name === name
       );
 
@@ -857,12 +826,12 @@ export class ConfigFile {
      * hasImportSpecifier(declaration, 'foo');
      * ```
      */
-    const hasDefaultImportSpecifier = (declaration: types.ImportDeclaration, name: string) =>
-      declaration.specifiers.find((specifier) => types.isImportDefaultSpecifier(specifier));
+    const hasDefaultImportSpecifier = (declaration: t.ImportDeclaration, name: string) =>
+      declaration.specifiers.find((specifier) => t.isImportDefaultSpecifier(specifier));
 
     const importDeclaration = this._ast.program.body.find(
-      (node) => types.isImportDeclaration(node) && node.source.value === fromImport
-    ) as types.ImportDeclaration | undefined;
+      (node) => t.isImportDeclaration(node) && node.source.value === fromImport
+    ) as t.ImportDeclaration | undefined;
 
     // if the import specifier is a string, we're dealing with default imports
     if (typeof importSpecifier === 'string') {
@@ -871,16 +840,16 @@ export class ConfigFile {
         if (!hasDefaultImportSpecifier(importDeclaration, importSpecifier)) {
           // If the import declaration hasn'types a default specifier, we add it
           importDeclaration.specifiers.push(
-            types.importDefaultSpecifier(types.identifier(importSpecifier))
+            t.importDefaultSpecifier(t.identifier(importSpecifier))
           );
         }
         // If the import declaration with the given source doesn'types exist
       } else {
         // Add the import declaration to the top of the file
         this._ast.program.body.unshift(
-          types.importDeclaration(
-            [types.importDefaultSpecifier(types.identifier(importSpecifier))],
-            types.stringLiteral(fromImport)
+          t.importDeclaration(
+            [t.importDefaultSpecifier(t.identifier(importSpecifier))],
+            t.stringLiteral(fromImport)
           )
         );
       }
@@ -893,11 +862,11 @@ export class ConfigFile {
       });
     } else {
       this._ast.program.body.unshift(
-        types.importDeclaration(
+        t.importDeclaration(
           importSpecifier.map((specifier) =>
-            types.importSpecifier(types.identifier(specifier), types.identifier(specifier))
+            t.importSpecifier(t.identifier(specifier), t.identifier(specifier))
           ),
-          types.stringLiteral(fromImport)
+          t.stringLiteral(fromImport)
         )
       );
     }

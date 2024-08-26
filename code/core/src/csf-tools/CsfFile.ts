@@ -8,8 +8,8 @@ import {
   babelParse,
   generate,
   recast,
+  types as t,
   traverse,
-  types,
 } from '@storybook/core/babel';
 import type {
   ComponentAnnotations,
@@ -30,7 +30,7 @@ const logger = console;
 
 // We add this BabelFile as a temporary workaround to deal with a BabelFileClass "ImportEquals should have a literal source" issue in no link mode with tsup
 interface BabelFile {
-  ast: types.File;
+  ast: t.File;
   opts: any;
   hub: any;
   metadata: object;
@@ -40,61 +40,61 @@ interface BabelFile {
   code: string;
 }
 
-function parseIncludeExclude(prop: types.Node) {
-  if (types.isArrayExpression(prop)) {
+function parseIncludeExclude(prop: t.Node) {
+  if (t.isArrayExpression(prop)) {
     return prop.elements.map((e) => {
-      if (types.isStringLiteral(e)) {
+      if (t.isStringLiteral(e)) {
         return e.value;
       }
       throw new Error(`Expected string literal: ${e}`);
     });
   }
 
-  if (types.isStringLiteral(prop)) {
+  if (t.isStringLiteral(prop)) {
     return new RegExp(prop.value);
   }
 
-  if (types.isRegExpLiteral(prop)) {
+  if (t.isRegExpLiteral(prop)) {
     return new RegExp(prop.pattern, prop.flags);
   }
 
   throw new Error(`Unknown include/exclude: ${prop}`);
 }
 
-function parseTags(prop: types.Node) {
-  if (!types.isArrayExpression(prop)) {
+function parseTags(prop: t.Node) {
+  if (!t.isArrayExpression(prop)) {
     throw new Error('CSF: Expected tags array');
   }
 
   return prop.elements.map((e) => {
-    if (types.isStringLiteral(e)) {
+    if (t.isStringLiteral(e)) {
       return e.value;
     }
     throw new Error(`CSF: Expected tag to be string literal`);
   }) as Tag[];
 }
 
-const formatLocation = (node: types.Node, fileName?: string) => {
+const formatLocation = (node: t.Node, fileName?: string) => {
   const { line, column } = node.loc?.start || {};
   return `${fileName || ''} (line ${line}, col ${column})`.trim();
 };
 
 export const isModuleMock = (importPath: string) => MODULE_MOCK_REGEX.test(importPath);
 
-const isArgsStory = (init: types.Node, parent: types.Node, csf: CsfFile) => {
-  let storyFn: types.Node = init;
+const isArgsStory = (init: t.Node, parent: t.Node, csf: CsfFile) => {
+  let storyFn: t.Node = init;
   // export const Foo = Bar.bind({})
-  if (types.isCallExpression(init)) {
+  if (t.isCallExpression(init)) {
     const { callee, arguments: bindArguments } = init;
     if (
-      types.isProgram(parent) &&
-      types.isMemberExpression(callee) &&
-      types.isIdentifier(callee.object) &&
-      types.isIdentifier(callee.property) &&
+      t.isProgram(parent) &&
+      t.isMemberExpression(callee) &&
+      t.isIdentifier(callee.object) &&
+      t.isIdentifier(callee.property) &&
       callee.property.name === 'bind' &&
       (bindArguments.length === 0 ||
         (bindArguments.length === 1 &&
-          types.isObjectExpression(bindArguments[0]) &&
+          t.isObjectExpression(bindArguments[0]) &&
           bindArguments[0].properties.length === 0))
     ) {
       const boundIdentifier = callee.object.name;
@@ -105,19 +105,19 @@ const isArgsStory = (init: types.Node, parent: types.Node, csf: CsfFile) => {
       }
     }
   }
-  if (types.isArrowFunctionExpression(storyFn)) {
+  if (t.isArrowFunctionExpression(storyFn)) {
     return storyFn.params.length > 0;
   }
-  if (types.isFunctionDeclaration(storyFn)) {
+  if (t.isFunctionDeclaration(storyFn)) {
     return storyFn.params.length > 0;
   }
   return false;
 };
 
-const parseExportsOrder = (init: types.Expression) => {
-  if (types.isArrayExpression(init)) {
-    return (init.elements as types.Expression[]).map((item) => {
-      if (types.isStringLiteral(item)) {
+const parseExportsOrder = (init: t.Expression) => {
+  if (t.isArrayExpression(init)) {
+    return (init.elements as t.Expression[]).map((item) => {
+      if (t.isStringLiteral(item)) {
         return item.value;
       }
       throw new Error(`Expected string literal named export: ${item}`);
@@ -140,14 +140,14 @@ const sortExports = (exportByName: Record<string, any>, order: string[]) => {
   );
 };
 
-const hasMount = (play: types.Node | undefined) => {
-  if (types.isArrowFunctionExpression(play) || types.isFunctionDeclaration(play)) {
+const hasMount = (play: t.Node | undefined) => {
+  if (t.isArrowFunctionExpression(play) || t.isFunctionDeclaration(play)) {
     const params = play.params;
     if (params.length >= 1) {
       const [arg] = params;
-      if (types.isObjectPattern(arg)) {
+      if (t.isObjectPattern(arg)) {
         return !!arg.properties.find((prop) => {
-          if (types.isObjectProperty(prop) && types.isIdentifier(prop.key)) {
+          if (t.isObjectProperty(prop) && t.isIdentifier(prop.key)) {
             return prop.key.name === 'mount';
           }
         });
@@ -170,7 +170,7 @@ export interface CsfOptions {
 }
 
 export class NoMetaError extends Error {
-  constructor(message: string, ast: types.Node, fileName?: string) {
+  constructor(message: string, ast: t.Node, fileName?: string) {
     super(dedent`
       CSF: ${message} ${formatLocation(ast, fileName)}
 
@@ -194,7 +194,7 @@ export interface StaticStory extends Pick<StoryAnnotations, 'name' | 'parameters
 }
 
 export class CsfFile {
-  _ast: types.File;
+  _ast: t.File;
 
   _file: BabelFile;
 
@@ -206,21 +206,21 @@ export class CsfFile {
 
   _stories: Record<string, StaticStory> = {};
 
-  _metaAnnotations: Record<string, types.Node> = {};
+  _metaAnnotations: Record<string, t.Node> = {};
 
-  _storyExports: Record<string, types.VariableDeclarator | types.FunctionDeclaration> = {};
+  _storyExports: Record<string, t.VariableDeclarator | t.FunctionDeclaration> = {};
 
-  _metaStatement: types.Statement | undefined;
+  _metaStatement: t.Statement | undefined;
 
-  _metaNode: types.Expression | undefined;
+  _metaNode: t.Expression | undefined;
 
   _metaVariableName: string | undefined;
 
-  _storyStatements: Record<string, types.ExportNamedDeclaration | types.Expression> = {};
+  _storyStatements: Record<string, t.ExportNamedDeclaration | t.Expression> = {};
 
-  _storyAnnotations: Record<string, Record<string, types.Node>> = {};
+  _storyAnnotations: Record<string, Record<string, t.Node>> = {};
 
-  _templates: Record<string, types.Expression> = {};
+  _templates: Record<string, t.Expression> = {};
 
   _namedExportsOrder?: string[];
 
@@ -236,21 +236,21 @@ export class CsfFile {
     return this._options.makeTitle;
   }
 
-  constructor(ast: types.File, options: CsfOptions, file: BabelFile) {
+  constructor(ast: t.File, options: CsfOptions, file: BabelFile) {
     this._ast = ast;
     this._file = file;
     this._options = options;
     this.imports = [];
   }
 
-  _parseTitle(value: types.Node) {
-    const node = types.isIdentifier(value)
+  _parseTitle(value: t.Node) {
+    const node = t.isIdentifier(value)
       ? findVarInitialization(value.name, this._ast.program)
       : value;
-    if (types.isStringLiteral(node)) {
+    if (t.isStringLiteral(node)) {
       return node.value;
     }
-    if (types.isTSSatisfiesExpression(node) && types.isStringLiteral(node.expression)) {
+    if (t.isTSSatisfiesExpression(node) && t.isStringLiteral(node.expression)) {
       return node.expression.value;
     }
 
@@ -261,10 +261,10 @@ export class CsfFile {
     `);
   }
 
-  _parseMeta(declaration: types.ObjectExpression, program: types.Program) {
+  _parseMeta(declaration: t.ObjectExpression, program: t.Program) {
     const meta: StaticMeta = {};
-    (declaration.properties as types.ObjectProperty[]).forEach((p) => {
-      if (types.isIdentifier(p.key)) {
+    (declaration.properties as t.ObjectProperty[]).forEach((p) => {
+      if (t.isIdentifier(p.key)) {
         this._metaAnnotations[p.key.name] = p.value;
 
         if (p.key.name === 'title') {
@@ -273,16 +273,16 @@ export class CsfFile {
           (meta as any)[p.key.name] = parseIncludeExclude(p.value);
         } else if (p.key.name === 'component') {
           const n = p.value;
-          if (types.isIdentifier(n)) {
+          if (t.isIdentifier(n)) {
             const id = n.name;
             const importStmt = program.body.find(
               (stmt) =>
-                types.isImportDeclaration(stmt) &&
+                t.isImportDeclaration(stmt) &&
                 stmt.specifiers.find((spec) => spec.local.name === id)
-            ) as types.ImportDeclaration;
+            ) as t.ImportDeclaration;
             if (importStmt) {
               const { source } = importStmt;
-              if (types.isStringLiteral(source)) {
+              if (t.isStringLiteral(source)) {
                 this._rawComponentPath = source.value;
               }
             }
@@ -291,12 +291,12 @@ export class CsfFile {
           meta.component = code;
         } else if (p.key.name === 'tags') {
           let node = p.value;
-          if (types.isIdentifier(node)) {
+          if (t.isIdentifier(node)) {
             node = findVarInitialization(node.name, this._ast.program);
           }
           meta.tags = parseTags(node);
         } else if (p.key.name === 'id') {
-          if (types.isStringLiteral(p.value)) {
+          if (t.isStringLiteral(p.value)) {
             meta.id = p.value.value;
           } else {
             throw new Error(`Unexpected component id: ${p.value}`);
@@ -308,18 +308,18 @@ export class CsfFile {
   }
 
   getStoryExport(key: string) {
-    let node = this._storyExports[key] as types.Node;
-    node = types.isVariableDeclarator(node) ? (node.init as types.Node) : node;
-    if (types.isCallExpression(node)) {
+    let node = this._storyExports[key] as t.Node;
+    node = t.isVariableDeclarator(node) ? (node.init as t.Node) : node;
+    if (t.isCallExpression(node)) {
       const { callee, arguments: bindArguments } = node;
       if (
-        types.isMemberExpression(callee) &&
-        types.isIdentifier(callee.object) &&
-        types.isIdentifier(callee.property) &&
+        t.isMemberExpression(callee) &&
+        t.isIdentifier(callee.object) &&
+        t.isIdentifier(callee.property) &&
         callee.property.name === 'bind' &&
         (bindArguments.length === 0 ||
           (bindArguments.length === 1 &&
-            types.isObjectExpression(bindArguments[0]) &&
+            t.isObjectExpression(bindArguments[0]) &&
             bindArguments[0].properties.length === 0))
       ) {
         const { name } = callee.object;
@@ -336,44 +336,41 @@ export class CsfFile {
       ExportDefaultDeclaration: {
         enter(path) {
           const { node, parent } = path;
-          const isVariableReference =
-            types.isIdentifier(node.declaration) && types.isProgram(parent);
+          const isVariableReference = t.isIdentifier(node.declaration) && t.isProgram(parent);
 
           if (
             self._options.transformInlineMeta &&
             !isVariableReference &&
-            types.isExpression(node.declaration)
+            t.isExpression(node.declaration)
           ) {
             const metaId = path.scope.generateUidIdentifier('meta');
             self._metaVariableName = metaId.name;
             const nodes = [
-              types.variableDeclaration('const', [
-                types.variableDeclarator(metaId, node.declaration),
-              ]),
-              types.exportDefaultDeclaration(metaId),
+              t.variableDeclaration('const', [t.variableDeclarator(metaId, node.declaration)]),
+              t.exportDefaultDeclaration(metaId),
             ];
 
             // Preserve sourcemaps location
-            nodes.forEach((_node: types.Node) => (_node.loc = path.node.loc));
+            nodes.forEach((_node: t.Node) => (_node.loc = path.node.loc));
             path.replaceWithMultiple(nodes);
           }
 
-          let metaNode: types.ObjectExpression | undefined;
+          let metaNode: t.ObjectExpression | undefined;
           let decl;
           if (isVariableReference) {
             // const meta = { ... };
             // export default meta;
-            const variableName = (node.declaration as types.Identifier).name;
+            const variableName = (node.declaration as t.Identifier).name;
             self._metaVariableName = variableName;
-            const isVariableDeclarator = (declaration: types.VariableDeclarator) =>
-              types.isIdentifier(declaration.id) && declaration.id.name === variableName;
+            const isVariableDeclarator = (declaration: t.VariableDeclarator) =>
+              t.isIdentifier(declaration.id) && declaration.id.name === variableName;
 
             self._metaStatement = self._ast.program.body.find(
               (topLevelNode) =>
-                types.isVariableDeclaration(topLevelNode) &&
+                t.isVariableDeclaration(topLevelNode) &&
                 topLevelNode.declarations.find(isVariableDeclarator)
             );
-            decl = ((self?._metaStatement as types.VariableDeclaration)?.declarations || []).find(
+            decl = ((self?._metaStatement as t.VariableDeclaration)?.declarations || []).find(
               isVariableDeclarator
             )?.init;
           } else {
@@ -381,18 +378,18 @@ export class CsfFile {
             decl = node.declaration;
           }
 
-          if (types.isObjectExpression(decl)) {
+          if (t.isObjectExpression(decl)) {
             // export default { ... };
             metaNode = decl;
           } else if (
             // export default { ... } as Meta<...>
-            (types.isTSAsExpression(decl) || types.isTSSatisfiesExpression(decl)) &&
-            types.isObjectExpression(decl.expression)
+            (t.isTSAsExpression(decl) || t.isTSSatisfiesExpression(decl)) &&
+            t.isObjectExpression(decl.expression)
           ) {
             metaNode = decl.expression;
           }
 
-          if (!self._meta && metaNode && types.isProgram(parent)) {
+          if (!self._meta && metaNode && t.isProgram(parent)) {
             self._metaNode = metaNode;
             self._parseMeta(metaNode, parent);
           }
@@ -409,20 +406,18 @@ export class CsfFile {
       ExportNamedDeclaration: {
         enter({ node, parent }) {
           let declarations;
-          if (types.isVariableDeclaration(node.declaration)) {
-            declarations = node.declaration.declarations.filter((d) =>
-              types.isVariableDeclarator(d)
-            );
-          } else if (types.isFunctionDeclaration(node.declaration)) {
+          if (t.isVariableDeclaration(node.declaration)) {
+            declarations = node.declaration.declarations.filter((d) => t.isVariableDeclarator(d));
+          } else if (t.isFunctionDeclaration(node.declaration)) {
             declarations = [node.declaration];
           }
           if (declarations) {
             // export const X = ...;
-            declarations.forEach((decl: types.VariableDeclarator | types.FunctionDeclaration) => {
-              if (types.isIdentifier(decl.id)) {
+            declarations.forEach((decl: t.VariableDeclarator | t.FunctionDeclaration) => {
+              if (t.isIdentifier(decl.id)) {
                 const { name: exportName } = decl.id;
-                if (exportName === '__namedExportsOrder' && types.isVariableDeclarator(decl)) {
-                  self._namedExportsOrder = parseExportsOrder(decl.init as types.Expression);
+                if (exportName === '__namedExportsOrder' && t.isVariableDeclarator(decl)) {
+                  self._namedExportsOrder = parseExportsOrder(decl.init as t.Expression);
                   return;
                 }
                 self._storyExports[exportName] = decl;
@@ -436,41 +431,41 @@ export class CsfFile {
                   self._storyAnnotations[exportName] = {};
                 }
                 let storyNode;
-                if (types.isVariableDeclarator(decl)) {
+                if (t.isVariableDeclarator(decl)) {
                   storyNode =
-                    types.isTSAsExpression(decl.init) || types.isTSSatisfiesExpression(decl.init)
+                    t.isTSAsExpression(decl.init) || t.isTSSatisfiesExpression(decl.init)
                       ? decl.init.expression
                       : decl.init;
                 } else {
                   storyNode = decl;
                 }
                 const parameters: { [key: string]: any } = {};
-                if (types.isObjectExpression(storyNode)) {
+                if (t.isObjectExpression(storyNode)) {
                   parameters.__isArgsStory = true; // assume default render is an args story
                   // CSF3 object export
-                  (storyNode.properties as types.ObjectProperty[]).forEach((p) => {
-                    if (types.isIdentifier(p.key)) {
+                  (storyNode.properties as t.ObjectProperty[]).forEach((p) => {
+                    if (t.isIdentifier(p.key)) {
                       if (p.key.name === 'render') {
                         parameters.__isArgsStory = isArgsStory(
-                          p.value as types.Expression,
+                          p.value as t.Expression,
                           parent,
                           self
                         );
-                      } else if (p.key.name === 'name' && types.isStringLiteral(p.value)) {
+                      } else if (p.key.name === 'name' && t.isStringLiteral(p.value)) {
                         name = p.value.value;
-                      } else if (p.key.name === 'storyName' && types.isStringLiteral(p.value)) {
+                      } else if (p.key.name === 'storyName' && t.isStringLiteral(p.value)) {
                         logger.warn(
                           `Unexpected usage of "storyName" in "${exportName}". Please use "name" instead.`
                         );
-                      } else if (p.key.name === 'parameters' && types.isObjectExpression(p.value)) {
+                      } else if (p.key.name === 'parameters' && t.isObjectExpression(p.value)) {
                         const idProperty = p.value.properties.find(
                           (property) =>
-                            types.isObjectProperty(property) &&
-                            types.isIdentifier(property.key) &&
+                            t.isObjectProperty(property) &&
+                            t.isIdentifier(property.key) &&
                             property.key.name === '__id'
-                        ) as types.ObjectProperty | undefined;
+                        ) as t.ObjectProperty | undefined;
                         if (idProperty) {
-                          parameters.__id = (idProperty.value as types.StringLiteral).value;
+                          parameters.__id = (idProperty.value as t.StringLiteral).value;
                         }
                       }
 
@@ -478,7 +473,7 @@ export class CsfFile {
                     }
                   });
                 } else {
-                  parameters.__isArgsStory = isArgsStory(storyNode as types.Node, parent, self);
+                  parameters.__isArgsStory = isArgsStory(storyNode as t.Node, parent, self);
                 }
                 self._stories[exportName] = {
                   id: 'FIXME',
@@ -491,27 +486,27 @@ export class CsfFile {
           } else if (node.specifiers.length > 0) {
             // export { X as Y }
             node.specifiers.forEach((specifier) => {
-              if (types.isExportSpecifier(specifier) && types.isIdentifier(specifier.exported)) {
+              if (t.isExportSpecifier(specifier) && t.isIdentifier(specifier.exported)) {
                 const { name: exportName } = specifier.exported;
-                const decl = types.isProgram(parent)
+                const decl = t.isProgram(parent)
                   ? findVarInitialization(specifier.local.name, parent)
                   : specifier.local;
 
                 if (exportName === 'default') {
-                  let metaNode: types.ObjectExpression | undefined;
+                  let metaNode: t.ObjectExpression | undefined;
 
-                  if (types.isObjectExpression(decl)) {
+                  if (t.isObjectExpression(decl)) {
                     // export default { ... };
                     metaNode = decl;
                   } else if (
                     // export default { ... } as Meta<...>
-                    types.isTSAsExpression(decl) &&
-                    types.isObjectExpression(decl.expression)
+                    t.isTSAsExpression(decl) &&
+                    t.isObjectExpression(decl.expression)
                   ) {
                     metaNode = decl.expression;
                   }
 
-                  if (!self._meta && metaNode && types.isProgram(parent)) {
+                  if (!self._meta && metaNode && t.isProgram(parent)) {
                     self._parseMeta(metaNode, parent);
                   }
                 } else {
@@ -534,11 +529,11 @@ export class CsfFile {
           const { expression } = node;
           // B.storyName = 'some string';
           if (
-            types.isProgram(parent) &&
-            types.isAssignmentExpression(expression) &&
-            types.isMemberExpression(expression.left) &&
-            types.isIdentifier(expression.left.object) &&
-            types.isIdentifier(expression.left.property)
+            t.isProgram(parent) &&
+            t.isAssignmentExpression(expression) &&
+            t.isMemberExpression(expression.left) &&
+            t.isIdentifier(expression.left.object) &&
+            t.isIdentifier(expression.left.property)
           ) {
             const exportName = expression.left.object.name;
             const annotationKey = expression.left.property.name;
@@ -548,9 +543,9 @@ export class CsfFile {
             // A.story = { parameters: ..., decorators: ... }
 
             if (self._storyAnnotations[exportName]) {
-              if (annotationKey === 'story' && types.isObjectExpression(annotationValue)) {
-                (annotationValue.properties as types.ObjectProperty[]).forEach((prop) => {
-                  if (types.isIdentifier(prop.key)) {
+              if (annotationKey === 'story' && t.isObjectExpression(annotationValue)) {
+                (annotationValue.properties as t.ObjectProperty[]).forEach((prop) => {
+                  if (t.isIdentifier(prop.key)) {
                     self._storyAnnotations[exportName][prop.key.name] = prop.value;
                   }
                 });
@@ -559,7 +554,7 @@ export class CsfFile {
               }
             }
 
-            if (annotationKey === 'storyName' && types.isStringLiteral(annotationValue)) {
+            if (annotationKey === 'storyName' && t.isStringLiteral(annotationValue)) {
               const storyName = annotationValue.value;
               const story = self._stories[exportName];
 
@@ -574,7 +569,7 @@ export class CsfFile {
       CallExpression: {
         enter({ node }) {
           const { callee } = node;
-          if (types.isIdentifier(callee) && callee.name === 'storiesOf') {
+          if (t.isIdentifier(callee) && callee.name === 'storiesOf') {
             throw new Error(dedent`
               Unexpected \`storiesOf\` usage: ${formatLocation(node, self._options.fileName)}.
 
@@ -586,7 +581,7 @@ export class CsfFile {
       ImportDeclaration: {
         enter({ node }) {
           const { source } = node;
-          if (types.isStringLiteral(source)) {
+          if (t.isStringLiteral(source)) {
             self.imports.push(source.value);
           } else {
             throw new Error('CSF: unexpected import source');
@@ -626,7 +621,7 @@ export class CsfFile {
         const storyAnnotations = self._storyAnnotations[key];
         const { tags, play } = storyAnnotations;
         if (tags) {
-          const node = types.isIdentifier(tags)
+          const node = t.isIdentifier(tags)
             ? findVarInitialization(tags.name, this._ast.program)
             : tags;
           acc[key].tags = parseTags(node);
@@ -641,7 +636,7 @@ export class CsfFile {
         });
         const storyExport = self.getStoryExport(key);
         stats.storyFn = !!(
-          types.isArrowFunctionExpression(storyExport) || types.isFunctionDeclaration(storyExport)
+          t.isArrowFunctionExpression(storyExport) || t.isFunctionDeclaration(storyExport)
         );
         stats.mount = hasMount(storyAnnotations.play ?? self._metaAnnotations.play);
         stats.moduleMock = !!self.imports.find((fname) => isModuleMock(fname));
@@ -721,7 +716,7 @@ export const babelParseFile = ({
 }: {
   code: string;
   filename?: string;
-  ast?: types.File;
+  ast?: t.File;
 }): BabelFile => {
   return new BabelFileClass({ filename }, { code, ast: ast ?? babelParse(code) });
 };
@@ -736,7 +731,7 @@ export const formatCsf = (
   csf: CsfFile,
   options: GeneratorOptions & { inputSourceMap?: any } = { sourceMaps: false },
   code?: string
-) => {
+): ReturnType<typeof generate> | string => {
   const result = generate(csf._ast, options, code);
   if (options.sourceMaps) {
     return result;

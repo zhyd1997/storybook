@@ -1,7 +1,7 @@
 /* eslint-disable local-rules/no-uncategorized-errors */
 
 /* eslint-disable no-underscore-dangle */
-import { types } from '@storybook/core/babel';
+import { types as t } from '@storybook/core/babel';
 import { getStoryTitle } from '@storybook/core/common';
 import type { StoriesEntry, Tag } from '@storybook/core/types';
 import { combineTags } from '@storybook/csf';
@@ -40,7 +40,7 @@ export async function vitestTransform({
   tagsFilter: TagsFilter;
   stories: StoriesEntry[];
   previewLevelTags: Tag[];
-}) {
+}): Promise<ReturnType<typeof formatCsf>> {
   const isStoryFile = /\.stor(y|ies)\./.test(fileName);
   if (!isStoryFile) {
     return code;
@@ -74,17 +74,16 @@ export async function vitestTransform({
 
   const metaExportName = parsed._metaVariableName!;
 
-  const metaNode = parsed._metaNode as types.ObjectExpression;
+  const metaNode = parsed._metaNode as t.ObjectExpression;
 
   const metaTitleProperty = metaNode.properties.find(
-    (prop) =>
-      types.isObjectProperty(prop) && types.isIdentifier(prop.key) && prop.key.name === 'title'
+    (prop) => t.isObjectProperty(prop) && t.isIdentifier(prop.key) && prop.key.name === 'title'
   );
 
-  const metaTitle = types.stringLiteral(parsed._meta?.title || 'unknown');
+  const metaTitle = t.stringLiteral(parsed._meta?.title || 'unknown');
   if (!metaTitleProperty) {
-    metaNode.properties.push(types.objectProperty(types.identifier('title'), metaTitle));
-  } else if (types.isObjectProperty(metaTitleProperty)) {
+    metaNode.properties.push(t.objectProperty(t.identifier('title'), metaTitle));
+  } else if (t.isObjectProperty(metaTitleProperty)) {
     // If the title is present in meta, overwrite it because autotitle can still affect existing titles
     metaTitleProperty.value = metaTitle;
   }
@@ -116,20 +115,20 @@ export async function vitestTransform({
 
   // if no valid stories are found, we just add describe.skip() to the file to avoid empty test files
   if (Object.keys(validStories).length === 0) {
-    const describeSkipBlock = types.expressionStatement(
-      types.callExpression(types.memberExpression(vitestDescribeId, types.identifier('skip')), [
-        types.stringLiteral('No valid tests found'),
+    const describeSkipBlock = t.expressionStatement(
+      t.callExpression(t.memberExpression(vitestDescribeId, t.identifier('skip')), [
+        t.stringLiteral('No valid tests found'),
       ])
     );
 
     ast.program.body.push(describeSkipBlock);
     const imports = [
-      types.importDeclaration(
+      t.importDeclaration(
         [
-          types.importSpecifier(vitestTestId, types.identifier('test')),
-          types.importSpecifier(vitestDescribeId, types.identifier('describe')),
+          t.importSpecifier(vitestTestId, t.identifier('test')),
+          t.importSpecifier(vitestDescribeId, t.identifier('describe')),
         ],
-        types.stringLiteral('vitest')
+        t.stringLiteral('vitest')
       ),
     ];
 
@@ -137,7 +136,7 @@ export async function vitestTransform({
   } else {
     const vitestExpectId = parsed._file.path.scope.generateUidIdentifier('expect');
     const testStoryId = parsed._file.path.scope.generateUidIdentifier('testStory');
-    const skipTagsId = types.identifier(JSON.stringify(tagsFilter.skip));
+    const skipTagsId = t.identifier(JSON.stringify(tagsFilter.skip));
 
     /**
      * In Storybook users might be importing stories from other story files. As a side effect, tests
@@ -152,46 +151,40 @@ export async function vitestTransform({
         parsed._file.path.scope.generateUidIdentifier('isRunningFromThisFile');
 
       // expect.getState().testPath
-      const testPathProperty = types.memberExpression(
-        types.callExpression(
-          types.memberExpression(vitestExpectId, types.identifier('getState')),
-          []
-        ),
-        types.identifier('testPath')
+      const testPathProperty = t.memberExpression(
+        t.callExpression(t.memberExpression(vitestExpectId, t.identifier('getState')), []),
+        t.identifier('testPath')
       );
 
       // There is a bug in Vitest where expect.getState().testPath is undefined when called outside of a test function so we add this fallback in the meantime
       // https://github.com/vitest-dev/vitest/issues/6367
       // globalThis.__vitest_worker__.filepath
-      const filePathProperty = types.memberExpression(
-        types.memberExpression(
-          types.identifier('globalThis'),
-          types.identifier('__vitest_worker__')
-        ),
-        types.identifier('filepath')
+      const filePathProperty = t.memberExpression(
+        t.memberExpression(t.identifier('globalThis'), t.identifier('__vitest_worker__')),
+        t.identifier('filepath')
       );
 
       // Combine testPath and filepath using the ?? operator
-      const nullishCoalescingExpression = types.logicalExpression(
+      const nullishCoalescingExpression = t.logicalExpression(
         '??',
         testPathProperty,
         filePathProperty
       );
 
       // Create the final expression: import.meta.url.includes(...)
-      const includesCall = types.callExpression(
-        types.memberExpression(
-          types.memberExpression(
-            types.memberExpression(types.identifier('import'), types.identifier('meta')),
-            types.identifier('url')
+      const includesCall = t.callExpression(
+        t.memberExpression(
+          t.memberExpression(
+            t.memberExpression(t.identifier('import'), t.identifier('meta')),
+            t.identifier('url')
           ),
-          types.identifier('includes')
+          t.identifier('includes')
         ),
         [nullishCoalescingExpression]
       );
 
-      const isRunningFromThisFileDeclaration = types.variableDeclaration('const', [
-        types.variableDeclarator(isRunningFromThisFileId, includesCall),
+      const isRunningFromThisFileDeclaration = t.variableDeclaration('const', [
+        t.variableDeclarator(isRunningFromThisFileId, includesCall),
       ]);
       return { isRunningFromThisFileDeclaration, isRunningFromThisFileId };
     }
@@ -205,16 +198,16 @@ export async function vitestTransform({
       node,
     }: {
       exportName: string;
-      node: types.Node;
-    }) => {
+      node: t.Node;
+    }): t.ExpressionStatement => {
       // Create the _test expression directly using the exportName identifier
-      const testStoryCall = types.expressionStatement(
-        types.callExpression(vitestTestId, [
-          types.stringLiteral(exportName),
-          types.callExpression(testStoryId, [
-            types.stringLiteral(exportName),
-            types.identifier(exportName),
-            types.identifier(metaExportName),
+      const testStoryCall = t.expressionStatement(
+        t.callExpression(vitestTestId, [
+          t.stringLiteral(exportName),
+          t.callExpression(testStoryId, [
+            t.stringLiteral(exportName),
+            t.identifier(exportName),
+            t.identifier(metaExportName),
             skipTagsId,
           ]),
         ])
@@ -244,26 +237,23 @@ export async function vitestTransform({
           node,
         });
       })
-      .filter((st) => !!st) as types.ExpressionStatement[];
+      .filter((st) => !!st) as t.ExpressionStatement[];
 
-    const testBlock = types.ifStatement(
-      isRunningFromThisFileId,
-      types.blockStatement(storyTestStatements)
-    );
+    const testBlock = t.ifStatement(isRunningFromThisFileId, t.blockStatement(storyTestStatements));
 
     ast.program.body.push(testBlock);
 
     const imports = [
-      types.importDeclaration(
+      t.importDeclaration(
         [
-          types.importSpecifier(vitestTestId, types.identifier('test')),
-          types.importSpecifier(vitestExpectId, types.identifier('expect')),
+          t.importSpecifier(vitestTestId, t.identifier('test')),
+          t.importSpecifier(vitestExpectId, t.identifier('expect')),
         ],
-        types.stringLiteral('vitest')
+        t.stringLiteral('vitest')
       ),
-      types.importDeclaration(
-        [types.importSpecifier(testStoryId, types.identifier('testStory'))],
-        types.stringLiteral('@storybook/experimental-addon-vitest/internal/test-utils')
+      t.importDeclaration(
+        [t.importSpecifier(testStoryId, t.identifier('testStory'))],
+        t.stringLiteral('@storybook/experimental-addon-vitest/internal/test-utils')
       ),
     ];
 
