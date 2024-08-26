@@ -1,8 +1,8 @@
-import { parser, types } from '@storybook/core/babel';
+import { parser, types as t } from '@storybook/core/babel';
 
 export function valueToAST<T>(literal: T): any {
   if (literal === null) {
-    return types.nullLiteral();
+    return t.nullLiteral();
   }
   switch (typeof literal) {
     case 'function':
@@ -15,18 +15,18 @@ export function valueToAST<T>(literal: T): any {
       return ast.program.body[0]?.expression;
 
     case 'number':
-      return types.numericLiteral(literal);
+      return t.numericLiteral(literal);
     case 'string':
-      return types.stringLiteral(literal);
+      return t.stringLiteral(literal);
     case 'boolean':
-      return types.booleanLiteral(literal);
+      return t.booleanLiteral(literal);
     case 'undefined':
-      return types.identifier('undefined');
+      return t.identifier('undefined');
     default:
       if (Array.isArray(literal)) {
-        return types.arrayExpression(literal.map(valueToAST));
+        return t.arrayExpression(literal.map(valueToAST));
       }
-      return types.objectExpression(
+      return t.objectExpression(
         Object.keys(literal)
           .filter((k) => {
             // @ts-expect-error (it's a completely unknown object)
@@ -36,7 +36,7 @@ export function valueToAST<T>(literal: T): any {
           .map((k) => {
             // @ts-expect-error (it's a completely unknown object)
             const value = literal[k];
-            return types.objectProperty(types.stringLiteral(k), valueToAST(value));
+            return t.objectProperty(t.stringLiteral(k), valueToAST(value));
           })
       );
   }

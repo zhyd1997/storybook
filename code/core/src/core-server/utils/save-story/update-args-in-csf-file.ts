@@ -1,9 +1,9 @@
-import { traverse, types } from '@storybook/core/babel';
+import { types as t, traverse } from '@storybook/core/babel';
 
 import { SaveStoryError } from './utils';
 import { valueToAST } from './valueToAST';
 
-export const updateArgsInCsfFile = async (node: types.Node, input: Record<string, any>) => {
+export const updateArgsInCsfFile = async (node: t.Node, input: Record<string, any>) => {
   let found = false;
   const args = Object.fromEntries(
     Object.entries(input).map(([k, v]) => {
@@ -12,28 +12,28 @@ export const updateArgsInCsfFile = async (node: types.Node, input: Record<string
   );
 
   // detect CSF2 and throw
-  if (types.isArrowFunctionExpression(node) || types.isCallExpression(node)) {
+  if (t.isArrowFunctionExpression(node) || t.isCallExpression(node)) {
     throw new SaveStoryError(`Updating a CSF2 story is not supported`);
   }
 
-  if (types.isObjectExpression(node)) {
+  if (t.isObjectExpression(node)) {
     const properties = node.properties;
     const argsProperty = properties.find((property) => {
-      if (types.isObjectProperty(property)) {
+      if (t.isObjectProperty(property)) {
         const key = property.key;
-        return types.isIdentifier(key) && key.name === 'args';
+        return t.isIdentifier(key) && key.name === 'args';
       }
       return false;
     });
 
     if (argsProperty) {
-      if (types.isObjectProperty(argsProperty)) {
+      if (t.isObjectProperty(argsProperty)) {
         const a = argsProperty.value;
-        if (types.isObjectExpression(a)) {
+        if (t.isObjectExpression(a)) {
           a.properties.forEach((p) => {
-            if (types.isObjectProperty(p)) {
+            if (t.isObjectProperty(p)) {
               const key = p.key;
-              if (types.isIdentifier(key) && key.name in args) {
+              if (t.isIdentifier(key) && key.name in args) {
                 p.value = args[key.name];
                 delete args[key.name];
               }
@@ -43,19 +43,17 @@ export const updateArgsInCsfFile = async (node: types.Node, input: Record<string
           const remainder = Object.entries(args);
           if (Object.keys(args).length) {
             remainder.forEach(([key, value]) => {
-              a.properties.push(types.objectProperty(types.identifier(key), value));
+              a.properties.push(t.objectProperty(t.identifier(key), value));
             });
           }
         }
       }
     } else {
       properties.unshift(
-        types.objectProperty(
-          types.identifier('args'),
-          types.objectExpression(
-            Object.entries(args).map(([key, value]) =>
-              types.objectProperty(types.identifier(key), value)
-            )
+        t.objectProperty(
+          t.identifier('args'),
+          t.objectExpression(
+            Object.entries(args).map(([key, value]) => t.objectProperty(t.identifier(key), value))
           )
         )
       );
@@ -97,7 +95,7 @@ export const updateArgsInCsfFile = async (node: types.Node, input: Record<string
             const remainder = Object.entries(args);
             if (Object.keys(args).length) {
               remainder.forEach(([key, value]) => {
-                a.pushContainer('properties', types.objectProperty(types.identifier(key), value));
+                a.pushContainer('properties', t.objectProperty(t.identifier(key), value));
               });
             }
           }
@@ -105,12 +103,10 @@ export const updateArgsInCsfFile = async (node: types.Node, input: Record<string
       } else {
         path.unshiftContainer(
           'properties',
-          types.objectProperty(
-            types.identifier('args'),
-            types.objectExpression(
-              Object.entries(args).map(([key, value]) =>
-                types.objectProperty(types.identifier(key), value)
-              )
+          t.objectProperty(
+            t.identifier('args'),
+            t.objectExpression(
+              Object.entries(args).map(([key, value]) => t.objectProperty(t.identifier(key), value))
             )
           )
         );

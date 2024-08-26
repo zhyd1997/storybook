@@ -1,4 +1,4 @@
-import { parser, types } from '@storybook/core/babel';
+import { parser, types as t } from '@storybook/core/babel';
 
 import type { Parser, ParserResult } from './types';
 
@@ -65,19 +65,16 @@ export class GenericParser implements Parser {
     const exports: ParserResult['exports'] = [];
 
     ast.program.body.forEach(function traverse(node) {
-      if (types.isExportNamedDeclaration(node)) {
+      if (t.isExportNamedDeclaration(node)) {
         // Handles function declarations: `export function a() {}`
-        if (
-          types.isFunctionDeclaration(node.declaration) &&
-          types.isIdentifier(node.declaration.id)
-        ) {
+        if (t.isFunctionDeclaration(node.declaration) && t.isIdentifier(node.declaration.id)) {
           exports.push({
             name: node.declaration.id.name,
             default: false,
           });
         }
         // Handles class declarations: `export class A {}`
-        if (types.isClassDeclaration(node.declaration) && types.isIdentifier(node.declaration.id)) {
+        if (t.isClassDeclaration(node.declaration) && t.isIdentifier(node.declaration.id)) {
           exports.push({
             name: node.declaration.id.name,
             default: false,
@@ -86,7 +83,7 @@ export class GenericParser implements Parser {
         // Handles export specifiers: `export { a }`
         if (node.declaration === null && node.specifiers.length > 0) {
           node.specifiers.forEach((specifier) => {
-            if (types.isExportSpecifier(specifier) && types.isIdentifier(specifier.exported)) {
+            if (t.isExportSpecifier(specifier) && t.isIdentifier(specifier.exported)) {
               exports.push({
                 name: specifier.exported.name,
                 default: false,
@@ -94,10 +91,10 @@ export class GenericParser implements Parser {
             }
           });
         }
-        if (types.isVariableDeclaration(node.declaration)) {
+        if (t.isVariableDeclaration(node.declaration)) {
           node.declaration.declarations.forEach((declaration) => {
             // Handle variable declarators: `export const a = 1;`
-            if (types.isVariableDeclarator(declaration) && types.isIdentifier(declaration.id)) {
+            if (t.isVariableDeclarator(declaration) && t.isIdentifier(declaration.id)) {
               exports.push({
                 name: declaration.id.name,
                 default: false,
@@ -105,7 +102,7 @@ export class GenericParser implements Parser {
             }
           });
         }
-      } else if (types.isExportDefaultDeclaration(node)) {
+      } else if (t.isExportDefaultDeclaration(node)) {
         exports.push({
           name: 'default',
           default: true,
