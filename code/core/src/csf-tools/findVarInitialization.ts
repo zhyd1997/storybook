@@ -1,24 +1,27 @@
-import * as t from '@babel/types';
+import { types } from '@storybook/core/babel';
 
-export const findVarInitialization = (identifier: string, program: t.Program) => {
-  let init: t.Expression = null as any;
-  let declarations: t.VariableDeclarator[] = null as any;
-  program.body.find((node: t.Node) => {
-    if (t.isVariableDeclaration(node)) {
+export const findVarInitialization = (identifier: string, program: types.Program) => {
+  let init: types.Expression = null as any;
+  let declarations: types.VariableDeclarator[] = null as any;
+  program.body.find((node: types.Node) => {
+    if (types.isVariableDeclaration(node)) {
       declarations = node.declarations;
-    } else if (t.isExportNamedDeclaration(node) && t.isVariableDeclaration(node.declaration)) {
+    } else if (
+      types.isExportNamedDeclaration(node) &&
+      types.isVariableDeclaration(node.declaration)
+    ) {
       declarations = node.declaration.declarations;
     }
 
     return (
       declarations &&
-      declarations.find((decl: t.Node) => {
+      declarations.find((decl: types.Node) => {
         if (
-          t.isVariableDeclarator(decl) &&
-          t.isIdentifier(decl.id) &&
+          types.isVariableDeclarator(decl) &&
+          types.isIdentifier(decl.id) &&
           decl.id.name === identifier
         ) {
-          init = decl.init as t.Expression;
+          init = decl.init as types.Expression;
           return true; // stop looking
         }
         return false;

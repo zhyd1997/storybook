@@ -1,13 +1,12 @@
-import * as babylon from '@babel/parser';
-import * as t from '@babel/types';
+import { parser, types } from '@storybook/core/babel';
 
 export function valueToAST<T>(literal: T): any {
   if (literal === null) {
-    return t.nullLiteral();
+    return types.nullLiteral();
   }
   switch (typeof literal) {
     case 'function':
-      const ast = babylon.parse(literal.toString(), {
+      const ast = parser.parse(literal.toString(), {
         allowReturnOutsideFunction: true,
         allowSuperOutsideMethod: true,
       });
@@ -16,18 +15,18 @@ export function valueToAST<T>(literal: T): any {
       return ast.program.body[0]?.expression;
 
     case 'number':
-      return t.numericLiteral(literal);
+      return types.numericLiteral(literal);
     case 'string':
-      return t.stringLiteral(literal);
+      return types.stringLiteral(literal);
     case 'boolean':
-      return t.booleanLiteral(literal);
+      return types.booleanLiteral(literal);
     case 'undefined':
-      return t.identifier('undefined');
+      return types.identifier('undefined');
     default:
       if (Array.isArray(literal)) {
-        return t.arrayExpression(literal.map(valueToAST));
+        return types.arrayExpression(literal.map(valueToAST));
       }
-      return t.objectExpression(
+      return types.objectExpression(
         Object.keys(literal)
           .filter((k) => {
             // @ts-expect-error (it's a completely unknown object)
@@ -37,7 +36,7 @@ export function valueToAST<T>(literal: T): any {
           .map((k) => {
             // @ts-expect-error (it's a completely unknown object)
             const value = literal[k];
-            return t.objectProperty(t.stringLiteral(k), valueToAST(value));
+            return types.objectProperty(types.stringLiteral(k), valueToAST(value));
           })
       );
   }

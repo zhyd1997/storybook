@@ -1,5 +1,4 @@
-import { types } from '@babel/core';
-import * as babelParser from '@babel/parser';
+import { parser, types } from '@storybook/core/babel';
 
 import type { Parser, ParserResult } from './types';
 
@@ -12,7 +11,7 @@ export class GenericParser implements Parser {
    * @returns The exports of the file
    */
   async parse(content: string): Promise<ParserResult> {
-    const ast = babelParser.parse(content, {
+    const ast = parser.parse(content, {
       allowImportExportEverywhere: true,
       allowAwaitOutsideFunction: true,
       allowNewTargetOutsideFunction: true,

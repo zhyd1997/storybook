@@ -1,7 +1,9 @@
 /* eslint-disable local-rules/no-uncategorized-errors */
 import { watch } from 'node:fs';
-import { mkdir, rm } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
+
+import { ensureDir } from 'fs-extra';
 
 import {
   chalk,
@@ -318,14 +320,15 @@ async function run() {
            * accessible, for the next person investigating bundle size issues.
            */
 
-          // if (out.metafile) {
-          //   await writeFile('report/meta.json', JSON.stringify(out.metafile, null, 2));
-          //   await writeFile(
-          //     'report/meta.txt',
-          //     await esbuild.analyzeMetafile(out.metafile, { color: false, verbose: false })
-          //   );
-          //   console.log(await esbuild.analyzeMetafile(out.metafile, { color: true }));
-          // }
+          if (out.metafile) {
+            await ensureDir('report');
+            await writeFile('report/meta.json', JSON.stringify(out.metafile, null, 2));
+            await writeFile(
+              'report/meta.txt',
+              await esbuild.analyzeMetafile(out.metafile, { color: false, verbose: false })
+            );
+            // console.log(await esbuild.analyzeMetafile(out.metafile, { color: true }));
+          }
         })
       );
     }

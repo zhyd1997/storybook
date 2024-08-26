@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { dedent } from 'ts-dedent';
 
+import { babelPrint } from '../babel/babelParse';
 import { loadConfig, printConfig } from './ConfigFile';
-import { babelPrint } from './babelParse';
 
 expect.addSnapshotSerializer({
   serialize: (val: any) => (typeof val === 'string' ? val : val.toString()),

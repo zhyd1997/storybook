@@ -1,49 +1,43 @@
-import bg from '@babel/generator';
-import bt from '@babel/traverse';
-import * as t from '@babel/types';
+import { generate, traverse, types } from '@storybook/core/babel';
+
 import { dedent } from 'ts-dedent';
 
-import { babelParse } from './babelParse';
+import { babelParse } from '../babel/babelParse';
 import { findVarInitialization } from './findVarInitialization';
-
-// @ts-expect-error (needed due to it's use of `exports.default`)
-const traverse = (bt.default || bt) as typeof bt;
-// @ts-expect-error (needed due to it's use of `exports.default`)
-const generate = (bg.default || bg) as typeof bg;
 
 const logger = console;
 
-const getValue = (obj: t.ObjectExpression, key: string) => {
-  let value: t.Expression | undefined;
-  (obj.properties as t.ObjectProperty[]).forEach((p) => {
-    if (t.isIdentifier(p.key) && p.key.name === key) {
-      value = p.value as t.Expression;
+const getValue = (obj: types.ObjectExpression, key: string) => {
+  let value: types.Expression | undefined;
+  (obj.properties as types.ObjectProperty[]).forEach((p) => {
+    if (types.isIdentifier(p.key) && p.key.name === key) {
+      value = p.value as types.Expression;
     }
   });
   return value;
 };
 
-const parseValue = (value: t.Expression): any => {
+const parseValue = (value: types.Expression): any => {
   const expr = stripTSModifiers(value);
 
-  if (t.isArrayExpression(expr)) {
-    return (expr.elements as t.Expression[]).map((o) => {
+  if (types.isArrayExpression(expr)) {
+    return (expr.elements as types.Expression[]).map((o) => {
       return parseValue(o);
     });
   }
-  if (t.isObjectExpression(expr)) {
-    return (expr.properties as t.ObjectProperty[]).reduce((acc, p) => {
-      if (t.isIdentifier(p.key)) {
-        acc[p.key.name] = parseValue(p.value as t.Expression);
+  if (types.isObjectExpression(expr)) {
+    return (expr.properties as types.ObjectProperty[]).reduce((acc, p) => {
+      if (types.isIdentifier(p.key)) {
+        acc[p.key.name] = parseValue(p.value as types.Expression);
       }
       return acc;
     }, {} as any);
   }
-  if (t.isLiteral(expr)) {
+  if (types.isLiteral(expr)) {
     // @ts-expect-error (Converted from ts-ignore)
     return expr.value;
   }
-  if (t.isIdentifier(expr)) {
+  if (types.isIdentifier(expr)) {
     return unsupported(expr.name, true);
   }
   throw new Error(`Unknown node type ${expr.type}`);
@@ -68,15 +62,15 @@ const unsupported = (unexpectedVar: string, isError: boolean) => {
   }
 };
 
-const stripTSModifiers = (expr: t.Expression): t.Expression =>
-  t.isTSAsExpression(expr) || t.isTSSatisfiesExpression(expr) ? expr.expression : expr;
+const stripTSModifiers = (expr: types.Expression): types.Expression =>
+  types.isTSAsExpression(expr) || types.isTSSatisfiesExpression(expr) ? expr.expression : expr;
 
-const parseParameters = (params: t.Expression): t.Expression | undefined => {
+const parseParameters = (params: types.Expression): types.Expression | undefined => {
   const paramsObject = stripTSModifiers(params);
-  if (t.isObjectExpression(paramsObject)) {
+  if (types.isObjectExpression(paramsObject)) {
     const options = getValue(paramsObject, 'options');
     if (options) {
-      if (t.isObjectExpression(options)) {
+      if (types.isObjectExpression(options)) {
         return getValue(options, 'storySort');
       }
       unsupported('options', true);
@@ -85,11 +79,14 @@ const parseParameters = (params: t.Expression): t.Expression | undefined => {
   return undefined;
 };
 
-const parseDefault = (defaultExpr: t.Expression, program: t.Program): t.Expression | undefined => {
+const parseDefault = (
+  defaultExpr: types.Expression,
+  program: types.Program
+): types.Expression | undefined => {
   const defaultObj = stripTSModifiers(defaultExpr);
-  if (t.isObjectExpression(defaultObj)) {
+  if (types.isObjectExpression(defaultObj)) {
     let params = getValue(defaultObj, 'parameters');
-    if (t.isIdentifier(params)) {
+    if (types.isIdentifier(params)) {
       params = findVarInitialization(params.name, program);
     }
     if (params) {
@@ -107,14 +104,14 @@ export const getStorySortParameter = (previewCode: string) => {
     return undefined;
   }
 
-  let storySort: t.Expression | undefined;
+  let storySort: types.Expression | undefined;
   const ast = babelParse(previewCode);
   traverse(ast, {
     ExportNamedDeclaration: {
       enter({ node }) {
-        if (t.isVariableDeclaration(node.declaration)) {
+        if (types.isVariableDeclaration(node.declaration)) {
           node.declaration.declarations.forEach((decl) => {
-            if (t.isVariableDeclarator(decl) && t.isIdentifier(decl.id)) {
+            if (types.isVariableDeclarator(decl) && types.isIdentifier(decl.id)) {
               const { name: exportName } = decl.id;
               if (exportName === 'parameters' && decl.init) {
                 const paramsObject = stripTSModifiers(decl.init);
@@ -124,7 +121,7 @@ export const getStorySortParameter = (previewCode: string) => {
           });
         } else {
           node.specifiers.forEach((spec) => {
-            if (t.isIdentifier(spec.exported) && spec.exported.name === 'parameters') {
+            if (types.isIdentifier(spec.exported) && spec.exported.name === 'parameters') {
               unsupported('parameters', false);
             }
           });
@@ -133,12 +130,12 @@ export const getStorySortParameter = (previewCode: string) => {
     },
     ExportDefaultDeclaration: {
       enter({ node }) {
-        let defaultObj = node.declaration as t.Expression;
-        if (t.isIdentifier(defaultObj)) {
+        let defaultObj = node.declaration as types.Expression;
+        if (types.isIdentifier(defaultObj)) {
           defaultObj = findVarInitialization(defaultObj.name, ast.program);
         }
         defaultObj = stripTSModifiers(defaultObj);
-        if (t.isObjectExpression(defaultObj)) {
+        if (types.isObjectExpression(defaultObj)) {
           storySort = parseDefault(defaultObj, ast.program);
         } else {
           unsupported('default', false);
@@ -151,13 +148,13 @@ export const getStorySortParameter = (previewCode: string) => {
     return undefined;
   }
 
-  if (t.isArrowFunctionExpression(storySort)) {
+  if (types.isArrowFunctionExpression(storySort)) {
     const { code: sortCode } = generate(storySort, {});
 
     return (0, eval)(sortCode);
   }
 
-  if (t.isFunctionExpression(storySort)) {
+  if (types.isFunctionExpression(storySort)) {
     const { code: sortCode } = generate(storySort, {});
     const functionName = storySort.id?.name;
     // Wrap the function within an arrow function, call it, and return
@@ -169,7 +166,11 @@ export const getStorySortParameter = (previewCode: string) => {
     return (0, eval)(wrapper);
   }
 
-  if (t.isLiteral(storySort) || t.isArrayExpression(storySort) || t.isObjectExpression(storySort)) {
+  if (
+    types.isLiteral(storySort) ||
+    types.isArrayExpression(storySort) ||
+    types.isObjectExpression(storySort)
+  ) {
     return parseValue(storySort);
   }
 
