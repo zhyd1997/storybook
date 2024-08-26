@@ -2,9 +2,14 @@
 import { existsSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, join, parse } from 'node:path';
 
-import { type BabelFile, core as babel, recast, types as t } from '@storybook/core/babel';
-
-import { babelParse, babelParseExpression } from '@storybook/core/csf-tools';
+import {
+  type BabelFile,
+  core as babel,
+  babelParse,
+  babelParseExpression,
+  recast,
+  types as t,
+} from '@storybook/core/babel';
 
 import type { FileInfo } from 'jscodeshift';
 import camelCase from 'lodash/camelCase';

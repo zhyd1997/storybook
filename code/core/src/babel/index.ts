@@ -13,7 +13,7 @@ import bt from '@babel/traverse';
 import * as types from '@babel/types';
 import * as recast from 'recast';
 
-import { babelParse } from './babelParse';
+export * from './babelParse';
 
 // @ts-expect-error (needed due to it's use of `exports.default`)
 const traverse = (bt.default || bt) as typeof bt;
@@ -34,9 +34,6 @@ export {
 
   // other
   recast,
-
-  // custom
-  babelParse,
 };
 
 export type { BabelFile, NodePath } from '@babel/core';
