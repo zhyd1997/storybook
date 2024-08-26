@@ -60,16 +60,16 @@ export default async function postInstall(options: PostinstallOptions) {
 
   const packages = ['vitest@latest', '@vitest/browser@latest', 'playwright@latest'];
 
-  logger.info(
-    dedent`
-      We detected that you're using Next.js. 
-      We will configure the vite-plugin-storybook-nextjs plugin to allow you to run tests in Vitest.
-    `
-  );
-
   if (info.frameworkPackageName === '@storybook/nextjs') {
+    logger.info(
+      dedent`
+        We detected that you're using Next.js.
+        We will configure the vite-plugin-storybook-nextjs plugin to allow you to run tests in Vitest.
+      `
+    );
     packages.push('vite-plugin-storybook-nextjs@latest');
   }
+
   logger.info(c.bold('Installing packages...'));
   logger.info(packages.join(', '));
   await packageManager.addDependencies({ installAsDevDependencies: true }, packages);
@@ -92,9 +92,9 @@ export default async function postInstall(options: PostinstallOptions) {
       import { beforeAll } from 'vitest'
       import { setProjectAnnotations } from '${annotationsImport}'
       ${previewExists ? `import * as projectAnnotations from './preview'` : ''}
-      
+
       const project = setProjectAnnotations(${previewExists ? 'projectAnnotations' : '[]'})
-      
+
       beforeAll(project.beforeAll)
     `
   );
@@ -138,7 +138,7 @@ export default async function postInstall(options: PostinstallOptions) {
                 provider: 'playwright',
                 headless: true,
               },
-              // Disabling isolation is faster and is similar to how tests are isolated in storybook itself.
+              // Disabling isolation is faster and is similar to how tests are isolated in Storybook itself.
               // Consider removing this if you are seeing problems with your tests.
               isolate: false,
               setupFiles: ['./.storybook/vitest.setup.ts'],
@@ -168,7 +168,7 @@ export default async function postInstall(options: PostinstallOptions) {
             provider: 'playwright',
             headless: true,
           },
-          // Disabling isolation is faster and is similar to how tests are isolated in storybook itself.
+          // Disabling isolation is faster and is similar to how tests are isolated in Storybook itself.
           // Consider removing this, if you have flaky tests.
           isolate: false,
           setupFiles: ['./.storybook/vitest.setup.ts'],
@@ -180,7 +180,7 @@ export default async function postInstall(options: PostinstallOptions) {
 
   logger.info(
     dedent`
-      The Vitest addon is now configured and you're ready to run your tests! 
+      The Vitest addon is now configured and you're ready to run your tests!
       Check the documentation for more information about its features and options at:
       https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
     `
@@ -215,7 +215,6 @@ async function getFrameworkInfo({ configDir, packageManager: pkgMgr }: Postinsta
   validateFrameworkName(frameworkName);
   const frameworkPackageName = extractProperFrameworkName(frameworkName);
 
-  console.log(configDir);
   const presets = await loadAllPresets({
     corePresets: [join(frameworkName, 'preset')],
     overridePresets: [
