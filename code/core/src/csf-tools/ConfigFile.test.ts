@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
+import { babelPrint } from '@storybook/core/babel';
+
 import { dedent } from 'ts-dedent';
 
-import { babelPrint } from '../babel/babelParse';
 import { loadConfig, printConfig } from './ConfigFile';
 
 expect.addSnapshotSerializer({

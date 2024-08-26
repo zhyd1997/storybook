@@ -1,11 +1,17 @@
 /* eslint-disable no-underscore-dangle */
 import { readFile, writeFile } from 'node:fs/promises';
 
-import { type RecastOptions, generate, recast, types as t, traverse } from '@storybook/core/babel';
+import {
+  type RecastOptions,
+  babelParse,
+  generate,
+  recast,
+  types as t,
+  traverse,
+} from '@storybook/core/babel';
 
 import { dedent } from 'ts-dedent';
 
-import { babelParse } from '../babel/babelParse';
 import type { PrintResultType } from './PrintResultType';
 
 const logger = console;
