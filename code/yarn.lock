@@ -6002,7 +6002,6 @@ __metadata:
     open: "npm:^8.4.0"
     picomatch: "npm:^2.3.0"
     polished: "npm:^4.2.2"
-    prettier: "npm:^3.2.5"
     pretty-hrtime: "npm:^1.0.3"
     process: "npm:^0.11.10"
     prompts: "npm:^2.4.0"
@@ -6037,6 +6036,11 @@ __metadata:
     util: "npm:^0.12.4"
     watchpack: "npm:^2.2.0"
     ws: "npm:^8.2.3"
+  peerDependencies:
+    prettier: ^3.2.5
+  peerDependenciesMeta:
+    prettier:
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -7494,12 +7498,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7.18.0":
-  version: 7.20.3
-  resolution: "@types/babel__traverse@npm:7.20.3"
+"@types/babel__traverse@npm:7.20.6":
+  version: 7.20.6
+  resolution: "@types/babel__traverse@npm:7.20.6"
   dependencies:
     "@babel/types": "npm:^7.20.7"
-  checksum: 10c0/295ed9b837e62e17ee43be0df45d90fff5208986bd43af593c9020d152d3b2c55328e038c2f8585926b63cc22f887f28bf3f4c805aa881e2dd0bdd5ead92ece0
+  checksum: 10c0/7ba7db61a53e28cac955aa99af280d2600f15a8c056619c05b6fc911cbe02c61aa4f2823299221b23ce0cce00b294c0e5f618ec772aa3f247523c2e48cf7b888
+  languageName: node
+  linkType: hard
+
+"@types/babel__traverse@patch:@types/babel__traverse@npm%3A7.20.6#~/.yarn/patches/@types-babel__traverse-npm-7.20.6-fac4243243.patch":
+  version: 7.20.6
+  resolution: "@types/babel__traverse@patch:@types/babel__traverse@npm%3A7.20.6#~/.yarn/patches/@types-babel__traverse-npm-7.20.6-fac4243243.patch::version=7.20.6&hash=1460c3"
+  dependencies:
+    "@babel/types": "npm:^7.20.7"
+  checksum: 10c0/0d350f7d22b422db04911a6844daeaad57279a0d1fe2c2b6b66ba3899c1390d66b728ca3a844a4f01da48f1541dcfdf4adc2d2d9f4ed32f4f7435f457da3240a
   languageName: node
   linkType: hard
 
@@ -22994,7 +23007,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:*, prettier@npm:^3.1.1, prettier@npm:^3.2.5":
+"prettier@npm:*, prettier@npm:^3.1.1":
   version: 3.2.5
   resolution: "prettier@npm:3.2.5"
   bin:
