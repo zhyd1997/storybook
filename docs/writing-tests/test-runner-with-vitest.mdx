@@ -91,7 +91,7 @@ beforeAll(project.beforeAll);
 
 ```ts title="vitest.config.ts"
 import { defineConfig, mergeConfig } from 'vitest/config'
-import viteConfig from '../vite.config'
+import viteConfig from './vite.config'
 import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
 
 export default mergeConfig(
@@ -103,7 +103,7 @@ export default mergeConfig(
       }),
     ],
     // Glob pattern to find story files
-    include: ['../src/**/*.stories.?(m)[jt]s?(x)'],
+    include: ['src/**/*.stories.?(m)[jt]s?(x)'],
     // Enable browser mode
     browser: {
       enabled: true,
@@ -140,7 +140,7 @@ export default defineWorkspace([
       }),
     ],
     // Glob pattern to find story files
-    include: ['../src/**/*.stories.?(m)[jt]s?(x)'],
+    include: ['src/**/*.stories.?(m)[jt]s?(x)'],
     // Enable browser mode
     browser: {
       enabled: true,
