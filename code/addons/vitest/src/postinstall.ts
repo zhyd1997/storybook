@@ -128,7 +128,7 @@ export default async function postInstall(options: PostinstallOptions) {
           export default defineWorkspace([
             '${relative(dirname(browserWorkspaceFile), rootConfig)}',
             {
-              extends: '${viteConfig || ''}',
+              extends: '${viteConfig ? relative(dirname(browserWorkspaceFile), viteConfig) : ''}',
               plugins: [
                 storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginCall : ''}
               ],
