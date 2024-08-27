@@ -2,6 +2,7 @@ import { getFrameworkName, loadPreviewOrConfigFile } from 'storybook/internal/co
 import type { Options, PreviewAnnotation } from 'storybook/internal/types';
 
 import { processPreviewAnnotation } from './utils/process-preview-annotation';
+import { getResolvedVirtualModuleId } from './utils/virtual-module';
 import { virtualAddonSetupFile, virtualStoriesFile } from './virtual-file-names';
 
 export async function generateModernIframeScriptCode(options: Options, projectRoot: string) {
@@ -45,7 +46,7 @@ export async function generateModernIframeScriptCode(options: Options, projectRo
 
     return `
     if (import.meta.hot) {
-      import.meta.hot.accept('${virtualStoriesFile}', (newModule) => {
+      import.meta.hot.accept('${getResolvedVirtualModuleId(virtualStoriesFile)}', (newModule) => {
       // importFn has changed so we need to patch the new one in
       window.__STORYBOOK_PREVIEW__.onStoriesChanged({ importFn: newModule.importFn });
       });

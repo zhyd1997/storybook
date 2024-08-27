@@ -8,6 +8,7 @@ import { generateImportFnScriptCode } from '../codegen-importfn-script';
 import { generateModernIframeScriptCode } from '../codegen-modern-iframe-script';
 import { generateAddonSetupCode } from '../codegen-set-addon-channel';
 import { transformIframeHtml } from '../transform-iframe-html';
+import { getResolvedVirtualModuleId } from '../utils/virtual-module';
 import {
   virtualAddonSetupFile,
   virtualFileId,
@@ -28,11 +29,15 @@ export function codeGeneratorPlugin(options: Options): Plugin {
       // invalidate the whole vite-app.js script on every file change.
       // (this might be a little too aggressive?)
       server.watcher.on('change', () => {
-        const appModule = server.moduleGraph.getModuleById(virtualFileId);
+        const appModule = server.moduleGraph.getModuleById(
+          getResolvedVirtualModuleId(virtualFileId)
+        );
         if (appModule) {
           server.moduleGraph.invalidateModule(appModule);
         }
-        const storiesModule = server.moduleGraph.getModuleById(virtualStoriesFile);
+        const storiesModule = server.moduleGraph.getModuleById(
+          getResolvedVirtualModuleId(virtualStoriesFile)
+        );
         if (storiesModule) {
           server.moduleGraph.invalidateModule(storiesModule);
         }
@@ -70,33 +75,33 @@ export function codeGeneratorPlugin(options: Options): Plugin {
     },
     resolveId(source) {
       if (source === virtualFileId) {
-        return `${virtualFileId}`;
+        return getResolvedVirtualModuleId(virtualFileId);
       }
       if (source === iframePath) {
         return iframeId;
       }
       if (source === virtualStoriesFile) {
-        return `${virtualStoriesFile}`;
+        return getResolvedVirtualModuleId(virtualStoriesFile);
       }
       if (source === virtualPreviewFile) {
-        return virtualPreviewFile;
+        return getResolvedVirtualModuleId(virtualPreviewFile);
       }
       if (source === virtualAddonSetupFile) {
-        return `${virtualAddonSetupFile}`;
+        return getResolvedVirtualModuleId(virtualAddonSetupFile);
       }
 
       return undefined;
     },
     async load(id, config) {
-      if (id === `${virtualStoriesFile}`) {
+      if (id === getResolvedVirtualModuleId(virtualStoriesFile)) {
         return generateImportFnScriptCode(options);
       }
 
-      if (id === `${virtualAddonSetupFile}`) {
+      if (id === getResolvedVirtualModuleId(virtualAddonSetupFile)) {
         return generateAddonSetupCode();
       }
 
-      if (id === `${virtualFileId}`) {
+      if (id === getResolvedVirtualModuleId(virtualFileId)) {
         return generateModernIframeScriptCode(options, projectRoot);
       }
 

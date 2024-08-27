@@ -6,6 +6,8 @@ import type { BuilderStats } from 'storybook/internal/types';
 import slash from 'slash';
 import type { Plugin } from 'vite';
 
+import { getResolvedVirtualModuleId } from '../utils/virtual-module';
+
 /*
  * Reason, Module are copied from chromatic types
  * https://github.com/chromaui/chromatic-cli/blob/145a5e295dde21042e96396c7e004f250d842182/bin-src/types.ts#L265-L276
@@ -50,7 +52,10 @@ export function pluginWebpackStats({ workingDir }: WebpackStatsPluginOptions): W
   /** Convert an absolute path name to a path relative to the vite root, with a starting `./` */
   function normalize(filename: string) {
     // Do not try to resolve virtual files
-    if (filename.startsWith('/virtual:')) {
+    if (
+      filename.startsWith('/virtual:') ||
+      filename.startsWith(getResolvedVirtualModuleId('/virtual:'))
+    ) {
       return filename;
     }
     // Otherwise, we need them in the format `./path/to/file.js`.
