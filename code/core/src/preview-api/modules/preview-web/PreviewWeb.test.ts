@@ -308,7 +308,7 @@ describe('PreviewWeb', () => {
         expect(mockChannel.emit).toHaveBeenCalledWith(STORY_MISSING, 'component-one--missing');
 
         mockChannel.emit.mockClear();
-        const newComponentOneExports = merge({}, componentOneExports, {
+        const newComponentOneExports = toMerged(componentOneExports, {
           d: { args: { foo: 'd' }, play: vi.fn() },
         });
         const newImportFn = vi.fn(async (path) => {
@@ -362,7 +362,7 @@ describe('PreviewWeb', () => {
           });
           await waitForSetCurrentStory();
 
-          const newComponentOneExports = merge({}, componentOneExports, {
+          const newComponentOneExports = toMerged(componentOneExports, {
             d: { args: { foo: 'd' }, play: vi.fn() },
           });
           const newImportFn = vi.fn(async (path) => {
