@@ -130,10 +130,12 @@ import { defineWorkspace } from 'vitest/config'
 import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
 
 export default defineWorkspace([
-  // This is the path to your existing Vitest config files
+  // This is the path to your existing Vitest config file
   './vitest.config.ts', 
   {
     name: 'storybook',
+    // This is the path to your existing Vite config file
+    extends: './vite.config.ts',
     plugins: [
       storybookTest({
         storybookScript: 'yarn storybook --ci',
@@ -182,7 +184,29 @@ There are three primary ways to run tests using the Vitest plugin:
 
 ### CLI
 
-The plugin transforms your stories into real Vitest tests, so you run those tests just like you run any other Vitest tests in your project. Typically, you will have a `test` script in your `package.json` that runs Vitest. When you run that script, the addon will find and run your story-based tests. Here's an example of running your tests (in [watch mode](https://vitest.dev/guide/cli.html#vitest-watch), by default) using the Vitest CLI:
+The plugin transforms your stories into real Vitest tests, so you run those tests just like you run any other Vitest tests in your project. Typically, you will have a `test` script in your `package.json` that runs your tests.
+
+If you don't already have a `test` script, you can add one that runs Vitest:
+
+```json title="package.json"
+{
+  "scripts": {
+    "test": "vitest"
+  }
+}
+```
+
+If you already have a `test` script that runs something other than Vitest, you can either adjust it to run Vitest (as above) or add a new script that runs Vitest:
+
+```json title="package.json"
+{
+  "scripts": {
+    "test-storybook": "vitest"
+  }
+}
+```
+
+When you run that script, the addon will find and run your story-based tests. Here's an example of running your tests (in [watch mode](https://vitest.dev/guide/cli.html#vitest-watch), by default) using the Vitest CLI:
 
 <CodeSnippets path="addon-vitest-run-tests.md" />
 
@@ -322,6 +346,12 @@ The [previous test runner](./test-runner.mdx) requires a running Storybook insta
 Additionally, the previous test runner ran your stories as orchestrated tests in Jest, and that orchestration came with some complexity. By comparison, this plugin transforms your stories into real tests and then runs them using Vitest, which is simpler and more configurable.
 
 Finally, because of the simpler architecture and the use of Vitest, this plugin should be faster than the previous test runner for most projects. We'll do more benchmarking to quantify this in the future.
+
+### How to isolate Storybook tests from others?
+
+Some projects might contain a `test` property in their Vite configuration. Because the Vitest configuration used by this plugin extends that Vite config, the `test` properties are merged. This lack of isolation can cause issues with your Storybook tests.
+
+To isolate your Storybook tests from other tests, you need to move the `test` property from your Vite configuration to the Vitest configuration. The Vitest config used by the plugin can then safely extend your Vite config without merging the `test` property.
 
 ## API
 
