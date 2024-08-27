@@ -5,9 +5,9 @@ import { global } from '@storybook/global';
 
 import { SET_CONFIG } from '@storybook/core/core-events';
 
-import { isEqual as deepEqual, pick, toMerged } from 'es-toolkit';
+import { isEqual as deepEqual, omitBy, pick, toMerged } from 'es-toolkit';
 
-import merge from '../lib/merge';
+import merge, { picky } from '../lib/merge';
 import type { ModuleFn } from '../lib/types';
 import type { State } from '../root';
 
@@ -354,14 +354,14 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, provider, singleStory 
       const updatedLayout = {
         ...layout,
         ...(options.layout || {}),
-        ...toMerged(options.layout || {}, pick(options, Object.keys(layout))),
+        ...picky(options, Object.keys(layout)),
         ...(singleStory && { navSize: 0 }),
       };
 
       const updatedUi = {
         ...ui,
         ...options.ui,
-        ...toMerged(options.ui, pick(options, Object.keys(ui))),
+        ...toMerged(options.ui || {}, picky(options, Object.keys(ui))),
       };
 
       const updatedTheme = {

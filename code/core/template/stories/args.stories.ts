@@ -8,7 +8,13 @@ import {
   UPDATE_STORY_ARGS,
 } from '@storybook/core/core-events';
 
-import { pick, toMerged } from 'es-toolkit';
+function pick(obj, keys) {
+  const result = {};
+  for (const key of keys) {
+    result[key] = obj[key];
+  }
+  return result;
+}
 
 export default {
   component: globalThis.Components.Pre,
@@ -26,7 +32,7 @@ export default {
     (storyFn: PartialStoryFn, context: StoryContext) => {
       const { argNames } = context.parameters;
       const args = { ...context.args };
-      const object = argNames ? toMerged({}, pick(args, argNames)) : args;
+      const object = argNames ? pick(args, argNames) : args;
       return storyFn({ args: { object } });
     },
   ],

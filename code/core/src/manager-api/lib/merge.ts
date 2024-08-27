@@ -1,6 +1,6 @@
 import { logger } from '@storybook/core/client-logger';
 
-import { isEqual, mergeWith } from 'es-toolkit';
+import { isEqual, mergeWith, omitBy, pick } from 'es-toolkit';
 
 export default <TObj = any>(a: TObj, ...b: Partial<TObj>[]): TObj => {
   // start with empty object
@@ -71,3 +71,10 @@ export const noArrayMerge = <TObj = any>(a: TObj, ...b: Partial<TObj>[]): TObj =
 
   return target as TObj;
 };
+
+export function picky<T extends Record<string, any>, K extends keyof T>(
+  obj: T,
+  keys: K[]
+): Partial<Pick<T, K>> {
+  return omitBy(pick(obj, keys), (v) => v === undefined);
+}

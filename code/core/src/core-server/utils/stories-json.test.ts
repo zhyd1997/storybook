@@ -471,8 +471,7 @@ describe('useStoriesJson', () => {
 
     it('debounces invalidation events', async () => {
       vi.mocked(debounce).mockImplementation(
-        // @ts-expect-error it doesn't think default exists
-        (await vi.importActual<typeof import('debounce')>('debounce')).default
+        (await vi.importActual<typeof import('es-toolkit')>('es-toolkit')).debounce
       );
 
       const mockServerChannel = { emit: vi.fn() } as any as ServerChannel;
