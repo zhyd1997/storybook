@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 
 import type { API_StatusObject, API_StatusState, API_StatusValue, StoryId } from '@storybook/types';
 
-import type { ComponentEntry, GroupEntry, StoriesHash } from '../../../manager-api';
+import type { StoriesHash } from '../../../manager-api';
 import type { Item } from '../../container/Sidebar';
 import { getDescendantIds } from '../../utils/tree';
 
