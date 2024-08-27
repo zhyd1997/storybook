@@ -5,8 +5,7 @@ import { global } from '@storybook/global';
 
 import { SET_CONFIG } from '@storybook/core/core-events';
 
-import { dequal as deepEqual } from 'dequal';
-import pick from 'lodash/pick.js';
+import { isEqual as deepEqual, pick, toMerged } from 'es-toolkit';
 
 import merge from '../lib/merge';
 import type { ModuleFn } from '../lib/types';
@@ -320,12 +319,15 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, provider, singleStory 
         ...defaultLayoutState,
         layout: {
           ...defaultLayoutState.layout,
-          ...pick(options, Object.keys(defaultLayoutState.layout)),
+          ...toMerged(
+            defaultLayoutState.layout,
+            pick(options, Object.keys(defaultLayoutState.layout))
+          ),
           ...(singleStory && { navSize: 0 }),
         },
         ui: {
           ...defaultLayoutState.ui,
-          ...pick(options, Object.keys(defaultLayoutState.ui)),
+          ...toMerged(defaultLayoutState.ui, pick(options, Object.keys(defaultLayoutState.ui))),
         },
         selectedPanel: selectedPanel || defaultLayoutState.selectedPanel,
         theme: theme || defaultLayoutState.theme,
@@ -351,15 +353,15 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, provider, singleStory 
 
       const updatedLayout = {
         ...layout,
-        ...options.layout,
-        ...pick(options, Object.keys(layout)),
+        ...(options.layout || {}),
+        ...toMerged(options.layout || {}, pick(options, Object.keys(layout))),
         ...(singleStory && { navSize: 0 }),
       };
 
       const updatedUi = {
         ...ui,
         ...options.ui,
-        ...pick(options, Object.keys(ui)),
+        ...toMerged(options.ui, pick(options, Object.keys(ui))),
       };
 
       const updatedTheme = {
@@ -388,7 +390,7 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, provider, singleStory 
     },
   };
 
-  const persisted = pick(store.getState(), 'layout', 'selectedPanel');
+  const persisted = pick(store.getState(), ['layout', 'selectedPanel']);
 
   provider.channel?.on(SET_CONFIG, () => {
     api.setOptions(merge(api.getInitialOptions(), persisted));

@@ -8,7 +8,7 @@ import {
   UPDATE_STORY_ARGS,
 } from '@storybook/core/core-events';
 
-import pick from 'lodash/pick';
+import { pick, toMerged } from 'es-toolkit';
 
 export default {
   component: globalThis.Components.Pre,
@@ -26,7 +26,7 @@ export default {
     (storyFn: PartialStoryFn, context: StoryContext) => {
       const { argNames } = context.parameters;
       const args = { ...context.args };
-      const object = argNames ? pick(args, argNames) : args;
+      const object = argNames ? toMerged({}, pick(args, argNames)) : args;
       return storyFn({ args: { object } });
     },
   ],

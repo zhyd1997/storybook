@@ -4,9 +4,9 @@ import type { NormalizedStoriesSpecifier, StoryIndex } from '@storybook/core/typ
 
 import { STORY_INDEX_INVALIDATED } from '@storybook/core/core-events';
 
+import { debounce } from 'es-toolkit';
 import type { Request, Response, Router } from 'express';
 import { writeJSON } from 'fs-extra';
-import debounce from 'lodash/debounce.js';
 
 import type { StoryIndexGenerator } from './StoryIndexGenerator';
 import type { ServerChannel } from './get-server-channel';

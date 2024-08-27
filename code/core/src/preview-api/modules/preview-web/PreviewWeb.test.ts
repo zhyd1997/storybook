@@ -31,7 +31,7 @@ import {
   UPDATE_STORY_ARGS,
 } from '@storybook/core/core-events';
 
-import merge from 'lodash/merge.js';
+import { merge, toMerged } from 'es-toolkit';
 
 import { addons } from '../addons';
 import type { StoryStore } from '../store';
@@ -2927,7 +2927,7 @@ describe('PreviewWeb', () => {
     });
 
     describe('when the current story changes', () => {
-      const newComponentOneExports = merge({}, componentOneExports, {
+      const newComponentOneExports = toMerged(componentOneExports, {
         a: { args: { foo: 'edited' } },
       });
       const newImportFn = vi.fn(async (path) => {
@@ -3282,7 +3282,7 @@ describe('PreviewWeb', () => {
       afterEach(() => {
         vi.useRealTimers();
       });
-      const newComponentOneExports = merge({}, componentOneExports, {
+      const newComponentOneExports = toMerged(componentOneExports, {
         a: { args: { bar: 'edited' }, argTypes: { bar: { type: { name: 'string' } } } },
       });
       const newImportFn = vi.fn(async (path) => {
