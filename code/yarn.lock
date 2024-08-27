@@ -7494,12 +7494,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7.18.0":
+"@types/babel__traverse@npm:7.20.6":
   version: 7.20.6
   resolution: "@types/babel__traverse@npm:7.20.6"
   dependencies:
     "@babel/types": "npm:^7.20.7"
   checksum: 10c0/7ba7db61a53e28cac955aa99af280d2600f15a8c056619c05b6fc911cbe02c61aa4f2823299221b23ce0cce00b294c0e5f618ec772aa3f247523c2e48cf7b888
+  languageName: node
+  linkType: hard
+
+"@types/babel__traverse@patch:@types/babel__traverse@npm%3A7.20.6#~/.yarn/patches/@types-babel__traverse-npm-7.20.6-fac4243243.patch":
+  version: 7.20.6
+  resolution: "@types/babel__traverse@patch:@types/babel__traverse@npm%3A7.20.6#~/.yarn/patches/@types-babel__traverse-npm-7.20.6-fac4243243.patch::version=7.20.6&hash=1460c3"
+  dependencies:
+    "@babel/types": "npm:^7.20.7"
+  checksum: 10c0/0d350f7d22b422db04911a6844daeaad57279a0d1fe2c2b6b66ba3899c1390d66b728ca3a844a4f01da48f1541dcfdf4adc2d2d9f4ed32f4f7435f457da3240a
   languageName: node
   linkType: hard
 
