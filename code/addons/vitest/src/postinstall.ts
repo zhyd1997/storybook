@@ -19,7 +19,7 @@ import dedent from 'ts-dedent';
 
 import { type PostinstallOptions } from '../../../lib/cli-storybook/src/add';
 
-const extensions = ['.ts', '.mts', '.cts', '.js', '.mjs', '.cjs'];
+const extensions = ['.js', '.jsx', '.ts', '.tsx', '.cts', '.mts', '.cjs', '.mjs'];
 
 export default async function postInstall(options: PostinstallOptions) {
   const packageManager = JsPackageManagerFactory.getPackageManager({
@@ -83,7 +83,7 @@ export default async function postInstall(options: PostinstallOptions) {
   logger.info(c.bold('Writing .storybook/vitest.setup.ts file...'));
 
   const previewExists = extensions
-    .map((ext) => path.resolve(path.join(options.configDir, `preview${ext}`)))
+    .map((ext) => path.resolve(options.configDir, `preview${ext}`))
     .some((config) => existsSync(config));
 
   await writeFile(
