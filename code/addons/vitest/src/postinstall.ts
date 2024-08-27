@@ -133,16 +133,13 @@ export default async function postInstall(options: PostinstallOptions) {
                 storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginCall : ''}
               ],
               test: {
-                include: ['**/*.stories.?(m)[jt]s?(x)'],
                 browser: {
                   enabled: true,
+                  headless: true,
                   name: 'chromium',
                   provider: 'playwright',
-                  headless: true,
                 },
-                // Disabling isolation is faster and is similar to how tests are isolated in Storybook itself.
-                // Consider removing this if you are seeing problems with your tests.
-                isolate: false,
+                include: ['**/*.stories.?(m)[jt]s?(x)'],
                 setupFiles: ['./.storybook/vitest.setup.ts'],
               },
             },
@@ -164,16 +161,13 @@ export default async function postInstall(options: PostinstallOptions) {
             storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginCall : ''}
           ],
           test: {
-            include: ['**/*.stories.?(m)[jt]s?(x)'],
             browser: {
               enabled: true,
+              headless: true,
               name: 'chromium',
               provider: 'playwright',
-              headless: true,
             },
-            // Disabling isolation is faster and is similar to how tests are isolated in Storybook itself.
-            // Consider removing this, if you have flaky tests.
-            isolate: false,
+            include: ['**/*.stories.?(m)[jt]s?(x)'],
             setupFiles: ['./.storybook/vitest.setup.ts'],
           },
         });
