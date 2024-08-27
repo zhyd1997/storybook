@@ -389,6 +389,7 @@
     "open": "^8.4.0",
     "picomatch": "^2.3.0",
     "polished": "^4.2.2",
+    "prettier": "^3.2.5",
     "pretty-hrtime": "^1.0.3",
     "prompts": "^2.4.0",
     "qs": "^6.10.0",
@@ -419,14 +420,6 @@
     "use-resize-observer": "^9.1.0",
     "util": "^0.12.4",
     "watchpack": "^2.2.0"
-  },
-  "peerDependencies": {
-    "prettier": "^3.2.5"
-  },
-  "peerDependenciesMeta": {
-    "prettier": {
-      "optional": true
-    }
   },
   "publishConfig": {
     "access": "public"
