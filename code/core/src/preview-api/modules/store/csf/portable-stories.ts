@@ -116,7 +116,7 @@ export function composeStory<TRenderer extends Renderer = Renderer, TArgs extend
     composeConfigs([
       defaultConfig && Object.keys(defaultConfig).length > 0
         ? defaultConfig
-        : globalThis.defaultProjectAnnotations ?? {},
+        : (globalThis.defaultProjectAnnotations ?? {}),
       globalThis.globalProjectAnnotations ?? {},
       projectAnnotations ?? {},
     ])
