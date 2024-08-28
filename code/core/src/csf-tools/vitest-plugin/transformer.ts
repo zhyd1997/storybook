@@ -175,7 +175,7 @@ export async function vitestTransform({
         // TODO: switch order of testPathProperty and filePathProperty when the bug is fixed
         // https://github.com/vitest-dev/vitest/issues/6367 (or probably just use testPathProperty)
         filePathProperty,
-        testPathProperty,
+        testPathProperty
       );
 
       // Create the final expression: import.meta.url.includes(...)
