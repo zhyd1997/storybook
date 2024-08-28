@@ -6001,6 +6001,7 @@ __metadata:
     open: "npm:^8.4.0"
     picomatch: "npm:^2.3.0"
     polished: "npm:^4.2.2"
+    prettier: "npm:^3.2.5"
     pretty-hrtime: "npm:^1.0.3"
     process: "npm:^0.11.10"
     prompts: "npm:^2.4.0"
@@ -6035,11 +6036,6 @@ __metadata:
     util: "npm:^0.12.4"
     watchpack: "npm:^2.2.0"
     ws: "npm:^8.2.3"
-  peerDependencies:
-    prettier: ^3.2.5
-  peerDependenciesMeta:
-    prettier:
-      optional: true
   languageName: unknown
   linkType: soft
 
@@ -23019,6 +23015,15 @@ __metadata:
   bin:
     prettier: bin/prettier.cjs
   checksum: 10c0/ea327f37a7d46f2324a34ad35292af2ad4c4c3c3355da07313339d7e554320f66f65f91e856add8530157a733c6c4a897dc41b577056be5c24c40f739f5ee8c6
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^3.2.5":
+  version: 3.3.3
+  resolution: "prettier@npm:3.3.3"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: 10c0/b85828b08e7505716324e4245549b9205c0cacb25342a030ba8885aba2039a115dbcf75a0b7ca3b37bc9d101ee61fab8113fc69ca3359f2a226f1ecc07ad2e26
   languageName: node
   linkType: hard
 
