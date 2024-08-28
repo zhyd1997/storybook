@@ -371,7 +371,7 @@ export class StoryStore<TRenderer extends Renderer> {
           ...picky(story.parameters, allowedParameters),
           fileName: importPath,
         },
-      };
+      } as V3CompatIndexEntry;
     });
 
     return {
