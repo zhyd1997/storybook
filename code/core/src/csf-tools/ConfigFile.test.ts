@@ -796,7 +796,7 @@ describe('ConfigFile', () => {
         `);
       });
 
-      it('root globals as const satsifies as variable', () => {
+      it('root globals as const satisfies as variable', () => {
         expect(
           removeField(
             ['globals'],
