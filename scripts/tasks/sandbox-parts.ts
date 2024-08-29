@@ -562,7 +562,7 @@ export const addStories: Task['run'] = async (
   const cwd = sandboxDir;
   const storiesPath = await findFirstPath([join('src', 'stories'), 'stories'], { cwd });
 
-  const mainConfig = await readConfig({ cwd });
+  const mainConfig = await readConfig({ fileName: 'main', cwd });
   const packageManager = JsPackageManagerFactory.getPackageManager({}, sandboxDir);
 
   // Ensure that we match the right stories in the stories directory
@@ -709,7 +709,7 @@ export const addStories: Task['run'] = async (
 
 export const extendMain: Task['run'] = async ({ template, sandboxDir, key }, { disableDocs }) => {
   logger.log('📝 Extending main.js');
-  const mainConfig = await readConfig({ cwd: sandboxDir });
+  const mainConfig = await readConfig({ fileName: 'main', cwd: sandboxDir });
 
   if (key === 'react-vite/default-ts') {
     addRefs(mainConfig);
