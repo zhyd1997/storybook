@@ -430,6 +430,8 @@ These APIs allowed addons to render arbitrary content in the Storybook sidebar. 
 
 > [!NOTE]
 > You need to set the feature flag `backgroundsStoryGlobals` to `true` in your `.storybook/main.ts` to use the new format and set the value with `globals`.
+> 
+> See here how to set feature flags: https://storybook.js.org/docs/api/main-config/main-config-features
 
 The `addon-backgrounds` addon now uses a new format for configuring its list of selectable backgrounds.
 The `backgrounds` parameter is now an object with an `options` property.
@@ -474,6 +476,8 @@ This locks that story to the `twitter` background, it cannot be changed by the a
 
 > [!NOTE]
 > You need to set the feature flag `viewportStoryGlobals` to `true` in your `.storybook/main.ts` to use the new format and set the value with `globals`.
+> 
+> See here how to set feature flags: https://storybook.js.org/docs/api/main-config/main-config-features
 
 The `addon-viewport` addon now uses a new format for configuring its list of selectable viewports.
 The `viewport` parameter is now an object with an `options` property.
