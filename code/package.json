@@ -126,7 +126,7 @@
     "@storybook/csf-plugin": "workspace:*",
     "@storybook/ember": "workspace:*",
     "@storybook/eslint-config-storybook": "^4.0.0",
-    "@storybook/experimental-addon-vitest": "workspace:*",
+    "@storybook/experimental-addon-test": "workspace:*",
     "@storybook/global": "^5.0.0",
     "@storybook/html": "workspace:*",
     "@storybook/html-vite": "workspace:*",

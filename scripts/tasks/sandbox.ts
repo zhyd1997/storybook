@@ -94,7 +94,7 @@ export const sandbox: Task = {
         'vitest',
         'playwright',
         '@vitest/browser',
-        '@storybook/experimental-addon-vitest'
+        '@storybook/experimental-addon-test'
       );
 
       if (details.template.expected.framework.includes('nextjs')) {
