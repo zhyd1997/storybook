@@ -369,17 +369,19 @@ const getVitestPluginInfo = (details: TemplateDetails) => {
   const isSveltekit = framework.includes('sveltekit');
 
   if (isNextjs) {
-    frameworkPluginImport = "import vitePluginNext from 'vite-plugin-storybook-nextjs'";
-    frameworkPluginCall = 'vitePluginNext()';
+    frameworkPluginImport =
+      "import { storybookNextJsPlugin } from '@storybook/experimental-nextjs-vite/vite-plugin'";
+    frameworkPluginCall = 'storybookNextJsPlugin()';
   }
 
   if (isSveltekit) {
-    frameworkPluginImport = "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite'";
+    frameworkPluginImport =
+      "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite-plugin'";
     frameworkPluginCall = 'storybookSveltekitPlugin()';
   }
 
   if (framework === '@storybook/vue3-vite') {
-    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite'";
+    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite-plugin'";
     frameworkPluginCall = 'storybookVuePlugin()';
   }
 
