@@ -139,7 +139,7 @@ export default async function postInstall(options: PostinstallOptions) {
             {
               extends: '${viteConfig ? relative(dirname(browserWorkspaceFile), viteConfig) : ''}',
               plugins: [
-                storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginCall : ''}
+                storybookTest(),${vitestInfo.frameworkPluginCall ? '\n      ' + vitestInfo.frameworkPluginCall : ''}
               ],
               test: {
                 browser: {
