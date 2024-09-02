@@ -18,7 +18,7 @@ export default {
   '@storybook/addon-themes': '8.3.0-beta.1',
   '@storybook/addon-toolbars': '8.3.0-beta.1',
   '@storybook/addon-viewport': '8.3.0-beta.1',
-  '@storybook/experimental-addon-vitest': '8.3.0-beta.1',
+  '@storybook/experimental-addon-test': '8.3.0-beta.1',
   '@storybook/builder-vite': '8.3.0-beta.1',
   '@storybook/builder-webpack5': '8.3.0-beta.1',
   '@storybook/core': '8.3.0-beta.1',

@@ -437,7 +437,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     join(sandboxDir, 'vitest.workspace.ts'),
     dedent`
       import { defineWorkspace, defaultExclude } from "vitest/config";
-      import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
+      import { storybookTest } from "@storybook/experimental-addon-test/vite-plugin";
       ${frameworkPluginImport}
 
       export default defineWorkspace([
@@ -515,7 +515,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     const vitestAddonPath = relative(sandboxDir, join(CODE_DIRECTORY, 'addons', 'vitest'));
     packageJson.resolutions = {
       ...packageJson.resolutions,
-      '@storybook/experimental-addon-vitest': `file:${vitestAddonPath}`,
+      '@storybook/experimental-addon-test': `file:${vitestAddonPath}`,
     };
   }
 
