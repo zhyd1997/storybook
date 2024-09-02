@@ -93,19 +93,20 @@ export async function add(
 
   if (typeof configDir === 'undefined') {
     throw new Error(dedent`
-      Unable to find storybook config directory
+      Unable to find storybook config directory. Please specify your Storybook config directory with the --config-dir flag.
     `);
   }
 
   if (!mainConfig) {
-    logger.error('Unable to find storybook main.js config');
+    logger.error('Unable to find Storybook main.js config');
     return;
   }
 
   if (checkInstalled(addonName, requireMain(configDir))) {
-    throw new Error(dedent`
-      Addon ${addonName} is already installed; we skipped adding it to your ${mainConfig}.
+    logger.error(dedent`
+      The Storybook Addon "${addonName}" is already present in ${mainConfig}; Its configuration will be skipped.
     `);
+    return;
   }
 
   const main = await readConfig(mainConfig);
@@ -135,7 +136,7 @@ export async function add(
   logger.log(`Installing ${addonWithVersion}`);
   await packageManager.addDependencies({ installAsDevDependencies: true }, [addonWithVersion]);
 
-  logger.log(`Adding '${addon}' to main.js addons field.`);
+  logger.log(`Adding '${addon}' to the addons field in ${mainConfig}.`);
   main.appendValueToArray(['addons'], addonName);
   await writeConfig(main);
 

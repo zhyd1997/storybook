@@ -32,7 +32,7 @@ export default async function postInstall(options: PostinstallOptions) {
     info.frameworkPackageName !== '@storybook/nextjs' &&
     info.builderPackageName !== '@storybook/builder-vite'
   ) {
-    logger.info(
+    logger.plain(
       'The Vitest addon can only be used with a Vite-based Storybook framework or Next.js.'
     );
     return;
@@ -52,7 +52,7 @@ export default async function postInstall(options: PostinstallOptions) {
       : null;
 
   if (!annotationsImport) {
-    logger.info('The Vitest addon cannot yet be used with: ' + info.frameworkPackageName);
+    logger.plain('The Vitest addon cannot yet be used with: ' + info.frameworkPackageName);
     return;
   }
 
@@ -61,26 +61,26 @@ export default async function postInstall(options: PostinstallOptions) {
   const packages = ['vitest@latest', '@vitest/browser@latest', 'playwright@latest'];
 
   if (info.frameworkPackageName === '@storybook/nextjs') {
-    logger.info(
+    logger.plain(
       dedent`
         We detected that you're using Next.js.
-        We will configure the vite-plugin-storybook-nextjs plugin to allow you to run tests in Vitest.
+        We will configure the ${c.magenta`vite-plugin-storybook-nextjs`} plugin to allow you to run tests in Vitest.
       `
     );
     packages.push('vite-plugin-storybook-nextjs@latest');
   }
 
-  logger.info(c.bold('Installing packages...'));
-  logger.info(packages.join(', '));
+  logger.plain(c.bold('Installing packages...'));
+  logger.plain(packages.join(', '));
   await packageManager.addDependencies({ installAsDevDependencies: true }, packages);
 
-  logger.info(c.bold('Executing npx playwright install chromium --with-deps ...'));
+  logger.plain(c.bold('Executing npx playwright install chromium --with-deps ...'));
   await packageManager.executeCommand({
     command: 'npx',
     args: ['playwright', 'install', 'chromium', '--with-deps'],
   });
 
-  logger.info(c.bold('Writing .storybook/vitest.setup.ts file...'));
+  logger.plain(c.bold(`Writing ${c.cyan`.storybook/vitest.setup.ts`} file...`));
 
   const previewExists = extensions
     .map((ext) => path.resolve(options.configDir, `preview${ext}`))
@@ -110,15 +110,15 @@ export default async function postInstall(options: PostinstallOptions) {
     const extname = path.extname(rootConfig);
     const browserWorkspaceFile = resolve(dirname(rootConfig), `vitest.workspace${extname}`);
     if (existsSync(browserWorkspaceFile)) {
-      logger.info(
+      logger.plain(
         dedent`
           We can not automatically setup the plugin when you use Vitest with workspaces.
           Please refer to the documentation to complete the setup manually:
-          https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual
+          ${c.yellow`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual`}
         `
       );
     } else {
-      logger.info(c.bold('Writing vitest.workspace.ts file...'));
+      logger.plain(c.bold(`Writing ${c.cyan`vitest.workspace.ts`} file...`));
       await writeFile(
         browserWorkspaceFile,
         dedent`
@@ -149,7 +149,7 @@ export default async function postInstall(options: PostinstallOptions) {
     }
   } else {
     // If there's no existing Vitest/Vite config, we create a new Vitest config file.
-    logger.info(c.bold('Writing vitest.config.ts file...'));
+    logger.plain(c.bold(`Writing ${c.cyan`vitest.config.ts`} file...`));
     await writeFile(
       resolve('vitest.config.ts'),
       dedent`
@@ -175,11 +175,11 @@ export default async function postInstall(options: PostinstallOptions) {
     );
   }
 
-  logger.info(
+  logger.plain(
     dedent`
-      The Vitest addon is now configured and you're ready to run your tests!
+      The Test addon is now configured and you're ready to run your tests!
       Check the documentation for more information about its features and options at:
-      https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
+      ${c.yellow`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest`}
     `
   );
 }
