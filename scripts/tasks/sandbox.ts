@@ -98,7 +98,7 @@ export const sandbox: Task = {
       );
 
       if (details.template.expected.framework.includes('nextjs')) {
-        extraDeps.push('vite-plugin-storybook-nextjs', 'jsdom');
+        extraDeps.push('@storybook/experimental-nextjs-vite', 'jsdom');
       }
 
       // if (details.template.expected.renderer === '@storybook/svelte') {
