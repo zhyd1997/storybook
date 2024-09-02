@@ -159,10 +159,17 @@ export default async function postInstall(options: PostinstallOptions) {
       dedent`
         It looks like you're using Next.js.
 
-        I'll add the ${colors.pink.bold(`vite-plugin-storybook-nextjs`)} plugin so you can use it with Vitest.
+        I'll add ${colors.pink.bold(`@storybook/experimental-nextjs-vite/vite-plugin`)} so you can use it with Vitest.
       `
     );
-    dependencies.push('vite-plugin-storybook-nextjs');
+    try {
+      const storybookVersion = await packageManager.getInstalledVersion('storybook');
+      dependencies.push(`@storybook/experimental-nextjs-vite@^${storybookVersion}`);
+    } catch (e) {
+      console.error(
+        'Failed to install @storybook/experimental-nextjs-vite. Please install it manually'
+      );
+    }
   }
 
   logger.line(1);
@@ -240,7 +247,7 @@ export default async function postInstall(options: PostinstallOptions) {
         browserWorkspaceFile,
         dedent`
           import { defineWorkspace } from 'vitest/config';
-          import { storybookTest } from '@storybook/experimental-addon-vitest/plugin';
+          import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
           ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
 
           // More info at: https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
@@ -249,7 +256,7 @@ export default async function postInstall(options: PostinstallOptions) {
             {
               extends: '${viteConfig ? relative(dirname(browserWorkspaceFile), viteConfig) : ''}',
               plugins: [
-                storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall : ''}
+                storybookTest(),${vitestInfo.frameworkPluginCall ? '\n      ' + vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall : ''}
               ],
               test: {
                 name: 'storybook',
@@ -277,13 +284,13 @@ export default async function postInstall(options: PostinstallOptions) {
       'vitest.config.ts',
       dedent`
         import { defineConfig } from "vitest/config";
-        import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
+        import { storybookTest } from "@storybook/experimental-addon-test/vite-plugin";
         ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
 
         // More info at: https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
         export default defineConfig({
           plugins: [
-            storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall : ''}
+            storybookTest(),${vitestInfo.frameworkPluginCall ? '\n      ' + vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall : ''}
           ],
           test: {
             browser: {
@@ -318,19 +325,21 @@ const getVitestPluginInfo = (framework: string) => {
   let frameworkPluginDocs = '';
 
   if (framework === '@storybook/nextjs') {
-    frameworkPluginImport = "import vitePluginNext from 'vite-plugin-storybook-nextjs'";
-    frameworkPluginCall = 'vitePluginNext()';
+    frameworkPluginImport =
+      "import { storybookNextJsPlugin } from '@storybook/experimental-nextjs-vite/vite-plugin'";
+    frameworkPluginCall = 'storybookNextJsPlugin()';
     frameworkPluginDocs =
-      '// More info at: https://github.com/storybookjs/vite-plugin-storybook-nextjs\n';
+      '// More info at: https://github.com/storybookjs/vite-plugin-storybook-nextjs\n      ';
   }
 
   if (framework === '@storybook/sveltekit') {
-    frameworkPluginImport = "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite'";
+    frameworkPluginImport =
+      "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite-plugin'";
     frameworkPluginCall = 'storybookSveltekitPlugin()';
   }
 
   if (framework === '@storybook/vue3-vite') {
-    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite'";
+    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite-plugin'";
     frameworkPluginCall = 'storybookVuePlugin()';
   }
 
