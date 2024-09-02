@@ -40,7 +40,6 @@ export const withBackgroundAndGrid = (
   const showGrid = data.grid || false;
   const shownBackground = !!item && !disable;
 
-  console.log({ context, globals, parameters, options, data, item, value, shownBackground, KEY });
   const backgroundSelector = viewMode === 'docs' ? `#anchor--${id} .docs-story` : '.sb-show-main';
   const gridSelector = viewMode === 'docs' ? `#anchor--${id} .docs-story` : '.sb-show-main';
 
