@@ -204,12 +204,13 @@ const getVitestPluginInfo = (framework: string) => {
   }
 
   if (framework === '@storybook/sveltekit') {
-    frameworkPluginImport = "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite'";
+    frameworkPluginImport =
+      "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite-plugin'";
     frameworkPluginCall = 'storybookSveltekitPlugin()';
   }
 
   if (framework === '@storybook/vue3-vite') {
-    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite'";
+    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite-plugin'";
     frameworkPluginCall = 'storybookVuePlugin()';
   }
 
