@@ -15,7 +15,6 @@ import { dedent } from 'ts-dedent';
 
 import {
   getRequireWrapperName,
-  isRequireWrapperNecessary,
   wrapValueWithRequireWrapper,
 } from './automigrate/fixes/wrap-require-utils';
 import { postinstallAddon } from './postinstallAddon';
@@ -143,7 +142,6 @@ export async function add(
   logger.log(`Adding '${addon}' to main.js addons field.`);
 
   const mainConfigAddons = main.getFieldNode(['addons']);
-
   if (mainConfigAddons && getRequireWrapperName(main) !== null) {
     const addonNode = main.valueToNode(addonName);
     main.appendNodeToArray(['addons'], addonNode as any);
