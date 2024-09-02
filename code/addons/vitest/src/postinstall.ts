@@ -11,17 +11,28 @@ import {
   loadMainConfig,
   validateFrameworkName,
 } from 'storybook/internal/common';
-import { logger } from 'storybook/internal/node-logger';
+import { colors, logger } from 'storybook/internal/node-logger';
 
 import { findUp } from 'find-up';
 import c from 'tinyrainbow';
 import dedent from 'ts-dedent';
 
 import { type PostinstallOptions } from '../../../lib/cli-storybook/src/add';
+import { printError, printInfo, printSuccess } from './postinstall-logger';
 
+const addonName = '@storybook/experimental-addon-vitest';
 const extensions = ['.js', '.jsx', '.ts', '.tsx', '.cts', '.mts', '.cjs', '.mjs'];
 
 export default async function postInstall(options: PostinstallOptions) {
+  printSuccess(
+    '👋 Howdy!',
+    dedent`
+      I'm the installation helper for ${colors.orange.bold(addonName)}
+
+      Hold on for a moment while I look at your project and get you all set up...
+    `
+  );
+
   const packageManager = JsPackageManagerFactory.getPackageManager({
     force: options.packageManager,
   });
@@ -32,8 +43,13 @@ export default async function postInstall(options: PostinstallOptions) {
     info.frameworkPackageName !== '@storybook/nextjs' &&
     info.builderPackageName !== '@storybook/builder-vite'
   ) {
-    logger.plain(
-      'The Vitest addon can only be used with a Vite-based Storybook framework or Next.js.'
+    printError(
+      '⛔️ Sorry!',
+      dedent`
+        The Vitest addon can only be used with a Vite-based Storybook framework or Next.js.
+
+        To roll back the installation, remove ${colors.orange.bold(addonName)} from the addons in your main Storybook config file and your package.json file.
+      `
     );
     return;
   }
@@ -52,7 +68,14 @@ export default async function postInstall(options: PostinstallOptions) {
       : null;
 
   if (!annotationsImport) {
-    logger.plain('The Vitest addon cannot yet be used with: ' + info.frameworkPackageName);
+    printError(
+      '⛔️ Sorry!',
+      dedent`
+        The Vitest addon cannot yet be used with ${colors.orange.bold(info.frameworkPackageName)}
+
+        To roll back the installation, remove ${colors.orange.bold(addonName)} from the addons in your main Storybook config file and your package.json file.
+      `
+    );
     return;
   }
 
@@ -61,16 +84,18 @@ export default async function postInstall(options: PostinstallOptions) {
   const packages = ['vitest@latest', '@vitest/browser@latest', 'playwright@latest'];
 
   if (info.frameworkPackageName === '@storybook/nextjs') {
-    logger.plain(
+    printInfo(
+      '🍦 Just so you know...',
       dedent`
-        We detected that you're using Next.js.
-        We will configure the ${c.magenta`vite-plugin-storybook-nextjs`} plugin to allow you to run tests in Vitest.
+        It looks like you're using Next.js.
+
+        I'll add the ${colors.orange.bold(`vite-plugin-storybook-nextjs`)} plugin so you can use it with Vitest.
       `
     );
     packages.push('vite-plugin-storybook-nextjs@latest');
   }
 
-  logger.plain(c.bold('Installing packages...'));
+  logger.plain(c.bold('✓ Ready to install packages:'));
   logger.plain(packages.join(', '));
   await packageManager.addDependencies({ installAsDevDependencies: true }, packages);
 
@@ -117,6 +142,7 @@ export default async function postInstall(options: PostinstallOptions) {
           ${c.yellow`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual`}
         `
       );
+      return;
     } else {
       logger.plain(c.bold(`Writing ${c.cyan`vitest.workspace.ts`} file...`));
       await writeFile(
@@ -175,11 +201,13 @@ export default async function postInstall(options: PostinstallOptions) {
     );
   }
 
-  logger.plain(
+  printSuccess(
+    '🎉 All done!',
     dedent`
       The Test addon is now configured and you're ready to run your tests!
+
       Check the documentation for more information about its features and options at:
-      ${c.yellow`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest`}
+      ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest`}
     `
   );
 }
