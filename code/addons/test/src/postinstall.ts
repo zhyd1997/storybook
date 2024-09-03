@@ -32,7 +32,7 @@ export default async function postInstall(options: PostinstallOptions) {
     dedent`
       I'm the installation helper for ${colors.pink.bold(ADDON_NAME)}
 
-      Hold on for a moment while I look at your project and get you all set up...
+      Hold on for a moment while I look at your project and get it set up...
     `
   );
 
@@ -65,20 +65,20 @@ export default async function postInstall(options: PostinstallOptions) {
       info.builderPackageName !== '@storybook/builder-vite'
     ) {
       reasons.push(
-        'The Vitest addon can only be used with a Vite-based Storybook framework or Next.js.'
+        'The Storybook Test addon can only be used with a Vite-based Storybook framework or Next.js.'
       );
     }
 
     if (!annotationsImport) {
       reasons.push(dedent`
-        The Vitest addon cannot yet be used with ${colors.pink.bold(info.frameworkPackageName)}
+        The Storybook Test addon cannot yet be used with ${colors.pink.bold(info.frameworkPackageName)}
       `);
     }
 
     const vitestVersion = await packageManager.getInstalledVersion('vitest');
     if (vitestVersion && !satisfies(vitestVersion, '>=2.0.0')) {
       reasons.push(`
-        The Vitest addon requires Vitest 2.0.0 or later.
+        The Storybook Test addon requires Vitest 2.0.0 or later.
         Please update your ${colors.pink.bold('vitest')} dependency and try again.
       `);
     } else {
@@ -108,7 +108,7 @@ export default async function postInstall(options: PostinstallOptions) {
 
       if (hasInconsistentPackageVersions) {
         reasons.push(
-          'Update your dependencies and try again, or manually install the Vitest addon.'
+          'Update your dependencies and try again, or manually install the Storybook Test addon.'
         );
       }
     }
@@ -125,7 +125,7 @@ export default async function postInstall(options: PostinstallOptions) {
 
     if (reasons.length > 0) {
       reasons.unshift(
-        'The Test addon is incompatible with your current set up and cannot be installed:'
+        'The Storybook Test addon is incompatible with your current set up and cannot be installed:'
       );
       reasons.push(
         dedent`
@@ -351,7 +351,7 @@ export default async function postInstall(options: PostinstallOptions) {
   printSuccess(
     '🎉 All done!',
     dedent`
-      The Test addon is now configured and you're ready to run your tests!
+      The Storybook Test addon is now configured and you're ready to run your tests!
 
       Check the documentation for more information about its features and options at:
       ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest`}
