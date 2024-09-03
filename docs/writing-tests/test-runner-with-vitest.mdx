@@ -5,10 +5,22 @@ sidebar:
   title: Test runner with Vitest
 ---
 
+<If notRenderer={['react', 'vue', 'svelte']}>
+  <Callout variant="info">
+    Test runner with Vitest is currently only supported in [React](?renderer=react), [Vue](?renderer=vue) and [Svelte](?renderer=svelte) projects.
+
+    If you are using a different renderer, you can use the [previous test runner](./test-runner.mdx) to test your stories.
+  </Callout>
+
+  {/* End non-supported renderers */}
+</If>
+
+<If renderer={['react', 'vue', 'svelte']}>
+
 (⚠️ **Experimental**)
 
 <Callout variant="warning" icon="🧪">
-  While this feature is experimental, it is published as the `@storybook/experimental-addon-vitest` package.
+  While this feature is experimental, it is published as the `@storybook/experimental-addon-test` package.
 </Callout>
 
 Storybook's test runner with Vitest transforms your [stories](../writing-stories/index.mdx) into tests using a Vitest plugin and [portable stories](../api/portable-stories/portable-stories-vitest.mdx). Those tests are then run using [Vitest](https://vitest.dev). This approach is faster and more flexible than the [previous test runner](./test-runner.mdx), which required a running Storybook instance to test your stories.
@@ -19,7 +31,15 @@ Stories are tested in two ways: a smoke test to ensure it renders and, if a [pla
 
 ## Install and set up
 
-Get started by upgrading to at least Storybook 8.3, then installing and configuring the plugin in your project.
+Before installing, make sure your project meets the following requirements:
+
+- Storybook ≥ 8.3
+- A Storybook framework that uses Vite (e.g. [`vue3-vite`](../get-started/frameworks/vue3-vite.mdx)), or the [Storybook Next.js framework](../get-started/frameworks/nextjs.mdx)
+- Vitest ≥ 2.0
+    - If you're not using Vitest, it will be installed and configured for you when you install the addon
+- For Next.js projects, Next.js ≥ 14.0
+
+If you're not yet using Storybook 8.3, you can [upgrade your Storybook](../configure/upgrading.mdx) to the latest version:
 
 <CodeSnippets path="storybook-upgrade.md" />
 
@@ -27,33 +47,9 @@ Get started by upgrading to at least Storybook 8.3, then installing and configur
 
 Run the following command to install and configure the addon, which contains the plugin to run your stories as tests using Vitest:
 
-<CodeSnippets path="addon-vitest-install.md" />
+<CodeSnippets path="addon-test-install.md" />
 
 That [`add` command](../addons/install-addons.mdx#automatic-installation) will install and register the Vitest addon. It will also inspect your project's Vite and Vitest setup, and install and configure them with sensible defaults, if necessary. You may need to adjust the configuration to fit your project's needs. The full configuration options can be found in the [API section](#options), below.
-
-<If renderer="vue">
-	<Callout variant="info">
-		If your stories use template-based Vue components, you may need to [alias the `vue` module](https://vuejs.org/guide/scaling-up/tooling#note-on-in-browser-template-compilation) to resolve correctly in the test environment:
-
-		<details>
-			<summary>Example Vite configuration</summary>
-
-```ts
-// vite.config.ts
-import { defineConfig } from 'vite/config';
-
-export default defineConfig({
-  // ...
-  resolve: {
-    alias: {
-      vue: 'vue/dist/vue.esm-bundler.js',
-    },
-  },
-});
-```
-		</details>
-	</Callout>
-</If>
 
 ### Manual setup
 
@@ -61,11 +57,84 @@ For some project setups, the `add` command may be unable to automate the plugin 
 
 1. Make sure Vite and Vitest are configured in your project.
 1. Configure Vitest to use [browser mode](https://vitest.dev/guide/browser/).
-1. Install the addon, `@storybook/experimental-addon-vitest`, in your project and [register it in your Storybook configuration](http://storybook.js.org/docs/addons/install-addons#manual-installation).
-1. If you're using Next.js, make sure you're using [`vite-plugin-storybook-nextjs`](https://github.com/storybookjs/vite-plugin-storybook-nextjs).
-1. If you're using SvelteKit, make sure you're using `@storybook/sveltekit/vite`.
-1. Create a [test setup file](../api/portable-stories/portable-stories-vitest.mdx#setprojectannotations), `.storybook/vitest.setup.ts`.
+1. Install the addon, `@storybook/experimental-addon-test`, in your project and [register it in your Storybook configuration](http://storybook.js.org/docs/addons/install-addons#manual-installation).
+1. Create a test setup file, `.storybook/vitest.setup.ts`. You can use the example setup file, below, as a guide
 1. Adjust your Vitest configuration to include the plugin(s) and reference the setup file. You can use the example configuration files, below, as a guide.
+
+#### Framework plugins
+
+Some Storybook frameworks require additional setup to enable the framework's features to work with Vitest. Each of those frameworks exports a Vite plugin that you can use to configure your project correctly:
+
+<If renderer="react">
+  If you're using Next.js, use `@storybook/experimental-nextjs-vite/vite-plugin`:
+
+  ```js title="vitest.config.ts"
+  import { defineConfig, mergeConfig } from 'vitest/config';
+  import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
+  import { storybookNextjsPlugin } from '@storybook/experimental-nextjs-vite/vite-plugin';
+
+  import viteConfig from './vite.config';
+
+  export default mergeConfig(
+    viteConfig,
+    defineConfig({
+      plugins: [
+        storybookTest(),
+        storybookNextjsPlugin(), // 👈 Use the plugin here
+      ],
+      // ...
+    })
+  );
+  ```
+</If>
+
+<If renderer="vue">
+  Vue projects should use `@storybook/vue3-vite/vite-plugin`:
+
+  ```js title="vitest.config.ts"
+  import { defineConfig, mergeConfig } from 'vitest/config';
+  import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
+  import { storybookVuePlugin } from '@storybook/vue3-vite/vite-plugin';
+
+  import viteConfig from './vite.config'
+
+  export default mergeConfig(
+    viteConfig,
+    defineConfig({
+      plugins: [
+        storybookTest(),
+        storybookVuePlugin(), // 👈 Use the plugin here
+      ],
+      // ...
+    })
+  );
+  ```
+</If>
+
+<If renderer="svelte">
+  If you're using SvelteKit, use `@storybook/sveltekit/vite-plugin`:
+
+  ```js title="vitest.config.ts"
+  import { defineConfig, mergeConfig } from 'vitest/config';
+  import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
+  import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite-plugin';
+
+  import viteConfig from './vite.config';
+
+  export default mergeConfig(
+    viteConfig,
+    defineConfig({
+      plugins: [
+        storybookTest(),
+        storybookSveltekitPlugin(), // 👈 Use the plugin here
+      ],
+      // ...
+    })
+  );
+  ```
+</If>
+
+The above example uses the framework's plugin in a Vitest configuration file. You can also use it in a Vitest workspace file, if that is how your project is configured.
 
 ### Example configuration files
 
@@ -74,25 +143,33 @@ When the addon is set up automatically, it will create or adjust your Vitest con
 <details>
   <summary>Example Vitest setup file</summary>
 
+ Storybook stories contain configuration defined in `.storybook/preview.js|ts`. To ensure that configuration is available to your tests, you can apply it in a Vitest setup file. Here's an example of how to do that:
+
 ```ts title=".storybook/vitest.setup.ts"
 import { beforeAll } from 'vitest';
 // Replace your-renderer with the renderer you are using (e.g., react, vue3, svelte, etc.)
 import { setProjectAnnotations } from '@storybook/your-renderer';
+
 import * as projectAnnotations from './preview';
 
 const project = setProjectAnnotations(projectAnnotations);
 
 beforeAll(project.beforeAll);
 ```
+
+  The `setProjectAnnotations` function is part of the portable stories API, which is used to transform your stories into tests. For more details, see the [portable stories API documentation](../api/portable-stories/portable-stories-vitest.mdx#setprojectannotations).
 </details>
 
 <details>
   <summary>Example Vitest config file</summary>
 
+  The most simple application of the plugin is to include it in your Vitest configuration file:
+
 ```ts title="vitest.config.ts"
-import { defineConfig, mergeConfig } from 'vitest/config'
-import viteConfig from './vite.config'
-import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
+import { defineConfig, mergeConfig } from 'vitest/config';
+import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
+
+import viteConfig from './vite.config';
 
 export default mergeConfig(
   viteConfig,
@@ -120,17 +197,18 @@ export default mergeConfig(
       setupFiles: ['./.storybook/vitest.setup.ts'],
     },
   })
-)
+);
 ```
 </details>
 
 <details>
   <summary>Example Vitest workspace file</summary>
 
-{/* TODO: Nextjs & SvelteKit examples */}
+  If you're using a [Vitest workspace](https://vitest.dev/guide/workspace), you can define a new workspace project:
+
 ```ts title="vitest.workspace.ts"
-import { defineWorkspace } from 'vitest/config'
-import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
+import { defineWorkspace } from 'vitest/config';
+import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
 
 export default defineWorkspace([
   // This is the path to your existing Vitest config file
@@ -162,7 +240,7 @@ export default defineWorkspace([
       setupFiles: ['./.storybook/vitest.setup.ts'],
     },
   }
-])
+]);
 ```
 </details>
 
@@ -196,7 +274,7 @@ If you already have a `test` script that runs something other than Vitest, you c
 
 When you run that script, the addon will find and run your story-based tests. Here's an example of running your tests (in [watch mode](https://vitest.dev/guide/cli.html#vitest-watch), by default) using the Vitest CLI:
 
-<CodeSnippets path="addon-vitest-run-tests.md" />
+<CodeSnippets path="addon-test-run-tests.md" />
 
 ### Editor extension
 
@@ -260,7 +338,7 @@ You can also provide a [`storybookUrl` option](#storybookurl) to the plugin conf
 
 ## Configuration
 
-Most of the configuration for the Vitest plugin's behavior is done in the Vitest configuration files. However, you can also define configuration in your stories themselves, using [tags](../writing-stories/tags.mdx), to control how they are tested.
+Most of the configuration for the Vitest plugin's behavior is done in the Vitest configuration and setup files. However, you can also define configuration in your stories themselves, using [tags](../writing-stories/tags.mdx), to control how they are tested.
 
 By default, the plugin will run all stories with the `test` tag. You can adjust this behavior by providing the [`tags` option](#tags) in the plugin configuration. This allows you to include, exclude, or skip stories based on their tags.
 
@@ -295,6 +373,14 @@ export default defineWorkspace([
 ```
 
 If the same tag is in both the `include` and `exclude` arrays, the `exclude` behavior takes precedence.
+
+## Comparison to the previous test runner
+
+The [previous test runner](./test-runner.mdx) requires a running Storybook instance to test your stories, because it visits each one, executes the play function, and listens for results. This plugin, however, transforms your stories into tests using Vite and portable stories, so it does not need to run Storybook to test your stories. Beyond that core difference, there are a few other distinctions:
+
+Additionally, the previous test runner ran your stories as orchestrated tests in Jest, and that orchestration came with some complexity. By comparison, this plugin transforms your stories into real tests and then runs them using Vitest, which is simpler and more configurable.
+
+Finally, because of the simpler architecture and the use of Vitest, this plugin should be faster than the previous test runner for most projects. We'll do more benchmarking to quantify this in the future.
 
 ## FAQ
 
@@ -341,14 +427,6 @@ We recommend running tests in a browser using Playwright, but you can use WebDri
 
 We recommend using Chromium, because it is most likely to best match the experience of a majority of your users. However, you can use other browsers by adjusting the [browser name in the Vitest configuration file](https://vitest.dev/config/#browser-name). Note that [Playwright and WebDriverIO support different browsers](https://vitest.dev/guide/browser/#browser-option-types).
 
-### How is this different from the previous test runner?
-
-The [previous test runner](./test-runner.mdx) requires a running Storybook instance to test your stories, because it visits each one, executes the play function, and listens for results. This plugin, however, transforms your stories into tests using Vite and portable stories, so it does not need to run Storybook to test your stories. Beyond that core difference, there are a few other distinctions:
-
-Additionally, the previous test runner ran your stories as orchestrated tests in Jest, and that orchestration came with some complexity. By comparison, this plugin transforms your stories into real tests and then runs them using Vitest, which is simpler and more configurable.
-
-Finally, because of the simpler architecture and the use of Vitest, this plugin should be faster than the previous test runner for most projects. We'll do more benchmarking to quantify this in the future.
-
 ## API
 
 ### Exports
@@ -356,7 +434,7 @@ Finally, because of the simpler architecture and the use of Vitest, this plugin 
 This addon contributes the following exports to Storybook:
 
 ```js
-import { storybookTest } from '@storybook/experimental-addon-vitest/plugin'
+import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin'
 ```
 
 #### `storybookTest`
@@ -420,3 +498,5 @@ Default:
 - **`include`**: Stories with these tags will be tested
 - **`exclude`**: Stories with these tags will not be tested, and will not be counted in the test results
 - **`skip`**: Stories with these tags will not be tested, and will be counted in the test results
+
+</If>
