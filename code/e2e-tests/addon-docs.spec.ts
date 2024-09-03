@@ -179,7 +179,7 @@ test.describe('addon-docs', () => {
     const root = sbPage.previewRoot();
     const stories = root.locator('.sb-story button');
 
-    await expect(await stories.count()).toBe(3);
+    await expect(stories).toHaveCount(3);
     await expect(stories.first()).toHaveText('Basic');
     await expect(stories.nth(1)).toHaveText('Basic');
     await expect(stories.last()).toHaveText('Another');
@@ -265,12 +265,14 @@ test.describe('addon-docs', () => {
     const root = sbPage.previewRoot();
 
     const storyHeadings = root.locator('.sb-anchor > h3');
-    await expect(await storyHeadings.count()).toBe(6);
-    await expect(storyHeadings.nth(0)).toHaveText('Default A');
-    await expect(storyHeadings.nth(1)).toHaveText('Span Content');
-    await expect(storyHeadings.nth(2)).toHaveText('Code Content');
-    await expect(storyHeadings.nth(3)).toHaveText('Default B');
-    await expect(storyHeadings.nth(4)).toHaveText('H 1 Content');
-    await expect(storyHeadings.nth(5)).toHaveText('H 2 Content');
+    await expect(storyHeadings).toHaveCount(6);
+    await expect(storyHeadings).toHaveText([
+      'Default A',
+      'Span Content',
+      'Code Content',
+      'Default B',
+      'H 1 Content',
+      'H 2 Content',
+    ]);
   });
 });

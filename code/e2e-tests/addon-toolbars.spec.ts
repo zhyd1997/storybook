@@ -32,6 +32,6 @@ test.describe('addon-toolbars', () => {
     await expect(sbPage.previewRoot()).toContainText('안녕하세요');
     const button = await sbPage.page.locator('[title="Internationalization locale"]');
 
-    await expect(await button.getAttribute('disabled')).toBe('');
+    await expect(button).toHaveAttribute('disabled', '');
   });
 });
