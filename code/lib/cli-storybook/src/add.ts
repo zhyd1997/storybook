@@ -107,8 +107,8 @@ export async function add(
   }
 
   if (checkInstalled(addonName, requireMain(configDir))) {
-    logger.error(dedent`
-      The Storybook Addon "${addonName}" is already present in ${mainConfig}; Its configuration will be skipped.
+    logger.warn(dedent`
+      The Storybook addon "${addonName}" is already present in ${mainConfig}; Its configuration will be skipped. Please remove it and rerun this command if you want to reinstall this addon.
     `);
     return;
   }
