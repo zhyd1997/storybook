@@ -21,18 +21,16 @@ import dedent from 'ts-dedent';
 import { type PostinstallOptions } from '../../../lib/cli-storybook/src/add';
 import { printError, printInfo, printSuccess, step } from './postinstall-logger';
 
-const addonName = '@storybook/experimental-addon-vitest';
-const dependencies = ['vitest', '@vitest/browser', 'playwright'];
-const optionalDependencies = ['@vitest/coverage-istanbul', '@vitest/coverage-v8'];
-const extensions = ['.js', '.jsx', '.ts', '.tsx', '.cts', '.mts', '.cjs', '.mjs'];
+const ADDON_NAME = '@storybook/experimental-addon-vitest' as const;
+const EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx', '.cts', '.mts', '.cjs', '.mjs'] as const;
 
-const findFile = async (basename: string) => findUp(extensions.map((ext) => basename + ext));
+const findFile = async (basename: string) => findUp(EXTENSIONS.map((ext) => basename + ext));
 
 export default async function postInstall(options: PostinstallOptions) {
   printSuccess(
     '👋 Howdy!',
     dedent`
-      I'm the installation helper for ${colors.pink.bold(addonName)}
+      I'm the installation helper for ${colors.pink.bold(ADDON_NAME)}
 
       Hold on for a moment while I look at your project and get you all set up...
     `
@@ -43,6 +41,8 @@ export default async function postInstall(options: PostinstallOptions) {
   });
 
   const info = await getFrameworkInfo(options);
+  const dependencies = ['vitest', '@vitest/browser', 'playwright'];
+  const optionalDependencies = ['@vitest/coverage-istanbul', '@vitest/coverage-v8'];
 
   const annotationsImport = [
     '@storybook/nextjs',
@@ -129,7 +129,7 @@ export default async function postInstall(options: PostinstallOptions) {
       );
       reasons.push(
         dedent`
-          To roll back the installation, remove ${colors.pink.bold(addonName)} from the "addons" array
+          To roll back the installation, remove ${colors.pink.bold(ADDON_NAME)} from the "addons" array
           in your main Storybook config file and remove the dependency from your package.json file.
         `
       );
@@ -212,9 +212,9 @@ export default async function postInstall(options: PostinstallOptions) {
   logger.plain(`${step} Creating a Vitest setup file for Storybook:`);
   logger.plain(colors.gray(`  ${vitestSetupFile}`));
 
-  const previewExists = extensions
-    .map((ext) => path.resolve(options.configDir, `preview${ext}`))
-    .some((config) => existsSync(config));
+  const previewExists = EXTENSIONS.map((ext) =>
+    path.resolve(options.configDir, `preview${ext}`)
+  ).some((config) => existsSync(config));
 
   await writeFile(
     vitestSetupFile,
