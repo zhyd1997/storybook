@@ -192,7 +192,7 @@ export default async function postInstall(options: PostinstallOptions) {
     args: ['playwright', 'install', 'chromium', '--with-deps'],
   });
 
-  const vitestSetupFile = join(options.configDir, 'vitest.setup.ts');
+  const vitestSetupFile = path.resolve(options.configDir, 'vitest.setup.ts');
   if (existsSync(vitestSetupFile)) {
     printError(
       '🚨 Oh no!',
@@ -315,12 +315,14 @@ export default async function postInstall(options: PostinstallOptions) {
     );
   } else {
     // If there's no existing Vitest/Vite config, we create a new Vitest config file.
+    const newVitestConfigFile = path.resolve('vitest.config.ts');
+
     logger.line(1);
     logger.plain(`${step} Creating a Vitest project config file:`);
-    logger.plain(colors.gray(`  vitest.config.ts`));
+    logger.plain(colors.gray(`  ${newVitestConfigFile}`));
 
     await writeFile(
-      'vitest.config.ts',
+      newVitestConfigFile,
       dedent`
         import { defineConfig } from "vitest/config";
         import { storybookTest } from "@storybook/experimental-addon-test/vite-plugin";
