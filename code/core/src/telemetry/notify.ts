@@ -1,5 +1,6 @@
-import picocolors from 'picocolors';
 import { cache } from '@storybook/core/common';
+
+import picocolors from 'picocolors';
 
 const TELEMETRY_KEY_NOTIFY_DATE = 'telemetry-notification-date';
 

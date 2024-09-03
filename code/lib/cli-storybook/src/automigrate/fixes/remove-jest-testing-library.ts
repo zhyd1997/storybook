@@ -1,9 +1,12 @@
-import picocolors from 'picocolors';
-import { dedent } from 'ts-dedent';
-import type { Fix } from '../types';
 import { getStorybookVersionSpecifier } from 'storybook/internal/cli';
+
 import { runCodemod } from '@storybook/codemod';
+
+import picocolors from 'picocolors';
 import prompts from 'prompts';
+import { dedent } from 'ts-dedent';
+
+import type { Fix } from '../types';
 
 const logger = console;
 

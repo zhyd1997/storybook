@@ -1,7 +1,8 @@
+import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
+
 import { getRendererName, updateMainConfig } from '../helpers/mainConfigFile';
 import type { Fix } from '../types';
-import picocolors from 'picocolors';
 
 const logger = console;
 

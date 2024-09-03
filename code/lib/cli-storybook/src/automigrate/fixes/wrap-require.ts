@@ -1,9 +1,11 @@
+import { detectPnp } from 'storybook/internal/cli';
+import { readConfig } from 'storybook/internal/csf-tools';
+
 import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
-import { readConfig } from 'storybook/internal/csf-tools';
-import type { Fix } from '../types';
-import { detectPnp } from 'storybook/internal/cli';
+
 import { updateMainConfig } from '../helpers/mainConfigFile';
+import type { Fix } from '../types';
 import {
   getFieldsForRequireWrapper,
   getRequireWrapperAsCallExpression,

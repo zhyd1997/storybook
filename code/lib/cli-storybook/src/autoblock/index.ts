@@ -1,7 +1,9 @@
-import type { AutoblockOptions, Blocker } from './types';
-import picocolors from 'picocolors';
 import { logger } from 'storybook/internal/node-logger';
+
 import boxen from 'boxen';
+import picocolors from 'picocolors';
+
+import type { AutoblockOptions, Blocker } from './types';
 
 const excludesFalse = <T>(x: T | false): x is T => x !== false;
 

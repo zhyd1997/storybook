@@ -1,7 +1,9 @@
+import type { StorybookConfigRaw } from 'storybook/internal/types';
+
 import picocolors from 'picocolors';
 import semver from 'semver';
 import { dedent } from 'ts-dedent';
-import type { StorybookConfigRaw } from 'storybook/internal/types';
+
 import { getBuilderPackageName } from './mainConfigFile';
 
 const logger = console;

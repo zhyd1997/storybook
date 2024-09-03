@@ -1,6 +1,8 @@
-import picocolors from 'picocolors';
 import { frameworkPackages, rendererPackages } from 'storybook/internal/common';
 import type { InstallationMetadata } from 'storybook/internal/common';
+
+import picocolors from 'picocolors';
+
 import { hasMultipleVersions } from './hasMultipleVersions';
 
 export const messageDivider = '\n\n';

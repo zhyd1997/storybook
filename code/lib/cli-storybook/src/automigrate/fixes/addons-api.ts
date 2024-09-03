@@ -1,5 +1,6 @@
 import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
+
 import type { Fix } from '../types';
 
 interface AddonsAPIRunOptions {

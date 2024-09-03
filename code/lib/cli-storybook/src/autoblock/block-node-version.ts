@@ -1,7 +1,8 @@
-import { createBlocker } from './types';
-import { dedent } from 'ts-dedent';
-import { lt } from 'semver';
 import picocolors from 'picocolors';
+import { lt } from 'semver';
+import { dedent } from 'ts-dedent';
+
+import { createBlocker } from './types';
 
 export const blocker = createBlocker({
   id: 'minimumNode16',

@@ -1,11 +1,12 @@
 /* eslint-disable local-rules/no-uncategorized-errors */
-import picocolors from 'picocolors';
-import semver from 'semver';
 import type { JsPackageManager } from 'storybook/internal/common';
 import {
   JsPackageManagerFactory,
   versions as storybookCorePackages,
 } from 'storybook/internal/common';
+
+import picocolors from 'picocolors';
+import semver from 'semver';
 
 export type AnalysedPackage = {
   packageName: string;

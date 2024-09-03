@@ -1,4 +1,5 @@
 import picocolors from 'picocolors';
+
 import { cache } from './cache';
 
 const TELEMETRY_KEY_NOTIFY_DATE = 'telemetry-notification-date';

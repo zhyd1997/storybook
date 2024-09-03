@@ -1,11 +1,14 @@
-import picocolors from 'picocolors';
-import { dedent } from 'ts-dedent';
 import type { StoriesEntry } from 'storybook/internal/types';
+
+import { runCodemod } from '@storybook/codemod';
+
+import picocolors from 'picocolors';
+import { glob } from 'glob';
+import { prompt } from 'prompts';
+import { dedent } from 'ts-dedent';
+
 import { updateMainConfig } from '../helpers/mainConfigFile';
 import type { Fix } from '../types';
-import { runCodemod } from '@storybook/codemod';
-import { prompt } from 'prompts';
-import { glob } from 'glob';
 
 const logger = console;
 
