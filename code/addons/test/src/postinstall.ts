@@ -26,6 +26,8 @@ const dependencies = ['vitest', '@vitest/browser', 'playwright'];
 const optionalDependencies = ['@vitest/coverage-istanbul', '@vitest/coverage-v8'];
 const extensions = ['.js', '.jsx', '.ts', '.tsx', '.cts', '.mts', '.cjs', '.mjs'];
 
+const findFile = async (basename: string) => findUp(extensions.map((ext) => basename + ext));
+
 export default async function postInstall(options: PostinstallOptions) {
   printSuccess(
     '👋 Howdy!',
@@ -191,6 +193,21 @@ export default async function postInstall(options: PostinstallOptions) {
   });
 
   const vitestSetupFile = join(options.configDir, 'vitest.setup.ts');
+  if (existsSync(vitestSetupFile)) {
+    printError(
+      '🚨 Oh no!',
+      dedent`
+        Found an existing Vitest setup file:
+        ${colors.gray(vitestSetupFile)}
+
+        Please refer to the documentation to complete the setup manually:
+        ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual`}
+      `
+    );
+    logger.line(1);
+    return;
+  }
+
   logger.line(1);
   logger.plain(`${step} Creating a Vitest setup file for Storybook:`);
   logger.plain(colors.gray(`  ${vitestSetupFile}`));
@@ -213,24 +230,37 @@ export default async function postInstall(options: PostinstallOptions) {
     `
   );
 
-  // Check for an existing config file. Can be from Vitest (preferred) or Vite (with `test` option).
-  const viteConfigFiles = extensions.map((ext) => 'vite.config' + ext);
-  const viteConfig = await findUp(viteConfigFiles, { cwd: process.cwd() });
-  const vitestConfigFiles = extensions.map((ext) => 'vitest.config' + ext);
-  const rootConfig = (await findUp(vitestConfigFiles, { cwd: process.cwd() })) || viteConfig;
+  // Check for existing Vitest workspace. We can't extend it so manual setup is required.
+  const vitestWorkspaceFile = await findFile('vitest.workspace');
+  if (vitestWorkspaceFile) {
+    printError(
+      '🚨 Oh no!',
+      dedent`
+        Found an existing Vitest workspace file:
+        ${colors.gray(vitestWorkspaceFile)}
 
-  if (rootConfig) {
-    // If there's an existing config, we create a workspace file so we can run Storybook tests alongside.
-    const extname = path.extname(rootConfig);
-    const browserWorkspaceFile = path.resolve(dirname(rootConfig), `vitest.workspace${extname}`);
-    if (existsSync(browserWorkspaceFile)) {
+        I cannot safely extend your existing workspace file automatically.
+
+        Please refer to the documentation to complete the setup manually:
+        ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual`}
+      `
+    );
+    logger.line(1);
+    return;
+  }
+
+  // Check for an existing config file. Can be from Vitest (preferred) or Vite (with `test` option).
+  const viteConfigFile = await findFile('vite.config');
+  if (viteConfigFile) {
+    const viteConfig = await fs.readFile(viteConfigFile, 'utf8');
+    if (viteConfig.match(/\Wtest:\s*{/)) {
       printError(
         '🚨 Oh no!',
         dedent`
-          Found an existing Vitest workspace file:
-          ${colors.gray(browserWorkspaceFile)}
+          You seem to have an existing test configuration in your Vite config file:
+          ${colors.gray(vitestWorkspaceFile)}
 
-          I cannot safely extend your existing workspace file automatically, you must do it yourself.
+          I cannot safely extend your test configuration automatically.
 
           Please refer to the documentation to complete the setup manually:
           ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual`}
@@ -238,42 +268,51 @@ export default async function postInstall(options: PostinstallOptions) {
       );
       logger.line(1);
       return;
-    } else {
-      logger.line(1);
-      logger.plain(`${step} Creating a Vitest project workspace file:`);
-      logger.plain(colors.gray(`  ${browserWorkspaceFile}`));
-
-      await writeFile(
-        browserWorkspaceFile,
-        dedent`
-          import { defineWorkspace } from 'vitest/config';
-          import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
-          ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
-
-          // More info at: https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
-          export default defineWorkspace([
-            '${relative(dirname(browserWorkspaceFile), rootConfig)}',
-            {
-              extends: '${viteConfig ? relative(dirname(browserWorkspaceFile), viteConfig) : ''}',
-              plugins: [
-                storybookTest(),${vitestInfo.frameworkPluginCall ? '\n      ' + vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall : ''}
-              ],
-              test: {
-                name: 'storybook',
-                browser: {
-                  enabled: true,
-                  headless: true,
-                  name: 'chromium',
-                  provider: 'playwright',
-                },
-                include: ['**/*.stories.?(m)[jt]s?(x)'],
-                setupFiles: ['./.storybook/vitest.setup.ts'],
-              },
-            },
-          ]);
-        `.replace(/\s+extends: '',/, '')
-      );
     }
+  }
+
+  const vitestConfigFile = await findFile('vitest.config');
+  const rootConfig = vitestConfigFile || viteConfigFile;
+
+  if (rootConfig) {
+    // If there's an existing config, we create a workspace file so we can run Storybook tests alongside.
+    const extname = path.extname(rootConfig);
+    const browserWorkspaceFile = path.resolve(dirname(rootConfig), `vitest.workspace${extname}`);
+
+    logger.line(1);
+    logger.plain(`${step} Creating a Vitest project workspace file:`);
+    logger.plain(colors.gray(`  ${browserWorkspaceFile}`));
+
+    await writeFile(
+      browserWorkspaceFile,
+      dedent`
+        import { defineWorkspace } from 'vitest/config';
+        import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
+        ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
+
+        // More info at: https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
+        export default defineWorkspace([
+          '${relative(dirname(browserWorkspaceFile), rootConfig)}',
+          {
+            extends: '${viteConfigFile ? relative(dirname(browserWorkspaceFile), viteConfigFile) : ''}',
+            plugins: [
+              storybookTest(),${vitestInfo.frameworkPluginCall ? '\n      ' + vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall : ''}
+            ],
+            test: {
+              name: 'storybook',
+              browser: {
+                enabled: true,
+                headless: true,
+                name: 'chromium',
+                provider: 'playwright',
+              },
+              include: ['**/*.stories.?(m)[jt]s?(x)'],
+              setupFiles: ['./.storybook/vitest.setup.ts'],
+            },
+          },
+        ]);
+      `.replace(/\s+extends: '',/, '')
+    );
   } else {
     // If there's no existing Vitest/Vite config, we create a new Vitest config file.
     logger.line(1);
