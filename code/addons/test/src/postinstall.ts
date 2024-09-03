@@ -279,6 +279,7 @@ export default async function postInstall(options: PostinstallOptions) {
           {
             extends: '${viteConfigFile ? relative(dirname(browserWorkspaceFile), viteConfigFile) : ''}',
             plugins: [
+              // See options at: https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#storybooktest
               storybookTest(),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
             ],
             test: {
@@ -314,6 +315,7 @@ export default async function postInstall(options: PostinstallOptions) {
         // More info at: https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
         export default defineConfig({
           plugins: [
+            // See options at: https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#storybooktest
             storybookTest(),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
           ],
           test: {
@@ -353,9 +355,9 @@ const getVitestPluginInfo = (framework: string) => {
   if (framework === '@storybook/nextjs') {
     frameworkPluginImport =
       "import { storybookNextJsPlugin } from '@storybook/experimental-nextjs-vite/vite-plugin';";
-    frameworkPluginCall = 'storybookNextJsPlugin()';
     frameworkPluginDocs =
-      '// More info at: https://github.com/storybookjs/vite-plugin-storybook-nextjs\n';
+      '// More info at: https://github.com/storybookjs/vite-plugin-storybook-nextjs';
+    frameworkPluginCall = 'storybookNextJsPlugin()';
   }
 
   if (framework === '@storybook/sveltekit') {
