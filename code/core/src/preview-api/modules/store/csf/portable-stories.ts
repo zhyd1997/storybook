@@ -74,6 +74,10 @@ export function setProjectAnnotations<TRenderer extends Renderer = Renderer>(
     | NamedOrDefaultProjectAnnotations<TRenderer>[]
 ): NormalizedProjectAnnotations<TRenderer> {
   const annotations = Array.isArray(projectAnnotations) ? projectAnnotations : [projectAnnotations];
+  if (globalThis.defaultProjectAnnotations) {
+    annotations.push(globalThis.defaultProjectAnnotations);
+  }
+
   globalThis.globalProjectAnnotations = composeConfigs(annotations.map(extractAnnotation));
 
   return globalThis.globalProjectAnnotations;
