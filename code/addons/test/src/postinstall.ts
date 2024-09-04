@@ -132,14 +132,14 @@ export default async function postInstall(options: PostinstallOptions) {
         browserWorkspaceFile,
         dedent`
           import { defineWorkspace } from 'vitest/config';
-          import { storybookTest } from '@storybook/experimental-addon-vitest/plugin';
+          import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';
           ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
           export default defineWorkspace([
             '${relative(dirname(browserWorkspaceFile), rootConfig)}',
             {
               extends: '${viteConfig ? relative(dirname(browserWorkspaceFile), viteConfig) : ''}',
               plugins: [
-                storybookTest(),${vitestInfo.frameworkPluginCall ? '\n' + vitestInfo.frameworkPluginCall : ''}
+                storybookTest(),${vitestInfo.frameworkPluginCall ? '\n      ' + vitestInfo.frameworkPluginCall : ''}
               ],
               test: {
                 browser: {
@@ -163,7 +163,7 @@ export default async function postInstall(options: PostinstallOptions) {
       resolve('vitest.config.ts'),
       dedent`
         import { defineConfig } from "vitest/config";
-        import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
+        import { storybookTest } from "@storybook/experimental-addon-test/vite-plugin";
         ${vitestInfo.frameworkPluginImport ? vitestInfo.frameworkPluginImport + '\n' : ''}
         export default defineConfig({
           plugins: [
@@ -204,12 +204,13 @@ const getVitestPluginInfo = (framework: string) => {
   }
 
   if (framework === '@storybook/sveltekit') {
-    frameworkPluginImport = "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite'";
+    frameworkPluginImport =
+      "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite-plugin'";
     frameworkPluginCall = 'storybookSveltekitPlugin()';
   }
 
   if (framework === '@storybook/vue3-vite') {
-    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite'";
+    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite-plugin'";
     frameworkPluginCall = 'storybookVuePlugin()';
   }
 
