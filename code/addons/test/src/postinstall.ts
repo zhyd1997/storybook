@@ -68,20 +68,20 @@ export default async function postInstall(options: PostinstallOptions) {
       info.builderPackageName !== '@storybook/builder-vite'
     ) {
       reasons.push(
-        'The Storybook Test addon can only be used with a Vite-based Storybook framework or Next.js.'
+        '- The addon can only be used with a Vite-based Storybook framework or Next.js.'
       );
     }
 
     if (!annotationsImport) {
       reasons.push(dedent`
-        The Storybook Test addon cannot yet be used with ${colors.pink.bold(info.frameworkPackageName)}
+        - The addon cannot yet be used with ${colors.pink.bold(info.frameworkPackageName)}
       `);
     }
 
     if (vitestVersion && !satisfies(vitestVersion as string, '>=2.0.0')) {
       reasons.push(`
-        The Storybook Test addon requires Vitest 2.0.0 or later.
-        Please update your ${colors.pink.bold('vitest')} dependency and try again.
+        - The addon requires Vitest 2.0.0 or later.
+          Please update your ${colors.pink.bold('vitest')} dependency and try again.
       `);
     }
 
@@ -89,15 +89,15 @@ export default async function postInstall(options: PostinstallOptions) {
       const nextVersion = await packageManager.getInstalledVersion('next');
       if (!nextVersion) {
         reasons.push(dedent`
-          It seems like you are using ${colors.pink.bold('@storybook/nextjs')} without having ${colors.pink.bold('next')} installed.
-          Please install "next" or use a different Storybook framework integration and try again.
+          - You are using ${colors.pink.bold('@storybook/nextjs')} without having ${colors.pink.bold('next')} installed.
+            Please install "next" or use a different Storybook framework integration and try again.
         `);
       }
     }
 
     if (reasons.length > 0) {
       reasons.unshift(
-        'The Storybook Test addon is incompatible with your current set up and cannot be installed:'
+        `Storybook Test's automated setup failed due to the following package incompatibilities:`
       );
       reasons.push(
         dedent`
@@ -107,7 +107,7 @@ export default async function postInstall(options: PostinstallOptions) {
       );
       reasons.push(
         dedent`
-          Please check the documentation for more information about its requirements and installation:
+          Fear not, however, you can follow the manual installation process instead at:
           ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest`}
         `
       );
@@ -140,7 +140,7 @@ export default async function postInstall(options: PostinstallOptions) {
       dedent`
         It looks like you're using Next.js.
 
-        I'll add ${colors.pink.bold(`@storybook/experimental-nextjs-vite/vite-plugin`)} so you can use it with Vitest.
+        Adding ${colors.pink.bold(`@storybook/experimental-nextjs-vite/vite-plugin`)} so you can use it with Vitest.
 
         More info about the plugin at: ${c.cyan`https://github.com/storybookjs/vite-plugin-storybook-nextjs`}
       `
@@ -200,15 +200,15 @@ export default async function postInstall(options: PostinstallOptions) {
   await writeFile(
     vitestSetupFile,
     dedent`
-      import { beforeAll } from 'vitest'
-      import { setProjectAnnotations } from '${annotationsImport}'
-      ${previewExists ? `import * as projectAnnotations from './preview'` : ''}
+      import { beforeAll } from 'vitest';
+      import { setProjectAnnotations } from '${annotationsImport}';
+      ${previewExists ? `import * as projectAnnotations from './preview';` : ''}
 
       // This is an important step to apply the right configuration when testing your stories.
       // More info at: https://storybook.js.org/docs/api/portable-stories/portable-stories-vitest#setprojectannotations
-      const project = setProjectAnnotations(${previewExists ? 'projectAnnotations' : '[]'})
+      const project = setProjectAnnotations(${previewExists ? 'projectAnnotations' : '[]'});
 
-      beforeAll(project.beforeAll)
+      beforeAll(project.beforeAll);
     `
   );
 
@@ -309,7 +309,7 @@ export default async function postInstall(options: PostinstallOptions) {
     await writeFile(
       newVitestConfigFile,
       dedent`
-        import { defineConfig } from "vitest/config";
+        import { defineConfig } from 'vitest/config';
         import { storybookTest } from '@storybook/experimental-addon-test/vite-plugin';${vitestInfo.frameworkPluginImport}
 
         // More info at: https://storybook.js.org/docs/writing-tests/test-runner-with-vitest
