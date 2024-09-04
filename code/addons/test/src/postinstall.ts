@@ -14,7 +14,7 @@ import {
 import { colors, logger } from 'storybook/internal/node-logger';
 
 import { findUp } from 'find-up';
-import { satisfies } from 'semver';
+import { satisfies, coerce } from 'semver';
 import c from 'tinyrainbow';
 import { dedent } from 'ts-dedent';
 
@@ -41,11 +41,13 @@ export default async function postInstall(options: PostinstallOptions) {
   });
 
   const info = await getFrameworkInfo(options);
-  const dependencies = ['vitest', '@vitest/browser', 'playwright'];
-  const optionalDependencies = ['@vitest/coverage-istanbul', '@vitest/coverage-v8'];
-  const vitestVersion = await packageManager.getInstalledVersion('vitest');
+  const allDeps = await packageManager.getAllDependencies();
+  // only install these dependencies if they are not already installed
+  const dependencies = ['vitest', '@vitest/browser', 'playwright'].filter(p => !allDeps[p]);
+  const vitestVersionSpecifier = allDeps.vitest || await packageManager.getInstalledVersion('vitest');
+  const coercedVitestVersion = vitestVersionSpecifier ? coerce(vitestVersionSpecifier) : null;
   // if Vitest is installed, we use the same version to keep consistency across Vitest packages
-  const vitestVersionToInstall = vitestVersion ?? 'latest';
+  const vitestVersionToInstall = vitestVersionSpecifier ?? 'latest';
 
   const annotationsImport = [
     '@storybook/nextjs',
@@ -59,6 +61,7 @@ export default async function postInstall(options: PostinstallOptions) {
         )
       ? info.rendererPackageName
       : null;
+  const isRendererSupported = !!annotationsImport;
 
   const prerequisiteCheck = async () => {
     const reasons = [];
@@ -72,15 +75,15 @@ export default async function postInstall(options: PostinstallOptions) {
       );
     }
 
-    if (!annotationsImport) {
+    if (!isRendererSupported) {
       reasons.push(dedent`
         - The addon cannot yet be used with ${colors.pink.bold(info.frameworkPackageName)}
       `);
     }
 
-    if (vitestVersion && !satisfies(vitestVersion as string, '>=2.0.0')) {
+    if (coercedVitestVersion && !satisfies(coercedVitestVersion, '>=2.0.0')) {
       reasons.push(`
-        - The addon requires Vitest 2.0.0 or later.
+        - The addon requires Vitest 2.0.0 or later. You are currently using ${vitestVersionSpecifier}.
           Please update your ${colors.pink.bold('vitest')} dependency and try again.
       `);
     }
@@ -105,12 +108,23 @@ export default async function postInstall(options: PostinstallOptions) {
           in your main Storybook config file and remove the dependency from your package.json file.
         `
       );
-      reasons.push(
-        dedent`
-          Fear not, however, you can follow the manual installation process instead at:
-          ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest`}
-        `
-      );
+
+      if (!isRendererSupported) {
+        reasons.push(
+          dedent`
+            Please check the documentation for more information about its requirements and installation:
+            ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest`}
+          `
+        );
+      } else {
+        reasons.push(
+          dedent`
+            Fear not, however, you can follow the manual installation process instead at:
+            ${c.cyan`https://storybook.js.org/docs/writing-tests/test-runner-with-vitest#manual`}
+          `
+        );
+      }
+
       return reasons.map((r) => r.trim()).join('\n\n');
     }
 
@@ -124,13 +138,6 @@ export default async function postInstall(options: PostinstallOptions) {
     logger.line(1);
     return;
   }
-
-  const allDeps = await packageManager.getAllDependencies();
-  optionalDependencies.forEach((dep) => {
-    if (allDeps[dep]) {
-      dependencies.push(dep);
-    }
-  });
 
   const vitestInfo = getVitestPluginInfo(info.frameworkPackageName);
 
@@ -155,13 +162,21 @@ export default async function postInstall(options: PostinstallOptions) {
     }
   }
 
+  const versionedDependencies = dependencies.map((p) => {
+    if(p.includes('vitest')) {
+      return `${p}@${vitestVersionToInstall ?? 'latest'}`
+    }
+
+    return p;
+  })
+
   logger.line(1);
   logger.plain(`${step} Installing/updating dependencies:`);
-  logger.plain(colors.gray('  ' + dependencies.join(', ')));
+  logger.plain(colors.gray('  ' + versionedDependencies.join(', ')));
 
   await packageManager.addDependencies(
     { installAsDevDependencies: true },
-    dependencies.map((p) => `${p}@${p.includes('vitest') ? vitestVersionToInstall : 'latest'}`)
+    versionedDependencies
   );
 
   logger.line(1);
