@@ -16,7 +16,7 @@ import { colors, logger } from 'storybook/internal/node-logger';
 import { findUp } from 'find-up';
 import { satisfies } from 'semver';
 import c from 'tinyrainbow';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 
 import { type PostinstallOptions } from '../../../lib/cli-storybook/src/add';
 import { printError, printInfo, printSuccess, step } from './postinstall-logger';
