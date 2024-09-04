@@ -25,9 +25,17 @@ export const configureConfig = async ({
   if (tryResolve('next/dist/compiled/react')) {
     addScopedAlias(baseConfig, 'react', 'next/dist/compiled/react');
   }
-  if (tryResolve('next/dist/compiled/react-dom')) {
-    addScopedAlias(baseConfig, 'react-dom', 'next/dist/compiled/react-dom');
+  if (tryResolve('next/dist/compiled/react-dom/cjs/react-dom-test-utils.production.js')) {
+    addScopedAlias(
+      baseConfig,
+      'react-dom/test-utils',
+      'next/dist/compiled/react-dom/cjs/react-dom-test-utils.production.js'
+    );
   }
+  if (tryResolve('next/dist/compiled/react-dom')) {
+    addScopedAlias(baseConfig, 'react-dom$', 'next/dist/compiled/react-dom');
+  }
+
   setupRuntimeConfig(baseConfig, nextConfig);
 
   return nextConfig;
