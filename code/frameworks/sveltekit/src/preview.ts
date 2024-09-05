@@ -15,7 +15,7 @@ const normalizeHrefConfig = (hrefConfig: HrefConfig): NormalizedHrefConfig => {
   return hrefConfig;
 };
 
-const svelteKitMocksDecorator = (Story, ctx) => {
+const svelteKitMocksDecorator: Decorator = (Story, ctx) => {
   const svelteKitParameters: SvelteKitParameters = ctx.parameters?.sveltekit_experimental ?? {};
   setPage(svelteKitParameters?.stores?.page);
   setNavigating(svelteKitParameters?.stores?.navigating);
