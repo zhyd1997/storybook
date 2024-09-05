@@ -107,6 +107,7 @@ export async function add(
     return;
   }
 
+  let shouldAddToMain = true;
   if (checkInstalled(addonName, requireMain(configDir))) {
     const { shouldForceInstall } = await prompts({
       type: 'confirm',
@@ -117,6 +118,8 @@ export async function add(
     if (!shouldForceInstall) {
       return;
     }
+
+    shouldAddToMain = false;
   }
 
   const main = await readConfig(mainConfig);
@@ -146,18 +149,20 @@ export async function add(
   logger.log(`Installing ${addonWithVersion}`);
   await packageManager.addDependencies({ installAsDevDependencies: true }, [addonWithVersion]);
 
-  logger.log(`Adding '${addon}' to the "addons" field in ${mainConfig}`);
+  if(shouldAddToMain) {
+    logger.log(`Adding '${addon}' to the "addons" field in ${mainConfig}`);
 
-  const mainConfigAddons = main.getFieldNode(['addons']);
-  if (mainConfigAddons && getRequireWrapperName(main) !== null) {
-    const addonNode = main.valueToNode(addonName);
-    main.appendNodeToArray(['addons'], addonNode as any);
-    wrapValueWithRequireWrapper(main, addonNode as any);
-  } else {
-    main.appendValueToArray(['addons'], addonName);
+    const mainConfigAddons = main.getFieldNode(['addons']);
+    if (mainConfigAddons && getRequireWrapperName(main) !== null) {
+      const addonNode = main.valueToNode(addonName);
+      main.appendNodeToArray(['addons'], addonNode as any);
+      wrapValueWithRequireWrapper(main, addonNode as any);
+    } else {
+      main.appendValueToArray(['addons'], addonName);
+    }
+
+    await writeConfig(main);
   }
-
-  await writeConfig(main);
 
   if (!skipPostinstall && isCoreAddon(addonName)) {
     await postinstallAddon(addonName, { packageManager: packageManager.type, configDir });
