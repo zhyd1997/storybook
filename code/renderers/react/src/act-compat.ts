@@ -8,8 +8,12 @@ declare const globalThis: {
   IS_REACT_ACT_ENVIRONMENT: boolean;
 };
 
-// @ts-expect-error act might not be available in some versions of React
-const reactAct = typeof React.act === 'function' ? React.act : DeprecatedReactTestUtils.act;
+const reactAct =
+  // @ts-expect-error act might not be available in some versions of React
+  typeof React.act === 'function'
+    ? // @ts-expect-error act might not be available in some versions of React
+      React.act
+    : DeprecatedReactTestUtils.act ?? (async (cb: () => Promise<void> | void) => cb());
 
 export function setReactActEnvironment(isReactActEnvironment: boolean) {
   globalThis.IS_REACT_ACT_ENVIRONMENT = isReactActEnvironment;

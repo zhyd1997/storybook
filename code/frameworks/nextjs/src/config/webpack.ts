@@ -20,6 +20,9 @@ export const configureConfig = async ({
   nextConfigPath?: string;
 }): Promise<NextConfig> => {
   const nextConfig = await resolveNextConfig({ nextConfigPath });
+  baseConfig.resolve ??= {};
+  baseConfig.resolve.alias ??= {};
+  const aliasConfig = baseConfig.resolve.alias;
 
   addScopedAlias(baseConfig, 'next/config');
   if (tryResolve('next/dist/compiled/react')) {
@@ -31,9 +34,19 @@ export const configureConfig = async ({
       'react-dom/test-utils',
       'next/dist/compiled/react-dom/cjs/react-dom-test-utils.production.js'
     );
+  } else {
+    const name = 'react-dom/test-utils';
+    if (Array.isArray(aliasConfig)) {
+      aliasConfig.push({
+        name,
+        alias: name,
+      });
+    } else {
+      aliasConfig[name] = name;
+    }
   }
   if (tryResolve('next/dist/compiled/react-dom')) {
-    addScopedAlias(baseConfig, 'react-dom$', 'next/dist/compiled/react-dom');
+    addScopedAlias(baseConfig, 'react-dom', 'next/dist/compiled/react-dom');
   }
 
   setupRuntimeConfig(baseConfig, nextConfig);
