@@ -84,8 +84,8 @@ export function setProjectAnnotations<TRenderer extends Renderer = Renderer>(
     beforeAll(projectAnnotations.beforeAll)
   */
   return composeConfigs([
-    globalThis.defaultProjectAnnotations,
-    globalThis.globalProjectAnnotations,
+    globalThis.defaultProjectAnnotations ?? {},
+    globalThis.globalProjectAnnotations ?? {},
   ]);
 }
 
