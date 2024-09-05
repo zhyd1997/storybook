@@ -10,6 +10,7 @@ import {
 } from 'storybook/internal/common';
 import { readConfig, writeConfig } from 'storybook/internal/csf-tools';
 
+import prompts from 'prompts';
 import SemVer from 'semver';
 import { dedent } from 'ts-dedent';
 
@@ -107,10 +108,15 @@ export async function add(
   }
 
   if (checkInstalled(addonName, requireMain(configDir))) {
-    logger.warn(dedent`
-      The Storybook addon "${addonName}" is already present in ${mainConfig}; Its configuration will be skipped. Please remove it and rerun this command if you want to reinstall this addon.
-    `);
-    return;
+    const { shouldForceInstall } = await prompts({
+      type: 'confirm',
+      name: 'shouldForceInstall',
+      message: `The Storybook addon "${addonName}" is already present in ${mainConfig}. Do you wish to install it again?`,
+    });
+
+    if (!shouldForceInstall) {
+      return;
+    }
   }
 
   const main = await readConfig(mainConfig);
