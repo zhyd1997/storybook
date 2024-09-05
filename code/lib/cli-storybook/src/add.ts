@@ -149,7 +149,7 @@ export async function add(
   logger.log(`Installing ${addonWithVersion}`);
   await packageManager.addDependencies({ installAsDevDependencies: true }, [addonWithVersion]);
 
-  if(shouldAddToMain) {
+  if (shouldAddToMain) {
     logger.log(`Adding '${addon}' to the "addons" field in ${mainConfig}`);
 
     const mainConfigAddons = main.getFieldNode(['addons']);
