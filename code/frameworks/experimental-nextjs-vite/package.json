@@ -55,8 +55,8 @@
     },
     "./vite-plugin": {
       "types": "./dist/vite-plugin/index.d.ts",
-      "import": "./dist/vite-plugin/index.js",
-      "require": "./dist/vite-plugin/index.cjs"
+      "import": "./dist/vite-plugin/index.mjs",
+      "require": "./dist/vite-plugin/index.js"
     },
     "./package.json": "./package.json"
   },
