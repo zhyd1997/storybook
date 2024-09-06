@@ -105,7 +105,6 @@ export function pluginWebpackStats({ workingDir }: WebpackStatsPluginOptions): W
         .filter((name) => isUserCode(name))
         .forEach((depIdUnsafe) => {
           const depId = normalize(depIdUnsafe);
-          console.log('LOG: normalization', { depIdUnsafe, depId });
           if (!statsMap.has(depId)) {
             statsMap.set(depId, createStatsMapModule(depId, [mod.id]));
             return;
