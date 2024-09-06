@@ -111,11 +111,17 @@ const parseTypeToControl = (type: JSDocType | undefined): any => {
   } else if (type.kind === 'union') {
     if (
       Array.isArray(type.type) &&
-      !type.type.find((t) => t.kind !== 'const' || t.type !== 'string')
+      !type.type.some(
+        (t) => t.kind !== 'const' || !['string', 'number', 'null', 'undefined'].includes(t.type)
+      )
     ) {
+      const options = type.type.map((t) => (t as JSDocTypeConst).value);
       return {
-        control: { type: 'radio' },
-        options: type.type.map((t) => (t as JSDocTypeConst).value),
+        control: {
+          type: 'radio',
+          labels: options.map(String),
+        },
+        options,
       };
     }
   } else if (type.kind === 'function') {
