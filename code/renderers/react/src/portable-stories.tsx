@@ -98,7 +98,7 @@ export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<ReactRende
         },
       });
     } catch (e) {
-      console.log(e);
+      // no-op
       // @storybook/test might not be available
     }
   },
