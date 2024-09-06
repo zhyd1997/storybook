@@ -42,7 +42,8 @@ function isUserCode(moduleName: string) {
       !moduleName.startsWith('\x00') &&
       !moduleName.startsWith('\u0000') &&
       moduleName !== 'react/jsx-runtime' &&
-      !moduleName.match(/node_modules\//)
+      !moduleName.match(/node_modules\//) &&
+      !moduleName.includes('sb-preview/runtime.js')
   );
 }
 
@@ -87,25 +88,27 @@ export function pluginWebpackStats({ workingDir }: WebpackStatsPluginOptions): W
     // We want this to run after the vite build plugins (https://vitejs.dev/guide/api-plugin.html#plugin-ordering)
     enforce: 'post',
     moduleParsed: function (mod) {
-      if (isUserCode(mod.id)) {
-        mod.importedIds
-          .concat(mod.dynamicallyImportedIds)
-          .filter((name) => isUserCode(name))
-          .forEach((depIdUnsafe) => {
-            const depId = normalize(depIdUnsafe);
-            if (statsMap.has(depId)) {
-              const m = statsMap.get(depId);
-              if (m) {
-                m.reasons = (m.reasons ?? [])
-                  .concat(createReasons([mod.id]))
-                  .filter((r) => r.moduleName !== depId);
-                statsMap.set(depId, m);
-              }
-            } else {
-              statsMap.set(depId, createStatsMapModule(depId, [mod.id]));
-            }
-          });
+      if (!isUserCode(mod.id)) {
+        return;
       }
+      mod.importedIds
+        .concat(mod.dynamicallyImportedIds)
+        .filter((name) => isUserCode(name))
+        .forEach((depIdUnsafe) => {
+          const depId = normalize(depIdUnsafe);
+          if (!statsMap.has(depId)) {
+            statsMap.set(depId, createStatsMapModule(depId, [mod.id]));
+            return;
+          }
+          const m = statsMap.get(depId);
+          if (!m) {
+            return;
+          }
+          m.reasons = (m.reasons ?? [])
+            .concat(createReasons([mod.id]))
+            .filter((r) => r.moduleName !== depId);
+          statsMap.set(depId, m);
+        });
     },
 
     storybookGetStats() {
