@@ -190,9 +190,9 @@ function initializerToDefaultValue(
 }
 
 function loadConfig(basepath: string): [ts.CompilerOptions, Set<string>] {
-  const jsConfigPath = ts.findConfigFile(basepath, ts.sys.fileExists, 'jsconfig.json');
-  const tsConfigPath = ts.findConfigFile(basepath, ts.sys.fileExists);
-  const configPath = jsConfigPath || tsConfigPath;
+  const configPath =
+    ts.findConfigFile(basepath, ts.sys.fileExists) ||
+    ts.findConfigFile(basepath, ts.sys.fileExists, 'jsconfig.json');
 
   const forcedOptions = {
     sourceMap: false,
