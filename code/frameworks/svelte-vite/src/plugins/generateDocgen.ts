@@ -1,7 +1,8 @@
-import ts from 'typescript';
+import path from 'node:path';
+
 import svelte2tsx from 'svelte2tsx';
-import path from 'path';
 import { VERSION } from 'svelte/compiler';
+import ts from 'typescript';
 
 export type Docgen = {
   name?: string;
