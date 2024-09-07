@@ -18,19 +18,19 @@ import { join, relative, resolve, sep } from 'path';
 import slash from 'slash';
 import dedent from 'ts-dedent';
 
+import { babelParse } from '../../code/core/src/babel/babelParse';
 import { detectLanguage } from '../../code/core/src/cli/detect';
 import { SupportedLanguage } from '../../code/core/src/cli/project_types';
 import { JsPackageManagerFactory, versions as storybookPackages } from '../../code/core/src/common';
 import type { ConfigFile } from '../../code/core/src/csf-tools';
 import { writeConfig } from '../../code/core/src/csf-tools';
-import { babelParse } from '../../code/core/src/csf-tools/babelParse';
 import type { TemplateKey } from '../../code/lib/cli-storybook/src/sandbox-templates';
 import type { PassedOptionValues, Task, TemplateDetails } from '../task';
 import { executeCLIStep, steps } from '../utils/cli-step';
 import { CODE_DIRECTORY, REPROS_DIRECTORY } from '../utils/constants';
 import { exec } from '../utils/exec';
 import { filterExistsInCodeDir } from '../utils/filterExistsInCodeDir';
-import { addPreviewAnnotations, readMainConfig } from '../utils/main-js';
+import { addPreviewAnnotations, readConfig } from '../utils/main-js';
 import { updatePackageScripts } from '../utils/package-json';
 import { findFirstPath } from '../utils/paths';
 import { workspacePath } from '../utils/workspace';
@@ -207,7 +207,7 @@ function addEsbuildLoaderToStories(mainConfig: ConfigFile) {
           },
         },
         // Handle MDX files per the addon-docs presets (ish)
-        {        
+        {
           test: /template-stories\\/.*\\.mdx$/,
           exclude: /\\.stories\\.mdx$/,
           use: [
@@ -360,13 +360,51 @@ async function linkPackageStories(
   );
 }
 
+const getVitestPluginInfo = (details: TemplateDetails) => {
+  let frameworkPluginImport = '';
+  let frameworkPluginCall = '';
+
+  const framework = details.template.expected.framework;
+  const isNextjs = framework.includes('nextjs');
+  const isSveltekit = framework.includes('sveltekit');
+
+  if (isNextjs) {
+    frameworkPluginImport =
+      "import { storybookNextJsPlugin } from '@storybook/experimental-nextjs-vite/vite-plugin'";
+    frameworkPluginCall = 'storybookNextJsPlugin()';
+  }
+
+  if (isSveltekit) {
+    frameworkPluginImport =
+      "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite-plugin'";
+    frameworkPluginCall = 'storybookSveltekitPlugin()';
+  }
+
+  if (framework === '@storybook/vue3-vite') {
+    frameworkPluginImport = "import { storybookVuePlugin } from '@storybook/vue3-vite/vite-plugin'";
+    frameworkPluginCall = 'storybookVuePlugin()';
+  }
+
+  return { frameworkPluginImport, frameworkPluginCall };
+};
+
 export async function setupVitest(details: TemplateDetails, options: PassedOptionValues) {
   const { sandboxDir, template } = details;
 
   const isVue = template.expected.renderer === '@storybook/vue3';
   const isNextjs = template.expected.framework.includes('nextjs');
+  const { frameworkPluginCall, frameworkPluginImport } = getVitestPluginInfo(details);
   // const isAngular = template.expected.framework === '@storybook/angular';
-  const storybookPackage = isNextjs ? template.expected.framework : template.expected.renderer;
+
+  const portableStoriesFrameworks = [
+    '@storybook/nextjs',
+    '@storybook/experimental-nextjs-vite',
+    '@storybook/sveltekit',
+    // TODO: add angular once we enable their sandboxes
+  ];
+  const storybookPackage = portableStoriesFrameworks.includes(template.expected.framework)
+    ? template.expected.framework
+    : template.expected.renderer;
   const viteConfigPath = template.name.includes('JavaScript') ? 'vite.config.js' : 'vite.config.ts';
 
   await writeFile(
@@ -383,7 +421,6 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     ${isVue ? 'import * as vueAnnotations from "../src/stories/renderers/vue3/preview.js"' : ''}
 
     const annotations = setProjectAnnotations([
-      { tags: ['vitest'] },
       rendererDocsAnnotations,
       projectAnnotations,
       coreAnnotations,
@@ -393,15 +430,15 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
       ${isVue ? 'vueAnnotations,' : ''}
     ])
 
-    beforeAll(annotations.beforeAll!)`
+    beforeAll(annotations.beforeAll)`
   );
 
   await writeFile(
     join(sandboxDir, 'vitest.workspace.ts'),
     dedent`
       import { defineWorkspace, defaultExclude } from "vitest/config";
-      import { storybookTest } from "@storybook/experimental-addon-vitest/plugin";
-      ${isNextjs ? "import vitePluginNext from 'vite-plugin-storybook-nextjs'" : ''}
+      import { storybookTest } from "@storybook/experimental-addon-test/vitest-plugin";
+      ${frameworkPluginImport}
 
       export default defineWorkspace([
         {
@@ -413,7 +450,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
                 include: ["vitest"],
               },
             }),
-           ${isNextjs ? 'vitePluginNext(),' : ''}
+           ${frameworkPluginCall}
           ],
           ${
             isNextjs
@@ -430,13 +467,11 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
           }
           resolve: {
             preserveSymlinks: true,
-            ${isVue ? "alias: { vue: 'vue/dist/vue.esm-bundler.js' }," : ''}
           },
           test: {
             name: "storybook",
             pool: "threads",
             include: [
-              // we need to set the path like this because svelte-kit overrides the root path so this makes it work in all sandboxes
               "src/**/*.{story,stories}.?(c|m)[jt]s?(x)",
               "template-stories/**/*.{story,stories}.?(c|m)[jt]s?(x)",
             ],
@@ -444,14 +479,6 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
               ...defaultExclude,
               // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
               "**/*argtypes*",
-              // TODO (SVELTEKIT): Failures related to missing framework annotations
-              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/navigation.stories*",
-              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/hrefs.stories*",
-              // TODO (SVELTEKIT): Investigate Error: use:enhance can only be used on <form> fields with method="POST"
-              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/forms.stories*",
-              // TODO (SVELTE|SVELTEKIT): Typescript preprocessor issue
-              "**/frameworks/svelte-vite_svelte-vite-default-ts/ts-docs.stories.*",
-              "**/frameworks/sveltekit_svelte-kit-skeleton-ts/ts-docs.stories.*",
             ],
             /**
              * TODO: Either fix or acknowledge limitation of:
@@ -465,7 +492,6 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
               name: "chromium",
               provider: "playwright",
               headless: true,
-              screenshotFailures: false,
             },
             setupFiles: ["./.storybook/vitest.setup.ts"],
             environment: "happy-dom",
@@ -480,16 +506,16 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
 
   packageJson.scripts = {
     ...packageJson.scripts,
-    vitest: 'vitest --pass-with-no-tests --reporter=default --reporter=hanging-process',
+    vitest: 'vitest --reporter=default --reporter=hanging-process --test-timeout=5000',
   };
 
   // This workaround is needed because Vitest seems to have issues in link mode
   // so the /setup-file and /global-setup files from the vitest addon won't work in portal protocol
   if (options.link) {
-    const vitestAddonPath = relative(sandboxDir, join(CODE_DIRECTORY, 'addons', 'vitest'));
+    const vitestAddonPath = relative(sandboxDir, join(CODE_DIRECTORY, 'addons', 'test'));
     packageJson.resolutions = {
       ...packageJson.resolutions,
-      '@storybook/experimental-addon-vitest': `file:${vitestAddonPath}`,
+      '@storybook/experimental-addon-test': `file:${vitestAddonPath}`,
     };
   }
 
@@ -521,10 +547,11 @@ export async function addExtraDependencies({
   await packageManager.addDependencies({ installAsDevDependencies: true }, extraDevDeps);
 
   if (extraDeps) {
+    const versionedExtraDeps = await packageManager.getVersionedPackages(extraDeps);
     if (debug) {
-      logger.log('\uD83C\uDF81 Adding extra deps', extraDeps);
+      logger.log('\uD83C\uDF81 Adding extra deps', versionedExtraDeps);
     }
-    await packageManager.addDependencies({ installAsDevDependencies: true }, extraDeps);
+    await packageManager.addDependencies({ installAsDevDependencies: true }, versionedExtraDeps);
   }
   await packageManager.installDependencies();
 }
@@ -537,7 +564,7 @@ export const addStories: Task['run'] = async (
   const cwd = sandboxDir;
   const storiesPath = await findFirstPath([join('src', 'stories'), 'stories'], { cwd });
 
-  const mainConfig = await readMainConfig({ cwd });
+  const mainConfig = await readConfig({ fileName: 'main', cwd });
   const packageManager = JsPackageManagerFactory.getPackageManager({}, sandboxDir);
 
   // Ensure that we match the right stories in the stories directory
@@ -684,7 +711,7 @@ export const addStories: Task['run'] = async (
 
 export const extendMain: Task['run'] = async ({ template, sandboxDir, key }, { disableDocs }) => {
   logger.log('📝 Extending main.js');
-  const mainConfig = await readMainConfig({ cwd: sandboxDir });
+  const mainConfig = await readConfig({ fileName: 'main', cwd: sandboxDir });
 
   if (key === 'react-vite/default-ts') {
     addRefs(mainConfig);
@@ -760,6 +787,17 @@ export const extendMain: Task['run'] = async ({ template, sandboxDir, key }, { d
     setSandboxViteFinal(mainConfig);
   }
   await writeConfig(mainConfig);
+};
+
+export const extendPreview: Task['run'] = async ({ template, sandboxDir }) => {
+  logger.log('📝 Extending preview.js');
+  const previewConfig = await readConfig({ cwd: sandboxDir, fileName: 'preview' });
+
+  if (template.expected.builder.includes('vite')) {
+    previewConfig.setFieldValue(['tags'], ['vitest']);
+  }
+
+  await writeConfig(previewConfig);
 };
 
 export async function setImportMap(cwd: string) {
