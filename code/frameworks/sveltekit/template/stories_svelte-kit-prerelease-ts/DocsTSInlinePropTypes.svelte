@@ -111,4 +111,4 @@
   } = $props();
 </script>
 
-<div>Docs: TS + Runes (style 1)</div>
+<div>Docs: TS + Runes (inline prop types)</div>

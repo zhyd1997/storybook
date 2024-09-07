@@ -99,4 +99,4 @@
   export let func: (event: MouseEvent) => number = () => 10;
 </script>
 
-<div>Docs: TS</div>
+<div>Docs: TS (Non-runes mode)</div>

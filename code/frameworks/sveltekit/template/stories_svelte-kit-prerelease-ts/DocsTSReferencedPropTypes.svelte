@@ -115,4 +115,4 @@
   }: PropsA & PropsB = $props();
 </script>
 
-<div>Docs: TS + Runes (style 2)</div>
+<div>Docs: TS + Runes (referenced prop types)</div>
