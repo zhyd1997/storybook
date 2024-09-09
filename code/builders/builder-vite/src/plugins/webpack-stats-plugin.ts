@@ -40,14 +40,20 @@ function stripQueryParams(filePath: string): string {
 
 /** We only care about user code, not node_modules, vite files, or (most) virtual files. */
 function isUserCode(moduleName: string) {
+  if (!moduleName) {
+    return false;
+  }
+
+  // keep Storybook's virtual files because they import the story files, so they are essential to the module graph
+  if (Object.values(SB_VIRTUAL_FILES).includes(getOriginalVirtualModuleId(moduleName))) {
+    return true;
+  }
+
   return Boolean(
-    (moduleName &&
-      // keep Storybook's virtual files because they import the story files, so they are essential to the module graph
-      Object.values(SB_VIRTUAL_FILES).includes(getOriginalVirtualModuleId(moduleName))) ||
-      (!moduleName.startsWith('vite/') &&
-        !moduleName.startsWith('\0') &&
-        moduleName !== 'react/jsx-runtime' &&
-        !moduleName.match(/node_modules\//))
+    !moduleName.startsWith('vite/') &&
+      !moduleName.startsWith('\0') &&
+      moduleName !== 'react/jsx-runtime' &&
+      !moduleName.match(/node_modules\//)
   );
 }
 
