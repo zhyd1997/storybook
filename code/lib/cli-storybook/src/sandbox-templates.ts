@@ -349,7 +349,7 @@ const baseTemplates = {
     },
     skipTasks: ['e2e-tests-dev', 'bench'],
   },
-  'nuxt/v3-vite': {
+  'nuxt-vite/default-ts': {
     name: 'Nuxt v3 (Vite | TypeScript)',
     script: 'npx nuxi init --packageManager yarn --gitInit false {{beforeDir}}',
     inDevelopment: true,
