@@ -1,3 +1,6 @@
+## 8.3.0
+
+
 ## 8.2.9
 
 - CLI: Fix `init --skip-install` - [#28853](https://github.com/storybookjs/storybook/pull/28853), thanks @ndelangen!
