@@ -65,6 +65,8 @@ export const INTERNAL_DEFAULT_PROJECT_ANNOTATIONS: ProjectAnnotations<ReactRende
         unstable_advanceTimersWrapper: (cb) => {
           return act(cb);
         },
+        // For more context about why we need disable act warnings in waitFor:
+        // https://github.com/reactwg/react-18/discussions/102
         asyncWrapper: async (cb) => {
           const previousActEnvironment = getReactActEnvironment();
           setReactActEnvironment(false);
