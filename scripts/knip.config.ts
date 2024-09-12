@@ -68,9 +68,9 @@ const baseConfig = {
 
 // Adds package.json#bundler.entries etc. to each workspace config `entry: []`
 export const addBundlerEntries = async (config: KnipConfig) => {
-  const baseDir = process.cwd();
+  const baseDir = join(__dirname, '../code');
   const rootManifest = await import(join(baseDir, 'package.json'));
-  const workspaceDirs = await fg(rootManifest.workspaces.packages, { onlyDirectories: true });
+  const workspaceDirs = await fg(rootManifest.workspaces.packages, { cwd: baseDir, onlyDirectories: true });
   const workspaceDirectories = workspaceDirs.map((dir) => relative(baseDir, join(baseDir, dir)));
   for (const wsDir of workspaceDirectories) {
     for (const configKey of Object.keys(baseConfig.workspaces)) {
