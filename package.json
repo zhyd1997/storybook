@@ -6,6 +6,7 @@
     "get-template": "cd scripts; yarn get-template",
     "i": "yarn --cwd scripts && yarn --cwd code",
     "lint": "cd code; yarn lint",
+    "knip": "cd code; yarn knip",
     "nx": "cd code; yarn nx",
     "pretty-docs": "cd scripts; yarn install >/dev/null; yarn docs:prettier:write",
     "start": "yarn task --task dev --template react-vite/default-ts --start-from=install",
