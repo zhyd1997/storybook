@@ -461,12 +461,22 @@ export interface Addon_SidebarTopType {
   render: FC;
 }
 
+export interface Addon_TestProviderType {
+  type: Addon_TypesEnum.experimental_TEST_PROVIDER;
+  /** The unique id of the test provider. */
+  id: string;
+  icon: ReactNode;
+  title: string;
+  description: FC;
+}
+
 type Addon_TypeBaseNames = Exclude<
   Addon_TypesEnum,
   | Addon_TypesEnum.PREVIEW
   | Addon_TypesEnum.experimental_PAGE
   | Addon_TypesEnum.experimental_SIDEBAR_BOTTOM
   | Addon_TypesEnum.experimental_SIDEBAR_TOP
+  | Addon_TypesEnum.experimental_TEST_PROVIDER
 >;
 
 export interface Addon_TypesMapping extends Record<Addon_TypeBaseNames, Addon_BaseType> {
@@ -474,6 +484,7 @@ export interface Addon_TypesMapping extends Record<Addon_TypeBaseNames, Addon_Ba
   [Addon_TypesEnum.experimental_PAGE]: Addon_PageType;
   [Addon_TypesEnum.experimental_SIDEBAR_BOTTOM]: Addon_SidebarBottomType;
   [Addon_TypesEnum.experimental_SIDEBAR_TOP]: Addon_SidebarTopType;
+  [Addon_TypesEnum.experimental_TEST_PROVIDER]: Addon_TestProviderType;
 }
 
 export type Addon_Loader<API> = (api: API) => void;
@@ -537,4 +548,6 @@ export enum Addon_TypesEnum {
    * @deprecated This will be removed in Storybook 9.0.
    */
   experimental_SIDEBAR_TOP = 'sidebar-top',
+  /** This adds items to the Testing Module in the sidebar. */
+  experimental_TEST_PROVIDER = 'test-provider',
 }
