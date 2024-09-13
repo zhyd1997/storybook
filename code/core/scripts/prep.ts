@@ -3,7 +3,7 @@ import { watch } from 'node:fs';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
-import { ensureDir } from 'fs-extra';
+import { emptyDir, ensureDir } from 'fs-extra';
 
 import {
   chalk,
@@ -308,25 +308,42 @@ async function run() {
         console.log(`compiled ${chalk.cyan(filename)}`);
       });
     } else {
+      // repo root/benchmarks/esbuild-metafiles/core
+      const metafilesDir = join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        'benchmarks',
+        'esbuild-metafiles',
+        'core'
+      );
+      await ensureDir(metafilesDir);
+      await emptyDir(metafilesDir);
+
       await Promise.all(
         compile.map(async (context, index) => {
           const out = await context.rebuild();
           await context.dispose();
 
-          if (out.metafile) {
-            const { outputs } = out.metafile;
-            const keys = Object.keys(outputs);
-            const format = keys.every((key) => key.endsWith('.js')) ? 'esm' : 'cjs';
-            const outName =
-              keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `meta-${format}-${index}`;
-
-            await ensureDir('report');
-            await writeFile(`report/${outName}.json`, JSON.stringify(out.metafile, null, 2));
-            await writeFile(
-              `report/${outName}.txt`,
-              await esbuild.analyzeMetafile(out.metafile, { color: false, verbose: false })
-            );
+          if (!out.metafile) {
+            return;
           }
+
+          const { outputs } = out.metafile;
+          const keys = Object.keys(outputs);
+          const format = keys.every((key) => key.endsWith('.js')) ? 'esm' : 'cjs';
+          const outName =
+            keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `core.${format}-${index}`;
+
+          await await writeFile(
+            join(metafilesDir, `${outName}.json`),
+            JSON.stringify(out.metafile, null, 2)
+          );
+          await writeFile(
+            join(metafilesDir, `${outName}.txt`),
+            await esbuild.analyzeMetafile(out.metafile, { color: false, verbose: false })
+          );
         })
       );
     }

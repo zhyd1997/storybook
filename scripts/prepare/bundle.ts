@@ -95,6 +95,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         watch,
         outDir,
         sourcemap: false,
+        metafile: true,
         format: ['esm'],
         target: platform === 'node' ? ['node18'] : ['chrome100', 'safari15', 'firefox91'],
         clean: false,
@@ -129,6 +130,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         watch,
         outDir,
         sourcemap: false,
+        metafile: true,
         format: ['cjs'],
         target: 'node18',
         ...(dtsBuild === 'cjs' ? dtsConfig : {}),
@@ -149,6 +151,15 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   }
 
   await Promise.all(tasks);
+
+  if (!watch) {
+    if (formats.includes('cjs')) {
+      await moveMetafile({ name, format: 'cjs', outDir });
+    }
+    if (formats.includes('esm')) {
+      await moveMetafile({ name, format: 'esm', outDir });
+    }
+  }
 
   const dtsFiles = await glob(outDir + '/**/*.d.ts');
   await Promise.all(
@@ -222,6 +233,28 @@ async function generateDTSMapperFile(file: string) {
       export * from '${rel}/${entryName}';
     `,
     { encoding: 'utf-8' }
+  );
+}
+
+async function moveMetafile({
+  name,
+  format,
+  outDir,
+}: {
+  name: string;
+  format: 'esm' | 'cjs';
+  outDir: string;
+}) {
+  const metafilesDir = join(__dirname, '..', '..', 'code', 'benchmarks', 'esbuild-metafiles');
+  await fs.ensureDir(metafilesDir);
+  const metafilePrefix = name.replace('@storybook/', '');
+
+  console.log('LOG: ', { dest: metafilesDir });
+
+  await fs.move(
+    join(outDir, `metafile-${format}.json`),
+    join(metafilesDir, `${metafilePrefix}/${format}.json`),
+    { overwrite: true }
   );
 }
 
