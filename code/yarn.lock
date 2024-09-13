@@ -6984,8 +6984,6 @@ __metadata:
     "@storybook/manager-api": "workspace:^"
     "@storybook/preview-api": "workspace:^"
     "@storybook/theming": "workspace:^"
-    "@types/fs-extra": "npm:^11.0.1"
-    fs-extra: "npm:^11.1.0"
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
     yaml: "npm:^2.3.1"
