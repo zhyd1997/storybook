@@ -308,16 +308,8 @@ async function run() {
         console.log(`compiled ${chalk.cyan(filename)}`);
       });
     } else {
-      // repo root/benchmarks/esbuild-metafiles/core
-      const metafilesDir = join(
-        __dirname,
-        '..',
-        '..',
-        '..',
-        'benchmarks',
-        'esbuild-metafiles',
-        'core'
-      );
+      // repo root/bench/esbuild-metafiles/core
+      const metafilesDir = join(__dirname, '..', '..', '..', 'bench', 'esbuild-metafiles', 'core');
       await ensureDir(metafilesDir);
       await emptyDir(metafilesDir);
 

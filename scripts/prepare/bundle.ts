@@ -245,15 +245,17 @@ async function moveMetafile({
   format: 'esm' | 'cjs';
   outDir: string;
 }) {
-  const metafilesDir = join(__dirname, '..', '..', 'code', 'benchmarks', 'esbuild-metafiles');
+  const metafilesDir = join(__dirname, '..', '..', 'bench', 'esbuild-metafiles');
   await fs.ensureDir(metafilesDir);
-  const metafilePrefix = name.replace('@storybook/', '');
+  const packageDir = process.cwd().includes('addons/test')
+    ? 'addon-test' // special case, because @storybook/addon-test and @storybook/test have the same leaf dirname
+    : process.cwd().split(sep).at(-1);
 
-  console.log('LOG: ', { dest: metafilesDir });
+  console.log('LOG: ', join(metafilesDir, packageDir, `${format}.json`));
 
   await fs.move(
     join(outDir, `metafile-${format}.json`),
-    join(metafilesDir, `${metafilePrefix}/${format}.json`),
+    join(metafilesDir, packageDir, `${format}.json`),
     { overwrite: true }
   );
 }

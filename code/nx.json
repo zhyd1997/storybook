@@ -52,11 +52,7 @@
         "{workspaceRoot}/../scripts/prepare/{bundle,addon-bundle,esm-bundle}.ts"
       ],
       "dependsOn": ["^build"],
-      "outputs": [
-        "{projectRoot}/dist",
-        // "{projectRoot}/benchmarks/{projectName}.{cjs,esm}.json"
-        "{workspaceRoot}/benchmarks/esbuild-metafiles/{projectName}"
-      ],
+      "outputs": ["{projectRoot}/dist", "{workspaceRoot}/../bench/esbuild-metafiles/{projectName}"],
       "cache": true
     },
     "test": {
