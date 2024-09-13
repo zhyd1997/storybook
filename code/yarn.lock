@@ -6239,6 +6239,7 @@ __metadata:
   resolution: "@storybook/experimental-addon-test@workspace:addons/test"
   dependencies:
     "@storybook/csf": "npm:^0.1.11"
+    "@storybook/icons": "npm:^1.2.10"
     "@types/semver": "npm:^7"
     "@vitest/browser": "npm:^2.0.0"
     boxen: "npm:^8.0.1"
