@@ -302,6 +302,7 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
       }
       return true;
     },
+    recursive: true,
   });
 
   const [webpackCompilationOutput] = await Promise.all([webpackCompilation, previewFiles]);

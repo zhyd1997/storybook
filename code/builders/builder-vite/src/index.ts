@@ -94,6 +94,7 @@ export const build: ViteBuilder['build'] = async ({ options }) => {
       }
       return true;
     },
+    recursive: true,
   });
 
   const [out] = await Promise.all([viteCompilation, previewFiles]);
