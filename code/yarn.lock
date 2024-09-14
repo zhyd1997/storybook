@@ -7052,7 +7052,6 @@ __metadata:
     "@sveltejs/vite-plugin-svelte": "npm:^3.0.2"
     "@testing-library/svelte": "patch:@testing-library/svelte@npm%3A4.1.0#~/.yarn/patches/@testing-library-svelte-npm-4.1.0-34b7037bc0.patch"
     expect-type: "npm:^0.15.0"
-    fs-extra: "npm:^11.1.0"
     svelte: "npm:^5.0.0-next.65"
     svelte-check: "npm:^3.6.4"
     sveltedoc-parser: "npm:^4.2.1"
