@@ -1,7 +1,6 @@
+import { closeSync, existsSync, openSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
-
-import { ensureFile } from 'fs-extra';
 
 import { dedent } from '../../../../scripts/prepare/tools';
 import type { getEntries } from '../entries';
@@ -34,7 +33,9 @@ export async function generateTypesMapperFiles(entries: ReturnType<typeof getEnt
   await Promise.all(
     all.map(async (filePath) => {
       const location = filePath.replace('src', 'dist').replace(/\.tsx?/, '.d.ts');
-      await ensureFile(location);
+      if (!existsSync(location)) {
+        closeSync(openSync(location, 'w'));
+      }
       await writeFile(location, await generateTypesMapperContent(filePath));
     })
   );
