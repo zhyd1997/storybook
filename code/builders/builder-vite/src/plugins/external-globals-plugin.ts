@@ -1,4 +1,4 @@
-import { existsSync, openSync } from 'node:fs';
+import { closeSync, existsSync, openSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -61,7 +61,7 @@ export async function externalGlobalsPlugin(externals: Record<string, string>) {
           const externalCachePath = join(cachePath, `${externalKey}.js`);
           newAlias.push({ find: new RegExp(`^${externalKey}$`), replacement: externalCachePath });
           if (!existsSync(externalCachePath)) {
-            openSync(externalCachePath, 'w');
+            closeSync(openSync(externalCachePath, 'w'));
           }
           await writeFile(externalCachePath, `module.exports = ${externals[externalKey]};`);
         })
