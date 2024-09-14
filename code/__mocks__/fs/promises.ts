@@ -10,8 +10,6 @@ export function __setMockFiles(newMockFiles: Record<string, string | null>) {
   mockFiles = newMockFiles;
 }
 
-// A custom version of `readdirSync` that reads from the special mocked out
-// file list set via __setMockFiles
 export const writeFile = vi.fn(async (filePath: string, content: string) => {
   mockFiles[filePath] = content;
 });
