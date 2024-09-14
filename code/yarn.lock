@@ -5437,7 +5437,6 @@ __metadata:
     "@storybook/global": "npm:^5.0.0"
     "@storybook/react-dom-shim": "workspace:*"
     "@types/react": "npm:^16.8.0 || ^17.0.0 || ^18.0.0"
-    fs-extra: "npm:^11.1.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     rehype-external-links: "npm:^3.0.0"
