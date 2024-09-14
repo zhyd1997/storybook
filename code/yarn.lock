@@ -6893,7 +6893,6 @@ __metadata:
     eslint-plugin-local-rules: "portal:../scripts/eslint-plugin-local-rules"
     eslint-plugin-playwright: "npm:^1.6.2"
     eslint-plugin-storybook: "npm:^0.8.0"
-    fs-extra: "npm:^11.1.0"
     github-release-from-changelog: "npm:^2.1.1"
     glob: "npm:^10.0.0"
     happy-dom: "npm:^14.12.0"
