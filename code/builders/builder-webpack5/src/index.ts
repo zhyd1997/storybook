@@ -1,3 +1,4 @@
+import { cp } from 'node:fs/promises';
 import { join, parse } from 'node:path';
 
 import { PREVIEW_BUILDER_PROGRESS } from 'storybook/internal/core-events';
@@ -12,7 +13,6 @@ import type { Builder, Options } from 'storybook/internal/types';
 import { checkWebpackVersion } from '@storybook/core-webpack';
 
 import express from 'express';
-import fs from 'fs-extra';
 import prettyTime from 'pretty-hrtime';
 import { corePath } from 'storybook/core-path';
 import type { Configuration, Stats, StatsOptions } from 'webpack';
@@ -292,7 +292,9 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
   const previewDirOrigin = previewResolvedDir;
   const previewDirTarget = join(options.outputDir || '', `sb-preview`);
 
-  const previewFiles = fs.copy(previewDirOrigin, previewDirTarget, {
+  // TODO: `fsPromises.cp` is marked as experimental in Node 16-21. Ask in the PR whether we should
+  // use it anyway or stick to `fs-extra` for now.
+  const previewFiles = cp(previewDirOrigin, previewDirTarget, {
     filter: (src) => {
       const { ext } = parse(src);
       if (ext) {
