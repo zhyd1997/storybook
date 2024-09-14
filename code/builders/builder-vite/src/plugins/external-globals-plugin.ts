@@ -4,7 +4,6 @@ import { join } from 'node:path';
 
 import { init, parse } from 'es-module-lexer';
 import findCacheDirectory from 'find-cache-dir';
-import { ensureFile } from 'fs-extra';
 import MagicString from 'magic-string';
 import type { Alias, Plugin } from 'vite';
 
