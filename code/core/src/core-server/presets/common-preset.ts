@@ -258,7 +258,7 @@ export const docs: PresetProperty<'docs'> = (docsOptions, { docs: docsMode }: CL
 export const managerHead = async (_: any, options: Options) => {
   const location = join(options.configDir, 'manager-head.html');
   if (existsSync(location)) {
-    const contents = readFile(location, { encoding: 'utf-8' });
+    const contents = readFile(location, { encoding: 'utf8' });
     const interpolations = options.presets.apply<Record<string, string>>('env');
 
     return interpolate(await contents, await interpolations);

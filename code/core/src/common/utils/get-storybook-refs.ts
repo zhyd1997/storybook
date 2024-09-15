@@ -16,7 +16,7 @@ export const getAutoRefs = async (options: Options): Promise<Record<string, Ref>
   const directory = dirname(location);
 
   const { dependencies = [], devDependencies = [] } =
-    JSON.parse(await readFile(location, { encoding: 'utf-8' })) || {};
+    JSON.parse(await readFile(location, { encoding: 'utf8' })) || {};
   const deps = Object.keys({ ...dependencies, ...devDependencies });
 
   const list = await Promise.all(
@@ -25,7 +25,7 @@ export const getAutoRefs = async (options: Options): Promise<Record<string, Ref>
         const l = resolveFrom(directory, join(d, 'package.json'));
 
         const { storybook, name, version } =
-          JSON.parse(await readFile(l, { encoding: 'utf-8' })) || {};
+          JSON.parse(await readFile(l, { encoding: 'utf8' })) || {};
 
         if (storybook?.url) {
           return { id: name, ...storybook, version };

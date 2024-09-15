@@ -756,7 +756,7 @@ export class StoryIndexGenerator {
       .map((ext) => join(this.options.configDir, `preview.${ext}`))
       .find((fname) => existsSync(fname));
 
-    return previewFile && (await readFile(previewFile, { encoding: 'utf-8' })).toString();
+    return previewFile && (await readFile(previewFile, { encoding: 'utf8' })).toString();
   }
 
   getProjectTags(previewCode?: string) {

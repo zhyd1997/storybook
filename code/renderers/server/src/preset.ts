@@ -18,7 +18,7 @@ export const experimental_indexers: PresetProperty<'experimental_indexers'> = (
   {
     test: /(stories|story)\.(json|ya?ml)$/,
     createIndex: async (fileName) => {
-      const rawFile = await readFile(fileName, { encoding: 'utf-8' });
+      const rawFile = await readFile(fileName, { encoding: 'utf8' });
       const content: FileContent = fileName.endsWith('.json')
         ? JSON.parse(rawFile)
         : yaml.parse(rawFile);

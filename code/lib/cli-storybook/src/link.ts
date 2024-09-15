@@ -61,7 +61,7 @@ export const exec = async (
 export const link = async ({ target, local, start }: LinkOptions) => {
   const storybookDir = process.cwd();
   try {
-    const packageJson = JSON.parse(await readFile('package.json', { encoding: 'utf-8' }));
+    const packageJson = JSON.parse(await readFile('package.json', { encoding: 'utf8' }));
     if (packageJson.name !== '@storybook/root') {
       throw new Error();
     }
@@ -87,7 +87,7 @@ export const link = async ({ target, local, start }: LinkOptions) => {
   }
 
   const reproPackageJson = JSON.parse(
-    await readFile(join(reproDir, 'package.json'), { encoding: 'utf-8' })
+    await readFile(join(reproDir, 'package.json'), { encoding: 'utf8' })
   );
 
   const version = spawnSync('yarn', ['--version'], {

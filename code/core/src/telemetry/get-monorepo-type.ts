@@ -36,7 +36,7 @@ export const getMonorepoType = (): MonorepoType => {
   }
 
   const packageJson = JSON.parse(
-    readFileSync(join(projectRootPath, 'package.json'), { encoding: 'utf-8' })
+    readFileSync(join(projectRootPath, 'package.json'), { encoding: 'utf8' })
   ) as PackageJson;
 
   if (packageJson?.workspaces) {

@@ -24,6 +24,6 @@ export const getActualPackageJson = async (packageName: string) => {
   const resolvedPackageJson = require.resolve(join(packageName, 'package.json'), {
     paths: [process.cwd()],
   });
-  const packageJson = JSON.parse(await readFile(resolvedPackageJson, { encoding: 'utf-8' }));
+  const packageJson = JSON.parse(await readFile(resolvedPackageJson, { encoding: 'utf8' }));
   return packageJson;
 };

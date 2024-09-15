@@ -30,9 +30,9 @@ export async function getServer(
   }
 
   const sslOptions = {
-    ca: await Promise.all((options.sslCa || []).map((ca) => readFile(ca, { encoding: 'utf-8' }))),
-    cert: await readFile(options.sslCert, { encoding: 'utf-8' }),
-    key: await readFile(options.sslKey, { encoding: 'utf-8' }),
+    ca: await Promise.all((options.sslCa || []).map((ca) => readFile(ca, { encoding: 'utf8' }))),
+    cert: await readFile(options.sslCert, { encoding: 'utf8' }),
+    key: await readFile(options.sslKey, { encoding: 'utf8' }),
   };
 
   return https.createServer(sslOptions, app);

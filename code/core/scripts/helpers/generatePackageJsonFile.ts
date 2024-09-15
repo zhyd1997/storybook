@@ -10,7 +10,7 @@ const cwd = process.cwd();
 
 export async function generatePackageJsonFile(entries: ReturnType<typeof getEntries>) {
   const location = join(cwd, 'package.json');
-  const pkgJson = JSON.parse(await readFile(location, { encoding: 'utf-8' }));
+  const pkgJson = JSON.parse(await readFile(location, { encoding: 'utf8' }));
 
   /**
    * Re-create the `exports` field in `code/core/package.json` This way we only need to update the

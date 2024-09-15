@@ -72,7 +72,7 @@ export async function configureEslintPlugin(
   if (eslintFile) {
     paddedLog(`Configuring Storybook ESLint plugin at ${eslintFile}`);
     if (eslintFile.endsWith('json')) {
-      const eslintConfig = JSON.parse(await readFile(eslintFile, { encoding: 'utf-8' })) as {
+      const eslintConfig = JSON.parse(await readFile(eslintFile, { encoding: 'utf8' })) as {
         extends?: string[];
       };
       const existingExtends = normalizeExtends(eslintConfig.extends).filter(Boolean);

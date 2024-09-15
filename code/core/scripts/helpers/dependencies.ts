@@ -18,7 +18,7 @@ export async function flattenDependencies(
         return;
       }
       const { dependencies = {}, peerDependencies = {} } = JSON.parse(
-        await readFile(path, { encoding: 'utf-8' })
+        await readFile(path, { encoding: 'utf8' })
       );
       const all: string[] = [
         ...new Set([...Object.keys(dependencies), ...Object.keys(peerDependencies)]),

@@ -74,7 +74,7 @@ export const mdx1to3: Fix<Mdx1to3Options> = {
   async run({ result: { storiesMdxFiles }, dryRun }) {
     await Promise.all([
       ...storiesMdxFiles.map(async (fname) => {
-        const contents = await readFile(fname, { encoding: 'utf-8' });
+        const contents = await readFile(fname, { encoding: 'utf8' });
         const updated = fixMdxComments(fixMdxStyleTags(contents));
         if (updated === contents) {
           logger.info(`🆗 Unmodified ${basename(fname)}`);
