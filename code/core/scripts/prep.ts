@@ -325,15 +325,15 @@ async function run() {
           const { outputs } = out.metafile;
           const keys = Object.keys(outputs);
           const format = keys.every((key) => key.endsWith('.js')) ? 'esm' : 'cjs';
-          const outName =
-            keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `core.${format}-${index}`;
+          const basename =
+            keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `core-${format}-${index}`;
 
-          await await writeFile(
-            join(metafilesDir, `${outName}.json`),
+          await writeFile(
+            join(metafilesDir, `${basename}.json`),
             JSON.stringify(out.metafile, null, 2)
           );
           await writeFile(
-            join(metafilesDir, `${outName}.txt`),
+            join(metafilesDir, `${basename}.txt`),
             await esbuild.analyzeMetafile(out.metafile, { color: false, verbose: false })
           );
         })

@@ -1,3 +1,4 @@
+import { writeFile } from 'node:fs/promises';
 import { dirname, join, parse, posix, relative, resolve, sep } from 'node:path';
 
 import aliasPlugin from 'esbuild-plugin-alias';
@@ -10,6 +11,7 @@ import { build } from 'tsup';
 import type { PackageJson } from 'type-fest';
 
 import { exec } from '../utils/exec';
+import { esbuild } from './tools';
 
 /* TYPES */
 
@@ -29,6 +31,16 @@ type PackageJsonWithBundlerConfig = PackageJson & {
 type DtsConfigSection = Pick<Options, 'dts' | 'tsconfig'>;
 
 /* MAIN */
+
+const METAFILES_DIR = join(
+  __dirname,
+  '..',
+  '..',
+  'bench',
+  'esbuild-metafiles',
+  process.cwd().split(sep).at(-1)
+);
+const OUT_DIR = join(process.cwd(), 'dist');
 
 const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   const {
@@ -53,14 +65,13 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   const reset = hasFlag(flags, 'reset');
   const watch = hasFlag(flags, 'watch');
   const optimized = hasFlag(flags, 'optimized');
-
   if (reset) {
-    await fs.emptyDir(join(process.cwd(), 'dist'));
+    await fs.emptyDir(OUT_DIR);
+    await fs.emptyDir(METAFILES_DIR);
   }
 
   const tasks: Promise<any>[] = [];
 
-  const outDir = join(process.cwd(), 'dist');
   const externals = [
     name,
     ...extraExternals,
@@ -93,7 +104,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         entry: nonPresetEntries,
         shims: false,
         watch,
-        outDir,
+        outDir: OUT_DIR,
         sourcemap: false,
         metafile: true,
         format: ['esm'],
@@ -128,7 +139,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         silent: true,
         entry: allEntries,
         watch,
-        outDir,
+        outDir: OUT_DIR,
         sourcemap: false,
         metafile: true,
         format: ['cjs'],
@@ -153,15 +164,10 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   await Promise.all(tasks);
 
   if (!watch) {
-    if (formats.includes('cjs')) {
-      await moveMetafile({ name, format: 'cjs', outDir });
-    }
-    if (formats.includes('esm')) {
-      await moveMetafile({ name, format: 'esm', outDir });
-    }
+    await saveMetafiles({ formats });
   }
 
-  const dtsFiles = await glob(outDir + '/**/*.d.ts');
+  const dtsFiles = await glob(OUT_DIR + '/**/*.d.ts');
   await Promise.all(
     dtsFiles.map(async (file) => {
       const content = await fs.readFile(file, 'utf-8');
@@ -236,27 +242,20 @@ async function generateDTSMapperFile(file: string) {
   );
 }
 
-async function moveMetafile({
-  name,
-  format,
-  outDir,
-}: {
-  name: string;
-  format: 'esm' | 'cjs';
-  outDir: string;
-}) {
-  const metafilesDir = join(__dirname, '..', '..', 'bench', 'esbuild-metafiles');
-  await fs.ensureDir(metafilesDir);
-  const packageDir = process.cwd().includes('addons/test')
-    ? 'addon-test' // special case, because @storybook/addon-test and @storybook/test have the same leaf dirname
-    : process.cwd().split(sep).at(-1);
-
-  console.log('LOG: ', join(metafilesDir, packageDir, `${format}.json`));
-
-  await fs.move(
-    join(outDir, `metafile-${format}.json`),
-    join(metafilesDir, packageDir, `${format}.json`),
-    { overwrite: true }
+async function saveMetafiles({ formats }: { formats: Formats[] }) {
+  await fs.ensureDir(METAFILES_DIR);
+  await Promise.all(
+    formats.map(async (format) => {
+      const basename = `metafile-${format}`;
+      const metafile = await fs.readJson(join(OUT_DIR, `${basename}.json`));
+      await fs.move(join(OUT_DIR, `${basename}.json`), join(METAFILES_DIR, `${basename}.json`), {
+        overwrite: true,
+      });
+      await writeFile(
+        join(METAFILES_DIR, `${basename}.txt`),
+        await esbuild.analyzeMetafile(metafile, { color: false, verbose: false })
+      );
+    })
   );
 }
 
