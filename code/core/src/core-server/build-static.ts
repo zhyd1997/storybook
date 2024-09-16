@@ -132,8 +132,6 @@ export async function buildStaticStandalone(options: BuildStaticStandaloneOption
     dirname(require.resolve('@storybook/core/package.json')),
     'assets/browser'
   );
-  // TODO: `fsPromises.cp` is marked as experimental in Node 16-21. Ask in the PR whether we should
-  // use it anyway or stick to `fs-extra` for now.
   effects.push(cp(coreServerPublicDir, options.outputDir, { recursive: true }));
 
   let initializedStoryIndexGenerator: Promise<StoryIndexGenerator | undefined> =

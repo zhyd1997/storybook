@@ -130,8 +130,6 @@ export function copyTemplate(templateRoot: string, destination = '.') {
     throw new Error(`Couldn't find template dir`);
   }
 
-  // TODO: `fsPromises.cpSync` is marked as experimental in Node 16-21. Ask in the PR whether we
-  // should use it anyway or stick to `fs-extra` for now.
   cpSync(templateDir, destination, { recursive: true });
 }
 
@@ -229,8 +227,6 @@ export async function copyTemplateFiles({
   };
 
   const destinationPath = destination ?? (await targetPath());
-  // TODO: `fsPromises.cp` is marked as experimental in Node 16-21. Ask in the PR whether we should
-  // use it anyway or stick to `fs-extra` for now.
   if (commonAssetsDir) {
     await cp(commonAssetsDir, destinationPath, {
       recursive: true,

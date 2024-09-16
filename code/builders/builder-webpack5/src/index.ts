@@ -292,8 +292,6 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
   const previewDirOrigin = previewResolvedDir;
   const previewDirTarget = join(options.outputDir || '', `sb-preview`);
 
-  // TODO: `fsPromises.cp` is marked as experimental in Node 16-21. Ask in the PR whether we should
-  // use it anyway or stick to `fs-extra` for now.
   const previewFiles = cp(previewDirOrigin, previewDirTarget, {
     filter: (src) => {
       const { ext } = parse(src);

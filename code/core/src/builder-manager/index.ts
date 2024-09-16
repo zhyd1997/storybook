@@ -256,8 +256,6 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
 
   yield;
 
-  // TODO: `fsPromises.cp` is marked as experimental in Node 16-21. Ask in the PR whether we should
-  // use it anyway or stick to `fs-extra` for now.
   const managerFiles = cp(coreDirOrigin, coreDirTarget, {
     filter: (src) => {
       const { ext } = parse(src);

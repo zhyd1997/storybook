@@ -26,8 +26,6 @@ export async function copyAllStaticFiles(staticDirs: any[] | undefined, outputDi
 
           // Storybook's own files should not be overwritten, so we skip such files if we find them
           const skipPaths = ['index.html', 'iframe.html'].map((f) => join(targetPath, f));
-          // TODO: `fsPromises.cp` is marked as experimental in Node 16-21. Ask in the PR whether we should
-          // use it anyway or stick to `fs-extra` for now.
           await cp(staticPath, targetPath, {
             dereference: true,
             preserveTimestamps: true,
