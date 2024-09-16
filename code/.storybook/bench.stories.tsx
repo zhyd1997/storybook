@@ -17,7 +17,7 @@ const allMetafiles = import.meta.glob(
     eager: true,
   }
 );
-console.log('LOG: ', { allMetafiles });
+
 const METAFILES_DIR = '../../bench/esbuild-metafiles/';
 const METAFILE_DIR_PKG_NAME_MAP = {
   cli: 'storybook',
