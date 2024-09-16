@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { cp, mkdir, readdir } from 'node:fs/promises';
 import { rm } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -45,8 +46,18 @@ export async function buildStaticStandalone(options: BuildStaticStandaloneOption
     throw new Error("Won't remove directory '/'. Check your outputDir!");
   }
 
-  const outputDirFiles = await readdir(options.outputDir);
-  if (outputDirFiles.length > 0) {
+  try {
+    const outputDirFiles = await readdir(options.outputDir);
+    for (const file of outputDirFiles) {
+      await rm(file, { recursive: true, force: true });
+    }
+  } catch {
+    await mkdir(options.outputDir, { recursive: true });
+  }
+
+  if (!existsSync(options.outputDir)) {
+    await mkdir(options.outputDir, { recursive: true });
+  } else if ((await readdir(options.outputDir)).length > 0) {
     await rm(options.outputDir, { recursive: true, force: true });
     await mkdir(options.outputDir, { recursive: true });
   }
