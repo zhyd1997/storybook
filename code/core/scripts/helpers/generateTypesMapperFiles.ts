@@ -1,6 +1,6 @@
-import { closeSync, existsSync, openSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { existsSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, join, relative } from 'node:path';
 
 import { dedent } from '../../../../scripts/prepare/tools';
 import type { getEntries } from '../entries';
@@ -34,7 +34,8 @@ export async function generateTypesMapperFiles(entries: ReturnType<typeof getEnt
     all.map(async (filePath) => {
       const location = filePath.replace('src', 'dist').replace(/\.tsx?/, '.d.ts');
       if (!existsSync(location)) {
-        closeSync(openSync(location, 'w'));
+        const directory = dirname(location);
+        await mkdir(directory, { recursive: true });
       }
       await writeFile(location, await generateTypesMapperContent(filePath));
     })

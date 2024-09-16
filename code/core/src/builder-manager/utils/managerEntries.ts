@@ -1,6 +1,6 @@
-import { closeSync, existsSync, openSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
-import { join, parse, relative, sep } from 'node:path';
+import { existsSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, join, parse, relative, sep } from 'node:path';
 
 import { resolvePathInStorybookCache } from '@storybook/core/common';
 
@@ -57,7 +57,8 @@ export async function wrapManagerEntries(entrypoints: string[], uniqueId?: strin
       );
 
       if (!existsSync(location)) {
-        closeSync(openSync(location, 'w'));
+        const directory = dirname(location);
+        await mkdir(directory, { recursive: true });
       }
       await writeFile(location, `import '${slash(entry)}';`);
 

@@ -1,6 +1,6 @@
-import { closeSync, existsSync, openSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
-import { join, normalize } from 'node:path';
+import { existsSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, join, normalize } from 'node:path';
 
 import type { OutputFile } from 'esbuild';
 import slash from 'slash';
@@ -17,7 +17,8 @@ export async function readOrderedFiles(
       const { location, url } = sanitizePath(file, addonsDir);
 
       if (!existsSync(location)) {
-        closeSync(openSync(location, 'w'));
+        const directory = dirname(location);
+        await mkdir(directory, { recursive: true });
       }
       await writeFile(location, file.contents);
       return url;

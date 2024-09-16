@@ -1,6 +1,6 @@
-import { closeSync, existsSync, openSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { existsSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 
 import { init, parse } from 'es-module-lexer';
 import findCacheDirectory from 'find-cache-dir';
@@ -61,7 +61,8 @@ export async function externalGlobalsPlugin(externals: Record<string, string>) {
           const externalCachePath = join(cachePath, `${externalKey}.js`);
           newAlias.push({ find: new RegExp(`^${externalKey}$`), replacement: externalCachePath });
           if (!existsSync(externalCachePath)) {
-            closeSync(openSync(externalCachePath, 'w'));
+            const directory = dirname(externalCachePath);
+            await mkdir(directory, { recursive: true });
           }
           await writeFile(externalCachePath, `module.exports = ${externals[externalKey]};`);
         })
