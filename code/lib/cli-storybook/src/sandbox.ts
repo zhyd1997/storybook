@@ -207,7 +207,7 @@ export const sandbox = async ({
         force: true,
         dir: templateDestination,
       });
-      // throw an error if templateDestination is an empty directory using fs-extra
+      // throw an error if templateDestination is an empty directory
       if ((await readdir(templateDestination)).length === 0) {
         const selected = chalk.yellow(templateId);
         throw new Error(dedent`
