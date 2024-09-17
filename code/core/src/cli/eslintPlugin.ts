@@ -1,4 +1,3 @@
-import picocolors from 'picocolors';
 import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 
@@ -7,8 +6,8 @@ import { paddedLog } from '@storybook/core/common';
 
 import { readConfig, writeConfig } from '@storybook/core/csf-tools';
 
-import chalk from 'chalk';
 import detectIndent from 'detect-indent';
+import picocolors from 'picocolors';
 import prompts from 'prompts';
 import { dedent } from 'ts-dedent';
 
