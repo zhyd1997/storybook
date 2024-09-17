@@ -177,6 +177,7 @@ jobs:
             - code/ui
             - code/renderers
             - code/presets
+            - bench
             - .verdaccio-cache
   lint:
     executor:
@@ -260,8 +261,8 @@ jobs:
           root: .
           paths:
             - code/coverage
-      - report-workflow-on-failure
-      - cancel-workflow-on-failure
+            - report-workflow-on-failure
+            - cancel-workflow-on-failure
   coverage:
     executor:
       class: small
