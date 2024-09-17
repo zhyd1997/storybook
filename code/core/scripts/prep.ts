@@ -1,9 +1,7 @@
 /* eslint-disable local-rules/no-uncategorized-errors */
-import { watch } from 'node:fs';
+import { existsSync, mkdirSync, watch } from 'node:fs';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-
-import { emptyDir, ensureDir } from 'fs-extra';
 
 import {
   chalk,
@@ -17,6 +15,7 @@ import {
   process,
 } from '../../../scripts/prepare/tools';
 import pkg from '../package.json';
+import meta from '../src/components/components/Badge/Badge.stories';
 import { globalsModuleInfoMap } from '../src/manager/globals-module-info';
 import { getBundles, getEntries, getFinals } from './entries';
 import { generatePackageJsonFile } from './helpers/generatePackageJsonFile';
@@ -310,8 +309,10 @@ async function run() {
     } else {
       // repo root/bench/esbuild-metafiles/core
       const metafilesDir = join(__dirname, '..', '..', '..', 'bench', 'esbuild-metafiles', 'core');
-      await ensureDir(metafilesDir);
-      await emptyDir(metafilesDir);
+      if (existsSync(metafilesDir)) {
+        await rm(metafilesDir, { recursive: true });
+      }
+      await mkdir(metafilesDir, { recursive: true });
 
       await Promise.all(
         compile.map(async (context, index) => {
