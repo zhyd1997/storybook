@@ -246,13 +246,14 @@ async function saveMetafiles({ formats }: { formats: Formats[] }) {
   await fs.ensureDir(METAFILES_DIR);
   await Promise.all(
     formats.map(async (format) => {
-      const basename = `metafile-${format}`;
-      const metafile = await fs.readJson(join(OUT_DIR, `${basename}.json`));
-      await fs.move(join(OUT_DIR, `${basename}.json`), join(METAFILES_DIR, `${basename}.json`), {
+      const fromFilename = `metafile-${format}.json`;
+      const toBasename = `metafile.${format}`;
+      const metafile = await fs.readJson(join(OUT_DIR, fromFilename));
+      await fs.move(join(OUT_DIR, fromFilename), join(METAFILES_DIR, `${toBasename}.json`), {
         overwrite: true,
       });
       await writeFile(
-        join(METAFILES_DIR, `${basename}.txt`),
+        join(METAFILES_DIR, `${toBasename}.txt`),
         await esbuild.analyzeMetafile(metafile, { color: false, verbose: false })
       );
     })

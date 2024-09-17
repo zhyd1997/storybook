@@ -325,8 +325,9 @@ async function run() {
           const { outputs } = out.metafile;
           const keys = Object.keys(outputs);
           const format = keys.every((key) => key.endsWith('.js')) ? 'esm' : 'cjs';
-          const basename =
-            keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `core-${format}-${index}`;
+          const moduleName =
+            keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `core-${index}`;
+          const basename = `${moduleName}.${format}`;
 
           await writeFile(
             join(metafilesDir, `${basename}.json`),

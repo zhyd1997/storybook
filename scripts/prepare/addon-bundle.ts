@@ -353,7 +353,7 @@ async function saveMetafiles({
   await Promise.all(
     formats.map(async (format) => {
       const fromFilename = `metafile-${format}.json`;
-      const toBasename = `${name}-${format}`;
+      const toBasename = `${name}.${format}`;
 
       const metafile = await fs.readJson(join(OUT_DIR, fromFilename));
       await fs.move(join(OUT_DIR, fromFilename), join(METAFILES_DIR, `${toBasename}.json`), {

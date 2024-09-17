@@ -7,8 +7,8 @@ const allMetafiles = import.meta.glob(
   [
     '../../bench/esbuild-metafiles/**/*.json',
     // the following metafiles are too big to be loaded automatically in the iframe
-    '!**/core-cjs-0.json',
-    '!**/core-esm-2.json',
+    '!**/core-0.cjs.json',
+    '!**/core-2.esm.json',
   ],
   {
     // eagerly loading is not ideal because it imports all metafiles upfront,
@@ -26,7 +26,7 @@ const METAFILE_DIR_PKG_NAME_MAP = {
   docs: '@storybook/addon-docs',
   'addon-test': '@storybook/experimental-addon-test',
 } as const;
-const TOO_BIG_METAFILES = ['@storybook/core core-cjs-0', '@storybook/core core-esm-2'];
+const TOO_BIG_METAFILES = ['@storybook/core core-0.cjs', '@storybook/core core-2.esm'];
 
 // allows the metafile path to be used in the URL hash
 const safeMetafileArg = (path: string) =>
@@ -117,4 +117,6 @@ export default {
   },
 } satisfies Meta;
 
-export const Metafiles = {};
+export const ESBuildAnalyzer = {
+  name: 'ESBuild Metafiles',
+};
