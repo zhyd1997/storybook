@@ -379,6 +379,10 @@ We recommend running tests in a browser using Playwright, but you can use WebDri
 
 We recommend using Chromium, because it is most likely to best match the experience of a majority of your users. However, you can use other browsers by adjusting the [browser name in the Vitest configuration file](https://vitest.dev/config/#browser-name). Note that [Playwright and WebDriverIO support different browsers](https://vitest.dev/guide/browser/#browser-option-types).
 
+### How do I customized the test description
+
+We are using the exportName of a story definition by default, but you can provide a `name` property for the story to customize the test description. This is useful when you want have places, brackets or other special characters in the test description.
+
 ## API
 
 ### Exports
