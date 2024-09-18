@@ -213,6 +213,42 @@ describe('transformer', () => {
       `);
     });
 
+    it("should use the story's explicitly settled name if it's present", async () => {
+      const code = `
+        export default {
+          component: Button,
+        }
+        export const Primary = {
+          name: "basic Primary Button scenario",
+          args: {
+            label: 'Primary Button',
+          },
+        };
+      `;
+
+      const result = await transform({ code });
+
+      expect(result.code).toMatchInlineSnapshot(`
+        import { test as _test, expect as _expect } from "vitest";
+        import { testStory as _testStory } from "@storybook/experimental-addon-test/internal/test-utils";
+        const _meta = {
+          component: Button,
+          title: "automatic/calculated/title"
+        };
+        export default _meta;
+        export const Primary = {
+          name: "basic Primary Button scenario",
+          args: {
+            label: 'Primary Button'
+          }
+        };
+        const _isRunningFromThisFile = import.meta.url.includes(globalThis.__vitest_worker__.filepath ?? _expect.getState().testPath);
+        if (_isRunningFromThisFile) {
+          _test("basic Primary Button scenario", _testStory("Primary", Primary, _meta, []));
+        }
+      `);
+    });
+
     it('should add test statement to const declared exported stories', async () => {
       const code = `
         export default {};

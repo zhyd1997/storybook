@@ -207,10 +207,34 @@ export async function vitestTransform({
       exportName: string;
       node: t.Node;
     }): t.ExpressionStatement => {
+      // Get test name from the story's name property, and fallback to exportName
+      const testName = (function getTestName(): string {
+        if (
+          node.type === 'ExportNamedDeclaration' &&
+          node.declaration?.type === 'VariableDeclaration'
+        ) {
+          const storyDeclarator = node.declaration.declarations[0];
+          if (storyDeclarator.init?.type === 'ObjectExpression') {
+            for (const prop of storyDeclarator.init.properties) {
+              if (
+                // Filter out the "name" property and return its value
+                prop.type === 'ObjectProperty' &&
+                prop.key.type === 'Identifier' &&
+                prop.value.type === 'StringLiteral' &&
+                prop.key.name === 'name'
+              ) {
+                return prop.value.value;
+              }
+            }
+          }
+        }
+        return exportName;
+      })();
+
       // Create the _test expression directly using the exportName identifier
       const testStoryCall = t.expressionStatement(
         t.callExpression(vitestTestId, [
-          t.stringLiteral(exportName),
+          t.stringLiteral(testName),
           t.callExpression(testStoryId, [
             t.stringLiteral(exportName),
             t.identifier(exportName),
