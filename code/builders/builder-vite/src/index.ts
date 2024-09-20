@@ -1,4 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
+import { readFile } from 'node:fs/promises';
 import { NoStatsForViteDevError } from 'storybook/internal/server-errors';
 import type { Options } from 'storybook/internal/types';
 
