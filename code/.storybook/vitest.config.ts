@@ -31,9 +31,8 @@ export default mergeConfig(
     test: {
       name: 'storybook-ui',
       include: [
-        // TODO: test all core and addon stories later
-        // './core/**/components/**/*.{story,stories}.?(c|m)[jt]s?(x)',
-        '../addons/**/src/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        // TODO: Can be reverted. Temporarily I am adding all stories so that I can trigger tests for all stories in the UI.
+        '../{core,addons,lib}/**/{src,components,template}/**/*.{story,stories}.?(c|m)[jt]s?(x)',
       ],
       exclude: [
         ...defaultExclude,

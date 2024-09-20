@@ -71,20 +71,23 @@
   },
   "dependencies": {
     "@storybook/csf": "^0.1.11",
-    "@storybook/icons": "^1.2.10"
+    "@storybook/icons": "^1.2.10",
+    "chalk": "^5.3.0"
   },
   "devDependencies": {
     "@types/semver": "^7",
-    "@vitest/browser": "^2.0.0",
+    "@vitest/browser": "^2.1.1",
+    "@vitest/runner": "^2.1.1",
     "boxen": "^8.0.1",
     "find-up": "^7.0.0",
     "semver": "^7.6.3",
     "tinyrainbow": "^1.2.0",
     "ts-dedent": "^2.2.0",
-    "vitest": "^2.0.0"
+    "vitest": "^2.1.1"
   },
   "peerDependencies": {
-    "@vitest/browser": "^2.0.0",
+    "@vitest/browser": "^2.1.1",
+    "@vitest/runner": "^2.1.1",
     "storybook": "workspace:^",
     "vitest": "^2.0.0"
   },
@@ -104,7 +107,8 @@
       "./src/preset.ts",
       "./src/vitest-plugin/index.ts",
       "./src/vitest-plugin/global-setup.ts",
-      "./src/postinstall.ts"
+      "./src/postinstall.ts",
+      "./src/node/vitest.ts"
     ]
   }
 }
