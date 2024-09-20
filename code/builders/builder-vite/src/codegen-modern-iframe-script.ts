@@ -68,8 +68,10 @@ export async function generateModernIframeScriptCode(options: Options, projectRo
    */
   const code = `
   import { composeConfigs, PreviewWeb, ClientApi } from 'storybook/internal/preview-api';
-  import '${SB_VIRTUAL_FILES.VIRTUAL_ADDON_SETUP_FILE}';
   import { importFn } from '${SB_VIRTUAL_FILES.VIRTUAL_STORIES_FILE}';
+  
+  import preview from '@storybook/core/preview/runtime';
+  import '${SB_VIRTUAL_FILES.VIRTUAL_ADDON_SETUP_FILE}';
   
     ${getPreviewAnnotationsFunction}
 
