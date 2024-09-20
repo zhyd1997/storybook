@@ -5799,7 +5799,6 @@ __metadata:
     "@types/node": "npm:^22.0.0"
     browser-assert: "npm:^1.2.1"
     es-module-lexer: "npm:^1.5.0"
-    express: "npm:^4.19.2"
     find-cache-dir: "npm:^3.0.0"
     glob: "npm:^10.0.0"
     magic-string: "npm:^0.30.0"
