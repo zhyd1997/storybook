@@ -23,6 +23,7 @@ const METAFILE_DIR_PKG_NAME_MAP = {
   cli: 'storybook',
   'cli-sb': 'sb',
   'cli-storybook': '@storybook/cli',
+  'create-storybook': 'create-storybook',
   docs: '@storybook/addon-docs',
   'addon-test': '@storybook/experimental-addon-test',
 } as const;
