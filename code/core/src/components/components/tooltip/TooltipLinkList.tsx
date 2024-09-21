@@ -31,11 +31,11 @@ interface ItemProps extends Link {
 }
 
 const Item = ({ id, onClick, ...rest }: ItemProps) => {
-  const { active, disabled, title } = rest;
+  const { active, disabled, title, href } = rest;
 
   const handleClick = useCallback(
-    (event: SyntheticEvent) => onClick?.(event, { id, active, disabled, title }),
-    [onClick, id, active, disabled, title]
+    (event: SyntheticEvent) => onClick?.(event, { id, active, disabled, title, href }),
+    [onClick, id, active, disabled, title, href]
   );
 
   return <ListItem id={`list-item-${id}`} {...rest} {...(onClick && { onClick: handleClick })} />;
