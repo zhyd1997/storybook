@@ -381,7 +381,12 @@ We recommend using Chromium, because it is most likely to best match the experie
 
 ### How do I customized the test description
 
-We are using the exportName of a story definition by default, but you can provide a `name` property for the story to customize the test description. This is useful when you want have places, brackets or other special characters in the test description.
+By default, the export name of a story is mapped to the test name. You can provide a `name` property for the story to customize the test description, allowing you to write more descriptive names. This is useful when you want use spaces, brackets or other special characters in the test description.
+```js
+export const Story = {
+  name: 'custom, descriptive name'
+};
+```
 
 ## API
 
