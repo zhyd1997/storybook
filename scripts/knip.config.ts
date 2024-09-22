@@ -2,7 +2,7 @@ import { join, relative } from 'node:path';
 
 import fg from 'fast-glob';
 import type { KnipConfig } from 'knip';
-import { isMatch } from 'picomatch';
+import { match } from 'minimatch';
 
 // Files we want to exclude from analysis should be negated project patterns, not `ignores`
 // docs: https://knip.dev/guides/configuring-project-files
@@ -74,9 +74,9 @@ export const addBundlerEntries = async (config: KnipConfig) => {
   const workspaceDirectories = workspaceDirs.map((dir) => relative(baseDir, join(baseDir, dir)));
   for (const wsDir of workspaceDirectories) {
     for (const configKey of Object.keys(baseConfig.workspaces)) {
-      if (isMatch(wsDir, configKey)) {
+      if (match([wsDir], configKey)) {
         const manifest = await import(join(baseDir, wsDir, 'package.json'));
-        const configEntries = config.workspaces[configKey].entry ?? [];
+        const configEntries = (config.workspaces[configKey].entry as string[]) ?? [];
         const bundler = manifest?.bundler;
         for (const value of Object.values(bundler ?? {})) {
           if (Array.isArray(value)) {
