@@ -4,6 +4,7 @@ import { type Reporter } from 'vitest/reporters';
 
 import type {
   TestingModuleRunAssertionResultPayload,
+  TestingModuleRunProgressPayload,
   TestingModuleRunResponsePayload,
   TestingModuleRunTestResultPayload,
 } from 'storybook/internal/core-events';
@@ -16,6 +17,7 @@ import type { Suite } from '@vitest/runner';
 // functions from the `@vitest/runner` package. It is not complex and does not have
 // any significant dependencies.
 import { getTests } from '@vitest/runner/utils';
+import throttle from 'lodash/throttle.js';
 
 import { TEST_PROVIDER_ID } from '../constants';
 import type { TestManager } from './test-manager';
@@ -42,7 +44,11 @@ export default class StorybookReporter implements Reporter {
 
   ctx!: Vitest;
 
-  constructor(private testManager: TestManager) {}
+  sendReport: (payload: TestingModuleRunProgressPayload) => void;
+
+  constructor(private testManager: TestManager) {
+    this.sendReport = throttle((payload) => this.testManager.sendProgressReport(payload), 200);
+  }
 
   onInit(ctx: Vitest) {
     this.ctx = ctx;
@@ -142,14 +148,14 @@ export default class StorybookReporter implements Reporter {
     try {
       const progress = this.getProgressReport();
 
-      this.testManager.sendProgressReport({
+      this.sendReport({
         status: 'success',
         payload: progress,
         providerId: TEST_PROVIDER_ID,
       });
     } catch (e) {
       if (e instanceof Error) {
-        this.testManager.sendProgressReport({
+        this.sendReport({
           status: 'failed',
           providerId: TEST_PROVIDER_ID,
           error: {
@@ -159,7 +165,7 @@ export default class StorybookReporter implements Reporter {
           },
         });
       } else {
-        this.testManager.sendProgressReport({
+        this.sendReport({
           status: 'failed',
           providerId: TEST_PROVIDER_ID,
           error: {

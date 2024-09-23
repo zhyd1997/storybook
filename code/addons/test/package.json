@@ -80,6 +80,7 @@
     "@vitest/runner": "^2.1.1",
     "boxen": "^8.0.1",
     "find-up": "^7.0.0",
+    "lodash": "^4.17.21",
     "semver": "^7.6.3",
     "tinyrainbow": "^1.2.0",
     "ts-dedent": "^2.2.0",

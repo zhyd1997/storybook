@@ -1,14 +1,20 @@
 import React, { useCallback, useEffect } from 'react';
 
 import { styled } from '@storybook/core/theming';
-import type { API_FilterFunction } from '@storybook/types';
+import type { API_FilterFunction, API_StatusUpdate, API_StatusValue } from '@storybook/types';
 
+import {
+  TESTING_MODULE_RUN_PROGRESS_RESPONSE,
+  type TestingModuleRunProgressPayload,
+  type TestingModuleRunResponsePayload,
+} from '@storybook/core/core-events';
 import {
   type API,
   type State,
   useStorybookApi,
   useStorybookState,
 } from '@storybook/core/manager-api';
+import { useChannel } from '@storybook/core/preview-api';
 
 import { FilterToggle } from './FilterToggle';
 
@@ -43,6 +49,30 @@ const Wrapper = styled.div({
 interface SidebarBottomProps {
   api: API;
   status: State['status'];
+}
+
+const statusMap: Record<any['status'], API_StatusValue> = {
+  failed: 'error',
+  passed: 'success',
+  pending: 'pending',
+};
+
+function processTestReport(payload: TestingModuleRunResponsePayload) {
+  const result: API_StatusUpdate = {};
+
+  payload.testResults.forEach((testResult: any) => {
+    testResult.results.forEach(({ storyId, status, failureMessages }: any) => {
+      if (storyId) {
+        result[storyId] = {
+          title: 'Vitest',
+          status: statusMap[status],
+          description: failureMessages?.length ? failureMessages.join('\n') : '',
+        };
+      }
+    });
+  });
+
+  return result;
 }
 
 export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
@@ -99,5 +129,18 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
 export const SidebarBottom = () => {
   const api = useStorybookApi();
   const { status } = useStorybookState();
+
+  useEffect(() => {
+    api.getChannel()?.on(TESTING_MODULE_RUN_PROGRESS_RESPONSE, (data) => {
+      if ('payload' in data) {
+        console.log('progress', data);
+        // TODO clear statuses
+        api.experimental_updateStatus('figure-out-id', processTestReport(data.payload));
+      } else {
+        console.log('error', data);
+      }
+    });
+  }, [api]);
+
   return <SidebarBottomBase api={api} status={status} />;
 };

@@ -31,5 +31,18 @@ process.on('uncaughtException', (err) => {
 });
 
 process.on('unhandledRejection', (reason) => {
-  throw new Error(`Unhandled Rejection: ${reason}`);
+  throw reason;
+});
+
+process.on('exit', () => {
+  channel?.removeAllListeners();
+  process.exit(0);
+});
+process.on('SIGINT', () => {
+  channel?.removeAllListeners();
+  process.exit(0);
+});
+process.on('SIGTERM', () => {
+  channel?.removeAllListeners();
+  process.exit(0);
 });
