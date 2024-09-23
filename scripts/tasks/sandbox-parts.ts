@@ -717,7 +717,7 @@ export const extendMain: Task['run'] = async ({ template, sandboxDir, key }, { d
     addRefs(mainConfig);
   }
 
-  const templateConfig = isFunction(template.modifications?.mainConfig)
+  const templateConfig: any = isFunction(template.modifications?.mainConfig)
     ? template.modifications?.mainConfig(mainConfig)
     : template.modifications?.mainConfig || {};
   const configToAdd = {
