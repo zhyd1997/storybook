@@ -5928,6 +5928,7 @@ __metadata:
     "@types/cross-spawn": "npm:^6.0.2"
     "@types/jscodeshift": "npm:^0.11.10"
     ansi-regex: "npm:^6.0.1"
+    camelcase: "npm:^8.0.0"
     cross-spawn: "npm:^7.0.3"
     es-toolkit: "npm:^1.20.0"
     globby: "npm:^14.0.1"

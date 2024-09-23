@@ -40,7 +40,9 @@ export function useStoriesJson({
   configDir?: string;
   normalizedStories: NormalizedStoriesSpecifier[];
 }) {
-  const maybeInvalidate = debounce(() => serverChannel.emit(STORY_INDEX_INVALIDATED), DEBOUNCE, {});
+  const maybeInvalidate = debounce(() => serverChannel.emit(STORY_INDEX_INVALIDATED), DEBOUNCE, {
+    leading: true,
+  });
   watchStorySpecifiers(normalizedStories, { workingDir }, async (specifier, path, removed) => {
     const generator = await initializedStoryIndexGenerator;
     generator.invalidate(specifier, path, removed);

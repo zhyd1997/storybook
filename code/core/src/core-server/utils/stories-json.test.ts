@@ -17,7 +17,7 @@ import type { ServerChannel } from './get-server-channel';
 import { DEBOUNCE, useStoriesJson } from './stories-json';
 
 vi.mock('watchpack');
-vi.mock('es-toolkit');
+vi.mock('es-toolkit/compat');
 vi.mock('@storybook/core/node-logger');
 
 const workingDir = join(__dirname, '__mockdata__');
