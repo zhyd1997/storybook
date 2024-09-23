@@ -346,7 +346,7 @@ export const ArgsTable: FC<ArgsTableProps> = (props) => {
   const { rows, args, globals } = 'rows' in props && props;
   const groups = groupRows(
     pickBy(
-      rows,
+      rows || {},
       (row) => !row?.table?.disable && safeIncludeConditionalArg(row, args || {}, globals || {})
     ),
     sort
