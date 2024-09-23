@@ -6,7 +6,7 @@ import { normalizeStoriesEntry } from '@storybook/core/common';
 
 import { STORY_INDEX_INVALIDATED } from '@storybook/core/core-events';
 
-import { debounce } from 'es-toolkit';
+import { debounce } from 'es-toolkit/compat';
 import type { Request, Response, Router } from 'express';
 import Watchpack from 'watchpack';
 
@@ -471,7 +471,7 @@ describe('useStoriesJson', () => {
 
     it('debounces invalidation events', async () => {
       vi.mocked(debounce).mockImplementation(
-        (await vi.importActual<typeof import('es-toolkit')>('es-toolkit')).debounce
+        (await vi.importActual<typeof import('es-toolkit/compat')>('es-toolkit/compat')).debounce
       );
 
       const mockServerChannel = { emit: vi.fn() } as any as ServerChannel;

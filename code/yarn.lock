@@ -5230,7 +5230,6 @@ __metadata:
     "@storybook/icons": "npm:^1.2.10"
     "@testing-library/react": "npm:^14.0.0"
     axe-core: "npm:^4.2.0"
-    lodash: "npm:^4.17.21"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-resize-detector: "npm:^7.1.2"
@@ -5285,7 +5284,6 @@ __metadata:
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.10"
     dequal: "npm:^2.0.2"
-    lodash: "npm:^4.17.21"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     ts-dedent: "npm:^2.0.0"
@@ -5650,10 +5648,9 @@ __metadata:
     "@storybook/react": "workspace:*"
     "@storybook/test": "workspace:*"
     "@types/color-convert": "npm:^2.0.0"
-    "@types/lodash": "npm:^4.14.167"
     color-convert: "npm:^2.0.1"
     dequal: "npm:^2.0.2"
-    lodash: "npm:^4.17.21"
+    es-toolkit: "npm:^1.20.0"
     markdown-to-jsx: "npm:^7.4.5"
     memoizerific: "npm:^1.11.3"
     polished: "npm:^4.2.2"
@@ -5828,9 +5825,9 @@ __metadata:
     "@types/jscodeshift": "npm:^0.11.10"
     ansi-regex: "npm:^6.0.1"
     cross-spawn: "npm:^7.0.3"
+    es-toolkit: "npm:^1.20.0"
     globby: "npm:^14.0.1"
     jscodeshift: "npm:^0.15.1"
-    lodash: "npm:^4.17.21"
     mdast-util-mdx-jsx: "npm:^3.0.0"
     mdast-util-mdxjs-esm: "npm:^2.0.1"
     prettier: "npm:^3.1.1"
@@ -5971,7 +5968,7 @@ __metadata:
     diff: "npm:^5.2.0"
     downshift: "npm:^9.0.4"
     ejs: "npm:^3.1.10"
-    es-toolkit: "npm:^1.16.0"
+    es-toolkit: "npm:^1.20.0"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0"
     esbuild-plugin-alias: "npm:^0.2.1"
     esbuild-register: "npm:^3.5.0"
@@ -6656,10 +6653,10 @@ __metadata:
     acorn-jsx: "npm:^5.3.1"
     acorn-walk: "npm:^7.2.0"
     babel-plugin-react-docgen: "npm:^4.2.1"
+    es-toolkit: "npm:^1.20.0"
     escodegen: "npm:^2.1.0"
     expect-type: "npm:^0.15.0"
     html-tags: "npm:^3.1.0"
-    lodash: "npm:^4.17.21"
     prop-types: "npm:^15.7.2"
     react-element-to-jsx-string: "npm:^15.0.0"
     require-from-string: "npm:^2.0.2"
@@ -6762,7 +6759,6 @@ __metadata:
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     "@types/express": "npm:^4.17.21"
     "@types/fs-extra": "npm:^11.0.1"
-    "@types/lodash": "npm:^4.14.167"
     "@types/mock-require": "npm:^2.0.3"
     "@types/node": "npm:^22.0.0"
     "@types/react": "npm:^18.0.37"
@@ -6779,6 +6775,7 @@ __metadata:
     create-storybook: "workspace:*"
     cross-env: "npm:^7.0.3"
     danger: "npm:^12.3.3"
+    es-toolkit: "npm:^1.20.0"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0"
     esbuild-loader: "npm:^4.2.0"
     esbuild-plugin-alias: "npm:^0.2.1"
@@ -6793,7 +6790,6 @@ __metadata:
     http-server: "npm:^14.1.1"
     husky: "npm:^4.3.7"
     lint-staged: "npm:^13.2.2"
-    lodash: "npm:^4.17.21"
     mock-require: "npm:^3.0.3"
     nx: "npm:18.0.6"
     prettier: "npm:^3.1.1"
@@ -6883,8 +6879,8 @@ __metadata:
   resolution: "@storybook/source-loader@workspace:lib/source-loader"
   dependencies:
     "@storybook/csf": "npm:^0.1.11"
+    es-toolkit: "npm:^1.20.0"
     estraverse: "npm:^5.2.0"
-    lodash: "npm:^4.17.21"
     prettier: "npm:^3.1.1"
     typescript: "npm:^5.3.2"
   peerDependencies:
@@ -7085,7 +7081,6 @@ __metadata:
     "@types/prettier": "npm:^3.0.0"
     "@vitejs/plugin-vue": "npm:^4.4.0"
     "@vue/compiler-core": "npm:^3.0.0"
-    lodash: "npm:^4.17.21"
     ts-dedent: "npm:^2.0.0"
     type-fest: "npm:~2.19"
     typescript: "npm:^5.3.2"
@@ -7912,13 +7907,6 @@ __metadata:
     "@types/node": "npm:*"
     "@types/webpack": "npm:^4"
   checksum: 10c0/df178981861ef09f0618eae4aa865b81ed3f2c4ab1359711fe6077236f57dee31fb94f1de9bd156d0a3d252eb95da01c424f9fa822aeaf7e3057bc082bb4bda7
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:^4.14.167":
-  version: 4.14.202
-  resolution: "@types/lodash@npm:4.14.202"
-  checksum: 10c0/6064d43c8f454170841bd67c8266cc9069d9e570a72ca63f06bceb484cb4a3ee60c9c1f305c1b9e3a87826049fd41124b8ef265c4dd08b00f6766609c7fe9973
   languageName: node
   linkType: hard
 
@@ -13964,10 +13952,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es-toolkit@npm:^1.16.0":
-  version: 1.16.0
-  resolution: "es-toolkit@npm:1.16.0"
-  checksum: 10c0/d2dc29a049e24583d31e5a4b3772ee157b598aaf99bb886d650c1bf52c2d7342101f5b52dbed663c39232f34eec59cade15d1b2c422df1489fa8f033b7be73ae
+"es-toolkit@npm:^1.20.0":
+  version: 1.20.0
+  resolution: "es-toolkit@npm:1.20.0"
+  checksum: 10c0/566a517ec97d4b2431d220d4eb9a7cc37a1b397521b4e230c9e53d647c2b4e0b8c2e91030e1de6e8080c30f9f05ee5281d13d3c2dd37ec1193a13bc24e2fd70c
   languageName: node
   linkType: hard
 
