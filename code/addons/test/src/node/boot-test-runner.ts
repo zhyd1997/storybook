@@ -21,7 +21,7 @@ const MAX_START_TIME = 8000;
 const vitestModulePath = join(__dirname, 'node', 'vitest.js');
 
 export const bootTestRunner = async (channel: Channel, initEvent?: string, initArgs?: any[]) => {
-  const now = Date.now();
+  let aborted = false;
   let child: null | ChildProcess;
 
   const forwardRun = (...args: any[]) =>
@@ -60,7 +60,9 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
       child.on('message', (result: any) => {
         if (result.type === 'ready') {
           // Resend the event that triggered the boot sequence, now that the child is ready to handle it
-          child?.send({ type: initEvent, args: initArgs, from: 'server' });
+          if (initEvent && initArgs) {
+            child?.send({ type: initEvent, args: initArgs, from: 'server' });
+          }
 
           // Forward all events from the channel to the child process
           channel.on(TESTING_MODULE_RUN_REQUEST, forwardRun);
@@ -84,10 +86,7 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
           if (attempt >= MAX_START_ATTEMPTS) {
             log(`Aborting test runner process after ${attempt} restart attempts`);
             reject();
-          } else if (Date.now() - now > MAX_START_TIME) {
-            log(`Aborting test runner process after ${MAX_START_TIME / 1000} seconds`);
-            reject();
-          } else {
+          } else if (!aborted) {
             log(`Restarting test runner process (attempt ${attempt}/${MAX_START_ATTEMPTS})`);
             setTimeout(() => startChildProcess(attempt + 1).then(resolve, reject), 1000);
           }
@@ -95,5 +94,13 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
       });
     });
 
-  await startChildProcess();
+  const timeout = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      log(`Aborting test runner process after ${MAX_START_TIME / 1000} seconds`);
+      aborted = true;
+      reject();
+    }, MAX_START_TIME);
+  });
+
+  await Promise.race([startChildProcess(), timeout]);
 };
