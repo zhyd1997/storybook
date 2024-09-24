@@ -22,7 +22,7 @@ export interface Link extends Omit<ListItemProps, 'onClick'> {
   id: string;
   onClick?: (
     event: SyntheticEvent,
-    item: Pick<ListItemProps, 'id' | 'active' | 'disabled' | 'title'>
+    item: Pick<ListItemProps, 'id' | 'active' | 'disabled' | 'title' | 'href'>
   ) => void;
 }
 
