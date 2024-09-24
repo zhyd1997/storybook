@@ -178,7 +178,7 @@ const customViewports = {
 };
 
 export const StatefulDynamicWithOpenTooltip = {
-  // TODO: remove this when we support new viewport global format in the vitest integration
+  // TODO VITEST INTEGRATION: remove this when we support new viewport global format in the vitest integration
   tags: ['!vitest'],
   parameters: {
     viewport: {
@@ -224,7 +224,7 @@ export const StatefulDynamicWithOpenTooltip = {
 
 export const StatefulDynamicWithSelectedAddon = {
   ...StatefulDynamicWithOpenTooltip,
-  // TODO: remove this when we support new viewport global format in the vitest integration
+  // TODO VITEST INTEGRATION: remove this when we support new viewport global format in the vitest integration
   tags: ['!vitest'],
   play: async (context) => {
     await StatefulDynamicWithOpenTooltip.play(context);

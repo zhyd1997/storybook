@@ -28,6 +28,8 @@ export const UseState = {
     await userEvent.click(button);
     await within(canvasElement).findByText('Clicked 1 times');
   },
+  // TODO VITEST INTEGRATION: remove this once we support Storybook hooks in portable stories
+  tags: ['!vitest'],
 };
 
 // NOTE: it isn't possible to write a play function for this story, as the

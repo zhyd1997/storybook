@@ -36,13 +36,14 @@ export default mergeConfig(
       name: 'storybook-ui',
       include: [
         // TODO: Can be reverted. Temporarily I am adding all stories so that I can trigger tests for all stories in the UI.
-        '../{core,addons,lib}/**/{src,components,template}/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        '../addons/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        '../core/template/stories/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        '../core/src/manager/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        '../core/src/preview-api/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        '../core/src/components/{brand,components}/**/*.{story,stories}.?(c|m)[jt]s?(x)',
       ],
       exclude: [
         ...defaultExclude,
-        // these stories mostly depend on things that won't be available
-        // like useOf hook, PreviewWeb and DocsContext
-        '../lib/blocks/**/*.stories.tsx',
         '../node_modules/**',
         '**/__mockdata__/**',
         '../**/__mockdata__/**',
