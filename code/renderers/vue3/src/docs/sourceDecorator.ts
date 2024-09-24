@@ -27,8 +27,8 @@ export type SourceCodeGeneratorContext = {
 };
 
 /**
- * Used to get the tracking data from the proxy.
- * A symbol is unique, so when using it as a key it can't be accidentally accessed.
+ * Used to get the tracking data from the proxy. A symbol is unique, so when using it as a key it
+ * can't be accidentally accessed.
  */
 const TRACKING_SYMBOL = Symbol('DEEP_ACCESS_SYMBOL');
 
@@ -40,9 +40,7 @@ type TrackingProxy = {
 const isProxy = (obj: unknown): obj is TrackingProxy =>
   !!(obj && typeof obj === 'object' && TRACKING_SYMBOL in obj);
 
-/**
- * Decorator to generate Vue source code for stories.
- */
+/** Decorator to generate Vue source code for stories. */
 export const sourceDecorator: Decorator = (storyFn, ctx) => {
   const story = storyFn();
 
@@ -490,7 +488,7 @@ const generateSlotChildrenSourceCode = (
               ownKeys: () => {
                 return [`v-bind`];
               },
-              /** called when destructured */
+              /** Called when destructured */
               getOwnPropertyDescriptor: () => ({
                 configurable: true,
                 enumerable: true,
