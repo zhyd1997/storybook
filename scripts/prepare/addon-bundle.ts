@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { builtinModules } from 'node:module';
 
+import type { Metafile } from 'esbuild';
 import aliasPlugin from 'esbuild-plugin-alias';
 import * as fs from 'fs-extra';
 import { glob } from 'glob';
@@ -36,16 +37,6 @@ type DtsConfigSection = Pick<Options, 'dts' | 'tsconfig'>;
 
 /* MAIN */
 
-const METAFILES_DIR = join(
-  __dirname,
-  '..',
-  '..',
-  'bench',
-  'esbuild-metafiles',
-  process.cwd().includes('addons/test')
-    ? 'addon-test' // special case, because @storybook/addon-test and @storybook/test have the same leaf dirname
-    : process.cwd().split(sep).at(-1)
-);
 const OUT_DIR = join(process.cwd(), 'dist');
 
 export const nodeInternals = [
@@ -75,13 +66,15 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
     await exec(`jiti ${pre}`, { cwd });
   }
 
+  const metafilesDir = join(__dirname, '..', '..', 'bench', 'esbuild-metafiles', name);
+
   const reset = hasFlag(flags, 'reset');
   const watch = hasFlag(flags, 'watch');
   const optimized = hasFlag(flags, 'optimized');
 
   if (reset) {
     await fs.emptyDir(OUT_DIR);
-    await fs.emptyDir(METAFILES_DIR);
+    await fs.emptyDir(metafilesDir);
   }
 
   const tasks: (() => Promise<any>)[] = [];
@@ -156,7 +149,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         }),
       ]);
       if (!watch) {
-        await saveMetafiles({ name: 'exportEntries', formats: ['esm', 'cjs'] });
+        await readMetafiles({ formats: ['esm', 'cjs'] });
       }
     });
 
@@ -177,7 +170,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         external: [...commonExternals, ...globalManagerPackages],
       });
       if (!watch) {
-        await saveMetafiles({ name: 'managerEntries', formats: ['esm'] });
+        await readMetafiles({ formats: ['esm'] });
       }
     });
   }
@@ -198,7 +191,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         external: [...commonExternals, ...globalPreviewPackages],
       });
       if (!watch) {
-        await saveMetafiles({ name: 'previewEntries', formats: ['esm', 'cjs'] });
+        await readMetafiles({ formats: ['esm', 'cjs'] });
       }
     });
 
@@ -254,7 +247,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         }),
       ]);
       if (!watch) {
-        await saveMetafiles({ name: 'nodeEntries', formats: ['esm', 'cjs'] });
+        await readMetafiles({ formats: ['esm', 'cjs'] });
       }
     });
 
@@ -266,7 +259,6 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   for (const task of tasks) {
     await task();
   }
-
   const dtsFiles = await glob(OUT_DIR + '/**/*.d.ts');
   await Promise.all(
     dtsFiles.map(async (file) => {
@@ -277,6 +269,10 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
       );
     })
   );
+
+  if (!watch) {
+    await saveMetafiles({ metafilesDir });
+  }
 
   if (post) {
     await exec(`jiti ${post}`, { cwd }, { debug: true });
@@ -342,28 +338,31 @@ async function generateDTSMapperFile(file: string) {
   );
 }
 
-async function saveMetafiles({
-  name,
-  formats,
-}: {
-  name: 'exportEntries' | 'managerEntries' | 'previewEntries' | 'nodeEntries';
-  formats: Formats[];
-}) {
-  await fs.ensureDir(METAFILES_DIR);
+const metafile: Metafile = {
+  inputs: {},
+  outputs: {},
+};
+
+async function readMetafiles({ formats }: { formats: Formats[] }) {
   await Promise.all(
     formats.map(async (format) => {
       const fromFilename = `metafile-${format}.json`;
-      const toBasename = `${name}.${format}`;
+      const currentMetafile = await fs.readJson(join(OUT_DIR, fromFilename));
+      metafile.inputs = { ...metafile.inputs, ...currentMetafile.inputs };
+      metafile.outputs = { ...metafile.outputs, ...currentMetafile.outputs };
 
-      const metafile = await fs.readJson(join(OUT_DIR, fromFilename));
-      await fs.move(join(OUT_DIR, fromFilename), join(METAFILES_DIR, `${toBasename}.json`), {
-        overwrite: true,
-      });
-      await writeFile(
-        join(METAFILES_DIR, `${toBasename}.txt`),
-        await esbuild.analyzeMetafile(metafile, { color: false, verbose: false })
-      );
+      await fs.rm(join(OUT_DIR, fromFilename));
     })
+  );
+}
+
+async function saveMetafiles({ metafilesDir }: { metafilesDir: string }) {
+  await fs.ensureDir(metafilesDir);
+
+  await writeFile(join(metafilesDir, 'metafile.json'), JSON.stringify(metafile, null, 2));
+  await writeFile(
+    join(metafilesDir, 'metafile.txt'),
+    await esbuild.analyzeMetafile(metafile, { color: false, verbose: false })
   );
 }
 

@@ -7,8 +7,7 @@ const allMetafiles = import.meta.glob(
   [
     '../../bench/esbuild-metafiles/**/*.json',
     // the following metafiles are too big to be loaded automatically in the iframe
-    '!**/core-0.cjs.json',
-    '!**/core-2.esm.json',
+    '!../../bench/esbuild-metafiles/@storybook/core/core.json',
   ],
   {
     // eagerly loading is not ideal because it imports all metafiles upfront,
@@ -19,19 +18,15 @@ const allMetafiles = import.meta.glob(
 );
 
 const METAFILES_DIR = '../../bench/esbuild-metafiles/';
-const METAFILE_DIR_PKG_NAME_MAP = {
-  cli: 'storybook',
-  'cli-sb': 'sb',
-  'cli-storybook': '@storybook/cli',
-  'create-storybook': 'create-storybook',
-  docs: '@storybook/addon-docs',
-  'addon-test': '@storybook/experimental-addon-test',
-} as const;
-const TOO_BIG_METAFILES = ['@storybook/core core-0.cjs', '@storybook/core core-2.esm'];
+const TOO_BIG_METAFILES = ['@storybook/core - core'];
 
 // allows the metafile path to be used in the URL hash
 const safeMetafileArg = (path: string) =>
-  path.replace(METAFILES_DIR, '').replaceAll('/', '_SLASH_').replaceAll('.', '_DOT_');
+  path
+    .replace(METAFILES_DIR, '')
+    .replace('@', '')
+    .replaceAll('/', '__')
+    .replace(/(\w*).json/, '$1');
 
 export default {
   title: 'Bench',
@@ -41,7 +36,7 @@ export default {
   },
   argTypes: {
     metafile: {
-      options: Object.keys(allMetafiles).map(safeMetafileArg).concat(TOO_BIG_METAFILES),
+      options: Object.keys(allMetafiles).concat(TOO_BIG_METAFILES).map(safeMetafileArg).sort(),
       mapping: Object.fromEntries(
         Object.keys(allMetafiles).map((path) => [safeMetafileArg(path), path])
       ),
@@ -52,34 +47,13 @@ export default {
             .concat(TOO_BIG_METAFILES)
             .map((path) => {
               if (TOO_BIG_METAFILES.includes(path)) {
-                return [path, `${path} - TOO BIG PLEASE UPLOAD MANUALLY`];
+                return [safeMetafileArg(path), `${path} - TOO BIG PLEASE UPLOAD MANUALLY`];
               }
-              // example path: ../../bench/esbuild-metafiles/actions/previewEntries-esm.json
-
-              const pkgDir = path.split('/').at(-2)!; // 'actions'
-              const basename = path.split('/').at(-1)!.split('.').at(0)!; // 'previewEntries-esm'
-              const entriesMatch = path.match(/\w+Entries/); // ['previewEntries']
-
-              let pkgName;
-              if (pkgDir in METAFILE_DIR_PKG_NAME_MAP) {
-                pkgName = METAFILE_DIR_PKG_NAME_MAP[pkgDir];
-              } else if (entriesMatch) {
-                // only addons have specific xEntries files
-                pkgName = `@storybook/addon-${pkgDir}`;
-              } else {
-                pkgName = `@storybook/${pkgDir}`;
-              }
-
-              let extraInfo = '';
-
-              if (pkgDir === 'core') {
-                extraInfo = `- ${basename} `;
-              } else if (entriesMatch) {
-                extraInfo = `- ${entriesMatch[0]} `;
-              }
-              const moduleType = path.includes('cjs') ? 'CJS' : 'ESM';
-
-              return [safeMetafileArg(path), `${pkgName} ${extraInfo}- ${moduleType}`];
+              const [, pkgName, subEntry] = /esbuild-metafiles\/(.+)\/(.+).json/.exec(path)!;
+              return [
+                safeMetafileArg(path),
+                subEntry !== 'metafile' ? `${pkgName} - ${subEntry}` : pkgName,
+              ];
             })
         ),
       },
