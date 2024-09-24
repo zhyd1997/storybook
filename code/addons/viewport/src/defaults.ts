@@ -227,7 +227,7 @@ const INITIAL_VIEWPORTS_DATA = {
   },
 } as const;
 
-export type InitialViewportKeyUnion = keyof typeof INITIAL_VIEWPORTS_DATA;
+export type InitialViewportKeys = keyof typeof INITIAL_VIEWPORTS_DATA;
 
 export const INITIAL_VIEWPORTS: ViewportMap = INITIAL_VIEWPORTS_DATA;
 
