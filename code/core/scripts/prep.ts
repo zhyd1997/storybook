@@ -191,6 +191,14 @@ async function run() {
                 '@storybook/core': join(cwd, 'src'),
                 react: dirname(require.resolve('react/package.json')),
                 'react-dom': dirname(require.resolve('react-dom/package.json')),
+                'react-dom/client': join(
+                  dirname(require.resolve('react-dom/package.json')),
+                  'client'
+                ),
+              },
+              define: {
+                // This should set react in prod mode for the manager
+                'process.env.NODE_ENV': JSON.stringify('production'),
               },
               external: [],
             })
@@ -306,27 +314,40 @@ async function run() {
         console.log(`compiled ${chalk.cyan(filename)}`);
       });
     } else {
-      await Promise.all(
-        compile.map(async (context, index) => {
+      const outs = await Promise.all(
+        compile.map(async (context) => {
           const out = await context.rebuild();
           await context.dispose();
 
-          if (out.metafile) {
-            const { outputs } = out.metafile;
-            const keys = Object.keys(outputs);
-            const format = keys.every((key) => key.endsWith('.js')) ? 'esm' : 'cjs';
-            const outName =
-              keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `meta-${format}-${index}`;
+          return out;
+        })
+      );
 
-            if (!existsSync('report')) {
-              mkdirSync('report');
-            }
-            await writeFile(`report/${outName}.json`, JSON.stringify(out.metafile, null, 2));
-            await writeFile(
-              `report/${outName}.txt`,
-              await esbuild.analyzeMetafile(out.metafile, { color: false, verbose: false })
-            );
+      const grouped = outs.reduce<Record<string, esbuild.Metafile>>((acc, out, index) => {
+        if (out.metafile) {
+          const { outputs, inputs } = out.metafile;
+          const keys = Object.keys(outputs);
+          const outName = keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `meta`;
+
+          if (acc[outName]) {
+            // merge results
+            acc[outName].inputs = { ...acc[outName].inputs, ...inputs };
+            acc[outName].outputs = { ...acc[outName].outputs, ...outputs };
+          } else {
+            acc[outName] = out.metafile;
           }
+        }
+
+        return acc;
+      }, {});
+
+      await Promise.all(
+        Object.entries(grouped).map(async ([outName, metafile]) => {
+          await writeFile(`report/${outName}.json`, JSON.stringify(metafile, null, 2));
+          await writeFile(
+            `report/${outName}.txt`,
+            await esbuild.analyzeMetafile(metafile, { color: false, verbose: false })
+          );
         })
       );
     }
