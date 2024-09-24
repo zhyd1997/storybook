@@ -1,16 +1,17 @@
+import { readdirSync } from 'node:fs';
+import { rm } from 'node:fs/promises';
+
+import type { PackageManagerName } from 'storybook/internal/common';
+import { logger } from 'storybook/internal/node-logger';
+import { GenerateNewProjectOnInitError } from 'storybook/internal/server-errors';
+import { telemetry } from 'storybook/internal/telemetry';
+
 import boxen from 'boxen';
 import chalk from 'chalk';
 import execa from 'execa';
-import { readdirSync, remove } from 'fs-extra';
 import prompts from 'prompts';
 import { dedent } from 'ts-dedent';
 
-import { telemetry } from 'storybook/internal/telemetry';
-
-import { GenerateNewProjectOnInitError } from 'storybook/internal/server-errors';
-import { logger } from 'storybook/internal/node-logger';
-
-import type { PackageManagerName } from 'storybook/internal/common';
 import type { CommandOptions } from './generators/types';
 
 type CoercedPackageManagerName = 'npm' | 'yarn' | 'pnpm';
@@ -24,9 +25,7 @@ interface SupportedProject {
   createScript: Record<CoercedPackageManagerName, string>;
 }
 
-/**
- * The supported projects.
- */
+/** The supported projects. */
 const SUPPORTED_PROJECTS: Record<string, SupportedProject> = {
   'react-vite-ts': {
     displayName: {
@@ -176,7 +175,7 @@ export const scaffoldNewProject = async (
   try {
     // If target directory has a .cache folder, remove it
     // so that it does not block the creation of the new project
-    await remove(`${targetDir}/.cache`);
+    await rm(`${targetDir}/.cache`, { recursive: true, force: true });
 
     // Create new project in temp directory
     await execa.command(createScript, {

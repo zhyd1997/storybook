@@ -1,6 +1,6 @@
 {
   "name": "@storybook/source-loader",
-  "version": "8.3.0-alpha.4",
+  "version": "8.4.0-alpha.0",
   "description": "Source loader",
   "keywords": [
     "lib",
@@ -24,7 +24,6 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "node": "./dist/index.js",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },

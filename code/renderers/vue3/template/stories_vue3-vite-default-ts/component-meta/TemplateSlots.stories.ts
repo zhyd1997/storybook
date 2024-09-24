@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
+
 import Component from './template-slots/component.vue';
 import { h } from 'vue';
 

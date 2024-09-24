@@ -1,9 +1,12 @@
-import { dedent } from 'ts-dedent';
-import chalk from 'chalk';
-import { readFile, writeFile } from 'fs-extra';
-import type { Expression } from '@babel/types';
+import { readFile, writeFile } from 'node:fs/promises';
+
 import type { ConfigFile } from 'storybook/internal/csf-tools';
-import { loadConfig, formatConfig } from 'storybook/internal/csf-tools';
+import { formatConfig, loadConfig } from 'storybook/internal/csf-tools';
+
+import type { Expression } from '@babel/types';
+import chalk from 'chalk';
+import { dedent } from 'ts-dedent';
+
 import type { Fix } from '../types';
 
 const MIGRATION =
@@ -15,18 +18,21 @@ interface Options {
   globals: Expression;
 }
 
-/**
- * Rename preview.js globals to initialGlobals
- */
+/** Rename preview.js globals to initialGlobals */
 export const initialGlobals: Fix<Options> = {
   id: 'initial-globals',
   versionRange: ['*.*.*', '>=8.0.*'],
   async check({ previewConfigPath }) {
-    if (!previewConfigPath) return null;
+    if (!previewConfigPath) {
+      return null;
+    }
 
     const previewConfig = loadConfig((await readFile(previewConfigPath)).toString()).parse();
     const globals = previewConfig.getFieldNode(['globals']) as Expression;
-    if (!globals) return null;
+
+    if (!globals) {
+      return null;
+    }
 
     return { globals, previewConfig, previewConfigPath };
   },

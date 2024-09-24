@@ -1,17 +1,16 @@
+import { cp, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, parse } from 'node:path';
-import fs from 'fs-extra';
-import express from 'express';
 
+import { stringifyProcessEnvs } from '@storybook/core/common';
+
+import { globalsModuleInfoMap } from '@storybook/core/manager/globals-module-info';
 import { logger } from '@storybook/core/node-logger';
 
 import { globalExternals } from '@fal-works/esbuild-plugin-global-externals';
 import { pnpPlugin } from '@yarnpkg/esbuild-plugin-pnp';
 import aliasPlugin from 'esbuild-plugin-alias';
+import express from 'express';
 
-import { stringifyProcessEnvs } from '@storybook/core/common';
-import { globalsModuleInfoMap } from '@storybook/core/manager/globals-module-info';
-import { getTemplatePath, renderHTML } from './utils/template';
-import { wrapManagerEntries } from './utils/managerEntries';
 import type {
   BuilderBuildResult,
   BuilderFunction,
@@ -20,11 +19,12 @@ import type {
   ManagerBuilder,
   StarterFunction,
 } from './types';
-
 import { getData } from './utils/data';
-import { safeResolve } from './utils/safeResolve';
 import { readOrderedFiles } from './utils/files';
 import { buildFrameworkGlobalsFromOptions } from './utils/framework';
+import { wrapManagerEntries } from './utils/managerEntries';
+import { safeResolve } from './utils/safeResolve';
+import { getTemplatePath, renderHTML } from './utils/template';
 
 let compilation: Compilation;
 let asyncIterator: ReturnType<StarterFunction> | ReturnType<BuilderFunction>;
@@ -116,8 +116,8 @@ export const executor = {
 };
 
 /**
- * This function is a generator so that we can abort it mid process
- * in case of failure coming from other processes e.g. preview builder
+ * This function is a generator so that we can abort it mid process in case of failure coming from
+ * other processes e.g. preview builder
  *
  * I am sorry for making you read about generators today :')
  */
@@ -149,7 +149,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({
   // make sure we clear output directory of addons dir before starting
   // this could cause caching issues where addons are loaded when they shouldn't
   const addonsDir = config.outdir;
-  await fs.remove(addonsDir);
+  await rm(addonsDir, { recursive: true, force: true });
 
   yield;
 
@@ -214,8 +214,8 @@ const starter: StarterFunction = async function* starterGeneratorFn({
 };
 
 /**
- * This function is a generator so that we can abort it mid process
- * in case of failure coming from other processes e.g. preview builder
+ * This function is a generator so that we can abort it mid process in case of failure coming from
+ * other processes e.g. preview builder
  *
  * I am sorry for making you read about generators today :')
  */
@@ -256,7 +256,7 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
 
   yield;
 
-  const managerFiles = fs.copy(coreDirOrigin, coreDirTarget, {
+  const managerFiles = cp(coreDirOrigin, coreDirTarget, {
     filter: (src) => {
       const { ext } = parse(src);
       if (ext) {
@@ -264,6 +264,7 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
       }
       return true;
     },
+    recursive: true,
   });
   const { cssFiles, jsFiles } = await readOrderedFiles(addonsDir, compilation?.outputFiles);
 
@@ -288,11 +289,7 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
     globals
   );
 
-  await Promise.all([
-    //
-    fs.writeFile(join(options.outputDir, 'index.html'), html),
-    managerFiles,
-  ]);
+  await Promise.all([writeFile(join(options.outputDir, 'index.html'), html), managerFiles]);
 
   logger.trace({ message: '=> Manager built', time: process.hrtime(startTime) });
 

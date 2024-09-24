@@ -1,7 +1,9 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { basename } from 'node:path';
+
 import chalk from 'chalk';
 import { dedent } from 'ts-dedent';
-import { basename } from 'path';
-import fse from 'fs-extra';
+
 import type { Fix } from '../types';
 
 const MDX1_STYLE_START = /<style>{`/g;
@@ -38,6 +40,7 @@ interface Mdx1to3Options {
  * Does the user have `.stories.mdx` files?
  *
  * If so:
+ *
  * - Assume they might be MDX1
  * - Offer to help migrate to MDX3
  */
@@ -71,14 +74,14 @@ export const mdx1to3: Fix<Mdx1to3Options> = {
   async run({ result: { storiesMdxFiles }, dryRun }) {
     await Promise.all([
       ...storiesMdxFiles.map(async (fname) => {
-        const contents = await fse.readFile(fname, 'utf-8');
+        const contents = await readFile(fname, { encoding: 'utf8' });
         const updated = fixMdxComments(fixMdxStyleTags(contents));
         if (updated === contents) {
           logger.info(`🆗 Unmodified ${basename(fname)}`);
         } else {
           logger.info(`✅ Modified ${basename(fname)}`);
           if (!dryRun) {
-            await fse.writeFile(fname, updated);
+            await writeFile(fname, updated);
           }
         }
       }),

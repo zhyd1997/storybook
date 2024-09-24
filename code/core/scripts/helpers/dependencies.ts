@@ -1,4 +1,4 @@
-import { readJson } from 'fs-extra';
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 export async function flattenDependencies(
@@ -17,7 +17,9 @@ export async function flattenDependencies(
         console.log(dep + ' not found');
         return;
       }
-      const { dependencies = {}, peerDependencies = {} } = await readJson(path);
+      const { dependencies = {}, peerDependencies = {} } = JSON.parse(
+        await readFile(path, { encoding: 'utf8' })
+      );
       const all: string[] = [
         ...new Set([...Object.keys(dependencies), ...Object.keys(peerDependencies)]),
       ]
