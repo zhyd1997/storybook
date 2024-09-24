@@ -12,9 +12,7 @@ const channel: Channel = new Channel({
   async: true,
   transport: {
     send: (event) => {
-      if (process.send) {
-        process.send(event);
-      }
+      process.send?.(event);
     },
     setHandler: (handler) => {
       process.on('message', handler);
@@ -23,26 +21,23 @@ const channel: Channel = new Channel({
 });
 
 const testManager = new TestManager(channel);
-testManager.restartVitest();
+testManager.restartVitest().then(() => process.send?.({ type: 'ready' }));
+
+const exit = (code = 0) => {
+  channel?.removeAllListeners();
+  process.exit(code);
+};
+
+process.on('exit', exit);
+process.on('SIGINT', () => exit(0));
+process.on('SIGTERM', () => exit(0));
 
 process.on('uncaughtException', (err) => {
-  process.send?.({ type: 'error', message: 'Uncaught Exception', error: err.stack });
-  process.exit(1);
+  process.send?.({ type: 'error', message: 'Uncaught exception', error: err.stack });
+  exit(1);
 });
 
 process.on('unhandledRejection', (reason) => {
-  throw reason;
-});
-
-process.on('exit', () => {
-  channel?.removeAllListeners();
-  process.exit(0);
-});
-process.on('SIGINT', () => {
-  channel?.removeAllListeners();
-  process.exit(0);
-});
-process.on('SIGTERM', () => {
-  channel?.removeAllListeners();
-  process.exit(0);
+  process.send?.({ type: 'error', message: 'Unhandled rejection', error: reason });
+  exit(1);
 });

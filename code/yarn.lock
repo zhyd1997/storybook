@@ -6245,6 +6245,7 @@ __metadata:
     "@vitest/runner": "npm:^2.1.1"
     boxen: "npm:^8.0.1"
     chalk: "npm:^5.3.0"
+    execa: "npm:^8.0.1"
     find-up: "npm:^7.0.0"
     lodash: "npm:^4.17.21"
     semver: "npm:^7.6.3"

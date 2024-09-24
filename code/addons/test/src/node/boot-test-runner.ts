@@ -1,4 +1,4 @@
-import { type ChildProcess, fork } from 'node:child_process';
+import { type ChildProcess } from 'node:child_process';
 import { join } from 'node:path';
 
 import type { Channel } from 'storybook/internal/channels';
@@ -9,109 +9,91 @@ import {
   TESTING_MODULE_WATCH_MODE_REQUEST,
 } from 'storybook/internal/core-events';
 
+import { execaNode } from 'execa';
+
 import { log } from '../logger';
 
-const MAX_RESTART_ATTEMPTS = 2;
+const MAX_START_ATTEMPTS = 3;
+const MAX_START_TIME = 8000;
 
 // This path is a bit confusing, but essentially `boot-test-runner` gets bundled into the preset bundle
 // which is at the root. Then, from the root, we want to load `node/vitest.js`
 const vitestModulePath = join(__dirname, 'node', 'vitest.js');
 
-export const bootTestRunner = (channel: Channel, initEvent?: string, initArgs?: any[]) =>
-  new Promise((resolve, reject) => {
-    let attempts = 0;
-    let child: null | ChildProcess;
+export const bootTestRunner = async (channel: Channel, initEvent?: string, initArgs?: any[]) => {
+  const now = Date.now();
+  let child: null | ChildProcess;
 
-    const forwardRun = (...args: any[]): void => {
-      child?.send({ type: TESTING_MODULE_RUN_REQUEST, args, from: 'server' });
-    };
-    const forwardRunAll = (...args: any[]): void => {
-      child?.send({ type: TESTING_MODULE_RUN_ALL_REQUEST, args, from: 'server' });
-    };
-    const forwardWatchMode = (...args: any[]): void => {
-      child?.send({ type: TESTING_MODULE_WATCH_MODE_REQUEST, args, from: 'server' });
-    };
-    const forwardCancel = (...args: any[]): void => {
-      child?.send({ type: TESTING_MODULE_CANCEL_TEST_RUN_REQUEST, args, from: 'server' });
-    };
+  const forwardRun = (...args: any[]) =>
+    child?.send({ args, from: 'server', type: TESTING_MODULE_RUN_REQUEST });
+  const forwardRunAll = (...args: any[]) =>
+    child?.send({ args, from: 'server', type: TESTING_MODULE_RUN_ALL_REQUEST });
+  const forwardWatchMode = (...args: any[]) =>
+    child?.send({ args, from: 'server', type: TESTING_MODULE_WATCH_MODE_REQUEST });
+  const forwardCancel = (...args: any[]) =>
+    child?.send({ args, from: 'server', type: TESTING_MODULE_CANCEL_TEST_RUN_REQUEST });
 
-    const startChildProcess = () => {
-      child = fork(vitestModulePath, [], {
-        // We want to pipe output and error
-        // so that we can prefix the logs in the terminal
-        // with a clear identifier
-        stdio: ['inherit', 'pipe', 'pipe', 'ipc'],
-        silent: true,
-      });
+  const killChild = () => {
+    channel.off(TESTING_MODULE_RUN_REQUEST, forwardRun);
+    channel.off(TESTING_MODULE_RUN_ALL_REQUEST, forwardRunAll);
+    channel.off(TESTING_MODULE_WATCH_MODE_REQUEST, forwardWatchMode);
+    channel.off(TESTING_MODULE_CANCEL_TEST_RUN_REQUEST, forwardCancel);
+    child?.kill();
+    child = null;
+  };
 
-      child.stdout?.on('data', (data) => {
-        log(data);
-      });
+  const exit = (code = 0) => {
+    killChild();
+    process.exit(code);
+  };
 
-      child.stderr?.on('data', (data) => {
-        log(data);
-      });
+  process.on('exit', exit);
+  process.on('SIGINT', () => exit(0));
+  process.on('SIGTERM', () => exit(0));
+
+  const startChildProcess = (attempt = 1) =>
+    new Promise<void>((resolve, reject) => {
+      child = execaNode(vitestModulePath);
+      child.stdout?.on('data', log);
+      child.stderr?.on('data', log);
 
       child.on('message', (result: any) => {
-        switch (result.type) {
-          case 'ready': {
-            attempts = 0;
-            child?.send({ type: initEvent, args: initArgs, from: 'server' });
-            channel.on(TESTING_MODULE_RUN_REQUEST, forwardRun);
-            channel.on(TESTING_MODULE_RUN_ALL_REQUEST, forwardRunAll);
-            channel.on(TESTING_MODULE_WATCH_MODE_REQUEST, forwardWatchMode);
-            channel.on(TESTING_MODULE_CANCEL_TEST_RUN_REQUEST, forwardCancel);
-            channel.emit(result.type, ...(result.args || []));
-            resolve(result);
-            return;
+        if (result.type === 'ready') {
+          // Resend the event that triggered the boot sequence, now that the child is ready to handle it
+          child?.send({ type: initEvent, args: initArgs, from: 'server' });
+
+          // Forward all events from the channel to the child process
+          channel.on(TESTING_MODULE_RUN_REQUEST, forwardRun);
+          channel.on(TESTING_MODULE_RUN_ALL_REQUEST, forwardRunAll);
+          channel.on(TESTING_MODULE_WATCH_MODE_REQUEST, forwardWatchMode);
+          channel.on(TESTING_MODULE_CANCEL_TEST_RUN_REQUEST, forwardCancel);
+
+          resolve();
+        }
+
+        if (result.type === 'error') {
+          killChild();
+
+          if (result.message) {
+            log(result.message);
+          }
+          if (result.error) {
+            log(result.error);
           }
 
-          case 'error': {
-            channel.off(TESTING_MODULE_RUN_REQUEST, forwardRun);
-            channel.off(TESTING_MODULE_RUN_ALL_REQUEST, forwardRunAll);
-            channel.off(TESTING_MODULE_WATCH_MODE_REQUEST, forwardWatchMode);
-            channel.off(TESTING_MODULE_CANCEL_TEST_RUN_REQUEST, forwardCancel);
-
-            child?.kill();
-            child = null;
-
-            if (result.message) {
-              log(result.message);
-            }
-            if (result.error) {
-              log(result.error);
-            }
-
-            if (attempts >= MAX_RESTART_ATTEMPTS) {
-              log(`Aborting test runner process after ${MAX_RESTART_ATTEMPTS} restart attempts`);
-              channel.emit(
-                'error',
-                `Aborting test runner process after ${MAX_RESTART_ATTEMPTS} restart attempts`
-              );
-              reject(new Error('Test runner process failed to start'));
-            } else {
-              attempts += 1;
-              log(`Restarting test runner process (attempt ${attempts}/${MAX_RESTART_ATTEMPTS})`);
-              setTimeout(startChildProcess, 500);
-            }
-            return;
+          if (attempt >= MAX_START_ATTEMPTS) {
+            log(`Aborting test runner process after ${attempt} restart attempts`);
+            reject();
+          } else if (Date.now() - now > MAX_START_TIME) {
+            log(`Aborting test runner process after ${MAX_START_TIME / 1000} seconds`);
+            reject();
+          } else {
+            log(`Restarting test runner process (attempt ${attempt}/${MAX_START_ATTEMPTS})`);
+            setTimeout(() => startChildProcess(attempt + 1).then(resolve, reject), 1000);
           }
         }
       });
-    };
+    });
 
-    startChildProcess();
-
-    process.on('exit', () => {
-      child?.kill();
-      process.exit(0);
-    });
-    process.on('SIGINT', () => {
-      child?.kill();
-      process.exit(0);
-    });
-    process.on('SIGTERM', () => {
-      child?.kill();
-      process.exit(0);
-    });
-  });
+  await startChildProcess();
+};

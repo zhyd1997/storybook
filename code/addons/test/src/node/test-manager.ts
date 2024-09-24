@@ -33,7 +33,6 @@ export class TestManager {
   async restartVitest(watchMode = false) {
     await this.vitestManager.closeVitest();
     await this.vitestManager.startVitest(watchMode);
-    process.send?.({ type: 'ready', watchMode });
   }
 
   async handleWatchModeRequest(request: TestingModuleWatchModeRequestPayload) {
