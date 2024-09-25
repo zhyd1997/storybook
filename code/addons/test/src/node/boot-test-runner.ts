@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import type { Channel } from 'storybook/internal/channels';
 import {
   TESTING_MODULE_CANCEL_TEST_RUN_REQUEST,
+  TESTING_MODULE_CRASH_REPORT,
   TESTING_MODULE_RUN_ALL_REQUEST,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
@@ -55,7 +56,15 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
     new Promise<void>((resolve, reject) => {
       child = execaNode(vitestModulePath);
       child.stdout?.on('data', log);
-      child.stderr?.on('data', log);
+      child.stderr?.on('data', (data) => {
+        const message = data.toString();
+        // TODO: improve this error handling. Example use case is Playwright is not installed
+        if (message.includes('Error: browserType.launch')) {
+          channel.emit(TESTING_MODULE_CRASH_REPORT, message);
+        }
+
+        log(data);
+      });
 
       child.on('message', (result: any) => {
         if (result.type === 'ready') {
