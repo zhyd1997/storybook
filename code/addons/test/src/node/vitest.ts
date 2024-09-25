@@ -20,8 +20,14 @@ const channel: Channel = new Channel({
   },
 });
 
-const testManager = new TestManager(channel);
-testManager.restartVitest().then(() => process.send?.({ type: 'ready' }));
+new TestManager(channel, {
+  onError: (message, error) => {
+    process.send?.({ type: 'error', message, error: error.stack ?? error });
+  },
+  onReady: () => {
+    process.send?.({ type: 'ready' });
+  },
+});
 
 const exit = (code = 0) => {
   channel?.removeAllListeners();

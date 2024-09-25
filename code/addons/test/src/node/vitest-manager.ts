@@ -37,11 +37,10 @@ export class VitestManager {
       },
     });
 
-    if (!this.vitest || this.vitest.projects.length < 1) {
-      return;
+    // TODO what should happen if there's no projects?
+    if (this.vitest?.projects.length) {
+      await this.vitest.init();
     }
-
-    await this.vitest.init();
   }
 
   async runAllTests() {

@@ -103,13 +103,13 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
       });
     });
 
-  const timeout = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      log(`Aborting test runner process after ${MAX_START_TIME / 1000} seconds`);
-      aborted = true;
-      reject();
-    }, MAX_START_TIME);
-  });
+  const timeout = new Promise((_, reject) =>
+    setTimeout(reject, MAX_START_TIME, new Error('Aborting test runner process due to timeout'))
+  );
 
-  await Promise.race([startChildProcess(), timeout]);
+  await Promise.race([startChildProcess(), timeout]).catch((e) => {
+    log(e.message);
+    aborted = true;
+    throw e;
+  });
 };
