@@ -14,31 +14,24 @@ import { TEST_PROVIDER_ID } from '../constants';
 import { VitestManager } from './vitest-manager';
 
 export class TestManager {
-  private options: {
-    onError: (message: string, error: Error) => void;
-    onReady: () => void;
-  };
-
   private vitestManager: VitestManager;
 
   watchMode = false;
 
   constructor(
     private channel: Channel,
-    options: typeof TestManager.prototype.options
+    private options: {
+      onError?: (message: string, error: Error) => void;
+      onReady?: () => void;
+    } = {}
   ) {
-    process.env.TEST = 'true';
-    process.env.VITEST = 'true';
-    process.env.NODE_ENV ??= 'test';
-
-    this.options = options;
     this.vitestManager = new VitestManager(channel, this);
 
     this.channel.on(TESTING_MODULE_RUN_REQUEST, this.handleRunRequest.bind(this));
     this.channel.on(TESTING_MODULE_RUN_ALL_REQUEST, this.handleRunAllRequest.bind(this));
     this.channel.on(TESTING_MODULE_WATCH_MODE_REQUEST, this.handleWatchModeRequest.bind(this));
 
-    this.vitestManager.startVitest().then(options.onReady);
+    this.vitestManager.startVitest().then(() => options.onReady?.());
   }
 
   async restartVitest(watchMode = false) {
@@ -90,6 +83,18 @@ export class TestManager {
   }
 
   async reportFatalError(message: string, error: Error | any) {
-    this.options.onError(message, error);
+    this.options.onError?.(message, error);
+  }
+
+  static async start(channel: Channel, options: typeof TestManager.prototype.options = {}) {
+    return new Promise<TestManager>((resolve) => {
+      const testManager = new TestManager(channel, {
+        ...options,
+        onReady: () => {
+          resolve(testManager);
+          options.onReady?.();
+        },
+      });
+    });
   }
 }
