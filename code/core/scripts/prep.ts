@@ -17,7 +17,6 @@ import {
   process,
 } from '../../../scripts/prepare/tools';
 import pkg from '../package.json';
-import meta from '../src/components/components/Badge/Badge.stories';
 import { globalsModuleInfoMap } from '../src/manager/globals-module-info';
 import { getBundles, getEntries, getFinals } from './entries';
 import { generatePackageJsonFile } from './helpers/generatePackageJsonFile';
@@ -310,15 +309,7 @@ async function run() {
       });
     } else {
       // repo root/bench/esbuild-metafiles/core
-      const metafilesDir = join(
-        __dirname,
-        '..',
-        '..',
-        '..',
-        'bench',
-        'esbuild-metafiles',
-        '@storybook/core'
-      );
+      const metafilesDir = join(__dirname, '..', '..', '..', 'bench', 'esbuild-metafiles', 'core');
       if (existsSync(metafilesDir)) {
         await rm(metafilesDir, { recursive: true });
       }

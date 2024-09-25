@@ -6,8 +6,8 @@ import type { Meta } from '@storybook/react';
 const allMetafiles = import.meta.glob(
   [
     '../../bench/esbuild-metafiles/**/*.json',
-    // the following metafiles are too big to be loaded automatically in the iframe
-    '!../../bench/esbuild-metafiles/@storybook/core/core.json',
+    // the core metafile is too big to be loaded automatically in the iframe
+    '!../../bench/esbuild-metafiles/core/core.json',
   ],
   {
     // eagerly loading is not ideal because it imports all metafiles upfront,
@@ -18,13 +18,12 @@ const allMetafiles = import.meta.glob(
 );
 
 const METAFILES_DIR = '../../bench/esbuild-metafiles/';
-const TOO_BIG_METAFILES = ['@storybook/core - core'];
+const PACKAGES_WITHOUT_ORG = ['storybook', 'sb', 'create-storybook'];
 
 // allows the metafile path to be used in the URL hash
 const safeMetafileArg = (path: string) =>
   path
     .replace(METAFILES_DIR, '')
-    .replace('@', '')
     .replaceAll('/', '__')
     .replace(/(\w*).json/, '$1');
 
@@ -36,7 +35,7 @@ export default {
   },
   argTypes: {
     metafile: {
-      options: Object.keys(allMetafiles).concat(TOO_BIG_METAFILES).map(safeMetafileArg).sort(),
+      options: Object.keys(allMetafiles).concat('core - core').map(safeMetafileArg).sort(),
       mapping: Object.fromEntries(
         Object.keys(allMetafiles).map((path) => [safeMetafileArg(path), path])
       ),
@@ -44,17 +43,18 @@ export default {
         type: 'select',
         labels: Object.fromEntries(
           Object.keys(allMetafiles)
-            .concat(TOO_BIG_METAFILES)
             .map((path) => {
-              if (TOO_BIG_METAFILES.includes(path)) {
-                return [safeMetafileArg(path), `${path} - TOO BIG PLEASE UPLOAD MANUALLY`];
-              }
-              const [, pkgName, subEntry] = /esbuild-metafiles\/(.+)\/(.+).json/.exec(path)!;
+              const [, dirName, subEntry] = /esbuild-metafiles\/(.+)\/(.+).json/.exec(path)!;
+              const pkgName = PACKAGES_WITHOUT_ORG.includes(dirName)
+                ? dirName
+                : `@storybook/${dirName}`;
+
               return [
                 safeMetafileArg(path),
                 subEntry !== 'metafile' ? `${pkgName} - ${subEntry}` : pkgName,
               ];
             })
+            .concat([['core - core', '@storybook/core - core - TOO BIG PLEASE UPLOAD MANUALLY']])
         ),
       },
     },

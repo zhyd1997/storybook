@@ -55,7 +55,14 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
     await exec(`jiti ${pre}`, { cwd });
   }
 
-  const metafilesDir = join(__dirname, '..', '..', 'bench', 'esbuild-metafiles', name);
+  const metafilesDir = join(
+    __dirname,
+    '..',
+    '..',
+    'bench',
+    'esbuild-metafiles',
+    name.replace('@storybook', '')
+  );
 
   const reset = hasFlag(flags, 'reset');
   const watch = hasFlag(flags, 'watch');
