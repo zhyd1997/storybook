@@ -163,7 +163,7 @@ const encodeSpecialValues = (value: unknown): any => {
   return value;
 };
 
-const QS_OPTIONS: Partial<QueryOptions> = {
+const QUERY_OPTIONS: Partial<QueryOptions> = {
   delimiter: ';', // we don't actually create multiple query params
   nesting: true,
   nestingSyntax: 'js', // encode objects using dot notation: obj.key=val
@@ -209,7 +209,7 @@ export const buildArgsParam = (initialArgs: Args | undefined, args: Args): strin
     return acc;
   }, {} as Args);
 
-  return stringify(encodeSpecialValues(object), QS_OPTIONS)
+  return stringify(encodeSpecialValues(object), QUERY_OPTIONS)
     .replace(knownQueryChar, decodeKnownQueryChar)
     .split(';')
     .map((part: string) => part.replace('=', ':'))
@@ -221,7 +221,7 @@ interface Query {
 }
 
 export const queryFromString = memoize(1000)(
-  (s?: string): Query => (s !== undefined ? parse(s, QS_OPTIONS) : {})
+  (s?: string): Query => (s !== undefined ? parse(s, QUERY_OPTIONS) : {})
 );
 export const queryFromLocation = (location: Partial<Location>) =>
   queryFromString(location.search ? location.search.slice(1) : '');

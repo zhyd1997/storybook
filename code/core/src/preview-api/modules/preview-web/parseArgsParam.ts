@@ -53,7 +53,7 @@ const validateArgs = (key = '', value: unknown): boolean => {
   return false;
 };
 
-const QS_OPTIONS: Partial<Options> = {
+const QUERY_OPTIONS: Partial<Options> = {
   delimiter: ';', // we're parsing a single query param
   nesting: true,
   arrayRepeat: true,
@@ -108,7 +108,7 @@ const QS_OPTIONS: Partial<Options> = {
 };
 export const parseArgsParam = (argsString: string): Args => {
   const parts = argsString.split(';').map((part) => part.replace('=', '~').replace(':', '='));
-  return Object.entries(parse(parts.join(';'), QS_OPTIONS)).reduce((acc, [key, value]) => {
+  return Object.entries(parse(parts.join(';'), QUERY_OPTIONS)).reduce((acc, [key, value]) => {
     if (validateArgs(key, value)) {
       return Object.assign(acc, { [key]: value });
     }
