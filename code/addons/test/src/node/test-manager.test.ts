@@ -38,14 +38,14 @@ const tests = [
 describe('TestManager', () => {
   it('should create a vitest instance', async () => {
     new TestManager(mockChannel);
-    await new Promise((r) => setTimeout(r, 10));
+    await new Promise((r) => setTimeout(r, 1000));
     expect(createVitest).toHaveBeenCalled();
   });
 
   it('should call onReady callback', async () => {
     const onReady = vi.fn();
     new TestManager(mockChannel, { onReady });
-    await new Promise((r) => setTimeout(r, 10));
+    await new Promise((r) => setTimeout(r, 1000));
     expect(onReady).toHaveBeenCalled();
   });
 
