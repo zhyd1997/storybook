@@ -80,9 +80,7 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
           channel.on(TESTING_MODULE_CANCEL_TEST_RUN_REQUEST, forwardCancel);
 
           resolve();
-        }
-
-        if (result.type === 'error') {
+        } else if (result.type === 'error') {
           killChild();
 
           if (result.message) {
@@ -99,6 +97,8 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
             log(`Restarting test runner process (attempt ${attempt}/${MAX_START_ATTEMPTS})`);
             setTimeout(() => startChildProcess(attempt + 1).then(resolve, reject), 1000);
           }
+        } else {
+          channel.emit(result.type, ...result.args);
         }
       });
     });
