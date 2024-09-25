@@ -1,5 +1,3 @@
-import { camelCase } from 'es-toolkit';
-
 /**
  * Get a valid variable name for a component.
  *
@@ -7,7 +5,9 @@ import { camelCase } from 'es-toolkit';
  * @returns A valid variable name.
  */
 export const getComponentVariableName = async (name: string) => {
-  const camelCased = camelCase(name.replace(/^[^a-zA-Z_$]*/, ''));
+  const camelCase = await import('camelcase');
+
+  const camelCased = camelCase.default(name.replace(/^[^a-zA-Z_$]*/, ''), { pascalCase: true });
   const sanitized = camelCased.replace(/[^a-zA-Z_$]+/, '');
   return sanitized;
 };
