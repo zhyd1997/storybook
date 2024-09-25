@@ -1,5 +1,5 @@
 /* eslint-disable local-rules/no-uncategorized-errors */
-import { existsSync, watch } from 'node:fs';
+import { existsSync, mkdirSync, watch } from 'node:fs';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
@@ -314,44 +314,27 @@ async function run() {
         console.log(`compiled ${chalk.cyan(filename)}`);
       });
     } else {
-      const outs = await Promise.all(
-        compile.map(async (context) => {
+      await Promise.all(
+        compile.map(async (context, index) => {
           const out = await context.rebuild();
           await context.dispose();
 
-          return out;
-        })
-      );
+          if (out.metafile) {
+            const { outputs } = out.metafile;
+            const keys = Object.keys(outputs);
+            const format = keys.every((key) => key.endsWith('.js')) ? 'esm' : 'cjs';
+            const outName =
+              keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `meta-${format}-${index}`;
 
-      const grouped = outs.reduce<Record<string, esbuild.Metafile>>((acc, out, index) => {
-        if (out.metafile) {
-          const { outputs, inputs } = out.metafile;
-          const keys = Object.keys(outputs);
-          const outName = keys.length === 1 ? dirname(keys[0]).replace('dist/', '') : `meta`;
-
-          if (acc[outName]) {
-            // merge results
-            acc[outName].inputs = { ...acc[outName].inputs, ...inputs };
-            acc[outName].outputs = { ...acc[outName].outputs, ...outputs };
-          } else {
-            acc[outName] = out.metafile;
+            if (!existsSync('report')) {
+              mkdirSync('report');
+            }
+            await writeFile(`report/${outName}.json`, JSON.stringify(out.metafile, null, 2));
+            await writeFile(
+              `report/${outName}.txt`,
+              await esbuild.analyzeMetafile(out.metafile, { color: false, verbose: false })
+            );
           }
-        }
-
-        return acc;
-      }, {});
-
-      if (!existsSync(join(cwd, 'report'))) {
-        await mkdir('report');
-      }
-
-      await Promise.all(
-        Object.entries(grouped).map(async ([outName, metafile]) => {
-          await writeFile(`report/${outName}.json`, JSON.stringify(metafile, null, 2));
-          await writeFile(
-            `report/${outName}.txt`,
-            await esbuild.analyzeMetafile(metafile, { color: false, verbose: false })
-          );
         })
       );
     }
