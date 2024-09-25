@@ -166,6 +166,7 @@ jobs:
           paths:
             - code/node_modules
             - scripts/node_modules
+            - code/bench
             - code/examples
             - code/node_modules
             - code/addons
@@ -177,7 +178,6 @@ jobs:
             - code/ui
             - code/renderers
             - code/presets
-            - bench
             - .verdaccio-cache
   lint:
     executor:
