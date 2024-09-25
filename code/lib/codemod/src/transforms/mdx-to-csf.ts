@@ -11,7 +11,7 @@ import {
   types as t,
 } from '@storybook/core/babel';
 
-import camelCase from 'camelcase';
+import { camelCase } from 'es-toolkit';
 import type { FileInfo } from 'jscodeshift';
 import type { MdxFlowExpression } from 'mdast-util-mdx-expression';
 import type {

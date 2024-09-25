@@ -71,10 +71,3 @@ export const noArrayMerge = <TObj = any>(a: TObj, ...b: Partial<TObj>[]): TObj =
 
   return target as TObj;
 };
-
-export function picky<T extends Record<string, any>, K extends keyof T>(
-  obj: T,
-  keys: K[]
-): Partial<Pick<T, K>> {
-  return omitBy(pick(obj, keys), (v) => v === undefined);
-}

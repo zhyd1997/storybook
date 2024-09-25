@@ -89,7 +89,7 @@
     "@types/semver": "^7.3.4",
     "@types/util-deprecate": "^1.0.0",
     "babel-plugin-react-docgen": "^4.2.1",
-    "es-toolkit": "^1.20.0",
+    "es-toolkit": "^1.21.0",
     "expect-type": "^0.15.0",
     "require-from-string": "^2.0.2"
   },

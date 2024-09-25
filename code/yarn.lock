@@ -5757,7 +5757,7 @@ __metadata:
     "@types/color-convert": "npm:^2.0.0"
     color-convert: "npm:^2.0.1"
     dequal: "npm:^2.0.2"
-    es-toolkit: "npm:^1.20.0"
+    es-toolkit: "npm:^1.21.0"
     markdown-to-jsx: "npm:^7.4.5"
     memoizerific: "npm:^1.11.3"
     polished: "npm:^4.2.2"
@@ -5928,9 +5928,8 @@ __metadata:
     "@types/cross-spawn": "npm:^6.0.2"
     "@types/jscodeshift": "npm:^0.11.10"
     ansi-regex: "npm:^6.0.1"
-    camelcase: "npm:^8.0.0"
     cross-spawn: "npm:^7.0.3"
-    es-toolkit: "npm:^1.20.0"
+    es-toolkit: "npm:^1.21.0"
     globby: "npm:^14.0.1"
     jscodeshift: "npm:^0.15.1"
     mdast-util-mdx-jsx: "npm:^3.0.0"
@@ -6054,7 +6053,6 @@ __metadata:
     boxen: "npm:^7.1.1"
     browser-assert: "npm:^1.2.1"
     browser-dtector: "npm:^3.4.0"
-    camelcase: "npm:^8.0.0"
     chai: "npm:^4.4.1"
     chalk: "npm:^5.3.0"
     cli-table3: "npm:^0.6.1"
@@ -6072,7 +6070,7 @@ __metadata:
     diff: "npm:^5.2.0"
     downshift: "npm:^9.0.4"
     ejs: "npm:^3.1.10"
-    es-toolkit: "npm:^1.20.0"
+    es-toolkit: "npm:^1.21.0"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0"
     esbuild-plugin-alias: "npm:^0.2.1"
     esbuild-register: "npm:^3.5.0"
@@ -6757,7 +6755,7 @@ __metadata:
     acorn-jsx: "npm:^5.3.1"
     acorn-walk: "npm:^7.2.0"
     babel-plugin-react-docgen: "npm:^4.2.1"
-    es-toolkit: "npm:^1.20.0"
+    es-toolkit: "npm:^1.21.0"
     escodegen: "npm:^2.1.0"
     expect-type: "npm:^0.15.0"
     html-tags: "npm:^3.1.0"
@@ -6881,7 +6879,7 @@ __metadata:
     create-storybook: "workspace:*"
     cross-env: "npm:^7.0.3"
     danger: "npm:^12.3.3"
-    es-toolkit: "npm:^1.20.0"
+    es-toolkit: "npm:^1.21.0"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0"
     esbuild-loader: "npm:^4.2.0"
     esbuild-plugin-alias: "npm:^0.2.1"
@@ -6983,7 +6981,7 @@ __metadata:
   resolution: "@storybook/source-loader@workspace:lib/source-loader"
   dependencies:
     "@storybook/csf": "npm:^0.1.11"
-    es-toolkit: "npm:^1.20.0"
+    es-toolkit: "npm:^1.21.0"
     estraverse: "npm:^5.2.0"
     prettier: "npm:^3.1.1"
     typescript: "npm:^5.3.2"
@@ -14060,10 +14058,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es-toolkit@npm:^1.20.0":
-  version: 1.20.0
-  resolution: "es-toolkit@npm:1.20.0"
-  checksum: 10c0/566a517ec97d4b2431d220d4eb9a7cc37a1b397521b4e230c9e53d647c2b4e0b8c2e91030e1de6e8080c30f9f05ee5281d13d3c2dd37ec1193a13bc24e2fd70c
+"es-toolkit@npm:^1.21.0":
+  version: 1.21.0
+  resolution: "es-toolkit@npm:1.21.0"
+  checksum: 10c0/894a63f8ce5b2e5c1be242c8e8eace6364ea1212d01cdf89594d2cc582c5e1574114ad2ee7022ad5206561c4d5170511d83b38853257249860e56178768854ea
   languageName: node
   linkType: hard
 
