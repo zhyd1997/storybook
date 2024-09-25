@@ -3,19 +3,11 @@ import React from 'react';
 import type { Meta } from '@storybook/react';
 
 // @ts-expect-error - TS doesn't know about import.meta.glob from Vite
-const allMetafiles = import.meta.glob(
-  [
-    '../bench/esbuild-metafiles/**/*.json',
-    // the core metafile is too big to be loaded automatically in the iframe
-    '!../bench/esbuild-metafiles/core/core.json',
-  ],
-  {
-    // eagerly loading is not ideal because it imports all metafiles upfront,
-    // but it's the only way to create the argTypes from this list,
-    // as otherwise it would be an async operation
-    eager: true,
-  }
-);
+const allMetafiles = import.meta.glob([
+  '../bench/esbuild-metafiles/**/*.json',
+  // the core metafile is too big to be loaded automatically in the iframe
+  '!../bench/esbuild-metafiles/core/core.json',
+]);
 
 const METAFILES_DIR = '../bench/esbuild-metafiles/';
 const PACKAGES_WITHOUT_ORG = ['storybook', 'sb', 'create-storybook'];
@@ -32,6 +24,9 @@ export default {
   parameters: {
     layout: 'fullscreen',
     chromatic: { disableSnapshot: true },
+  },
+  args: {
+    metafile: safeMetafileArg(Object.keys(allMetafiles)[0]),
   },
   argTypes: {
     metafile: {
@@ -59,26 +54,23 @@ export default {
       },
     },
   },
-  render: (args) => {
-    if (!args.metafile) {
-      return (
-        <div
-          style={{
-            width: '100%',
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <span>
-            Select a metafile in the <code>metafile</code> Control
-          </span>
-        </div>
-      );
-    }
-    const metafile = allMetafiles[args.metafile];
-    const encodedMetafile = btoa(JSON.stringify(metafile));
+  loaders: [
+    async ({ args }) => {
+      if (!args.metafile) {
+        return;
+      }
+      let metafile;
+      try {
+        metafile = await allMetafiles[args.metafile]();
+      } catch (e) {
+        return;
+      }
+      const encodedMetafile = btoa(JSON.stringify(metafile));
+      return { encodedMetafile };
+    },
+  ],
+  render: (args, { loaded }) => {
+    const { encodedMetafile = '' } = loaded ?? {};
 
     return (
       <iframe
