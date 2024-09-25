@@ -155,7 +155,7 @@ jobs:
             yarn local-registry --publish
       - report-workflow-on-failure
       - store_artifacts: 
-          path: bench/esbuild-metafiles
+          path: code/bench/esbuild-metafiles
       - save_cache:
           name: Save Yarn cache
           key: build-yarn-2-cache-v4--{{ checksum "code/yarn.lock" }}--{{ checksum "scripts/yarn.lock" }}

@@ -70,6 +70,7 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
     __dirname,
     '..',
     '..',
+    'code',
     'bench',
     'esbuild-metafiles',
     name.replace('@storybook/', '')

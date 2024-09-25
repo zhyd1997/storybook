@@ -5,9 +5,9 @@ import type { Meta } from '@storybook/react';
 // @ts-expect-error - TS doesn't know about import.meta.glob from Vite
 const allMetafiles = import.meta.glob(
   [
-    '../../bench/esbuild-metafiles/**/*.json',
+    '../bench/esbuild-metafiles/**/*.json',
     // the core metafile is too big to be loaded automatically in the iframe
-    '!../../bench/esbuild-metafiles/core/core.json',
+    '!../bench/esbuild-metafiles/core/core.json',
   ],
   {
     // eagerly loading is not ideal because it imports all metafiles upfront,
@@ -17,7 +17,7 @@ const allMetafiles = import.meta.glob(
   }
 );
 
-const METAFILES_DIR = '../../bench/esbuild-metafiles/';
+const METAFILES_DIR = '../bench/esbuild-metafiles/';
 const PACKAGES_WITHOUT_ORG = ['storybook', 'sb', 'create-storybook'];
 
 // allows the metafile path to be used in the URL hash

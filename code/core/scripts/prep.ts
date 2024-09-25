@@ -309,7 +309,7 @@ async function run() {
       });
     } else {
       // repo root/bench/esbuild-metafiles/core
-      const metafilesDir = join(__dirname, '..', '..', '..', 'bench', 'esbuild-metafiles', 'core');
+      const metafilesDir = join(__dirname, '..', '..', 'bench', 'esbuild-metafiles', 'core');
       if (existsSync(metafilesDir)) {
         await rm(metafilesDir, { recursive: true });
       }
