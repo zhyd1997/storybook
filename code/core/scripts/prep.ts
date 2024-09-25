@@ -1,5 +1,5 @@
 /* eslint-disable local-rules/no-uncategorized-errors */
-import { existsSync, mkdirSync, watch } from 'node:fs';
+import { existsSync, watch } from 'node:fs';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
@@ -340,6 +340,10 @@ async function run() {
 
         return acc;
       }, {});
+
+      if (!existsSync(join(cwd, 'report'))) {
+        await mkdir('report');
+      }
 
       await Promise.all(
         Object.entries(grouped).map(async ([outName, metafile]) => {
