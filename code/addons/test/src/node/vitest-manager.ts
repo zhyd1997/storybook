@@ -5,7 +5,7 @@ import type { TestProject, TestSpecification, Vitest, WorkspaceProject } from 'v
 import type { Channel } from 'storybook/internal/channels';
 import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-events';
 
-import StorybookReporter from './reporter';
+import { StorybookReporter } from './reporter';
 import type { TestManager } from './test-manager';
 
 export class VitestManager {

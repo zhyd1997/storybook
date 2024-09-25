@@ -58,7 +58,7 @@ const mockChannel = new Channel({ transport });
 describe('bootTestRunner', () => {
   it('should execute vitest.js', async () => {
     bootTestRunner(mockChannel);
-    expect(execaNode).toHaveBeenCalledWith(expect.stringMatching(/\/vitest\.js$/));
+    expect(execaNode).toHaveBeenCalledWith(expect.stringMatching(/vitest\.js$/));
   });
 
   it('should log stdout and stderr', async () => {

@@ -37,7 +37,7 @@ const StatusMap: Record<TaskState, Status> = {
   todo: 'todo',
 };
 
-export default class StorybookReporter implements Reporter {
+export class StorybookReporter implements Reporter {
   testStatusData: API_StatusUpdate = {};
 
   start = 0;
@@ -195,4 +195,3 @@ export default class StorybookReporter implements Reporter {
     this.clearVitestState();
   }
 }
-export { StorybookReporter };
