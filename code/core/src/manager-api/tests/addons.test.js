@@ -24,7 +24,7 @@ const TEST_PROVIDERS = {
     id: 'storybook/test/test-provider',
     title: 'Component tests',
   },
-}
+};
 
 const provider = {
   getElements(type) {
