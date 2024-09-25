@@ -85,7 +85,8 @@
     "playwright": "1.46.0",
     "playwright-core": "1.46.0",
     "serialize-javascript": "^3.1.0",
-    "type-fest": "~2.19"
+    "type-fest": "~2.19",
+    "@vitest/expect@npm:2.0.5": "patch:@vitest/expect@npm%3A2.0.5#~/.yarn/patches/@vitest-expect-npm-2.0.5-8933466cce.patch"
   },
   "dependencies": {
     "@chromatic-com/storybook": "^1.6.1",

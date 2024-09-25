@@ -54,9 +54,6 @@
     "@vitest/spy": "2.0.5",
     "util": "^0.12.4"
   },
-  "resolutions": {
-    "@vitest/expect@npm:2.0.5": "patch:@vitest/expect@npm%3A2.0.5#~/.yarn/patches/@vitest-expect-npm-2.0.5-8933466cce.patch"
-  },
   "devDependencies": {
     "chai": "^5.1.1",
     "tinyspy": "^3.0.0",
