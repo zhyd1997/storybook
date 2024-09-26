@@ -55,8 +55,21 @@ export const getVirtualModules = async (options: Options) => {
       require.resolve('@storybook/builder-webpack5/templates/virtualModuleModernEntry.js')
     )
   )
-    .replaceAll('{{storiesFilename}}', storiesFilename)
-    .replaceAll('{{previewAnnotations}}', previewAnnotations.filter(Boolean).join(','))
+    .replaceAll(`'{{storiesFilename}}'`, `'./${storiesFilename}'`)
+    .replaceAll(
+      `'{{previewAnnotations}}'`,
+      previewAnnotations
+        .filter(Boolean)
+        .map((entry) => `'${entry}'`)
+        .join(',')
+    )
+    .replaceAll(
+      `'{{previewAnnotations_requires}}'`,
+      previewAnnotations
+        .filter(Boolean)
+        .map((entry) => `require('${entry}')`)
+        .join(',')
+    )
     // We need to double escape `\` for webpack. We may have some in windows paths
     .replace(/\\/g, '\\\\');
   entries.push(configEntryPath);
