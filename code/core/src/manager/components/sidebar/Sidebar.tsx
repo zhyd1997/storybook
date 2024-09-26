@@ -1,10 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { ScrollArea, Spaced } from '@storybook/core/components';
+import { Button, ScrollArea, Spaced } from '@storybook/core/components';
 import { styled } from '@storybook/core/theming';
 import type { API_LoadedRefData, Addon_SidebarTopType } from '@storybook/core/types';
 
-import type { State } from '@storybook/core/manager-api';
+import {
+  TESTING_MODULE_RUN_ALL_REQUEST,
+  TESTING_MODULE_WATCH_MODE_REQUEST,
+  type TestingModuleRunAllRequestPayload,
+  type TestingModuleWatchModeRequestPayload,
+} from '@storybook/core/core-events';
+import { type State, useStorybookApi } from '@storybook/core/manager-api';
 
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
 import { Explorer } from './Explorer';
@@ -13,6 +19,7 @@ import { Heading } from './Heading';
 import { Search } from './Search';
 import { SearchResults } from './SearchResults';
 import { SidebarBottom } from './SidebarBottom';
+import { TEST_PROVIDER_ID } from './Tree';
 import type { CombinedDataset, Selection } from './types';
 import { useLastViewed } from './useLastViewed';
 
@@ -133,6 +140,15 @@ export const Sidebar = React.memo(function Sidebar({
   const dataset = useCombination(index, indexError, previewInitialized, status, refs);
   const isLoading = !index && !indexError;
   const lastViewedProps = useLastViewed(selected);
+  const api = useStorybookApi();
+  const [watchMode, setWatchMode] = useState(false);
+
+  useEffect(() => {
+    api.emit(TESTING_MODULE_WATCH_MODE_REQUEST, {
+      providerId: TEST_PROVIDER_ID,
+      watchMode,
+    } as TestingModuleWatchModeRequestPayload);
+  }, [api, watchMode]);
 
   return (
     <Container className="container sidebar-container">
@@ -188,6 +204,19 @@ export const Sidebar = React.memo(function Sidebar({
       {isLoading ? null : (
         <Bottom className="sb-bar">
           <SidebarBottom />
+          <Button
+            onClick={() => {
+              api.emit(TESTING_MODULE_RUN_ALL_REQUEST, {
+                providerId: TEST_PROVIDER_ID,
+              } as TestingModuleRunAllRequestPayload);
+            }}
+          >
+            Run test for all Stories
+          </Button>
+          <label>
+            <input type="checkbox" checked={watchMode} onChange={() => setWatchMode(!watchMode)} />{' '}
+            Watch Mode
+          </label>
         </Bottom>
       )}
     </Container>

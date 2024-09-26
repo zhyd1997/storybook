@@ -79,10 +79,10 @@ const config: StorybookConfig = {
       directory: '../addons/interactions/src',
       titlePrefix: 'addons/interactions',
     },
-    // {
-    //   directory: '../addons/interactions/template/stories',
-    //   titlePrefix: 'addons/interactions',
-    // },
+    {
+      directory: '../addons/interactions/template/stories',
+      titlePrefix: 'addons/interactions/tests',
+    },
   ],
   addons: [
     '@storybook/addon-links',
