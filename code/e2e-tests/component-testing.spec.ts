@@ -4,11 +4,15 @@ import { SbPage } from './util';
 
 const storybookUrl = process.env.STORYBOOK_URL || 'http://localhost:8001';
 const type = process.env.STORYBOOK_TYPE || 'dev';
+const templateName = process.env.STORYBOOK_TEMPLATE_NAME || '';
 
 test.describe('component testing', () => {
   test.describe.configure({ mode: 'serial' });
   test.skip(type === 'build', `Skipping tests for production Storybooks`);
-
+  test.skip(
+    templateName.startsWith('cra'),
+    `Skipping ${templateName}, which does not support Vitest`
+  );
   test.beforeEach(async ({ page }) => {
     await page.goto(storybookUrl);
     await new SbPage(page).waitUntilLoaded();
@@ -37,7 +41,9 @@ test.describe('component testing', () => {
     // Change controls to force a failure in the story
     await sbPage.viewAddonPanel('Controls');
     const toggle = sbPage.panelContent().locator('input[name=forceFailure]');
-    await toggle.click();
+    await await expect(toggle).not.toBeChecked();
+
+    await toggle.check();
 
     // Save controls
     await sbPage.panelContent().locator('[data-short-label="Unsaved changes"]').isVisible();
