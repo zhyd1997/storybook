@@ -12,12 +12,23 @@ test.describe('component testing', () => {
     await new SbPage(page).waitUntilLoaded();
   });
 
-  test('should correctly filter dev-only, docs-only, test-only stories', async ({ page }) => {
+  test('should execute tests via testing module UI', async ({ page }) => {
     const sbPage = new SbPage(page);
-    await sbPage.navigateToStory('addons/test/basics', 'basic');
+    await sbPage.navigateToStory('addons/test/basics', 'Expected Failure');
 
     // Toggle watch mode
     await page.getByLabel('Watch Mode').check();
+
+    /**
+     * Wait a couple seconds for Vitest to spawn. Ideally we should test non-watch mode scenarios
+     * first and then enable watch mode and test again. Currently, the vitest non-watch mode run is
+     * caching and therefore not picking up arg changes. However, we don't have a way in the UI that
+     * states that Vitest is ready, hence we do this arbitrary timeout (not great, I know!)
+     * eslint-disable-next-line playwright/no-wait-for-timeout
+     */
+    // then enable watch mode and test again. Currently, the vitest non-watch mode run
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(2000);
 
     // Change controls to force a failure in the story
     await sbPage.viewAddonPanel('Controls');
