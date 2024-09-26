@@ -318,17 +318,13 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, provider, singleStory 
       return {
         ...defaultLayoutState,
         layout: {
-          ...defaultLayoutState.layout,
           ...toMerged(
             defaultLayoutState.layout,
             pick(options, Object.keys(defaultLayoutState.layout))
           ),
           ...(singleStory && { navSize: 0 }),
         },
-        ui: {
-          ...defaultLayoutState.ui,
-          ...toMerged(defaultLayoutState.ui, pick(options, Object.keys(defaultLayoutState.ui))),
-        },
+        ui: toMerged(defaultLayoutState.ui, pick(options, Object.keys(defaultLayoutState.ui))),
         selectedPanel: selectedPanel || defaultLayoutState.selectedPanel,
         theme: theme || defaultLayoutState.theme,
       };
