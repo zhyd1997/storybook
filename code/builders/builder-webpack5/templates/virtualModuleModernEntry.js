@@ -3,10 +3,9 @@ import { PreviewWeb, addons, composeConfigs } from 'storybook/internal/preview-a
 
 import { global } from '@storybook/global';
 
-import { importFn } from './{{storiesFilename}}';
+import { importFn } from '{{storiesFilename}}';
 
-const getProjectAnnotations = () =>
-  composeConfigs(['{{previewAnnotations}}'].map((entry) => require(entry)));
+const getProjectAnnotations = () => composeConfigs(['{{previewAnnotations_requires}}']);
 
 const channel = createBrowserChannel({ page: 'preview' });
 addons.setChannel(channel);
@@ -22,7 +21,7 @@ window.__STORYBOOK_STORY_STORE__ = preview.storyStore;
 window.__STORYBOOK_ADDONS_CHANNEL__ = channel;
 
 if (import.meta.webpackHot) {
-  import.meta.webpackHot.accept('./{{storiesFilename}}', () => {
+  import.meta.webpackHot.accept('{{storiesFilename}}', () => {
     // importFn has changed so we need to patch the new one in
     preview.onStoriesChanged({ importFn });
   });
