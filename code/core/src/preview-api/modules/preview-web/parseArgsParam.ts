@@ -78,7 +78,7 @@ const QUERY_OPTIONS: Partial<Options> = {
       }
 
       if (str.startsWith('!date(') && str.endsWith(')')) {
-        return new Date(str.slice(6, -1));
+        return new Date(str.replaceAll(' ', '+').slice(6, -1));
       }
 
       if (str.startsWith('!hex(') && str.endsWith(')')) {
