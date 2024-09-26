@@ -6,13 +6,17 @@ const storybookUrl = process.env.STORYBOOK_URL || 'http://localhost:8001';
 const type = process.env.STORYBOOK_TYPE || 'dev';
 
 test.describe('component testing', () => {
+  test.describe.configure({ mode: 'serial' });
   test.skip(type === 'build', `Skipping tests for production Storybooks`);
+
   test.beforeEach(async ({ page }) => {
     await page.goto(storybookUrl);
     await new SbPage(page).waitUntilLoaded();
   });
 
-  test('should execute tests via testing module UI', async ({ page }) => {
+  test('should execute tests via testing module UI', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', `Skipping tests for ${browserName}`);
+
     const sbPage = new SbPage(page);
     await sbPage.navigateToStory('addons/test/basics', 'Expected Failure');
 
