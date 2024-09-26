@@ -516,6 +516,9 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     packageJson.resolutions = {
       ...packageJson.resolutions,
       '@storybook/experimental-addon-test': `file:${vitestAddonPath}`,
+      // TODO VITEST INTEGRATION: remove this once Vitest 2.1.x is released with a fix that supports symlinks
+      vitest: '2.1.0-beta.6',
+      '@vitest/browser': '2.1.0-beta.6',
     };
   }
 
