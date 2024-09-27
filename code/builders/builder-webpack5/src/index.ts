@@ -187,15 +187,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({
     immutable: true,
   });
 
-  app.use('/sb-preview', (req, res, next) => {
-    if (!req.url || req.url === '/') {
-      next();
-      return;
-    }
-
-    servePreview(req, res, next);
-  });
-
+  app.use('/sb-preview', servePreview);
   app.use(compilation);
   app.use(webpackHotMiddleware(compiler, { log: false }));
 

@@ -2,10 +2,10 @@
 import type { FileSystemCache } from 'file-system-cache';
 // should be node:http, but that caused the ui/manager to fail to build, might be able to switch this back once ui/manager is in the core
 import type { Server as HttpServer } from 'http';
+import type Polka from 'polka';
 import type { Options as TelejsonOptions } from 'telejson';
 import type { PackageJson as PackageJsonFromTypeFest } from 'type-fest';
 
-import type { Server } from '../../core-server/utils/server-connect';
 import type { Indexer, StoriesEntry } from './indexer';
 
 /** ⚠️ This file contains internal WIP types they MUST NOT be exported outside this package for now! */
@@ -216,7 +216,7 @@ export interface Builder<Config, BuilderStats extends Stats = Stats> {
   start: (args: {
     options: Options;
     startTime: ReturnType<typeof process.hrtime>;
-    app: Server;
+    app: Polka.Polka;
     server: HttpServer;
     channel: ServerChannel;
   }) => Promise<void | {

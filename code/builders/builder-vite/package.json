@@ -46,10 +46,10 @@
     "@storybook/csf-plugin": "workspace:*",
     "@types/find-cache-dir": "^3.2.1",
     "browser-assert": "^1.2.1",
-    "connect": "^3.7.0",
     "es-module-lexer": "^1.5.0",
     "find-cache-dir": "^3.0.0",
     "magic-string": "^0.30.0",
+    "polka": "^1.0.0-next.28",
     "sirv": "^2.0.4",
     "ts-dedent": "^2.0.0"
   },

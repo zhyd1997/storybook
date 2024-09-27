@@ -8,10 +8,9 @@ import { logger } from '@storybook/core/node-logger';
 
 import chalk from 'chalk';
 import type { ServerResponse } from 'http';
+import type Polka from 'polka';
 import sirv from 'sirv';
 import { dedent } from 'ts-dedent';
-
-import type { Server } from './server-connect';
 
 // TODO (43081j): maybe get this from somewhere?
 const contentTypes: Record<string, string> = {
@@ -27,7 +26,7 @@ const setContentTypeHeaders = (res: ServerResponse, pathname: string) => {
   }
 };
 
-export async function useStatics(app: Server, options: Options): Promise<void> {
+export async function useStatics(app: Polka.Polka, options: Options): Promise<void> {
   const staticDirs = (await options.presets.apply('staticDirs')) ?? [];
   const faviconPath = await options.presets.apply<string>('favicon');
 

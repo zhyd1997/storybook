@@ -2,7 +2,7 @@ import { writeFile } from 'node:fs/promises';
 
 import { getStorybookMetadata } from '@storybook/core/telemetry';
 
-import type { Server } from './server-connect';
+import type Polka from 'polka';
 
 export async function extractStorybookMetadata(outputFile: string, configDir: string) {
   const storybookMetadata = await getStorybookMetadata(configDir);
@@ -10,7 +10,7 @@ export async function extractStorybookMetadata(outputFile: string, configDir: st
   await writeFile(outputFile, JSON.stringify(storybookMetadata));
 }
 
-export function useStorybookMetadata(app: Server, configDir?: string) {
+export function useStorybookMetadata(app: Polka.Polka, configDir?: string) {
   app.use('/project.json', async (req, res) => {
     const storybookMetadata = await getStorybookMetadata(configDir);
     res.setHeader('Content-Type', 'application/json');

@@ -1,6 +1,6 @@
-import type { NextHandleFunction } from './server-connect';
+import type Polka from 'polka';
 
-export function getAccessControlMiddleware(crossOriginIsolated: boolean): NextHandleFunction {
+export function getAccessControlMiddleware(crossOriginIsolated: boolean): Polka.Middleware {
   return (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');

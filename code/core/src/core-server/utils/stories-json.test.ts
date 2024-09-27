@@ -8,13 +8,13 @@ import { STORY_INDEX_INVALIDATED } from '@storybook/core/core-events';
 
 import { debounce } from 'es-toolkit/compat';
 import type { Request, Response } from 'express';
+import type Polka from 'polka';
 import Watchpack from 'watchpack';
 
 import { csfIndexer } from '../presets/common-preset';
 import type { StoryIndexGeneratorOptions } from './StoryIndexGenerator';
 import { StoryIndexGenerator } from './StoryIndexGenerator';
 import type { ServerChannel } from './get-server-channel';
-import type { Server } from './server-connect';
 import { DEBOUNCE, useStoriesJson } from './stories-json';
 
 vi.mock('watchpack');
@@ -59,7 +59,7 @@ const getInitializedStoryIndexGenerator = async (
 
 describe('useStoriesJson', () => {
   const use = vi.fn();
-  const app: Server = { use } as any;
+  const app: Polka.Polka = { use } as any;
   const end = vi.fn();
   const write = vi.fn();
   const response: Response = {

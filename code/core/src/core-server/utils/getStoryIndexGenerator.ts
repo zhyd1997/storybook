@@ -1,13 +1,14 @@
 import { normalizeStories } from '@storybook/core/common';
 import type { DocsOptions, Options } from '@storybook/core/types';
 
+import type Polka from 'polka';
+
 import { StoryIndexGenerator } from './StoryIndexGenerator';
 import type { ServerChannel } from './get-server-channel';
-import type { Server } from './server-connect';
 import { useStoriesJson } from './stories-json';
 
 export async function getStoryIndexGenerator(
-  app: Server,
+  app: Polka.Polka,
   features: {
     argTypeTargetsV7?: boolean;
   },

@@ -1,12 +1,13 @@
+import { logConfig } from '@storybook/core/common';
 import type { Options } from '@storybook/core/types';
 
 import { logger } from '@storybook/core/node-logger';
 import { MissingBuilderError } from '@storybook/core/server-errors';
 
-import compression from 'compression';
+import compression from '@polka/compression';
+import polka from 'polka';
 import invariant from 'tiny-invariant';
 
-import { logConfig } from '../common';
 import type { StoryIndexGenerator } from './utils/StoryIndexGenerator';
 import { doTelemetry } from './utils/doTelemetry';
 import { getManagerBuilder, getPreviewBuilder } from './utils/get-builders';
@@ -17,18 +18,17 @@ import { getStoryIndexGenerator } from './utils/getStoryIndexGenerator';
 import { getMiddleware } from './utils/middleware';
 import { openInBrowser } from './utils/open-in-browser';
 import { getServerAddresses } from './utils/server-address';
-import { type NextHandleFunction, connect } from './utils/server-connect';
 import { getServer } from './utils/server-init';
 import { useStatics } from './utils/server-statics';
 
 export async function storybookDevServer(options: Options) {
-  const app = connect();
-
   const [server, features, core] = await Promise.all([
-    getServer(app, options),
+    getServer(options),
     options.presets.apply('features'),
     options.presets.apply('core'),
   ]);
+
+  const app = polka({ server });
 
   const serverChannel = await options.presets.apply(
     'experimental_serverChannel',
@@ -43,7 +43,7 @@ export async function storybookDevServer(options: Options) {
       return undefined;
     });
 
-  app.use(compression({ level: 1 }) as NextHandleFunction);
+  app.use(compression({ level: 1 }));
 
   if (typeof options.extendServer === 'function') {
     options.extendServer(server);

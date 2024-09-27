@@ -5,7 +5,7 @@ import { join, parse } from 'node:path';
 import { NoStatsForViteDevError } from 'storybook/internal/server-errors';
 import type { Options } from 'storybook/internal/types';
 
-import type { NextHandleFunction } from 'connect';
+import type Polka from 'polka';
 import sirv from 'sirv';
 import { corePath } from 'storybook/core-path';
 import type { ViteDevServer } from 'vite';
@@ -13,13 +13,14 @@ import type { ViteDevServer } from 'vite';
 import { build as viteBuild } from './build';
 import { transformIframeHtml } from './transform-iframe-html';
 import type { ViteBuilder } from './types';
+import { createViteServer } from './vite-server';
 
 export { withoutVitePlugins } from './utils/without-vite-plugins';
 export { hasVitePlugins } from './utils/has-vite-plugins';
 
 export * from './types';
 
-function iframeMiddleware(options: Options, server: ViteDevServer): NextHandleFunction {
+function iframeMiddleware(options: Options, server: ViteDevServer): Polka.Middleware {
   return async (req, res, next) => {
     if (!req.url || !req.url.match(/^\/iframe\.html($|\?)/)) {
       next();
@@ -68,14 +69,7 @@ export const start: ViteBuilder['start'] = async ({
     immutable: true,
   });
 
-  app.use('/sb-preview', (req, res, next) => {
-    if (!req.url || req.url === '/') {
-      next();
-      return;
-    }
-
-    servePreview(req, res, next);
-  });
+  app.use('/sb-preview', servePreview);
 
   app.use(iframeMiddleware(options as Options, server));
   app.use(server.middlewares);
