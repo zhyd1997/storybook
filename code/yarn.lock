@@ -26229,6 +26229,11 @@ __metadata:
   dependencies:
     "@storybook/core": "workspace:*"
     typescript: "npm:^5.3.2"
+  peerDependencies:
+    prettier: ^2 || ^3
+  peerDependenciesMeta:
+    prettier:
+      optional: true
   bin:
     getstorybook: ./bin/index.cjs
     sb: ./bin/index.cjs
