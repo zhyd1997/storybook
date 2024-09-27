@@ -16,18 +16,18 @@ test.describe('addon-test', () => {
     // templateName is e.g. 'vue-cli/default-js'
     test.skip(
       /^(lit)/i.test(`${templateName}`),
-      `Skipping ${templateName}, which does not support addon-interactions`
+      `Skipping ${templateName}, which does not support addon-test`
     );
 
     const sbPage = new SbPage(page);
 
     await sbPage.navigateToStory('example/page', 'logged-in');
-    await sbPage.viewAddonPanel('Interactions');
+    await sbPage.viewAddonPanel('Component Tests');
 
     const welcome = sbPage.previewRoot().locator('.welcome');
     await expect(welcome).toContainText('Welcome, Jane Doe!', { timeout: 50000 });
 
-    const interactionsTab = page.locator('#tabbutton-storybook-interactions-panel');
+    const interactionsTab = page.locator('#tabbutton-storybook-test-panel');
     await expect(interactionsTab).toContainText(/(\d)/);
     await expect(interactionsTab).toBeVisible();
 
@@ -44,7 +44,7 @@ test.describe('addon-test', () => {
     // templateName is e.g. 'vue-cli/default-js'
     test.skip(
       /^(lit)/i.test(`${templateName}`),
-      `Skipping ${templateName}, which does not support addon-interactions`
+      `Skipping ${templateName}, which does not support addon-test`
     );
     test.skip(
       browserName === 'firefox',
@@ -53,14 +53,14 @@ test.describe('addon-test', () => {
 
     const sbPage = new SbPage(page);
 
-    await sbPage.deepLinkToStory(storybookUrl, 'addons/interactions/basics', 'type-and-clear');
-    await sbPage.viewAddonPanel('Interactions');
+    await sbPage.deepLinkToStory(storybookUrl, 'addons/test/basics', 'type-and-clear');
+    await sbPage.viewAddonPanel('Component Tests');
 
     // Test initial state - Interactions have run, count is correct and values are as expected
     const formInput = sbPage.previewRoot().locator('#interaction-test-form input');
     await expect(formInput).toHaveValue('final value', { timeout: 50000 });
 
-    const interactionsTab = page.locator('#tabbutton-storybook-interactions-panel');
+    const interactionsTab = page.locator('#tabbutton-storybook-test-panel');
     await expect(interactionsTab.getByText('3')).toBeVisible();
     await expect(interactionsTab).toBeVisible();
     await expect(interactionsTab).toBeVisible();
@@ -122,15 +122,15 @@ test.describe('addon-test', () => {
   test('should show unhandled errors', async ({ page }) => {
     test.skip(
       /^(lit)/i.test(`${templateName}`),
-      `Skipping ${templateName}, which does not support addon-interactions`
+      `Skipping ${templateName}, which does not support addon-test`
     );
     // We trigger the implicit action error here, but angular works a bit different with implicit actions.
     test.skip(/^(angular)/i.test(`${templateName}`));
 
     const sbPage = new SbPage(page);
 
-    await sbPage.deepLinkToStory(storybookUrl, 'addons/interactions/unhandled-errors', 'default');
-    await sbPage.viewAddonPanel('Interactions');
+    await sbPage.deepLinkToStory(storybookUrl, 'addons/test/unhandled-errors', 'default');
+    await sbPage.viewAddonPanel('Component Tests');
 
     const button = sbPage.previewRoot().locator('button');
     await expect(button).toContainText('Button', { timeout: 50000 });
