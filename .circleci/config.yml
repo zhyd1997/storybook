@@ -154,6 +154,8 @@ jobs:
             cd code
             yarn local-registry --publish
       - report-workflow-on-failure
+      - store_artifacts: 
+          path: code/bench/esbuild-metafiles
       - save_cache:
           name: Save Yarn cache
           key: build-yarn-2-cache-v4--{{ checksum "code/yarn.lock" }}--{{ checksum "scripts/yarn.lock" }}
@@ -164,6 +166,7 @@ jobs:
           paths:
             - code/node_modules
             - scripts/node_modules
+            - code/bench
             - code/examples
             - code/node_modules
             - code/addons
@@ -403,7 +406,7 @@ jobs:
       parallelism:
         type: integer
     executor:
-      class: large
+      class: xlarge
       name: sb_playwright
     parallelism: << parameters.parallelism >>
     steps:
@@ -628,6 +631,8 @@ jobs:
                   mkdir empty-<< parameters.template >>-no-install
                   cd empty-<< parameters.template >>-no-install
                   npx storybook init --yes --skip-install
+                  npm install
+                  npm run build-storybook
                 environment:
                   IN_STORYBOOK_SANDBOX: true
                   STORYBOOK_INIT_EMPTY_TYPE: << parameters.template >>
@@ -723,7 +728,7 @@ workflows:
           requires:
             - build-sandboxes
       - vitest-integration:
-          parallelism: 4
+          parallelism: 5
           requires:
             - create-sandboxes
       - bench:
@@ -789,7 +794,7 @@ workflows:
           requires:
             - build-sandboxes
       - vitest-integration:
-          parallelism: 4
+          parallelism: 5
           requires:
             - create-sandboxes
       - test-portable-stories:
@@ -856,7 +861,7 @@ workflows:
           requires:
             - build-sandboxes
       - vitest-integration:
-          parallelism: 8
+          parallelism: 11
           requires:
             - create-sandboxes
       - test-portable-stories:

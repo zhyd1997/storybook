@@ -1,13 +1,13 @@
-import { getStorybookMetadata } from '@storybook/core/telemetry';
+import { writeFile } from 'node:fs/promises';
 
-import { writeJSON } from 'fs-extra';
+import { getStorybookMetadata } from '@storybook/core/telemetry';
 
 import type { Server } from './server-connect';
 
 export async function extractStorybookMetadata(outputFile: string, configDir: string) {
   const storybookMetadata = await getStorybookMetadata(configDir);
 
-  await writeJSON(outputFile, storybookMetadata);
+  await writeFile(outputFile, JSON.stringify(storybookMetadata));
 }
 
 export function useStorybookMetadata(app: Server, configDir?: string) {

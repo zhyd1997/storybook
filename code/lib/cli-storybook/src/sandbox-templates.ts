@@ -216,12 +216,7 @@ const baseTemplates = {
         framework: '@storybook/experimental-nextjs-vite',
         features: { experimentalRSC: true },
       },
-      extraDependencies: [
-        'server-only',
-        'vite-plugin-storybook-nextjs',
-        '@storybook/experimental-nextjs-vite',
-        'vite',
-      ],
+      extraDependencies: ['server-only', '@storybook/experimental-nextjs-vite', 'vite'],
     },
     skipTasks: ['e2e-tests-dev', 'bench'],
   },
@@ -449,8 +444,7 @@ const baseTemplates = {
       renderer: '@storybook/svelte',
       builder: '@storybook/builder-vite',
     },
-    // TODO: remove vitest-integration filter once project annotations exist for sveltekit
-    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
+    skipTasks: ['e2e-tests-dev', 'bench'],
   },
   'svelte-kit/skeleton-ts': {
     name: 'SvelteKit Latest (Vite | TypeScript)',
@@ -461,8 +455,7 @@ const baseTemplates = {
       renderer: '@storybook/svelte',
       builder: '@storybook/builder-vite',
     },
-    // TODO: remove vitest-integration filter once project annotations exist for sveltekit
-    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
+    skipTasks: ['e2e-tests-dev', 'bench'],
   },
   'svelte-kit/prerelease-ts': {
     name: 'SvelteKit Prerelease (Vite | TypeScript)',
@@ -473,7 +466,7 @@ const baseTemplates = {
       renderer: '@storybook/svelte',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
+    skipTasks: ['e2e-tests-dev', 'bench'],
   },
   'lit-vite/default-js': {
     name: 'Lit Latest (Vite | JavaScript)',

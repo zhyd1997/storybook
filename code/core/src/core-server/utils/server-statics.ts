@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { basename, isAbsolute, normalize, posix, relative, resolve, sep, win32 } from 'node:path';
 
 import { getDirectoryFromWorkingDir } from '@storybook/core/common';
@@ -6,7 +7,6 @@ import type { Options } from '@storybook/core/types';
 import { logger } from '@storybook/core/node-logger';
 
 import chalk from 'chalk';
-import { pathExists } from 'fs-extra';
 import type { ServerResponse } from 'http';
 import sirv from 'sirv';
 import { dedent } from 'ts-dedent';
@@ -118,7 +118,7 @@ export const parseStaticDir = async (arg: string) => {
   const targetDir = target.replace(/^\/?/, './');
   const targetEndpoint = targetDir.substring(1);
 
-  if (!(await pathExists(staticPath))) {
+  if (!existsSync(staticPath)) {
     throw new Error(
       dedent`
         Failed to load static files, no such directory: ${chalk.cyan(staticPath)}

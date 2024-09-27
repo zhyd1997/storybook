@@ -1,3 +1,4 @@
+import { cp, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, parse } from 'node:path';
 
 import { stringifyProcessEnvs } from '@storybook/core/common';
@@ -8,7 +9,6 @@ import { logger } from '@storybook/core/node-logger';
 import { globalExternals } from '@fal-works/esbuild-plugin-global-externals';
 import { pnpPlugin } from '@yarnpkg/esbuild-plugin-pnp';
 import aliasPlugin from 'esbuild-plugin-alias';
-import fs from 'fs-extra';
 import sirv from 'sirv';
 
 import type {
@@ -146,7 +146,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({ startTime,
   // make sure we clear output directory of addons dir before starting
   // this could cause caching issues where addons are loaded when they shouldn't
   const addonsDir = config.outdir;
-  await fs.remove(addonsDir);
+  await rm(addonsDir, { recursive: true, force: true });
 
   yield;
 
@@ -282,7 +282,7 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
 
   yield;
 
-  const managerFiles = fs.copy(coreDirOrigin, coreDirTarget, {
+  const managerFiles = cp(coreDirOrigin, coreDirTarget, {
     filter: (src) => {
       const { ext } = parse(src);
       if (ext) {
@@ -290,6 +290,7 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
       }
       return true;
     },
+    recursive: true,
   });
   const { cssFiles, jsFiles } = await readOrderedFiles(addonsDir, compilation?.outputFiles);
 
@@ -314,11 +315,7 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
     globals
   );
 
-  await Promise.all([
-    //
-    fs.writeFile(join(options.outputDir, 'index.html'), html),
-    managerFiles,
-  ]);
+  await Promise.all([writeFile(join(options.outputDir, 'index.html'), html), managerFiles]);
 
   logger.trace({ message: '=> Manager built', time: process.hrtime(startTime) });
 
