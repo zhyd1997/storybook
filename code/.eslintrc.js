@@ -43,7 +43,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['templates/virtualModuleModernEntry.js'],
+      files: ['**/templates/virtualModuleModernEntry.js'],
       rules: {
         'no-underscore-dangle': 'off',
         'import/no-extraneous-dependencies': 'off',
