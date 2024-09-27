@@ -418,6 +418,14 @@
     "use-resize-observer": "^9.1.0",
     "watchpack": "^2.2.0"
   },
+  "peerDependencies": {
+    "prettier": "^2 || ^3"
+  },
+  "peerDependenciesMeta": {
+    "prettier": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
