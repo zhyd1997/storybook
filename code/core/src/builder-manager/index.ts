@@ -172,23 +172,8 @@ const starter: StarterFunction = async function* starterGeneratorFn({ startTime,
     dev: true,
     immutable: true,
   });
-  // TODO (43081j): maybe abstract this into a reusable function
-  app.use('/sb-addons', (req, res, next) => {
-    if (!req.url || req.url === '/') {
-      next();
-      return;
-    }
-
-    serveAddons(req, res, next);
-  });
-  app.use('/sb-manager', (req, res, next) => {
-    if (!req.url || req.url === '/') {
-      next();
-      return;
-    }
-
-    serveCore(req, res, next);
-  });
+  app.use('/sb-addons', serveAddons);
+  app.use('/sb-manager', serveCore);
 
   const { cssFiles, jsFiles } = await readOrderedFiles(addonsDir, compilation?.outputFiles);
 
