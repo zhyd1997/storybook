@@ -635,6 +635,26 @@ jobs:
                   STORYBOOK_INIT_EMPTY_TYPE: << parameters.template >>
                   STORYBOOK_DISABLE_TELEMETRY: true
       - report-workflow-on-failure
+  test-ui-testing-module:
+    executor:
+      name: sb_playwright
+      class: medium
+    steps:
+      - git-shallow-clone/checkout_advanced:
+          clone_options: "--depth 1 --verbose"
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install dependencies
+          command: yarn install --no-immutable
+          working_directory: test-storybooks/portable-stories-kitchen-sink/react
+          environment:
+            YARN_ENABLE_IMMUTABLE_INSTALLS: false
+      - run:
+          name: Run E2E tests
+          command: yarn playwright-e2e
+          working_directory: test-storybooks/portable-stories-kitchen-sink/react
+      - report-workflow-on-failure
   test-portable-stories:
     parameters:
       directory:
@@ -732,6 +752,9 @@ workflows:
           parallelism: 5
           requires:
             - build-sandboxes
+      - test-ui-testing-module:
+          requires:
+            - build
       - test-portable-stories:
           requires:
             - build
@@ -800,6 +823,9 @@ workflows:
           matrix:
             parameters:
               directory: ["react", "vue3", "nextjs", "svelte"]
+      - test-ui-testing-module:
+          requires:
+            - build
       - bench:
           parallelism: 5
           requires:
@@ -867,6 +893,9 @@ workflows:
           matrix:
             parameters:
               directory: ["react", "vue3", "nextjs", "svelte"]
+      - test-ui-testing-module:
+          requires:
+            - build
       - test-empty-init:
           requires:
             - build
