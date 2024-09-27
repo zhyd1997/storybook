@@ -52,12 +52,10 @@ const Top = styled(Spaced)({
 });
 
 const Bottom = styled.div(({ theme }) => ({
-  borderTop: `1px solid ${theme.appBorderColor}`,
   padding: theme.layoutMargin / 2,
   display: 'flex',
   flexWrap: 'wrap',
   gap: theme.layoutMargin / 2,
-  backgroundColor: theme.barBg,
 
   '&:empty': {
     display: 'none',
@@ -140,15 +138,6 @@ export const Sidebar = React.memo(function Sidebar({
   const dataset = useCombination(index, indexError, previewInitialized, status, refs);
   const isLoading = !index && !indexError;
   const lastViewedProps = useLastViewed(selected);
-  const api = useStorybookApi();
-  const [watchMode, setWatchMode] = useState(false);
-
-  useEffect(() => {
-    api.emit(TESTING_MODULE_WATCH_MODE_REQUEST, {
-      providerId: TEST_PROVIDER_ID,
-      watchMode,
-    } as TestingModuleWatchModeRequestPayload);
-  }, [api, watchMode]);
 
   return (
     <Container className="container sidebar-container">
@@ -204,19 +193,6 @@ export const Sidebar = React.memo(function Sidebar({
       {isLoading ? null : (
         <Bottom className="sb-bar">
           <SidebarBottom />
-          <Button
-            onClick={() => {
-              api.emit(TESTING_MODULE_RUN_ALL_REQUEST, {
-                providerId: TEST_PROVIDER_ID,
-              } as TestingModuleRunAllRequestPayload);
-            }}
-          >
-            Run test for all Stories
-          </Button>
-          <label>
-            <input type="checkbox" checked={watchMode} onChange={() => setWatchMode(!watchMode)} />{' '}
-            Watch Mode
-          </label>
         </Bottom>
       )}
     </Container>

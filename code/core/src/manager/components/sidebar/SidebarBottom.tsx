@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { type SyntheticEvent, useCallback, useEffect } from 'react';
 
 import { styled } from '@storybook/core/theming';
+import { ContrastIcon, PointerHandIcon } from '@storybook/icons';
 import type { API_FilterFunction, API_StatusUpdate, API_StatusValue } from '@storybook/types';
 
 import {
   TESTING_MODULE_RUN_PROGRESS_RESPONSE,
-  type TestingModuleRunProgressPayload,
   type TestingModuleRunResponsePayload,
 } from '@storybook/core/core-events';
 import {
@@ -14,9 +14,8 @@ import {
   useStorybookApi,
   useStorybookState,
 } from '@storybook/core/manager-api';
-import { useChannel } from '@storybook/core/preview-api';
 
-import { FilterToggle } from './FilterToggle';
+import { TestingModule } from './TestingModule';
 
 const filterNone: API_FilterFunction = () => true;
 const filterWarn: API_FilterFunction = ({ status = {} }) =>
@@ -26,24 +25,25 @@ const filterError: API_FilterFunction = ({ status = {} }) =>
 const filterBoth: API_FilterFunction = ({ status = {} }) =>
   Object.values(status).some((value) => value?.status === 'warn' || value?.status === 'error');
 
-const getFilter = (showWarnings = false, showErrors = false) => {
-  if (showWarnings && showErrors) {
+const getFilter = (warningsActive = false, errorsActive = false) => {
+  if (warningsActive && errorsActive) {
     return filterBoth;
   }
 
-  if (showWarnings) {
+  if (warningsActive) {
     return filterWarn;
   }
 
-  if (showErrors) {
+  if (errorsActive) {
     return filterError;
   }
   return filterNone;
 };
 
 const Wrapper = styled.div({
+  width: '100%',
   display: 'flex',
-  gap: 5,
+  gap: 6,
 });
 
 interface SidebarBottomProps {
@@ -76,8 +76,8 @@ function processTestReport(payload: TestingModuleRunResponsePayload) {
 }
 
 export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
-  const [showWarnings, setShowWarnings] = React.useState(false);
-  const [showErrors, setShowErrors] = React.useState(false);
+  const [warningsActive, setWarningsActive] = React.useState(false);
+  const [errorsActive, setErrorsActive] = React.useState(false);
 
   const warnings = Object.values(status).filter((statusByAddonId) =>
     Object.values(statusByAddonId).some((value) => value?.status === 'warn')
@@ -88,40 +88,47 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
   const hasWarnings = warnings.length > 0;
   const hasErrors = errors.length > 0;
 
-  const toggleWarnings = useCallback(() => setShowWarnings((shown) => !shown), []);
-  const toggleErrors = useCallback(() => setShowErrors((shown) => !shown), []);
+  const toggleWarnings = useCallback((e: SyntheticEvent) => {
+    e.stopPropagation();
+    setWarningsActive((active) => !active);
+  }, []);
+  const toggleErrors = useCallback((e: SyntheticEvent) => {
+    e.stopPropagation();
+    setErrorsActive((active) => !active);
+  }, []);
 
   useEffect(() => {
-    const filter = getFilter(hasWarnings && showWarnings, hasErrors && showErrors);
+    const filter = getFilter(hasWarnings && warningsActive, hasErrors && errorsActive);
     api.experimental_setFilter('sidebar-bottom-filter', filter);
-  }, [api, hasWarnings, hasErrors, showWarnings, showErrors]);
+  }, [api, hasWarnings, hasErrors, warningsActive, errorsActive]);
 
-  if (!hasWarnings && !hasErrors) {
+  const testProviders = [
+    {
+      providerId: 'component-tests',
+      title: 'Component tests',
+      description: 'Ran 2 seconds ago',
+      icon: <PointerHandIcon />,
+      watchable: true,
+    },
+    {
+      providerId: 'visual-tests',
+      title: 'Visual tests',
+      description: 'Not run',
+      icon: <ContrastIcon />,
+    },
+  ];
+
+  if (!hasWarnings && !hasErrors && !testProviders.length) {
     return null;
   }
 
   return (
     <Wrapper id="sidebar-bottom-wrapper">
-      {hasErrors && (
-        <FilterToggle
-          id="errors-found-filter"
-          active={showErrors}
-          count={errors.length}
-          label="Error"
-          status="critical"
-          onClick={toggleErrors}
-        />
-      )}
-      {hasWarnings && (
-        <FilterToggle
-          id="warnings-found-filter"
-          active={showWarnings}
-          count={warnings.length}
-          label="Warning"
-          status="warning"
-          onClick={toggleWarnings}
-        />
-      )}
+      <TestingModule
+        {...{ api, testProviders, errorsActive, warningsActive, toggleErrors, toggleWarnings }}
+        errorCount={errors.length}
+        warningCount={warnings.length}
+      />
     </Wrapper>
   );
 };
