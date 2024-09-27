@@ -7,20 +7,7 @@ export default {
   component: Component,
 };
 
-export const ExpectedSuccess = {} satisfies StoryAnnotations;
-
-export const LongRunning = {
-  loaders: [async () => new Promise((resolve) => setTimeout(resolve, 800))],
-} satisfies StoryAnnotations;
-
 export const ExpectedFailure = {
-  argTypes: {
-    forceFailure: {
-      control: {
-        type: 'boolean',
-      },
-    },
-  },
   args: {
     forceFailure: false,
   },
@@ -29,4 +16,10 @@ export const ExpectedFailure = {
       throw new Error('Expected failure');
     }
   }
+} satisfies StoryAnnotations;
+
+export const ExpectedSuccess = {} satisfies StoryAnnotations;
+
+export const LongRunning = {
+  loaders: [async () => new Promise((resolve) => setTimeout(resolve, 800))],
 } satisfies StoryAnnotations;

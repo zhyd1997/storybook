@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import path from 'node:path';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -23,7 +24,7 @@ export default defineConfig({
       'junit',
       {
         embedAnnotationsAsProperties: true,
-        outputFile: process.env.PLAYWRIGHT_JUNIT_OUTPUT_NAME,
+        outputFile: path.join(__dirname, '..','..','..', 'test-results'),
       },
     ],
   ],

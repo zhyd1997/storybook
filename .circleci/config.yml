@@ -654,6 +654,11 @@ jobs:
           name: Run E2E tests
           command: yarn playwright-e2e
           working_directory: test-storybooks/portable-stories-kitchen-sink/react
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results/
+          destination: playwright
       - report-workflow-on-failure
   test-portable-stories:
     parameters:
@@ -683,7 +688,7 @@ jobs:
           working_directory: test-storybooks/portable-stories-kitchen-sink/<< parameters.directory >>
       - run:
           name: Run Playwright CT tests
-          command: yarn playwright
+          command: yarn playwright-ct
           working_directory: test-storybooks/portable-stories-kitchen-sink/<< parameters.directory >>
       - run:
           name: Run Cypress CT tests

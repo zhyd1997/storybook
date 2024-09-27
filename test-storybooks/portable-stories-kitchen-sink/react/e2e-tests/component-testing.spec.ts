@@ -15,8 +15,6 @@ test.describe('component testing', () => {
     await sbPage.navigateToStory('addons/test', 'Expected Failure');
 
     // For whatever reason, sometimes it takes longer for the story to load
-    const storyElement = sbPage.getCanvasBodyElement().getByRole('button', { name: 'test' });
-    await expect(storyElement).toBeVisible({ timeout: 10000 });
 
     // Change controls to force a failure in the story
     await sbPage.viewAddonPanel('Controls');
@@ -30,7 +28,7 @@ test.describe('component testing', () => {
     await sbPage.panelContent().locator('button').getByText('Update story').click();
     await expect(sbPage.page.getByTitle('Story saved')).toBeVisible();
 
-    await page.locator('#addons').getByRole('button').nth(2).click();
+    await page.locator('#addons').getByRole('button').nth(2).click({ timeout: 3000 });
 
     // Wait for test results to appear
     const errorFilter = page.getByRole('button', { name: '1 Error' });
@@ -40,7 +38,7 @@ test.describe('component testing', () => {
     const successfulStoryElement = page.locator(
       '[data-item-id="addons-test--expected-success"] [role="status"]'
     );
-    await expect(successfulStoryElement).toHaveAttribute('aria-label', 'Test status: success');
+    await expect(successfulStoryElement).toHaveAttribute('aria-label', 'Test status: success', { timeout: 3000 });
 
     // Assert for expected failure
     const failingStoryElement = page.locator(
