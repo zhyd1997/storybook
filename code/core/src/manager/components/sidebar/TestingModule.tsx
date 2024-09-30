@@ -44,7 +44,7 @@ const Outline = styled.div<{ active: boolean }>(({ theme, active }) => ({
     animation: `${spin} 3s linear infinite`,
     background:
       'conic-gradient(rgba(255, 71, 133, 0.2) 0deg, rgb(255, 71, 133) 0deg, transparent 160deg)',
-    opacity: '1',
+    opacity: 1,
     willChange: 'auto',
   },
 }));
@@ -89,6 +89,9 @@ const CollapseToggle = styled(Button)({
   opacity: 0,
   transition: 'opacity 250ms',
   willChange: 'auto',
+  '&:focus, &:hover': {
+    opacity: 1,
+  },
 });
 
 const StatusButton = styled(Button)<{ status: 'negative' | 'warning' }>(
