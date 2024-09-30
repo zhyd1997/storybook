@@ -27,7 +27,7 @@ const Outline = styled.div<{ active: boolean }>(({ theme, active }) => ({
   padding: 1,
   overflow: 'hidden',
   borderRadius: theme.appBorderRadius + 1,
-  backgroundColor: 'rgb(226 232 240)',
+  backgroundColor: theme.appBorderColor,
   boxShadow: `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
   transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
@@ -55,19 +55,19 @@ const Card = styled.div(({ theme }) => ({
   position: 'relative',
   zIndex: 1,
   borderRadius: theme.appBorderRadius,
-  backgroundColor: '#fff',
+  backgroundColor: theme.background.content,
 
   '&:hover #testing-module-collapse-toggle': {
     opacity: 1,
   },
 }));
 
-const Collapsible = styled.div({
+const Collapsible = styled.div(({ theme }) => ({
   overflow: 'hidden',
   transition: 'max-height 250ms',
   willChange: 'auto',
-  boxShadow: 'inset 0 -1px 0 #e5e7eb',
-});
+  boxShadow: `inset 0 -1px 0 ${theme.appBorderColor}`,
+}));
 
 const Content = styled.div({
   padding: '12px 6px',
@@ -99,16 +99,27 @@ const CollapseToggle = styled(Button)({
 const StatusButton = styled(Button)<{ status: 'negative' | 'warning' }>(
   { minWidth: 28 },
   ({ active, status, theme }) =>
-    !active && {
-      background: {
-        negative: theme.background.negative,
-        warning: theme.background.warning,
-      }[status],
-      color: {
-        negative: theme.color.negativeText,
-        warning: theme.color.warningText,
-      }[status],
-    }
+    !active && theme.base === 'light'
+      ? {
+          background: {
+            negative: theme.background.negative,
+            warning: theme.background.warning,
+          }[status],
+          color: {
+            negative: theme.color.negativeText,
+            warning: theme.color.warningText,
+          }[status],
+        }
+      : {
+          background: {
+            negative: `${theme.color.negative}22`,
+            warning: `${theme.color.warning}22`,
+          }[status],
+          color: {
+            negative: theme.color.negative,
+            warning: theme.color.warning,
+          }[status],
+        }
 );
 
 const TestProvider = styled.div({
@@ -136,7 +147,7 @@ const Title = styled.div({});
 
 const Description = styled.div(({ theme }) => ({
   fontSize: theme.typography.size.s1,
-  color: transparentize(0.25, theme.color.defaultText),
+  color: theme.barTextColor,
 }));
 
 const Icon = styled.div(({ theme }) => ({
@@ -219,9 +230,10 @@ export const TestingModule = ({
                       <Button
                         variant="ghost"
                         padding="small"
+                        active={watching}
                         onClick={() => onSetWatchMode(id, !watching)}
                       >
-                        {watching ? <EyeCloseIcon /> : <EyeIcon />}
+                        <EyeIcon />
                       </Button>
                     )}
                     {runnable && (
