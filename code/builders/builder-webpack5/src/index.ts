@@ -180,14 +180,14 @@ const starter: StarterFunction = async function* starterGeneratorFn({
   compilation = webpackDevMiddleware(compiler, middlewareOptions);
 
   const previewResolvedDir = join(corePath, 'dist/preview');
-  const previewDirOrigin = previewResolvedDir;
-  const servePreview = sirv(previewDirOrigin, {
-    maxAge: 300000,
-    dev: true,
-    immutable: true,
-  });
-
-  app.use('/sb-preview', servePreview);
+  app.use(
+    '/sb-preview',
+    sirv(previewResolvedDir, {
+      maxAge: 300000,
+      dev: true,
+      immutable: true,
+    })
+  );
   app.use(compilation);
   app.use(webpackHotMiddleware(compiler, { log: false }));
 
@@ -293,10 +293,8 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
   });
 
   const previewResolvedDir = join(corePath, 'dist/preview');
-  const previewDirOrigin = previewResolvedDir;
   const previewDirTarget = join(options.outputDir || '', `sb-preview`);
-
-  const previewFiles = cp(previewDirOrigin, previewDirTarget, {
+  const previewFiles = cp(previewResolvedDir, previewDirTarget, {
     filter: (src) => {
       const { ext } = parse(src);
       if (ext) {

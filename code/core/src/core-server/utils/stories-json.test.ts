@@ -7,7 +7,6 @@ import { normalizeStoriesEntry } from '@storybook/core/common';
 import { STORY_INDEX_INVALIDATED } from '@storybook/core/core-events';
 
 import { debounce } from 'es-toolkit/compat';
-import type { Request, Response } from 'express';
 import type Polka from 'polka';
 import Watchpack from 'watchpack';
 
@@ -62,7 +61,7 @@ describe('useStoriesJson', () => {
   const app: Polka.Polka = { use } as any;
   const end = vi.fn();
   const write = vi.fn();
-  const response: Response = {
+  const response: Polka.Response = {
     header: vi.fn(),
     send: vi.fn(),
     status: vi.fn(),
@@ -82,7 +81,7 @@ describe('useStoriesJson', () => {
     Watchpack.mockClear();
   });
 
-  const request: Request = {
+  const request: Polka.Request = {
     headers: { accept: 'application/json' },
   } as any;
 

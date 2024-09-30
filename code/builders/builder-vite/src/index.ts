@@ -26,7 +26,8 @@ function iframeMiddleware(options: Options, server: ViteDevServer): Polka.Middle
       next();
       return;
     }
-    const url = new URL(req.url, 'https://storybook.js.org');
+    // the base isn't used for anything, but it's required by the URL constructor
+    const url = new URL(req.url, 'http://localhost:6006');
 
     // We need to handle `html-proxy` params for style tag HMR https://github.com/storybookjs/builder-vite/issues/266#issuecomment-1055677865
     // e.g. /iframe.html?html-proxy&index=0.css
@@ -62,15 +63,14 @@ export const start: ViteBuilder['start'] = async ({
   server = await createViteServer(options as Options, devServer);
 
   const previewResolvedDir = join(corePath, 'dist/preview');
-  const previewDirOrigin = previewResolvedDir;
-  const servePreview = sirv(previewDirOrigin, {
-    maxAge: 300000,
-    dev: true,
-    immutable: true,
-  });
-
-  app.use('/sb-preview', servePreview);
-
+  app.use(
+    '/sb-preview',
+    sirv(previewResolvedDir, {
+      maxAge: 300000,
+      dev: true,
+      immutable: true,
+    })
+  );
   app.use(iframeMiddleware(options as Options, server));
   app.use(server.middlewares);
 
@@ -89,10 +89,8 @@ export const build: ViteBuilder['build'] = async ({ options }) => {
   const viteCompilation = viteBuild(options as Options);
 
   const previewResolvedDir = join(corePath, 'dist/preview');
-  const previewDirOrigin = previewResolvedDir;
   const previewDirTarget = join(options.outputDir || '', `sb-preview`);
-
-  const previewFiles = cp(previewDirOrigin, previewDirTarget, {
+  const previewFiles = cp(previewResolvedDir, previewDirTarget, {
     filter: (src) => {
       const { ext } = parse(src);
       if (ext) {

@@ -22,13 +22,13 @@ import { getServer } from './utils/server-init';
 import { useStatics } from './utils/server-statics';
 
 export async function storybookDevServer(options: Options) {
-  const [server, features, core] = await Promise.all([
-    getServer(options),
-    options.presets.apply('features'),
-    options.presets.apply('core'),
-  ]);
-
+  const [server, core] = await Promise.all([getServer(options), options.presets.apply('core')]);
+  console.log('LOG: starting dev server');
   const app = polka({ server });
+  // app.use((req, res, next) => {
+  //   console.log('LOG: ', { url: req.url, method: req.method });
+  //   next();
+  // });
 
   const serverChannel = await options.presets.apply(
     'experimental_serverChannel',
@@ -38,7 +38,7 @@ export async function storybookDevServer(options: Options) {
   let indexError: Error | undefined;
   // try get index generator, if failed, send telemetry without storyCount, then rethrow the error
   const initializedStoryIndexGenerator: Promise<StoryIndexGenerator | undefined> =
-    getStoryIndexGenerator(app, features ?? {}, options, serverChannel).catch((err) => {
+    getStoryIndexGenerator(app, options, serverChannel).catch((err) => {
       indexError = err;
       return undefined;
     });
@@ -58,11 +58,6 @@ export async function storybookDevServer(options: Options) {
   invariant(port, 'expected options to have a port');
   const proto = options.https ? 'https' : 'http';
   const { address, networkAddress } = getServerAddresses(port, host, proto, initialPath);
-
-  const listening = new Promise<void>((resolve, reject) => {
-    // @ts-expect-error (Following line doesn't match TypeScript signature at all 🤔)
-    server.listen({ port, host }, (error: Error) => (error ? reject(error) : resolve()));
-  });
 
   if (!core?.builder) {
     throw new MissingBuilderError();
@@ -84,6 +79,7 @@ export async function storybookDevServer(options: Options) {
     startTime: process.hrtime(),
     options,
     app,
+    router: app, // back-compatability with express-based API
     server,
     channel: serverChannel,
   });
@@ -99,6 +95,7 @@ export async function storybookDevServer(options: Options) {
         startTime: process.hrtime(),
         options,
         app,
+        router: app, // back-compatability with express-based API
         server,
         channel: serverChannel,
       })
@@ -126,7 +123,9 @@ export async function storybookDevServer(options: Options) {
     previewStarted.catch(() => {}).then(() => next());
   });
 
-  await Promise.all([initializedStoryIndexGenerator, listening]).then(async ([indexGenerator]) => {
+  app.listen(port, host);
+
+  await Promise.all([initializedStoryIndexGenerator]).then(async ([indexGenerator]) => {
     if (indexGenerator && !options.ci && !options.smokeTest && options.open) {
       openInBrowser(host ? networkAddress : address);
     }

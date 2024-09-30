@@ -9,9 +9,6 @@ import { useStoriesJson } from './stories-json';
 
 export async function getStoryIndexGenerator(
   app: Polka.Polka,
-  features: {
-    argTypeTargetsV7?: boolean;
-  },
   options: Options,
   serverChannel: ServerChannel
 ): Promise<StoryIndexGenerator | undefined> {

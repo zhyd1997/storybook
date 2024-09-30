@@ -217,6 +217,7 @@ export interface Builder<Config, BuilderStats extends Stats = Stats> {
     options: Options;
     startTime: ReturnType<typeof process.hrtime>;
     app: Polka.Polka;
+    router: Polka.Polka; // back-compatability with express-based API
     server: HttpServer;
     channel: ServerChannel;
   }) => Promise<void | {

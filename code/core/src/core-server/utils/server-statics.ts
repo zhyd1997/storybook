@@ -74,7 +74,8 @@ export async function useStatics(app: Polka.Polka, options: Options): Promise<vo
       return next();
     }
 
-    const url = new URL(req.url, 'https://storybook.js.org');
+    // the base isn't used for anything, but it's required by the URL constructor
+    const url = new URL(req.url, 'http://localhost:6006');
     const pathname = normalize(url.pathname);
 
     // TODO (43081j): this is 'security' so you can't break out of cwd
@@ -84,17 +85,18 @@ export async function useStatics(app: Polka.Polka, options: Options): Promise<vo
     }
 
     for (const { targetEndpoint, staticPath } of statics) {
-      if (pathname.startsWith(targetEndpoint)) {
-        // TODO (43081j): similar as above, this might be doable in a cleaner way
-        const newPath = relative(
-          process.cwd(),
-          resolve(staticPath, './' + pathname.slice(targetEndpoint.length))
-        );
-        url.pathname = newPath;
-        req.url = url.href.slice(url.origin.length);
-        serve(req, res, next);
-        return;
+      if (!pathname.startsWith(targetEndpoint)) {
+        continue;
       }
+      // TODO (43081j): similar as above, this might be doable in a cleaner way
+      const newPath = relative(
+        process.cwd(),
+        resolve(staticPath, './' + pathname.slice(targetEndpoint.length))
+      );
+      url.pathname = newPath;
+      req.url = url.href.slice(url.origin.length);
+      serve(req, res, next);
+      return;
     }
 
     next();

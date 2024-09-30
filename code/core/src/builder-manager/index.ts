@@ -162,18 +162,22 @@ const starter: StarterFunction = async function* starterGeneratorFn({ startTime,
     'manager'
   );
 
-  const serveAddons = sirv(addonsDir, {
-    maxAge: 300000,
-    dev: true,
-    immutable: true,
-  });
-  const serveCore = sirv(coreDirOrigin, {
-    maxAge: 300000,
-    dev: true,
-    immutable: true,
-  });
-  app.use('/sb-addons', serveAddons);
-  app.use('/sb-manager', serveCore);
+  app.use(
+    '/sb-addons',
+    sirv(addonsDir, {
+      maxAge: 300000,
+      dev: true,
+      immutable: true,
+    })
+  );
+  app.use(
+    '/sb-manager',
+    sirv(coreDirOrigin, {
+      maxAge: 300000,
+      dev: true,
+      immutable: true,
+    })
+  );
 
   const { cssFiles, jsFiles } = await readOrderedFiles(addonsDir, compilation?.outputFiles);
 
@@ -261,7 +265,6 @@ const builder: BuilderFunction = async function* builderGeneratorFn({ startTime,
   // TODO: this doesn't watch, we should change this to use the esbuild watch API: https://esbuild.github.io/api/#watch
   compilation = await instance({
     ...config,
-
     minify: true,
   });
 
