@@ -51,7 +51,7 @@ export class SbPage {
 
     await this.page.waitForURL((url) =>
       url.search.includes(
-        `path=/${viewMode ?? name === 'docs' ? 'docs' : 'story'}/${titleId}--${storyId}`
+        `path=/${(viewMode ?? name === 'docs') ? 'docs' : 'story'}/${titleId}--${storyId}`
       )
     );
 
