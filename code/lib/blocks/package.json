@@ -45,7 +45,7 @@
   "dependencies": {
     "@storybook/csf": "^0.1.11",
     "@storybook/global": "^5.0.0",
-    "@storybook/icons": "^1.2.10",
+    "@storybook/icons": "^1.2.12",
     "color-convert": "^2.0.1",
     "dequal": "^2.0.2",
     "es-toolkit": "^1.21.0",

@@ -5,7 +5,9 @@ import { ContrastIcon, PointerHandIcon } from '@storybook/icons';
 import type { API_FilterFunction, API_StatusUpdate, API_StatusValue } from '@storybook/types';
 
 import {
+  TESTING_MODULE_RUN_ALL_REQUEST,
   TESTING_MODULE_RUN_PROGRESS_RESPONSE,
+  TESTING_MODULE_WATCH_MODE_REQUEST,
   type TestingModuleRunResponsePayload,
 } from '@storybook/core/core-events';
 import {
@@ -96,6 +98,18 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
     e.stopPropagation();
     setErrorsActive((active) => !active);
   }, []);
+  const onRunTests = useCallback(
+    (providerId?: string) => {
+      api.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId });
+    },
+    [api]
+  );
+  const onSetWatchMode = useCallback(
+    (providerId: string, watchMode: boolean) => {
+      api.emit(TESTING_MODULE_WATCH_MODE_REQUEST, { providerId, watchMode });
+    },
+    [api]
+  );
 
   useEffect(() => {
     const filter = getFilter(hasWarnings && warningsActive, hasErrors && errorsActive);
@@ -104,17 +118,19 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
 
   const testProviders = [
     {
-      providerId: 'component-tests',
+      id: 'component-tests',
       title: 'Component tests',
       description: 'Ran 2 seconds ago',
       icon: <PointerHandIcon />,
+      runnable: true,
       watchable: true,
     },
     {
-      providerId: 'visual-tests',
+      id: 'visual-tests',
       title: 'Visual tests',
       description: 'Not run',
       icon: <ContrastIcon />,
+      runnable: true,
     },
   ];
 
@@ -125,9 +141,17 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
   return (
     <Wrapper id="sidebar-bottom-wrapper">
       <TestingModule
-        {...{ api, testProviders, errorsActive, warningsActive, toggleErrors, toggleWarnings }}
-        errorCount={errors.length}
-        warningCount={warnings.length}
+        {...{
+          testProviders,
+          errorCount: errors.length,
+          warningCount: warnings.length,
+          errorsActive,
+          warningsActive,
+          toggleErrors,
+          toggleWarnings,
+          onRunTests,
+          onSetWatchMode,
+        }}
       />
     </Wrapper>
   );
@@ -140,7 +164,7 @@ export const SidebarBottom = () => {
   useEffect(() => {
     api.getChannel()?.on(TESTING_MODULE_RUN_PROGRESS_RESPONSE, (data) => {
       if ('payload' in data) {
-        // console.log('progress', data);
+        console.log('progress', data);
         // TODO clear statuses
         api.experimental_updateStatus('figure-out-id', processTestReport(data.payload));
       } else {

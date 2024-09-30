@@ -1,13 +1,20 @@
-import React, { type SyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, { type SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@storybook/core/components';
-import { styled } from '@storybook/core/theming';
-
+import { keyframes, styled } from '@storybook/core/theming';
 import {
-  TESTING_MODULE_RUN_ALL_REQUEST,
-  TESTING_MODULE_WATCH_MODE_REQUEST,
-} from '@storybook/core/core-events';
-import { type API } from '@storybook/core/manager-api';
+  ChevronSmallUpIcon,
+  EyeCloseIcon,
+  EyeIcon,
+  PlayAllHollowIcon,
+  PlayHollowIcon,
+  StopAltHollowIcon,
+} from '@storybook/icons';
+
+const spin = keyframes({
+  from: { transform: 'rotate(0deg)' },
+  to: { transform: 'rotate(360deg)' },
+});
 
 const Position = styled.div({
   bottom: 0,
@@ -19,23 +26,42 @@ const Position = styled.div({
   width: '100%',
 });
 
-const Glow = styled.div(({ theme }) => ({
+const Outline = styled.div<{ active: boolean }>(({ theme, active }) => ({
+  position: 'relative',
   color: theme.color.defaultText,
   fontSize: theme.typography.size.s2,
   lineHeight: '20px',
   width: '100%',
   overflow: 'hidden',
-  borderRadius: theme.appBorderRadius,
+  borderRadius: theme.appBorderRadius + 1,
   backgroundColor: 'rgb(226 232 240)',
   padding: '1px',
   boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
   transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
   transitionDuration: '0.15s',
+
+  '&:after': {
+    content: '""',
+    display: active ? 'block' : 'none',
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    marginLeft: 'calc(max(100vw, 100vh) * -0.5)',
+    marginTop: 'calc(max(100vw, 100vh) * -0.5)',
+    height: 'max(100vw, 100vh)',
+    width: 'max(100vw, 100vh)',
+    animation: `${spin} 3s linear infinite`,
+    background:
+      'conic-gradient(rgba(255, 71, 133, 0.2) 0deg, rgb(255, 71, 133) 0deg, transparent 160deg)',
+    opacity: '1',
+    willChange: 'auto',
+  },
 }));
 
 const Card = styled.div(({ theme }) => ({
-  zIndex: 10,
+  position: 'relative',
+  zIndex: 1,
   borderRadius: theme.appBorderRadius,
   backgroundColor: '#fff',
 
@@ -75,11 +101,20 @@ const CollapseToggle = styled(Button)({
   willChange: 'auto',
 });
 
-const StatusButton = styled(Button)<{ status: 'negative' | 'warning' }>(({ status, theme }) => ({
-  background: { negative: theme.background.negative, warning: theme.background.warning }[status],
-  color: { negative: theme.color.negativeText, warning: theme.color.warningText }[status],
-  minWidth: 28,
-}));
+const StatusButton = styled(Button)<{ status: 'negative' | 'warning' }>(
+  { minWidth: 28 },
+  ({ active, status, theme }) =>
+    !active && {
+      background: {
+        negative: theme.background.negative,
+        warning: theme.background.warning,
+      }[status],
+      color: {
+        negative: theme.color.negativeText,
+        warning: theme.color.warningText,
+      }[status],
+    }
+);
 
 const TestProvider = styled.div({
   display: 'flex',
@@ -117,13 +152,15 @@ const Icon = styled.div(({ theme }) => ({
 }));
 
 interface TestingModuleProps {
-  api: API;
   testProviders: {
-    providerId: string;
+    id: string;
     icon: React.ReactNode;
     title: string;
     description: string;
+    runnable?: boolean;
+    running?: boolean;
     watchable?: boolean;
+    watching?: boolean;
   }[];
   errorCount: number;
   warningCount: number;
@@ -131,10 +168,11 @@ interface TestingModuleProps {
   warningsActive: boolean;
   toggleErrors: (e: SyntheticEvent) => void;
   toggleWarnings: (e: SyntheticEvent) => void;
+  onRunTests: (providerId?: string) => void;
+  onSetWatchMode: (providerId: string, watchMode: boolean) => void;
 }
 
 export const TestingModule = ({
-  api,
   testProviders,
   errorCount,
   warningCount,
@@ -142,147 +180,90 @@ export const TestingModule = ({
   warningsActive,
   toggleErrors,
   toggleWarnings,
+  onRunTests,
+  onSetWatchMode,
 }: TestingModuleProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [maxHeight, setMaxHeight] = useState(500);
-  const [watchMode, setWatchMode] = useState(false);
 
   useEffect(() => {
     setMaxHeight(contentRef.current?.offsetHeight || 500);
   }, []);
 
-  const runAllTests = (e: SyntheticEvent) => {
-    e.stopPropagation();
-  };
+  const runAllTests = useCallback(
+    (e: SyntheticEvent) => {
+      e.stopPropagation();
+      onRunTests();
+    },
+    [onRunTests]
+  );
 
   const toggleCollapsed = () => {
     setMaxHeight(contentRef.current?.offsetHeight || 500);
     setCollapsed(!collapsed);
   };
 
+  const active = testProviders.some((tp) => tp.running);
+
   return (
     <Position>
-      <Glow>
+      <Outline active={active}>
         <Card>
           <Collapsible style={{ maxHeight: collapsed ? 0 : maxHeight }}>
             <Content ref={contentRef}>
-              {testProviders.map(({ providerId, icon, title, description, watchable }) => (
-                <TestProvider key={providerId}>
-                  <Info>
-                    <Icon>{icon}</Icon>
-                    <Details>
-                      <Title>{title}</Title>
-                      <Description>{description}</Description>
-                    </Details>
-                  </Info>
-                  <Actions>
-                    {watchable && (
-                      <Button
-                        variant="ghost"
-                        padding="small"
-                        onClick={() => {
-                          api.emit(TESTING_MODULE_WATCH_MODE_REQUEST, {
-                            providerId,
-                            watchMode: !watchMode,
-                          });
-                          setWatchMode(!watchMode);
-                        }}
-                      >
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 14 14"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+              {testProviders.map(
+                ({ id, icon, title, description, runnable, running, watchable, watching }) => (
+                  <TestProvider key={id}>
+                    <Info>
+                      <Icon>{icon}</Icon>
+                      <Details>
+                        <Title>{title}</Title>
+                        <Description>{description}</Description>
+                      </Details>
+                    </Info>
+                    <Actions>
+                      {watchable && (
+                        <Button
+                          variant="ghost"
+                          padding="small"
+                          onClick={() => onSetWatchMode(id, !watching)}
                         >
-                          <path
-                            d="M7 9.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
-                            fill="currentColor"
-                          ></path>
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M14 7l-.21.293C13.669 7.465 10.739 11.5 7 11.5S.332 7.465.21 7.293L0 7l.21-.293C.331 6.536 3.261 2.5 7 2.5s6.668 4.036 6.79 4.207L14 7zM2.896 5.302A12.725 12.725 0 001.245 7c.296.37.874 1.04 1.65 1.698C4.043 9.67 5.482 10.5 7 10.5c1.518 0 2.958-.83 4.104-1.802A12.72 12.72 0 0012.755 7c-.297-.37-.875-1.04-1.65-1.698C9.957 4.33 8.517 3.5 7 3.5c-1.519 0-2.958.83-4.104 1.802z"
-                            fill="currentColor"
-                          ></path>
-                        </svg>
-                      </Button>
-                    )}
-                    <Button
-                      variant="ghost"
-                      padding="small"
-                      onClick={() => api.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId })}
-                    >
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 14 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M4.2 10.88L10.668 7 4.2 3.12v7.76zM3 2.414v9.174a.8.8 0 001.212.686l7.645-4.587a.8.8 0 000-1.372L4.212 1.727A.8.8 0 003 2.413z"
-                          fill="currentColor"
-                        ></path>
-                      </svg>
-                    </Button>
-                  </Actions>
-                </TestProvider>
-              ))}
+                          {watching ? <EyeCloseIcon /> : <EyeIcon />}
+                        </Button>
+                      )}
+                      {runnable && (
+                        <Button variant="ghost" padding="small" onClick={() => onRunTests(id)}>
+                          {running ? <StopAltHollowIcon /> : <PlayHollowIcon />}
+                        </Button>
+                      )}
+                    </Actions>
+                  </TestProvider>
+                )
+              )}
             </Content>
           </Collapsible>
 
           <Bar onClick={toggleCollapsed}>
-            <Button variant="ghost" padding="small" onClick={runAllTests}>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M5.2 10.88L11.668 7 5.2 3.12v7.76zM4 2.414v9.174a.8.8 0 001.212.686l7.645-4.587a.8.8 0 000-1.372L5.212 1.727A.8.8 0 004 2.413zM1.5 1.6a.6.6 0 01.6.6v9.6a.6.6 0 11-1.2 0V2.2a.6.6 0 01.6-.6z"
-                  fill="currentColor"
-                ></path>
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M.963 1.932a.6.6 0 01.805-.268l1 .5a.6.6 0 01-.536 1.073l-1-.5a.6.6 0 01-.269-.805zM3.037 11.132a.6.6 0 01-.269.805l-1 .5a.6.6 0 01-.536-1.073l1-.5a.6.6 0 01.805.268z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-              Run tests
+            <Button variant="ghost" padding="small" onClick={runAllTests} disabled={active}>
+              <PlayAllHollowIcon />
+              {active ? 'Running...' : 'Run tests'}
             </Button>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <Info>
               <CollapseToggle
                 variant="ghost"
                 padding="small"
                 onClick={toggleCollapsed}
                 id="testing-module-collapse-toggle"
+                aria-label={collapsed ? 'Expand testing module' : 'Collapse testing module'}
               >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                <ChevronSmallUpIcon
                   style={{
                     transform: collapsed ? 'none' : 'rotate(180deg)',
                     transition: 'transform 250ms',
                     willChange: 'auto',
                   }}
-                >
-                  <path
-                    d="M3.854 9.104a.5.5 0 11-.708-.708l3.5-3.5a.5.5 0 01.708 0l3.5 3.5a.5.5 0 01-.708.708L7 5.957 3.854 9.104z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
+                />
               </CollapseToggle>
 
               {errorCount > 0 && (
@@ -311,10 +292,10 @@ export const TestingModule = ({
                   {warningCount < 100 ? warningCount : '99+'}
                 </StatusButton>
               )}
-            </div>
+            </Info>
           </Bar>
         </Card>
-      </Glow>
+      </Outline>
     </Position>
   );
 };
