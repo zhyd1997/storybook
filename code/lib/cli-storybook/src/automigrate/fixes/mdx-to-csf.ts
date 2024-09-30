@@ -2,8 +2,8 @@ import type { StoriesEntry } from 'storybook/internal/types';
 
 import { runCodemod } from '@storybook/codemod';
 
-import picocolors from 'picocolors';
 import { glob } from 'glob';
+import picocolors from 'picocolors';
 import { prompt } from 'prompts';
 import { dedent } from 'ts-dedent';
 

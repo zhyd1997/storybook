@@ -3,8 +3,8 @@ import { basename, extname, join } from 'node:path';
 
 import { logger } from 'storybook/internal/node-logger';
 
-import picocolors from 'picocolors';
 import { spawn as spawnAsync, sync as spawnSync } from 'cross-spawn';
+import picocolors from 'picocolors';
 
 type ExecOptions = Parameters<typeof spawnAsync>[2];
 

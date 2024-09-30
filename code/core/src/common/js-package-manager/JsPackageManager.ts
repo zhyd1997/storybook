@@ -2,9 +2,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 
-import picocolors from 'picocolors';
 import type { CommonOptions } from 'execa';
 import { execaCommand, execaCommandSync } from 'execa';
+import picocolors from 'picocolors';
 import { gt, satisfies } from 'semver';
 import invariant from 'tiny-invariant';
 import { dedent } from 'ts-dedent';

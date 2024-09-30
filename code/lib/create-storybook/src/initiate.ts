@@ -17,8 +17,8 @@ import { NxProjectDetectedError } from 'storybook/internal/server-errors';
 import { telemetry } from 'storybook/internal/telemetry';
 
 import boxen from 'boxen';
-import picocolors from 'picocolors';
 import findUp from 'find-up';
+import picocolors from 'picocolors';
 import prompts from 'prompts';
 import { lt, prerelease } from 'semver';
 import { dedent } from 'ts-dedent';

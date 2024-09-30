@@ -7,11 +7,11 @@ import { withTelemetry } from 'storybook/internal/core-server';
 import { logger } from 'storybook/internal/node-logger';
 import { addToGlobalContext, telemetry } from 'storybook/internal/telemetry';
 
-import picocolors from 'picocolors';
 import { program } from 'commander';
 import envinfo from 'envinfo';
 import { findPackageSync } from 'fd-package-json';
 import leven from 'leven';
+import picocolors from 'picocolors';
 import invariant from 'tiny-invariant';
 
 import { add } from '../add';

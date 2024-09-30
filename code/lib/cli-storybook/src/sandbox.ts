@@ -7,9 +7,9 @@ import { JsPackageManagerFactory } from 'storybook/internal/common';
 import { versions } from 'storybook/internal/common';
 
 import boxen from 'boxen';
-import picocolors from 'picocolors';
 import { initiate } from 'create-storybook';
 import { downloadTemplate } from 'giget';
+import picocolors from 'picocolors';
 import prompts from 'prompts';
 import { lt, prerelease } from 'semver';
 import invariant from 'tiny-invariant';

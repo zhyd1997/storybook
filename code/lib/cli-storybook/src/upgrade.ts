@@ -18,8 +18,8 @@ import {
 import { telemetry } from 'storybook/internal/telemetry';
 
 import boxen from 'boxen';
-import picocolors from 'picocolors';
 import { sync as spawnSync } from 'cross-spawn';
+import picocolors from 'picocolors';
 import semver, { clean, eq, lt, prerelease } from 'semver';
 import { dedent } from 'ts-dedent';
 

@@ -23,8 +23,8 @@ import { getStorySortParameter, loadConfig } from '@storybook/core/csf-tools';
 import { logger, once } from '@storybook/core/node-logger';
 import { sortStoriesV7, userOrAutoTitleFromSpecifier } from '@storybook/core/preview-api';
 
-import picocolors from 'picocolors';
 import { findUp } from 'find-up';
+import picocolors from 'picocolors';
 import slash from 'slash';
 import invariant from 'tiny-invariant';
 import { dedent } from 'ts-dedent';

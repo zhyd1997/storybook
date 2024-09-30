@@ -7,8 +7,8 @@ import { GenerateNewProjectOnInitError } from 'storybook/internal/server-errors'
 import { telemetry } from 'storybook/internal/telemetry';
 
 import boxen from 'boxen';
-import picocolors from 'picocolors';
 import execa from 'execa';
+import picocolors from 'picocolors';
 import prompts from 'prompts';
 import { dedent } from 'ts-dedent';
 

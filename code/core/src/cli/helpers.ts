@@ -11,8 +11,8 @@ import {
 import { versions as storybookMonorepoPackages } from '@storybook/core/common';
 import type { SupportedFrameworks, SupportedRenderers } from '@storybook/core/types';
 
-import picocolors from 'picocolors';
 import { findUpSync } from 'find-up';
+import picocolors from 'picocolors';
 import { coerce, satisfies } from 'semver';
 import stripJsonComments from 'strip-json-comments';
 import invariant from 'tiny-invariant';

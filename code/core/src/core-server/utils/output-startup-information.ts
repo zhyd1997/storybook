@@ -3,8 +3,8 @@ import type { VersionCheck } from '@storybook/core/types';
 import { colors } from '@storybook/core/node-logger';
 
 import boxen from 'boxen';
-import picocolors from 'picocolors';
 import Table from 'cli-table3';
+import picocolors from 'picocolors';
 import prettyTime from 'pretty-hrtime';
 import { dedent } from 'ts-dedent';
 

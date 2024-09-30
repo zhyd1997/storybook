@@ -6,9 +6,9 @@ import type { Options } from '@storybook/core/types';
 
 import { logger } from '@storybook/core/node-logger';
 
-import picocolors from 'picocolors';
 import type { Router } from 'express';
 import express from 'express';
+import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
 
 export async function useStatics(router: Router, options: Options) {

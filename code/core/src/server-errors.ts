@@ -350,9 +350,9 @@ export class MainFileESMOnlyImportError extends StorybookError {
     if (data.line) {
       message.push(
         picocolors.white(
-          `In your ${picocolors.yellow(data.location)} file, line ${picocolors.bold(picocolors.cyan(
-            data.num
-          ))} threw an error:`
+          `In your ${picocolors.yellow(data.location)} file, line ${picocolors.bold(
+            picocolors.cyan(data.num)
+          )} threw an error:`
         ),
         picocolors.gray(data.line)
       );
