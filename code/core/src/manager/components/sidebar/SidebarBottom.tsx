@@ -48,22 +48,20 @@ const Wrapper = styled.div({
   transition: 'height 250ms',
 });
 
-const Content = styled.div(({ theme }) => ({
-  boxShadow: `0 0 20px 20px ${theme.background.app}`,
-  padding: '0 12px',
+const Content = styled.div({
   position: 'absolute',
-  bottom: 12,
+  bottom: 0,
   left: 0,
   right: 0,
-  width: '100%',
+  padding: 12,
   display: 'flex',
   flexDirection: 'column',
-  gap: 6,
+  gap: 12,
 
   '&:empty': {
     display: 'none',
   },
-}));
+});
 
 interface SidebarBottomProps {
   api: API;
@@ -100,18 +98,14 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
   const [contentHeight, setContentHeight] = useState(0);
 
   const resizeObserverCallback = useMemo(
-    () =>
-      throttle(
-        () => setContentHeight(document.getElementById('sidebar-bottom')?.clientHeight || 0),
-        250
-      ),
+    () => throttle((element) => setContentHeight(element.clientHeight || 0), 250),
     []
   );
 
   useEffect(() => {
     const wrapper = document.getElementById('sidebar-bottom');
     if (wrapper) {
-      const resizeObserver = new ResizeObserver(resizeObserverCallback);
+      const resizeObserver = new ResizeObserver(() => resizeObserverCallback(wrapper));
       resizeObserver.observe(wrapper);
       return () => resizeObserver.disconnect();
     }
