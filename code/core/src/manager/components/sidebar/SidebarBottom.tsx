@@ -48,7 +48,7 @@ const Wrapper = styled.div({
   transition: 'height 250ms',
 });
 
-const Content = styled.div({
+const Content = styled.div(({ theme }) => ({
   position: 'absolute',
   bottom: 0,
   left: 0,
@@ -61,7 +61,12 @@ const Content = styled.div({
   '&:empty': {
     display: 'none',
   },
-});
+
+  '--sb-sidebar-bottom-card-background': theme.background.content,
+  '--sb-sidebar-bottom-card-border': `1px solid ${theme.appBorderColor}`,
+  '--sb-sidebar-bottom-card-radius': `${theme.appBorderRadius + 1}px`,
+  '--sb-sidebar-bottom-card-shadow': `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
+}));
 
 interface SidebarBottomProps {
   api: API;
@@ -120,14 +125,6 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
   const hasWarnings = warnings.length > 0;
   const hasErrors = errors.length > 0;
 
-  const toggleWarnings = useCallback((e: SyntheticEvent) => {
-    e.stopPropagation();
-    setWarningsActive((active) => !active);
-  }, []);
-  const toggleErrors = useCallback((e: SyntheticEvent) => {
-    e.stopPropagation();
-    setErrorsActive((active) => !active);
-  }, []);
   const onRunTests = useCallback(
     (providerId?: string) => {
       api.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId });
@@ -175,11 +172,11 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
           {...{
             testProviders,
             errorCount: errors.length,
-            warningCount: warnings.length,
             errorsActive,
+            setErrorsActive,
+            warningCount: warnings.length,
             warningsActive,
-            toggleErrors,
-            toggleWarnings,
+            setWarningsActive,
             onRunTests,
             onSetWatchMode,
           }}

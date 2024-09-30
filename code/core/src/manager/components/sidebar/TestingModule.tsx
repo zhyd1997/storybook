@@ -11,6 +11,8 @@ import {
   StopAltHollowIcon,
 } from '@storybook/icons';
 
+import { transparentize } from 'polished';
+
 const spin = keyframes({
   from: { transform: 'rotate(0deg)' },
   to: { transform: 'rotate(360deg)' },
@@ -26,7 +28,7 @@ const Outline = styled.div<{ active: boolean }>(({ theme, active }) => ({
   overflow: 'hidden',
   borderRadius: theme.appBorderRadius + 1,
   backgroundColor: 'rgb(226 232 240)',
-  boxShadow: `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 0 20px 15px ${theme.background.app}`,
+  boxShadow: `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
   transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
   transitionDuration: '0.15s',
@@ -130,13 +132,11 @@ const Details = styled.div({
   flexDirection: 'column',
 });
 
-const Title = styled.div({
-  textWrap: 'nowrap',
-});
+const Title = styled.div({});
 
 const Description = styled.div(({ theme }) => ({
   fontSize: theme.typography.size.s1,
-  color: theme.barTextColor,
+  color: transparentize(0.25, theme.color.defaultText),
 }));
 
 const Icon = styled.div(({ theme }) => ({
@@ -156,11 +156,11 @@ interface TestingModuleProps {
     watching?: boolean;
   }[];
   errorCount: number;
-  warningCount: number;
   errorsActive: boolean;
+  setErrorsActive: (active: boolean) => void;
+  warningCount: number;
   warningsActive: boolean;
-  toggleErrors: (e: SyntheticEvent) => void;
-  toggleWarnings: (e: SyntheticEvent) => void;
+  setWarningsActive: (active: boolean) => void;
   onRunTests: (providerId?: string) => void;
   onSetWatchMode: (providerId: string, watchMode: boolean) => void;
 }
@@ -168,11 +168,11 @@ interface TestingModuleProps {
 export const TestingModule = ({
   testProviders,
   errorCount,
-  warningCount,
   errorsActive,
+  setErrorsActive,
+  warningCount,
   warningsActive,
-  toggleErrors,
-  toggleWarnings,
+  setWarningsActive,
   onRunTests,
   onSetWatchMode,
 }: TestingModuleProps) => {
@@ -265,7 +265,10 @@ export const TestingModule = ({
                 padding={errorCount < 10 ? 'medium' : 'small'}
                 status="negative"
                 active={errorsActive}
-                onClick={toggleErrors}
+                onClick={(e: SyntheticEvent) => {
+                  e.stopPropagation();
+                  setErrorsActive(!errorsActive);
+                }}
                 aria-label="Show errors"
               >
                 {errorCount < 100 ? errorCount : '99+'}
@@ -278,7 +281,10 @@ export const TestingModule = ({
                 padding={warningCount < 10 ? 'medium' : 'small'}
                 status="warning"
                 active={warningsActive}
-                onClick={toggleWarnings}
+                onClick={(e: SyntheticEvent) => {
+                  e.stopPropagation();
+                  setWarningsActive(!warningsActive);
+                }}
                 aria-label="Show warnings"
               >
                 {warningCount < 100 ? warningCount : '99+'}
