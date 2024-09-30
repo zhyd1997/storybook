@@ -26,7 +26,7 @@ function getGlossaryMessages(
     messages.push(
       Object.entries(fixSummary.failed)
         .map(([id, error]) => {
-          return `${picocolors.redBright(id)}:\n${error}`;
+          return `${picocolors.bold(picocolors.red(id))}:\n${error}`;
         })
         .join('\n')
     );

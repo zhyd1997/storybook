@@ -67,7 +67,9 @@ export function getDuplicatedDepsWarnings(
         const hasMultipleMajorVersions = hasMultipleVersions(packageVersions);
 
         if (disallowList.includes(dep) && hasMultipleMajorVersions) {
-          acc.critical.push(`${picocolors.redBright(dep)}:\n${packageVersions.join(', ')}`);
+          acc.critical.push(
+            `${picocolors.bold(picocolors.red(dep))}:\n${packageVersions.join(', ')}`
+          );
         } else {
           acc.trivial.push(`${picocolors.yellow(dep)}:\n${packageVersions.join(', ')}`);
         }
