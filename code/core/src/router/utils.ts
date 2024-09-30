@@ -163,12 +163,6 @@ const encodeSpecialValues = (value: unknown): any => {
   return value;
 };
 
-const QUERY_OPTIONS: Partial<QueryOptions> = {
-  delimiter: ';', // we don't actually create multiple query params
-  nesting: true,
-  nestingSyntax: 'js', // encode objects using dot notation: obj.key=val
-};
-
 // Replaces some url-encoded characters with their decoded equivalents.
 // The URI RFC specifies these should be encoded, but all browsers will
 // tolerate them being decoded, so we opt to go with it for cleaner looking
@@ -209,7 +203,11 @@ export const buildArgsParam = (initialArgs: Args | undefined, args: Args): strin
     return acc;
   }, {} as Args);
 
-  return stringify(encodeSpecialValues(object), QUERY_OPTIONS)
+  return stringify(encodeSpecialValues(object), {
+    delimiter: ';', // we don't actually create multiple query params
+    nesting: true,
+    nestingSyntax: 'js', // encode objects using dot notation: obj.key=val
+  })
     .replace(knownQueryChar, decodeKnownQueryChar)
     .split(';')
     .map((part: string) => part.replace('=', ':'))
@@ -220,11 +218,12 @@ interface Query {
   [key: string]: any;
 }
 
-export const queryFromString = memoize(1000)(
-  (s?: string): Query => (s !== undefined ? parse(s, QUERY_OPTIONS) : {})
-);
-export const queryFromLocation = (location: Partial<Location>) =>
-  queryFromString(location.search ? location.search.slice(1) : '');
+const queryFromString = memoize(1000)((s?: string): Query => (s !== undefined ? parse(s) : {}));
+
+export const queryFromLocation = (location: Partial<Location>) => {
+  return queryFromString(location.search ? location.search.slice(1) : '');
+};
+
 export const stringifyQuery = (query: Query) => {
   const queryStr = stringify(query);
   return queryStr ? '?' + queryStr : '';
