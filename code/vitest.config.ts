@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     coverage: {
       all: false,
-      provider: 'istanbul',
+      provider: 'v8',
       exclude: [
         ...coverageConfigDefaults.exclude,
         '**/__mocks/**',
