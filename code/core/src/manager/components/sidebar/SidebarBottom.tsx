@@ -1,4 +1,4 @@
-import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { styled } from '@storybook/core/theming';
 import { ContrastIcon, PointerHandIcon } from '@storybook/icons';
@@ -63,10 +63,11 @@ const Content = styled.div(({ theme }) => ({
     display: 'none',
   },
 
+  // Integrators can use these to style their custom additions
   '--sb-sidebar-bottom-card-background': theme.background.content,
-  '--sb-sidebar-bottom-card-border': `1px solid ${theme.appBorderColor}`,
-  '--sb-sidebar-bottom-card-radius': `${theme.appBorderRadius + 1}px`,
-  '--sb-sidebar-bottom-card-shadow': `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
+  '--sb-sidebar-bottom-card-border-color': theme.appBorderColor,
+  '--sb-sidebar-bottom-card-border-radius': `${theme.appBorderRadius + 1}px`,
+  '--sb-sidebar-bottom-card-box-shadow': `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
 }));
 
 interface SidebarBottomProps {
