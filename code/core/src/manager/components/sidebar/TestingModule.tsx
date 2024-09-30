@@ -16,16 +16,6 @@ const spin = keyframes({
   to: { transform: 'rotate(360deg)' },
 });
 
-const Position = styled.div({
-  bottom: 0,
-  zIndex: 20,
-  paddingLeft: 12,
-  paddingRight: 12,
-  paddingTop: 12,
-  paddingBottom: 12,
-  width: '100%',
-});
-
 const Outline = styled.div<{ active: boolean }>(({ theme, active }) => ({
   position: 'relative',
   color: theme.color.defaultText,
@@ -207,95 +197,93 @@ export const TestingModule = ({
   const active = testProviders.some((tp) => tp.running);
 
   return (
-    <Position>
-      <Outline active={active}>
-        <Card>
-          <Collapsible style={{ maxHeight: collapsed ? 0 : maxHeight }}>
-            <Content ref={contentRef}>
-              {testProviders.map(
-                ({ id, icon, title, description, runnable, running, watchable, watching }) => (
-                  <TestProvider key={id}>
-                    <Info>
-                      <Icon>{icon}</Icon>
-                      <Details>
-                        <Title>{title}</Title>
-                        <Description>{description}</Description>
-                      </Details>
-                    </Info>
-                    <Actions>
-                      {watchable && (
-                        <Button
-                          variant="ghost"
-                          padding="small"
-                          onClick={() => onSetWatchMode(id, !watching)}
-                        >
-                          {watching ? <EyeCloseIcon /> : <EyeIcon />}
-                        </Button>
-                      )}
-                      {runnable && (
-                        <Button variant="ghost" padding="small" onClick={() => onRunTests(id)}>
-                          {running ? <StopAltHollowIcon /> : <PlayHollowIcon />}
-                        </Button>
-                      )}
-                    </Actions>
-                  </TestProvider>
-                )
-              )}
-            </Content>
-          </Collapsible>
+    <Outline active={active}>
+      <Card>
+        <Collapsible style={{ maxHeight: collapsed ? 0 : maxHeight }}>
+          <Content ref={contentRef}>
+            {testProviders.map(
+              ({ id, icon, title, description, runnable, running, watchable, watching }) => (
+                <TestProvider key={id}>
+                  <Info>
+                    <Icon>{icon}</Icon>
+                    <Details>
+                      <Title>{title}</Title>
+                      <Description>{description}</Description>
+                    </Details>
+                  </Info>
+                  <Actions>
+                    {watchable && (
+                      <Button
+                        variant="ghost"
+                        padding="small"
+                        onClick={() => onSetWatchMode(id, !watching)}
+                      >
+                        {watching ? <EyeCloseIcon /> : <EyeIcon />}
+                      </Button>
+                    )}
+                    {runnable && (
+                      <Button variant="ghost" padding="small" onClick={() => onRunTests(id)}>
+                        {running ? <StopAltHollowIcon /> : <PlayHollowIcon />}
+                      </Button>
+                    )}
+                  </Actions>
+                </TestProvider>
+              )
+            )}
+          </Content>
+        </Collapsible>
 
-          <Bar onClick={toggleCollapsed}>
-            <Button variant="ghost" padding="small" onClick={runAllTests} disabled={active}>
-              <PlayAllHollowIcon />
-              {active ? 'Running...' : 'Run tests'}
-            </Button>
-            <Info>
-              <CollapseToggle
+        <Bar onClick={toggleCollapsed}>
+          <Button variant="ghost" padding="small" onClick={runAllTests} disabled={active}>
+            <PlayAllHollowIcon />
+            {active ? 'Running...' : 'Run tests'}
+          </Button>
+          <Info>
+            <CollapseToggle
+              variant="ghost"
+              padding="small"
+              onClick={toggleCollapsed}
+              id="testing-module-collapse-toggle"
+              aria-label={collapsed ? 'Expand testing module' : 'Collapse testing module'}
+            >
+              <ChevronSmallUpIcon
+                style={{
+                  transform: collapsed ? 'none' : 'rotate(180deg)',
+                  transition: 'transform 250ms',
+                  willChange: 'auto',
+                }}
+              />
+            </CollapseToggle>
+
+            {errorCount > 0 && (
+              <StatusButton
+                id="errors-found-filter"
                 variant="ghost"
-                padding="small"
-                onClick={toggleCollapsed}
-                id="testing-module-collapse-toggle"
-                aria-label={collapsed ? 'Expand testing module' : 'Collapse testing module'}
+                padding={errorCount < 10 ? 'medium' : 'small'}
+                status="negative"
+                active={errorsActive}
+                onClick={toggleErrors}
+                aria-label="Show errors"
               >
-                <ChevronSmallUpIcon
-                  style={{
-                    transform: collapsed ? 'none' : 'rotate(180deg)',
-                    transition: 'transform 250ms',
-                    willChange: 'auto',
-                  }}
-                />
-              </CollapseToggle>
-
-              {errorCount > 0 && (
-                <StatusButton
-                  id="errors-found-filter"
-                  variant="ghost"
-                  padding={errorCount < 10 ? 'medium' : 'small'}
-                  status="negative"
-                  active={errorsActive}
-                  onClick={toggleErrors}
-                  aria-label="Show errors"
-                >
-                  {errorCount < 100 ? errorCount : '99+'}
-                </StatusButton>
-              )}
-              {warningCount > 0 && (
-                <StatusButton
-                  id="warnings-found-filter"
-                  variant="ghost"
-                  padding={warningCount < 10 ? 'medium' : 'small'}
-                  status="warning"
-                  active={warningsActive}
-                  onClick={toggleWarnings}
-                  aria-label="Show warnings"
-                >
-                  {warningCount < 100 ? warningCount : '99+'}
-                </StatusButton>
-              )}
-            </Info>
-          </Bar>
-        </Card>
-      </Outline>
-    </Position>
+                {errorCount < 100 ? errorCount : '99+'}
+              </StatusButton>
+            )}
+            {warningCount > 0 && (
+              <StatusButton
+                id="warnings-found-filter"
+                variant="ghost"
+                padding={warningCount < 10 ? 'medium' : 'small'}
+                status="warning"
+                active={warningsActive}
+                onClick={toggleWarnings}
+                aria-label="Show warnings"
+              >
+                {warningCount < 100 ? warningCount : '99+'}
+              </StatusButton>
+            )}
+          </Info>
+        </Bar>
+      </Card>
+    </Outline>
   );
 };

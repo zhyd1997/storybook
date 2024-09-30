@@ -1,16 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
-import { Button, ScrollArea, Spaced } from '@storybook/core/components';
+import { ScrollArea, Spaced } from '@storybook/core/components';
 import { styled } from '@storybook/core/theming';
 import type { API_LoadedRefData, Addon_SidebarTopType } from '@storybook/core/types';
 
-import {
-  TESTING_MODULE_RUN_ALL_REQUEST,
-  TESTING_MODULE_WATCH_MODE_REQUEST,
-  type TestingModuleRunAllRequestPayload,
-  type TestingModuleWatchModeRequestPayload,
-} from '@storybook/core/core-events';
-import { type State, useStorybookApi } from '@storybook/core/manager-api';
+import { type State } from '@storybook/core/manager-api';
 
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
 import { Explorer } from './Explorer';
@@ -19,7 +13,6 @@ import { Heading } from './Heading';
 import { Search } from './Search';
 import { SearchResults } from './SearchResults';
 import { SidebarBottom } from './SidebarBottom';
-import { TEST_PROVIDER_ID } from './Tree';
 import type { CombinedDataset, Selection } from './types';
 import { useLastViewed } from './useLastViewed';
 
@@ -50,17 +43,6 @@ const Top = styled(Spaced)({
   paddingTop: 16,
   flex: 1,
 });
-
-const Bottom = styled.div(({ theme }) => ({
-  padding: theme.layoutMargin / 2,
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: theme.layoutMargin / 2,
-
-  '&:empty': {
-    display: 'none',
-  },
-}));
 
 const Swap = React.memo(function Swap({
   children,
@@ -189,12 +171,12 @@ export const Sidebar = React.memo(function Sidebar({
             )}
           </Search>
         </Top>
+        {isLoading ? null : (
+          <div className="sb-bar">
+            <SidebarBottom />
+          </div>
+        )}
       </ScrollArea>
-      {isLoading ? null : (
-        <Bottom className="sb-bar">
-          <SidebarBottom />
-        </Bottom>
-      )}
     </Container>
   );
 });

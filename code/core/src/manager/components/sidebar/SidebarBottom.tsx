@@ -1,4 +1,4 @@
-import React, { type SyntheticEvent, useCallback, useEffect } from 'react';
+import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { styled } from '@storybook/core/theming';
 import { ContrastIcon, PointerHandIcon } from '@storybook/icons';
@@ -16,6 +16,8 @@ import {
   useStorybookApi,
   useStorybookState,
 } from '@storybook/core/manager-api';
+
+import { throttle } from 'es-toolkit';
 
 import { TestingModule } from './TestingModule';
 
@@ -43,10 +45,25 @@ const getFilter = (warningsActive = false, errorsActive = false) => {
 };
 
 const Wrapper = styled.div({
+  transition: 'height 250ms',
+});
+
+const Content = styled.div(({ theme }) => ({
+  boxShadow: `0 0 20px 20px ${theme.background.app}`,
+  padding: '0 12px',
+  position: 'absolute',
+  bottom: 12,
+  left: 0,
+  right: 0,
   width: '100%',
   display: 'flex',
+  flexDirection: 'column',
   gap: 6,
-});
+
+  '&:empty': {
+    display: 'none',
+  },
+}));
 
 interface SidebarBottomProps {
   api: API;
@@ -78,8 +95,27 @@ function processTestReport(payload: TestingModuleRunResponsePayload) {
 }
 
 export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
-  const [warningsActive, setWarningsActive] = React.useState(false);
-  const [errorsActive, setErrorsActive] = React.useState(false);
+  const [warningsActive, setWarningsActive] = useState(false);
+  const [errorsActive, setErrorsActive] = useState(false);
+  const [contentHeight, setContentHeight] = useState(0);
+
+  const resizeObserverCallback = useMemo(
+    () =>
+      throttle(
+        () => setContentHeight(document.getElementById('sidebar-bottom')?.clientHeight || 0),
+        250
+      ),
+    []
+  );
+
+  useEffect(() => {
+    const wrapper = document.getElementById('sidebar-bottom');
+    if (wrapper) {
+      const resizeObserver = new ResizeObserver(resizeObserverCallback);
+      resizeObserver.observe(wrapper);
+      return () => resizeObserver.disconnect();
+    }
+  }, [resizeObserverCallback]);
 
   const warnings = Object.values(status).filter((statusByAddonId) =>
     Object.values(statusByAddonId).some((value) => value?.status === 'warn')
@@ -139,20 +175,22 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
   }
 
   return (
-    <Wrapper id="sidebar-bottom-wrapper">
-      <TestingModule
-        {...{
-          testProviders,
-          errorCount: errors.length,
-          warningCount: warnings.length,
-          errorsActive,
-          warningsActive,
-          toggleErrors,
-          toggleWarnings,
-          onRunTests,
-          onSetWatchMode,
-        }}
-      />
+    <Wrapper id="sidebar-bottom-wrapper" style={{ height: contentHeight }}>
+      <Content id="sidebar-bottom">
+        <TestingModule
+          {...{
+            testProviders,
+            errorCount: errors.length,
+            warningCount: warnings.length,
+            errorsActive,
+            warningsActive,
+            toggleErrors,
+            toggleWarnings,
+            onRunTests,
+            onSetWatchMode,
+          }}
+        />
+      </Content>
     </Wrapper>
   );
 };
