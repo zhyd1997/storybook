@@ -1,8 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { styled } from '@storybook/core/theming';
-import { ContrastIcon, PointerHandIcon } from '@storybook/icons';
-import type { API_FilterFunction, API_StatusUpdate, API_StatusValue } from '@storybook/types';
+import {
+  type API_FilterFunction,
+  type API_StatusUpdate,
+  type API_StatusValue,
+  Addon_TypesEnum,
+} from '@storybook/core/types';
 
 import {
   TESTING_MODULE_RUN_ALL_REQUEST,
@@ -58,6 +62,8 @@ const Content = styled.div(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: 12,
+  color: theme.color.defaultText,
+  fontSize: theme.typography.size.s1,
 
   '&:empty': {
     display: 'none',
@@ -65,15 +71,10 @@ const Content = styled.div(({ theme }) => ({
 
   // Integrators can use these to style their custom additions
   '--sb-sidebar-bottom-card-background': theme.background.content,
-  '--sb-sidebar-bottom-card-border-color': theme.appBorderColor,
+  '--sb-sidebar-bottom-card-border': `1px solid ${theme.appBorderColor}`,
   '--sb-sidebar-bottom-card-border-radius': `${theme.appBorderRadius + 1}px`,
   '--sb-sidebar-bottom-card-box-shadow': `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
 }));
-
-interface SidebarBottomProps {
-  api: API;
-  status: State['status'];
-}
 
 const statusMap: Record<any['status'], API_StatusValue> = {
   failed: 'error',
@@ -97,6 +98,11 @@ function processTestReport(payload: TestingModuleRunResponsePayload) {
   });
 
   return result;
+}
+
+interface SidebarBottomProps {
+  api: API;
+  status: State['status'];
 }
 
 export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
@@ -145,23 +151,7 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
     api.experimental_setFilter('sidebar-bottom-filter', filter);
   }, [api, hasWarnings, hasErrors, warningsActive, errorsActive]);
 
-  const testProviders = [
-    {
-      id: 'component-tests',
-      title: 'Component tests',
-      description: 'Ran 2 seconds ago',
-      icon: <PointerHandIcon />,
-      runnable: true,
-      watchable: true,
-    },
-    {
-      id: 'visual-tests',
-      title: 'Visual tests',
-      description: 'Not run',
-      icon: <ContrastIcon />,
-      runnable: true,
-    },
-  ];
+  const testProviders = Object.values(api.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER));
 
   if (!hasWarnings && !hasErrors && !testProviders.length) {
     return null;

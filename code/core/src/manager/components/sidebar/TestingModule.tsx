@@ -4,14 +4,12 @@ import { Button } from '@storybook/core/components';
 import { keyframes, styled } from '@storybook/core/theming';
 import {
   ChevronSmallUpIcon,
-  EyeCloseIcon,
   EyeIcon,
   PlayAllHollowIcon,
   PlayHollowIcon,
   StopAltHollowIcon,
 } from '@storybook/icons';
-
-import { transparentize } from 'polished';
+import type { Addon_TestProviderType } from '@storybook/types';
 
 const spin = keyframes({
   from: { transform: 'rotate(0deg)' },
@@ -20,15 +18,14 @@ const spin = keyframes({
 
 const Outline = styled.div<{ active: boolean }>(({ theme, active }) => ({
   position: 'relative',
-  color: theme.color.defaultText,
-  fontSize: theme.typography.size.s2,
   lineHeight: '20px',
   width: '100%',
   padding: 1,
   overflow: 'hidden',
-  borderRadius: theme.appBorderRadius + 1,
-  backgroundColor: theme.appBorderColor,
-  boxShadow: `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
+  background: 'var(--sb-sidebar-bottom-card-background)',
+  border: 'var(--sb-sidebar-bottom-card-border)',
+  borderRadius: 'var(--sb-sidebar-bottom-card-border-radius)' as any,
+  boxShadow: 'var(--sb-sidebar-bottom-card-box-shadow)',
   transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
   transitionDuration: '0.15s',
@@ -143,7 +140,9 @@ const Details = styled.div({
   flexDirection: 'column',
 });
 
-const Title = styled.div({});
+const Title = styled.div(({ theme }) => ({
+  fontSize: theme.typography.size.s2,
+}));
 
 const Description = styled.div(({ theme }) => ({
   fontSize: theme.typography.size.s1,
@@ -156,16 +155,7 @@ const Icon = styled.div(({ theme }) => ({
 }));
 
 interface TestingModuleProps {
-  testProviders: {
-    id: string;
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    runnable?: boolean;
-    running?: boolean;
-    watchable?: boolean;
-    watching?: boolean;
-  }[];
+  testProviders: (Addon_TestProviderType & { running?: boolean; watching?: boolean })[];
   errorCount: number;
   errorsActive: boolean;
   setErrorsActive: (active: boolean) => void;
@@ -222,7 +212,7 @@ export const TestingModule = ({
                     <Icon>{icon}</Icon>
                     <Details>
                       <Title>{title}</Title>
-                      <Description>{description}</Description>
+                      <Description>{description?.({})}</Description>
                     </Details>
                   </Info>
                   <Actions>

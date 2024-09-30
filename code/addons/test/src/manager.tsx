@@ -13,5 +13,7 @@ addons.register(ADDON_ID, () => {
     icon: <PointerHandIcon />,
     title: 'Component tests',
     description: () => 'Not yet run',
+    runnable: true,
+    watchable: true,
   });
 });

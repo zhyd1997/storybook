@@ -468,6 +468,8 @@ export interface Addon_TestProviderType {
   icon: ReactNode;
   title: string;
   description: FC;
+  runnable?: boolean;
+  watchable?: boolean;
 }
 
 type Addon_TypeBaseNames = Exclude<
