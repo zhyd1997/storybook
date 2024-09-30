@@ -5757,7 +5757,7 @@ __metadata:
     "@types/color-convert": "npm:^2.0.0"
     color-convert: "npm:^2.0.1"
     dequal: "npm:^2.0.2"
-    es-toolkit: "npm:^1.21.0"
+    es-toolkit: "npm:^1.22.0"
     markdown-to-jsx: "npm:^7.4.5"
     memoizerific: "npm:^1.11.3"
     polished: "npm:^4.2.2"
@@ -5930,7 +5930,7 @@ __metadata:
     ansi-regex: "npm:^6.0.1"
     camelcase: "npm:^8.0.0"
     cross-spawn: "npm:^7.0.3"
-    es-toolkit: "npm:^1.21.0"
+    es-toolkit: "npm:^1.22.0"
     globby: "npm:^14.0.1"
     jscodeshift: "npm:^0.15.1"
     mdast-util-mdx-jsx: "npm:^3.0.0"
@@ -6072,7 +6072,7 @@ __metadata:
     diff: "npm:^5.2.0"
     downshift: "npm:^9.0.4"
     ejs: "npm:^3.1.10"
-    es-toolkit: "npm:^1.21.0"
+    es-toolkit: "npm:^1.22.0"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0"
     esbuild-plugin-alias: "npm:^0.2.1"
     esbuild-register: "npm:^3.5.0"
@@ -6779,7 +6779,7 @@ __metadata:
     acorn-jsx: "npm:^5.3.1"
     acorn-walk: "npm:^7.2.0"
     babel-plugin-react-docgen: "npm:^4.2.1"
-    es-toolkit: "npm:^1.21.0"
+    es-toolkit: "npm:^1.22.0"
     escodegen: "npm:^2.1.0"
     expect-type: "npm:^0.15.0"
     html-tags: "npm:^3.1.0"
@@ -6903,7 +6903,7 @@ __metadata:
     create-storybook: "workspace:*"
     cross-env: "npm:^7.0.3"
     danger: "npm:^12.3.3"
-    es-toolkit: "npm:^1.21.0"
+    es-toolkit: "npm:^1.22.0"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0"
     esbuild-loader: "npm:^4.2.0"
     esbuild-plugin-alias: "npm:^0.2.1"
@@ -7005,7 +7005,7 @@ __metadata:
   resolution: "@storybook/source-loader@workspace:lib/source-loader"
   dependencies:
     "@storybook/csf": "npm:^0.1.11"
-    es-toolkit: "npm:^1.21.0"
+    es-toolkit: "npm:^1.22.0"
     estraverse: "npm:^5.2.0"
     prettier: "npm:^3.1.1"
     typescript: "npm:^5.3.2"
@@ -14161,10 +14161,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es-toolkit@npm:^1.21.0":
-  version: 1.21.0
-  resolution: "es-toolkit@npm:1.21.0"
-  checksum: 10c0/894a63f8ce5b2e5c1be242c8e8eace6364ea1212d01cdf89594d2cc582c5e1574114ad2ee7022ad5206561c4d5170511d83b38853257249860e56178768854ea
+"es-toolkit@npm:^1.22.0":
+  version: 1.22.0
+  resolution: "es-toolkit@npm:1.22.0"
+  checksum: 10c0/a167789f727437d435071af74e22c0c4a5a557aa61a5013a1656d24b1c8636c88d6b74f12ad0c3966b74d3f56e432d8e8d1989e5c10c10fda8eba5752783af18
   languageName: node
   linkType: hard
 
