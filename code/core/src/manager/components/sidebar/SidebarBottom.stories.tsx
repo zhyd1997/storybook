@@ -6,8 +6,10 @@ export default {
   component: SidebarBottomBase,
   args: {
     api: {
-      experimental_setFilter: fn(),
+      clearNotification: fn(),
       emit: fn(),
+      experimental_setFilter: fn(),
+      getElements: fn(() => ({})),
     },
   },
 };

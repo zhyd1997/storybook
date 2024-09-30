@@ -23,7 +23,7 @@ import {
 
 import { throttle } from 'es-toolkit';
 
-import { Notifications } from '../../container/Notifications';
+import { NotificationList } from '../notifications/NotificationList';
 import { TestingModule } from './TestingModule';
 
 const filterNone: API_FilterFunction = () => true;
@@ -102,10 +102,11 @@ function processTestReport(payload: TestingModuleRunResponsePayload) {
 
 interface SidebarBottomProps {
   api: API;
+  notifications: State['notifications'];
   status: State['status'];
 }
 
-export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
+export const SidebarBottomBase = ({ api, notifications = [], status = {} }: SidebarBottomProps) => {
   const [warningsActive, setWarningsActive] = useState(false);
   const [errorsActive, setErrorsActive] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
@@ -160,7 +161,7 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
   return (
     <Wrapper id="sidebar-bottom-wrapper" style={{ height: contentHeight }}>
       <Content id="sidebar-bottom">
-        <Notifications />
+        <NotificationList notifications={notifications} clearNotification={api.clearNotification} />
         <TestingModule
           {...{
             testProviders,
@@ -181,7 +182,7 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
 
 export const SidebarBottom = () => {
   const api = useStorybookApi();
-  const { status } = useStorybookState();
+  const { notifications, status } = useStorybookState();
 
   useEffect(() => {
     api.getChannel()?.on(TESTING_MODULE_RUN_PROGRESS_RESPONSE, (data) => {
@@ -195,5 +196,5 @@ export const SidebarBottom = () => {
     });
   }, [api]);
 
-  return <SidebarBottomBase api={api} status={status} />;
+  return <SidebarBottomBase api={api} notifications={notifications} status={status} />;
 };

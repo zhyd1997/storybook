@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Addon_TypesEnum } from '@storybook/core/types';
 import { ContrastIcon, MarkupIcon, PointerHandIcon } from '@storybook/icons';
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn, userEvent } from '@storybook/test';
@@ -8,24 +9,27 @@ import { TestingModule } from './TestingModule';
 
 const testProviders = [
   {
+    type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'component-tests',
     title: 'Component tests',
-    description: 'Ran 2 seconds ago',
+    description: () => 'Ran 2 seconds ago',
     icon: <PointerHandIcon />,
     runnable: true,
     watchable: true,
   },
   {
+    type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'visual-tests',
     title: 'Visual tests',
-    description: 'Not run',
+    description: () => 'Not run',
     icon: <ContrastIcon />,
     runnable: true,
   },
   {
+    type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'linting',
     title: 'Linting',
-    description: 'Watching for changes',
+    description: () => 'Watching for changes',
     icon: <MarkupIcon />,
     watching: true,
   },

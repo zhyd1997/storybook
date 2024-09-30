@@ -73,15 +73,22 @@ const Content = styled.div({
   gap: '12px',
 });
 
-const Bar = styled.div({
+const Bar = styled.div<{ onClick?: (e: SyntheticEvent) => void }>(({ onClick }) => ({
   display: 'flex',
   width: '100%',
-  cursor: 'pointer',
+  cursor: onClick ? 'pointer' : 'default',
   userSelect: 'none',
   alignItems: 'center',
   justifyContent: 'space-between',
   overflow: 'hidden',
   padding: '6px',
+}));
+
+const Filters = styled.div({
+  display: 'flex',
+  flexBasis: '100%',
+  justifyContent: 'flex-end',
+  gap: 6,
 });
 
 const CollapseToggle = styled(Button)({
@@ -199,11 +206,17 @@ export const TestingModule = ({
   };
 
   const active = testProviders.some((tp) => tp.running);
+  const testing = testProviders.length > 0;
 
   return (
     <Outline active={active}>
       <Card>
-        <Collapsible style={{ maxHeight: collapsed ? 0 : maxHeight }}>
+        <Collapsible
+          style={{
+            display: testing ? 'block' : 'none',
+            maxHeight: collapsed ? 0 : maxHeight,
+          }}
+        >
           <Content ref={contentRef}>
             {testProviders.map(
               ({ id, icon, title, description, runnable, running, watchable, watching }) => (
@@ -238,27 +251,31 @@ export const TestingModule = ({
           </Content>
         </Collapsible>
 
-        <Bar onClick={toggleCollapsed}>
-          <Button variant="ghost" padding="small" onClick={runAllTests} disabled={active}>
-            <PlayAllHollowIcon />
-            {active ? 'Running...' : 'Run tests'}
-          </Button>
-          <Info>
-            <CollapseToggle
-              variant="ghost"
-              padding="small"
-              onClick={toggleCollapsed}
-              id="testing-module-collapse-toggle"
-              aria-label={collapsed ? 'Expand testing module' : 'Collapse testing module'}
-            >
-              <ChevronSmallUpIcon
-                style={{
-                  transform: collapsed ? 'none' : 'rotate(180deg)',
-                  transition: 'transform 250ms',
-                  willChange: 'auto',
-                }}
-              />
-            </CollapseToggle>
+        <Bar onClick={testing ? toggleCollapsed : undefined}>
+          {testing && (
+            <Button variant="ghost" padding="small" onClick={runAllTests} disabled={active}>
+              <PlayAllHollowIcon />
+              {active ? 'Running...' : 'Run tests'}
+            </Button>
+          )}
+          <Filters>
+            {testing && (
+              <CollapseToggle
+                variant="ghost"
+                padding="small"
+                onClick={toggleCollapsed}
+                id="testing-module-collapse-toggle"
+                aria-label={collapsed ? 'Expand testing module' : 'Collapse testing module'}
+              >
+                <ChevronSmallUpIcon
+                  style={{
+                    transform: collapsed ? 'none' : 'rotate(180deg)',
+                    transition: 'transform 250ms',
+                    willChange: 'auto',
+                  }}
+                />
+              </CollapseToggle>
+            )}
 
             {errorCount > 0 && (
               <StatusButton
@@ -292,7 +309,7 @@ export const TestingModule = ({
                 {warningCount < 100 ? warningCount : '99+'}
               </StatusButton>
             )}
-          </Info>
+          </Filters>
         </Bar>
       </Card>
     </Outline>
