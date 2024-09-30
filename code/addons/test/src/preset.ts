@@ -30,6 +30,13 @@ export const checkActionsLoaded = (configDir: string) => {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const experimental_serverChannel = async (channel: Channel, options: Options) => {
+  const core = await options.presets.apply('core');
+  const builderName = typeof core?.builder === 'string' ? core.builder : core?.builder?.name;
+  // Only boot the test runner if the builder is vite, else just provide interactions functionality
+  if (!builderName?.includes('vite')) {
+    return channel;
+  }
+
   let booting = false;
   let booted = false;
   const start =
