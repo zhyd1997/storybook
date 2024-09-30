@@ -35,17 +35,18 @@ const Notification = styled.div<{ duration?: number }>(
   ({ theme }) => ({
     position: 'relative',
     display: 'flex',
-    padding: 15,
-    width: 280,
-    borderRadius: 4,
+    border: `1px solid ${theme.appBorderColor}`,
+    padding: '12px 6px 12px 12px',
+    borderRadius: theme.appBorderRadius + 1,
     alignItems: 'center',
 
     animation: `${slideIn} 500ms`,
     background: theme.base === 'light' ? 'hsla(203, 50%, 20%, .97)' : 'hsla(203, 30%, 95%, .97)',
-    boxShadow: `0 2px 5px 0 rgba(0,0,0,0.05), 0 5px 15px 0 rgba(0,0,0,0.1)`,
+    boxShadow: `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
     color: theme.color.inverseText,
     textDecoration: 'none',
     overflow: 'hidden',
+    zIndex: 1,
   }),
   ({ duration, theme }) =>
     duration && {
@@ -107,9 +108,8 @@ const NotificationTextWrapper = styled.div(({ theme }) => ({
 
 const Headline = styled.div<{ hasIcon: boolean }>(({ theme, hasIcon }) => ({
   height: '100%',
-  width: hasIcon ? 205 : 230,
   alignItems: 'center',
-  whiteSpace: 'nowrap',
+  whiteSpace: 'balance',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   fontSize: theme.typography.size.s1,
@@ -122,6 +122,7 @@ const SubHeadline = styled.div(({ theme }) => ({
   fontSize: theme.typography.size.s1 - 1,
   lineHeight: '14px',
   marginTop: 2,
+  whiteSpace: 'balance',
 }));
 
 const ItemContent: FC<Pick<State['notifications'][0], 'icon' | 'content'>> = ({
@@ -154,6 +155,7 @@ const ItemContent: FC<Pick<State['notifications'][0], 'icon' | 'content'>> = ({
 };
 
 const DismissButtonWrapper = styled(IconButton)(({ theme }) => ({
+  width: 28,
   alignSelf: 'center',
   marginTop: 0,
   color: theme.base === 'light' ? 'rgba(255,255,255,0.7)' : ' #999999',

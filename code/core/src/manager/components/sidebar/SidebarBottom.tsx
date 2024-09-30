@@ -19,6 +19,7 @@ import {
 
 import { throttle } from 'es-toolkit';
 
+import { Notifications } from '../../container/Notifications';
 import { TestingModule } from './TestingModule';
 
 const filterNone: API_FilterFunction = () => true;
@@ -168,6 +169,7 @@ export const SidebarBottomBase = ({ api, status = {} }: SidebarBottomProps) => {
   return (
     <Wrapper id="sidebar-bottom-wrapper" style={{ height: contentHeight }}>
       <Content id="sidebar-bottom">
+        <Notifications />
         <TestingModule
           {...{
             testProviders,
