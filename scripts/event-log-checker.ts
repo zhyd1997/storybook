@@ -90,7 +90,7 @@ async function run() {
   } catch (err) {
     if (err instanceof assert.AssertionError) {
       console.log(`Assertions failed for ${picocolors.bold(templateName)}\n`);
-      console.log(picocolors.bold(picocolors.red`✕ ${testMessage}:`));
+      console.log(picocolors.bold(picocolors.red(`✕ ${testMessage}:`)));
       console.log(err);
       process.exit(1);
     }

@@ -71,7 +71,7 @@ export const run = async (_: unknown) => {
       }
       failedCherryPicks.push(pr.mergeCommit);
       prSpinner.info(
-        `This PR can be picked manually with: ${picocolors.grey(
+        `This PR can be picked manually with: ${picocolors.gray(
           `git cherry-pick -m1 -x ${pr.mergeCommit}`
         )}`
       );
