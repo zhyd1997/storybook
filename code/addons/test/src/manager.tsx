@@ -33,6 +33,8 @@ addons.register(ADDON_ID, (api) => {
     icon: <PointerHandIcon />,
     title: 'Component Tests',
     description: () => 'Not yet run',
+    runnable: true,
+    watchable: true,
   });
 
   addons.add(PANEL_ID, {
