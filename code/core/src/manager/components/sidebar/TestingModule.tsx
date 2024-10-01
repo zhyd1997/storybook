@@ -11,6 +11,8 @@ import {
 } from '@storybook/icons';
 import type { Addon_TestProviderType } from '@storybook/types';
 
+const DEFAULT_HEIGHT = 500;
+
 const spin = keyframes({
   from: { transform: 'rotate(0deg)' },
   to: { transform: 'rotate(360deg)' },
@@ -186,14 +188,14 @@ export const TestingModule = ({
 }: TestingModuleProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
-  const [maxHeight, setMaxHeight] = useState(500);
+  const [maxHeight, setMaxHeight] = useState(DEFAULT_HEIGHT);
 
   useEffect(() => {
-    setMaxHeight(contentRef.current?.offsetHeight || 500);
+    setMaxHeight(contentRef.current?.offsetHeight || DEFAULT_HEIGHT);
   }, []);
 
   const toggleCollapsed = () => {
-    setMaxHeight(contentRef.current?.offsetHeight || 500);
+    setMaxHeight(contentRef.current?.offsetHeight || DEFAULT_HEIGHT);
     setCollapsed(!collapsed);
   };
 
