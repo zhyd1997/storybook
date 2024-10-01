@@ -11,6 +11,7 @@ import {
 import { type State, useStorybookApi } from '@storybook/core/manager-api';
 
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
+import { useLayout } from '../layout/LayoutProvider';
 import { Explorer } from './Explorer';
 import type { HeadingProps } from './Heading';
 import { Heading } from './Heading';
@@ -125,7 +126,7 @@ export const Sidebar = React.memo(function Sidebar({
   const dataset = useCombination(index, indexError, previewInitialized, status, refs);
   const isLoading = !index && !indexError;
   const lastViewedProps = useLastViewed(selected);
-  const api = useStorybookApi();
+  const { isMobile } = useLayout();
 
   return (
     <Container className="container sidebar-container">
@@ -177,7 +178,7 @@ export const Sidebar = React.memo(function Sidebar({
             )}
           </Search>
         </Top>
-        {isLoading ? null : <SidebarBottom />}
+        {isMobile || isLoading ? null : <SidebarBottom />}
       </ScrollArea>
     </Container>
   );
