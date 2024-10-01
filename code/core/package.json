@@ -329,6 +329,7 @@
     "@types/prettier": "^3.0.0",
     "@types/pretty-hrtime": "^1.0.0",
     "@types/prompts": "^2.0.9",
+    "@types/ramda": "^0.30.2",
     "@types/react-syntax-highlighter": "11.0.5",
     "@types/react-transition-group": "^4",
     "@types/semver": "^7.5.8",
