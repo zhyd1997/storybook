@@ -177,11 +177,7 @@ export const Sidebar = React.memo(function Sidebar({
             )}
           </Search>
         </Top>
-        {isLoading ? null : (
-          <div className="sb-bar">
-            <SidebarBottom />
-          </div>
-        )}
+        {isLoading ? null : <SidebarBottom />}
       </ScrollArea>
     </Container>
   );
