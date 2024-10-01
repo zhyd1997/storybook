@@ -42,6 +42,7 @@ const managerContext: any = {
       'api::getShortcutKeys'
     ),
     getChannel: fn().mockName('api::getChannel'),
+    getElements: fn(() => ({})),
     selectStory: fn().mockName('api::selectStory'),
     experimental_setFilter: fn().mockName('api::experimental_setFilter'),
   },
