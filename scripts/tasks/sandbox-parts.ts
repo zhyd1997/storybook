@@ -663,6 +663,15 @@ export const addStories: Task['run'] = async (
       cwd,
       disableDocs,
     });
+
+    await linkPackageStories(
+      await workspacePath('addon test package', '@storybook/experimental-addon-test'),
+      {
+        mainConfig,
+        cwd,
+        disableDocs,
+      }
+    );
   }
 
   const mainAddons = (mainConfig.getSafeFieldValue(['addons']) || []).reduce(
@@ -782,6 +791,9 @@ export const extendMain: Task['run'] = async ({ template, sandboxDir, key }, { d
     updatedStories = updatedStories.filter((specifier) => !specifier.endsWith('.mdx'));
     mainConfig.setFieldValue(['stories'], updatedStories);
   }
+
+  const addons = mainConfig.getFieldValue(['addons']);
+  mainConfig.setFieldValue(['addons'], [...addons, '@storybook/experimental-addon-test']);
 
   if (template.expected.builder === '@storybook/builder-vite') {
     setSandboxViteFinal(mainConfig);
