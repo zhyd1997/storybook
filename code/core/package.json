@@ -344,7 +344,6 @@
     "browser-dtector": "^3.4.0",
     "camelcase": "^8.0.0",
     "chai": "^4.4.1",
-    "chalk": "^5.3.0",
     "cli-table3": "^0.6.1",
     "commander": "^12.1.0",
     "comment-parser": "^1.4.1",
