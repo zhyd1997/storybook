@@ -243,10 +243,9 @@ export async function vitestTransform({
           return;
         }
 
-        // use the story's name as the test title for vitest, and fallback to exportName
-        const testTitle = parsed._stories[exportName].name ?? exportName;
-        const decl = parsed._storyExports[exportName];
         const localName = parsed._stories[exportName].localName ?? exportName;
+        // use the story's name as the test title for vitest, and fallback to exportName
+        const testTitle = parsed._stories[exportName].name ?? localName;
         return getTestStatementForStory({ testTitle, localName, exportName, node });
       })
       .filter((st) => !!st) as t.ExpressionStatement[];
