@@ -271,7 +271,7 @@ export const run = async (options: unknown) => {
         releaseType
       )}${
         preId ? ` and ${picocolors.yellow(preId)}` : ''
-      } results in version: ${picocolors.bgGreenBright.bold(nextVersion)}`
+      } results in version: ${picocolors.bold(picocolors.greenBright(nextVersion))}`
     );
   }
 
