@@ -1,6 +1,6 @@
 {
   "name": "@storybook/core",
-  "version": "8.4.0-alpha.1",
+  "version": "8.4.0-alpha.2",
   "description": "Storybook framework-agnostic API",
   "keywords": [
     "storybook"
@@ -327,7 +327,6 @@
     "@types/prettier": "^3.0.0",
     "@types/pretty-hrtime": "^1.0.0",
     "@types/prompts": "^2.0.9",
-    "@types/qs": "^6",
     "@types/react-syntax-highlighter": "11.0.5",
     "@types/react-transition-group": "^4",
     "@types/semver": "^7.5.8",
@@ -371,7 +370,6 @@
     "get-npm-tarball-url": "^2.0.3",
     "glob": "^10.0.0",
     "globby": "^14.0.1",
-    "handlebars": "^4.7.7",
     "jiti": "^1.21.6",
     "js-yaml": "^4.1.0",
     "lazy-universal-dotenv": "^4.0.0",
@@ -383,12 +381,12 @@
     "npmlog": "^7.0.0",
     "open": "^8.4.0",
     "picomatch": "^2.3.0",
+    "picoquery": "^1.4.0",
     "polished": "^4.2.2",
     "polka": "^1.0.0-next.28",
     "prettier": "^3.2.5",
     "pretty-hrtime": "^1.0.3",
     "prompts": "^2.4.0",
-    "qs": "^6.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
@@ -416,6 +414,14 @@
     "unique-string": "^3.0.0",
     "use-resize-observer": "^9.1.0",
     "watchpack": "^2.2.0"
+  },
+  "peerDependencies": {
+    "prettier": "^2 || ^3"
+  },
+  "peerDependenciesMeta": {
+    "prettier": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public"
