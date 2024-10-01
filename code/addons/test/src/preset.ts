@@ -18,7 +18,7 @@ export const checkActionsLoaded = (configDir: string) => {
       inEssentials: true,
     },
     after: {
-      name: '@storybook/addon-interactions',
+      name: '@storybook/experimental-addon-test',
       inEssentials: false,
     },
     configFile: isAbsolute(configDir)
