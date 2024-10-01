@@ -105,7 +105,8 @@ const CollapseToggle = styled(Button)({
 const StatusButton = styled(Button)<{ status: 'negative' | 'warning' }>(
   { minWidth: 28 },
   ({ active, status, theme }) =>
-    !active && theme.base === 'light'
+    !active &&
+    (theme.base === 'light'
       ? {
           background: {
             negative: theme.background.negative,
@@ -125,7 +126,7 @@ const StatusButton = styled(Button)<{ status: 'negative' | 'warning' }>(
             negative: theme.color.negative,
             warning: theme.color.warning,
           }[status],
-        }
+        })
 );
 
 const TestProvider = styled.div({
