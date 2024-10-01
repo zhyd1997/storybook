@@ -1,10 +1,26 @@
 import { expect, test } from '@playwright/test';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 
 import { SbPage } from '../../../../code/e2e-tests/util';
 
 const storybookUrl = 'http://localhost:6006';
+const testStoryPath = path.resolve(__dirname, '..', 'stories/AddonTest.stories.tsx');
 
 test.describe('component testing', () => {
+  test.beforeEach(async () => {
+    console.log(`Preparing the file for testing: ${testStoryPath}`);
+  
+    // Read the story file content asynchronously
+    const storyContent = (await fs.readFile(testStoryPath)).toString();
+  
+    // Replace 'forceFailure: true' with 'forceFailure: false'
+    const updatedContent = storyContent.replace('forceFailure: true', 'forceFailure: false');
+  
+    // Write the updated content back to the file asynchronously
+    await fs.writeFile(testStoryPath, updatedContent);
+  });
+
   test('should execute tests via testing module UI', async ({ page, browserName }) => {
     test.skip(browserName !== 'chromium', `Skipping tests for ${browserName}`);
 
@@ -31,7 +47,7 @@ test.describe('component testing', () => {
     await page.locator('#addons').getByRole('button').nth(2).click({ timeout: 3000 });
 
     // Wait for test results to appear
-    const errorFilter = page.getByRole('button', { name: '1 Error' });
+    const errorFilter = page.getByLabel('Show errors');
     await expect(errorFilter).toBeVisible({ timeout: 20000 });
 
     // Assert for expected success
