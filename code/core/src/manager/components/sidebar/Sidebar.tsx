@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Button, ScrollArea, Spaced } from '@storybook/core/components';
 import { styled } from '@storybook/core/theming';
@@ -6,13 +6,12 @@ import type { API_LoadedRefData, Addon_SidebarTopType } from '@storybook/core/ty
 
 import {
   TESTING_MODULE_RUN_ALL_REQUEST,
-  TESTING_MODULE_WATCH_MODE_REQUEST,
   type TestingModuleRunAllRequestPayload,
-  type TestingModuleWatchModeRequestPayload,
 } from '@storybook/core/core-events';
 import { type State, useStorybookApi } from '@storybook/core/manager-api';
 
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
+import { useLayout } from '../layout/LayoutProvider';
 import { Explorer } from './Explorer';
 import type { HeadingProps } from './Heading';
 import { Heading } from './Heading';
@@ -50,19 +49,6 @@ const Top = styled(Spaced)({
   paddingTop: 16,
   flex: 1,
 });
-
-const Bottom = styled.div(({ theme }) => ({
-  borderTop: `1px solid ${theme.appBorderColor}`,
-  padding: theme.layoutMargin / 2,
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: theme.layoutMargin / 2,
-  backgroundColor: theme.barBg,
-
-  '&:empty': {
-    display: 'none',
-  },
-}));
 
 const Swap = React.memo(function Swap({
   children,
@@ -140,15 +126,7 @@ export const Sidebar = React.memo(function Sidebar({
   const dataset = useCombination(index, indexError, previewInitialized, status, refs);
   const isLoading = !index && !indexError;
   const lastViewedProps = useLastViewed(selected);
-  const api = useStorybookApi();
-  const [watchMode, setWatchMode] = useState(false);
-
-  useEffect(() => {
-    api.emit(TESTING_MODULE_WATCH_MODE_REQUEST, {
-      providerId: TEST_PROVIDER_ID,
-      watchMode,
-    } as TestingModuleWatchModeRequestPayload);
-  }, [api, watchMode]);
+  const { isMobile } = useLayout();
 
   return (
     <Container className="container sidebar-container">
@@ -200,25 +178,8 @@ export const Sidebar = React.memo(function Sidebar({
             )}
           </Search>
         </Top>
+        {isMobile || isLoading ? null : <SidebarBottom />}
       </ScrollArea>
-      {isLoading ? null : (
-        <Bottom className="sb-bar">
-          <SidebarBottom />
-          <Button
-            onClick={() => {
-              api.emit(TESTING_MODULE_RUN_ALL_REQUEST, {
-                providerId: TEST_PROVIDER_ID,
-              } as TestingModuleRunAllRequestPayload);
-            }}
-          >
-            Run test for all Stories
-          </Button>
-          <label>
-            <input type="checkbox" checked={watchMode} onChange={() => setWatchMode(!watchMode)} />{' '}
-            Watch Mode
-          </label>
-        </Bottom>
-      )}
     </Container>
   );
 });

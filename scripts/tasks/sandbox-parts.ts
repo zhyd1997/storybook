@@ -667,16 +667,14 @@ export const addStories: Task['run'] = async (
       disableDocs,
     });
 
-    if (!template.skipTasks.includes('vitest-integration')) {
-      await linkPackageStories(
-        await workspacePath('addon test package', '@storybook/experimental-addon-test'),
-        {
-          mainConfig,
-          cwd,
-          disableDocs,
-        }
-      );
-    }
+    await linkPackageStories(
+      await workspacePath('addon test package', '@storybook/experimental-addon-test'),
+      {
+        mainConfig,
+        cwd,
+        disableDocs,
+      }
+    );
   }
 
   const mainAddons = (mainConfig.getSafeFieldValue(['addons']) || []).reduce(
@@ -797,9 +795,10 @@ export const extendMain: Task['run'] = async ({ template, sandboxDir, key }, { d
     mainConfig.setFieldValue(['stories'], updatedStories);
   }
 
+  const addons = mainConfig.getFieldValue(['addons']);
+  mainConfig.setFieldValue(['addons'], [...addons, '@storybook/experimental-addon-test']);
+
   if (template.expected.builder === '@storybook/builder-vite') {
-    const addons = mainConfig.getFieldValue(['addons']);
-    mainConfig.setFieldValue(['addons'], [...addons, '@storybook/experimental-addon-test']);
     setSandboxViteFinal(mainConfig);
   }
   await writeConfig(mainConfig);

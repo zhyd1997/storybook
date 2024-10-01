@@ -17,6 +17,7 @@ import type { Suite } from '@vitest/runner';
 // functions from the `@vitest/runner` package. It is not complex and does not have
 // any significant dependencies.
 import { getTests } from '@vitest/runner/utils';
+// @ts-expect-error we will very soon replace this library with es-toolkit
 import throttle from 'lodash/throttle.js';
 
 import { TEST_PROVIDER_ID } from '../constants';
@@ -47,6 +48,7 @@ export class StorybookReporter implements Reporter {
   sendReport: (payload: TestingModuleRunProgressPayload) => void;
 
   constructor(private testManager: TestManager) {
+    // @ts-expect-error we will very soon replace this library with es-toolkit
     this.sendReport = throttle((payload) => this.testManager.sendProgressReport(payload), 200);
   }
 
