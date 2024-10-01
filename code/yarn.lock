@@ -26225,7 +26225,6 @@ __metadata:
   resolution: "storybook@workspace:lib/cli"
   dependencies:
     "@storybook/core": "workspace:*"
-    picocolors: "npm:^1.1.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
     prettier: ^2 || ^3
