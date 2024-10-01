@@ -18,8 +18,8 @@ const MAX_START_ATTEMPTS = 3;
 const MAX_START_TIME = 8000;
 
 // This path is a bit confusing, but essentially `boot-test-runner` gets bundled into the preset bundle
-// which is at the root. Then, from the root, we want to load `node/vitest.js`
-const vitestModulePath = join(__dirname, 'node', 'vitest.js');
+// which is at the root. Then, from the root, we want to load `node/vitest.mjs`
+const vitestModulePath = join(__dirname, 'node', 'vitest.mjs');
 
 export const bootTestRunner = async (channel: Channel, initEvent?: string, initArgs?: any[]) => {
   let aborted = false;
