@@ -187,7 +187,7 @@ export const SidebarBottom = () => {
   useEffect(() => {
     api.getChannel()?.on(TESTING_MODULE_RUN_PROGRESS_RESPONSE, (data) => {
       if ('payload' in data) {
-        console.log('progress', data);
+        // console.log('progress', data);
         // TODO clear statuses
         api.experimental_updateStatus('figure-out-id', processTestReport(data.payload));
       } else {
