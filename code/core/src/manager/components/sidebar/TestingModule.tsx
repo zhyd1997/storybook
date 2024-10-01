@@ -225,7 +225,7 @@ export const TestingModule = ({
                     <Icon>{icon}</Icon>
                     <Details>
                       <Title>{title}</Title>
-                      <Description>{description?.({})}</Description>
+                      <Description>{description({})}</Description>
                     </Details>
                   </Info>
                   <Actions>
