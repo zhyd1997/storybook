@@ -21,11 +21,12 @@ export const NotificationList: FC<NotificationListProps> = ({
   return (
     <List isMobile={isMobile}>
       {notifications &&
-        notifications.map((notification) => (
+        notifications.map((notification, index) => (
           <NotificationItem
             key={notification.id}
             onDismissNotification={(id: string) => clearNotification(id)}
             notification={notification}
+            zIndex={notifications.length - index}
           />
         ))}
     </List>
@@ -34,6 +35,7 @@ export const NotificationList: FC<NotificationListProps> = ({
 
 const List = styled.div<{ isMobile?: boolean }>(
   {
+    zIndex: 200,
     '> * + *': {
       marginTop: 12,
     },
@@ -43,7 +45,6 @@ const List = styled.div<{ isMobile?: boolean }>(
   },
   ({ isMobile }) =>
     isMobile && {
-      zIndex: 200,
       position: 'fixed',
       bottom: 40,
       margin: 20,

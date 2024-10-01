@@ -48,7 +48,7 @@ const Notification = styled.div<{ duration?: number }>(
     color: theme.color.inverseText,
     textDecoration: 'none',
     overflow: 'hidden',
-    zIndex: 1,
+
     [MEDIA_DESKTOP_BREAKPOINT]: {
       boxShadow: `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
     },
@@ -188,9 +188,11 @@ export const NotificationItemSpacer = styled.div({
 const NotificationItem: FC<{
   notification: State['notifications'][0];
   onDismissNotification: (id: string) => void;
+  zIndex?: number;
 }> = ({
   notification: { content, duration, link, onClear, onClick, id, icon },
   onDismissNotification,
+  zIndex,
 }) => {
   const onTimeout = useCallback(() => {
     onDismissNotification(id);
@@ -198,7 +200,7 @@ const NotificationItem: FC<{
     if (onClear) {
       onClear({ dismissed: false, timeout: true });
     }
-  }, [onDismissNotification, onClear]);
+  }, [id, onDismissNotification, onClear]);
 
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -218,11 +220,11 @@ const NotificationItem: FC<{
     if (onClear) {
       onClear({ dismissed: true, timeout: false });
     }
-  }, [onDismissNotification, onClear]);
+  }, [id, onDismissNotification, onClear]);
 
   if (link) {
     return (
-      <NotificationLink to={link} duration={duration}>
+      <NotificationLink to={link} duration={duration} style={{ zIndex }}>
         <ItemContent icon={icon} content={content} />
         <DismissNotificationItem onDismiss={onDismiss} />
       </NotificationLink>
@@ -231,7 +233,11 @@ const NotificationItem: FC<{
 
   if (onClick) {
     return (
-      <NotificationButton duration={duration} onClick={() => onClick({ onDismiss })}>
+      <NotificationButton
+        duration={duration}
+        onClick={() => onClick({ onDismiss })}
+        style={{ zIndex }}
+      >
         <ItemContent icon={icon} content={content} />
         <DismissNotificationItem onDismiss={onDismiss} />
       </NotificationButton>
@@ -239,7 +245,7 @@ const NotificationItem: FC<{
   }
 
   return (
-    <Notification duration={duration}>
+    <Notification duration={duration} style={{ zIndex }}>
       <ItemContent icon={icon} content={content} />
       <DismissNotificationItem onDismiss={onDismiss} />
     </Notification>
