@@ -192,14 +192,6 @@ export const TestingModule = ({
     setMaxHeight(contentRef.current?.offsetHeight || 500);
   }, []);
 
-  const runAllTests = useCallback(
-    (e: SyntheticEvent) => {
-      e.stopPropagation();
-      onRunTests();
-    },
-    [onRunTests]
-  );
-
   const toggleCollapsed = () => {
     setMaxHeight(contentRef.current?.offsetHeight || 500);
     setCollapsed(!collapsed);
@@ -253,7 +245,15 @@ export const TestingModule = ({
 
         <Bar onClick={testing ? toggleCollapsed : undefined}>
           {testing && (
-            <Button variant="ghost" padding="small" onClick={runAllTests} disabled={active}>
+            <Button
+              variant="ghost"
+              padding="small"
+              onClick={(e: SyntheticEvent) => {
+                e.stopPropagation();
+                testProviders.forEach(({ id }) => onRunTests(id));
+              }}
+              disabled={active}
+            >
               <PlayAllHollowIcon />
               {active ? 'Running...' : 'Run tests'}
             </Button>
