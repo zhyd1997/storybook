@@ -23,7 +23,7 @@ function hex(hexColor: string) {
   const b = parseInt(hexColor.slice(4, 6), 16);
 
   // Return the ANSI escape sequence for the given RGB color
-  return (text: string) => `\x1b[38;2;${r};${g};${b}m${text}\x1b[0m`;
+  return (text: string) => `\x1b[38;2;${r};${g};${b}m${text}\x1b[39m`;
 }
 
 export const colors = {
