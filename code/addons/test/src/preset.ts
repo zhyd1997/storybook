@@ -1,4 +1,7 @@
+import { isAbsolute, join } from 'node:path';
+
 import type { Channel } from 'storybook/internal/channels';
+import { checkAddonOrder, serverRequire } from 'storybook/internal/common';
 import {
   TESTING_MODULE_RUN_ALL_REQUEST,
   TESTING_MODULE_RUN_REQUEST,
@@ -8,8 +11,32 @@ import type { Options } from 'storybook/internal/types';
 
 import { bootTestRunner } from './node/boot-test-runner';
 
+export const checkActionsLoaded = (configDir: string) => {
+  checkAddonOrder({
+    before: {
+      name: '@storybook/addon-actions',
+      inEssentials: true,
+    },
+    after: {
+      name: '@storybook/experimental-addon-test',
+      inEssentials: false,
+    },
+    configFile: isAbsolute(configDir)
+      ? join(configDir, 'main')
+      : join(process.cwd(), configDir, 'main'),
+    getConfig: (configFile) => serverRequire(configFile),
+  });
+};
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const experimental_serverChannel = async (channel: Channel, options: Options) => {
+  const core = await options.presets.apply('core');
+  const builderName = typeof core?.builder === 'string' ? core.builder : core?.builder?.name;
+  // Only boot the test runner if the builder is vite, else just provide interactions functionality
+  if (!builderName?.includes('vite')) {
+    return channel;
+  }
+
   let booting = false;
   let booted = false;
   const start =
@@ -40,8 +67,3 @@ export const experimental_serverChannel = async (channel: Channel, options: Opti
 
   return channel;
 };
-
-// TODO:
-// 1 - Do not boot Vitest on Storybook boot, but rather on the first test run
-// 2 - Handle cases where Vitest is already booted, so we dont boot it again
-// 3 - Upon crash, provide a notification to the user

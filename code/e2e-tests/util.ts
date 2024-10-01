@@ -120,7 +120,7 @@ export class SbPage {
   }
 
   panelContent() {
-    return this.page.locator('#storybook-panel-root #panel-tab-content');
+    return this.page.locator('#storybook-panel-root #panel-tab-content > div:not([hidden])');
   }
 
   async viewAddonPanel(name: string) {

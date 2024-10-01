@@ -31,6 +31,7 @@ export class VitestManager {
       // find a way to just show errors and warnings for example
       // Otherwise it might be hard for the user to discover Storybook related logs
       reporters: ['default', new StorybookReporter(this.testManager)],
+      // @ts-expect-error we just want to disable coverage, not specify a provider
       coverage: {
         enabled: false,
       },
