@@ -11,6 +11,8 @@ import { type State } from '@storybook/core/manager-api';
 
 import { transparentize } from 'polished';
 
+import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
+
 const slideIn = keyframes({
   '0%': {
     opacity: 0,
@@ -42,11 +44,14 @@ const Notification = styled.div<{ duration?: number }>(
 
     animation: `${slideIn} 500ms`,
     background: theme.base === 'light' ? 'hsla(203, 50%, 20%, .97)' : 'hsla(203, 30%, 95%, .97)',
-    boxShadow: `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
+    boxShadow: `0 2px 5px 0 rgba(0, 0, 0, 0.05), 0 5px 15px 0 rgba(0, 0, 0, 0.1)`,
     color: theme.color.inverseText,
     textDecoration: 'none',
     overflow: 'hidden',
     zIndex: 1,
+    [MEDIA_DESKTOP_BREAKPOINT]: {
+      boxShadow: `0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app}`,
+    },
   }),
   ({ duration, theme }) =>
     duration && {
