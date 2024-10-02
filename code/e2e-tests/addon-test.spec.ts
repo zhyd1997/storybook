@@ -9,7 +9,7 @@ const templateName = process.env.STORYBOOK_TEMPLATE_NAME || '';
 test.describe('addon-test', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(storybookUrl);
-    await new SbPage(page).waitUntilLoaded();
+    await new SbPage(page, expect).waitUntilLoaded();
   });
 
   test('should have interactions', async ({ page }) => {
@@ -19,7 +19,7 @@ test.describe('addon-test', () => {
       `Skipping ${templateName}, which does not support addon-test`
     );
 
-    const sbPage = new SbPage(page);
+    const sbPage = new SbPage(page, expect);
 
     await sbPage.navigateToStory('example/page', 'logged-in');
     await sbPage.viewAddonPanel('Component Tests');
@@ -51,7 +51,7 @@ test.describe('addon-test', () => {
       `Skipping on FIreFox, which has trouble with "initial value"`
     );
 
-    const sbPage = new SbPage(page);
+    const sbPage = new SbPage(page, expect);
 
     await sbPage.deepLinkToStory(storybookUrl, 'addons/test/basics', 'type-and-clear');
     await sbPage.viewAddonPanel('Component Tests');
@@ -127,7 +127,7 @@ test.describe('addon-test', () => {
     // We trigger the implicit action error here, but angular works a bit different with implicit actions.
     test.skip(/^(angular)/i.test(`${templateName}`));
 
-    const sbPage = new SbPage(page);
+    const sbPage = new SbPage(page, expect);
 
     await sbPage.deepLinkToStory(storybookUrl, 'addons/test/unhandled-errors', 'default');
     await sbPage.viewAddonPanel('Component Tests');
