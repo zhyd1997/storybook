@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { promises as fsPromises } from 'node:fs';
+import { readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -51,11 +51,7 @@ export class FileSystemCache {
     return parsed.ttl != null && now > parsed.ttl;
   }
 
-  private parseCacheData<T>(
-    data: string,
-    fallback: T | null,
-    opts: CacheSetOptions = {}
-  ): T | null {
+  private parseCacheData<T>(data: string, fallback: T | null): T | null {
     const parsed = JSON.parse(data);
     return this.isExpired(parsed, Date.now()) ? fallback : (parsed.content as T);
   }
@@ -65,25 +61,21 @@ export class FileSystemCache {
     return JSON.stringify({ key, content: data, ...(ttl && { ttl: Date.now() + ttl * 1000 }) });
   }
 
-  public async get<T = any>(
-    name: string,
-    fallback: T | null = null,
-    opts?: CacheSetOptions
-  ): Promise<T | null> {
+  public async get<T = any>(name: string, fallback?: T): Promise<T> {
     try {
-      const data = await fsPromises.readFile(this.generateHash(name), 'utf8');
-      return this.parseCacheData(data, fallback, opts);
+      const data = await readFile(this.generateHash(name), 'utf8');
+      return this.parseCacheData(data, fallback) as T;
     } catch {
-      return fallback;
+      return fallback as T;
     }
   }
 
-  public getSync<T>(name: string, fallback: T | null = null, opts?: CacheSetOptions): T | null {
+  public getSync<T>(name: string, fallback?: T): T {
     try {
       const data = readFileSync(this.generateHash(name), 'utf8');
-      return this.parseCacheData(data, fallback, opts);
+      return this.parseCacheData(data, fallback) as T;
     } catch {
-      return fallback;
+      return fallback as T;
     }
   }
 
@@ -93,7 +85,7 @@ export class FileSystemCache {
     orgOpts: CacheSetOptions | number = {}
   ): Promise<void> {
     const opts: CacheSetOptions = typeof orgOpts === 'number' ? { ttl: orgOpts } : orgOpts;
-    await fsPromises.writeFile(this.generateHash(name), this.parseSetData(name, data, opts), {
+    await writeFile(this.generateHash(name), this.parseSetData(name, data, opts), {
       encoding: opts.encoding || 'utf8',
     });
   }
@@ -114,7 +106,7 @@ export class FileSystemCache {
   }
 
   public async remove(name: string): Promise<void> {
-    await fsPromises.rm(this.generateHash(name), { force: true });
+    await rm(this.generateHash(name), { force: true });
   }
 
   public removeSync(name: string): void {
@@ -122,11 +114,11 @@ export class FileSystemCache {
   }
 
   public async clear(): Promise<void> {
-    const files = await fsPromises.readdir(this.cache_dir);
+    const files = await readdir(this.cache_dir);
     await Promise.all(
       files
         .filter((f) => f.startsWith(this.prefix))
-        .map((f) => fsPromises.rm(join(this.cache_dir, f), { force: true }))
+        .map((f) => rm(join(this.cache_dir, f), { force: true }))
     );
   }
 
@@ -138,11 +130,11 @@ export class FileSystemCache {
 
   public async getAll(): Promise<CacheItem[]> {
     const now = Date.now();
-    const files = await fsPromises.readdir(this.cache_dir);
+    const files = await readdir(this.cache_dir);
     const items = await Promise.all(
       files
         .filter((f) => f.startsWith(this.prefix))
-        .map((f) => fsPromises.readFile(join(this.cache_dir, f), 'utf8'))
+        .map((f) => readFile(join(this.cache_dir, f), 'utf8'))
     );
     return items
       .map((data) => JSON.parse(data))
