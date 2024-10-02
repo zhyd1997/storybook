@@ -7,24 +7,9 @@ import type { Options } from '@storybook/core/types';
 import { logger } from '@storybook/core/node-logger';
 
 import chalk from 'chalk';
-import type { ServerResponse } from 'http';
 import type Polka from 'polka';
 import sirv from 'sirv';
 import { dedent } from 'ts-dedent';
-
-// TODO (43081j): maybe get this from somewhere?
-const contentTypes: Record<string, string> = {
-  css: 'text/css',
-  woff2: 'font/woff2',
-  js: 'text/javascript',
-};
-const setContentTypeHeaders = (res: ServerResponse, pathname: string) => {
-  const base = basename(pathname);
-  const contentType = contentTypes[base];
-  if (contentType) {
-    res.setHeader('Content-Type', contentType);
-  }
-};
 
 export async function useStatics(app: Polka.Polka, options: Options): Promise<void> {
   const staticDirs = (await options.presets.apply('staticDirs')) ?? [];
@@ -49,7 +34,7 @@ export async function useStatics(app: Polka.Polka, options: Options): Promise<vo
       const { staticDir, staticPath, targetEndpoint } = await parseStaticDir(normalizedDir);
 
       // Don't log for the internal static dir
-      if (!targetEndpoint.startsWith('/sb-')) {
+      if (!targetEndpoint.startsWith('/sb-') && staticPath !== faviconPath) {
         logger.info(
           `=> Serving static files from ${chalk.cyan(staticDir)} at ${chalk.cyan(targetEndpoint)}`
         );
@@ -66,7 +51,6 @@ export async function useStatics(app: Polka.Polka, options: Options): Promise<vo
   const serve = sirv(process.cwd(), {
     dev: true,
     etag: true,
-    setHeaders: setContentTypeHeaders,
   });
 
   app.use((req, res, next) => {
