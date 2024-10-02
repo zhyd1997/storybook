@@ -36,6 +36,10 @@ test.describe('component testing', () => {
     const sbPage = new SbPage(page, expect);
     await sbPage.navigateToStory('addons/test', 'Expected Failure');
 
+    // For whatever reason, sometimes it takes longer for the story to load
+    const storyElement = sbPage.getCanvasBodyElement().getByRole('button', { name: 'test' });
+    await expect(storyElement).toBeVisible({ timeout: 10000 });
+
     await page.locator('#addons').getByRole('button').nth(2).click();
 
     // Wait for test results to appear
@@ -70,8 +74,9 @@ test.describe('component testing', () => {
     const sbPage = new SbPage(page, expect);
     await sbPage.navigateToStory('addons/test', 'Expected Failure');
 
-    await page.goto('http://localhost:6006/');
-    await page.goto('http://localhost:6006/?path=/story/addons-test--expected-failure');
+    // For whatever reason, sometimes it takes longer for the story to load
+    const storyElement = sbPage.getCanvasBodyElement().getByRole('button', { name: 'test' });
+    await expect(storyElement).toBeVisible({ timeout: 10000 });
 
     // TODO: improve locators in the testing module elements
     await page.locator('#sidebar-bottom').getByRole('button').first().click();
