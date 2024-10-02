@@ -154,7 +154,7 @@ jobs:
             cd code
             yarn local-registry --publish
       - report-workflow-on-failure
-      - store_artifacts: 
+      - store_artifacts:
           path: code/bench/esbuild-metafiles
       - save_cache:
           name: Save Yarn cache
@@ -676,7 +676,7 @@ jobs:
       - store_test_results:
           path: test-results
       - store_artifacts:
-          path: test-results/
+          path: test-storybooks/portable-stories-kitchen-sink/react/test-results/
           destination: playwright
       - report-workflow-on-failure
   test-portable-stories:
