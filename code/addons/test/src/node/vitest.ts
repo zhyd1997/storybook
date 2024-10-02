@@ -44,6 +44,6 @@ process.on('uncaughtException', (err) => {
 });
 
 process.on('unhandledRejection', (reason) => {
-  process.send?.({ type: 'error', message: 'Unhandled rejection', error: reason });
+  process.send?.({ type: 'error', message: 'Unhandled rejection', error: String(reason) });
   exit(1);
 });

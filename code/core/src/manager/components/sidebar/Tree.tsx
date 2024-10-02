@@ -229,6 +229,7 @@ const Node = React.memo<NodeProps>(function Node({
                     id: addonId,
                     title: value.title,
                     description: value.description,
+                    'aria-label': `Test status for ${value.title}: ${value.status}`,
                     icon: {
                       success: <StatusPassIcon color={theme.color.positive} />,
                       error: <StatusFailIcon color={theme.color.negative} />,
@@ -244,7 +245,13 @@ const Node = React.memo<NodeProps>(function Node({
               />
             )}
           >
-            <StatusButton type="button" status={statusValue} selectedItem={isSelected}>
+            <StatusButton
+              aria-label={`Test status: ${statusValue}`}
+              role="status"
+              type="button"
+              status={statusValue}
+              selectedItem={isSelected}
+            >
               {icon}
             </StatusButton>
           </WithTooltip>

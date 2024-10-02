@@ -226,6 +226,7 @@ export const TestingModule = ({
                   <Actions>
                     {watchable && (
                       <Button
+                        aria-label="Toggle watch mode"
                         variant="ghost"
                         padding="small"
                         active={watching}
@@ -235,7 +236,12 @@ export const TestingModule = ({
                       </Button>
                     )}
                     {runnable && (
-                      <Button variant="ghost" padding="small" onClick={() => onRunTests(id)}>
+                      <Button
+                        aria-label={`Run ${title}`}
+                        variant="ghost"
+                        padding="small"
+                        onClick={() => onRunTests(id)}
+                      >
                         {running ? <StopAltHollowIcon /> : <PlayHollowIcon />}
                       </Button>
                     )}
