@@ -65,7 +65,7 @@ export class FileSystemCache {
     return JSON.stringify({ key, content: data, ...(ttl && { ttl: Date.now() + ttl * 1000 }) });
   }
 
-  public async get<T>(
+  public async get<T = any>(
     name: string,
     fallback: T | null = null,
     opts?: CacheSetOptions
