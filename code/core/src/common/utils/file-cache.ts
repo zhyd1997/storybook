@@ -24,8 +24,6 @@ interface CacheSetOptions {
 }
 
 export class FileSystemCache {
-  private id = randomBytes(15).toString('base64').replace(/\//g, '-');
-
   private prefix: string;
 
   private hash_alg: string;
@@ -37,7 +35,8 @@ export class FileSystemCache {
   constructor(options: FileSystemCacheOptions = {}) {
     this.prefix = (options.ns || options.prefix || '') + '-';
     this.hash_alg = options.hash_alg || 'md5';
-    this.cache_dir = options.basePath || join(tmpdir(), this.id);
+    this.cache_dir =
+      options.basePath || join(tmpdir(), randomBytes(15).toString('base64').replace(/\//g, '-'));
     this.ttl = options.ttl || 0;
     createHash(this.hash_alg); // Verifies hash algorithm is available
     mkdirSync(this.cache_dir, { recursive: true });
