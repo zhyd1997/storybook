@@ -1,3 +1,17 @@
+## 8.4.0-alpha.3
+
+- CLI: Migrate from `chalk` to `picocolors` - [#28262](https://github.com/storybookjs/storybook/pull/28262), thanks @43081j!
+- Core: Migrate from `qs` to `picoquery` - [#28315](https://github.com/storybookjs/storybook/pull/28315), thanks @43081j!
+- UI: Brand image css class conflict causes image to resize on hot reloads - [#29129](https://github.com/storybookjs/storybook/pull/29129), thanks @ShreySinha02!
+
+## 8.4.0-alpha.2
+
+- CLI: Don't add `@storybook/addon-links` by default - [#29177](https://github.com/storybookjs/storybook/pull/29177), thanks @tobiasdiez!
+- Core: Make `prettier` an optional peer dependency - [#29223](https://github.com/storybookjs/storybook/pull/29223), thanks @JReinhold!
+- Core: Remove `handlebars` usage - [#29208](https://github.com/storybookjs/storybook/pull/29208), thanks @ndelangen!
+- Core: Replace `lodash` with `es-toolkit` - [#28981](https://github.com/storybookjs/storybook/pull/28981), thanks @ndelangen!
+- UI: Use production-mode `react` in manager - [#29197](https://github.com/storybookjs/storybook/pull/29197), thanks @ndelangen!
+
 ## 8.4.0-alpha.1
 
 - Addon Test: Support story name as test description - [#29147](https://github.com/storybookjs/storybook/pull/29147), thanks @InfiniteXyy!
