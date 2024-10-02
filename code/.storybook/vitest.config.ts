@@ -36,10 +36,10 @@ export default mergeConfig(
       name: 'storybook-ui',
       include: [
         '../addons/**/*.{story,stories}.?(c|m)[jt]s?(x)',
-        '../core/template/stories/**/*.{story,stories}.?(c|m)[jt]s?(x)',
-        '../core/src/manager/**/*.{story,stories}.?(c|m)[jt]s?(x)',
-        '../core/src/preview-api/**/*.{story,stories}.?(c|m)[jt]s?(x)',
-        '../core/src/components/{brand,components}/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        // '../core/template/stories/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        // '../core/src/manager/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        // '../core/src/preview-api/**/*.{story,stories}.?(c|m)[jt]s?(x)',
+        // '../core/src/components/{brand,components}/**/*.{story,stories}.?(c|m)[jt]s?(x)',
       ],
       exclude: [
         ...defaultExclude,
