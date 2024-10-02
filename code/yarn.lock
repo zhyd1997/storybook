@@ -6891,6 +6891,7 @@ __metadata:
     esbuild-plugin-alias: "npm:^0.2.1"
     eslint: "npm:^8.56.0"
     eslint-import-resolver-typescript: "npm:^3.6.1"
+    eslint-plugin-depend: "npm:^0.11.0"
     eslint-plugin-local-rules: "portal:../scripts/eslint-plugin-local-rules"
     eslint-plugin-playwright: "npm:^1.6.2"
     eslint-plugin-storybook: "npm:^0.8.0"
@@ -14336,6 +14337,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-depend@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "eslint-plugin-depend@npm:0.11.0"
+  dependencies:
+    fd-package-json: "npm:^1.2.0"
+    module-replacements: "npm:^2.1.0"
+    semver: "npm:^7.6.3"
+  checksum: 10c0/64baf4d4f5d406efa1f13bda723ff0eb5fe4cee0ae8c3679fcdfccb4d7ba3a9472416fa3c54d75f1bde3e0123e55a85774662484a5b0355812f21a8968ee784a
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-eslint-comments@npm:^3.2.0":
   version: 3.2.0
   resolution: "eslint-plugin-eslint-comments@npm:3.2.0"
@@ -21037,6 +21049,13 @@ __metadata:
   version: 2.2.3
   resolution: "module-alias@npm:2.2.3"
   checksum: 10c0/47dc5b6d04f6e7df0ff330ca9b2a37c688a682ed661e9432b0b327e1e6c43eedad052151b8d50d6beea8b924828d2a92fa4625c18d651bf2d93d8f03aa0172fa
+  languageName: node
+  linkType: hard
+
+"module-replacements@npm:^2.1.0":
+  version: 2.5.0
+  resolution: "module-replacements@npm:2.5.0"
+  checksum: 10c0/7fcbcb19151778a2f2fa70b7bffb134bb8922b2306e2a0d7b4a863467a9d6d9d5fed537763c43272e22b69dbddaf1610746b42a68b4663aa225e85f9ae9b03c8
   languageName: node
   linkType: hard
 
