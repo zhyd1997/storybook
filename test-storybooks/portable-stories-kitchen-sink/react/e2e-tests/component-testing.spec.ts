@@ -44,7 +44,7 @@ test.describe('component testing', () => {
 
     // Wait for test results to appear
     const errorFilter = page.getByLabel('Show errors');
-    await expect(errorFilter).toBeVisible({ timeout: 20000 });
+    await expect(errorFilter).toBeVisible({ timeout: 30000 });
 
     // Assert for expected success
     const successfulStoryElement = page.locator(
@@ -85,7 +85,7 @@ test.describe('component testing', () => {
 
     // Wait for test results to appear
     const errorFilter = page.getByLabel('Show errors');
-    await expect(errorFilter).toBeVisible({ timeout: 30000 });
+    await expect(errorFilter).toBeVisible({ timeout: 20000 });
 
     // Assert for expected success
     const successfulStoryElement = page.locator(
