@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { FileSystemCache } from 'file-system-cache';
 // should be node:http, but that caused the ui/manager to fail to build, might be able to switch this back once ui/manager is in the core
-import type { Server as HttpServer } from 'http';
-import type Polka from 'polka';
+import type { Server as HttpServer, IncomingMessage } from 'http';
 import type { Options as TelejsonOptions } from 'telejson';
 import type { PackageJson as PackageJsonFromTypeFest } from 'type-fest';
 
@@ -211,13 +210,38 @@ export type Options = LoadOptions &
   CLIOptions &
   BuilderOptions & { build?: TestBuildConfig };
 
+// A minimal version of Polka's interface to avoid exposing internal implementation details
+type Pattern = RegExp | string;
+type Middleware<T extends IncomingMessage = IncomingMessage> = (
+  req: T & IncomingMessage,
+  res: Response,
+  next: (err?: string | Error) => Promise<void> | void
+) => Promise<void>;
+
+interface ServerApp<T extends IncomingMessage = IncomingMessage> {
+  server: HttpServer;
+
+  use(pattern: Pattern, ...handlers: Middleware<T>[]): this;
+  use(...handlers: Middleware<T>[]): this;
+
+  get(...handlers: Middleware<T>[]): this;
+  post(...handlers: Middleware<T>[]): this;
+  put(...handlers: Middleware<T>[]): this;
+  patch(...handlers: Middleware<T>[]): this;
+  delete(...handlers: Middleware<T>[]): this;
+  head(...handlers: Middleware<T>[]): this;
+  options(...handlers: Middleware<T>[]): this;
+  connect(...handlers: Middleware<T>[]): this;
+  trace(...handlers: Middleware<T>[]): this;
+}
+
 export interface Builder<Config, BuilderStats extends Stats = Stats> {
   getConfig: (options: Options) => Promise<Config>;
   start: (args: {
     options: Options;
     startTime: ReturnType<typeof process.hrtime>;
-    app: Polka.Polka;
-    router: Polka.Polka; // back-compatability with express-based API
+    app: ServerApp;
+    router: ServerApp; // back-compatability with express-based API
     server: HttpServer;
     channel: ServerChannel;
   }) => Promise<void | {
