@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { FileSystemCache } from 'file-system-cache';
 // should be node:http, but that caused the ui/manager to fail to build, might be able to switch this back once ui/manager is in the core
-import type { Server as HttpServer, IncomingMessage } from 'http';
+import type { Server as HttpServer, IncomingMessage, ServerResponse } from 'http';
 import type { Options as TelejsonOptions } from 'telejson';
 import type { PackageJson as PackageJsonFromTypeFest } from 'type-fest';
 
@@ -211,17 +211,16 @@ export type Options = LoadOptions &
   BuilderOptions & { build?: TestBuildConfig };
 
 // A minimal version of Polka's interface to avoid exposing internal implementation details
-type Pattern = RegExp | string;
-type Middleware<T extends IncomingMessage = IncomingMessage> = (
+export type Middleware<T extends IncomingMessage = IncomingMessage> = (
   req: T & IncomingMessage,
-  res: Response,
+  res: ServerResponse,
   next: (err?: string | Error) => Promise<void> | void
-) => Promise<void>;
+) => Promise<void> | void;
 
 interface ServerApp<T extends IncomingMessage = IncomingMessage> {
   server: HttpServer;
 
-  use(pattern: Pattern, ...handlers: Middleware<T>[]): this;
+  use(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
   use(...handlers: Middleware<T>[]): this;
 
   get(...handlers: Middleware<T>[]): this;

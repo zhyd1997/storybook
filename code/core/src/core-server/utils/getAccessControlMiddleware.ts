@@ -1,6 +1,6 @@
-import type Polka from 'polka';
+import type { Middleware } from '../../types';
 
-export function getAccessControlMiddleware(crossOriginIsolated: boolean): Polka.Middleware {
+export function getAccessControlMiddleware(crossOriginIsolated: boolean): Middleware {
   return (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');

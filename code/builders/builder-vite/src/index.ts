@@ -3,9 +3,8 @@ import { cp, readFile } from 'node:fs/promises';
 import { join, parse } from 'node:path';
 
 import { NoStatsForViteDevError } from 'storybook/internal/server-errors';
-import type { Options } from 'storybook/internal/types';
+import type { Middleware, Options } from 'storybook/internal/types';
 
-import type Polka from 'polka';
 import sirv from 'sirv';
 import { corePath } from 'storybook/core-path';
 import type { ViteDevServer } from 'vite';
@@ -20,7 +19,7 @@ export { hasVitePlugins } from './utils/has-vite-plugins';
 
 export * from './types';
 
-function iframeMiddleware(options: Options, server: ViteDevServer): Polka.Middleware {
+function iframeMiddleware(options: Options, server: ViteDevServer): Middleware {
   return async (req, res, next) => {
     if (!req.url || !req.url.match(/^\/iframe\.html($|\?)/)) {
       next();
