@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { basename, isAbsolute, normalize, posix, relative, resolve, sep, win32 } from 'node:path';
+import { basename, isAbsolute, posix, resolve, sep, win32 } from 'node:path';
 
 import { getDirectoryFromWorkingDir } from '@storybook/core/common';
 import type { Options } from '@storybook/core/types';
@@ -15,76 +15,52 @@ export async function useStatics(app: Polka.Polka, options: Options): Promise<vo
   const staticDirs = (await options.presets.apply('staticDirs')) ?? [];
   const faviconPath = await options.presets.apply<string>('favicon');
 
-  const statics: Array<{ targetEndpoint: string; staticPath: string }> = [];
-  const userStatics = [
-    `${faviconPath}:/${basename(faviconPath)}`,
-    ...staticDirs.map((dir) => (typeof dir === 'string' ? dir : `${dir.from}:${dir.to}`)),
-  ];
+  await Promise.all(
+    staticDirs
+      .map((dir) => (typeof dir === 'string' ? dir : `${dir.from}:${dir.to}`))
+      .map(async (dir) => {
+        try {
+          const normalizedDir =
+            staticDirs && !isAbsolute(dir)
+              ? getDirectoryFromWorkingDir({
+                  configDir: options.configDir,
+                  workingDir: process.cwd(),
+                  directory: dir,
+                })
+              : dir;
+          const { staticDir, staticPath, targetEndpoint } = await parseStaticDir(normalizedDir);
 
-  for (const dir of userStatics) {
-    try {
-      const normalizedDir =
-        staticDirs && !isAbsolute(dir)
-          ? getDirectoryFromWorkingDir({
-              configDir: options.configDir,
-              workingDir: process.cwd(),
-              directory: dir,
+          // Don't log for the internal static dir
+          if (!targetEndpoint.startsWith('/sb-')) {
+            logger.info(
+              `=> Serving static files from ${chalk.cyan(staticDir)} at ${chalk.cyan(targetEndpoint)}`
+            );
+          }
+
+          app.use(
+            targetEndpoint,
+            sirv(staticPath, {
+              dev: true,
+              etag: true,
+              extensions: [],
             })
-          : dir;
-      const { staticDir, staticPath, targetEndpoint } = await parseStaticDir(normalizedDir);
+          );
+        } catch (e) {
+          if (e instanceof Error) {
+            logger.warn(e.message);
+          }
+        }
+      })
+  );
 
-      // Don't log for the internal static dir
-      if (!targetEndpoint.startsWith('/sb-') && staticPath !== faviconPath) {
-        logger.info(
-          `=> Serving static files from ${chalk.cyan(staticDir)} at ${chalk.cyan(targetEndpoint)}`
-        );
-      }
-
-      statics.push({ targetEndpoint, staticPath });
-    } catch (e) {
-      if (e instanceof Error) {
-        logger.warn(e.message);
-      }
-    }
-  }
-
-  const serve = sirv(process.cwd(), {
-    dev: true,
-    etag: true,
-  });
-
-  app.use((req, res, next) => {
-    if (!req.url) {
-      return next();
-    }
-
-    // the base isn't used for anything, but it's required by the URL constructor
-    const url = new URL(req.url, 'http://localhost:6006');
-    const pathname = normalize(url.pathname);
-
-    // TODO (43081j): this is 'security' so you can't break out of cwd
-    // Probably need to do something better here
-    if (pathname.startsWith('..') || pathname.endsWith('/')) {
-      return next();
-    }
-
-    for (const { targetEndpoint, staticPath } of statics) {
-      if (!pathname.startsWith(targetEndpoint)) {
-        continue;
-      }
-      // TODO (43081j): similar as above, this might be doable in a cleaner way
-      const newPath = relative(
-        process.cwd(),
-        resolve(staticPath, './' + pathname.slice(targetEndpoint.length))
-      );
-      url.pathname = newPath;
-      req.url = url.href.slice(url.origin.length);
-      serve(req, res, next);
-      return;
-    }
-
-    next();
-  });
+  app.get(
+    `/${basename(faviconPath)}`,
+    sirv(faviconPath, {
+      dev: true,
+      etag: true,
+      extensions: [],
+    })
+  );
 }
 
 export const parseStaticDir = async (arg: string) => {
