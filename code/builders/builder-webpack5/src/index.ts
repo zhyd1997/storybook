@@ -114,7 +114,7 @@ export const bail: WebpackBuilder['bail'] = async () => {
 const starter: StarterFunction = async function* starterGeneratorFn({
   startTime,
   options,
-  app,
+  router,
   channel,
 }) {
   const webpackInstance = await executor.get(options);
@@ -180,7 +180,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({
   compilation = webpackDevMiddleware(compiler, middlewareOptions);
 
   const previewResolvedDir = join(corePath, 'dist/preview');
-  app.use(
+  router.use(
     '/sb-preview',
     sirv(previewResolvedDir, {
       maxAge: 300000,
@@ -188,8 +188,8 @@ const starter: StarterFunction = async function* starterGeneratorFn({
       immutable: true,
     })
   );
-  app.use(compilation);
-  app.use(webpackHotMiddleware(compiler, { log: false }));
+  router.use(compilation);
+  router.use(webpackHotMiddleware(compiler, { log: false }));
 
   const stats = await new Promise<Stats>((res, rej) => {
     compilation?.waitUntilValid(res as any);

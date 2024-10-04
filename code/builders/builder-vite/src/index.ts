@@ -56,13 +56,13 @@ export async function bail(): Promise<void> {
 export const start: ViteBuilder['start'] = async ({
   startTime,
   options,
-  app,
+  router,
   server: devServer,
 }) => {
   server = await createViteServer(options as Options, devServer);
 
   const previewResolvedDir = join(corePath, 'dist/preview');
-  app.use(
+  router.use(
     '/sb-preview',
     sirv(previewResolvedDir, {
       maxAge: 300000,
@@ -70,8 +70,8 @@ export const start: ViteBuilder['start'] = async ({
       immutable: true,
     })
   );
-  app.use(iframeMiddleware(options as Options, server));
-  app.use(server.middlewares);
+  router.use(iframeMiddleware(options as Options, server));
+  router.use(server.middlewares);
 
   return {
     bail,

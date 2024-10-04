@@ -239,8 +239,7 @@ export interface Builder<Config, BuilderStats extends Stats = Stats> {
   start: (args: {
     options: Options;
     startTime: ReturnType<typeof process.hrtime>;
-    app: ServerApp;
-    router: ServerApp; // back-compatability with express-based API
+    router: ServerApp;
     server: HttpServer;
     channel: ServerChannel;
   }) => Promise<void | {

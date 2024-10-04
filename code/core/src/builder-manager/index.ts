@@ -122,7 +122,11 @@ export const executor = {
  *
  * I am sorry for making you read about generators today :')
  */
-const starter: StarterFunction = async function* starterGeneratorFn({ startTime, options, app }) {
+const starter: StarterFunction = async function* starterGeneratorFn({
+  startTime,
+  options,
+  router,
+}) {
   if (!options.quiet) {
     logger.info('=> Starting manager..');
   }
@@ -162,7 +166,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({ startTime,
     'manager'
   );
 
-  app.use(
+  router.use(
     '/sb-addons',
     sirv(addonsDir, {
       maxAge: 300000,
@@ -170,7 +174,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({ startTime,
       immutable: true,
     })
   );
-  app.use(
+  router.use(
     '/sb-manager',
     sirv(coreDirOrigin, {
       maxAge: 300000,
@@ -204,7 +208,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({ startTime,
 
   yield;
 
-  app.use('/', ({ url }, res, next) => {
+  router.use('/', ({ url }, res, next) => {
     if (url && isRootPath.test(url)) {
       res.statusCode = 200;
       res.write(html);
@@ -213,7 +217,7 @@ const starter: StarterFunction = async function* starterGeneratorFn({ startTime,
       next();
     }
   });
-  app.use(`/index.html`, (req, res) => {
+  router.use(`/index.html`, (req, res) => {
     res.statusCode = 200;
     res.write(html);
     res.end();
