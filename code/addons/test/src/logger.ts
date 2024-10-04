@@ -1,7 +1,7 @@
-import c from 'tinyrainbow';
+import picocolors from 'picocolors';
 
 import { ADDON_ID } from './constants';
 
 export const log = (message: any) => {
-  console.log(`${c.magenta(ADDON_ID)}: ${message.toString().trim()}`);
+  console.log(`${picocolors.magenta(ADDON_ID)}: ${message.toString().trim()}`);
 };
