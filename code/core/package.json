@@ -1,6 +1,6 @@
 {
   "name": "@storybook/core",
-  "version": "8.4.0-alpha.2",
+  "version": "8.4.0-alpha.4",
   "description": "Storybook framework-agnostic API",
   "keywords": [
     "storybook"
@@ -280,7 +280,7 @@
     "@storybook/csf": "^0.1.11",
     "better-opn": "^3.0.2",
     "browser-assert": "^1.2.1",
-    "esbuild": "^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0",
+    "esbuild": "^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0",
     "esbuild-register": "^3.5.0",
     "jsdoc-type-pratt-parser": "^4.0.0",
     "process": "^0.11.10",
@@ -341,7 +341,6 @@
     "browser-dtector": "^3.4.0",
     "camelcase": "^8.0.0",
     "chai": "^4.4.1",
-    "chalk": "^5.3.0",
     "cli-table3": "^0.6.1",
     "commander": "^12.1.0",
     "comment-parser": "^1.4.1",
@@ -380,6 +379,7 @@
     "nanoid": "^4.0.2",
     "npmlog": "^7.0.0",
     "open": "^8.4.0",
+    "picocolors": "^1.1.0",
     "picomatch": "^2.3.0",
     "picoquery": "^1.4.0",
     "polished": "^4.2.2",
