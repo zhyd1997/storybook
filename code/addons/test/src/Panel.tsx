@@ -8,10 +8,16 @@ import {
   STORY_THREW_EXCEPTION,
   UNHANDLED_ERRORS_WHILE_PLAYING,
 } from 'storybook/internal/core-events';
-import { useAddonState, useChannel, useParameter } from 'storybook/internal/manager-api';
+import {
+  useAddonState,
+  useChannel,
+  useParameter,
+  useStorybookState,
+} from 'storybook/internal/manager-api';
 
 import { global } from '@storybook/global';
 import { type Call, CallStates, EVENTS, type LogItem } from '@storybook/instrumenter';
+import type { API_StatusValue } from '@storybook/types';
 
 import { InteractionsPanel } from './components/InteractionsPanel';
 import { ADDON_ID } from './constants';
@@ -83,6 +89,8 @@ export const getInteractions = ({
 };
 
 export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId }) {
+  const { status: storyStatuses } = useStorybookState();
+
   // shared state
   const [addonState, set] = useAddonState(ADDON_ID, {
     controlStates: INITIAL_CONTROL_STATES,
@@ -236,6 +244,23 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
     !!unhandledErrors ||
     interactions.some((v) => v.status === CallStates.ERROR);
 
+  const storyStatus = storyStatuses[storyId]?.['storybook-testing-module'];
+
+  const testRunStatus = React.useMemo<API_StatusValue | null>(() => {
+    if (!isPlaying && (interactions.length > 0 || hasException)) {
+      return hasException ? 'error' : 'success';
+    }
+    return null;
+  }, [isPlaying, interactions, hasException]);
+
+  const hasResultMismatch = React.useMemo(() => {
+    return (
+      testRunStatus !== null &&
+      storyStatus?.status !== undefined &&
+      testRunStatus !== storyStatus?.status
+    );
+  }, [testRunStatus, storyStatus]);
+
   if (isErrored) {
     return <Fragment key="component-tests" />;
   }
@@ -243,6 +268,7 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
   return (
     <Fragment key="component-tests">
       <InteractionsPanel
+        hasResultMismatch={hasResultMismatch}
         calls={calls.current}
         controls={controls}
         controlStates={controlStates}

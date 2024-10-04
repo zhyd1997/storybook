@@ -19,6 +19,8 @@ const MethodCallWrapper = styled.div(() => ({
   fontSize: typography.size.s1,
   overflowWrap: 'break-word',
   inlineSize: 'calc( 100% - 40px )',
+  // TODO: discuss about this
+  userSelect: 'text',
 }));
 
 const RowContainer = styled('div', {
@@ -152,6 +154,7 @@ export const Interaction = ({
   isCollapsed,
   toggleCollapsed,
   pausedAt,
+  isDisabled,
 }: {
   call: Call;
   callsById: Map<Call['id'], Call>;
@@ -162,6 +165,7 @@ export const Interaction = ({
   isCollapsed: boolean;
   toggleCollapsed: () => void;
   pausedAt?: Call['id'];
+  isDisabled: boolean;
 }) => {
   const [isHovered, setIsHovered] = React.useState(false);
   const isInteractive = !controlStates.goto || !call.interceptable || !!call.ancestors.length;
@@ -177,7 +181,7 @@ export const Interaction = ({
           aria-label="Interaction step"
           call={call}
           onClick={() => controls.goto(call.id)}
-          disabled={isInteractive}
+          disabled={isDisabled || isInteractive}
           onMouseEnter={() => controlStates.goto && setIsHovered(true)}
           onMouseLeave={() => controlStates.goto && setIsHovered(false)}
         >

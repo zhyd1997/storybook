@@ -39,6 +39,7 @@ interface InteractionsPanelProps {
   calls: Map<string, any>;
   endRef?: React.Ref<HTMLDivElement>;
   onScrollToEnd?: () => void;
+  hasResultMismatch?: boolean;
 }
 
 const Container = styled.div(({ theme }) => ({
@@ -96,17 +97,30 @@ export const InteractionsPanel: React.FC<InteractionsPanelProps> = React.memo(
     pausedAt,
     onScrollToEnd,
     endRef,
+    hasResultMismatch,
   }) {
     const filter = useAnsiToHtmlFilter();
+    const finalTestStatus = React.useMemo(() => {
+      if (isPlaying) {
+        return CallStates.ACTIVE;
+      }
+
+      if (hasResultMismatch) {
+        return CallStates.ERROR;
+      }
+
+      return hasException ? CallStates.ERROR : CallStates.DONE;
+    }, [isPlaying, hasResultMismatch, hasException]);
+
     return (
       <Container>
+        {hasResultMismatch && <div>Discrepancy issues!</div>}
         {(interactions.length > 0 || hasException) && (
           <Subnav
             controls={controls}
             controlStates={controlStates}
-            status={
-              isPlaying ? CallStates.ACTIVE : hasException ? CallStates.ERROR : CallStates.DONE
-            }
+            hasResultMismatch={hasResultMismatch}
+            status={finalTestStatus}
             storyFileName={fileName}
             onScrollToEnd={onScrollToEnd}
           />
@@ -124,6 +138,7 @@ export const InteractionsPanel: React.FC<InteractionsPanelProps> = React.memo(
               isCollapsed={call.isCollapsed}
               toggleCollapsed={call.toggleCollapsed}
               pausedAt={pausedAt}
+              isDisabled={hasResultMismatch}
             />
           ))}
         </div>
