@@ -1,12 +1,18 @@
-import * as fs from 'fs-extra';
-import path, { dirname, join, relative } from 'path';
-import type { Options } from 'tsup';
-import type { PackageJson } from 'type-fest';
-import { build } from 'tsup';
+import { writeFile } from 'node:fs/promises';
+import { dirname, join, parse, posix, relative, resolve, sep } from 'node:path';
+
+import type { Metafile } from 'esbuild';
 import aliasPlugin from 'esbuild-plugin-alias';
-import dedent from 'ts-dedent';
+import * as fs from 'fs-extra';
+import { glob } from 'glob';
 import slash from 'slash';
+import { dedent } from 'ts-dedent';
+import type { Options } from 'tsup';
+import { build } from 'tsup';
+import type { PackageJson } from 'type-fest';
+
 import { exec } from '../utils/exec';
+import { esbuild } from './tools';
 
 /* TYPES */
 
@@ -27,6 +33,8 @@ type DtsConfigSection = Pick<Options, 'dts' | 'tsconfig'>;
 
 /* MAIN */
 
+const OUT_DIR = join(process.cwd(), 'dist');
+
 const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   const {
     name,
@@ -44,20 +52,29 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
   } = (await fs.readJson(join(cwd, 'package.json'))) as PackageJsonWithBundlerConfig;
 
   if (pre) {
-    await exec(`node -r ${__dirname}/../node_modules/esbuild-register/register.js ${pre}`, { cwd });
+    await exec(`jiti ${pre}`, { cwd });
   }
+
+  const metafilesDir = join(
+    __dirname,
+    '..',
+    '..',
+    'code',
+    'bench',
+    'esbuild-metafiles',
+    name.replace('@storybook', '')
+  );
 
   const reset = hasFlag(flags, 'reset');
   const watch = hasFlag(flags, 'watch');
   const optimized = hasFlag(flags, 'optimized');
-
   if (reset) {
-    await fs.emptyDir(join(process.cwd(), 'dist'));
+    await fs.emptyDir(OUT_DIR);
+    await fs.emptyDir(metafilesDir);
   }
 
   const tasks: Promise<any>[] = [];
 
-  const outDir = join(process.cwd(), 'dist');
   const externals = [
     name,
     ...extraExternals,
@@ -77,9 +94,9 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
    * Generating an ESM file for them anyway is problematic because they often have a reference to `require`.
    * TSUP generated code will then have a `require` polyfill/guard in the ESM files, which causes issues for webpack.
    */
-  const nonPresetEntries = allEntries.filter((f) => !path.parse(f).name.includes('preset'));
+  const nonPresetEntries = allEntries.filter((f) => !parse(f).name.includes('preset'));
 
-  const noExternal = [/^@vitest\/.+$/, ...extraNoExternal];
+  const noExternal = [...extraNoExternal];
 
   if (formats.includes('esm')) {
     tasks.push(
@@ -90,19 +107,23 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         entry: nonPresetEntries,
         shims: false,
         watch,
-        outDir,
+        outDir: OUT_DIR,
         sourcemap: false,
+        metafile: true,
         format: ['esm'],
-        target: ['chrome100', 'safari15', 'firefox91'],
+        target: platform === 'node' ? ['node18'] : ['chrome100', 'safari15', 'firefox91'],
         clean: false,
         ...(dtsBuild === 'esm' ? dtsConfig : {}),
         platform: platform || 'browser',
-        esbuildPlugins: [
-          aliasPlugin({
-            process: path.resolve('../node_modules/process/browser.js'),
-            util: path.resolve('../node_modules/util/util.js'),
-          }),
-        ],
+        esbuildPlugins:
+          platform === 'node'
+            ? []
+            : [
+                aliasPlugin({
+                  process: resolve('../node_modules/process/browser.js'),
+                  util: resolve('../node_modules/util/util.js'),
+                }),
+              ],
         external: externals,
 
         esbuildOptions: (c) => {
@@ -121,8 +142,9 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
         silent: true,
         entry: allEntries,
         watch,
-        outDir,
+        outDir: OUT_DIR,
         sourcemap: false,
+        metafile: true,
         format: ['cjs'],
         target: 'node18',
         ...(dtsBuild === 'cjs' ? dtsConfig : {}),
@@ -144,12 +166,23 @@ const run = async ({ cwd, flags }: { cwd: string; flags: string[] }) => {
 
   await Promise.all(tasks);
 
+  if (!watch) {
+    await saveMetafiles({ metafilesDir, formats });
+  }
+
+  const dtsFiles = await glob(OUT_DIR + '/**/*.d.ts');
+  await Promise.all(
+    dtsFiles.map(async (file) => {
+      const content = await fs.readFile(file, 'utf-8');
+      await fs.writeFile(
+        file,
+        content.replace(/from \'core\/dist\/(.*)\'/g, `from 'storybook/internal/$1'`)
+      );
+    })
+  );
+
   if (post) {
-    await exec(
-      `node -r ${__dirname}/../node_modules/esbuild-register/register.js ${post}`,
-      { cwd },
-      { debug: true }
-    );
+    await exec(`jiti ${post}`, { cwd }, { debug: true });
   }
 
   if (process.env.CI !== 'true') {
@@ -195,11 +228,11 @@ function getESBuildOptions(optimized: boolean) {
 }
 
 async function generateDTSMapperFile(file: string) {
-  const { name: entryName, dir } = path.parse(file);
+  const { name: entryName, dir } = parse(file);
 
   const pathName = join(process.cwd(), dir.replace('./src', 'dist'), `${entryName}.d.ts`);
   const srcName = join(process.cwd(), file);
-  const rel = relative(dirname(pathName), dirname(srcName)).split(path.sep).join(path.posix.sep);
+  const rel = relative(dirname(pathName), dirname(srcName)).split(sep).join(posix.sep);
 
   await fs.ensureFile(pathName);
   await fs.writeFile(
@@ -209,6 +242,37 @@ async function generateDTSMapperFile(file: string) {
       export * from '${rel}/${entryName}';
     `,
     { encoding: 'utf-8' }
+  );
+}
+
+async function saveMetafiles({
+  metafilesDir,
+  formats,
+}: {
+  metafilesDir: string;
+  formats: Formats[];
+}) {
+  await fs.ensureDir(metafilesDir);
+  const metafile: Metafile = {
+    inputs: {},
+    outputs: {},
+  };
+
+  await Promise.all(
+    formats.map(async (format) => {
+      const fromFilename = `metafile-${format}.json`;
+      const currentMetafile = await fs.readJson(join(OUT_DIR, fromFilename));
+      metafile.inputs = { ...metafile.inputs, ...currentMetafile.inputs };
+      metafile.outputs = { ...metafile.outputs, ...currentMetafile.outputs };
+
+      await fs.rm(join(OUT_DIR, fromFilename));
+    })
+  );
+
+  await writeFile(join(metafilesDir, 'metafile.json'), JSON.stringify(metafile, null, 2));
+  await writeFile(
+    join(metafilesDir, 'metafile.txt'),
+    await esbuild.analyzeMetafile(metafile, { color: false, verbose: false })
   );
 }
 
