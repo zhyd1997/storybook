@@ -23,13 +23,8 @@ import { useStatics } from './utils/server-statics';
 
 export async function storybookDevServer(options: Options) {
   const [server, core] = await Promise.all([getServer(options), options.presets.apply('core')]);
-  console.log('LOG: starting dev server');
   const app = polka({ server });
-  // app.use((req, res, next) => {
-  //   console.log('LOG: ', { url: req.url, method: req.method });
-  //   next();
-  // });
-
+  
   const serverChannel = await options.presets.apply(
     'experimental_serverChannel',
     getServerChannel(server)
