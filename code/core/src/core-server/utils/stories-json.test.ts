@@ -385,7 +385,7 @@ describe('useStoriesJson', () => {
       await Promise.all([firstPromise, secondPromise]);
 
       expect(end).toHaveBeenCalledTimes(1);
-      expect(response.status).not.toEqual(500);
+      expect(response.statusCode).not.toEqual(500);
       expect(secondResponse.end).toHaveBeenCalledTimes(1);
       expect(secondResponse.status).not.toEqual(500);
     });

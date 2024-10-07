@@ -2,6 +2,7 @@
 import type { FileSystemCache } from 'file-system-cache';
 // should be node:http, but that caused the ui/manager to fail to build, might be able to switch this back once ui/manager is in the core
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from 'http';
+import type { Server as NetServer } from 'net';
 import type { Options as TelejsonOptions } from 'telejson';
 import type { PackageJson as PackageJsonFromTypeFest } from 'type-fest';
 
@@ -218,20 +219,20 @@ export type Middleware<T extends IncomingMessage = IncomingMessage> = (
 ) => Promise<void> | void;
 
 interface ServerApp<T extends IncomingMessage = IncomingMessage> {
-  server: HttpServer;
+  server: NetServer;
 
   use(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
   use(...handlers: Middleware<T>[]): this;
 
-  get(...handlers: Middleware<T>[]): this;
-  post(...handlers: Middleware<T>[]): this;
-  put(...handlers: Middleware<T>[]): this;
-  patch(...handlers: Middleware<T>[]): this;
-  delete(...handlers: Middleware<T>[]): this;
-  head(...handlers: Middleware<T>[]): this;
-  options(...handlers: Middleware<T>[]): this;
-  connect(...handlers: Middleware<T>[]): this;
-  trace(...handlers: Middleware<T>[]): this;
+  get(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
+  post(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
+  put(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
+  patch(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
+  delete(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
+  head(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
+  options(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
+  connect(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
+  trace(pattern: RegExp | string, ...handlers: Middleware<T>[]): this;
 }
 
 export interface Builder<Config, BuilderStats extends Stats = Stats> {

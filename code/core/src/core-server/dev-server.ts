@@ -93,8 +93,7 @@ export async function storybookDevServer(options: Options) {
       .start({
         startTime: process.hrtime(),
         options,
-        app,
-        router: app, // back-compatability with express-based API
+        router: app,
         server,
         channel: serverChannel,
       })
