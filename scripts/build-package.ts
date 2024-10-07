@@ -1,5 +1,7 @@
 import { program } from 'commander';
+// eslint-disable-next-line depend/ban-dependencies
 import { execaCommand } from 'execa';
+// eslint-disable-next-line depend/ban-dependencies
 import { readJSON } from 'fs-extra';
 import { posix, resolve, sep } from 'path';
 import picocolors from 'picocolors';
