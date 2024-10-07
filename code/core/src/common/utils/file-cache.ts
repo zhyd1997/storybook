@@ -1,3 +1,7 @@
+/**
+ * This file is a modified copy from https://git.nfp.is/TheThing/fs-cache-fast
+ */
+
 import { createHash, randomBytes } from 'node:crypto';
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { readFile, readdir, rm, writeFile } from 'node:fs/promises';
