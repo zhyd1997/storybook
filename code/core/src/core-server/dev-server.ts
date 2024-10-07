@@ -116,9 +116,12 @@ export async function storybookDevServer(options: Options) {
     previewStarted.catch(() => {}).then(() => next());
   });
 
-  app.listen(port, host);
+  const listening = new Promise<void>((resolve, reject) => {
+    server.once('error', reject);
+    app.listen({ port, host }, resolve);
+  });
 
-  await Promise.all([initializedStoryIndexGenerator]).then(async ([indexGenerator]) => {
+  await Promise.all([initializedStoryIndexGenerator, listening]).then(async ([indexGenerator]) => {
     if (indexGenerator && !options.ci && !options.smokeTest && options.open) {
       openInBrowser(host ? networkAddress : address);
     }
