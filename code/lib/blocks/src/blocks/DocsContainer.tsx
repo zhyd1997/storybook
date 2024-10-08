@@ -5,7 +5,6 @@ import type { ThemeVars } from 'storybook/internal/theming';
 import { ThemeProvider, ensure as ensureTheme } from 'storybook/internal/theming';
 import type { Renderer } from 'storybook/internal/types';
 
-
 import { DocsPageWrapper } from '../components';
 import { TableOfContents } from '../components/TableOfContents';
 import type { DocsContextProps } from './DocsContext';

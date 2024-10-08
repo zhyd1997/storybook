@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-
 const { window: globalWindow } = globalThis;
 
 interface IFrameProps {

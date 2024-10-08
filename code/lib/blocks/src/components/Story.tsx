@@ -6,7 +6,6 @@ import { ErrorFormatter, Loader, getStoryHref } from 'storybook/internal/compone
 import { styled } from 'storybook/internal/theming';
 import type { DocsContextProps, PreparedStory } from 'storybook/internal/types';
 
-
 import { IFrame } from './IFrame';
 import { ZoomContext } from './ZoomContext';
 
