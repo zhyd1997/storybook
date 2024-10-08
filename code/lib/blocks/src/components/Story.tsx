@@ -6,12 +6,11 @@ import { ErrorFormatter, Loader, getStoryHref } from 'storybook/internal/compone
 import { styled } from 'storybook/internal/theming';
 import type { DocsContextProps, PreparedStory } from 'storybook/internal/types';
 
-import { global } from '@storybook/global';
 
 import { IFrame } from './IFrame';
 import { ZoomContext } from './ZoomContext';
 
-const { PREVIEW_URL } = global;
+const { PREVIEW_URL } = globalThis;
 const BASE_URL = PREVIEW_URL || 'iframe.html';
 
 interface CommonProps {
