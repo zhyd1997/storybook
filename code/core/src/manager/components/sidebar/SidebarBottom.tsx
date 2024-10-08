@@ -191,7 +191,7 @@ export const SidebarBottom = () => {
       if ('payload' in data) {
         console.log('progress', data);
         // TODO clear statuses
-        api.experimental_updateStatus(TESTING_MODULE_ID, processTestReport(data.payload));
+        api.experimental_updateStatus(data.providerId, processTestReport(data.payload));
       } else {
         // console.log('error', data);
       }

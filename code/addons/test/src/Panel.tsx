@@ -244,7 +244,7 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
     !!unhandledErrors ||
     interactions.some((v) => v.status === CallStates.ERROR);
 
-  const storyStatus = storyStatuses[storyId]?.['storybook-testing-module'];
+  const storyStatus = storyStatuses[storyId]?.[ADDON_ID];
 
   const testRunStatus = React.useMemo<API_StatusValue | null>(() => {
     if (!isPlaying && (interactions.length > 0 || hasException)) {

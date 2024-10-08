@@ -8,6 +8,7 @@ import { transparentize } from 'polished';
 
 import { isTestAssertionError, useAnsiToHtmlFilter } from '../utils';
 import { Empty } from './EmptyState';
+import { DiscrepancyEyebrow } from './Eyebrow';
 import { Interaction } from './Interaction';
 import { Subnav } from './Subnav';
 
@@ -114,7 +115,7 @@ export const InteractionsPanel: React.FC<InteractionsPanelProps> = React.memo(
 
     return (
       <Container>
-        {hasResultMismatch && <div>Discrepancy issues!</div>}
+        {hasResultMismatch && <DiscrepancyEyebrow cliRunStatus={finalTestStatus} />}
         {(interactions.length > 0 || hasException) && (
           <Subnav
             controls={controls}

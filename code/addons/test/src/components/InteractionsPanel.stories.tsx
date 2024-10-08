@@ -134,3 +134,10 @@ export const CaughtException: Story = {
     caughtException: new TypeError("Cannot read properties of undefined (reading 'args')"),
   },
 };
+
+export const DiscrepancyResult: Story = {
+  args: {
+    ...Failed.args,
+    hasResultMismatch: true,
+  },
+};

@@ -85,6 +85,10 @@ const config: StorybookConfig = {
       titlePrefix: 'addons/interactions/tests',
     },
     {
+      directory: '../addons/test/src/components',
+      titlePrefix: 'addons/test',
+    },
+    {
       directory: '../addons/test/template/stories',
       titlePrefix: 'addons/test',
     },
