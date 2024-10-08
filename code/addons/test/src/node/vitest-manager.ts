@@ -89,7 +89,7 @@ export class VitestManager {
       });
       if (match) {
         // make sure to clear the file cache so test results are updated even if watch mode is not enabled
-        if (!this.watchMode) {
+        if (!this.testManager.watchMode) {
           this.updateLastChanged(storybookTest.moduleId);
         }
 
