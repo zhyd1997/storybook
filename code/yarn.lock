@@ -5446,7 +5446,6 @@ __metadata:
     "@rollup/pluginutils": "npm:^5.0.2"
     "@storybook/blocks": "workspace:*"
     "@storybook/csf-plugin": "workspace:*"
-    "@storybook/global": "npm:^5.0.0"
     "@storybook/react-dom-shim": "workspace:*"
     "@types/react": "npm:^16.8.0 || ^17.0.0 || ^18.0.0"
     react: "npm:^18.2.0"

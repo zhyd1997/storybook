@@ -99,7 +99,6 @@
   "dependencies": {
     "@storybook/blocks": "workspace:*",
     "@storybook/csf-plugin": "workspace:*",
-    "@storybook/global": "^5.0.0",
     "@storybook/react-dom-shim": "workspace:*",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0",
