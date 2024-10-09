@@ -164,7 +164,7 @@ const Icon = styled.div(({ theme }) => ({
   padding: '2px 6px',
 }));
 
-interface TestingModuleProps {
+export interface TestingModuleProps {
   testProviders: (Addon_TestProviderType & { running?: boolean; watching?: boolean })[];
   errorCount: number;
   errorsActive: boolean;

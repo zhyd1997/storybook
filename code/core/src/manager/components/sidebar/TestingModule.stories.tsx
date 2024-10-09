@@ -5,9 +5,9 @@ import { ContrastIcon, MarkupIcon, PointerHandIcon } from '@storybook/icons';
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn, userEvent } from '@storybook/test';
 
-import { TestingModule } from './TestingModule';
+import { TestingModule, type TestingModuleProps } from './TestingModule';
 
-const testProviders = [
+const testProviders: TestingModuleProps['testProviders'] = [
   {
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'component-tests',
