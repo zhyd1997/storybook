@@ -1,17 +1,20 @@
-// import React from 'react';
+import React from 'react';
+
+import { ManagerContext } from 'storybook/internal/manager-api';
+
 import { CallStates } from '@storybook/instrumenter';
 import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
 
-// import { fn } from '@storybook/test';
 import { TestDiscrepancyMessage } from './TestDiscrepancyMessage';
 
 type Story = StoryObj<typeof TestDiscrepancyMessage>;
-// const managerContext: any = {
-//   state: {},
-//   api: {
-//     getDocsUrl: fn().mockName('api::getDocsUrl'),
-//   },
-// };
+const managerContext: any = {
+  state: {},
+  api: {
+    getDocsUrl: fn().mockName('api::getDocsUrl'),
+  },
+};
 
 export default {
   title: 'TestDiscrepancyMessage',
@@ -19,11 +22,11 @@ export default {
   parameters: {
     layout: 'fullscreen',
   },
-  // decorators: [
-  //   (storyFn) => (
-  //     <ManagerContext.Provider value={managerContext}>{storyFn()}</ManagerContext.Provider>
-  //   ),
-  // ],
+  decorators: [
+    (storyFn) => (
+      <ManagerContext.Provider value={managerContext}>{storyFn()}</ManagerContext.Provider>
+    ),
+  ],
 } as Meta<typeof TestDiscrepancyMessage>;
 
 export const BrowserPassedCliFailed: Story = {
