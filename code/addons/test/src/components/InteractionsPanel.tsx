@@ -2,15 +2,16 @@ import * as React from 'react';
 
 import { styled } from 'storybook/internal/theming';
 
-import { type Call, CallStates, type ControlStates } from '@storybook/instrumenter';
+import type { CallStates } from '@storybook/instrumenter';
+import { type Call, type ControlStates } from '@storybook/instrumenter';
 
 import { transparentize } from 'polished';
 
 import { isTestAssertionError, useAnsiToHtmlFilter } from '../utils';
 import { Empty } from './EmptyState';
-import { DiscrepancyEyebrow } from './Eyebrow';
 import { Interaction } from './Interaction';
 import { Subnav } from './Subnav';
+import { TestDiscrepancyMessage } from './TestDiscrepancyMessage';
 
 export interface Controls {
   start: (args: any) => void;
@@ -41,6 +42,7 @@ interface InteractionsPanelProps {
   endRef?: React.Ref<HTMLDivElement>;
   onScrollToEnd?: () => void;
   hasResultMismatch?: boolean;
+  browserTestStatus?: CallStates;
 }
 
 const Container = styled.div(({ theme }) => ({
@@ -99,29 +101,18 @@ export const InteractionsPanel: React.FC<InteractionsPanelProps> = React.memo(
     onScrollToEnd,
     endRef,
     hasResultMismatch,
+    browserTestStatus,
   }) {
     const filter = useAnsiToHtmlFilter();
-    const finalTestStatus = React.useMemo(() => {
-      if (isPlaying) {
-        return CallStates.ACTIVE;
-      }
-
-      if (hasResultMismatch) {
-        return CallStates.ERROR;
-      }
-
-      return hasException ? CallStates.ERROR : CallStates.DONE;
-    }, [isPlaying, hasResultMismatch, hasException]);
 
     return (
       <Container>
-        {hasResultMismatch && <DiscrepancyEyebrow cliRunStatus={finalTestStatus} />}
+        {hasResultMismatch && <TestDiscrepancyMessage browserTestStatus={browserTestStatus} />}
         {(interactions.length > 0 || hasException) && (
           <Subnav
             controls={controls}
             controlStates={controlStates}
-            hasResultMismatch={hasResultMismatch}
-            status={finalTestStatus}
+            status={browserTestStatus}
             storyFileName={fileName}
             onScrollToEnd={onScrollToEnd}
           />
@@ -139,7 +130,6 @@ export const InteractionsPanel: React.FC<InteractionsPanelProps> = React.memo(
               isCollapsed={call.isCollapsed}
               toggleCollapsed={call.toggleCollapsed}
               pausedAt={pausedAt}
-              isDisabled={hasResultMismatch}
             />
           ))}
         </div>

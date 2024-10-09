@@ -20,7 +20,7 @@ import { type Call, CallStates, EVENTS, type LogItem } from '@storybook/instrume
 import type { API_StatusValue } from '@storybook/types';
 
 import { InteractionsPanel } from './components/InteractionsPanel';
-import { ADDON_ID } from './constants';
+import { ADDON_ID, TEST_PROVIDER_ID } from './constants';
 
 interface Interaction extends Call {
   status: Call['status'];
@@ -36,6 +36,13 @@ const INITIAL_CONTROL_STATES = {
   goto: false,
   next: false,
   end: false,
+};
+
+const statusMap: Record<CallStates, API_StatusValue> = {
+  [CallStates.DONE]: 'success',
+  [CallStates.ERROR]: 'error',
+  [CallStates.ACTIVE]: 'pending',
+  [CallStates.WAITING]: 'pending',
 };
 
 export const getInteractions = ({
@@ -244,22 +251,23 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
     !!unhandledErrors ||
     interactions.some((v) => v.status === CallStates.ERROR);
 
-  const storyStatus = storyStatuses[storyId]?.[ADDON_ID];
+  const storyStatus = storyStatuses[storyId]?.[TEST_PROVIDER_ID];
 
-  const testRunStatus = React.useMemo<API_StatusValue | null>(() => {
+  const browserTestStatus = React.useMemo<CallStates | null>(() => {
     if (!isPlaying && (interactions.length > 0 || hasException)) {
-      return hasException ? 'error' : 'success';
+      return hasException ? CallStates.ERROR : CallStates.DONE;
     }
-    return null;
+    return isPlaying ? CallStates.ACTIVE : null;
   }, [isPlaying, interactions, hasException]);
 
   const hasResultMismatch = React.useMemo(() => {
     return (
-      testRunStatus !== null &&
+      browserTestStatus !== null &&
+      browserTestStatus !== CallStates.ACTIVE &&
       storyStatus?.status !== undefined &&
-      testRunStatus !== storyStatus?.status
+      statusMap[browserTestStatus] !== storyStatus?.status
     );
-  }, [testRunStatus, storyStatus]);
+  }, [browserTestStatus, storyStatus]);
 
   if (isErrored) {
     return <Fragment key="component-tests" />;
@@ -269,6 +277,7 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
     <Fragment key="component-tests">
       <InteractionsPanel
         hasResultMismatch={hasResultMismatch}
+        browserTestStatus={browserTestStatus}
         calls={calls.current}
         controls={controls}
         controlStates={controlStates}

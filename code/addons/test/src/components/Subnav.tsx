@@ -42,7 +42,6 @@ const StyledSubnav = styled.nav(({ theme }) => ({
 }));
 
 export interface SubnavProps {
-  hasResultMismatch: boolean;
   controls: Controls;
   controlStates: ControlStates;
   status: Call['status'];
@@ -120,7 +119,6 @@ export const Subnav: React.FC<SubnavProps> = ({
   status,
   storyFileName,
   onScrollToEnd,
-  hasResultMismatch,
 }) => {
   const buttonText = status === CallStates.ERROR ? 'Scroll to error' : 'Scroll to end';
 
@@ -131,7 +129,7 @@ export const Subnav: React.FC<SubnavProps> = ({
           <Group>
             <StatusBadge status={status} />
 
-            <JumpToEndButton onClick={onScrollToEnd} disabled={hasResultMismatch || !onScrollToEnd}>
+            <JumpToEndButton onClick={onScrollToEnd} disabled={!onScrollToEnd}>
               {buttonText}
             </JumpToEndButton>
 
@@ -141,7 +139,7 @@ export const Subnav: React.FC<SubnavProps> = ({
               <RewindButton
                 aria-label="Go to start"
                 onClick={controls.start}
-                disabled={hasResultMismatch || !controlStates.start}
+                disabled={!controlStates.start}
               >
                 <RewindIcon />
               </RewindButton>
@@ -151,7 +149,7 @@ export const Subnav: React.FC<SubnavProps> = ({
               <StyledIconButton
                 aria-label="Go back"
                 onClick={controls.back}
-                disabled={hasResultMismatch || !controlStates.back}
+                disabled={!controlStates.back}
               >
                 <PlayBackIcon />
               </StyledIconButton>
@@ -161,7 +159,7 @@ export const Subnav: React.FC<SubnavProps> = ({
               <StyledIconButton
                 aria-label="Go forward"
                 onClick={controls.next}
-                disabled={hasResultMismatch || !controlStates.next}
+                disabled={!controlStates.next}
               >
                 <PlayNextIcon />
               </StyledIconButton>
@@ -171,7 +169,7 @@ export const Subnav: React.FC<SubnavProps> = ({
               <StyledIconButton
                 aria-label="Go to end"
                 onClick={controls.end}
-                disabled={hasResultMismatch || !controlStates.end}
+                disabled={!controlStates.end}
               >
                 <FastForwardIcon />
               </StyledIconButton>
