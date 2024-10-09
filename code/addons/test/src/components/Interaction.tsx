@@ -19,8 +19,6 @@ const MethodCallWrapper = styled.div(() => ({
   fontSize: typography.size.s1,
   overflowWrap: 'break-word',
   inlineSize: 'calc( 100% - 40px )',
-  // TODO: discuss about this
-  userSelect: 'text',
 }));
 
 const RowContainer = styled('div', {

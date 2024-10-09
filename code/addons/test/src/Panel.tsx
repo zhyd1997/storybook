@@ -265,7 +265,7 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
       browserTestStatus !== null &&
       browserTestStatus !== CallStates.ACTIVE &&
       storyStatus?.status !== undefined &&
-      statusMap[browserTestStatus] !== storyStatus?.status
+      statusMap[browserTestStatus] !== storyStatus.status
     );
   }, [browserTestStatus, storyStatus]);
 
