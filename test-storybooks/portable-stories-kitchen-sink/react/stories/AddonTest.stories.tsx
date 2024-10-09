@@ -1,4 +1,4 @@
-import { expect } from '@storybook/test'
+import { instrument } from '@storybook/instrumenter'
 import type { StoryAnnotations } from 'storybook/internal/types';
 
 const Component = () => <button>test</button>
@@ -8,12 +8,16 @@ export default {
   component: Component,
 };
 
+const { pass } = instrument({
+  pass: async () => {},
+}, { intercept: true })
+
 export const ExpectedFailure = {
   args: {
     forceFailure: false,
   },
   play: async (context) => {
-    await expect(1).toBe(1)
+    await pass();
     if (context.args.forceFailure) {
       throw new Error('Expected failure');
     }
@@ -22,7 +26,7 @@ export const ExpectedFailure = {
 
 export const ExpectedSuccess = {
   play: async () => {
-    await expect(1).toBe(1)
+    await pass();
   }
 } satisfies StoryAnnotations;
 
