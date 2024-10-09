@@ -1,9 +1,12 @@
 import React from 'react';
 
 import { Button, IconButton, Modal } from 'storybook/internal/components';
+import { useStorybookApi } from 'storybook/internal/manager-api';
 
 import { CloseIcon, SyncIcon } from '@storybook/icons';
 import { styled } from '@storybook/theming';
+
+import { TROUBLESHOOTING_LINK } from '../constants';
 
 interface GlobalErrorModalProps {
   error: string;
@@ -45,9 +48,15 @@ const TroubleshootLink = styled.a(({ theme }) => ({
   color: theme.color.defaultText,
 }));
 
-const TROUBLESHOOT_LINK = `https://storybook.js.org/docs/vitest/troubleshooting`;
-
 export function GlobalErrorModal({ onRerun, onClose, error, open }: GlobalErrorModalProps) {
+  const api = useStorybookApi();
+
+  const troubleshootURL = api.getDocsUrl({
+    subpath: TROUBLESHOOTING_LINK,
+    versioned: true,
+    renderer: true,
+  });
+
   return (
     <Modal onEscapeKeyDown={onClose} onInteractOutside={onClose} open={open}>
       <ModalBar>
@@ -58,8 +67,7 @@ export function GlobalErrorModal({ onRerun, onClose, error, open }: GlobalErrorM
             Rerun
           </Button>
           <Button variant="ghost" asChild>
-            {/* TODO: Is this the right link? */}
-            <a target="_blank" href={TROUBLESHOOT_LINK} rel="noreferrer">
+            <a target="_blank" href={troubleshootURL} rel="noreferrer">
               Troubleshoot
             </a>
           </Button>
@@ -73,8 +81,8 @@ export function GlobalErrorModal({ onRerun, onClose, error, open }: GlobalErrorM
         <br />
         <br />
         Troubleshoot:{' '}
-        <TroubleshootLink target="_blank" href={TROUBLESHOOT_LINK}>
-          {TROUBLESHOOT_LINK}
+        <TroubleshootLink target="_blank" href={troubleshootURL}>
+          {troubleshootURL}
         </TroubleshootLink>
       </ModalStackTrace>
     </Modal>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { ManagerContext } from 'storybook/internal/manager-api';
+
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from '@storybook/test';
 
@@ -9,21 +11,32 @@ import { GlobalErrorModal } from './GlobalErrorModal';
 
 type Story = StoryObj<typeof meta>;
 
+const managerContext: any = {
+  state: {},
+  api: {
+    getDocsUrl: fn(({ subpath }) => `https://storybook.js.org/docs/${subpath}`).mockName(
+      'api::getDocsUrl'
+    ),
+  },
+};
+
 const meta = {
   component: GlobalErrorModal,
   decorators: [
     (storyFn) => (
-      <div
-        style={{
-          width: '100%',
-          minWidth: '1200px',
-          height: '800px',
-          background:
-            'repeating-linear-gradient(45deg, #000000, #ffffff 50px, #ffffff 50px, #ffffff 80px)',
-        }}
-      >
-        {storyFn()}
-      </div>
+      <ManagerContext.Provider value={managerContext}>
+        <div
+          style={{
+            width: '100%',
+            minWidth: '1200px',
+            height: '800px',
+            background:
+              'repeating-linear-gradient(45deg, #000000, #ffffff 50px, #ffffff 50px, #ffffff 80px)',
+          }}
+        >
+          {storyFn()}
+        </div>
+      </ManagerContext.Provider>
     ),
   ],
   args: {
