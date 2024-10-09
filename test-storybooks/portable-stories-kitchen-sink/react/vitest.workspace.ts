@@ -13,6 +13,13 @@ export default defineWorkspace([
       include: [
         "stories/AddonTest.stories.?(c|m)[jt]s?(x)",
       ],
+      deps: {
+        optimizer: {
+          web: { 
+            enabled: false
+          }
+        }
+      },
       browser: {
         enabled: true,
         name: "chromium",

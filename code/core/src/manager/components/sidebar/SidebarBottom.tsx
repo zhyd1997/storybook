@@ -180,6 +180,8 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   );
 };
 
+const TESTING_MODULE_ID = 'storybook-testing-module';
+
 export const SidebarBottom = () => {
   const api = useStorybookApi();
   const { notifications, status } = useStorybookState();
@@ -189,7 +191,7 @@ export const SidebarBottom = () => {
       if ('payload' in data) {
         // console.log('progress', data);
         // TODO clear statuses
-        api.experimental_updateStatus('figure-out-id', processTestReport(data.payload));
+        api.experimental_updateStatus(data.providerId, processTestReport(data.payload));
       } else {
         // console.log('error', data);
       }

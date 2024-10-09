@@ -1,10 +1,11 @@
 import React from 'react';
 
+import { ManagerContext } from 'storybook/internal/manager-api';
 import { styled } from 'storybook/internal/theming';
 
 import { CallStates } from '@storybook/instrumenter';
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { expect, fn, userEvent, waitFor, within } from '@storybook/test';
 
 import { isChromatic } from '../../../../.storybook/isChromatic';
 import { getCalls, getInteractions } from '../mocks';
@@ -24,15 +25,23 @@ const StyledWrapper = styled.div(({ theme }) => ({
 }));
 
 const interactions = getInteractions(CallStates.DONE);
+const managerContext: any = {
+  state: {},
+  api: {
+    getDocsUrl: fn().mockName('api::getDocsUrl'),
+  },
+};
 
 const meta = {
   title: 'InteractionsPanel',
   component: InteractionsPanel,
   decorators: [
     (Story: any) => (
-      <StyledWrapper id="panel-tab-content">
-        <Story />
-      </StyledWrapper>
+      <ManagerContext.Provider value={managerContext}>
+        <StyledWrapper id="panel-tab-content">
+          <Story />
+        </StyledWrapper>
+      </ManagerContext.Provider>
     ),
   ],
   parameters: { layout: 'fullscreen' },
@@ -57,6 +66,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Passing: Story = {
   args: {
+    browserTestStatus: CallStates.DONE,
     interactions: getInteractions(CallStates.DONE),
   },
   play: async ({ args, canvasElement }) => {
@@ -94,6 +104,7 @@ export const Passing: Story = {
 
 export const Paused: Story = {
   args: {
+    browserTestStatus: CallStates.ACTIVE,
     isPlaying: true,
     interactions: getInteractions(CallStates.WAITING),
     controlStates: {
@@ -109,6 +120,7 @@ export const Paused: Story = {
 
 export const Playing: Story = {
   args: {
+    browserTestStatus: CallStates.ACTIVE,
     isPlaying: true,
     interactions: getInteractions(CallStates.ACTIVE),
   },
@@ -116,21 +128,30 @@ export const Playing: Story = {
 
 export const Failed: Story = {
   args: {
+    browserTestStatus: CallStates.ERROR,
     hasException: true,
     interactions: getInteractions(CallStates.ERROR),
   },
 };
 
-// export const NoInteractions: Story = {
-//   args: {
-//     interactions: [],
-//   },
-// };
-
 export const CaughtException: Story = {
   args: {
+    browserTestStatus: CallStates.ERROR,
     hasException: true,
     interactions: [],
     caughtException: new TypeError("Cannot read properties of undefined (reading 'args')"),
+  },
+};
+
+export const DiscrepancyResult: Story = {
+  args: {
+    ...Failed.args,
+    hasResultMismatch: true,
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    interactions: [],
   },
 };
