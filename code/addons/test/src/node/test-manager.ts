@@ -1,11 +1,13 @@
 import type { Channel } from 'storybook/internal/channels';
 import {
+  TESTING_MODULE_CANCEL_TEST_RUN_REQUEST,
+  TESTING_MODULE_PROGRESS_REPORT,
   TESTING_MODULE_RUN_ALL_REQUEST,
-  TESTING_MODULE_RUN_PROGRESS_RESPONSE,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
+  type TestingModuleCancelTestRunRequestPayload,
+  type TestingModuleProgressReportPayload,
   type TestingModuleRunAllRequestPayload,
-  type TestingModuleRunProgressPayload,
   type TestingModuleRunRequestPayload,
   type TestingModuleWatchModeRequestPayload,
 } from 'storybook/internal/core-events';
@@ -30,6 +32,7 @@ export class TestManager {
     this.channel.on(TESTING_MODULE_RUN_REQUEST, this.handleRunRequest.bind(this));
     this.channel.on(TESTING_MODULE_RUN_ALL_REQUEST, this.handleRunAllRequest.bind(this));
     this.channel.on(TESTING_MODULE_WATCH_MODE_REQUEST, this.handleWatchModeRequest.bind(this));
+    this.channel.on(TESTING_MODULE_CANCEL_TEST_RUN_REQUEST, this.handleCancelRequest.bind(this));
 
     this.vitestManager.startVitest().then(() => options.onReady?.());
   }
@@ -78,8 +81,20 @@ export class TestManager {
     }
   }
 
-  async sendProgressReport(payload: TestingModuleRunProgressPayload) {
-    this.channel.emit(TESTING_MODULE_RUN_PROGRESS_RESPONSE, payload);
+  async handleCancelRequest(request: TestingModuleCancelTestRunRequestPayload) {
+    try {
+      if (request.providerId !== TEST_PROVIDER_ID) {
+        return;
+      }
+
+      await this.vitestManager.cancelCurrentRun();
+    } catch (e) {
+      this.reportFatalError('Failed to cancel tests', e);
+    }
+  }
+
+  async sendProgressReport(payload: TestingModuleProgressReportPayload) {
+    this.channel.emit(TESTING_MODULE_PROGRESS_REPORT, payload);
   }
 
   async reportFatalError(message: string, error: Error | any) {

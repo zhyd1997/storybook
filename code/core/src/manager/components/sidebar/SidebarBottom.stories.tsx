@@ -1,7 +1,4 @@
-import React from 'react';
-
 import { Addon_TypesEnum } from '@storybook/core/types';
-import { ContrastIcon, PointerHandIcon } from '@storybook/icons';
 import { fn } from '@storybook/test';
 
 import { SidebarBottomBase } from './SidebarBottom';
@@ -13,22 +10,21 @@ export default {
       clearNotification: fn(),
       emit: fn(),
       experimental_setFilter: fn(),
+      getChannel: fn(),
       getElements: fn(() => ({
         'component-tests': {
           type: Addon_TypesEnum.experimental_TEST_PROVIDER,
           id: 'component-tests',
-          title: 'Component tests',
+          title: () => 'Component tests',
           description: () => 'Ran 2 seconds ago',
-          icon: <PointerHandIcon />,
           runnable: true,
           watchable: true,
         },
         'visual-tests': {
           type: Addon_TypesEnum.experimental_TEST_PROVIDER,
           id: 'visual-tests',
-          title: 'Visual tests',
+          title: () => 'Visual tests',
           description: () => 'Not run',
-          icon: <ContrastIcon />,
           runnable: true,
         },
       })),

@@ -1,4 +1,10 @@
-export type ProviderId = string;
+import type { Addon_TestProviderState, Addon_TestProviderType } from '@storybook/core/types';
+
+export type TestProviderId = Addon_TestProviderType['id'];
+export type TestProviderConfig = Addon_TestProviderType;
+export type TestProviderState = Addon_TestProviderState;
+
+export type TestProviders = Record<TestProviderId, TestProviderConfig & TestProviderState>;
 
 export type TestingModuleRunRequestStories = {
   id: string;
@@ -6,7 +12,7 @@ export type TestingModuleRunRequestStories = {
 };
 
 export type TestingModuleRunRequestPayload = {
-  providerId: ProviderId;
+  providerId: TestProviderId;
   payload: {
     stories: TestingModuleRunRequestStories[];
     importPath: string;
@@ -15,61 +21,46 @@ export type TestingModuleRunRequestPayload = {
 };
 
 export type TestingModuleRunAllRequestPayload = {
-  providerId: ProviderId;
+  providerId: TestProviderId;
 };
 
-export type TestingModuleRunProgressPayload =
+export type TestingModuleProgressReportPayload =
   | {
-      providerId: ProviderId;
-      payload: TestingModuleRunResponsePayload;
+      providerId: TestProviderId;
       status: 'success' | 'pending';
+      cancellable?: boolean;
+      progress?: TestingModuleProgressReportProgress;
+      details?: { [key: string]: any };
     }
   | {
-      providerId: ProviderId;
+      providerId: TestProviderId;
+      status: 'failed';
       error: {
         name: string;
         message: string;
         stack?: string;
       };
-      status: 'failed';
     };
 
-export type TestingModuleRunResponsePayload = {
-  numTotalTests: number;
-  numPassedTests: number;
-  numFailedTests: number;
-  numPendingTests: number;
-  progress: number;
-  startTime: number;
-  success: boolean;
-  testResults: TestingModuleRunTestResultPayload[];
+export type TestingModuleCrashReportPayload = {
+  providerId: TestProviderId;
+  message: string;
 };
 
-export type TestingModuleRunTestResultPayload = {
-  results: TestingModuleRunAssertionResultPayload[];
-  startTime: number;
-  endTime: number;
-  status: 'passed' | 'failed';
-  message?: string;
+export type TestingModuleProgressReportProgress = {
+  startedAt: Date;
+  finishedAt?: Date;
+  numTotalTests?: number;
+  numPassedTests?: number;
+  numFailedTests?: number;
+  numPendingTests?: number;
+  percentageCompleted?: number;
 };
-
-export type TestingModuleRunAssertionResultPayload =
-  | {
-      status: 'success' | 'pending';
-      duration: number;
-      storyId: string;
-    }
-  | {
-      status: 'failed';
-      duration: number;
-      failureMessages: string[];
-      storyId: string;
-    };
 
 export type Status = 'success' | 'failed' | 'pending';
 
 export type TestingModuleCancelTestRunRequestPayload = {
-  providerId: ProviderId;
+  providerId: TestProviderId;
 };
 
 export type TestingModuleCancelTestRunResponsePayload =
@@ -82,6 +73,6 @@ export type TestingModuleCancelTestRunResponsePayload =
     };
 
 export type TestingModuleWatchModeRequestPayload = {
-  providerId: ProviderId;
+  providerId: TestProviderId;
   watchMode: boolean;
 };

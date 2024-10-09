@@ -8,10 +8,12 @@ import {
   TESTING_MODULE_RUN_ALL_REQUEST,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
+  type TestingModuleCrashReportPayload,
 } from 'storybook/internal/core-events';
 
 import { execaNode } from 'execa';
 
+import { TEST_PROVIDER_ID } from '../constants';
 import { log } from '../logger';
 
 const MAX_START_ATTEMPTS = 3;
@@ -24,6 +26,7 @@ const vitestModulePath = join(__dirname, 'node', 'vitest.mjs');
 export const bootTestRunner = async (channel: Channel, initEvent?: string, initArgs?: any[]) => {
   let aborted = false;
   let child: null | ChildProcess;
+  let stderr: string[] = [];
 
   const forwardRun = (...args: any[]) =>
     child?.send({ args, from: 'server', type: TESTING_MODULE_RUN_REQUEST });
@@ -55,15 +58,15 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
   const startChildProcess = (attempt = 1) =>
     new Promise<void>((resolve, reject) => {
       child = execaNode(vitestModulePath);
+      stderr = [];
+
       child.stdout?.on('data', log);
       child.stderr?.on('data', (data) => {
-        const message = data.toString();
-        // TODO: improve this error handling. Example use case is Playwright is not installed
-        if (message.includes('Error: browserType.launch')) {
-          channel.emit(TESTING_MODULE_CRASH_REPORT, message);
+        // Ignore deprecation warnings which appear in yellow ANSI color
+        if (!data.toString().match(/^\u001B\[33m/)) {
+          log(data);
+          stderr.push(data.toString());
         }
-
-        log(data);
       });
 
       child.on('message', (result: any) => {
@@ -82,13 +85,7 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
           resolve();
         } else if (result.type === 'error') {
           killChild();
-
-          if (result.message) {
-            log(result.message);
-          }
-          if (result.error) {
-            log(result.error);
-          }
+          log(`${result.message}: ${result.error}`);
 
           if (attempt >= MAX_START_ATTEMPTS) {
             log(`Aborting test runner process after ${attempt} restart attempts`);
@@ -108,8 +105,11 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
   );
 
   await Promise.race([startChildProcess(), timeout]).catch((e) => {
-    log(e.message);
     aborted = true;
+    channel.emit(TESTING_MODULE_CRASH_REPORT, {
+      providerId: TEST_PROVIDER_ID,
+      message: stderr.join('\n'),
+    } as TestingModuleCrashReportPayload);
     throw e;
   });
 };
