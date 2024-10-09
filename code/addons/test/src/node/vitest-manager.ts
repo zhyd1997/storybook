@@ -13,8 +13,6 @@ export class VitestManager {
 
   vitestStartupCounter = 0;
 
-  private watchMode = false;
-
   constructor(
     private channel: Channel,
     private testManager: TestManager
@@ -23,7 +21,6 @@ export class VitestManager {
   async startVitest(watchMode = false) {
     const { createVitest } = await import('vitest/node');
 
-    this.watchMode = watchMode;
     this.vitest = await createVitest('test', {
       watch: watchMode,
       passWithNoTests: true,
