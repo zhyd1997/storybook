@@ -15,8 +15,7 @@ import type { Suite } from '@vitest/runner';
 // functions from the `@vitest/runner` package. It is not complex and does not have
 // any significant dependencies.
 import { getTests } from '@vitest/runner/utils';
-// @ts-expect-error we will very soon replace this library with es-toolkit
-import throttle from 'lodash/throttle.js';
+import { throttle } from 'es-toolkit';
 
 import { TEST_PROVIDER_ID } from '../constants';
 import type { TestManager } from './test-manager';
@@ -64,7 +63,6 @@ export class StorybookReporter implements Reporter {
   sendReport: (payload: TestingModuleProgressReportPayload) => void;
 
   constructor(private testManager: TestManager) {
-    // @ts-expect-error we will very soon replace this library with es-toolkit
     this.sendReport = throttle((payload) => this.testManager.sendProgressReport(payload), 200);
   }
 
@@ -187,11 +185,21 @@ export class StorybookReporter implements Reporter {
   }
 
   async onFinished() {
-    this.sendReport({
-      providerId: TEST_PROVIDER_ID,
-      status: 'success',
-      ...this.getProgressReport(new Date()),
-    });
+    const unhandledErrors = this.ctx.state.getUnhandledErrors();
+
+    if (unhandledErrors?.length) {
+      this.testManager.reportFatalError(
+        `Vitest caught ${unhandledErrors.length} unhandled error${unhandledErrors?.length > 1 ? 's' : ''} during the test run.`,
+        unhandledErrors[0]
+      );
+    } else {
+      this.sendReport({
+        providerId: TEST_PROVIDER_ID,
+        status: 'success',
+        ...this.getProgressReport(new Date()),
+      });
+    }
+
     this.clearVitestState();
   }
 }

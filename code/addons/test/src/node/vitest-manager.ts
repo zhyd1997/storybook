@@ -23,7 +23,7 @@ export class VitestManager {
 
     this.vitest = await createVitest('test', {
       watch: watchMode,
-      passWithNoTests: true,
+      passWithNoTests: false,
       changed: watchMode,
       // TODO:
       // Do we want to enable Vite's default reporter?
