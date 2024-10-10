@@ -42,6 +42,7 @@ const ModalStackTrace = styled.pre(({ theme }) => ({
   fontFamily: theme.typography.fonts.mono,
   fontSize: '12px',
   borderTop: `1px solid ${theme.appBorderColor}`,
+  borderRadius: 0,
 }));
 
 const TroubleshootLink = styled.a(({ theme }) => ({
