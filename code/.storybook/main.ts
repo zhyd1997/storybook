@@ -92,10 +92,6 @@ const config: StorybookConfig = {
       directory: '../addons/test/template/stories',
       titlePrefix: 'addons/test',
     },
-    {
-      directory: '../addons/test/src',
-      titlePrefix: 'addons/test',
-    },
   ],
   addons: [
     '@storybook/addon-themes',
