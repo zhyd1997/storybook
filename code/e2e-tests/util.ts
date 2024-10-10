@@ -141,12 +141,4 @@ export class SbPage {
   getCanvasBodyElement() {
     return this.previewIframe().locator('body');
   }
-
-  async emitChannelEvent(event: string, ...args: any[]) {
-    return this.page.evaluate(
-      ([channelEvent, channelArgs]) =>
-        window.__STORYBOOK_ADDONS_CHANNEL__.emit(channelEvent, ...channelArgs),
-      [event, args]
-    );
-  }
 }

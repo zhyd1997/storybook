@@ -11,12 +11,12 @@ import {
   type TestingModuleCrashReportPayload,
 } from 'storybook/internal/core-events';
 
+// eslint-disable-next-line depend/ban-dependencies
 import { execaNode } from 'execa';
 
 import { TEST_PROVIDER_ID } from '../constants';
 import { log } from '../logger';
 
-const MAX_START_ATTEMPTS = 3;
 const MAX_START_TIME = 8000;
 
 // This path is a bit confusing, but essentially `boot-test-runner` gets bundled into the preset bundle
@@ -24,7 +24,6 @@ const MAX_START_TIME = 8000;
 const vitestModulePath = join(__dirname, 'node', 'vitest.mjs');
 
 export const bootTestRunner = async (channel: Channel, initEvent?: string, initArgs?: any[]) => {
-  let aborted = false;
   let child: null | ChildProcess;
   let stderr: string[] = [];
 
@@ -55,7 +54,7 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
   process.on('SIGINT', () => exit(0));
   process.on('SIGTERM', () => exit(0));
 
-  const startChildProcess = (attempt = 1) =>
+  const startChildProcess = () =>
     new Promise<void>((resolve, reject) => {
       child = execaNode(vitestModulePath);
       stderr = [];
@@ -85,15 +84,11 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
           resolve();
         } else if (result.type === 'error') {
           killChild();
-          log(`${result.message}: ${result.error}`);
 
-          if (attempt >= MAX_START_ATTEMPTS) {
-            log(`Aborting test runner process after ${attempt} restart attempts`);
-            reject();
-          } else if (!aborted) {
-            log(`Restarting test runner process (attempt ${attempt}/${MAX_START_ATTEMPTS})`);
-            setTimeout(() => startChildProcess(attempt + 1).then(resolve, reject), 1000);
-          }
+          channel.emit(TESTING_MODULE_CRASH_REPORT, {
+            providerId: TEST_PROVIDER_ID,
+            message: stderr.join('\n'),
+          } as TestingModuleCrashReportPayload);
         } else {
           channel.emit(result.type, ...result.args);
         }
@@ -101,14 +96,20 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
     });
 
   const timeout = new Promise((_, reject) =>
-    setTimeout(reject, MAX_START_TIME, new Error('Aborting test runner process due to timeout'))
+    setTimeout(
+      reject,
+      MAX_START_TIME,
+      // eslint-disable-next-line local-rules/no-uncategorized-errors
+      new Error(
+        `Aborting test runner process because it took longer than ${MAX_START_TIME / 1000} seconds to start.`
+      )
+    )
   );
 
   await Promise.race([startChildProcess(), timeout]).catch((e) => {
-    aborted = true;
     channel.emit(TESTING_MODULE_CRASH_REPORT, {
       providerId: TEST_PROVIDER_ID,
-      message: stderr.join('\n'),
+      message: String(e),
     } as TestingModuleCrashReportPayload);
     throw e;
   });

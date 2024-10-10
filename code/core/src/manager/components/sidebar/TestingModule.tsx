@@ -24,38 +24,41 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 });
 
-const Outline = styled.div<{ failed: boolean; running: boolean }>(({ failed, running, theme }) => ({
-  position: 'relative',
-  lineHeight: '20px',
-  width: '100%',
-  padding: 1,
-  overflow: 'hidden',
-  background: `var(--sb-sidebar-bottom-card-background, ${theme.background.content})`,
-  borderRadius:
-    `var(--sb-sidebar-bottom-card-border-radius, ${theme.appBorderRadius + 1}px)` as any,
-  boxShadow: `inset 0 0 0 1px ${failed && !running ? theme.color.negative : theme.appBorderColor}, var(--sb-sidebar-bottom-card-box-shadow, 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app})`,
-  transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
-  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-  transitionDuration: '0.15s',
+const Outline = styled.div<{ crashed: boolean; running: boolean }>(
+  ({ crashed, running, theme }) => ({
+    position: 'relative',
+    lineHeight: '20px',
+    width: '100%',
+    padding: 1,
+    overflow: 'hidden',
+    background: `var(--sb-sidebar-bottom-card-background, ${theme.background.content})`,
+    borderRadius:
+      `var(--sb-sidebar-bottom-card-border-radius, ${theme.appBorderRadius + 1}px)` as any,
+    boxShadow: `inset 0 0 0 1px ${crashed && !running ? theme.color.negative : theme.appBorderColor}, var(--sb-sidebar-bottom-card-box-shadow, 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app})`,
+    transitionProperty:
+      'color, background-color, border-color, text-decoration-color, fill, stroke',
+    transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    transitionDuration: '0.15s',
 
-  '&:after': {
-    content: '""',
-    display: running ? 'block' : 'none',
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    marginLeft: 'calc(max(100vw, 100vh) * -0.5)',
-    marginTop: 'calc(max(100vw, 100vh) * -0.5)',
-    height: 'max(100vw, 100vh)',
-    width: 'max(100vw, 100vh)',
-    animation: `${spin} 3s linear infinite`,
-    background: failed
-      ? `conic-gradient(transparent 90deg, ${theme.color.orange} 150deg, ${theme.color.gold} 210deg, transparent 270deg)`
-      : `conic-gradient(transparent 90deg, ${theme.color.secondary} 150deg, ${theme.color.seafoam} 210deg, transparent 270deg)`,
-    opacity: 1,
-    willChange: 'auto',
-  },
-}));
+    '&:after': {
+      content: '""',
+      display: running ? 'block' : 'none',
+      position: 'absolute',
+      left: '50%',
+      top: '50%',
+      marginLeft: 'calc(max(100vw, 100vh) * -0.5)',
+      marginTop: 'calc(max(100vw, 100vh) * -0.5)',
+      height: 'max(100vw, 100vh)',
+      width: 'max(100vw, 100vh)',
+      animation: `${spin} 3s linear infinite`,
+      background: crashed
+        ? `conic-gradient(transparent 90deg, ${theme.color.orange} 150deg, ${theme.color.gold} 210deg, transparent 270deg)`
+        : `conic-gradient(transparent 90deg, ${theme.color.secondary} 150deg, ${theme.color.seafoam} 210deg, transparent 270deg)`,
+      opacity: 1,
+      willChange: 'auto',
+    },
+  })
+);
 
 const Card = styled.div(({ theme }) => ({
   position: 'relative',
@@ -153,31 +156,33 @@ const Actions = styled.div({
   gap: 6,
 });
 
-const Title = styled.div<{ failed?: boolean }>(({ failed, theme }) => ({
-  fontSize: theme.typography.size.s2,
-  fontWeight: failed ? 'bold' : 'normal',
+const TitleWrapper = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
+  fontSize: theme.typography.size.s1,
+  fontWeight: crashed ? 'bold' : 'normal',
+  color: crashed ? theme.color.negativeText : theme.color.defaultText,
 }));
 
-const Description = styled.div(({ theme }) => ({
+const DescriptionWrapper = styled.div(({ theme }) => ({
   fontSize: theme.typography.size.s1,
   color: theme.barTextColor,
 }));
 
 const DynamicInfo = ({ state }: { state: TestProviders[keyof TestProviders] }) => {
-  const [iterator, setIterator] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => setIterator((i) => i + 1), 10000);
-    return () => clearInterval(interval);
-  }, []);
+  const Description = state.description;
+  const Title = state.title;
   return (
-    <Info key={iterator}>
-      <Title failed={state.failed}>{state.title(state)}</Title>
-      <Description>{state.description(state)}</Description>
+    <Info>
+      <TitleWrapper crashed={state.crashed}>
+        <Title {...state} />
+      </TitleWrapper>
+      <DescriptionWrapper>
+        <Description {...state} />
+      </DescriptionWrapper>
     </Info>
   );
 };
 
-export interface TestingModuleProps {
+interface TestingModuleProps {
   testProviders: TestProviders[keyof TestProviders][];
   errorCount: number;
   errorsActive: boolean;
@@ -216,11 +221,11 @@ export const TestingModule = ({
   };
 
   const running = testProviders.some((tp) => tp.running);
-  const failed = testProviders.some((tp) => tp.failed);
+  const crashed = testProviders.some((tp) => tp.crashed);
   const testing = testProviders.length > 0;
 
   return (
-    <Outline running={running} failed={failed || errorCount > 0}>
+    <Outline running={running} crashed={crashed}>
       <Card>
         <Collapsible
           style={{
@@ -240,6 +245,7 @@ export const TestingModule = ({
                       padding="small"
                       active={state.watching}
                       onClick={() => onSetWatchMode(state.id, !state.watching)}
+                      disabled={state.crashed}
                     >
                       <EyeIcon />
                     </Button>
@@ -262,7 +268,7 @@ export const TestingModule = ({
                           variant="ghost"
                           padding="small"
                           onClick={() => onRunTests(state.id)}
-                          disabled={state.running}
+                          disabled={state.crashed || state.running}
                         >
                           <PlayHollowIcon />
                         </Button>

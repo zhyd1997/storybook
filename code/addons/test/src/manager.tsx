@@ -1,6 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { AddonPanel, Badge, Spaced } from 'storybook/internal/components';
+import { AddonPanel, Badge, Link as LinkComponent, Spaced } from 'storybook/internal/components';
+import { TESTING_MODULE_RUN_ALL_REQUEST } from 'storybook/internal/core-events';
 import type { Combo } from 'storybook/internal/manager-api';
 import { Consumer, addons, types, useAddonState } from 'storybook/internal/manager-api';
 import {
@@ -11,6 +12,7 @@ import {
 } from 'storybook/internal/types';
 
 import { Panel } from './Panel';
+import { GlobalErrorModal } from './components/GlobalErrorModal';
 import { ADDON_ID, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 import type { TestResult } from './node/reporter';
 
@@ -56,29 +58,79 @@ export function getRelativeTimeString(date: Date): string {
   return rtf.format(Math.floor(delta / divisor), units[unitIndex]);
 }
 
-addons.register(ADDON_ID, () => {
+const RelativeTime = ({ timestamp }: { timestamp: Date }) => {
+  const [relativeTimeString, setRelativeTimeString] = useState(null);
+
+  useEffect(() => {
+    if (timestamp) {
+      setRelativeTimeString(getRelativeTimeString(timestamp).replace(/^now$/, 'just now'));
+
+      const interval = setInterval(() => {
+        setRelativeTimeString(getRelativeTimeString(timestamp).replace(/^now$/, 'just now'));
+      }, 10000);
+
+      return () => clearInterval(interval);
+    }
+  }, [timestamp]);
+
+  return relativeTimeString && `Ran ${relativeTimeString}`;
+};
+
+addons.register(ADDON_ID, (api) => {
   addons.add(TEST_PROVIDER_ID, {
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     runnable: true,
     watchable: true,
 
-    title: ({ failed }) => (failed ? "Component tests didn't complete" : 'Component tests'),
-    description: ({ failed, running, watching, progress }) => {
+    title: ({ crashed }) => (crashed ? "Component tests didn't complete" : 'Component tests'),
+    description: ({ failed, running, watching, progress, crashed, details }) => {
+      const [isModalOpen, setIsModalOpen] = useState(false);
+
+      let message: string | React.ReactNode = 'Not run';
+
       if (running) {
-        return progress
+        message = progress
           ? `Testing... ${progress.numPassedTests}/${progress.numTotalTests}`
           : 'Starting...';
+      } else if (failed) {
+        message = 'Component tests failed';
+      } else if (watching) {
+        message = 'Watching for file changes';
+      } else if (progress?.finishedAt) {
+        message = <RelativeTime timestamp={progress.finishedAt} />;
+      } else if (crashed) {
+        message = (
+          <>
+            <LinkComponent
+              isButton
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              View full error
+            </LinkComponent>
+          </>
+        );
       }
-      if (failed) {
-        return 'Component tests failed';
-      }
-      if (watching) {
-        return 'Watching for file changes';
-      }
-      if (progress?.finishedAt) {
-        return `Ran ${getRelativeTimeString(progress.finishedAt).replace(/^now$/, 'just now')}`;
-      }
-      return 'Not run';
+
+      return (
+        <>
+          {message}
+          <GlobalErrorModal
+            error={details?.message}
+            open={isModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+            }}
+            onRerun={() => {
+              setIsModalOpen(false);
+              api
+                .getChannel()
+                .emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: TEST_PROVIDER_ID });
+            }}
+          />
+        </>
+      );
     },
 
     mapStatusUpdate: (state) =>
@@ -101,7 +153,7 @@ addons.register(ADDON_ID, () => {
             .filter(Boolean)
         )
       ),
-  } as Addon_TestProviderType<{ testResults: TestResult[] }>);
+  } as Addon_TestProviderType<{ testResults: TestResult[]; message: string }>);
 
   addons.add(PANEL_ID, {
     type: types.PANEL,

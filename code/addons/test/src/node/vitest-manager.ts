@@ -23,7 +23,7 @@ export class VitestManager {
 
     this.vitest = await createVitest('test', {
       watch: watchMode,
-      passWithNoTests: true,
+      passWithNoTests: false,
       changed: watchMode,
       // TODO:
       // Do we want to enable Vite's default reporter?
@@ -36,6 +36,12 @@ export class VitestManager {
         enabled: false,
       },
     });
+
+    if (this.vitest) {
+      this.vitest.onCancel(() => {
+        // TODO: handle cancelation
+      });
+    }
 
     await this.vitest.init();
   }
