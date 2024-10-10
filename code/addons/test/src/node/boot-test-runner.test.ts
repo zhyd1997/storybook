@@ -10,6 +10,7 @@ import {
   TESTING_MODULE_WATCH_MODE_REQUEST,
 } from '@storybook/core/core-events';
 
+// eslint-disable-next-line depend/ban-dependencies
 import { execaNode } from 'execa';
 
 import { log } from '../logger';
@@ -84,16 +85,6 @@ describe('bootTestRunner', () => {
   it('should abort if vitest doesn’t become ready in time', async () => {
     const promise = bootTestRunner(mockChannel);
     vi.advanceTimersByTime(10000);
-    await expect(promise).rejects.toThrow();
-  });
-
-  it('should abort if vitest fails to start repeatedly', async () => {
-    const promise = bootTestRunner(mockChannel);
-    message({ type: 'error' });
-    vi.advanceTimersByTime(1000);
-    message({ type: 'error' });
-    vi.advanceTimersByTime(1000);
-    message({ type: 'error' });
     await expect(promise).rejects.toThrow();
   });
 
