@@ -15,6 +15,7 @@ const vitest = vi.hoisted(() => ({
   runFiles: vi.fn(),
   cancelCurrentRun: vi.fn(),
   globTestSpecs: vi.fn(),
+  getModuleProjects: vi.fn(() => []),
 }));
 
 vi.mock('vitest/node', () => ({
@@ -35,28 +36,34 @@ const tests = [
   },
 ];
 
+const options: ConstructorParameters<typeof TestManager>[1] = {
+  onError: (message, error) => {
+    throw error;
+  },
+  onReady: vi.fn(),
+};
+
 describe('TestManager', () => {
   it('should create a vitest instance', async () => {
-    new TestManager(mockChannel);
+    new TestManager(mockChannel, options);
     await new Promise((r) => setTimeout(r, 1000));
     expect(createVitest).toHaveBeenCalled();
   });
 
   it('should call onReady callback', async () => {
-    const onReady = vi.fn();
-    new TestManager(mockChannel, { onReady });
+    new TestManager(mockChannel, options);
     await new Promise((r) => setTimeout(r, 1000));
-    expect(onReady).toHaveBeenCalled();
+    expect(options.onReady).toHaveBeenCalled();
   });
 
   it('TestManager.start should start vitest and resolve when ready', async () => {
-    const testManager = await TestManager.start(mockChannel);
+    const testManager = await TestManager.start(mockChannel, options);
     expect(testManager).toBeInstanceOf(TestManager);
     expect(createVitest).toHaveBeenCalled();
   });
 
   it('should handle watch mode request', async () => {
-    const testManager = await TestManager.start(mockChannel);
+    const testManager = await TestManager.start(mockChannel, options);
     expect(testManager.watchMode).toBe(false);
     expect(createVitest).toHaveBeenCalledTimes(1);
 
@@ -67,7 +74,7 @@ describe('TestManager', () => {
 
   it('should handle run request', async () => {
     vitest.globTestSpecs.mockImplementation(() => tests);
-    const testManager = await TestManager.start(mockChannel);
+    const testManager = await TestManager.start(mockChannel, options);
     expect(createVitest).toHaveBeenCalledTimes(1);
 
     await testManager.handleRunRequest({
@@ -91,7 +98,7 @@ describe('TestManager', () => {
 
   it('should filter tests', async () => {
     vitest.globTestSpecs.mockImplementation(() => tests);
-    const testManager = await TestManager.start(mockChannel);
+    const testManager = await TestManager.start(mockChannel, options);
 
     await testManager.handleRunRequest({
       providerId: TEST_PROVIDER_ID,
@@ -119,7 +126,7 @@ describe('TestManager', () => {
   });
 
   it('should handle run all request', async () => {
-    const testManager = await TestManager.start(mockChannel);
+    const testManager = await TestManager.start(mockChannel, options);
     expect(createVitest).toHaveBeenCalledTimes(1);
 
     await testManager.handleRunAllRequest({ providerId: TEST_PROVIDER_ID });

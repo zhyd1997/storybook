@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import { styled } from 'storybook/internal/theming';
 
-import { type Call, CallStates, type ControlStates } from '@storybook/instrumenter';
+import type { CallStates } from '@storybook/instrumenter';
+import { type Call, type ControlStates } from '@storybook/instrumenter';
 
 import { transparentize } from 'polished';
 
@@ -10,6 +11,7 @@ import { isTestAssertionError, useAnsiToHtmlFilter } from '../utils';
 import { Empty } from './EmptyState';
 import { Interaction } from './Interaction';
 import { Subnav } from './Subnav';
+import { TestDiscrepancyMessage } from './TestDiscrepancyMessage';
 
 export interface Controls {
   start: (args: any) => void;
@@ -39,6 +41,8 @@ interface InteractionsPanelProps {
   calls: Map<string, any>;
   endRef?: React.Ref<HTMLDivElement>;
   onScrollToEnd?: () => void;
+  hasResultMismatch?: boolean;
+  browserTestStatus?: CallStates;
 }
 
 const Container = styled.div(({ theme }) => ({
@@ -96,17 +100,19 @@ export const InteractionsPanel: React.FC<InteractionsPanelProps> = React.memo(
     pausedAt,
     onScrollToEnd,
     endRef,
+    hasResultMismatch,
+    browserTestStatus,
   }) {
     const filter = useAnsiToHtmlFilter();
+
     return (
       <Container>
+        {hasResultMismatch && <TestDiscrepancyMessage browserTestStatus={browserTestStatus} />}
         {(interactions.length > 0 || hasException) && (
           <Subnav
             controls={controls}
             controlStates={controlStates}
-            status={
-              isPlaying ? CallStates.ACTIVE : hasException ? CallStates.ERROR : CallStates.DONE
-            }
+            status={browserTestStatus}
             storyFileName={fileName}
             onScrollToEnd={onScrollToEnd}
           />

@@ -37,10 +37,7 @@ export class VitestManager {
       },
     });
 
-    // TODO what should happen if there's no projects?
-    if (this.vitest?.projects.length) {
-      await this.vitest.init();
-    }
+    await this.vitest.init();
   }
 
   async runAllTests() {
@@ -48,9 +45,28 @@ export class VitestManager {
       await this.startVitest();
     }
 
-    const tests = await this.getStorybookTestSpecs();
+    const storybookTests = await this.getStorybookTestSpecs();
+    for (const storybookTest of storybookTests) {
+      // make sure to clear the file cache so test results are updated even if watch mode is not enabled
+      if (!this.testManager.watchMode) {
+        this.updateLastChanged(storybookTest.moduleId);
+      }
+    }
     await this.cancelCurrentRun();
-    await this.vitest!.runFiles(tests, true);
+    await this.vitest!.runFiles(storybookTests, true);
+  }
+
+  private updateLastChanged(filepath: string) {
+    const projects = this.vitest!.getModuleProjects(filepath);
+    projects.forEach(({ server, browser }) => {
+      const serverMods = server.moduleGraph.getModulesByFile(filepath);
+      serverMods?.forEach((mod) => server.moduleGraph.invalidateModule(mod));
+
+      if (browser) {
+        const browserMods = browser.vite.moduleGraph.getModulesByFile(filepath);
+        browserMods?.forEach((mod) => browser.vite.moduleGraph.invalidateModule(mod));
+      }
+    });
   }
 
   async runTests(testPayload: TestingModuleRunRequestPayload['payload']) {
@@ -72,6 +88,11 @@ export class VitestManager {
         return absoluteImportPath === storybookTest.moduleId;
       });
       if (match) {
+        // make sure to clear the file cache so test results are updated even if watch mode is not enabled
+        if (!this.testManager.watchMode) {
+          this.updateLastChanged(storybookTest.moduleId);
+        }
+
         testList.push(storybookTest);
       }
     }

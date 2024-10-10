@@ -177,7 +177,7 @@ const DynamicInfo = ({ state }: { state: TestProviders[keyof TestProviders] }) =
   );
 };
 
-interface TestingModuleProps {
+export interface TestingModuleProps {
   testProviders: TestProviders[keyof TestProviders][];
   errorCount: number;
   errorsActive: boolean;

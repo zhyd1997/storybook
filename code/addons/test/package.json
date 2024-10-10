@@ -1,6 +1,6 @@
 {
   "name": "@storybook/experimental-addon-test",
-  "version": "8.4.0-alpha.4",
+  "version": "8.4.0-alpha.6",
   "description": "Integrate Vitest with Storybook",
   "keywords": [
     "storybook-addons",
@@ -80,6 +80,7 @@
     "@storybook/icons": "^1.2.12",
     "@storybook/instrumenter": "workspace:*",
     "@storybook/test": "workspace:*",
+    "@storybook/theming": "workspace:*",
     "polished": "^4.2.2",
     "ts-dedent": "^2.2.0"
   },

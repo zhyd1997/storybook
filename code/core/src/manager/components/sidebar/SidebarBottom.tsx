@@ -226,6 +226,8 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   );
 };
 
+const TESTING_MODULE_ID = 'storybook-testing-module';
+
 export const SidebarBottom = () => {
   const api = useStorybookApi();
   const { notifications, status } = useStorybookState();
