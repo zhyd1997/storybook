@@ -1,36 +1,44 @@
-import React from 'react';
-
 import { Addon_TypesEnum } from '@storybook/core/types';
-import { ContrastIcon, MarkupIcon, PointerHandIcon } from '@storybook/icons';
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn, userEvent } from '@storybook/test';
 
-import { TestingModule, type TestingModuleProps } from './TestingModule';
+import type { TestProviders } from '@storybook/core/core-events';
 
-const testProviders: TestingModuleProps['testProviders'] = [
+import { TestingModule } from './TestingModule';
+
+const baseState = {
+  details: {},
+  cancellable: false,
+  cancelling: false,
+  running: false,
+  watching: false,
+  failed: false,
+};
+
+const testProviders: TestProviders[keyof TestProviders][] = [
   {
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'component-tests',
-    title: 'Component tests',
+    title: () => 'Component tests',
     description: () => 'Ran 2 seconds ago',
-    icon: <PointerHandIcon />,
     runnable: true,
     watchable: true,
+    ...baseState,
   },
   {
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'visual-tests',
-    title: 'Visual tests',
+    title: () => 'Visual tests',
     description: () => 'Not run',
-    icon: <ContrastIcon />,
     runnable: true,
+    ...baseState,
   },
   {
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'linting',
-    title: 'Linting',
+    title: () => 'Linting',
     description: () => 'Watching for changes',
-    icon: <MarkupIcon />,
+    ...baseState,
     watching: true,
   },
 ];
@@ -46,6 +54,7 @@ const meta = {
     warningsActive: false,
     setWarningsActive: fn(),
     onRunTests: fn(),
+    onCancelTests: fn(),
     onSetWatchMode: fn(),
   },
 } satisfies Meta<typeof TestingModule>;
@@ -99,17 +108,56 @@ export const CollapsedStatuses: Story = {
 
 export const Running: Story = {
   args: {
-    testProviders: testProviders.map((tp) => ({ ...tp, running: true })),
+    testProviders: [{ ...testProviders[0], running: true }, ...testProviders.slice(1)],
+  },
+};
+
+export const RunningAll: Story = {
+  args: {
+    testProviders: testProviders.map((tp) => ({ ...tp, running: !!tp.runnable })),
   },
 };
 
 export const CollapsedRunning: Story = {
-  args: Running.args,
+  args: RunningAll.args,
   play: Collapsed.play,
+};
+
+export const Cancellable: Story = {
+  args: {
+    testProviders: [
+      { ...testProviders[0], running: true, cancellable: true },
+      ...testProviders.slice(1),
+    ],
+  },
+};
+
+export const Cancelling: Story = {
+  args: {
+    testProviders: [
+      { ...testProviders[0], running: true, cancellable: true, cancelling: true },
+      ...testProviders.slice(1),
+    ],
+  },
 };
 
 export const Watching: Story = {
   args: {
-    testProviders: testProviders.map((tp) => ({ ...tp, watching: true })),
+    testProviders: [{ ...testProviders[0], watching: true }, ...testProviders.slice(1)],
+  },
+};
+
+export const Failing: Story = {
+  args: {
+    testProviders: [
+      { ...testProviders[0], failed: true, running: true },
+      ...testProviders.slice(1),
+    ],
+  },
+};
+
+export const Failed: Story = {
+  args: {
+    testProviders: [{ ...testProviders[0], failed: true }, ...testProviders.slice(1)],
   },
 };

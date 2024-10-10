@@ -4,8 +4,8 @@ import { Channel, type ChannelTransport } from '@storybook/core/channels';
 
 import {
   TESTING_MODULE_CANCEL_TEST_RUN_REQUEST,
+  TESTING_MODULE_PROGRESS_REPORT,
   TESTING_MODULE_RUN_ALL_REQUEST,
-  TESTING_MODULE_RUN_PROGRESS_RESPONSE,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
 } from '@storybook/core/core-events';
@@ -101,8 +101,8 @@ describe('bootTestRunner', () => {
     bootTestRunner(mockChannel);
     message({ type: 'ready' });
 
-    message({ type: TESTING_MODULE_RUN_PROGRESS_RESPONSE, args: ['foo'] });
-    expect(mockChannel.last(TESTING_MODULE_RUN_PROGRESS_RESPONSE)).toEqual(['foo']);
+    message({ type: TESTING_MODULE_PROGRESS_REPORT, args: ['foo'] });
+    expect(mockChannel.last(TESTING_MODULE_PROGRESS_REPORT)).toEqual(['foo']);
 
     mockChannel.emit(TESTING_MODULE_RUN_REQUEST, 'foo');
     expect(child.send).toHaveBeenCalledWith({

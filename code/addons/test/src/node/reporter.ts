@@ -3,10 +3,8 @@ import type { Vitest } from 'vitest/node';
 import { type Reporter } from 'vitest/reporters';
 
 import type {
-  TestingModuleRunAssertionResultPayload,
-  TestingModuleRunProgressPayload,
-  TestingModuleRunResponsePayload,
-  TestingModuleRunTestResultPayload,
+  TestingModuleProgressReportPayload,
+  TestingModuleProgressReportProgress,
 } from 'storybook/internal/core-events';
 
 import type { API_StatusUpdate } from '@storybook/types';
@@ -23,13 +21,31 @@ import throttle from 'lodash/throttle.js';
 import { TEST_PROVIDER_ID } from '../constants';
 import type { TestManager } from './test-manager';
 
-type Status = 'passed' | 'failed' | 'skipped' | 'pending' | 'todo' | 'disabled';
+export type TestResultResult =
+  | {
+      status: 'success' | 'pending';
+      storyId: string;
+      duration: number;
+    }
+  | {
+      status: 'failed';
+      storyId: string;
+      duration: number;
+      failureMessages: string[];
+    };
 
-function isDefined(value: any): value is NonNullable<typeof value> {
-  return value !== undefined && value !== null;
-}
+export type TestResult = {
+  results: TestResultResult[];
+  startTime: number;
+  endTime: number;
+  status: 'passed' | 'failed';
+  message?: string;
+};
 
-const StatusMap: Record<TaskState, Status> = {
+const StatusMap: Record<
+  TaskState,
+  'passed' | 'failed' | 'skipped' | 'pending' | 'todo' | 'disabled'
+> = {
   fail: 'failed',
   only: 'pending',
   pass: 'passed',
@@ -45,7 +61,7 @@ export class StorybookReporter implements Reporter {
 
   ctx!: Vitest;
 
-  sendReport: (payload: TestingModuleRunProgressPayload) => void;
+  sendReport: (payload: TestingModuleProgressReportPayload) => void;
 
   constructor(private testManager: TestManager) {
     // @ts-expect-error we will very soon replace this library with es-toolkit
@@ -57,7 +73,7 @@ export class StorybookReporter implements Reporter {
     this.start = Date.now();
   }
 
-  getProgressReport(): TestingModuleRunResponsePayload {
+  getProgressReport(finishedAt?: Date) {
     const files = this.ctx.state.getFiles();
     const fileTests = getTests(files);
     // The number of total tests is dynamic and can change during the run
@@ -68,7 +84,7 @@ export class StorybookReporter implements Reporter {
     const numPendingTests = fileTests.filter(
       (t) => t.result?.state === 'run' || t.mode === 'skip' || t.result?.state === 'skip'
     ).length;
-    const testResults: Array<TestingModuleRunTestResultPayload> = [];
+    const testResults: TestResult[] = [];
 
     for (const file of files) {
       const tests = getTests([file]);
@@ -86,38 +102,30 @@ export class StorybookReporter implements Reporter {
         startTime
       );
 
-      const assertionResults: TestingModuleRunAssertionResultPayload[] = tests
-        .map((t) => {
-          const ancestorTitles: string[] = [];
-          let iter: Suite | undefined = t.suite;
-          while (iter) {
-            ancestorTitles.push(iter.name);
-            iter = iter.suite;
-          }
-          ancestorTitles.reverse();
+      const assertionResults = tests.flatMap<TestResultResult>((t) => {
+        const ancestorTitles: string[] = [];
+        let iter: Suite | undefined = t.suite;
+        while (iter) {
+          ancestorTitles.push(iter.name);
+          iter = iter.suite;
+        }
+        ancestorTitles.reverse();
 
-          const status = StatusMap[t.result?.state || t.mode] || 'skipped';
+        const status = StatusMap[t.result?.state || t.mode] || 'skipped';
+        const storyId = (t.meta as any).storyId as string;
+        const duration = t.result?.duration || 0;
 
-          if (status === 'passed' || status === 'pending') {
-            return {
-              status,
-              duration: t.result?.duration || 0,
-              storyId: (t.meta as any).storyId,
-            };
-          }
-
-          if (status === 'failed') {
-            return {
-              status,
-              duration: t.result?.duration || 0,
-              failureMessages: t.result?.errors?.map((e) => e.stack || e.message) || [],
-              storyId: (t.meta as any).storyId,
-            };
-          }
-
-          return null;
-        })
-        .filter(isDefined);
+        switch (status) {
+          case 'passed':
+          case 'pending':
+            return [{ status, storyId, duration } as TestResultResult];
+          case 'failed':
+            const failureMessages = t.result?.errors?.map((e) => e.stack || e.message) || [];
+            return [{ status, storyId, duration, failureMessages } as TestResultResult];
+          default:
+            return [];
+        }
+      });
 
       const hasFailedTests = tests.some((t) => t.result?.state === 'fail');
 
@@ -131,52 +139,37 @@ export class StorybookReporter implements Reporter {
     }
 
     return {
-      numFailedTests,
-      numPassedTests,
-      numPendingTests,
-      numTotalTests,
-      testResults,
-      success: true,
-      // TODO
-      // It is not simply (numPassedTests + numFailedTests) / numTotalTests
-      // because numTotalTests is dyanmic and can change during the run
-      // We need to calculate the progress based on the number of tests that have been run
-      progress: 0,
-      startTime: this.start,
+      cancellable: !finishedAt,
+      progress: {
+        numFailedTests,
+        numPassedTests,
+        numPendingTests,
+        numTotalTests,
+        startedAt: new Date(this.start),
+        finishedAt,
+      } as TestingModuleProgressReportProgress,
+      details: {
+        testResults,
+      },
     };
   }
 
   async onTaskUpdate() {
     try {
-      const progress = this.getProgressReport();
-
       this.sendReport({
-        status: 'success',
-        payload: progress,
         providerId: TEST_PROVIDER_ID,
+        status: 'pending',
+        ...this.getProgressReport(),
       });
     } catch (e) {
-      if (e instanceof Error) {
-        this.sendReport({
-          status: 'failed',
-          providerId: TEST_PROVIDER_ID,
-          error: {
-            name: 'Failed to gather test results',
-            message: e.message,
-            stack: e.stack,
-          },
-        });
-      } else {
-        this.sendReport({
-          status: 'failed',
-          providerId: TEST_PROVIDER_ID,
-          error: {
-            name: 'Failed to gather test results',
-            message: String(e),
-            stack: undefined,
-          },
-        });
-      }
+      this.sendReport({
+        providerId: TEST_PROVIDER_ID,
+        status: 'failed',
+        error:
+          e instanceof Error
+            ? { name: 'Failed to gather test results', message: e.message, stack: e.stack }
+            : { name: 'Failed to gather test results', message: String(e) },
+      });
     }
   }
 
@@ -194,6 +187,11 @@ export class StorybookReporter implements Reporter {
   }
 
   async onFinished() {
+    this.sendReport({
+      providerId: TEST_PROVIDER_ID,
+      status: 'success',
+      ...this.getProgressReport(new Date()),
+    });
     this.clearVitestState();
   }
 }

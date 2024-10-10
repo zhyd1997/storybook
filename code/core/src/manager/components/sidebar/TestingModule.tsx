@@ -1,4 +1,4 @@
-import React, { type SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { type SyntheticEvent, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@storybook/core/components';
 import { keyframes, styled } from '@storybook/core/theming';
@@ -9,32 +9,38 @@ import {
   PlayHollowIcon,
   StopAltHollowIcon,
 } from '@storybook/icons';
-import type { Addon_TestProviderType } from '@storybook/types';
+
+import type { TestProviders } from '@storybook/core/core-events';
 
 const DEFAULT_HEIGHT = 500;
 
 const spin = keyframes({
-  from: { transform: 'rotate(0deg)' },
-  to: { transform: 'rotate(360deg)' },
+  '0%': { transform: 'rotate(0deg)' },
+  '10%': { transform: 'rotate(10deg)' },
+  '40%': { transform: 'rotate(170deg)' },
+  '50%': { transform: 'rotate(180deg)' },
+  '60%': { transform: 'rotate(190deg)' },
+  '90%': { transform: 'rotate(350deg)' },
+  '100%': { transform: 'rotate(360deg)' },
 });
 
-const Outline = styled.div<{ active: boolean }>(({ theme, active }) => ({
+const Outline = styled.div<{ failed: boolean; running: boolean }>(({ failed, running, theme }) => ({
   position: 'relative',
   lineHeight: '20px',
   width: '100%',
   padding: 1,
   overflow: 'hidden',
-  background: 'var(--sb-sidebar-bottom-card-background)',
-  border: 'var(--sb-sidebar-bottom-card-border)',
-  borderRadius: 'var(--sb-sidebar-bottom-card-border-radius)' as any,
-  boxShadow: 'var(--sb-sidebar-bottom-card-box-shadow)',
+  background: `var(--sb-sidebar-bottom-card-background, ${theme.background.content})`,
+  borderRadius:
+    `var(--sb-sidebar-bottom-card-border-radius, ${theme.appBorderRadius + 1}px)` as any,
+  boxShadow: `inset 0 0 0 1px ${failed && !running ? theme.color.negative : theme.appBorderColor}, var(--sb-sidebar-bottom-card-box-shadow, 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app})`,
   transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
   transitionDuration: '0.15s',
 
   '&:after': {
     content: '""',
-    display: active ? 'block' : 'none',
+    display: running ? 'block' : 'none',
     position: 'absolute',
     left: '50%',
     top: '50%',
@@ -43,8 +49,9 @@ const Outline = styled.div<{ active: boolean }>(({ theme, active }) => ({
     height: 'max(100vw, 100vh)',
     width: 'max(100vw, 100vh)',
     animation: `${spin} 3s linear infinite`,
-    background:
-      'conic-gradient(rgba(255, 71, 133, 0.2) 0deg, rgb(255, 71, 133) 0deg, transparent 160deg)',
+    background: failed
+      ? `conic-gradient(transparent 90deg, ${theme.color.orange} 150deg, ${theme.color.gold} 210deg, transparent 270deg)`
+      : `conic-gradient(transparent 90deg, ${theme.color.secondary} 150deg, ${theme.color.seafoam} 210deg, transparent 270deg)`,
     opacity: 1,
     willChange: 'auto',
   },
@@ -137,7 +144,8 @@ const TestProvider = styled.div({
 
 const Info = styled.div({
   display: 'flex',
-  gap: 6,
+  flexDirection: 'column',
+  marginLeft: 6,
 });
 
 const Actions = styled.div({
@@ -145,13 +153,9 @@ const Actions = styled.div({
   gap: 6,
 });
 
-const Details = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-});
-
-const Title = styled.div(({ theme }) => ({
+const Title = styled.div<{ failed?: boolean }>(({ failed, theme }) => ({
   fontSize: theme.typography.size.s2,
+  fontWeight: failed ? 'bold' : 'normal',
 }));
 
 const Description = styled.div(({ theme }) => ({
@@ -159,20 +163,30 @@ const Description = styled.div(({ theme }) => ({
   color: theme.barTextColor,
 }));
 
-const Icon = styled.div(({ theme }) => ({
-  color: theme.barTextColor,
-  padding: '2px 6px',
-}));
+const DynamicInfo = ({ state }: { state: TestProviders[keyof TestProviders] }) => {
+  const [iterator, setIterator] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setIterator((i) => i + 1), 10000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <Info key={iterator}>
+      <Title failed={state.failed}>{state.title(state)}</Title>
+      <Description>{state.description(state)}</Description>
+    </Info>
+  );
+};
 
 export interface TestingModuleProps {
-  testProviders: (Addon_TestProviderType & { running?: boolean; watching?: boolean })[];
+  testProviders: TestProviders[keyof TestProviders][];
   errorCount: number;
   errorsActive: boolean;
   setErrorsActive: (active: boolean) => void;
   warningCount: number;
   warningsActive: boolean;
   setWarningsActive: (active: boolean) => void;
-  onRunTests: (providerId?: string) => void;
+  onRunTests: (providerId: string) => void;
+  onCancelTests: (providerId: string) => void;
   onSetWatchMode: (providerId: string, watchMode: boolean) => void;
 }
 
@@ -185,6 +199,7 @@ export const TestingModule = ({
   warningsActive,
   setWarningsActive,
   onRunTests,
+  onCancelTests,
   onSetWatchMode,
 }: TestingModuleProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -200,11 +215,12 @@ export const TestingModule = ({
     setCollapsed(!collapsed);
   };
 
-  const active = testProviders.some((tp) => tp.running);
+  const running = testProviders.some((tp) => tp.running);
+  const failed = testProviders.some((tp) => tp.failed);
   const testing = testProviders.length > 0;
 
   return (
-    <Outline active={active}>
+    <Outline running={running} failed={failed || errorCount > 0}>
       <Card>
         <Collapsible
           style={{
@@ -213,42 +229,49 @@ export const TestingModule = ({
           }}
         >
           <Content ref={contentRef}>
-            {testProviders.map(
-              ({ id, icon, title, description, runnable, running, watchable, watching }) => (
-                <TestProvider key={id}>
-                  <Info>
-                    <Icon>{icon}</Icon>
-                    <Details>
-                      <Title>{title}</Title>
-                      <Description>{description({})}</Description>
-                    </Details>
-                  </Info>
-                  <Actions>
-                    {watchable && (
-                      <Button
-                        aria-label="Toggle watch mode"
-                        variant="ghost"
-                        padding="small"
-                        active={watching}
-                        onClick={() => onSetWatchMode(id, !watching)}
-                      >
-                        <EyeIcon />
-                      </Button>
-                    )}
-                    {runnable && (
-                      <Button
-                        aria-label={`Run ${title}`}
-                        variant="ghost"
-                        padding="small"
-                        onClick={() => onRunTests(id)}
-                      >
-                        {running ? <StopAltHollowIcon /> : <PlayHollowIcon />}
-                      </Button>
-                    )}
-                  </Actions>
-                </TestProvider>
-              )
-            )}
+            {testProviders.map((state) => (
+              <TestProvider key={state.id}>
+                <DynamicInfo state={state} />
+                <Actions>
+                  {state.watchable && (
+                    <Button
+                      aria-label="Toggle watch mode"
+                      variant="ghost"
+                      padding="small"
+                      active={state.watching}
+                      onClick={() => onSetWatchMode(state.id, !state.watching)}
+                    >
+                      <EyeIcon />
+                    </Button>
+                  )}
+                  {state.runnable && (
+                    <>
+                      {state.running && state.cancellable ? (
+                        <Button
+                          aria-label={`Cancel tests`}
+                          variant="ghost"
+                          padding="small"
+                          onClick={() => onCancelTests(state.id)}
+                          disabled={state.cancelling}
+                        >
+                          <StopAltHollowIcon />
+                        </Button>
+                      ) : (
+                        <Button
+                          aria-label={`Run ${state.title}`}
+                          variant="ghost"
+                          padding="small"
+                          onClick={() => onRunTests(state.id)}
+                          disabled={state.running}
+                        >
+                          <PlayHollowIcon />
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </Actions>
+              </TestProvider>
+            ))}
           </Content>
         </Collapsible>
 
@@ -261,10 +284,10 @@ export const TestingModule = ({
                 e.stopPropagation();
                 testProviders.forEach(({ id }) => onRunTests(id));
               }}
-              disabled={active}
+              disabled={running}
             >
               <PlayAllHollowIcon />
-              {active ? 'Running...' : 'Run tests'}
+              {running ? 'Running...' : 'Run tests'}
             </Button>
           )}
           <Filters>
