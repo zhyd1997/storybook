@@ -45,8 +45,6 @@ test.describe("component testing", () => {
     browserName,
   }) => {
     test.skip(browserName !== "chromium", `Skipping tests for ${browserName}`);
-    await setForceFailureFlag(true);
-
     const sbPage = new SbPage(page, expect);
 
     await sbPage.navigateToStory("addons/test", "Mismatch Failure");
@@ -70,6 +68,10 @@ test.describe("component testing", () => {
 
     // TODO: This is just temporary, the UI will be different
     await page.locator("#addons").getByRole("button").nth(2).click();
+    
+    // Wait for test results to appear
+    const errorFilter = page.getByLabel("Show errors");
+    await expect(errorFilter).toBeVisible({ timeout: 30000 });
 
     // Assert discrepancy: CLI pass + Browser fail
     const failingStoryElement = page.locator(
