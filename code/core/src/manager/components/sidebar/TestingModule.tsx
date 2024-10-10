@@ -24,8 +24,8 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 });
 
-const Outline = styled.div<{ crashed: boolean; running: boolean }>(
-  ({ crashed, running, theme }) => ({
+const Outline = styled.div<{ crashed: boolean; failed: boolean; running: boolean }>(
+  ({ crashed, running, theme, failed }) => ({
     position: 'relative',
     lineHeight: '20px',
     width: '100%',
@@ -51,7 +51,7 @@ const Outline = styled.div<{ crashed: boolean; running: boolean }>(
       height: 'max(100vw, 100vh)',
       width: 'max(100vw, 100vh)',
       animation: `${spin} 3s linear infinite`,
-      background: crashed
+      background: failed
         ? `conic-gradient(transparent 90deg, ${theme.color.orange} 150deg, ${theme.color.gold} 210deg, transparent 270deg)`
         : `conic-gradient(transparent 90deg, ${theme.color.secondary} 150deg, ${theme.color.seafoam} 210deg, transparent 270deg)`,
       opacity: 1,
@@ -222,10 +222,11 @@ export const TestingModule = ({
 
   const running = testProviders.some((tp) => tp.running);
   const crashed = testProviders.some((tp) => tp.crashed);
+  const failed = testProviders.some((tp) => tp.failed);
   const testing = testProviders.length > 0;
 
   return (
-    <Outline running={running} crashed={crashed}>
+    <Outline running={running} crashed={crashed} failed={failed || errorCount > 0}>
       <Card>
         <Collapsible
           style={{

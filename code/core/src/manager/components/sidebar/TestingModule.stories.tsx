@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Addon_TypesEnum } from '@storybook/core/types';
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn, userEvent } from '@storybook/test';
@@ -13,6 +15,7 @@ const baseState = {
   running: false,
   watching: false,
   failed: false,
+  crashed: false,
 };
 
 const testProviders: TestProviders[keyof TestProviders][] = [
@@ -57,6 +60,13 @@ const meta = {
     onCancelTests: fn(),
     onSetWatchMode: fn(),
   },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ maxWidth: 232 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof TestingModule>;
 
 export default meta;
@@ -159,5 +169,19 @@ export const Failing: Story = {
 export const Failed: Story = {
   args: {
     testProviders: [{ ...testProviders[0], failed: true }, ...testProviders.slice(1)],
+  },
+};
+
+export const Crashed: Story = {
+  args: {
+    testProviders: [
+      {
+        ...testProviders[0],
+        title: () => "Component tests didn't complete",
+        description: () => 'Problems!',
+        crashed: true,
+      },
+      ...testProviders.slice(1),
+    ],
   },
 };
