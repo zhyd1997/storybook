@@ -85,10 +85,12 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
           resolve();
         } else if (result.type === 'error') {
           killChild();
-          log(`${result.message}: ${result.error}`);
+          const fullMessage = `${result.message}: ${result.error}`
+          log(fullMessage);
 
           if (attempt >= MAX_START_ATTEMPTS) {
             log(`Aborting test runner process after ${attempt} restart attempts`);
+            stderr.push(fullMessage);
             reject();
           } else if (!aborted) {
             log(`Restarting test runner process (attempt ${attempt}/${MAX_START_ATTEMPTS})`);

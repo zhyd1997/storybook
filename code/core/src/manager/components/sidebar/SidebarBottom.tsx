@@ -33,6 +33,7 @@ const initialTestProviderState: TestProviderState = {
   running: false,
   watching: false,
   failed: false,
+  crashed: false,
 };
 
 const filterNone: API_FilterFunction = () => true;
@@ -129,6 +130,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
         cancelling: false,
         running: true,
         failed: false,
+        crashed: false,
       };
       setTestProviders((state) => ({ ...state, [id]: { ...state[id], ...startingState } }));
       api.experimental_updateStatus(id, (state = {}) =>
@@ -171,7 +173,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
 
   useEffect(() => {
     const onCrashReport = ({ providerId, ...details }: { providerId: string }) => {
-      updateTestProvider(providerId, { details, failed: true });
+      updateTestProvider(providerId, { details, crashed: true });
     };
 
     const onProgressReport = ({ providerId, ...payload }: TestingModuleProgressReportPayload) => {
@@ -225,8 +227,6 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
     </Wrapper>
   );
 };
-
-const TESTING_MODULE_ID = 'storybook-testing-module';
 
 export const SidebarBottom = () => {
   const api = useStorybookApi();

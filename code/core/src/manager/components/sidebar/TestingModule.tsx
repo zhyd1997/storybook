@@ -24,7 +24,7 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 });
 
-const Outline = styled.div<{ failed: boolean; running: boolean }>(({ failed, running, theme }) => ({
+const Outline = styled.div<{ crashed: boolean; running: boolean }>(({ crashed, running, theme }) => ({
   position: 'relative',
   lineHeight: '20px',
   width: '100%',
@@ -33,7 +33,7 @@ const Outline = styled.div<{ failed: boolean; running: boolean }>(({ failed, run
   background: `var(--sb-sidebar-bottom-card-background, ${theme.background.content})`,
   borderRadius:
     `var(--sb-sidebar-bottom-card-border-radius, ${theme.appBorderRadius + 1}px)` as any,
-  boxShadow: `inset 0 0 0 1px ${failed && !running ? theme.color.negative : theme.appBorderColor}, var(--sb-sidebar-bottom-card-box-shadow, 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app})`,
+  boxShadow: `inset 0 0 0 1px ${crashed && !running ? theme.color.negative : theme.appBorderColor}, var(--sb-sidebar-bottom-card-box-shadow, 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app})`,
   transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
   transitionDuration: '0.15s',
@@ -49,7 +49,7 @@ const Outline = styled.div<{ failed: boolean; running: boolean }>(({ failed, run
     height: 'max(100vw, 100vh)',
     width: 'max(100vw, 100vh)',
     animation: `${spin} 3s linear infinite`,
-    background: failed
+    background: crashed
       ? `conic-gradient(transparent 90deg, ${theme.color.orange} 150deg, ${theme.color.gold} 210deg, transparent 270deg)`
       : `conic-gradient(transparent 90deg, ${theme.color.secondary} 150deg, ${theme.color.seafoam} 210deg, transparent 270deg)`,
     opacity: 1,
@@ -171,13 +171,13 @@ const DynamicInfo = ({ state }: { state: TestProviders[keyof TestProviders] }) =
   }, []);
   return (
     <Info key={iterator}>
-      <Title failed={state.failed}>{state.title(state)}</Title>
+      <Title failed={state.failed || state.crashed}>{state.title(state)}</Title>
       <Description>{state.description(state)}</Description>
     </Info>
   );
 };
 
-export interface TestingModuleProps {
+interface TestingModuleProps {
   testProviders: TestProviders[keyof TestProviders][];
   errorCount: number;
   errorsActive: boolean;
@@ -216,11 +216,11 @@ export const TestingModule = ({
   };
 
   const running = testProviders.some((tp) => tp.running);
-  const failed = testProviders.some((tp) => tp.failed);
+  const crashed = testProviders.some((tp) => tp.crashed);
   const testing = testProviders.length > 0;
 
   return (
-    <Outline running={running} failed={failed || errorCount > 0}>
+    <Outline running={running} failed={crashed}>
       <Card>
         <Collapsible
           style={{
