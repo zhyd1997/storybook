@@ -12,6 +12,7 @@ const vitest = vi.hoisted(() => ({
   projects: [{}],
   init: vi.fn(),
   close: vi.fn(),
+  onCancel: vi.fn(),
   runFiles: vi.fn(),
   cancelCurrentRun: vi.fn(),
   globTestSpecs: vi.fn(),
