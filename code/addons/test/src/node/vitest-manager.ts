@@ -37,6 +37,12 @@ export class VitestManager {
       },
     });
 
+    if (this.vitest) {
+      this.vitest.onCancel(() => {
+        // TODO: handle cancelation
+      });
+    }
+
     await this.vitest.init();
   }
 

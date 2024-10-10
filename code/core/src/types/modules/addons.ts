@@ -487,6 +487,7 @@ export type Addon_TestProviderState<Details extends { [key: string]: any } = Non
     running: boolean;
     watching: boolean;
     failed: boolean;
+    crashed: boolean;
   };
 
 type Addon_TypeBaseNames = Exclude<

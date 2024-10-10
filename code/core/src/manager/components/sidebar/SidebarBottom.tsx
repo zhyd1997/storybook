@@ -124,8 +124,8 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
     []
   );
 
-  const onRunTests = useCallback(
-    (id: TestProviderId) => {
+  const clearState = useCallback(
+    ({ providerId: id }: { providerId: TestProviderId }) => {
       const startingState: Partial<TestProviderState> = {
         cancelling: false,
         running: true,
@@ -136,6 +136,12 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
       api.experimental_updateStatus(id, (state = {}) =>
         Object.fromEntries(Object.keys(state).map((key) => [key, null]))
       );
+    },
+    [api]
+  );
+
+  const onRunTests = useCallback(
+    (id: TestProviderId) => {
       api.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: id });
     },
     [api]
@@ -173,7 +179,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
 
   useEffect(() => {
     const onCrashReport = ({ providerId, ...details }: { providerId: string }) => {
-      updateTestProvider(providerId, { details, crashed: true });
+      updateTestProvider(providerId, { details, running: false, crashed: true });
     };
 
     const onProgressReport = ({ providerId, ...payload }: TestingModuleProgressReportPayload) => {
@@ -192,13 +198,15 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
     };
 
     api.getChannel()?.on(TESTING_MODULE_CRASH_REPORT, onCrashReport);
+    api.getChannel()?.on(TESTING_MODULE_RUN_ALL_REQUEST, clearState);
     api.getChannel()?.on(TESTING_MODULE_PROGRESS_REPORT, onProgressReport);
 
     return () => {
       api.getChannel()?.off(TESTING_MODULE_CRASH_REPORT, onCrashReport);
       api.getChannel()?.off(TESTING_MODULE_PROGRESS_REPORT, onProgressReport);
+      api.getChannel()?.off(TESTING_MODULE_RUN_ALL_REQUEST, clearState);
     };
-  }, [api, testProviders, updateTestProvider]);
+  }, [api, testProviders, updateTestProvider, clearState]);
 
   const testProvidersArray = Object.values(testProviders);
   if (!hasWarnings && !hasErrors && !testProvidersArray.length) {
