@@ -1,9 +1,10 @@
 import type { ChangeEvent } from 'react';
-import React, { useState } from 'react';
-import { transparentize } from 'polished';
-import { styled } from '@storybook/theming';
-import { CollapseIcon } from './components/CollapseIcon';
+import React from 'react';
+
+import { styled } from '@storybook/core/theming';
 import type { Tag } from '@storybook/types';
+
+import { transparentize } from 'polished';
 
 const BUILT_IN_TAGS = new Set([
   'dev',
@@ -55,9 +56,7 @@ const Label = styled.label({
 interface TagsFilterPanelProps {
   allTags: Tag[];
   selectedTags: Tag[];
-  exclude: boolean;
   toggleTag: (tag: Tag) => void;
-  toggleExclude: () => void;
 }
 
 interface TagsListProps {
@@ -95,49 +94,17 @@ const Wrapper = styled.div({
   },
 });
 
-export const TagsFilterPanel = ({
-  allTags,
-  selectedTags,
-  exclude,
-  toggleTag,
-  toggleExclude,
-}: TagsFilterPanelProps) => {
-  const userTags = allTags.filter((tag) => !BUILT_IN_TAGS.has(tag)).toSorted();
-  const builtInTags = allTags.filter((tag) => BUILT_IN_TAGS.has(tag)).toSorted();
-  const [builtinsExpanded, setBuiltinsExpanded] = useState(
-    selectedTags.some((tag) => BUILT_IN_TAGS.has(tag))
-  );
+export const TagsFilterPanel = ({ allTags, selectedTags, toggleTag }: TagsFilterPanelProps) => {
+  const userTags = allTags.filter((tag) => tag === 'play-fn' || !BUILT_IN_TAGS.has(tag)).toSorted();
 
   return (
     <div>
       {userTags.length === 0 ? (
-        'No tags defined'
+        <>There are no tags. Use tags to organize and filter your Storybook.</>
       ) : (
         <Wrapper>
-          Tags <span onClick={toggleExclude}>{exclude ? 'does not contain' : 'contains'}</span>
           <TagsList tags={userTags} selectedTags={selectedTags} toggleTag={toggleTag} />
         </Wrapper>
-      )}
-      {builtInTags.length > 0 && (
-        <>
-          <CollapseButton
-            type="button"
-            data-action="collapse-root"
-            onClick={(event) => {
-              event.preventDefault();
-              setBuiltinsExpanded(!builtinsExpanded);
-            }}
-            aria-expanded={builtinsExpanded}
-          >
-            <CollapseIcon isExpanded={builtinsExpanded} />
-            Built-in tags
-          </CollapseButton>
-          {builtinsExpanded ? (
-            <Wrapper>
-              <TagsList tags={builtInTags} selectedTags={selectedTags} toggleTag={toggleTag} />
-            </Wrapper>
-          ) : null}
-        </>
       )}
     </div>
   );

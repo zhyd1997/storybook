@@ -6,9 +6,7 @@ import { TagsFilterPanel } from './TagsFilterPanel';
 const meta = {
   component: TagsFilterPanel,
   args: {
-    exclude: false,
     toggleTag: fn(),
-    toggleExclude: fn(),
   },
   tags: ['hoho'],
 } satisfies Meta<typeof TagsFilterPanel>;
@@ -31,16 +29,9 @@ export const Default: Story = {
   },
 };
 
-export const Exclude: Story = {
-  args: {
-    ...Default.args,
-    exclude: true,
-  },
-};
-
 export const BuiltInTags: Story = {
   args: {
-    allTags: [...Default.args.allTags, 'dev', 'autodocs'],
+    allTags: [...Default.args.allTags, 'dev', 'autodocs', 'play-fn'],
     selectedTags: ['tag1', 'tag3'],
   },
 };
@@ -48,6 +39,6 @@ export const BuiltInTags: Story = {
 export const BuiltInTagsSelected: Story = {
   args: {
     ...BuiltInTags.args,
-    selectedTags: ['tag1', 'tag3', 'autodocs'],
+    selectedTags: ['tag1', 'tag3', 'autodocs', 'play-fn'],
   },
 };

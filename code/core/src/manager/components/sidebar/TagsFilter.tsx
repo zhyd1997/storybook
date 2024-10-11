@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Badge, IconButton, WithTooltip } from '@storybook/components';
+import React, { useCallback, useEffect, useState } from 'react';
+
+import { Badge, IconButton, WithTooltip } from '@storybook/core/components';
+import { styled } from '@storybook/core/theming';
 import { FilterIcon } from '@storybook/icons';
-import type { API } from '@storybook/manager-api';
-import { styled } from '@storybook/theming';
-import type { Tag, StoryIndex } from '@storybook/types';
+import type { StoryIndex, Tag } from '@storybook/types';
+
+import type { API } from '@storybook/core/manager-api';
+
 import { TagsFilterPanel } from './TagsFilterPanel';
 
 const TAGS_FILTER = 'tags-filter';
@@ -43,27 +46,45 @@ export const TagsFilter = ({
   initialSelectedTags = [],
 }: TagsFilterProps) => {
   const [selectedTags, setSelectedTags] = useState(initialSelectedTags);
-  const [exclude, setExclude] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const tagsActive = selectedTags.length > 0;
 
   useEffect(() => {
     api.experimental_setFilter(TAGS_FILTER, (item) => {
-      if (selectedTags.length === 0) return true;
+      if (selectedTags.length === 0) {
+        return true;
+      }
 
-      const hasSelectedTags = selectedTags.some((tag) => item.tags?.includes(tag));
-      return exclude ? !hasSelectedTags : hasSelectedTags;
+      return selectedTags.some((tag) => item.tags?.includes(tag));
     });
 
-    const tagsParam = selectedTags.join(',');
-    const [includeTags, excludeTags] = exclude ? [null, tagsParam] : [tagsParam, null];
-    updateQueryParams({ includeTags, excludeTags });
-  }, [api, selectedTags, exclude, updateQueryParams]);
+    const includeTags = selectedTags.join(',');
+    updateQueryParams({ includeTags });
+  }, [api, selectedTags, updateQueryParams]);
 
   const allTags = Object.values(indexJson.entries).reduce((acc, entry) => {
     entry.tags?.forEach((tag: Tag) => acc.add(tag));
     return acc;
   }, new Set<Tag>());
+
+  const toggleTag = useCallback(
+    (tag: string) => {
+      if (selectedTags.includes(tag)) {
+        setSelectedTags(selectedTags.filter((t) => t !== tag));
+      } else {
+        setSelectedTags([...selectedTags, tag]);
+      }
+    },
+    [selectedTags, setSelectedTags]
+  );
+
+  const handleToggleExpand = useCallback(
+    (event: React.SyntheticEvent<Element, Event>): void => {
+      event.preventDefault();
+      setExpanded(!expanded);
+    },
+    [expanded, setExpanded]
+  );
 
   return (
     <WithTooltip
@@ -74,28 +95,12 @@ export const TagsFilter = ({
         <TagsFilterPanel
           allTags={Array.from(allTags)}
           selectedTags={selectedTags}
-          exclude={exclude}
-          toggleTag={(tag) => {
-            if (selectedTags.includes(tag)) {
-              setSelectedTags(selectedTags.filter((t) => t !== tag));
-            } else {
-              setSelectedTags([...selectedTags, tag]);
-            }
-          }}
-          toggleExclude={() => setExclude(!exclude)}
+          toggleTag={toggleTag}
         />
       )}
     >
       <Wrapper>
-        <IconButton
-          key="tags"
-          title="Tag filters"
-          active={tagsActive}
-          onClick={(event) => {
-            event.preventDefault();
-            setExpanded(!expanded);
-          }}
-        >
+        <IconButton key="tags" title="Tag filters" active={tagsActive} onClick={handleToggleExpand}>
           <FilterIcon />
         </IconButton>
         {selectedTags.length > 0 && <Count>{selectedTags.length}</Count>}
