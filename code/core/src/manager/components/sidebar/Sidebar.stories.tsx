@@ -56,6 +56,7 @@ const meta = {
     menu,
     extra: [] as Addon_SidebarTopType[],
     index: index,
+    indexJson: { entries: {}, v: 6 },
     storyId,
     refId: DEFAULT_REF_ID,
     refs: {},

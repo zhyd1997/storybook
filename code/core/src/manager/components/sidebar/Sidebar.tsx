@@ -1,19 +1,28 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
-import { ScrollArea, Spaced } from '@storybook/core/components';
+import {
+  IconButton,
+  ScrollArea,
+  Spaced,
+  TooltipNote,
+  WithTooltip,
+} from '@storybook/core/components';
 import { styled } from '@storybook/core/theming';
 import type { API_LoadedRefData, Addon_SidebarTopType, StoryIndex } from '@storybook/core/types';
+import { global } from '@storybook/global';
+import { PlusIcon } from '@storybook/icons';
 
-import { useStorybookApi, type State } from '@storybook/core/manager-api';
+import { type State, useStorybookApi } from '@storybook/core/manager-api';
 
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
+import { CreateNewStoryFileModal } from './CreateNewStoryFileModal';
 import { Explorer } from './Explorer';
 import type { HeadingProps } from './Heading';
 import { Heading } from './Heading';
-import { TagsFilter } from './TagsFilter';
 import { Search } from './Search';
 import { SearchResults } from './SearchResults';
 import { SidebarBottom } from './SidebarBottom';
+import { TagsFilter } from './TagsFilter';
 import type { CombinedDataset, Selection } from './types';
 import { useLastViewed } from './useLastViewed';
 
@@ -56,6 +65,17 @@ const Bottom = styled.div(({ theme }) => ({
   '&:empty': {
     display: 'none',
   },
+}));
+
+const TooltipNoteWrapper = styled(TooltipNote)({
+  margin: 0,
+});
+
+const CreateNewStoryButton = styled(IconButton)(({ theme }) => ({
+  color: theme.color.mediumdark,
+  width: 32,
+  height: 32,
+  borderRadius: theme.appBorderRadius + 2,
 }));
 
 const Swap = React.memo(function Swap({
@@ -111,6 +131,10 @@ const updateQueryParams = (params: Record<string, string>) => {
   });
   window.history.pushState({}, '', url);
 };
+
+const isDevelopment = global.CONFIG_TYPE === 'DEVELOPMENT';
+const isRendererReact = global.STORYBOOK_RENDERER === 'react';
+
 export interface SidebarProps extends API_LoadedRefData {
   refs: State['refs'];
   status: State['status'];
@@ -124,7 +148,6 @@ export interface SidebarProps extends API_LoadedRefData {
   showCreateStoryButton?: boolean;
   indexJson?: StoryIndex;
 }
-
 export const Sidebar = React.memo(function Sidebar({
   // @ts-expect-error (non strict)
   storyId = null,
@@ -140,8 +163,9 @@ export const Sidebar = React.memo(function Sidebar({
   enableShortcuts = true,
   refs = {},
   onMenuClick,
-  showCreateStoryButton,
+  showCreateStoryButton = isDevelopment && isRendererReact,
 }: SidebarProps) {
+  const [isFileSearchModalOpen, setIsFileSearchModalOpen] = useState(false);
   // @ts-expect-error (non strict)
   const selected: Selection = useMemo(() => storyId && { storyId, refId }, [storyId, refId]);
   const dataset = useCombination(index, indexError, previewInitialized, status, refs);
@@ -162,13 +186,38 @@ export const Sidebar = React.memo(function Sidebar({
             isLoading={isLoading}
             onMenuClick={onMenuClick}
           />
-          {index && (
-            <TagsFilter api={api} indexJson={indexJson} updateQueryParams={updateQueryParams} />
-          )}
           <Search
             dataset={dataset}
             enableShortcuts={enableShortcuts}
-            showCreateStoryButton={showCreateStoryButton}
+            searchBarContent={
+              showCreateStoryButton && (
+                <>
+                  <WithTooltip
+                    trigger="hover"
+                    hasChrome={false}
+                    tooltip={<TooltipNoteWrapper note="Create a new story" />}
+                  >
+                    <CreateNewStoryButton
+                      onClick={() => {
+                        setIsFileSearchModalOpen(true);
+                      }}
+                      variant="outline"
+                    >
+                      <PlusIcon />
+                    </CreateNewStoryButton>
+                  </WithTooltip>
+                  <CreateNewStoryFileModal
+                    open={isFileSearchModalOpen}
+                    onOpenChange={setIsFileSearchModalOpen}
+                  />
+                </>
+              )
+            }
+            searchFieldContent={
+              indexJson && (
+                <TagsFilter api={api} indexJson={indexJson} updateQueryParams={updateQueryParams} />
+              )
+            }
             {...lastViewedProps}
           >
             {({
