@@ -270,13 +270,17 @@ jobs:
           name: Test
           command: |
             cd code
-            yarn test --coverage
+            yarn test
       - store_test_results:
           path: code/junit.xml
-      - persist_to_workspace:
-          root: .
-          paths:
-            - code/coverage
+      # TODO: bring coverage back later. This has caused flakiness in the tests because
+      # Somehow Vitest reports coverage while some tests are still running,
+      # then it tries to report coverage again and as result it crashes like this:
+      # https://app.circleci.com/pipelines/github/storybookjs/storybook/85043/workflows/4ddf7907-b93c-4b17-8fdf-fe0bd7fde905/jobs/715446
+      # - persist_to_workspace:
+      #     root: .
+      #     paths:
+      #       - code/coverage
       - report-workflow-on-failure
       - cancel-workflow-on-failure
   coverage:
