@@ -164,7 +164,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   );
 
   useEffect(() => {
-    const wrapper = document.getElementById('sidebar-bottom');
+    const wrapper = document.getElementById('sidebar-bottom-wrapper');
     if (wrapper) {
       const resizeObserver = new ResizeObserver(() => resizeObserverCallback(wrapper));
       resizeObserver.observe(wrapper);
@@ -214,8 +214,8 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   }
 
   return (
-    <Wrapper id="sidebar-bottom-wrapper" style={{ height: contentHeight }}>
-      <Content id="sidebar-bottom">
+    <Wrapper id="sidebar-bottom-spacer" style={{ height: contentHeight }}>
+      <Content id="sidebar-bottom-wrapper">
         <NotificationList notifications={notifications} clearNotification={api.clearNotification} />
         <TestingModule
           {...{
