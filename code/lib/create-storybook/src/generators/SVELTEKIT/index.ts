@@ -1,8 +1,8 @@
 import { CoreBuilder } from 'storybook/internal/cli';
 
+import { getAddonSvelteCsfVersion } from '../SVELTE';
 import { baseGenerator } from '../baseGenerator';
 import type { Generator } from '../types';
-import { getAddonSvelteCsfVersion } from '../SVELTE';
 
 const generator: Generator = async (packageManager, npmOptions, options) => {
   const addonSvelteCsfVersion = await getAddonSvelteCsfVersion(packageManager);
@@ -14,7 +14,9 @@ const generator: Generator = async (packageManager, npmOptions, options) => {
     'svelte',
     {
       extensions: ['js', 'ts', 'svelte'],
-      extraAddons: [`@storybook/addon-svelte-csf${addonSvelteCsfVersion && `@${addonSvelteCsfVersion}`}`],
+      extraAddons: [
+        `@storybook/addon-svelte-csf${addonSvelteCsfVersion && `@${addonSvelteCsfVersion}`}`,
+      ],
     },
     'sveltekit'
   );
