@@ -17,15 +17,24 @@ import { execaNode } from 'execa';
 import { TEST_PROVIDER_ID } from '../constants';
 import { log } from '../logger';
 
-const MAX_START_TIME = 8000;
+const MAX_START_TIME = 30000;
 
 // This path is a bit confusing, but essentially `boot-test-runner` gets bundled into the preset bundle
 // which is at the root. Then, from the root, we want to load `node/vitest.mjs`
 const vitestModulePath = join(__dirname, 'node', 'vitest.mjs');
 
-export const bootTestRunner = async (channel: Channel, initEvent?: string, initArgs?: any[]) => {
-  let child: null | ChildProcess;
+let child: null | ChildProcess;
+let ready = false;
+
+const bootTestRunner = async (channel: Channel, initEvent?: string, initArgs?: any[]) => {
   let stderr: string[] = [];
+
+  function reportFatalError(e: any) {
+    channel.emit(TESTING_MODULE_CRASH_REPORT, {
+      providerId: TEST_PROVIDER_ID,
+      message: String(e),
+    } as TestingModuleCrashReportPayload);
+  }
 
   const forwardRun = (...args: any[]) =>
     child?.send({ args, from: 'server', type: TESTING_MODULE_RUN_REQUEST });
@@ -84,11 +93,14 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
           resolve();
         } else if (result.type === 'error') {
           killChild();
-
-          channel.emit(TESTING_MODULE_CRASH_REPORT, {
-            providerId: TEST_PROVIDER_ID,
-            message: stderr.join('\n'),
-          } as TestingModuleCrashReportPayload);
+          log(result.message);
+          log(result.error);
+          // Reject if the child process reports an error before it's ready
+          if (!ready) {
+            reject(new Error(`${result.message}\n${result.error}`));
+          } else {
+            reportFatalError(result.error);
+          }
         } else {
           channel.emit(result.type, ...result.args);
         }
@@ -107,10 +119,15 @@ export const bootTestRunner = async (channel: Channel, initEvent?: string, initA
   );
 
   await Promise.race([startChildProcess(), timeout]).catch((e) => {
-    channel.emit(TESTING_MODULE_CRASH_REPORT, {
-      providerId: TEST_PROVIDER_ID,
-      message: String(e),
-    } as TestingModuleCrashReportPayload);
+    reportFatalError(e);
     throw e;
   });
+};
+
+export const runTestRunner = async (channel: Channel, initEvent?: string, initArgs?: any[]) => {
+  if (!child) {
+    ready = false;
+    await bootTestRunner(channel, initEvent, initArgs);
+    ready = true;
+  }
 };
