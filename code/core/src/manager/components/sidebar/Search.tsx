@@ -138,6 +138,7 @@ const FocusKey = styled.code(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   gap: 4,
+  flexShrink: 0,
 }));
 
 const FocusKeyCmd = styled.span({
@@ -147,6 +148,7 @@ const FocusKeyCmd = styled.span({
 const Actions = styled.div({
   display: 'flex',
   alignItems: 'center',
+  gap: 2,
 });
 
 const FocusContainer = styled.div({ outline: 0 });

@@ -35,7 +35,7 @@ const Count = styled(Badge)(({ theme }) => ({
 export interface TagsFilterProps {
   api: API;
   indexJson: StoryIndex;
-  updateQueryParams: (params: Record<string, string | null>) => void;
+  updateQueryParams: (params: Record<string, string>) => void;
   initialSelectedTags?: Tag[];
 }
 
