@@ -45,6 +45,7 @@ interface InteractionsPanelProps {
   hasResultMismatch?: boolean;
   browserTestStatus?: CallStates;
   storyId: StoryId;
+  testRunId: string;
 }
 
 const Container = styled.div(({ theme }) => ({
@@ -105,13 +106,18 @@ export const InteractionsPanel: React.FC<InteractionsPanelProps> = React.memo(
     hasResultMismatch,
     browserTestStatus,
     storyId,
+    testRunId,
   }) {
     const filter = useAnsiToHtmlFilter();
 
     return (
       <Container>
         {hasResultMismatch && (
-          <TestDiscrepancyMessage browserTestStatus={browserTestStatus} storyId={storyId} />
+          <TestDiscrepancyMessage
+            browserTestStatus={browserTestStatus}
+            storyId={storyId}
+            testRunId={testRunId}
+          />
         )}
         {(interactions.length > 0 || hasException) && (
           <Subnav

@@ -34,10 +34,12 @@ const Wrapper = styled.div(({ theme: { color, typography, background } }) => ({
 interface TestDiscrepancyMessageProps {
   browserTestStatus: CallStates;
   storyId: StoryId;
+  testRunId: string;
 }
 export const TestDiscrepancyMessage = ({
   browserTestStatus,
   storyId,
+  testRunId,
 }: TestDiscrepancyMessageProps) => {
   const api = useStorybookApi();
   const docsUrl = api.getDocsUrl({
@@ -54,11 +56,11 @@ export const TestDiscrepancyMessage = ({
         payload: {
           browserStatus: browserTestStatus === CallStates.DONE ? 'PASS' : 'FAIL',
           cliStatus: browserTestStatus === CallStates.DONE ? 'FAIL' : 'PASS',
-          message,
           storyId,
+          testRunId,
         },
       }),
-    [api, message, browserTestStatus, storyId]
+    [api, browserTestStatus, storyId, testRunId]
   );
 
   return (

@@ -137,7 +137,7 @@ addons.register(ADDON_ID, (api) => {
       Object.fromEntries(
         (state.details.testResults || []).flatMap((testResult) =>
           testResult.results
-            .map(({ storyId, status, ...rest }) => {
+            .map(({ storyId, status, testRunId, ...rest }) => {
               if (storyId) {
                 const statusObject: API_StatusObject = {
                   title: 'Vitest',
@@ -146,6 +146,9 @@ addons.register(ADDON_ID, (api) => {
                     'failureMessages' in rest && rest.failureMessages?.length
                       ? rest.failureMessages.join('\n')
                       : '',
+                  data: {
+                    testRunId,
+                  },
                 };
                 return [storyId, statusObject];
               }
