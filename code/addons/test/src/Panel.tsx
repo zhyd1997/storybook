@@ -290,6 +290,7 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
         pausedAt={pausedAt}
         endRef={endRef}
         onScrollToEnd={scrollTarget && scrollToTarget}
+        storyId={storyId}
       />
     </Fragment>
   );

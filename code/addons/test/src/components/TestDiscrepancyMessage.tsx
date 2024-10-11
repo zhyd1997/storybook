@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Link } from 'storybook/internal/components';
 import { useStorybookApi } from 'storybook/internal/manager-api';
 import { styled } from 'storybook/internal/theming';
+import type { StoryId } from 'storybook/internal/types';
 
 import { CallStates } from '@storybook/instrumenter';
 
-import { DOCUMENTATION_LINK } from '../constants';
+import { DOCUMENTATION_LINK, STORYBOOK_ADDON_TEST_CHANNEL } from '../constants';
 
 const Wrapper = styled.div(({ theme: { color, typography, background } }) => ({
   textAlign: 'start',
@@ -32,8 +33,12 @@ const Wrapper = styled.div(({ theme: { color, typography, background } }) => ({
 
 interface TestDiscrepancyMessageProps {
   browserTestStatus: CallStates;
+  storyId: StoryId;
 }
-export const TestDiscrepancyMessage = ({ browserTestStatus }: TestDiscrepancyMessageProps) => {
+export const TestDiscrepancyMessage = ({
+  browserTestStatus,
+  storyId,
+}: TestDiscrepancyMessageProps) => {
   const api = useStorybookApi();
   const docsUrl = api.getDocsUrl({
     subpath: DOCUMENTATION_LINK,
@@ -41,6 +46,20 @@ export const TestDiscrepancyMessage = ({ browserTestStatus }: TestDiscrepancyMes
     renderer: true,
   });
   const message = `This component test passed in ${browserTestStatus === CallStates.DONE ? 'this browser' : 'CLI'}, but the tests failed in ${browserTestStatus === CallStates.ERROR ? 'this browser' : 'CLI'}.`;
+
+  useEffect(
+    () =>
+      api.emit(STORYBOOK_ADDON_TEST_CHANNEL, {
+        type: 'test-discrepancy',
+        payload: {
+          browserStatus: browserTestStatus === CallStates.DONE ? 'PASS' : 'FAIL',
+          cliStatus: browserTestStatus === CallStates.DONE ? 'FAIL' : 'PASS',
+          message,
+          storyId,
+        },
+      }),
+    [api, message, browserTestStatus, storyId]
+  );
 
   return (
     <Wrapper>

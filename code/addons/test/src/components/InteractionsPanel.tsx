@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { styled } from 'storybook/internal/theming';
+import type { StoryId } from 'storybook/internal/types';
 
 import type { CallStates } from '@storybook/instrumenter';
 import { type Call, type ControlStates } from '@storybook/instrumenter';
@@ -43,6 +44,7 @@ interface InteractionsPanelProps {
   onScrollToEnd?: () => void;
   hasResultMismatch?: boolean;
   browserTestStatus?: CallStates;
+  storyId: StoryId;
 }
 
 const Container = styled.div(({ theme }) => ({
@@ -102,12 +104,15 @@ export const InteractionsPanel: React.FC<InteractionsPanelProps> = React.memo(
     endRef,
     hasResultMismatch,
     browserTestStatus,
+    storyId,
   }) {
     const filter = useAnsiToHtmlFilter();
 
     return (
       <Container>
-        {hasResultMismatch && <TestDiscrepancyMessage browserTestStatus={browserTestStatus} />}
+        {hasResultMismatch && (
+          <TestDiscrepancyMessage browserTestStatus={browserTestStatus} storyId={storyId} />
+        )}
         {(interactions.length > 0 || hasException) && (
           <Subnav
             controls={controls}
