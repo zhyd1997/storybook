@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 import { readFile, writeFile } from 'node:fs/promises';
-import { readFileSync } from 'node:fs';
 
 import {
   type RecastOptions,
@@ -14,7 +13,6 @@ import {
 import { dedent } from 'ts-dedent';
 
 import type { PrintResultType } from './PrintResultType';
-import path from 'node:path';
 
 const logger = console;
 
@@ -905,11 +903,6 @@ export const printConfig = (config: ConfigFile, options: RecastOptions = {}): Pr
 export const readConfig = async (fileName: string) => {
   const code = (await readFile(fileName, 'utf-8')).toString();
   return loadConfig(code, fileName).parse();
-};
-
-export const readConfigSync = (fileName: string) => {
-  const code = readFileSync(fileName, 'utf-8').toString();
-  return loadConfig(code).parse();
 };
 
 export const writeConfig = async (config: ConfigFile, fileName?: string) => {
