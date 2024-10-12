@@ -1309,7 +1309,7 @@ describe('ConfigFile', () => {
     });
   });
 
-  describe.only('parse', () => {
+  describe('parse', () => {
     it("export { X } with X is import { X } from 'another-file'", () => {
         const source = dedent`
           import type { StorybookConfig } from '@storybook/react-webpack5';

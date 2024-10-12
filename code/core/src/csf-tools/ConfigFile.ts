@@ -255,7 +255,7 @@ export class ConfigFile {
                 const decl = _findVarDeclarator(localName, parent as t.Program) as any;
                 // decl can be empty in case X from `import { X } from ....` because it is not handled in _findVarDeclarator
                 if(decl) {
-                  self._exports[exportName] = decl?.init;
+                  self._exports[exportName] = decl.init;
                   self._exportDecls[exportName] = decl;
                 }
                 
