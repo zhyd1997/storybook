@@ -1,10 +1,11 @@
-import type { ChangeEvent } from 'react';
 import React from 'react';
 
-import { styled } from '@storybook/core/theming';
+import { TooltipLinkList } from '@storybook/core/components';
+import { styled, useTheme } from '@storybook/core/theming';
+import { ShareAltIcon } from '@storybook/icons';
 import type { Tag } from '@storybook/types';
 
-import { transparentize } from 'polished';
+import type { API } from '@storybook/core/manager-api';
 
 const BUILT_IN_TAGS = new Set([
   'dev',
@@ -15,97 +16,59 @@ const BUILT_IN_TAGS = new Set([
   'play-fn',
 ]);
 
-const CollapseButton = styled.button(({ theme }) => ({
-  all: 'unset',
-  display: 'flex',
-  padding: '0px 8px',
-  borderRadius: 4,
-  transition: 'color 150ms, box-shadow 150ms',
-  gap: 6,
-  alignItems: 'center',
-  cursor: 'pointer',
-  height: 28,
-
-  '&:hover, &:focus': {
-    outline: 'none',
-    background: transparentize(0.93, theme.color.secondary),
-  },
-}));
-
-const Text = styled.span({
-  '[aria-readonly=true] &': {
-    opacity: 0.5,
-  },
-});
-
-const Label = styled.label({
-  lineHeight: '20px',
-  alignItems: 'center',
-  marginBottom: 8,
-
-  '&:last-child': {
-    marginBottom: 0,
-  },
-
-  input: {
-    margin: 0,
-    marginRight: 6,
-  },
+const Wrapper = styled.div({
+  minWidth: 180,
+  maxWidth: 220,
 });
 
 interface TagsFilterPanelProps {
+  api: API;
   allTags: Tag[];
   selectedTags: Tag[];
   toggleTag: (tag: Tag) => void;
 }
 
-interface TagsListProps {
-  tags: Tag[];
-  selectedTags: Tag[];
-  toggleTag: (tag: Tag) => void;
-}
-
-const TagsList = ({ tags, selectedTags, toggleTag }: TagsListProps) => {
-  return tags.map((tag) => {
-    const checked = selectedTags.includes(tag);
-    const id = `tag-${tag}`;
-    return (
-      <Label key={id} htmlFor={id}>
-        <input
-          type="checkbox"
-          id={id}
-          name={id}
-          value={tag}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            toggleTag(e.target.value);
-          }}
-          checked={checked}
-        />
-        <Text>{tag}</Text>
-      </Label>
-    );
-  });
-};
-
-const Wrapper = styled.div({
-  padding: 10,
-  label: {
-    display: 'flex',
-  },
-});
-
-export const TagsFilterPanel = ({ allTags, selectedTags, toggleTag }: TagsFilterPanelProps) => {
+export const TagsFilterPanel = ({
+  api,
+  allTags,
+  selectedTags,
+  toggleTag,
+}: TagsFilterPanelProps) => {
+  const theme = useTheme();
   const userTags = allTags.filter((tag) => tag === 'play-fn' || !BUILT_IN_TAGS.has(tag)).toSorted();
+  const docsUrl = api.getDocsUrl({ subpath: 'writing-stories/tags' });
+  const items =
+    userTags.length === 0
+      ? [
+          {
+            id: 'no-tags',
+            title: 'There are no tags. Use tags to organize and filter your Storybook.',
+            isIndented: false,
+            style: {
+              borderBottom: `4px solid ${theme.appBorderColor}`,
+            },
+          },
+          {
+            id: 'tags-docs',
+            title: 'Learn how to add tags',
+            icon: <ShareAltIcon />,
+            href: docsUrl,
+          },
+        ]
+      : userTags.map((tag) => {
+          const checked = selectedTags.includes(tag);
+          const id = `tag-${tag}`;
+          return {
+            id,
+            title: tag,
+            right: <input type="checkbox" id={id} name={id} value={tag} checked={checked} />,
+            onClick: () => toggleTag(tag),
+          };
+        });
 
   return (
-    <div>
-      {userTags.length === 0 ? (
-        <>There are no tags. Use tags to organize and filter your Storybook.</>
-      ) : (
-        <Wrapper>
-          <TagsList tags={userTags} selectedTags={selectedTags} toggleTag={toggleTag} />
-        </Wrapper>
-      )}
-    </div>
+    <Wrapper>
+      <TooltipLinkList links={items} />
+    </Wrapper>
   );
 };

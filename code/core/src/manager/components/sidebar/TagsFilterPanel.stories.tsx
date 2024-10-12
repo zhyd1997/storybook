@@ -7,6 +7,9 @@ const meta = {
   component: TagsFilterPanel,
   args: {
     toggleTag: fn(),
+    api: {
+      getDocsUrl: () => 'https://storybook.js.org/docs/',
+    } as any,
   },
   tags: ['hoho'],
 } satisfies Meta<typeof TagsFilterPanel>;

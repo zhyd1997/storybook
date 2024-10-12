@@ -93,11 +93,13 @@ export const TagsFilter = ({
       onVisibleChange={setExpanded}
       tooltip={() => (
         <TagsFilterPanel
+          api={api}
           allTags={Array.from(allTags)}
           selectedTags={selectedTags}
           toggleTag={toggleTag}
         />
       )}
+      closeOnOutsideClick
     >
       <Wrapper>
         <IconButton key="tags" title="Tag filters" active={tagsActive} onClick={handleToggleExpand}>
