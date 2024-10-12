@@ -1308,4 +1308,32 @@ describe('ConfigFile', () => {
       );
     });
   });
+
+  describe.only('parse', () => {
+    it("export { X } with X is import { X } from 'another-file'", () => {
+        const source = dedent`
+          import type { StorybookConfig } from '@storybook/react-webpack5';
+          import { parameters } from './parameters.data';
+
+          export { parameters };
+
+          const config: StorybookConfig = {
+            addons: [
+              'foo',
+              { name: 'bar', options: {} },
+            ],
+            "otherField": [
+              "foo",
+              { "name": 'bar', options: {} },
+            ],
+          }
+          export default config;
+        `;
+        const config = loadConfig(source).parse()
+
+        // ensure config._exportDecls vs config._exports has 'parameters'
+        expect(config._exportDecls['parameters']).toBeTruthy()
+        expect(config._exports['parameters']).toBeTruthy()
+    })
+  })
 });

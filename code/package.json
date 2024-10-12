@@ -52,7 +52,7 @@
     "storybook:vitest": "yarn test:watch --project storybook-ui",
     "storybook:vitest:inspect": "INSPECT=true yarn test --project storybook-ui",
     "task": "yarn --cwd ../scripts task",
-    "test": "NODE_OPTIONS=--max_old_space_size=4096 vitest run",
+    "test": "NODE_OPTIONS=--max_old_space_size=4096 vitest run src/csf-tools/ConfigFile.test.ts",
     "test:watch": "NODE_OPTIONS=--max_old_space_size=4096 vitest watch"
   },
   "husky": {

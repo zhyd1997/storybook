@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { readFile, writeFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 
 import {
   type RecastOptions,
@@ -13,6 +14,7 @@ import {
 import { dedent } from 'ts-dedent';
 
 import type { PrintResultType } from './PrintResultType';
+import path from 'node:path';
 
 const logger = console;
 
@@ -102,7 +104,24 @@ const _findVarDeclarator = (
 ): t.VariableDeclarator | null | undefined => {
   let declarator: t.VariableDeclarator | null | undefined = null;
   let declarations: t.VariableDeclarator[] | null = null;
+  
   program.body.find((node: t.Node) => {
+    if(t.isImportDeclaration(node)) {
+
+      node.specifiers.forEach((specifier) => {
+
+        if(t.isImportSpecifier(specifier) && (specifier as t.ImportSpecifier).local?.name === identifier) {
+            const importSource = node.source.value; // the source module of the import
+            const importedConfig = readConfigSync(require.resolve(path.resolve(__dirname, `${importSource}.ts`)));
+
+            const importedFileAST = importedConfig._ast.program; // Adjust this depending on how your importedConfig is structured
+            declarator = _findVarDeclarator(((specifier as t.ImportSpecifier).imported as t.Identifier).name, importedFileAST)
+
+            return true; // stop looking
+        }
+      })
+    }
+
     if (t.isVariableDeclaration(node)) {
       declarations = node.declarations;
     } else if (t.isExportNamedDeclaration(node) && t.isVariableDeclaration(node.declaration)) {
@@ -248,8 +267,9 @@ export class ConfigFile {
               ) {
                 const { name: localName } = spec.local;
                 const { name: exportName } = spec.exported;
+
                 const decl = _findVarDeclarator(localName, parent as t.Program) as any;
-                self._exports[exportName] = decl.init;
+                self._exports[exportName] = decl?.init;
                 self._exportDecls[exportName] = decl;
               }
             });
@@ -897,6 +917,11 @@ export const printConfig = (config: ConfigFile, options: RecastOptions = {}): Pr
 export const readConfig = async (fileName: string) => {
   const code = (await readFile(fileName, 'utf-8')).toString();
   return loadConfig(code, fileName).parse();
+};
+
+export const readConfigSync = (fileName: string) => {
+  const code = readFileSync(fileName, 'utf-8').toString();
+  return loadConfig(code).parse();
 };
 
 export const writeConfig = async (config: ConfigFile, fileName?: string) => {
