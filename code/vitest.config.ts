@@ -2,7 +2,6 @@ import { coverageConfigDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    include: ["code/core/src/csf-tools/ConfigFile.test.ts"],
     coverage: {
       all: false,
       provider: 'istanbul',

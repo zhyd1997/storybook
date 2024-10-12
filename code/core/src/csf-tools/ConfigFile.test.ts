@@ -1331,7 +1331,6 @@ describe('ConfigFile', () => {
         `;
         const config = loadConfig(source).parse()
 
-        // ensure config._exportDecls vs config._exports has 'parameters'
         expect(config._exportDecls['path']).toBe(undefined)
         expect(config._exports['path']).toBe(undefined)
     })
