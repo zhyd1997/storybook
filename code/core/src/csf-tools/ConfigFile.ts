@@ -106,22 +106,6 @@ const _findVarDeclarator = (
   let declarations: t.VariableDeclarator[] | null = null;
   
   program.body.find((node: t.Node) => {
-    if(t.isImportDeclaration(node)) {
-
-      node.specifiers.forEach((specifier) => {
-
-        if(t.isImportSpecifier(specifier) && (specifier as t.ImportSpecifier).local?.name === identifier) {
-            const importSource = node.source.value; // the source module of the import
-            const importedConfig = readConfigSync(require.resolve(path.resolve(__dirname, `${importSource}.ts`)));
-
-            const importedFileAST = importedConfig._ast.program; // Adjust this depending on how your importedConfig is structured
-            declarator = _findVarDeclarator(((specifier as t.ImportSpecifier).imported as t.Identifier).name, importedFileAST)
-
-            return true; // stop looking
-        }
-      })
-    }
-
     if (t.isVariableDeclaration(node)) {
       declarations = node.declarations;
     } else if (t.isExportNamedDeclaration(node) && t.isVariableDeclaration(node.declaration)) {
@@ -269,8 +253,12 @@ export class ConfigFile {
                 const { name: exportName } = spec.exported;
 
                 const decl = _findVarDeclarator(localName, parent as t.Program) as any;
-                self._exports[exportName] = decl?.init;
-                self._exportDecls[exportName] = decl;
+                // decl can be empty in case X from `import { X } from ....` because it is not handled in _findVarDeclarator
+                if(decl) {
+                  self._exports[exportName] = decl?.init;
+                  self._exportDecls[exportName] = decl;
+                }
+                
               }
             });
           } else {

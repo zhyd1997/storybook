@@ -1313,9 +1313,9 @@ describe('ConfigFile', () => {
     it("export { X } with X is import { X } from 'another-file'", () => {
         const source = dedent`
           import type { StorybookConfig } from '@storybook/react-webpack5';
-          import { parameters } from './parameters.data';
+          import { path } from 'path';
 
-          export { parameters };
+          export { path };
 
           const config: StorybookConfig = {
             addons: [
@@ -1332,8 +1332,8 @@ describe('ConfigFile', () => {
         const config = loadConfig(source).parse()
 
         // ensure config._exportDecls vs config._exports has 'parameters'
-        expect(config._exportDecls['parameters']).toBeTruthy()
-        expect(config._exports['parameters']).toBeTruthy()
+        expect(config._exportDecls['path']).toBe(undefined)
+        expect(config._exports['path']).toBe(undefined)
     })
   })
 });
