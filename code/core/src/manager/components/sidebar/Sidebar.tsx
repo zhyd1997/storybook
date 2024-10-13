@@ -120,18 +120,6 @@ const useCombination = (
   return useMemo(() => ({ hash, entries: Object.entries(hash) }), [hash]);
 };
 
-const updateQueryParams = (params: Record<string, string>) => {
-  const url = new URL(window.location.href);
-  Object.entries(params).forEach(([key, value]) => {
-    if (value) {
-      url.searchParams.set(key, value);
-    } else {
-      url.searchParams.delete(key);
-    }
-  });
-  window.history.pushState({}, '', url);
-};
-
 const isDevelopment = global.CONFIG_TYPE === 'DEVELOPMENT';
 const isRendererReact = global.STORYBOOK_RENDERER === 'react';
 
@@ -213,11 +201,7 @@ export const Sidebar = React.memo(function Sidebar({
                 </>
               )
             }
-            searchFieldContent={
-              indexJson && (
-                <TagsFilter api={api} indexJson={indexJson} updateQueryParams={updateQueryParams} />
-              )
-            }
+            searchFieldContent={indexJson && <TagsFilter api={api} indexJson={indexJson} />}
             {...lastViewedProps}
           >
             {({

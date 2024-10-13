@@ -35,16 +35,10 @@ const Count = styled(Badge)(({ theme }) => ({
 export interface TagsFilterProps {
   api: API;
   indexJson: StoryIndex;
-  updateQueryParams: (params: Record<string, string>) => void;
   initialSelectedTags?: Tag[];
 }
 
-export const TagsFilter = ({
-  api,
-  indexJson,
-  updateQueryParams,
-  initialSelectedTags = [],
-}: TagsFilterProps) => {
+export const TagsFilter = ({ api, indexJson, initialSelectedTags = [] }: TagsFilterProps) => {
   const [selectedTags, setSelectedTags] = useState(initialSelectedTags);
   const [expanded, setExpanded] = useState(false);
   const tagsActive = selectedTags.length > 0;
@@ -58,9 +52,10 @@ export const TagsFilter = ({
       return selectedTags.some((tag) => item.tags?.includes(tag));
     });
 
+    const { url } = api.getUrlState();
     const includeTags = selectedTags.join(',');
-    updateQueryParams({ includeTags });
-  }, [api, selectedTags, updateQueryParams]);
+    api.applyQueryParams({ includeTags }, { replace: true });
+  }, [api, selectedTags]);
 
   const allTags = Object.values(indexJson.entries).reduce((acc, entry) => {
     entry.tags?.forEach((tag: Tag) => acc.add(tag));
