@@ -94,10 +94,6 @@ addons.register(ADDON_ID, (api) => {
           : 'Starting...';
       } else if (failed) {
         message = 'Component tests failed';
-      } else if (watching) {
-        message = 'Watching for file changes';
-      } else if (progress?.finishedAt) {
-        message = <RelativeTime timestamp={progress.finishedAt} />;
       } else if (crashed) {
         message = (
           <>
@@ -111,6 +107,10 @@ addons.register(ADDON_ID, (api) => {
             </LinkComponent>
           </>
         );
+      } else if (watching) {
+        message = 'Watching for file changes';
+      } else if (progress?.finishedAt) {
+        message = <RelativeTime timestamp={progress.finishedAt} />;
       }
 
       return (
@@ -137,7 +137,7 @@ addons.register(ADDON_ID, (api) => {
       Object.fromEntries(
         (state.details.testResults || []).flatMap((testResult) =>
           testResult.results
-            .map(({ storyId, status, ...rest }) => {
+            .map(({ storyId, status, testRunId, ...rest }) => {
               if (storyId) {
                 const statusObject: API_StatusObject = {
                   title: 'Vitest',
@@ -146,6 +146,9 @@ addons.register(ADDON_ID, (api) => {
                     'failureMessages' in rest && rest.failureMessages?.length
                       ? rest.failureMessages.join('\n')
                       : '',
+                  data: {
+                    testRunId,
+                  },
                 };
                 return [storyId, statusObject];
               }

@@ -24,12 +24,14 @@ export type TestResultResult =
   | {
       status: 'success' | 'pending';
       storyId: string;
+      testRunId: string;
       duration: number;
     }
   | {
       status: 'failed';
       storyId: string;
       duration: number;
+      testRunId: string;
       failureMessages: string[];
     };
 
@@ -112,14 +114,15 @@ export class StorybookReporter implements Reporter {
         const status = StatusMap[t.result?.state || t.mode] || 'skipped';
         const storyId = (t.meta as any).storyId as string;
         const duration = t.result?.duration || 0;
+        const testRunId = this.start.toString();
 
         switch (status) {
           case 'passed':
           case 'pending':
-            return [{ status, storyId, duration } as TestResultResult];
+            return [{ status, storyId, duration, testRunId } as TestResultResult];
           case 'failed':
             const failureMessages = t.result?.errors?.map((e) => e.stack || e.message) || [];
-            return [{ status, storyId, duration, failureMessages } as TestResultResult];
+            return [{ status, storyId, duration, failureMessages, testRunId } as TestResultResult];
           default:
             return [];
         }
