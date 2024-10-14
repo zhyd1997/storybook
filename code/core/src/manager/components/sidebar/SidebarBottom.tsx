@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { styled } from '@storybook/core/theming';
 import { type API_FilterFunction, Addon_TypesEnum } from '@storybook/core/types';
@@ -21,10 +21,13 @@ import {
   useStorybookState,
 } from '@storybook/core/manager-api';
 
-import { throttle } from 'es-toolkit';
-
 import { NotificationList } from '../notifications/NotificationList';
 import { TestingModule } from './TestingModule';
+
+// This ID is used dynamically add/remove space at the bottom to prevent overlapping the main sidebar content.
+const SIDEBAR_BOTTOM_SPACER_ID = 'sidebar-bottom-spacer';
+// This ID is used by some integrators to target the (fixed position) sidebar bottom element so it should remain stable.
+const SIDEBAR_BOTTOM_WRAPPER_ID = 'sidebar-bottom-wrapper';
 
 const initialTestProviderState: TestProviderState = {
   details: {} as { [key: string]: any },
@@ -59,10 +62,6 @@ const getFilter = (warningsActive = false, errorsActive = false) => {
   return filterNone;
 };
 
-const Wrapper = styled.div({
-  transition: 'height 250ms',
-});
-
 const Content = styled.div(({ theme }) => ({
   position: 'absolute',
   bottom: 0,
@@ -93,20 +92,16 @@ interface SidebarBottomProps {
 }
 
 export const SidebarBottomBase = ({ api, notifications = [], status = {} }: SidebarBottomProps) => {
+  const spacerRef = useRef<HTMLDivElement | null>(null);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [warningsActive, setWarningsActive] = useState(false);
   const [errorsActive, setErrorsActive] = useState(false);
-  const [contentHeight, setContentHeight] = useState(0);
   const [testProviders, setTestProviders] = useState<TestProviders>(() =>
     Object.fromEntries(
       Object.entries(api.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER)).map(
         ([id, config]) => [id, { ...config, ...initialTestProviderState }]
       )
     )
-  );
-
-  const resizeObserverCallback = useMemo(
-    () => throttle((element) => setContentHeight(element.clientHeight || 0), 250),
-    []
   );
 
   const warnings = Object.values(status).filter((statusByAddonId) =>
@@ -164,13 +159,18 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   );
 
   useEffect(() => {
-    const wrapper = document.getElementById('sidebar-bottom-wrapper');
-    if (wrapper) {
-      const resizeObserver = new ResizeObserver(() => resizeObserverCallback(wrapper));
+    const spacer = spacerRef.current;
+    const wrapper = wrapperRef.current;
+    if (spacer && wrapper) {
+      const resizeObserver = new ResizeObserver(() => {
+        if (spacer && wrapper) {
+          spacer.style.height = `${wrapper.clientHeight}px`;
+        }
+      });
       resizeObserver.observe(wrapper);
       return () => resizeObserver.disconnect();
     }
-  }, [resizeObserverCallback]);
+  }, []);
 
   useEffect(() => {
     const filter = getFilter(hasWarnings && warningsActive, hasErrors && errorsActive);
@@ -214,8 +214,8 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   }
 
   return (
-    <Wrapper id="sidebar-bottom-spacer" style={{ height: contentHeight }}>
-      <Content id="sidebar-bottom-wrapper">
+    <div id={SIDEBAR_BOTTOM_SPACER_ID} ref={spacerRef}>
+      <Content id={SIDEBAR_BOTTOM_WRAPPER_ID} ref={wrapperRef}>
         <NotificationList notifications={notifications} clearNotification={api.clearNotification} />
         <TestingModule
           {...{
@@ -232,7 +232,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
           }}
         />
       </Content>
-    </Wrapper>
+    </div>
   );
 };
 
