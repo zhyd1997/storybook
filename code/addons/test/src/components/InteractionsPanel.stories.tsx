@@ -29,6 +29,7 @@ const managerContext: any = {
   state: {},
   api: {
     getDocsUrl: fn().mockName('api::getDocsUrl'),
+    emit: fn().mockName('api::emit'),
   },
 };
 
@@ -57,6 +58,7 @@ const meta = {
     endRef: null,
     // prop for the AddonPanel used as wrapper of Panel
     active: true,
+    storyId: 'story-id',
   },
 } as Meta<typeof InteractionsPanel>;
 

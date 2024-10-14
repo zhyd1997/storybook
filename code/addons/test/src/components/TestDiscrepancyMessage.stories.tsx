@@ -13,6 +13,7 @@ const managerContext: any = {
   state: {},
   api: {
     getDocsUrl: fn().mockName('api::getDocsUrl'),
+    emit: fn().mockName('api::emit'),
   },
 };
 
@@ -21,6 +22,9 @@ export default {
   component: TestDiscrepancyMessage,
   parameters: {
     layout: 'fullscreen',
+  },
+  args: {
+    storyId: 'story-id',
   },
   decorators: [
     (storyFn) => (
