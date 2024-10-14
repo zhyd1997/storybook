@@ -10,8 +10,14 @@ const meta = {
     api: {
       experimental_setFilter: fn(),
       getDocsUrl: () => 'https://storybook.js.org/docs/',
+      getUrlState: () => ({
+        queryParams: {},
+        path: '',
+        viewMode: 'story',
+        url: 'http://localhost:6006/',
+      }),
+      applyQueryParams: fn().mockName('api::applyQueryParams'),
     } as any,
-    updateQueryParams: fn(),
   },
 } satisfies Meta<typeof TagsFilter>;
 
