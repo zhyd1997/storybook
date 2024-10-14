@@ -14,7 +14,7 @@ import {
 import { execaNode } from 'execa';
 
 import { log } from '../logger';
-import { bootTestRunner } from './boot-test-runner';
+import { killTestRunner, runTestRunner } from './boot-test-runner';
 
 let stdout: (chunk: any) => void;
 let stderr: (chunk: any) => void;
@@ -48,6 +48,7 @@ vi.mock('../logger', () => ({
 
 beforeEach(() => {
   vi.useFakeTimers();
+  killTestRunner();
 });
 
 afterEach(() => {
@@ -59,12 +60,12 @@ const mockChannel = new Channel({ transport });
 
 describe('bootTestRunner', () => {
   it('should execute vitest.js', async () => {
-    bootTestRunner(mockChannel);
+    runTestRunner(mockChannel);
     expect(execaNode).toHaveBeenCalledWith(expect.stringMatching(/vitest\.mjs$/));
   });
 
   it('should log stdout and stderr', async () => {
-    bootTestRunner(mockChannel);
+    runTestRunner(mockChannel);
     stdout('foo');
     stderr('bar');
     expect(log).toHaveBeenCalledWith('foo');
@@ -73,7 +74,7 @@ describe('bootTestRunner', () => {
 
   it('should wait for vitest to be ready', async () => {
     let ready;
-    const promise = bootTestRunner(mockChannel).then(() => {
+    const promise = runTestRunner(mockChannel).then(() => {
       ready = true;
     });
     expect(ready).toBeUndefined();
@@ -83,13 +84,13 @@ describe('bootTestRunner', () => {
   });
 
   it('should abort if vitest doesn’t become ready in time', async () => {
-    const promise = bootTestRunner(mockChannel);
-    vi.advanceTimersByTime(10000);
+    const promise = runTestRunner(mockChannel);
+    vi.advanceTimersByTime(30001);
     await expect(promise).rejects.toThrow();
   });
 
   it('should forward channel events', async () => {
-    bootTestRunner(mockChannel);
+    runTestRunner(mockChannel);
     message({ type: 'ready' });
 
     message({ type: TESTING_MODULE_PROGRESS_REPORT, args: ['foo'] });
@@ -125,7 +126,7 @@ describe('bootTestRunner', () => {
   });
 
   it('should resend init event', async () => {
-    bootTestRunner(mockChannel, 'init', ['foo']);
+    runTestRunner(mockChannel, 'init', ['foo']);
     message({ type: 'ready' });
     expect(child.send).toHaveBeenCalledWith({
       args: ['foo'],
