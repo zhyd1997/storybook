@@ -13,8 +13,11 @@ import {
 } from 'storybook/internal/common';
 import { colors, logger } from 'storybook/internal/node-logger';
 
+// eslint-disable-next-line depend/ban-dependencies
+import { execa } from 'execa';
 import { findUp } from 'find-up';
 import picocolors from 'picocolors';
+import prompts from 'prompts';
 import { coerce, satisfies } from 'semver';
 import { dedent } from 'ts-dedent';
 
@@ -40,7 +43,7 @@ export default async function postInstall(options: PostinstallOptions) {
     force: options.packageManager,
   });
 
-  const info = await getFrameworkInfo(options);
+  const info = await getStorybookInfo(options);
   const allDeps = await packageManager.getAllDependencies();
   // only install these dependencies if they are not already installed
   const dependencies = ['vitest', '@vitest/browser', 'playwright'].filter((p) => !allDeps[p]);
@@ -50,6 +53,28 @@ export default async function postInstall(options: PostinstallOptions) {
   // if Vitest is installed, we use the same version to keep consistency across Vitest packages
   const vitestVersionToInstall = vitestVersionSpecifier ?? 'latest';
 
+  const addonInteractionsName = '@storybook/addon-interactions';
+
+  if (info.addons.includes(addonInteractionsName)) {
+    const { shouldUninstall } = await prompts({
+      type: 'confirm',
+      name: 'shouldUninstall',
+      message: dedent`
+          We have detected that you're using ${addonInteractionsName}. The Storybook test addon is a replacement for addon-interactions, so you must uninstall and unregister addon-interactions in order to use the test addon correctly. Before setting up the test addon, I would need to remove addon-interactions for you.
+          
+          More info: ${picocolors.yellow(
+            'https://storybook.js.org/docs/8.4/writing-tests/test-addon'
+          )}
+  
+          Would you like to remove and unregister ${addonInteractionsName}?
+        `,
+      initial: true,
+    });
+
+    if (shouldUninstall) {
+      await execa('npx', ['storybook', 'remove', addonInteractionsName]);
+    }
+  }
   const annotationsImport = [
     '@storybook/nextjs',
     '@storybook/experimental-nextjs-vite',
@@ -401,7 +426,7 @@ const getVitestPluginInfo = (framework: string) => {
   return { frameworkPluginImport, frameworkPluginCall, frameworkPluginDocs };
 };
 
-async function getFrameworkInfo({ configDir, packageManager: pkgMgr }: PostinstallOptions) {
+async function getStorybookInfo({ configDir, packageManager: pkgMgr }: PostinstallOptions) {
   const packageManager = JsPackageManagerFactory.getPackageManager({ force: pkgMgr });
   const packageJson = await packageManager.retrievePackageJson();
 
@@ -446,5 +471,6 @@ async function getFrameworkInfo({ configDir, packageManager: pkgMgr }: Postinsta
     frameworkPackageName,
     builderPackageName,
     rendererPackageName,
+    addons: config.addons,
   };
 }
