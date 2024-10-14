@@ -94,10 +94,6 @@ addons.register(ADDON_ID, (api) => {
           : 'Starting...';
       } else if (failed) {
         message = 'Component tests failed';
-      } else if (watching) {
-        message = 'Watching for file changes';
-      } else if (progress?.finishedAt) {
-        message = <RelativeTime timestamp={progress.finishedAt} />;
       } else if (crashed) {
         message = (
           <>
@@ -111,6 +107,10 @@ addons.register(ADDON_ID, (api) => {
             </LinkComponent>
           </>
         );
+      } else if (watching) {
+        message = 'Watching for file changes';
+      } else if (progress?.finishedAt) {
+        message = <RelativeTime timestamp={progress.finishedAt} />;
       }
 
       return (
