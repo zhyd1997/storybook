@@ -131,3 +131,10 @@ export const runTestRunner = async (channel: Channel, initEvent?: string, initAr
     ready = true;
   }
 };
+
+export const killTestRunner = () => {
+  if (child) {
+    child.kill();
+    child = null;
+  }
+};
