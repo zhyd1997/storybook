@@ -112,6 +112,17 @@
     "storybook": "workspace:^",
     "vitest": "^2.0.0"
   },
+  "peerDependenciesMeta": {
+    "@vitest/browser": {
+      "optional": true
+    },
+    "@vitest/runner": {
+      "optional": true
+    },
+    "vitest": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
