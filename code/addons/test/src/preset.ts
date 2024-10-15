@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs';
 import { isAbsolute, join } from 'node:path';
 
 import type { Channel } from 'storybook/internal/channels';
-import { logger } from 'storybook/internal/client-logger';
 import { checkAddonOrder, getFrameworkName, serverRequire } from 'storybook/internal/common';
 import {
   TESTING_MODULE_RUN_ALL_REQUEST,
@@ -15,6 +14,7 @@ import type { Options, StoryId } from 'storybook/internal/types';
 import { dedent } from 'ts-dedent';
 
 import { STORYBOOK_ADDON_TEST_CHANNEL } from './constants';
+import { log } from './logger';
 import { runTestRunner } from './node/boot-test-runner';
 
 export const checkActionsLoaded = (configDir: string) => {
@@ -33,11 +33,6 @@ export const checkActionsLoaded = (configDir: string) => {
     getConfig: (configFile) => serverRequire(configFile),
   });
 };
-
-const log = (message: string) => {
-  logger.log(`[@storybook/experimental-addon-test] ${message}`);
-};
-
 type Event = {
   type: 'test-discrepancy';
   payload: {
@@ -58,8 +53,8 @@ export const experimental_serverChannel = async (channel: Channel, options: Opti
   if (!builderName?.includes('vite')) {
     if (framework.includes('nextjs')) {
       log(dedent`
-        It seems that you are using Next.js in Storybook with a Webpack based builder. Storybook now provides a way to use Vite with Next.js.
-        If configure your Storybook to use Vite, the test addon will contain extra capabilities to run tests in Storybook.
+        It seems that you are using Next.js in Storybook with a Webpack-based builder. Storybook now provides a new, performant way to use Vite with Next.js.
+        If you configure your Storybook to use Vite, the test addon will contain extra capabilities to run tests in Storybook.
 
         More info: https://storybook.js.org/docs/get-started/frameworks/nextjs#with-vite
       `);
