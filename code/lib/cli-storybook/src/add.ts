@@ -140,7 +140,7 @@ export async function add(
 
   if (isCoreAddon(addonName) && version !== storybookVersion) {
     logger.warn(
-      `The version of ${addonName} you are installing is not the same as the version of Storybook you are using. This may lead to unexpected behavior.`
+      `The version of ${addonName} (${version}) you are installing is not the same as the version of Storybook you are using (${storybookVersion}). This may lead to unexpected behavior.`
     );
   }
 

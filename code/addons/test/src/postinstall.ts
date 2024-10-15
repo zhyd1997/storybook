@@ -54,25 +54,42 @@ export default async function postInstall(options: PostinstallOptions) {
   const vitestVersionToInstall = vitestVersionSpecifier ?? 'latest';
 
   const addonInteractionsName = '@storybook/addon-interactions';
+  const interactionsAddon = info.addons.find((addon: string | { name: string }) => {
+    // account for addons as objects, as well as addons with PnP paths
+    const addonName = typeof addon === 'string' ? addon : addon.name;
+    return addonName.includes(addonInteractionsName);
+  });
 
-  if (info.addons.includes(addonInteractionsName)) {
-    const { shouldUninstall } = await prompts({
-      type: 'confirm',
-      name: 'shouldUninstall',
-      message: dedent`
-          We have detected that you're using ${addonInteractionsName}. The Storybook test addon is a replacement for addon-interactions, so you must uninstall and unregister addon-interactions in order to use the test addon correctly. Before setting up the test addon, I would need to remove addon-interactions for you.
+  console.log('✅✅✅✅✅✅✅✅✅✅✅✅✅✅', { interactionsAddon, info });
+  if (!!interactionsAddon) {
+    let shouldUninstall = options.yes;
+    if (!options.yes) {
+      const response = await prompts({
+        type: 'confirm',
+        name: 'shouldUninstall',
+        message: dedent`
+          We have detected that you're using ${addonInteractionsName}. The Storybook test addon is a replacement for the interactions addon, so you must uninstall and unregister it in order to use the test addon correctly.
           
-          More info: ${picocolors.yellow(
-            'https://storybook.js.org/docs/8.4/writing-tests/test-addon'
-          )}
+          More info: ${picocolors.yellow('https://storybook.js.org/docs/writing-tests/test-addon')}
   
-          Would you like to remove and unregister ${addonInteractionsName}?
+          Would you like me to remove and unregister ${addonInteractionsName}?
         `,
-      initial: true,
-    });
+        initial: true,
+      });
 
+      shouldUninstall = response.shouldUninstall;
+    }
+
+    console.log({ shouldUninstall });
     if (shouldUninstall) {
-      await execa('npx', ['storybook', 'remove', addonInteractionsName]);
+      console.log('UNINSTALLING!!!');
+      await execa(
+        packageManager.getRemoteRunCommand(),
+        ['storybook', 'remove', addonInteractionsName, '--package-manager', options.packageManager],
+        {
+          shell: true,
+        }
+      );
     }
   }
   const annotationsImport = [

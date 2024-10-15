@@ -6,6 +6,7 @@ export const postinstallAddon = async (addonName: string, options: PostinstallOp
 
     const postinstall = require(modulePath);
 
+    console.log({ modulePath, postinstall });
     try {
       console.log(`Running postinstall script for ${addonName}`);
       await postinstall(options);
