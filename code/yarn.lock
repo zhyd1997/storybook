@@ -6249,6 +6249,7 @@ __metadata:
     formik: "npm:^2.2.9"
     picocolors: "npm:^1.1.0"
     polished: "npm:^4.2.2"
+    prompts: "npm:^2.4.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     semver: "npm:^7.6.3"
@@ -6260,6 +6261,13 @@ __metadata:
     "@vitest/runner": ^2.1.1
     storybook: "workspace:^"
     vitest: ^2.0.0
+  peerDependenciesMeta:
+    "@vitest/browser":
+      optional: true
+    "@vitest/runner":
+      optional: true
+    vitest:
+      optional: true
   languageName: unknown
   linkType: soft
 
