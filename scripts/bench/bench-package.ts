@@ -14,7 +14,13 @@ const BENCH_PACKAGES_PATH = join(__dirname, '..', '..', 'bench', 'packages');
 const REGISTRY_PORT = 6001;
 
 type PackageName = keyof typeof versions;
-
+type Result = {
+  package: PackageName;
+  dependencies: number;
+  selfSize: string;
+  dependencySize: string;
+  totalSize: string;
+};
 /**
  * This script is used to bench the size of Storybook packages and their dependencies. For each
  * package, the steps are:
@@ -70,13 +76,15 @@ export const benchPackage = async (packageName: PackageName) => {
   const selfSize = await getDirSize(join(tmpBenchPackagePath, 'node_modules', packageName));
   const dependencySize = nodeModulesSize - selfSize;
 
-  console.log({
+  const result: Result = {
     package: packageName,
     dependencies: amountOfDependencies,
     selfSize: formatBytes(selfSize),
     dependencySize: formatBytes(dependencySize),
     totalSize: formatBytes(nodeModulesSize),
-  });
+  };
+  console.log(result);
+  return result;
 };
 
 const getDirSize = async (path: string) => {
@@ -106,6 +114,19 @@ const formatBytes = (bytes: number) => {
   // MB, GB, TB = 2 decimal places
   const decimals = unitIndex < 2 ? 0 : 2;
   return `${size.toFixed(decimals)} ${units[unitIndex]}`;
+};
+
+const saveResults = async (results: Result[]) => {
+  console.log('Saving results...');
+  const allResults: Record<string, Omit<Result, 'package'>> = {};
+  for (const result of results) {
+    const { package: packageName, ...withoutPackage } = result;
+    allResults[result.package] = withoutPackage;
+  }
+  await writeFile(
+    join(BENCH_PACKAGES_PATH, 'package-bench-results.json'),
+    JSON.stringify(allResults, null, 2)
+  );
 };
 
 const run = async () => {
@@ -146,7 +167,10 @@ const run = async () => {
       `Currently benching ${limit.activeCount} packages, ${limit.pendingCount} pending, ${doneCount} done...`
     );
   }, 2_000);
-  await Promise.all(packages.map((packageName) => limit(() => benchPackage(packageName))));
+  const results = await Promise.all(
+    packages.map((packageName) => limit(() => benchPackage(packageName)))
+  );
+  await saveResults(results);
 
   console.log('Done benching all packages');
   registryController?.abort();

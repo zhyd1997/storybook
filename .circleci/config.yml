@@ -224,6 +224,8 @@ jobs:
           name: Benchmarking Packages
           working_directory: scripts
           command: yarn bench-package
+      - store_artifacts: 
+          path: code/bench/packages/package-bench-results.json
       # - run:
       #     name: Uploading results
       #     command: yarn upload-bench $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench) << pipeline.parameters.ghPrNumber >> << pipeline.parameters.ghBaseBranch >>
@@ -540,7 +542,7 @@ jobs:
       - store_artifacts: # this is where playwright puts more complex stuff
           path: code/playwright-results/
           destination: playwright
-  bench:
+  bench-sandboxes:
     parameters:
       parallelism:
         type: integer
@@ -771,7 +773,7 @@ workflows:
           parallelism: 5
           requires:
             - create-sandboxes
-      - bench:
+      - bench-sandboxes:
           parallelism: 5
           requires:
             - build-sandboxes
@@ -849,7 +851,7 @@ workflows:
           matrix:
             parameters:
               directory: ["react", "vue3", "nextjs", "svelte"]
-      - bench:
+      - bench-sandboxes:
           parallelism: 5
           requires:
             - build-sandboxes
@@ -940,7 +942,7 @@ workflows:
                 # --smoke-test is not supported for the angular builder right now
                 # - "angular-cli"
                 - "lit-vite-ts"
-      - bench:
+      - bench-sandboxes:
           parallelism: 5
           requires:
             - build-sandboxes
