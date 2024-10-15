@@ -6261,6 +6261,13 @@ __metadata:
     "@vitest/runner": ^2.1.1
     storybook: "workspace:^"
     vitest: ^2.0.0
+  peerDependenciesMeta:
+    "@vitest/browser":
+      optional: true
+    "@vitest/runner":
+      optional: true
+    vitest:
+      optional: true
   languageName: unknown
   linkType: soft
 
