@@ -223,12 +223,11 @@ jobs:
       - run:
           name: Benchmarking Packages
           working_directory: scripts
-          command: yarn bench-package
+          command: yarn bench-package --base << pipeline.parameters.ghBaseBranch >> --pull-request << pipeline.parameters.ghPrNumber >>
       - store_artifacts: 
           path: bench/packages/results.json
-      # - run:
-      #     name: Uploading results
-      #     command: yarn upload-bench $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench) << pipeline.parameters.ghPrNumber >> << pipeline.parameters.ghBaseBranch >>
+      - store_artifacts: 
+          path: bench/packages/compare-with-<< pipeline.parameters.ghBaseBranch >>.json
       - report-workflow-on-failure
       - cancel-workflow-on-failure
   check:

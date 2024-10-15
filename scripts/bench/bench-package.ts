@@ -1,3 +1,5 @@
+import { BigQuery } from '@google-cloud/bigquery';
+import { request } from '@octokit/request';
 import { program } from 'commander';
 import detectFreePort from 'detect-port';
 import { mkdir, readdir, rm, stat, writeFile } from 'fs/promises';
@@ -17,10 +19,18 @@ type PackageName = keyof typeof versions;
 type Result = {
   package: PackageName;
   dependencies: number;
+  selfSize: number;
+  dependencySize: number;
+};
+type HumanReadableResult = {
+  package: PackageName;
+  dependencies: number;
   selfSize: string;
   dependencySize: string;
   totalSize: string;
 };
+type ResultMap = Record<PackageName, Result>;
+type HumanReadableResultMap = Record<PackageName, HumanReadableResult>;
 /**
  * This script is used to bench the size of Storybook packages and their dependencies. For each
  * package, the steps are:
@@ -79,11 +89,10 @@ export const benchPackage = async (packageName: PackageName) => {
   const result: Result = {
     package: packageName,
     dependencies: amountOfDependencies,
-    selfSize: formatBytes(selfSize),
-    dependencySize: formatBytes(dependencySize),
-    totalSize: formatBytes(nodeModulesSize),
+    selfSize,
+    dependencySize,
   };
-  console.log(result);
+  console.log(toHumanReadable(result));
   return result;
 };
 
@@ -100,9 +109,19 @@ const getDirSize = async (path: string) => {
   return stats.reduce((acc, { size }) => acc + size, 0);
 };
 
+const toHumanReadable = (result: Result): HumanReadableResult => {
+  return {
+    package: result.package,
+    dependencies: result.dependencies,
+    selfSize: formatBytes(result.selfSize),
+    dependencySize: formatBytes(result.dependencySize),
+    totalSize: formatBytes(result.selfSize + result.dependencySize),
+  };
+};
+
 const formatBytes = (bytes: number) => {
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-  let size = bytes;
+  let size = Math.abs(bytes);
   let unitIndex = 0;
 
   while (size >= 1000 && unitIndex < units.length - 1) {
@@ -113,30 +132,93 @@ const formatBytes = (bytes: number) => {
   // B, KB = 0 decimal places
   // MB, GB, TB = 2 decimal places
   const decimals = unitIndex < 2 ? 0 : 2;
-  return `${size.toFixed(decimals)} ${units[unitIndex]}`;
+  const formattedSize = `${size.toFixed(decimals)} ${units[unitIndex]}`;
+
+  return bytes < 0 ? `-${formattedSize}` : formattedSize;
 };
 
-const saveResults = async (results: Result[]) => {
-  const resultPath = join(BENCH_PACKAGES_PATH, 'results.json');
+const saveResultsLocally = async ({
+  results,
+  filename,
+}: {
+  results: ResultMap;
+  filename: string;
+}) => {
+  const resultPath = join(BENCH_PACKAGES_PATH, filename);
   console.log(`Saving results to ${resultPath}...`);
-  const allResults: Record<string, Omit<Result, 'package'>> = {};
-  for (const result of results) {
-    const { package: packageName, ...withoutPackage } = result;
-    allResults[result.package] = withoutPackage;
+
+  const humanReadableResults = Object.entries(results).reduce((acc, [packageName, result]) => {
+    acc[packageName] = toHumanReadable(result);
+    return acc;
+  }, {} as HumanReadableResultMap);
+  await writeFile(resultPath, JSON.stringify(humanReadableResults, null, 2));
+};
+
+const compareResults = async ({ results, base }: { results: ResultMap; base: string }) => {
+  // const GCP_CREDENTIALS = JSON.parse(process.env.GCP_CREDENTIALS || '{}');
+
+  // const store = new BigQuery({
+  //   projectId: GCP_CREDENTIALS.project_id,
+  //   credentials: GCP_CREDENTIALS,
+  // });
+  // const dataset = store.dataset('benchmark_results');
+  // const appTable = dataset.table('bench2');
+
+  // const [baseResults] = await appTable.query({
+  //   query: `
+  //     WITH latest_packages AS (
+  //     SELECT branch, package, timestamp,
+  //         ROW_NUMBER() OVER (PARTITION BY branch, package ORDER BY timestamp DESC) as rownumber
+  //       FROM \`storybook-benchmark.benchmark_results.bench2\`
+  //       WHERE branch = @base
+  //         AND package IN UNNEST(@packages)
+  //         AND timestamp > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+  //     )
+  //     SELECT branch, package, timestamp
+  //     FROM latest_packages
+  //     WHERE rownumber = 1
+  //     ORDER BY package;`,
+  //   params: { base, packages: Object.keys(results) },
+  // });
+  // console.log(baseResults);
+
+  const baseResults = [
+    {
+      package: '@storybook/react',
+      dependencies: 4,
+      selfSize: 900_000,
+      dependencySize: 50_000,
+    },
+  ];
+
+  const comparisonResults = {} as ResultMap;
+  for (const [packageName, result] of Object.entries(results)) {
+    const baseResult = baseResults.find((row) => row.package === packageName);
+    if (!baseResult) {
+      console.warn(`No base result found for ${packageName}, skipping comparison.`);
+      continue;
+    }
+    comparisonResults[packageName] = {
+      package: packageName,
+      dependencies: result.dependencies - baseResult.dependencies,
+      selfSize: result.selfSize - baseResult.selfSize,
+      dependencySize: result.dependencySize - baseResult.dependencySize,
+    };
   }
-  await writeFile(resultPath, JSON.stringify(allResults, null, 2));
+  return comparisonResults;
 };
 
 const run = async () => {
-  program.argument(
-    '[packages...]',
-    'which packages to bench. If omitted, all packages are benched'
-  );
+  program
+    .option('-b, --base <string>', 'The base branch to compare the results with')
+    .option('-p, --pull-request <number>', 'The PR number to comment comparions on')
+    .argument('[packages...]', 'which packages to bench. If omitted, all packages are benched');
   program.parse(process.argv);
 
   const packages = (
     program.args.length > 0 ? program.args : Object.keys(versions)
   ) as PackageName[];
+  const options = program.opts<{ pullRequest?: string; base?: string }>();
 
   packages.forEach((packageName) => {
     if (!Object.keys(versions).includes(packageName)) {
@@ -165,10 +247,29 @@ const run = async () => {
       `Currently benching ${limit.activeCount} packages, ${limit.pendingCount} pending, ${doneCount} done...`
     );
   }, 2_000);
-  const results = await Promise.all(
+  const resultsArray = await Promise.all(
     packages.map((packageName) => limit(() => benchPackage(packageName)))
   );
-  await saveResults(results);
+  const results = resultsArray.reduce((acc, result) => {
+    acc[result.package] = result;
+    return acc;
+  }, {} as ResultMap);
+  await saveResultsLocally({
+    filename: `results.json`,
+    results,
+  });
+
+  if (options.base) {
+    const comparisonResults = await compareResults({ results, base: options.base });
+    await saveResultsLocally({
+      filename: `compare-with-${options.base}.json`,
+      results: comparisonResults,
+    });
+
+    if (options.pullRequest) {
+      // send to github bot
+    }
+  }
 
   console.log('Done benching all packages');
   registryController?.abort();
