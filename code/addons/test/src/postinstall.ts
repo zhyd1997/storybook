@@ -63,17 +63,17 @@ export default async function postInstall(options: PostinstallOptions) {
   if (!!interactionsAddon) {
     let shouldUninstall = options.yes;
     if (!options.yes) {
+      logger.plain(dedent`
+        We have detected that you're using ${addonInteractionsName}.
+        The Storybook test addon is a replacement for the interactions addon, so you must uninstall and unregister it in order to use the test addon correctly. This can be done automatically.
+
+        More info: ${picocolors.yellow('https://storybook.js.org/docs/writing-tests/test-addon')}
+      `);
+
       const response = await prompts({
         type: 'confirm',
         name: 'shouldUninstall',
-        message: dedent`
-          We have detected that you're using ${addonInteractionsName}.
-          The Storybook test addon is a replacement for the interactions addon, so you must uninstall and unregister it in order to use the test addon correctly. This can be done automatically.
-          
-          More info: ${picocolors.yellow('https://storybook.js.org/docs/writing-tests/test-addon')}
-  
-          Would you like me to remove and unregister ${addonInteractionsName}?
-        `,
+        message: `Would you like me to remove and unregister ${addonInteractionsName}?`,
         initial: true,
       });
 
