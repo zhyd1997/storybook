@@ -211,6 +211,24 @@ jobs:
             yarn knip --no-exit-code
       - report-workflow-on-failure
       - cancel-workflow-on-failure
+  bench-packages:
+    executor:
+      class: medium
+      name: sb_node_22_classic
+    steps:
+      - git-shallow-clone/checkout_advanced:
+          clone_options: "--depth 1 --verbose"
+      - attach_workspace:
+          at: .
+      - run:
+          name: Benchmarking Packages
+          working_directory: scripts
+          command: yarn bench-package
+      # - run:
+      #     name: Uploading results
+      #     command: yarn upload-bench $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench) << pipeline.parameters.ghPrNumber >> << pipeline.parameters.ghBaseBranch >>
+      - report-workflow-on-failure
+      - cancel-workflow-on-failure
   check:
     executor:
       class: xlarge
@@ -707,6 +725,9 @@ workflows:
       - knip:
           requires:
             - build
+      - bench-packages:
+          requires:
+            - build
       - check:
           requires:
             - build
@@ -774,6 +795,9 @@ workflows:
           requires:
             - build
       - knip:
+          requires:
+            - build
+      - bench-packages:
           requires:
             - build
       - check:
@@ -844,6 +868,9 @@ workflows:
           requires:
             - build
       - knip:
+          requires:
+            - build
+      - bench-packages:
           requires:
             - build
       - check:
