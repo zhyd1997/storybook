@@ -110,7 +110,7 @@ addons.register(ADDON_ID, (api) => {
       } else if (watching) {
         message = 'Watching for file changes';
       } else if (progress?.finishedAt) {
-        message = <RelativeTime timestamp={progress.finishedAt} />;
+        message = <RelativeTime timestamp={new Date(progress.finishedAt)} />;
       }
 
       return (

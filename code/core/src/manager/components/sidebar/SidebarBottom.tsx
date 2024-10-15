@@ -126,6 +126,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
         running: true,
         failed: false,
         crashed: false,
+        progress: undefined,
       };
       setTestProviders((state) => ({ ...state, [id]: { ...state[id], ...startingState } }));
       api.experimental_updateStatus(id, (state = {}) =>
