@@ -23,7 +23,7 @@ function Title() {
   return (
     <div>
       <Spaced col={1}>
-        <span style={{ display: 'inline-block', verticalAlign: 'middle' }}>Component Tests</span>
+        <span style={{ display: 'inline-block', verticalAlign: 'middle' }}>Component tests</span>
         {interactionsCount && !hasException ? (
           <Badge status="neutral">{interactionsCount}</Badge>
         ) : null}

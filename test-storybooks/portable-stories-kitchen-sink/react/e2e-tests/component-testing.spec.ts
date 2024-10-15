@@ -55,7 +55,7 @@ test.describe("component testing", () => {
       .getByRole("button", { name: "test" });
     await expect(storyElement).toBeVisible({ timeout: 10000 });
 
-    await sbPage.viewAddonPanel("Component Tests");
+    await sbPage.viewAddonPanel("Component tests");
 
     // For whatever reason, when visiting a story sometimes the story element is collapsed and that causes flake
     const testStoryElement = await page.getByRole("button", {
@@ -68,7 +68,7 @@ test.describe("component testing", () => {
 
     // TODO: This is just temporary, the UI will be different
     await page.locator("#addons").getByRole("button").nth(2).click();
-    
+
     // Wait for test results to appear
     const errorFilter = page.getByLabel("Show errors");
     await expect(errorFilter).toBeVisible({ timeout: 30000 });
