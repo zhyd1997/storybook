@@ -10,7 +10,7 @@ import { runRegistry } from '../tasks/run-registry';
 import { maxConcurrentTasks } from '../utils/concurrency';
 import { esMain } from '../utils/esmain';
 
-const PACKAGES_PATH = join(__dirname, '..', '..', 'bench', 'packages');
+const BENCH_PACKAGES_PATH = join(__dirname, '..', '..', 'bench', 'packages');
 const REGISTRY_PORT = 6001;
 
 type PackageName = keyof typeof versions;
@@ -29,17 +29,18 @@ type PackageName = keyof typeof versions;
 
 export const benchPackage = async (packageName: PackageName) => {
   console.log(`Benching ${packageName}...`);
-  const packagePath = join(PACKAGES_PATH, packageName.replace('@storybook', ''));
+  const tmpBenchPackagePath = join(BENCH_PACKAGES_PATH, packageName.replace('@storybook', ''));
 
-  await rm(packagePath, { recursive: true }).catch(() => {});
-  await mkdir(packagePath, { recursive: true });
+  await rm(tmpBenchPackagePath, { recursive: true }).catch(() => {});
+  await mkdir(tmpBenchPackagePath, { recursive: true });
 
   await writeFile(
-    join(packagePath, 'package.json'),
+    join(tmpBenchPackagePath, 'package.json'),
     JSON.stringify(
       {
         name: `${packageName}-bench`,
         version: '1.0.0',
+        // Overrides ensures that Storybook packages outside the monorepo are using the versions we have in the monorepo
         overrides: versions,
       },
       null,
@@ -53,20 +54,20 @@ export const benchPackage = async (packageName: PackageName) => {
       ' '
     ),
     {
-      nodeOptions: { cwd: packagePath },
+      nodeOptions: { cwd: tmpBenchPackagePath },
     }
   );
 
   const npmLsResult = await x('npm', `ls --all --parseable`.split(' '), {
-    nodeOptions: { cwd: packagePath },
+    nodeOptions: { cwd: tmpBenchPackagePath },
   });
 
-  const amountOfDependencies = npmLsResult.stdout.trim().split('\n').length - 2;
   // the first line is the temporary benching package itself, don't count it
   // the second line is the package we're benching, don't count it
+  const amountOfDependencies = npmLsResult.stdout.trim().split('\n').length - 2;
 
-  const nodeModulesSize = await getDirSize(join(packagePath, 'node_modules'));
-  const selfSize = await getDirSize(join(packagePath, 'node_modules', packageName));
+  const nodeModulesSize = await getDirSize(join(tmpBenchPackagePath, 'node_modules'));
+  const selfSize = await getDirSize(join(tmpBenchPackagePath, 'node_modules', packageName));
   const dependencySize = nodeModulesSize - selfSize;
 
   console.log({
@@ -101,7 +102,8 @@ const formatBytes = (bytes: number) => {
     unitIndex++;
   }
 
-  // show 2 decimal places for MB, GB and TB and 0 for KB, B
+  // B, KB = 0 decimal places
+  // MB, GB, TB = 2 decimal places
   const decimals = unitIndex < 2 ? 0 : 2;
   return `${size.toFixed(decimals)} ${units[unitIndex]}`;
 };
@@ -125,11 +127,12 @@ const run = async () => {
 
   let registryController: AbortController | undefined;
   if ((await detectFreePort(REGISTRY_PORT)) === REGISTRY_PORT) {
+    console.log('Starting local registry...');
     registryController = await runRegistry({ dryRun: false, debug: false });
   }
 
-  // The amount of VCPUs for this task in CI is 8 (xlarge resource)
-  const amountOfVCPUs = 8;
+  // The amount of VCPUs for this task in CI is 2 (medium resource)
+  const amountOfVCPUs = 2;
   const concurrentLimt = process.env.CI ? amountOfVCPUs - 1 : maxConcurrentTasks;
   const limit = pLimit(concurrentLimt);
 
