@@ -23,6 +23,7 @@ import { postinstallAddon } from './postinstallAddon';
 export interface PostinstallOptions {
   packageManager: PackageManagerName;
   configDir: string;
+  yes?: boolean;
 }
 
 /**
@@ -66,6 +67,7 @@ type CLIOptions = {
   packageManager?: PackageManagerName;
   configDir?: string;
   skipPostinstall: boolean;
+  yes?: boolean;
 };
 
 /**
@@ -83,7 +85,7 @@ type CLIOptions = {
  */
 export async function add(
   addon: string,
-  { packageManager: pkgMgr, skipPostinstall, configDir: userSpecifiedConfigDir }: CLIOptions,
+  { packageManager: pkgMgr, skipPostinstall, configDir: userSpecifiedConfigDir, yes }: CLIOptions,
   logger = console
 ) {
   const [addonName, inputVersion] = getVersionSpecifier(addon);
@@ -165,7 +167,7 @@ export async function add(
   }
 
   if (!skipPostinstall && isCoreAddon(addonName)) {
-    await postinstallAddon(addonName, { packageManager: packageManager.type, configDir });
+    await postinstallAddon(addonName, { packageManager: packageManager.type, configDir, yes });
   }
 }
 function isValidVersion(version: string) {
