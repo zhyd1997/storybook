@@ -6,6 +6,7 @@ import type { Plugin } from 'vitest/config';
 import {
   getInterpretedFile,
   loadAllPresets,
+  normalizeStories,
   validateConfigurationFiles,
 } from 'storybook/internal/common';
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
@@ -19,6 +20,39 @@ const defaultOptions: UserOptions = {
   configDir: undefined,
   storybookUrl: 'http://localhost:6006',
 };
+
+async function extractStorybookData(finalOptions: InternalOptions) {
+  const configDir = finalOptions.configDir;
+  try {
+    await validateConfigurationFiles(configDir);
+  } catch (err) {
+    throw new MainFileMissingError({
+      location: configDir,
+      source: 'vitest',
+    });
+  }
+  const previewLevelTags = await extractTagsFromPreview(configDir);
+
+  const presets = await loadAllPresets({
+    configDir,
+    corePresets: [],
+    overridePresets: [],
+    packageJson: {},
+  });
+  const stories = await presets.apply('stories', []);
+
+  const normalizedStories = normalizeStories(stories, {
+    configDir: finalOptions.configDir,
+    workingDir: process.cwd(),
+  });
+
+  const storiesGlobs = normalizedStories.map((entry) => `${entry.directory}/${entry.files}`);
+  // To discuss: Do we want to filter out mdx files?
+  // The vitest plugin ignores mdx files, but perhaps it might still give side effects based on user's config
+  // However if we do filter out mdx, how do we do it without affecting things like ./*.stories.@(js|jsx|ts|mdx|tsx)?
+  // .filter((entry) => !entry.includes('mdx'));
+  return { previewLevelTags, stories, storiesGlobs };
+}
 
 const extractTagsFromPreview = async (configDir: string) => {
   const previewConfigPath = getInterpretedFile(join(resolve(configDir), 'preview'));
@@ -64,30 +98,14 @@ export const storybookTest = (options?: UserOptions): Plugin => {
   return {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
-    async buildStart() {
-      // evaluate main.js and preview.js so we can extract
-      // stories for autotitle support and tags for tags filtering support
-      const configDir = finalOptions.configDir;
-      try {
-        await validateConfigurationFiles(configDir);
-      } catch (err) {
-        throw new MainFileMissingError({
-          location: configDir,
-          source: 'vitest',
-        });
-      }
-
-      const presets = await loadAllPresets({
-        configDir,
-        corePresets: [],
-        overridePresets: [],
-        packageJson: {},
-      });
-
-      stories = await presets.apply('stories', []);
-      previewLevelTags = await extractTagsFromPreview(configDir);
-    },
     async config(config) {
+      const storybookData = await extractStorybookData(finalOptions);
+      stories = storybookData.stories;
+      previewLevelTags = storybookData.previewLevelTags;
+
+      config.test.include ??= [];
+      config.test.include.push(...storybookData.storiesGlobs);
+
       // If we end up needing to know if we are running in browser mode later
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
       //   plugin.name?.startsWith('vitest:browser')

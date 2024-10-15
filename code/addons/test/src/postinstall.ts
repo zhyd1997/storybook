@@ -334,6 +334,7 @@ export default async function postInstall(options: PostinstallOptions) {
           {
             extends: '${viteConfigFile ? relative(dirname(browserWorkspaceFile), viteConfigFile) : ''}',
             plugins: [
+              // The plugin will run tests in the stories defined in your Storybook config 
               // See options at: https://storybook.js.org/docs/writing-tests/vitest-plugin#storybooktest
               storybookTest(),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
             ],
@@ -345,8 +346,6 @@ export default async function postInstall(options: PostinstallOptions) {
                 name: 'chromium',
                 provider: 'playwright',
               },
-              // Make sure to adjust this pattern to match your stories files.
-              include: ['**/*.stories.?(m)[jt]s?(x)'],
               setupFiles: ['./.storybook/vitest.setup.ts'],
             },
           },
@@ -370,6 +369,7 @@ export default async function postInstall(options: PostinstallOptions) {
         // More info at: https://storybook.js.org/docs/writing-tests/vitest-plugin
         export default defineConfig({
           plugins: [
+            // The plugin will run tests in the stories defined in your Storybook config 
             // See options at: https://storybook.js.org/docs/writing-tests/vitest-plugin#storybooktest
             storybookTest(),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
           ],
@@ -381,8 +381,6 @@ export default async function postInstall(options: PostinstallOptions) {
               name: 'chromium',
               provider: 'playwright',
             },
-            // Make sure to adjust this pattern to match your stories files.
-            include: ['**/*.stories.?(m)[jt]s?(x)'],
             setupFiles: ['./.storybook/vitest.setup.ts'],
           },
         });
