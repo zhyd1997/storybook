@@ -117,16 +117,14 @@ const formatBytes = (bytes: number) => {
 };
 
 const saveResults = async (results: Result[]) => {
-  console.log('Saving results...');
+  const resultPath = join(BENCH_PACKAGES_PATH, 'results.json');
+  console.log(`Saving results to ${resultPath}...`);
   const allResults: Record<string, Omit<Result, 'package'>> = {};
   for (const result of results) {
     const { package: packageName, ...withoutPackage } = result;
     allResults[result.package] = withoutPackage;
   }
-  await writeFile(
-    join(BENCH_PACKAGES_PATH, 'package-bench-results.json'),
-    JSON.stringify(allResults, null, 2)
-  );
+  await writeFile(resultPath, JSON.stringify(allResults, null, 2));
 };
 
 const run = async () => {

@@ -225,7 +225,7 @@ jobs:
           working_directory: scripts
           command: yarn bench-package
       - store_artifacts: 
-          path: code/bench/packages/package-bench-results.json
+          path: bench/packages/results.json
       # - run:
       #     name: Uploading results
       #     command: yarn upload-bench $(yarn get-template --cadence << pipeline.parameters.workflow >> --task bench) << pipeline.parameters.ghPrNumber >> << pipeline.parameters.ghBaseBranch >>
