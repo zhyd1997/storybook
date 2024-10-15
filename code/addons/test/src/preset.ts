@@ -11,6 +11,7 @@ import {
 import { oneWayHash, telemetry } from 'storybook/internal/telemetry';
 import type { Options, StoryId } from 'storybook/internal/types';
 
+import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
 
 import { STORYBOOK_ADDON_TEST_CHANNEL } from './constants';
@@ -53,10 +54,9 @@ export const experimental_serverChannel = async (channel: Channel, options: Opti
   if (!builderName?.includes('vite')) {
     if (framework.includes('nextjs')) {
       log(dedent`
-        It seems that you are using Next.js in Storybook with a Webpack-based builder. Storybook now provides a new, performant way to use Vite with Next.js.
-        If you configure your Storybook to use Vite, the test addon will contain extra capabilities to run tests in Storybook.
+        You're using ${framework}, which is a Webpack-based builder. In order to use Storybook Test, with your project, you need to use '@storybook/experimental-nextjs-vite', a high performance Vite-based equivalent.
 
-        More info: https://storybook.js.org/docs/get-started/frameworks/nextjs#with-vite
+        Information on how to upgrade here: ${picocolors.yellow('https://storybook.js.org/docs/get-started/frameworks/nextjs#with-vite')}\n
       `);
     }
 
