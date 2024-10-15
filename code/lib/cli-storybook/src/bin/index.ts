@@ -57,6 +57,7 @@ command('remove <addon>')
     '--package-manager <npm|pnpm|yarn1|yarn2>',
     'Force package manager for installing dependencies'
   )
+  .option('-c, --config-dir <dir-name>', 'Directory where to load Storybook configurations from')
   .action((addonName: string, options: any) =>
     withTelemetry('remove', { cliOptions: options }, async () => {
       await remove(addonName, options);
