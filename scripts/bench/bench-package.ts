@@ -14,6 +14,13 @@ import { esMain } from '../utils/esmain';
 
 const BENCH_PACKAGES_PATH = join(__dirname, '..', '..', 'bench', 'packages');
 const REGISTRY_PORT = 6001;
+const GCP_CREDENTIALS = JSON.parse(process.env.GCP_CREDENTIALS || '{}');
+const bigQueryBenchTable = new BigQuery({
+  projectId: GCP_CREDENTIALS.project_id,
+  credentials: GCP_CREDENTIALS,
+})
+  .dataset('benchmark_results')
+  .table('bench2');
 
 type PackageName = keyof typeof versions;
 type Result = {
@@ -161,16 +168,7 @@ const compareResults = async ({
   results: ResultMap;
   baseBranch: string;
 }) => {
-  // const GCP_CREDENTIALS = JSON.parse(process.env.GCP_CREDENTIALS || '{}');
-
-  // const store = new BigQuery({
-  //   projectId: GCP_CREDENTIALS.project_id,
-  //   credentials: GCP_CREDENTIALS,
-  // });
-  // const dataset = store.dataset('benchmark_results');
-  // const appTable = dataset.table('bench2');
-
-  // const [baseResults] = await appTable.query({
+  // const [baseResults] = await bigQueryBenchTable.query({
   //   query: `
   //     WITH latest_packages AS (
   //     SELECT branch, package, timestamp,
@@ -212,6 +210,18 @@ const compareResults = async ({
     };
   }
   return comparisonResults;
+};
+
+const uploadResultsToBigQuery = async (results: ResultMap) => {
+  const row = {
+    branch:
+      process.env.CIRCLE_BRANCH ||
+      (await x('git', 'rev-parse --abbrev-ref HEAD'.split(' '))).stdout.trim(),
+    commit: process.env.CIRCLE_SHA1 || (await x('git', 'rev-parse HEAD'.split(' '))).stdout.trim(),
+    timestamp: new Date().toISOString(),
+    results,
+  };
+
 };
 
 const run = async () => {
