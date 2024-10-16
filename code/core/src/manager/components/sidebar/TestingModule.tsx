@@ -246,7 +246,7 @@ export const TestingModule = ({
                       padding="small"
                       active={state.watching}
                       onClick={() => onSetWatchMode(state.id, !state.watching)}
-                      disabled={state.crashed}
+                      disabled={state.crashed || state.running}
                     >
                       <EyeIcon />
                     </Button>
