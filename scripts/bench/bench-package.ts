@@ -31,18 +31,18 @@ type HumanReadableResult = {
 };
 type ResultMap = Record<PackageName, Result>;
 type HumanReadableResultMap = Record<PackageName, HumanReadableResult>;
+
 /**
- * This script is used to bench the size of Storybook packages and their dependencies. For each
- * package, the steps are:
+ * This function benchmarks the size of Storybook packages and their dependencies. For each package,
+ * the steps are:
  *
  * 1. Create a temporary directory in /bench/packages and create a package.json file that only depends
  *    on that one package
  * 2. Install the package and its dependencies, without peer dependencies
  * 3. Measure the size of the package and its dependencies, and count the number of dependencies
  *    (including transitive)
- * 4. Print the results
+ * 4. Print and return the results
  */
-
 export const benchPackage = async (packageName: PackageName) => {
   console.log(`Benching ${packageName}...`);
   const tmpBenchPackagePath = join(BENCH_PACKAGES_PATH, packageName.replace('@storybook', ''));
@@ -154,7 +154,13 @@ const saveResultsLocally = async ({
   await writeFile(resultPath, JSON.stringify(humanReadableResults, null, 2));
 };
 
-const compareResults = async ({ results, base }: { results: ResultMap; base: string }) => {
+const compareResults = async ({
+  results,
+  baseBranch,
+}: {
+  results: ResultMap;
+  baseBranch: string;
+}) => {
   // const GCP_CREDENTIALS = JSON.parse(process.env.GCP_CREDENTIALS || '{}');
 
   // const store = new BigQuery({
@@ -170,7 +176,7 @@ const compareResults = async ({ results, base }: { results: ResultMap; base: str
   //     SELECT branch, package, timestamp,
   //         ROW_NUMBER() OVER (PARTITION BY branch, package ORDER BY timestamp DESC) as rownumber
   //       FROM \`storybook-benchmark.benchmark_results.bench2\`
-  //       WHERE branch = @base
+  //       WHERE branch = @baseBranch
   //         AND package IN UNNEST(@packages)
   //         AND timestamp > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
   //     )
@@ -178,7 +184,7 @@ const compareResults = async ({ results, base }: { results: ResultMap; base: str
   //     FROM latest_packages
   //     WHERE rownumber = 1
   //     ORDER BY package;`,
-  //   params: { base, packages: Object.keys(results) },
+  //   params: { baseBranch, packages: Object.keys(results) },
   // });
   // console.log(baseResults);
 
@@ -192,14 +198,14 @@ const compareResults = async ({ results, base }: { results: ResultMap; base: str
   ];
 
   const comparisonResults = {} as ResultMap;
-  for (const [packageName, result] of Object.entries(results)) {
-    const baseResult = baseResults.find((row) => row.package === packageName);
+  for (const result of Object.values(results)) {
+    const baseResult = baseResults.find((row) => row.package === result.package);
     if (!baseResult) {
-      console.warn(`No base result found for ${packageName}, skipping comparison.`);
+      console.warn(`No base result found for ${result.package}, skipping comparison.`);
       continue;
     }
-    comparisonResults[packageName] = {
-      package: packageName,
+    comparisonResults[result.package] = {
+      package: result.package,
       dependencies: result.dependencies - baseResult.dependencies,
       selfSize: result.selfSize - baseResult.selfSize,
       dependencySize: result.dependencySize - baseResult.dependencySize,
@@ -210,7 +216,7 @@ const compareResults = async ({ results, base }: { results: ResultMap; base: str
 
 const run = async () => {
   program
-    .option('-b, --base <string>', 'The base branch to compare the results with')
+    .option('-b, --baseBranch <string>', 'The base branch to compare the results with')
     .option('-p, --pull-request <number>', 'The PR number to comment comparions on')
     .argument('[packages...]', 'which packages to bench. If omitted, all packages are benched');
   program.parse(process.argv);
@@ -218,7 +224,7 @@ const run = async () => {
   const packages = (
     program.args.length > 0 ? program.args : Object.keys(versions)
   ) as PackageName[];
-  const options = program.opts<{ pullRequest?: string; base?: string }>();
+  const options = program.opts<{ pullRequest?: string; baseBranch?: string }>();
 
   packages.forEach((packageName) => {
     if (!Object.keys(versions).includes(packageName)) {
@@ -259,10 +265,10 @@ const run = async () => {
     results,
   });
 
-  if (options.base) {
-    const comparisonResults = await compareResults({ results, base: options.base });
+  if (options.baseBranch) {
+    const comparisonResults = await compareResults({ results, baseBranch: options.baseBranch });
     await saveResultsLocally({
-      filename: `compare-with-${options.base}.json`,
+      filename: `compare-with-${options.baseBranch}.json`,
       results: comparisonResults,
     });
 
