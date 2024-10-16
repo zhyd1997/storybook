@@ -15,18 +15,20 @@ const Wrapper = styled.div({
   position: 'relative',
 });
 
-const Count = styled(Badge)(({ theme }) => ({
+const TagSelected = styled(Badge)(({ theme }) => ({
   position: 'absolute',
-  top: 0,
-  right: 0,
+  top: 7,
+  right: 7,
   transform: 'translate(50%, -50%)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   padding: 3,
-  height: 15,
-  minWidth: 15,
-  lineHeight: '15px',
+  height: 6,
+  minWidth: 6,
+  lineHeight: 'px',
+  border: `2px solid`,
+  boxShadow: `${theme.barSelectedColor} 0 0 0 1px inset`,
   fontSize: theme.typography.size.s1 - 1,
   background: theme.color.secondary,
   color: theme.color.lightest,
@@ -100,7 +102,7 @@ export const TagsFilter = ({ api, indexJson, initialSelectedTags = [] }: TagsFil
         <IconButton key="tags" title="Tag filters" active={tagsActive} onClick={handleToggleExpand}>
           <FilterIcon />
         </IconButton>
-        {selectedTags.length > 0 && <Count>{selectedTags.length}</Count>}
+        {selectedTags.length > 0 && <TagSelected />}
       </Wrapper>
     </WithTooltip>
   );
