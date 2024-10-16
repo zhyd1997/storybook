@@ -6,7 +6,6 @@ import { styled, useTheme } from '@storybook/core/theming';
 import {
   CollapseIcon as CollapseIconSvg,
   ExpandAltIcon,
-  PlayIcon,
   StatusFailIcon,
   StatusPassIcon,
   StatusWarnIcon,
@@ -14,12 +13,7 @@ import {
 } from '@storybook/icons';
 import type { API_HashEntry, API_StatusValue, StoryId } from '@storybook/types';
 
-import {
-  PRELOAD_ENTRIES,
-  TESTING_MODULE_RUN_REQUEST,
-  type TestingModuleRunRequestPayload,
-  type TestingModuleRunRequestStories,
-} from '@storybook/core/core-events';
+import { PRELOAD_ENTRIES } from '@storybook/core/core-events';
 import { useStorybookApi } from '@storybook/core/manager-api';
 import type {
   API,
@@ -282,64 +276,21 @@ const Node = React.memo<NodeProps>(function Node({
           <CollapseIcon isExpanded={isExpanded} />
           {item.renderLabel?.(item, api) || item.name}
         </CollapseButton>
-        <div>
-          {isExpanded && (
-            <IconButton
-              className="sidebar-subheading-action"
-              aria-label={isFullyExpanded ? 'Expand' : 'Collapse'}
-              data-action="expand-all"
-              data-expanded={isFullyExpanded}
-              onClick={(event) => {
-                event.preventDefault();
-                // @ts-expect-error (non strict)
-                setFullyExpanded();
-              }}
-            >
-              {isFullyExpanded ? <CollapseIconSvg /> : <ExpandAltIcon />}
-            </IconButton>
-          )}
+        {isExpanded && (
           <IconButton
-            onClick={() => {
-              type ImportPath = string;
-              type ComponentPath = string;
-
-              const importPathMap = new Map<ImportPath, ComponentPath>();
-              const storyFilesMap = new Map<ImportPath, TestingModuleRunRequestStories[]>();
-
-              const traverseChildren = (children: string[]) => {
-                children.forEach((childId) => {
-                  const child = collapsedData[childId];
-                  if (child.type === 'story') {
-                    const componentPath = (child as any).componentPath;
-                    const importPath = child.importPath;
-                    const storyFile = storyFilesMap.get(importPath) || [];
-
-                    storyFile.push({ id: child.id, name: child.name });
-                    storyFilesMap.set(importPath, storyFile);
-                    importPathMap.set(importPath, componentPath);
-                  } else if (child.type !== 'docs') {
-                    traverseChildren(child.children);
-                  }
-                });
-              };
-
-              traverseChildren(item.children);
-
-              const testingModuleRunRequestPayload: TestingModuleRunRequestPayload = {
-                providerId: TEST_PROVIDER_ID,
-                payload: Array.from(importPathMap.entries()).map(([importPath, componentPath]) => ({
-                  importPath,
-                  componentPath,
-                  stories: storyFilesMap.get(importPath) ?? [],
-                })),
-              };
-
-              api.emit(TESTING_MODULE_RUN_REQUEST, testingModuleRunRequestPayload);
+            className="sidebar-subheading-action"
+            aria-label={isFullyExpanded ? 'Expand' : 'Collapse'}
+            data-action="expand-all"
+            data-expanded={isFullyExpanded}
+            onClick={(event) => {
+              event.preventDefault();
+              // @ts-expect-error (non strict)
+              setFullyExpanded();
             }}
           >
-            <PlayIcon />
+            {isFullyExpanded ? <CollapseIconSvg /> : <ExpandAltIcon />}
           </IconButton>
-        </div>
+        )}
       </RootNode>
     );
   }
