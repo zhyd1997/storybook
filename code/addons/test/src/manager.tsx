@@ -58,7 +58,7 @@ export function getRelativeTimeString(date: Date): string {
   return rtf.format(Math.floor(delta / divisor), units[unitIndex]);
 }
 
-const RelativeTime = ({ timestamp }: { timestamp: Date }) => {
+const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: number }) => {
   const [relativeTimeString, setRelativeTimeString] = useState(null);
 
   useEffect(() => {
@@ -73,7 +73,10 @@ const RelativeTime = ({ timestamp }: { timestamp: Date }) => {
     }
   }, [timestamp]);
 
-  return relativeTimeString && `Ran ${relativeTimeString}`;
+  return (
+    relativeTimeString &&
+    `Ran ${testCount} ${testCount === 1 ? 'test' : 'tests'} ${relativeTimeString}`
+  );
 };
 
 addons.register(ADDON_ID, (api) => {
@@ -107,10 +110,15 @@ addons.register(ADDON_ID, (api) => {
             </LinkComponent>
           </>
         );
+      } else if (progress?.finishedAt) {
+        message = (
+          <RelativeTime
+            timestamp={new Date(progress.finishedAt)}
+            testCount={progress.numTotalTests}
+          />
+        );
       } else if (watching) {
         message = 'Watching for file changes';
-      } else if (progress?.finishedAt) {
-        message = <RelativeTime timestamp={new Date(progress.finishedAt)} />;
       }
 
       return (
