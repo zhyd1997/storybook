@@ -1,5 +1,7 @@
 import type { Addon_TestProviderState, Addon_TestProviderType } from '@storybook/core/types';
 
+type DateNow = number;
+
 export type TestProviderId = Addon_TestProviderType['id'];
 export type TestProviderConfig = Addon_TestProviderType;
 export type TestProviderState = Addon_TestProviderState;
@@ -27,7 +29,7 @@ export type TestingModuleRunAllRequestPayload = {
 export type TestingModuleProgressReportPayload =
   | {
       providerId: TestProviderId;
-      status: 'success' | 'pending';
+      status: 'success' | 'pending' | 'cancelled';
       cancellable?: boolean;
       progress?: TestingModuleProgressReportProgress;
       details?: { [key: string]: any };
@@ -48,8 +50,8 @@ export type TestingModuleCrashReportPayload = {
 };
 
 export type TestingModuleProgressReportProgress = {
-  startedAt: Date;
-  finishedAt?: Date;
+  startedAt: DateNow;
+  finishedAt?: DateNow;
   numTotalTests?: number;
   numPassedTests?: number;
   numFailedTests?: number;

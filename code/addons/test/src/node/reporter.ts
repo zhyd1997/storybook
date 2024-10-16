@@ -73,7 +73,7 @@ export class StorybookReporter implements Reporter {
     this.start = Date.now();
   }
 
-  getProgressReport(finishedAt?: Date) {
+  getProgressReport(finishedAt?: number) {
     const files = this.ctx.state.getFiles();
     const fileTests = getTests(files);
     // The number of total tests is dynamic and can change during the run
@@ -146,7 +146,7 @@ export class StorybookReporter implements Reporter {
         numPassedTests,
         numPendingTests,
         numTotalTests,
-        startedAt: new Date(this.start),
+        startedAt: this.start,
         finishedAt,
       } as TestingModuleProgressReportProgress,
       details: {
@@ -196,10 +196,11 @@ export class StorybookReporter implements Reporter {
         unhandledErrors[0]
       );
     } else {
+      const isCancelled = this.ctx.isCancelling;
       this.sendReport({
         providerId: TEST_PROVIDER_ID,
-        status: 'success',
-        ...this.getProgressReport(new Date()),
+        status: isCancelled ? 'cancelled' : 'success',
+        ...this.getProgressReport(Date.now()),
       });
     }
 
