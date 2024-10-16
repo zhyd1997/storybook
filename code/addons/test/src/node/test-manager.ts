@@ -38,6 +38,7 @@ export class TestManager {
   }
 
   async restartVitest(watchMode = false) {
+    await this.vitestManager.vitest?.runningPromise;
     await this.vitestManager.closeVitest();
     await this.vitestManager.startVitest(watchMode);
   }
