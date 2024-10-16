@@ -9,6 +9,8 @@ import type { API } from '@storybook/core/manager-api';
 
 const BUILT_IN_TAGS = new Set([
   'dev',
+  'docs-only',
+  'test-only',
   'autodocs',
   'test',
   'attached-mdx',
