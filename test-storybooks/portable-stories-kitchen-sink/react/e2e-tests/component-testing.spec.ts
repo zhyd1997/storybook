@@ -66,8 +66,7 @@ test.describe("component testing", () => {
       testStoryElement.click();
     }
 
-    // TODO: This is just temporary, the UI will be different
-    await page.locator("#addons").getByRole("button").nth(2).click();
+    await page.getByRole('button', { name: 'Run tests' }).click();
 
     // Wait for test results to appear
     const errorFilter = page.getByLabel("Show errors");
@@ -115,8 +114,7 @@ test.describe("component testing", () => {
       .getByRole("button", { name: "test" });
     await expect(storyElement).toBeVisible({ timeout: 10000 });
 
-    // TODO: This is just temporary, the UI will be different
-    await page.locator("#addons").getByRole("button").nth(2).click();
+    await page.getByRole('button', { name: 'Run tests' }).click();
 
     // Wait for test results to appear
     const errorFilter = page.getByLabel("Show errors");
