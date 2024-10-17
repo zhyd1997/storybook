@@ -180,7 +180,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
 
   useEffect(() => {
     const onCrashReport = ({ providerId, ...details }: { providerId: string }) => {
-      updateTestProvider(providerId, { details, running: false, crashed: true });
+      updateTestProvider(providerId, { details, running: false, crashed: true, watching: false });
     };
 
     const onProgressReport = ({ providerId, ...payload }: TestingModuleProgressReportPayload) => {
