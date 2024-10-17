@@ -27,7 +27,6 @@ const TagSelected = styled(Badge)(({ theme }) => ({
   height: 6,
   minWidth: 6,
   lineHeight: 'px',
-  border: `2px solid`,
   boxShadow: `${theme.barSelectedColor} 0 0 0 1px inset`,
   fontSize: theme.typography.size.s1 - 1,
   background: theme.color.secondary,
