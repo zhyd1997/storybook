@@ -173,16 +173,20 @@ export const frameworkToDefaultBuilder: Record<
   'vue3-rsbuild': CommunityBuilder.Rsbuild,
 };
 
+/**
+ * Return the installed version of a package, or the coerced version specifier from package.json if
+ * it's a dependency but not installed (e.g. in a fresh project)
+ */
 export async function getVersionSafe(packageManager: JsPackageManager, packageName: string) {
   try {
-    const version = await packageManager.getInstalledVersion(packageName);
-    if (version) {
-      return coerce(version);
-    } else {
+    let version = await packageManager.getInstalledVersion(packageName);
+    if (!version) {
       const deps = await packageManager.getAllDependencies();
       const versionSpecifier = deps[packageName];
-      return coerce(versionSpecifier);
+      version = versionSpecifier ?? '';
     }
+    const coerced = coerce(version, { includePrerelease: true });
+    return coerced?.toString();
   } catch (err) {
     // fall back to no version
   }
