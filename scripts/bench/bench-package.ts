@@ -20,7 +20,7 @@ const bigQueryBenchTable = new BigQuery({
   credentials: GCP_CREDENTIALS,
 })
   .dataset('benchmark_results')
-  .table('bench2');
+  .table('package_bench');
 
 type PackageName = keyof typeof versions;
 type Result = {
@@ -155,7 +155,7 @@ const saveResultsLocally = async ({
   console.log(`Saving results to ${resultPath}...`);
 
   const humanReadableResults = Object.entries(results).reduce((acc, [packageName, result]) => {
-    acc[packageName] = toHumanReadable(result);
+    acc[packageName as PackageName] = toHumanReadable(result);
     return acc;
   }, {} as HumanReadableResultMap);
   await writeFile(resultPath, JSON.stringify(humanReadableResults, null, 2));
@@ -213,15 +213,26 @@ const compareResults = async ({
 };
 
 const uploadResultsToBigQuery = async (results: ResultMap) => {
-  const row = {
+  if (!GCP_CREDENTIALS.project_id) {
+    console.warn('No GCP credentials found, skipping upload to BigQuery');
+    return;
+  }
+  const commonFields = {
     branch:
       process.env.CIRCLE_BRANCH ||
       (await x('git', 'rev-parse --abbrev-ref HEAD'.split(' '))).stdout.trim(),
     commit: process.env.CIRCLE_SHA1 || (await x('git', 'rev-parse HEAD'.split(' '))).stdout.trim(),
-    timestamp: new Date().toISOString(),
-    results,
+    benchmarkedAt: new Date(),
   };
+  const rows = Object.values(results).map((result) => ({
+    ...commonFields,
+    package: result.package,
+    selfSize: result.selfSize,
+    dependencySize: result.dependencySize,
+    dependencyCount: result.dependencies,
+  }));
 
+  await bigQueryBenchTable.insert(rows);
 };
 
 const run = async () => {
@@ -277,10 +288,13 @@ const run = async () => {
 
   if (options.baseBranch) {
     const comparisonResults = await compareResults({ results, baseBranch: options.baseBranch });
-    await saveResultsLocally({
-      filename: `compare-with-${options.baseBranch}.json`,
-      results: comparisonResults,
-    });
+    await Promise.all([
+      saveResultsLocally({
+        filename: `compare-with-${options.baseBranch}.json`,
+        results: comparisonResults,
+      }),
+      uploadResultsToBigQuery(results),
+    ]);
 
     if (options.pullRequest) {
       // send to github bot
