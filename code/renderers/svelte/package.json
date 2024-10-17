@@ -66,7 +66,7 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
-    "@testing-library/svelte": "patch:@testing-library/svelte@npm%3A4.1.0#~/.yarn/patches/@testing-library-svelte-npm-4.1.0-34b7037bc0.patch",
+    "@testing-library/svelte": "^5.2.3",
     "expect-type": "^0.15.0",
     "svelte": "^5.0.0-next.268",
     "svelte-check": "^4.0.5",
