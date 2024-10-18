@@ -42,7 +42,7 @@ export const createArgTypes = (docgen: SvelteComponentDoc) => {
         description: item.description || undefined,
         type: {
           required: hasKeyword('required', item.keywords || []),
-          name: item.type?.text as SBScalarType['name'],
+          name: item.type?.text === '{}' ? 'object' : (item.type?.text as SBScalarType['name']),
         },
         table: {
           type: {
