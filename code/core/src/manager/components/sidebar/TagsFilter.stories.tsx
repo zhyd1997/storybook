@@ -18,6 +18,7 @@ const meta = {
       }),
       applyQueryParams: fn().mockName('api::applyQueryParams'),
     } as any,
+    isDevelopment: true,
   },
 } satisfies Meta<typeof TagsFilter>;
 
@@ -64,4 +65,11 @@ export const OpenEmpty: Story = {
     },
   },
   play: Open.play,
+};
+
+export const EmptyProduction: Story = {
+  args: {
+    ...OpenEmpty.args,
+    isDevelopment: false,
+  },
 };

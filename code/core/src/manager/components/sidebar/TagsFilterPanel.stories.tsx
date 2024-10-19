@@ -10,6 +10,7 @@ const meta = {
     api: {
       getDocsUrl: () => 'https://storybook.js.org/docs/',
     } as any,
+    isDevelopment: true,
   },
   tags: ['hoho'],
 } satisfies Meta<typeof TagsFilterPanel>;
@@ -25,6 +26,20 @@ export const Empty: Story = {
   },
 };
 
+export const BuiltInTagsOnly: Story = {
+  args: {
+    allTags: ['play-fn'],
+    selectedTags: [],
+  },
+};
+
+export const BuiltInTagsOnlyProduction: Story = {
+  args: {
+    ...BuiltInTagsOnly.args,
+    isDevelopment: false,
+  },
+};
+
 export const Default: Story = {
   args: {
     allTags: ['tag1', 'tag2', 'tag3'],
@@ -34,12 +49,12 @@ export const Default: Story = {
 
 export const BuiltInTags: Story = {
   args: {
-    allTags: [...Default.args.allTags, 'dev', 'autodocs', 'play-fn'],
+    allTags: [...Default.args.allTags, 'play-fn'],
     selectedTags: ['tag1', 'tag3'],
   },
 };
 
-export const BuiltInTagsSelected: Story = {
+export const ExtraBuiltInTagsSelected: Story = {
   args: {
     ...BuiltInTags.args,
     selectedTags: ['tag1', 'tag3', 'autodocs', 'play-fn'],

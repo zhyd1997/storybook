@@ -7,16 +7,9 @@ import type { Tag } from '@storybook/types';
 
 import type { API } from '@storybook/core/manager-api';
 
-const BUILT_IN_TAGS = new Set([
-  'dev',
-  'docs-only',
-  'test-only',
-  'autodocs',
-  'test',
-  'attached-mdx',
-  'unattached-mdx',
-  'play-fn',
-]);
+import { isDOMComponent } from 'react-dom/test-utils';
+
+const BUILT_IN_TAGS_SHOW = new Set(['play-fn']);
 
 const Wrapper = styled.div({
   minWidth: 180,
@@ -28,6 +21,7 @@ interface TagsFilterPanelProps {
   allTags: Tag[];
   selectedTags: Tag[];
   toggleTag: (tag: Tag) => void;
+  isDevelopment: boolean;
 }
 
 export const TagsFilterPanel = ({
@@ -35,38 +29,40 @@ export const TagsFilterPanel = ({
   allTags,
   selectedTags,
   toggleTag,
+  isDevelopment,
 }: TagsFilterPanelProps) => {
   const theme = useTheme();
-  const userTags = allTags.filter((tag) => tag === 'play-fn' || !BUILT_IN_TAGS.has(tag)).toSorted();
-  const docsUrl = api.getDocsUrl({ subpath: 'writing-stories/tags' });
-  const items =
-    userTags.length === 0
-      ? [
-          {
-            id: 'no-tags',
-            title: 'There are no tags. Use tags to organize and filter your Storybook.',
-            isIndented: false,
-            style: {
-              borderBottom: `4px solid ${theme.appBorderColor}`,
-            },
-          },
-          {
-            id: 'tags-docs',
-            title: 'Learn how to add tags',
-            icon: <ShareAltIcon />,
-            href: docsUrl,
-          },
-        ]
-      : userTags.map((tag) => {
-          const checked = selectedTags.includes(tag);
-          const id = `tag-${tag}`;
-          return {
-            id,
-            title: tag,
-            right: <input type="checkbox" id={id} name={id} value={tag} checked={checked} />,
-            onClick: () => toggleTag(tag),
-          };
-        });
+  const userTags = allTags.filter((tag) => !BUILT_IN_TAGS_SHOW.has(tag));
+  const docsUrl = api.getDocsUrl({ subpath: 'writing-stories/tags#filtering-by-custom-tags' });
+  const items = allTags.map((tag) => {
+    const checked = selectedTags.includes(tag);
+    const id = `tag-${tag}`;
+    return {
+      id,
+      title: tag,
+      right: <input type="checkbox" id={id} name={id} value={tag} checked={checked} />,
+      onClick: () => toggleTag(tag),
+    };
+  }) as any[];
+
+  if (allTags.length === 0) {
+    items.push({
+      id: 'no-tags',
+      title: 'There are no tags. Use tags to organize and filter your Storybook.',
+      isIndented: false,
+    });
+  }
+  if (userTags.length === 0 && isDevelopment) {
+    items.push({
+      id: 'tags-docs',
+      title: 'Learn how to add tags',
+      icon: <ShareAltIcon />,
+      href: docsUrl,
+      style: {
+        borderTop: `4px solid ${theme.appBorderColor}`,
+      },
+    });
+  }
 
   return (
     <Wrapper>
