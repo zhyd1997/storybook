@@ -1,8 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { UnsupportedViewportDimensionError } from 'storybook/internal/preview-errors';
 
-import { page } from '@vitest/browser/context';
-
 import { MINIMAL_VIEWPORTS } from '../../../viewport/src/defaults';
 import type { ViewportMap, ViewportStyles } from '../../../viewport/src/types';
 
@@ -31,13 +29,13 @@ const parseDimension = (value: string, dimension: 'width' | 'height') => {
   if (validPixelOrNumber.test(value)) {
     return Number.parseInt(value, 10);
   } else if (percentagePattern.test(value)) {
-    const percentageValue = parseFloat(value) / 100;
+    const percentageValue = Number.parseFloat(value) / 100;
     return Math.round(DEFAULT_VIEWPORT_DIMENSIONS[dimension] * percentageValue);
   } else if (vwPattern.test(value)) {
-    const vwValue = parseFloat(value) / 100;
+    const vwValue = Number.parseFloat(value) / 100;
     return Math.round(DEFAULT_VIEWPORT_DIMENSIONS.width * vwValue);
   } else if (vhPattern.test(value)) {
-    const vhValue = parseFloat(value) / 100;
+    const vhValue = Number.parseFloat(value) / 100;
     return Math.round(DEFAULT_VIEWPORT_DIMENSIONS.height * vhValue);
   } else if (emRemPattern.test(value)) {
     const emRemValue = Number.parseInt(value, 10);
@@ -50,7 +48,7 @@ const parseDimension = (value: string, dimension: 'width' | 'height') => {
 export const setViewport = async (viewportsParam: ViewportsParam = {} as ViewportsParam) => {
   const defaultViewport = viewportsParam.defaultViewport;
 
-  if (!page || !globalThis.__vitest_browser__) {
+  if (!globalThis.__vitest_browser__) {
     return;
   }
 
@@ -70,6 +68,8 @@ export const setViewport = async (viewportsParam: ViewportsParam = {} as Viewpor
       viewportHeight = parseDimension(height, 'height');
     }
   }
+
+  const { page } = await import('@vitest/browser/context');
 
   await page.viewport(viewportWidth, viewportHeight);
 };
