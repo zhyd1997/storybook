@@ -114,6 +114,7 @@ export const TagsFilter = ({
           allTags={Array.from(allTags).toSorted()}
           selectedTags={selectedTags}
           toggleTag={toggleTag}
+          isDevelopment={isDevelopment}
         />
       )}
       closeOnOutsideClick
