@@ -29,13 +29,13 @@ const parseDimension = (value: string, dimension: 'width' | 'height') => {
   if (validPixelOrNumber.test(value)) {
     return Number.parseInt(value, 10);
   } else if (percentagePattern.test(value)) {
-    const percentageValue = Number.parseFloat(value) / 100;
+    const percentageValue = parseFloat(value) / 100;
     return Math.round(DEFAULT_VIEWPORT_DIMENSIONS[dimension] * percentageValue);
   } else if (vwPattern.test(value)) {
-    const vwValue = Number.parseFloat(value) / 100;
+    const vwValue = parseFloat(value) / 100;
     return Math.round(DEFAULT_VIEWPORT_DIMENSIONS.width * vwValue);
   } else if (vhPattern.test(value)) {
-    const vhValue = Number.parseFloat(value) / 100;
+    const vhValue = parseFloat(value) / 100;
     return Math.round(DEFAULT_VIEWPORT_DIMENSIONS.height * vhValue);
   } else if (emRemPattern.test(value)) {
     const emRemValue = Number.parseInt(value, 10);
