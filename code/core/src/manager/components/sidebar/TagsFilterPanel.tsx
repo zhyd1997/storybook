@@ -7,8 +7,6 @@ import type { Tag } from '@storybook/types';
 
 import type { API } from '@storybook/core/manager-api';
 
-import { isDOMComponent } from 'react-dom/test-utils';
-
 const BUILT_IN_TAGS_SHOW = new Set(['play-fn']);
 
 const Wrapper = styled.div({

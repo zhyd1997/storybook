@@ -64,7 +64,20 @@ const meta = {
     menu,
     extra: [] as Addon_SidebarTopType[],
     index: index,
-    indexJson: { entries: {}, v: 6 },
+    indexJson: {
+      entries: {
+        // force the tags filter menu to show in production
+        ['dummy--dummyId']: {
+          id: 'dummy--dummyId',
+          name: 'Dummy story',
+          title: 'dummy',
+          importPath: './dummy.stories.js',
+          type: 'story',
+          tags: ['A', 'B', 'C', 'dev'],
+        },
+      },
+      v: 6,
+    },
     storyId,
     refId: DEFAULT_REF_ID,
     refs: {},
