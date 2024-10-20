@@ -48,7 +48,11 @@ const parseDimension = (value: string, dimension: 'width' | 'height') => {
 export const setViewport = async (viewportsParam: ViewportsParam = {} as ViewportsParam) => {
   const defaultViewport = viewportsParam.defaultViewport;
 
-  if (!globalThis.__vitest_browser__) {
+  const { page } = await import('@vitest/browser/context').catch(() => ({
+    page: null,
+  }));
+
+  if (!page || !globalThis.__vitest_browser__) {
     return;
   }
 
@@ -68,8 +72,6 @@ export const setViewport = async (viewportsParam: ViewportsParam = {} as Viewpor
       viewportHeight = parseDimension(height, 'height');
     }
   }
-
-  const { page } = await import('@vitest/browser/context');
 
   await page.viewport(viewportWidth, viewportHeight);
 };
