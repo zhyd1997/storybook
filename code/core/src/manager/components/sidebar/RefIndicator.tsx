@@ -308,7 +308,7 @@ const ReadDocsMessage: FC = () => {
 
   return (
     <Message
-      href="https://storybook.js.org/docs/react/sharing/storybook-composition"
+      href="https://storybook.js.org/docs/sharing/storybook-composition"
       target="_blank"
     >
       <DocumentIcon color={theme.color.green} />
@@ -348,12 +348,13 @@ const LoadingMessage: FC<{ url: string }> = ({ url }) => {
   );
 };
 
+// TODO: This is a temporary fix as the documentation link is not available with the 8.0 release, since the features it referenced were removed. See https://storybook.js.org/docs/7/sharing/storybook-composition#improve-your-storybook-composition for context.
 const PerformanceDegradedMessage: FC = () => {
   const theme = useTheme();
 
   return (
     <Message
-      href="https://storybook.js.org/docs/react/sharing/storybook-composition#improve-your-storybook-composition"
+      href="https://storybook.js.org/docs/sharing/storybook-composition"
       target="_blank"
     >
       <LightningIcon color={theme.color.gold} />
