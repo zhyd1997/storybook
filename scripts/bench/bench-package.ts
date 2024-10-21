@@ -1,6 +1,5 @@
 import { BigQuery } from '@google-cloud/bigquery';
-import { request } from '@octokit/request';
-import { program } from 'commander';
+import { InvalidArgumentError, program } from 'commander';
 import detectFreePort from 'detect-port';
 import { mkdir, readdir, rm, stat, writeFile } from 'fs/promises';
 import pLimit from 'p-limit';
@@ -11,6 +10,14 @@ import versions from '../../code/core/src/common/versions';
 import { runRegistry } from '../tasks/run-registry';
 import { maxConcurrentTasks } from '../utils/concurrency';
 import { esMain } from '../utils/esmain';
+
+const Thresholds = {
+  SELF_SIZE_RATIO: 0.1,
+  SELF_SIZE_ABSOLUTE: 10_000,
+  DEPS_SIZE_RATIO: 0.1,
+  DEPS_SIZE_ABSOLUTE: 10_000,
+  DEPS_COUNT_ABSOLUTE: 1,
+} as const;
 
 const BENCH_PACKAGES_PATH = join(__dirname, '..', '..', 'bench', 'packages');
 const REGISTRY_PORT = 6001;
@@ -73,7 +80,7 @@ export const benchPackage = async (packageName: PackageName) => {
     )
   );
 
-  await x(
+  const npmInstallResult = await x(
     'npm',
     `install --save-exact --registry http://localhost:6001 --omit peer ${packageName}@${versions[packageName]}`.split(
       ' '
@@ -83,13 +90,9 @@ export const benchPackage = async (packageName: PackageName) => {
     }
   );
 
-  const npmLsResult = await x('npm', `ls --all --parseable`.split(' '), {
-    nodeOptions: { cwd: tmpBenchPackagePath },
-  });
-
-  // the first line is the temporary benching package itself, don't count it
-  // the second line is the package we're benching, don't count it
-  const dependencyCount = npmLsResult.stdout.trim().split('\n').length - 2;
+  // -1 of reported packages added because we shouldn't count the actual package as a dependency
+  const dependencyCount =
+    Number.parseInt(npmInstallResult.stdout.match(/added (\d+) packages?/)?.[1] ?? '') - 1;
 
   const nodeModulesSize = await getDirSize(join(tmpBenchPackagePath, 'node_modules'));
   const selfSize = await getDirSize(join(tmpBenchPackagePath, 'node_modules', packageName));
@@ -101,7 +104,7 @@ export const benchPackage = async (packageName: PackageName) => {
     selfSize,
     dependencySize,
   };
-  console.log(toHumanReadable(result));
+  console.log(`Done benching ${packageName}`);
   return result;
 };
 
@@ -146,11 +149,11 @@ const formatBytes = (bytes: number) => {
   return bytes < 0 ? `-${formattedSize}` : formattedSize;
 };
 
-const saveResultsLocally = async ({
+const saveLocally = async ({
   results,
   filename,
 }: {
-  results: ResultMap;
+  results: Partial<ResultMap>;
   filename: string;
 }) => {
   const resultPath = join(BENCH_PACKAGES_PATH, filename);
@@ -203,11 +206,38 @@ const compareResults = async ({
       dependencySize: result.dependencySize - baseResult.dependencySize,
     };
   }
-  console.log('LOG: comparisonResults', comparisonResults);
+  console.log('Done comparing results');
   return comparisonResults;
 };
 
-const uploadResultsToBigQuery = async (results: ResultMap) => {
+const filterResultsByThresholds = ({
+  currentResults,
+  comparisonResults,
+}: {
+  currentResults: ResultMap;
+  comparisonResults: ResultMap;
+}) => {
+  const filteredResults: Partial<ResultMap> = {};
+  for (const comparisonResult of Object.values(comparisonResults)) {
+    const currentResult = currentResults[comparisonResult.package];
+
+    const exceedsThresholds =
+      Math.abs(comparisonResult.selfSize) > Thresholds.SELF_SIZE_ABSOLUTE ||
+      Math.abs(comparisonResult.selfSize) / currentResult.selfSize > Thresholds.SELF_SIZE_RATIO ||
+      Math.abs(comparisonResult.dependencySize) > Thresholds.DEPS_SIZE_ABSOLUTE ||
+      Math.abs(comparisonResult.dependencySize) / currentResult.dependencySize >
+        Thresholds.DEPS_SIZE_RATIO ||
+      Math.abs(comparisonResult.dependencyCount) > Thresholds.DEPS_COUNT_ABSOLUTE;
+
+    if (exceedsThresholds) {
+      filteredResults[comparisonResult.package] = comparisonResult;
+    }
+  }
+  console.log(`${Object.keys(filteredResults).length} packages exceeded the thresholds`);
+  return filteredResults;
+};
+
+const uploadToBigQuery = async (results: ResultMap) => {
   console.log('Uploading results to BigQuery...');
   const commonFields = {
     branch:
@@ -227,6 +257,30 @@ const uploadResultsToBigQuery = async (results: ResultMap) => {
   await bigQueryBenchTable.insert(rows);
 };
 
+const uploadToGithub = async ({
+  results,
+  pullRequest,
+}: {
+  results: Partial<ResultMap>;
+  pullRequest: number;
+}) => {
+  if (Object.keys(results).length === 0) {
+    console.log('No results to upload to GitHub, skipping.');
+    return;
+  }
+
+  console.log('Uploading results to GitHub...');
+  await fetch('https://storybook-benchmark-bot.vercel.app/package-bench', {
+    method: 'POST',
+    body: JSON.stringify({
+      owner: 'storybookjs',
+      repo: 'storybook',
+      issueNumber: pullRequest,
+      results,
+    }),
+  });
+};
+
 const run = async () => {
   program
     .option(
@@ -235,16 +289,35 @@ const run = async () => {
     )
     .option(
       '-p, --pull-request <number>',
-      'The PR number to add compare results to. Only used together with --baseBranch'
+      'The PR number to add compare results to. Only used together with --baseBranch',
+      function parseInt(value) {
+        const parsedValue = Number.parseInt(value);
+        if (Number.isNaN(parsedValue)) {
+          throw new InvalidArgumentError('Must be a number');
+        }
+        return parsedValue;
+      }
     )
     .option('-u, --upload', 'Upload results to BigQuery. Requires GCP_CREDENTIALS env var')
-    .argument('[packages...]', 'which packages to bench. If omitted, all packages are benched');
+    .argument(
+      '[packages...]',
+      'which packages to bench. If omitted, all packages are benched',
+      function parsePackages(value) {
+        const parsedValue = value.split(' ');
+        parsedValue.forEach((packageName) => {
+          if (!Object.keys(versions).includes(packageName)) {
+            throw new InvalidArgumentError(`Package '${packageName}' not found in the monorepo`);
+          }
+        });
+        return parsedValue;
+      }
+    );
   program.parse(process.argv);
 
   const packages = (
     program.args.length > 0 ? program.args : Object.keys(versions)
   ) as PackageName[];
-  const options = program.opts<{ pullRequest?: string; baseBranch?: string; upload?: boolean }>();
+  const options = program.opts<{ pullRequest?: number; baseBranch?: string; upload?: boolean }>();
 
   if (options.upload || options.baseBranch) {
     if (!GCP_CREDENTIALS.project_id) {
@@ -287,23 +360,30 @@ const run = async () => {
     acc[result.package] = result;
     return acc;
   }, {} as ResultMap);
-  await saveResultsLocally({
+  await saveLocally({
     filename: `results.json`,
     results,
   });
   if (options.upload) {
-    await uploadResultsToBigQuery(results);
+    await uploadToBigQuery(results);
   }
 
   if (options.baseBranch) {
     const comparisonResults = await compareResults({ results, baseBranch: options.baseBranch });
-    await saveResultsLocally({
+    await saveLocally({
       filename: `compare-with-${options.baseBranch}.json`,
       results: comparisonResults,
     });
-
+    const resultsAboveThreshold = filterResultsByThresholds({
+      currentResults: results,
+      comparisonResults,
+    });
+    await saveLocally({
+      filename: `comparisons-above-threshold-with-${options.baseBranch}.json`,
+      results: resultsAboveThreshold,
+    });
     if (options.pullRequest) {
-      // send to github bot
+      await uploadToGithub({ results: resultsAboveThreshold, pullRequest: options.pullRequest });
     }
   }
 
@@ -318,10 +398,3 @@ if (esMain(import.meta.url)) {
     process.exit(1);
   });
 }
-
-// TODO:
-// compile no-link
-// upload results as "next" branch
-// set up threshold for comparisons
-// send to github bot
-// make github bot comment PRs
