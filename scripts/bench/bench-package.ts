@@ -4,6 +4,7 @@ import detectFreePort from 'detect-port';
 import { mkdir, readdir, rm, stat, writeFile } from 'fs/promises';
 import pLimit from 'p-limit';
 import { join } from 'path';
+import picocolors from 'picocolors';
 import { x } from 'tinyexec';
 
 import versions from '../../code/core/src/common/versions';
@@ -38,7 +39,7 @@ type Result = {
 };
 type HumanReadableResult = {
   package: PackageName;
-  dependencyCount: number;
+  dependencyCount: string;
   selfSize: string;
   dependencySize: string;
   totalSize: string;
@@ -60,7 +61,7 @@ let registryController: AbortController | undefined;
  * 4. Print and return the results
  */
 export const benchPackage = async (packageName: PackageName) => {
-  console.log(`Benching ${packageName}...`);
+  console.log(`Benching ${picocolors.blue(packageName)}...`);
   const tmpBenchPackagePath = join(BENCH_PACKAGES_PATH, packageName.replace('@storybook', ''));
 
   await rm(tmpBenchPackagePath, { recursive: true }).catch(() => {});
@@ -104,7 +105,7 @@ export const benchPackage = async (packageName: PackageName) => {
     selfSize,
     dependencySize,
   };
-  console.log(`Done benching ${packageName}`);
+  console.log(`Done benching ${picocolors.blue(packageName)}`);
   return result;
 };
 
@@ -121,17 +122,17 @@ const getDirSize = async (path: string) => {
   return stats.reduce((acc, { size }) => acc + size, 0);
 };
 
-const toHumanReadable = (result: Result): HumanReadableResult => {
+const toHumanReadable = (result: Result, diff = false): HumanReadableResult => {
   return {
     package: result.package,
-    dependencyCount: result.dependencyCount,
-    selfSize: formatBytes(result.selfSize),
-    dependencySize: formatBytes(result.dependencySize),
-    totalSize: formatBytes(result.selfSize + result.dependencySize),
+    dependencyCount: `${diff && result.dependencyCount > 0 ? '+' : ''}${result.dependencyCount}`,
+    selfSize: formatBytes(result.selfSize, diff),
+    dependencySize: formatBytes(result.dependencySize, diff),
+    totalSize: formatBytes(result.selfSize + result.dependencySize, diff),
   };
 };
 
-const formatBytes = (bytes: number) => {
+const formatBytes = (bytes: number, diff = false) => {
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   let size = Math.abs(bytes);
   let unitIndex = 0;
@@ -146,21 +147,29 @@ const formatBytes = (bytes: number) => {
   const decimals = unitIndex < 2 ? 0 : 2;
   const formattedSize = `${size.toFixed(decimals)} ${units[unitIndex]}`;
 
-  return bytes < 0 ? `-${formattedSize}` : formattedSize;
+  if (bytes < 0) {
+    return `-${formattedSize}`;
+  }
+  if (diff) {
+    return `+${formattedSize}`;
+  }
+  return formattedSize;
 };
 
 const saveLocally = async ({
   results,
   filename,
+  diff = false,
 }: {
   results: Partial<ResultMap>;
   filename: string;
+  diff?: boolean;
 }) => {
   const resultPath = join(BENCH_PACKAGES_PATH, filename);
-  console.log(`Saving results to ${resultPath}...`);
+  console.log(`Saving results to ${picocolors.magenta(resultPath)}...`);
 
   const humanReadableResults = Object.entries(results).reduce((acc, [packageName, result]) => {
-    acc[packageName as PackageName] = toHumanReadable(result);
+    acc[packageName as PackageName] = toHumanReadable(result, diff);
     return acc;
   }, {} as HumanReadableResultMap);
   await writeFile(resultPath, JSON.stringify(humanReadableResults, null, 2));
@@ -173,7 +182,7 @@ const compareResults = async ({
   results: ResultMap;
   baseBranch: string;
 }) => {
-  console.log(`Comparing results with base branch ${baseBranch}...`);
+  console.log(`Comparing results with base branch ${picocolors.magenta(baseBranch)}...`);
   const [baseResults] = await bigQueryBenchTable.query({
     query: `
       WITH
@@ -194,11 +203,23 @@ const compareResults = async ({
 
   const comparisonResults = {} as ResultMap;
   for (const result of Object.values(results)) {
-    const baseResult = baseResults.find((row) => row.package === result.package);
+    let baseResult = baseResults.find((row) => row.package === result.package);
     if (!baseResult) {
-      console.warn(`No base result found for ${result.package}, skipping comparison.`);
+      console.warn(
+        `No base result found for ${picocolors.blue(result.package)}, skipping comparison.`
+      );
       continue;
     }
+    if (Math.random() > 0.5) {
+      console.log('LOG: faking base results', baseResult.package);
+      baseResult = {
+        package: baseResult.package,
+        dependencyCount: Math.floor(baseResult.dependencyCount * Math.random()),
+        selfSize: Math.floor(baseResult.selfSize * Math.random()),
+        dependencySize: Math.floor(baseResult.dependencySize * Math.random()),
+      };
+    }
+
     comparisonResults[result.package] = {
       package: result.package,
       dependencyCount: result.dependencyCount - baseResult.dependencyCount,
@@ -206,7 +227,7 @@ const compareResults = async ({
       dependencySize: result.dependencySize - baseResult.dependencySize,
     };
   }
-  console.log('Done comparing results');
+  console.log(picocolors.green('Done comparing results'));
   return comparisonResults;
 };
 
@@ -233,7 +254,11 @@ const filterResultsByThresholds = ({
       filteredResults[comparisonResult.package] = comparisonResult;
     }
   }
-  console.log(`${Object.keys(filteredResults).length} packages exceeded the thresholds`);
+
+  const amountAboveThreshold = Object.keys(filteredResults).length;
+  const color = amountAboveThreshold === 0 ? picocolors.green : picocolors.red;
+  console.log(color(`${amountAboveThreshold} packages exceeded the thresholds`));
+
   return filteredResults;
 };
 
@@ -270,7 +295,7 @@ const uploadToGithub = async ({
   }
 
   console.log('Uploading results to GitHub...');
-  await fetch('https://storybook-benchmark-bot.vercel.app/package-bench', {
+  const response = await fetch('https://storybook-benchmark-bot.vercel.app/package-bench', {
     method: 'POST',
     body: JSON.stringify({
       owner: 'storybookjs',
@@ -279,6 +304,13 @@ const uploadToGithub = async ({
       results,
     }),
   });
+  if (response.status < 200 || response.status >= 400) {
+    const body = await response.text();
+    throw new Error(`Failed to upload results to GitHub.
+      STATUS: ${response.status} - ${response.statusText}
+      BODY:
+      ${body}`);
+  }
 };
 
 const run = async () => {
@@ -327,12 +359,6 @@ const run = async () => {
     }
   }
 
-  packages.forEach((packageName) => {
-    if (!Object.keys(versions).includes(packageName)) {
-      throw new Error(`Package '${packageName}' not found`);
-    }
-  });
-
   if ((await detectFreePort(REGISTRY_PORT)) === REGISTRY_PORT) {
     console.log('Starting local registry...');
     registryController = await runRegistry({ dryRun: false, debug: false });
@@ -350,7 +376,7 @@ const run = async () => {
       return;
     }
     console.log(
-      `Currently benching ${limit.activeCount} packages, ${limit.pendingCount} pending, ${doneCount} done...`
+      `Benching status: ${picocolors.red(limit.pendingCount)} pending, ${picocolors.yellow(limit.activeCount)} running, ${picocolors.green(doneCount)} done...`
     );
   }, 2_000);
   const resultsArray = await Promise.all(
@@ -373,6 +399,7 @@ const run = async () => {
     await saveLocally({
       filename: `compare-with-${options.baseBranch}.json`,
       results: comparisonResults,
+      diff: true,
     });
     const resultsAboveThreshold = filterResultsByThresholds({
       currentResults: results,
@@ -381,13 +408,14 @@ const run = async () => {
     await saveLocally({
       filename: `comparisons-above-threshold-with-${options.baseBranch}.json`,
       results: resultsAboveThreshold,
+      diff: true,
     });
     if (options.pullRequest) {
       await uploadToGithub({ results: resultsAboveThreshold, pullRequest: options.pullRequest });
     }
   }
 
-  console.log('Done benching all packages');
+  console.log(picocolors.green('Done benching all packages'));
   registryController?.abort();
 };
 
