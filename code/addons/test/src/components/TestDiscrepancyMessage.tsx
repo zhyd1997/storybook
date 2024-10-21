@@ -7,7 +7,7 @@ import type { StoryId } from 'storybook/internal/types';
 
 import { CallStates } from '@storybook/instrumenter';
 
-import { DOCUMENTATION_LINK, STORYBOOK_ADDON_TEST_CHANNEL } from '../constants';
+import { DOCUMENTATION_DISCREPANCY_LINK, STORYBOOK_ADDON_TEST_CHANNEL } from '../constants';
 
 const Wrapper = styled.div(({ theme: { color, typography, background } }) => ({
   textAlign: 'start',
@@ -43,7 +43,7 @@ export const TestDiscrepancyMessage = ({
 }: TestDiscrepancyMessageProps) => {
   const api = useStorybookApi();
   const docsUrl = api.getDocsUrl({
-    subpath: DOCUMENTATION_LINK,
+    subpath: DOCUMENTATION_DISCREPANCY_LINK,
     versioned: true,
     renderer: true,
   });

@@ -6,7 +6,7 @@ import { useStorybookApi } from 'storybook/internal/manager-api';
 import { CloseIcon, SyncIcon } from '@storybook/icons';
 import { styled } from '@storybook/theming';
 
-import { TROUBLESHOOTING_LINK } from '../constants';
+import { DOCUMENTATION_FATAL_ERROR_LINK } from '../constants';
 
 interface GlobalErrorModalProps {
   error: string;
@@ -53,7 +53,7 @@ export function GlobalErrorModal({ onRerun, onClose, error, open }: GlobalErrorM
   const api = useStorybookApi();
 
   const troubleshootURL = api.getDocsUrl({
-    subpath: TROUBLESHOOTING_LINK,
+    subpath: DOCUMENTATION_FATAL_ERROR_LINK,
     versioned: true,
     renderer: true,
   });

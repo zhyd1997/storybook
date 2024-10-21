@@ -2,19 +2,25 @@ import { readFileSync } from 'node:fs';
 import { isAbsolute, join } from 'node:path';
 
 import type { Channel } from 'storybook/internal/channels';
-import { checkAddonOrder, serverRequire } from 'storybook/internal/common';
+import { checkAddonOrder, getFrameworkName, serverRequire } from 'storybook/internal/common';
 import {
+  TESTING_MODULE_PROGRESS_REPORT,
   TESTING_MODULE_RUN_ALL_REQUEST,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
+  type TestingModuleProgressReportPayload,
 } from 'storybook/internal/core-events';
 import { oneWayHash, telemetry } from 'storybook/internal/telemetry';
 import type { Options, PresetProperty, StoryId } from 'storybook/internal/types';
 
 import { dedent } from 'ts-dedent';
 
+import picocolors from 'picocolors';
+import { dedent } from 'ts-dedent';
+
 import { STORYBOOK_ADDON_TEST_CHANNEL } from './constants';
-import { bootTestRunner } from './node/boot-test-runner';
+import { log } from './logger';
+import { runTestRunner } from './node/boot-test-runner';
 
 export const checkActionsLoaded = (configDir: string) => {
   checkAddonOrder({
@@ -32,7 +38,6 @@ export const checkActionsLoaded = (configDir: string) => {
     getConfig: (configFile) => serverRequire(configFile),
   });
 };
-
 type Event = {
   type: 'test-discrepancy';
   payload: {
@@ -47,36 +52,32 @@ type Event = {
 export const experimental_serverChannel = async (channel: Channel, options: Options) => {
   const core = await options.presets.apply('core');
   const builderName = typeof core?.builder === 'string' ? core.builder : core?.builder?.name;
+  const framework = await getFrameworkName(options);
+
   // Only boot the test runner if the builder is vite, else just provide interactions functionality
   if (!builderName?.includes('vite')) {
+    if (framework.includes('nextjs')) {
+      log(dedent`
+        You're using ${framework}, which is a Webpack-based builder. In order to use Storybook Test, with your project, you need to use '@storybook/experimental-nextjs-vite', a high performance Vite-based equivalent.
+
+        Information on how to upgrade here: ${picocolors.yellow('https://storybook.js.org/docs/get-started/frameworks/nextjs#with-vite')}\n
+      `);
+    }
+
     return channel;
   }
 
-  let booting = false;
-  let booted = false;
-  const start =
+  const execute =
     (eventName: string) =>
     (...args: any[]) => {
-      if (!booted && !booting) {
-        booting = true;
-        bootTestRunner(channel, eventName, args)
-          .then(() => {
-            booted = true;
-          })
-          .catch(() => {
-            booted = false;
-          })
-          .finally(() => {
-            booting = false;
-          });
-      }
+      runTestRunner(channel, eventName, args);
     };
 
-  channel.on(TESTING_MODULE_RUN_ALL_REQUEST, start(TESTING_MODULE_RUN_ALL_REQUEST));
-  channel.on(TESTING_MODULE_RUN_REQUEST, start(TESTING_MODULE_RUN_REQUEST));
+  channel.on(TESTING_MODULE_RUN_ALL_REQUEST, execute(TESTING_MODULE_RUN_ALL_REQUEST));
+  channel.on(TESTING_MODULE_RUN_REQUEST, execute(TESTING_MODULE_RUN_REQUEST));
   channel.on(TESTING_MODULE_WATCH_MODE_REQUEST, (payload) => {
     if (payload.watchMode) {
-      start(TESTING_MODULE_WATCH_MODE_REQUEST)(payload);
+      execute(TESTING_MODULE_WATCH_MODE_REQUEST)(payload);
     }
   });
 

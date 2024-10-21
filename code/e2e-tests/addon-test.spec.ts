@@ -22,7 +22,7 @@ test.describe('addon-test', () => {
     const sbPage = new SbPage(page, expect);
 
     await sbPage.navigateToStory('example/page', 'logged-in');
-    await sbPage.viewAddonPanel('Component Tests');
+    await sbPage.viewAddonPanel('Component tests');
 
     const welcome = sbPage.previewRoot().locator('.welcome');
     await expect(welcome).toContainText('Welcome, Jane Doe!', { timeout: 50000 });
@@ -54,7 +54,7 @@ test.describe('addon-test', () => {
     const sbPage = new SbPage(page, expect);
 
     await sbPage.deepLinkToStory(storybookUrl, 'addons/test/basics', 'type-and-clear');
-    await sbPage.viewAddonPanel('Component Tests');
+    await sbPage.viewAddonPanel('Component tests');
 
     // Test initial state - Interactions have run, count is correct and values are as expected
     const formInput = sbPage.previewRoot().locator('#interaction-test-form input');
@@ -130,7 +130,7 @@ test.describe('addon-test', () => {
     const sbPage = new SbPage(page, expect);
 
     await sbPage.deepLinkToStory(storybookUrl, 'addons/test/unhandled-errors', 'default');
-    await sbPage.viewAddonPanel('Component Tests');
+    await sbPage.viewAddonPanel('Component tests');
 
     const button = sbPage.previewRoot().locator('button');
     await expect(button).toContainText('Button', { timeout: 50000 });
