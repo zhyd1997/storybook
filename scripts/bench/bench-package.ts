@@ -174,22 +174,22 @@ const toHumanReadable = (result: Partial<Result> | Partial<ComparisonResult>) =>
     package: result.package,
     dependencyCount: {
       base: dependencyCount.base.toString(),
-      current: dependencyCount.new.toString(),
+      new: dependencyCount.new.toString(),
       diff: `${dependencyCount.diff > 0 ? '+' : dependencyCount.diff < 0 ? '-' : ''}${dependencyCount.diff}`,
     },
     selfSize: {
       base: formatBytes(selfSize.base),
-      current: formatBytes(selfSize.new),
+      new: formatBytes(selfSize.new),
       diff: formatBytes(selfSize.diff, true),
     },
     dependencySize: {
       base: formatBytes(dependencySize.base),
-      current: formatBytes(dependencySize.new),
+      new: formatBytes(dependencySize.new),
       diff: formatBytes(dependencySize.diff, true),
     },
     totalSize: {
       base: formatBytes(selfSize.base + dependencySize.base),
-      current: formatBytes(selfSize.new + dependencySize.new),
+      new: formatBytes(selfSize.new + dependencySize.new),
       diff: formatBytes(selfSize.diff + dependencySize.diff, true),
     },
   };
@@ -244,22 +244,20 @@ const compareResults = async ({
 
   const comparisonResults = {} as ComparisonResultMap;
   for (const result of Object.values(results)) {
-    let baseResult = baseResults.find((row) => row.package === result.package);
+    const baseResult = baseResults.find((row) => row.package === result.package);
     if (!baseResult) {
       console.warn(
         `No base result found for ${picocolors.blue(result.package)}, skipping comparison.`
       );
       continue;
     }
-    if (Math.random() > 0.5) {
-      console.log('LOG: faking base results', baseResult.package);
-      baseResult = {
-        package: baseResult.package,
-        dependencyCount: Math.floor(baseResult.dependencyCount * Math.random()),
-        selfSize: Math.floor(baseResult.selfSize * Math.random()),
-        dependencySize: Math.floor(baseResult.dependencySize * Math.random()),
-      };
-    }
+    // console.log('LOG: faking base results', baseResult.package);
+    // baseResult = {
+    //   package: baseResult.package,
+    //   dependencyCount: Math.floor(baseResult.dependencyCount * Math.random()),
+    //   selfSize: Math.floor(baseResult.selfSize * Math.random()),
+    //   dependencySize: Math.floor(baseResult.dependencySize * Math.random()),
+    // };
 
     comparisonResults[result.package] = {
       package: result.package,
@@ -289,10 +287,10 @@ const filterResultsByThresholds = (comparisonResults: ComparisonResultMap) => {
   for (const comparisonResult of Object.values(comparisonResults)) {
     const exceedsThresholds =
       Math.abs(comparisonResult.selfSize.diff) > Thresholds.SELF_SIZE_ABSOLUTE ||
-      Math.abs(comparisonResult.selfSize.diff) / comparisonResult.selfSize.new >
+      Math.abs(comparisonResult.selfSize.diff) / comparisonResult.selfSize.base >
         Thresholds.SELF_SIZE_RATIO ||
       Math.abs(comparisonResult.dependencySize.diff) > Thresholds.DEPS_SIZE_ABSOLUTE ||
-      Math.abs(comparisonResult.dependencySize.diff) / comparisonResult.dependencySize.new >
+      Math.abs(comparisonResult.dependencySize.diff) / comparisonResult.dependencySize.base >
         Thresholds.DEPS_SIZE_RATIO ||
       Math.abs(comparisonResult.dependencyCount.diff) > Thresholds.DEPS_COUNT_ABSOLUTE;
 
@@ -348,12 +346,6 @@ const uploadToGithub = async ({
   benchmarkedAt: Date;
   pullRequest: number;
 }) => {
-  if (Object.keys(results).length === 0) {
-    // TODO: no, we need to update the table when results are good again
-    console.log('No results to upload to GitHub, skipping.');
-    return;
-  }
-
   const humanReadableResults = Object.values(results).reduce(
     (acc, result) => {
       acc[result.package] = toHumanReadable(result);
@@ -363,8 +355,8 @@ const uploadToGithub = async ({
   );
 
   console.log('Uploading results to GitHub...');
-  const response = await fetch('http://localhost:3000/package-bench', {
-    // const response = await fetch('https://storybook-benchmark-bot.vercel.app/package-bench', {
+  // const response = await fetch('http://localhost:3000/package-bench', {
+  const response = await fetch('https://storybook-benchmark-bot.vercel.app/package-bench', {
     method: 'POST',
     body: JSON.stringify({
       owner: 'storybookjs',
