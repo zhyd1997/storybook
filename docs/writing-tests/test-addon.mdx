@@ -35,7 +35,6 @@ If a test fails, it will be marked as such in the sidebar and you can click on t
 
 Before installing, make sure your project meets the following requirements:
 
-{/* TODO: Exact version? */}
 - Storybook ≥ 8.4
 - A Storybook framework that uses Vite (e.g. [`vue3-vite`](../get-started/frameworks/vue3-vite.mdx)), or the [Storybook Next.js framework](../get-started/frameworks/nextjs.mdx)
 - Vitest ≥ 2.1
@@ -44,7 +43,6 @@ Before installing, make sure your project meets the following requirements:
     - Next.js ≥ 14.1
     - Must be using the [`@storybook/experimental-nextjs-vite` framework](../get-started/frameworks/nextjs.mdx#with-vite)
 
-{/* TODO: Exact version? */}
 If you're not yet using Storybook 8.4, you can [upgrade your Storybook](../configure/upgrading.mdx) to the prerelease version:
 
 <CodeSnippets path="storybook-upgrade-prerelease.md" />
@@ -214,7 +212,8 @@ If you have the [Visual tests addon](./visual-testing.mdx) installed, you'll see
 
 ![Screenshot of test module, expanded, showing Visual tests](../_assets/writing-tests/addon-test-module-expanded-with-vta.png)
 
-Other addons may also provide test types that can be run from the test module and affect the status indicators on stories and components.
+{/* TODO: Add this when a11y support ships */}
+{/* Other addons, such as [a11y](./accessibility-testing), may also provide test types that can be run from the test module and affect the status indicators on stories and components. */}
 
 </Callout>
 
@@ -382,7 +381,7 @@ Vitest offers [troubleshooting help for common errors](https://vitest.dev/guide/
 
 ### What happens when there are different test results in multiple environments?
 
-When you run tests with this addon, they are run as Vitest tests with whatever configuration you have set up in your project. By default, they will run in browser mode, using Playwright's Chromium browser. Sometimes, tests will fail when run in the addon (or via CLI), but then pass when viewed in the Component tests addon panel (or vice-versa). This can happen because the tests are run in different environments, which can have different behaviors.
+When you run tests with this addon, they are run as Vitest tests with whatever configuration you have set up in your project. By default, they will run in browser mode, using Playwright's Chromium browser. Sometimes, tests will fail when run in the addon (or via CLI), but then pass when viewed in the Component tests addon panel (or vice versa). This can happen because the tests are run in different environments, which can have different behaviors.
 
 ### How do I debug my CLI tests in Storybook?
 
