@@ -37,15 +37,26 @@ type Result = {
   selfSize: number;
   dependencySize: number;
 };
-type HumanReadableResult = {
+type ComparisonResult = {
   package: PackageName;
-  dependencyCount: string;
-  selfSize: string;
-  dependencySize: string;
-  totalSize: string;
+  dependencyCount: {
+    base: number;
+    new: number;
+    diff: number;
+  };
+  selfSize: {
+    base: number;
+    new: number;
+    diff: number;
+  };
+  dependencySize: {
+    base: number;
+    new: number;
+    diff: number;
+  };
 };
 type ResultMap = Record<PackageName, Result>;
-type HumanReadableResultMap = Record<PackageName, HumanReadableResult>;
+type ComparisonResultMap = Record<PackageName, ComparisonResult>;
 
 let registryController: AbortController | undefined;
 
@@ -95,6 +106,19 @@ export const benchPackage = async (packageName: PackageName) => {
   const dependencyCount =
     Number.parseInt(npmInstallResult.stdout.match(/added (\d+) packages?/)?.[1] ?? '') - 1;
 
+  const getDirSize = async (path: string) => {
+    const entities = await readdir(path, {
+      recursive: true,
+      withFileTypes: true,
+    });
+    const stats = await Promise.all(
+      entities
+        .filter((entity) => entity.isFile())
+        .map((entity) => stat(join(entity.parentPath, entity.name)))
+    );
+    return stats.reduce((acc, { size }) => acc + size, 0);
+  };
+
   const nodeModulesSize = await getDirSize(join(tmpBenchPackagePath, 'node_modules'));
   const selfSize = await getDirSize(join(tmpBenchPackagePath, 'node_modules', packageName));
   const dependencySize = nodeModulesSize - selfSize;
@@ -109,69 +133,86 @@ export const benchPackage = async (packageName: PackageName) => {
   return result;
 };
 
-const getDirSize = async (path: string) => {
-  const entities = await readdir(path, {
-    recursive: true,
-    withFileTypes: true,
-  });
-  const stats = await Promise.all(
-    entities
-      .filter((entity) => entity.isFile())
-      .map((entity) => stat(join(entity.parentPath, entity.name)))
-  );
-  return stats.reduce((acc, { size }) => acc + size, 0);
-};
+const toHumanReadable = (result: Partial<Result> | Partial<ComparisonResult>) => {
+  const formatBytes = (bytes: number, diff = false) => {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    let size = Math.abs(bytes);
+    let unitIndex = 0;
 
-const toHumanReadable = (result: Result, diff = false): HumanReadableResult => {
+    while (size >= 1000 && unitIndex < units.length - 1) {
+      size /= 1000;
+      unitIndex++;
+    }
+
+    // B, KB = 0 decimal places
+    // MB, GB, TB = 2 decimal places
+    const decimals = unitIndex < 2 ? 0 : 2;
+    const formattedSize = `${size.toFixed(decimals)} ${units[unitIndex]}`;
+
+    if (bytes < 0) {
+      return `-${formattedSize}`;
+    }
+    if (diff && bytes > 0) {
+      return `+${formattedSize}`;
+    }
+    return formattedSize;
+  };
+
+  if (typeof result.dependencyCount === 'number') {
+    const { dependencyCount, selfSize, dependencySize } = result as Result;
+    return {
+      package: result.package,
+      dependencyCount: dependencyCount.toString(),
+      selfSize: formatBytes(selfSize),
+      dependencySize: formatBytes(dependencySize),
+      totalSize: formatBytes(selfSize + dependencySize),
+    };
+  }
+  const { dependencyCount, selfSize, dependencySize } = result as ComparisonResult;
+
   return {
     package: result.package,
-    dependencyCount: `${diff && result.dependencyCount > 0 ? '+' : ''}${result.dependencyCount}`,
-    selfSize: formatBytes(result.selfSize, diff),
-    dependencySize: formatBytes(result.dependencySize, diff),
-    totalSize: formatBytes(result.selfSize + result.dependencySize, diff),
+    dependencyCount: {
+      base: dependencyCount.base.toString(),
+      current: dependencyCount.new.toString(),
+      diff: `${dependencyCount.diff > 0 ? '+' : dependencyCount.diff < 0 ? '-' : ''}${dependencyCount.diff}`,
+    },
+    selfSize: {
+      base: formatBytes(selfSize.base),
+      current: formatBytes(selfSize.new),
+      diff: formatBytes(selfSize.diff, true),
+    },
+    dependencySize: {
+      base: formatBytes(dependencySize.base),
+      current: formatBytes(dependencySize.new),
+      diff: formatBytes(dependencySize.diff, true),
+    },
+    totalSize: {
+      base: formatBytes(selfSize.base + dependencySize.base),
+      current: formatBytes(selfSize.new + dependencySize.new),
+      diff: formatBytes(selfSize.diff + dependencySize.diff, true),
+    },
   };
-};
-
-const formatBytes = (bytes: number, diff = false) => {
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-  let size = Math.abs(bytes);
-  let unitIndex = 0;
-
-  while (size >= 1000 && unitIndex < units.length - 1) {
-    size /= 1000;
-    unitIndex++;
-  }
-
-  // B, KB = 0 decimal places
-  // MB, GB, TB = 2 decimal places
-  const decimals = unitIndex < 2 ? 0 : 2;
-  const formattedSize = `${size.toFixed(decimals)} ${units[unitIndex]}`;
-
-  if (bytes < 0) {
-    return `-${formattedSize}`;
-  }
-  if (diff) {
-    return `+${formattedSize}`;
-  }
-  return formattedSize;
 };
 
 const saveLocally = async ({
   results,
   filename,
-  diff = false,
 }: {
-  results: Partial<ResultMap>;
+  results: Partial<ResultMap | ComparisonResultMap>;
   filename: string;
   diff?: boolean;
 }) => {
   const resultPath = join(BENCH_PACKAGES_PATH, filename);
   console.log(`Saving results to ${picocolors.magenta(resultPath)}...`);
 
-  const humanReadableResults = Object.entries(results).reduce((acc, [packageName, result]) => {
-    acc[packageName as PackageName] = toHumanReadable(result, diff);
-    return acc;
-  }, {} as HumanReadableResultMap);
+  const humanReadableResults = Object.entries(results).reduce(
+    (acc, [packageName, result]) => {
+      acc[packageName as PackageName] = toHumanReadable(result);
+      return acc;
+    },
+    {} as Record<PackageName, ReturnType<typeof toHumanReadable>>
+  );
   await writeFile(resultPath, JSON.stringify(humanReadableResults, null, 2));
 };
 
@@ -201,7 +242,7 @@ const compareResults = async ({
     params: { baseBranch, packages: Object.keys(results) },
   });
 
-  const comparisonResults = {} as ResultMap;
+  const comparisonResults = {} as ComparisonResultMap;
   for (const result of Object.values(results)) {
     let baseResult = baseResults.find((row) => row.package === result.package);
     if (!baseResult) {
@@ -222,33 +263,38 @@ const compareResults = async ({
 
     comparisonResults[result.package] = {
       package: result.package,
-      dependencyCount: result.dependencyCount - baseResult.dependencyCount,
-      selfSize: result.selfSize - baseResult.selfSize,
-      dependencySize: result.dependencySize - baseResult.dependencySize,
+      dependencyCount: {
+        base: baseResult.dependencyCount,
+        new: result.dependencyCount,
+        diff: result.dependencyCount - baseResult.dependencyCount,
+      },
+      selfSize: {
+        base: baseResult.selfSize,
+        new: result.selfSize,
+        diff: result.selfSize - baseResult.selfSize,
+      },
+      dependencySize: {
+        base: baseResult.dependencySize,
+        new: result.dependencySize,
+        diff: result.dependencySize - baseResult.dependencySize,
+      },
     };
   }
   console.log(picocolors.green('Done comparing results'));
   return comparisonResults;
 };
 
-const filterResultsByThresholds = ({
-  currentResults,
-  comparisonResults,
-}: {
-  currentResults: ResultMap;
-  comparisonResults: ResultMap;
-}) => {
-  const filteredResults: Partial<ResultMap> = {};
+const filterResultsByThresholds = (comparisonResults: ComparisonResultMap) => {
+  const filteredResults: Partial<ComparisonResultMap> = {};
   for (const comparisonResult of Object.values(comparisonResults)) {
-    const currentResult = currentResults[comparisonResult.package];
-
     const exceedsThresholds =
-      Math.abs(comparisonResult.selfSize) > Thresholds.SELF_SIZE_ABSOLUTE ||
-      Math.abs(comparisonResult.selfSize) / currentResult.selfSize > Thresholds.SELF_SIZE_RATIO ||
-      Math.abs(comparisonResult.dependencySize) > Thresholds.DEPS_SIZE_ABSOLUTE ||
-      Math.abs(comparisonResult.dependencySize) / currentResult.dependencySize >
+      Math.abs(comparisonResult.selfSize.diff) > Thresholds.SELF_SIZE_ABSOLUTE ||
+      Math.abs(comparisonResult.selfSize.diff) / comparisonResult.selfSize.new >
+        Thresholds.SELF_SIZE_RATIO ||
+      Math.abs(comparisonResult.dependencySize.diff) > Thresholds.DEPS_SIZE_ABSOLUTE ||
+      Math.abs(comparisonResult.dependencySize.diff) / comparisonResult.dependencySize.new >
         Thresholds.DEPS_SIZE_RATIO ||
-      Math.abs(comparisonResult.dependencyCount) > Thresholds.DEPS_COUNT_ABSOLUTE;
+      Math.abs(comparisonResult.dependencyCount.diff) > Thresholds.DEPS_COUNT_ABSOLUTE;
 
     if (exceedsThresholds) {
       filteredResults[comparisonResult.package] = comparisonResult;
@@ -262,17 +308,22 @@ const filterResultsByThresholds = ({
   return filteredResults;
 };
 
-const uploadToBigQuery = async (results: ResultMap) => {
+const uploadToBigQuery = async ({
+  results,
+  branch,
+  commit,
+  benchmarkedAt,
+}: {
+  results: ResultMap;
+  branch: string;
+  commit: string;
+  benchmarkedAt: Date;
+}) => {
   console.log('Uploading results to BigQuery...');
-  const commonFields = {
-    branch:
-      process.env.CIRCLE_BRANCH ||
-      (await x('git', 'rev-parse --abbrev-ref HEAD'.split(' '))).stdout.trim(),
-    commit: process.env.CIRCLE_SHA1 || (await x('git', 'rev-parse HEAD'.split(' '))).stdout.trim(),
-    benchmarkedAt: new Date(),
-  };
   const rows = Object.values(results).map((result) => ({
-    ...commonFields,
+    branch,
+    commit,
+    benchmarkedAt,
     package: result.package,
     selfSize: result.selfSize,
     dependencySize: result.dependencySize,
@@ -284,24 +335,46 @@ const uploadToBigQuery = async (results: ResultMap) => {
 
 const uploadToGithub = async ({
   results,
+  headBranch,
+  baseBranch,
+  commit,
+  benchmarkedAt,
   pullRequest,
 }: {
-  results: Partial<ResultMap>;
+  results: Partial<ComparisonResultMap>;
+  headBranch: string;
+  baseBranch: string;
+  commit: string;
+  benchmarkedAt: Date;
   pullRequest: number;
 }) => {
   if (Object.keys(results).length === 0) {
+    // TODO: no, we need to update the table when results are good again
     console.log('No results to upload to GitHub, skipping.');
     return;
   }
 
+  const humanReadableResults = Object.values(results).reduce(
+    (acc, result) => {
+      acc[result.package] = toHumanReadable(result);
+      return acc;
+    },
+    {} as Record<PackageName, ReturnType<typeof toHumanReadable>>
+  );
+
   console.log('Uploading results to GitHub...');
-  const response = await fetch('https://storybook-benchmark-bot.vercel.app/package-bench', {
+  const response = await fetch('http://localhost:3000/package-bench', {
+    // const response = await fetch('https://storybook-benchmark-bot.vercel.app/package-bench', {
     method: 'POST',
     body: JSON.stringify({
       owner: 'storybookjs',
       repo: 'storybook',
       issueNumber: pullRequest,
-      results,
+      headBranch,
+      baseBranch,
+      commit,
+      benchmarkedAt: benchmarkedAt.toISOString(),
+      results: humanReadableResults,
     }),
   });
   if (response.status < 200 || response.status >= 400) {
@@ -390,20 +463,25 @@ const run = async () => {
     filename: `results.json`,
     results,
   });
+
+  const headBranch =
+    process.env.CIRCLE_BRANCH ||
+    (await x('git', 'rev-parse --abbrev-ref HEAD'.split(' '))).stdout.trim();
+  const commit =
+    process.env.CIRCLE_SHA1 || (await x('git', 'rev-parse HEAD'.split(' '))).stdout.trim();
+  const benchmarkedAt = new Date();
+
   if (options.upload) {
-    await uploadToBigQuery(results);
+    await uploadToBigQuery({ results, branch: headBranch, commit, benchmarkedAt });
   }
 
   if (options.baseBranch) {
     const comparisonResults = await compareResults({ results, baseBranch: options.baseBranch });
+    const resultsAboveThreshold = filterResultsByThresholds(comparisonResults);
     await saveLocally({
       filename: `compare-with-${options.baseBranch}.json`,
       results: comparisonResults,
       diff: true,
-    });
-    const resultsAboveThreshold = filterResultsByThresholds({
-      currentResults: results,
-      comparisonResults,
     });
     await saveLocally({
       filename: `comparisons-above-threshold-with-${options.baseBranch}.json`,
@@ -411,7 +489,14 @@ const run = async () => {
       diff: true,
     });
     if (options.pullRequest) {
-      await uploadToGithub({ results: resultsAboveThreshold, pullRequest: options.pullRequest });
+      await uploadToGithub({
+        results: resultsAboveThreshold,
+        pullRequest: options.pullRequest,
+        baseBranch: options.baseBranch,
+        headBranch,
+        commit,
+        benchmarkedAt,
+      });
     }
   }
 
