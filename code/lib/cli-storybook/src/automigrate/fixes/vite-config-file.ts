@@ -109,7 +109,7 @@ export const viteConfigFile = {
         If you already have these plugins, you can ignore this message.
 
         You can find more information on how to do this here:
-        https://storybook.js.org/docs/migration-guide#missing-viteconfigjs-file
+        https://storybook.js.org/docs/8.0/migration-guide#missing-viteconfigjs-file
 
         This change was necessary to support newer versions of Vite.
       `;
