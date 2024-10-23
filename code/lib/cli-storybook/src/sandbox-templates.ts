@@ -210,7 +210,7 @@ const baseTemplates = {
   'experimental-nextjs-vite/default-ts': {
     name: 'Next.js Latest (Vite | TypeScript)',
     script:
-      'yarn create next-app {{beforeDir}} --typescript --eslint --tailwind --app --import-alias="@/*" --src-dir',
+      'npx create-next-app@^14 {{beforeDir}} --typescript --eslint --tailwind --app --import-alias="@/*" --src-dir',
     expected: {
       framework: '@storybook/experimental-nextjs-vite',
       renderer: '@storybook/react',
