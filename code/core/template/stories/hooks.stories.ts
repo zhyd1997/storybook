@@ -6,7 +6,7 @@ import { useEffect, useState } from '@storybook/core/preview-api';
 
 export default {
   component: globalThis.Components.Button,
-  tags: ['!vitest']
+  tags: ['!vitest'],
 };
 
 export const UseState = {
