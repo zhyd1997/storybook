@@ -81,7 +81,6 @@ export const addWorkaroundResolutions = async ({ cwd, dryRun }: YarnOptions) => 
     ...packageJson.resolutions,
     // Due to our support of older vite versions
     '@vitejs/plugin-react': '4.2.0',
-    '@sveltejs/vite-plugin-svelte': '3.0.1',
     '@vitejs/plugin-vue': '4.5.0',
     '@testing-library/dom': '^9.3.4',
     '@testing-library/jest-dom': '^6.5.0',
@@ -116,7 +115,7 @@ export const configureYarn2ForVerdaccio = async ({
   if (
     key.includes('svelte-kit') ||
     // React prereleases will have INCOMPATIBLE_PEER_DEPENDENCY errors because of transitive dependencies not allowing v19 betas
-    key.includes('nextjs/prerelease') ||
+    key.includes('nextjs') ||
     key.includes('react-vite/prerelease') ||
     key.includes('react-webpack/prerelease')
   ) {
