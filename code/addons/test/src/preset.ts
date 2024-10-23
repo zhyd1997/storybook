@@ -11,8 +11,6 @@ import {
 import { oneWayHash, telemetry } from 'storybook/internal/telemetry';
 import type { Options, PresetProperty, StoryId } from 'storybook/internal/types';
 
-import { dedent } from 'ts-dedent';
-
 import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
 
