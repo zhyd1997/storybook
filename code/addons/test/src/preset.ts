@@ -117,13 +117,12 @@ export const managerEntries: PresetProperty<'managerEntries'> = async (entry = [
     // eslint-disable-next-line local-rules/no-uncategorized-errors
     const error = new Error(
       dedent`
-      You have both addon-interactions and addon-test enabled, which is not allowed.
+        You have both "@storybook/addon-interactions" and "@storybook/experimental-addon-test" listed as addons in your Storybook config. This is not allowed, as @storybook/experimental-addon-test is a replacement for @storybook/addon-interactions.
 
-      addon-test is a replacement for addon-interactions, please uninstall and remove addon-interactions from the addons list in your main config at ${options.configDir}.
+        Please remove "@storybook/addon-interactions" from the addons array in your main Storybook config at ${options.configDir} and remove the dependency from your package.json file.
       `
     );
     error.name = 'AddonConflictError';
-
     throw error;
   }
 
