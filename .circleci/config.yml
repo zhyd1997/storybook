@@ -261,6 +261,7 @@ jobs:
     executor:
       class: xlarge
       name: sb_playwright
+    parallelism: 4
     steps:
       - git-shallow-clone/checkout_advanced:
           clone_options: "--depth 1 --verbose"
@@ -270,7 +271,7 @@ jobs:
           name: Test
           command: |
             cd code
-            yarn test
+            SHARD="$((${CIRCLE_NODE_INDEX}+1))"; yarn test --shard=${SHARD}/${CIRCLE_NODE_TOTAL}
       - store_test_results:
           path: code/junit.xml
       # TODO: bring coverage back later. This has caused flakiness in the tests because
