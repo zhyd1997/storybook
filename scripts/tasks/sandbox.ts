@@ -57,15 +57,10 @@ export const sandbox: Task = {
       '@storybook/cli',
     ];
 
-    const shouldAddVitestIntegration = !details.template.skipTasks?.includes('vitest-integration')
+    const shouldAddVitestIntegration = !details.template.skipTasks?.includes('vitest-integration');
 
     if (shouldAddVitestIntegration) {
-      extraDeps.push(
-        'happy-dom',
-        'vitest',
-        'playwright',
-        '@vitest/browser',
-      );
+      extraDeps.push('happy-dom', 'vitest', 'playwright', '@vitest/browser');
 
       if (details.template.expected.framework.includes('nextjs')) {
         extraDeps.push('@storybook/experimental-nextjs-vite', 'jsdom');
@@ -81,7 +76,6 @@ export const sandbox: Task = {
 
       options.addon = [...options.addon, '@storybook/experimental-addon-test'];
     }
-
 
     let startTime = now();
     await create(details, options);
@@ -116,7 +110,7 @@ export const sandbox: Task = {
       await addStories(details, options);
     }
 
-    if(shouldAddVitestIntegration) {
+    if (shouldAddVitestIntegration) {
       await setupVitest(details, options);
     }
 

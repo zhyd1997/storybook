@@ -22,10 +22,7 @@ import dedent from 'ts-dedent';
 import { babelParse } from '../../code/core/src/babel/babelParse';
 import { detectLanguage } from '../../code/core/src/cli/detect';
 import { SupportedLanguage } from '../../code/core/src/cli/project_types';
-import {
-  JsPackageManagerFactory,
-  versions as storybookPackages,
-} from '../../code/core/src/common';
+import { JsPackageManagerFactory, versions as storybookPackages } from '../../code/core/src/common';
 import type { ConfigFile } from '../../code/core/src/csf-tools';
 import { writeConfig } from '../../code/core/src/csf-tools';
 import type { TemplateKey } from '../../code/lib/cli-storybook/src/sandbox-templates';
@@ -180,7 +177,13 @@ export const init: Task['run'] = async (
 
   if (!skipTemplateStories) {
     for (const addon of addons) {
-      await executeCLIStep(steps.add, { argument: addon, cwd, dryRun, debug, optionValues: { yes: true } });
+      await executeCLIStep(steps.add, {
+        argument: addon,
+        cwd,
+        dryRun,
+        debug,
+        optionValues: { yes: true },
+      });
     }
   }
 };
@@ -793,9 +796,6 @@ export const extendMain: Task['run'] = async ({ template, sandboxDir, key }, { d
     updatedStories = updatedStories.filter((specifier) => !specifier.endsWith('.mdx'));
     mainConfig.setFieldValue(['stories'], updatedStories);
   }
-
-  const addons = mainConfig.getFieldValue(['addons']);
-  mainConfig.setFieldValue(['addons'], [...addons]);
 
   if (template.expected.builder === '@storybook/builder-vite') {
     setSandboxViteFinal(mainConfig);
