@@ -61,7 +61,7 @@ export class JsPackageManagerFactory {
     const hasPNPMCommand = hasPNPM(cwd);
     const yarnVersion = getYarnVersion(cwd);
 
-    if (yarnVersion && (closestLockfile === YARN_LOCKFILE || (!hasNPMCommand && !hasPNPMCommand))) {
+    if (yarnVersion && closestLockfile === YARN_LOCKFILE) {
       return yarnVersion === 1 ? new Yarn1Proxy({ cwd }) : new Yarn2Proxy({ cwd });
     }
 
@@ -129,6 +129,7 @@ function hasNPM(cwd?: string) {
     cwd,
     shell: true,
     env: {
+      ...process.env,
       COREPACK_ENABLE_STRICT: '0',
     },
   });
@@ -140,6 +141,7 @@ function hasPNPM(cwd?: string) {
     cwd,
     shell: true,
     env: {
+      ...process.env,
       COREPACK_ENABLE_STRICT: '0',
     },
   });
@@ -151,6 +153,7 @@ function getYarnVersion(cwd?: string): 1 | 2 | undefined {
     cwd,
     shell: true,
     env: {
+      ...process.env,
       COREPACK_ENABLE_STRICT: '0',
     },
   });
