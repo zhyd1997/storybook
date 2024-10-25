@@ -30,6 +30,8 @@ const SIDEBAR_BOTTOM_SPACER_ID = 'sidebar-bottom-spacer';
 // This ID is used by some integrators to target the (fixed position) sidebar bottom element so it should remain stable.
 const SIDEBAR_BOTTOM_WRAPPER_ID = 'sidebar-bottom-wrapper';
 
+const STORAGE_KEY = '@storybook/manager/test-providers';
+
 const initialTestProviderState: TestProviderState = {
   details: {} as { [key: string]: any },
   cancellable: false,
@@ -97,13 +99,17 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [warningsActive, setWarningsActive] = useState(false);
   const [errorsActive, setErrorsActive] = useState(false);
-  const [testProviders, setTestProviders] = useState<TestProviders>(() =>
-    Object.fromEntries(
+  const [testProviders, setTestProviders] = useState<TestProviders>(() => {
+    let sessionState: TestProviders = {};
+    try {
+      sessionState = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}');
+    } catch (_) {}
+    return Object.fromEntries(
       Object.entries(api.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER)).map(
-        ([id, config]) => [id, { ...config, ...initialTestProviderState }]
+        ([id, config]) => [id, { ...config, ...initialTestProviderState, ...sessionState[id] }]
       )
-    )
-  );
+    );
+  });
 
   const warnings = Object.values(status).filter((statusByAddonId) =>
     Object.values(statusByAddonId).some((value) => value?.status === 'warn')
@@ -116,7 +122,11 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
 
   const updateTestProvider = useCallback(
     (id: TestProviderId, update: Partial<TestProviderState>) =>
-      setTestProviders((state) => ({ ...state, [id]: { ...state[id], ...update } })),
+      setTestProviders((state) => {
+        const newValue = { ...state, [id]: { ...state[id], ...update } };
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(newValue));
+        return newValue;
+      }),
     []
   );
 
@@ -130,6 +140,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
         progress: undefined,
       };
       setTestProviders((state) => ({ ...state, [id]: { ...state[id], ...startingState } }));
+      sessionStorage.removeItem(STORAGE_KEY);
       api.experimental_updateStatus(id, (state = {}) =>
         Object.fromEntries(Object.keys(state).map((key) => [key, null]))
       );
