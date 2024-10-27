@@ -80,6 +80,11 @@ const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: nu
 };
 
 addons.register(ADDON_ID, (api) => {
+  const openAddonPanel = () => {
+    api.setSelectedPanel(PANEL_ID);
+    api.togglePanel(true);
+  };
+
   addons.add(TEST_PROVIDER_ID, {
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     runnable: true,
@@ -161,6 +166,7 @@ addons.register(ADDON_ID, (api) => {
                   data: {
                     testRunId,
                   },
+                  onClick: openAddonPanel,
                 };
                 return [storyId, statusObject];
               }
