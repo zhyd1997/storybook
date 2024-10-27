@@ -210,9 +210,10 @@ const Node = React.memo<NodeProps>(function Node({
         {icon ? (
           <WithTooltip
             closeOnOutsideClick
+            closeOnTriggerHidden
             onClick={(event) => event.stopPropagation()}
             placement="bottom"
-            tooltip={() => (
+            tooltip={({ onHide }) => (
               <TooltipLinkList
                 links={Object.entries(status || {})
                   .sort(
@@ -233,6 +234,7 @@ const Node = React.memo<NodeProps>(function Node({
                     onClick: () => {
                       onSelectStoryId(item.id);
                       value.onClick?.();
+                      onHide();
                     },
                   }))}
               />
