@@ -7,6 +7,7 @@ import {
   CollapseIcon as CollapseIconSvg,
   ExpandAltIcon,
   StatusFailIcon,
+  StatusPassIcon,
   StatusWarnIcon,
   SyncIcon,
 } from '@storybook/icons';
@@ -224,7 +225,7 @@ const Node = React.memo<NodeProps>(function Node({
                     description: value.description,
                     'aria-label': `Test status for ${value.title}: ${value.status}`,
                     icon: {
-                      success: null, // We don't show a checkmark, to avoid clutter
+                      success: <StatusPassIcon color={theme.color.positive} />,
                       error: <StatusFailIcon color={theme.color.negative} />,
                       warn: <StatusWarnIcon color={theme.color.warning} />,
                       pending: <SyncIcon size={12} color={theme.color.defaultText} />,
