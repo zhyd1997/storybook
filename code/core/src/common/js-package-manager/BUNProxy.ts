@@ -81,6 +81,10 @@ export class BUNProxy extends JsPackageManager {
     return `bun run ${command}`;
   }
 
+  getRemoteRunCommand(): string {
+    return 'bunx';
+  }
+
   public async getPackageJSON(
     packageName: string,
     basePath = this.cwd
