@@ -171,7 +171,7 @@ const installStorybook = async <Project extends ProjectType>(
       default:
         paddedLog(`We couldn't detect your project type. (code: ${projectType})`);
         paddedLog(
-          'You can specify a project type explicitly via `storybook init --type <type>`, see our docs on how to configure Storybook for your framework: https://storybook.js.org/docs/react/get-started/install'
+          'You can specify a project type explicitly via `storybook init --type <type>`, see our docs on how to configure Storybook for your framework: https://storybook.js.org/docs/get-started/install'
         );
 
         // Add a new line for the clear visibility.
@@ -356,10 +356,13 @@ export async function doInitiate(options: CommandOptions): Promise<
       
       ${picocolors.inverse(' ' + "export {default} from './.storybook';" + ' ')}
       
-      2. Enable transformer.unstable_allowRequireContext in your metro config
+      2. Wrap your metro config with the withStorybook enhancer function like this: 
       
-      For a more detailed guide go to:
-      ${picocolors.cyan('https://github.com/storybookjs/react-native#existing-project')}
+      ${picocolors.inverse(' ' + "const withStorybook = require('@storybook/react-native/metro/withStorybook');" + ' ')}
+      ${picocolors.inverse(' ' + 'module.exports = withStorybook(defaultConfig);' + ' ')}
+
+      For more details go to:
+      ${picocolors.cyan('https://github.com/storybookjs/react-native#getting-started')}
       
       Then to run your Storybook, type:
 
