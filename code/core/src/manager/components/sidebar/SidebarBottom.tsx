@@ -131,21 +131,19 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   );
 
   const clearState = useCallback(
-    ({ providerId: id }: { providerId: TestProviderId }) => {
-      const startingState: Partial<TestProviderState> = {
+    ({ providerId }: { providerId: TestProviderId }) => {
+      updateTestProvider(providerId, {
         cancelling: false,
         running: true,
         failed: false,
         crashed: false,
         progress: undefined,
-      };
-      setTestProviders((state) => ({ ...state, [id]: { ...state[id], ...startingState } }));
-      sessionStorage.removeItem(STORAGE_KEY);
-      api.experimental_updateStatus(id, (state = {}) =>
+      });
+      api.experimental_updateStatus(providerId, (state = {}) =>
         Object.fromEntries(Object.keys(state).map((key) => [key, null]))
       );
     },
-    [api]
+    [api, updateTestProvider]
   );
 
   const onRunTests = useCallback(
