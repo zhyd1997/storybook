@@ -61,7 +61,7 @@ export class JsPackageManagerFactory {
     const hasPNPMCommand = hasPNPM(cwd);
     const yarnVersion = getYarnVersion(cwd);
 
-    if (yarnVersion && closestLockfile === YARN_LOCKFILE) {
+    if (yarnVersion && (closestLockfile === YARN_LOCKFILE || (!hasNPMCommand && !hasPNPMCommand))) {
       return yarnVersion === 1 ? new Yarn1Proxy({ cwd }) : new Yarn2Proxy({ cwd });
     }
 
