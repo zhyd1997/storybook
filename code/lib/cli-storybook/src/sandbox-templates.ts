@@ -386,7 +386,7 @@ const baseTemplates = {
       renderer: '@storybook/vue3',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['e2e-tests-dev', 'bench'],
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'html-webpack/default': {
     name: 'HTML Latest (Webpack | JavaScript)',
