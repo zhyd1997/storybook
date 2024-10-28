@@ -8,7 +8,7 @@ const generator: Generator = async (packageManager, npmOptions, options) => {
     options,
     'nuxt',
     {
-      extraPackages: async ({ builder }) => {
+      extraPackages: async () => {
         return ['@nuxtjs/storybook'];
       },
       installFrameworkPackages: false,
