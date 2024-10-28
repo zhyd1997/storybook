@@ -380,7 +380,6 @@ const baseTemplates = {
   'nuxt-vite/default-ts': {
     name: 'Nuxt v3 (Vite | TypeScript)',
     script: 'npx nuxi init --packageManager yarn --gitInit false {{beforeDir}}',
-    inDevelopment: true,
     expected: {
       framework: '@storybook-vue/nuxt',
       renderer: '@storybook/vue3',
