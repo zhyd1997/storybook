@@ -28,6 +28,7 @@ export function isJestError(error: unknown) {
 
 export function createAnsiToHtmlFilter(theme: StorybookTheme) {
   return new Filter({
+    escapeXML: true,
     fg: theme.color.defaultText,
     bg: theme.background.content,
   });
