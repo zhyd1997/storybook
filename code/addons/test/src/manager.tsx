@@ -152,7 +152,7 @@ addons.register(ADDON_ID, (api) => {
             .map(({ storyId, status, testRunId, ...rest }) => {
               if (storyId) {
                 const statusObject: API_StatusObject = {
-                  title: 'Vitest',
+                  title: 'Component tests',
                   status: statusMap[status],
                   description:
                     'failureMessages' in rest && rest.failureMessages?.length
