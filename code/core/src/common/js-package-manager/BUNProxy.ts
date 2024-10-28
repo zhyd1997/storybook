@@ -81,10 +81,6 @@ export class BUNProxy extends JsPackageManager {
     return `bun run ${command}`;
   }
 
-  async getNpmVersion(): Promise<string> {
-    return this.executeCommand({ command: 'npm', args: ['--version'] });
-  }
-
   public async getPackageJSON(
     packageName: string,
     basePath = this.cwd
