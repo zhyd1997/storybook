@@ -130,6 +130,7 @@ const addStorybook = async ({
   }
 
   await copy(tmpDir, afterDir);
+  await remove(tmpDir);
 };
 
 export const runCommand = async (script: string, options: ExecaOptions, debug = false) => {
