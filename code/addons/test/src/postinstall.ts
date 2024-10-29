@@ -176,7 +176,15 @@ export default async function postInstall(options: PostinstallOptions) {
     if (shouldUninstall) {
       await execa(
         packageManager.getRemoteRunCommand(),
-        ['storybook', 'remove', addonInteractionsName, '--package-manager', options.packageManager],
+        [
+          'storybook',
+          'remove',
+          addonInteractionsName,
+          '--package-manager',
+          options.packageManager,
+          '--config-dir',
+          options.configDir,
+        ],
         {
           shell: true,
         }
