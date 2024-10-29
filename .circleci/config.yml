@@ -223,7 +223,7 @@ jobs:
       - run:
           name: Benchmarking Packages
           working_directory: scripts
-          command: yarn bench-package --baseBranch << pipeline.parameters.ghBaseBranch >> --pull-request << pipeline.parameters.ghPrNumber >> --upload
+          command: yarn bench-packages --baseBranch << pipeline.parameters.ghBaseBranch >> --pull-request << pipeline.parameters.ghPrNumber >> --upload
       - store_artifacts: 
           path: bench/packages/results.json
       - store_artifacts: 

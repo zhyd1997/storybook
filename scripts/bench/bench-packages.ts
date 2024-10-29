@@ -6,9 +6,9 @@ import pLimit from 'p-limit';
 import { join } from 'path';
 import picocolors from 'picocolors';
 import { x } from 'tinyexec';
+import dedent from 'ts-dedent';
 
 import versions from '../../code/core/src/common/versions';
-import { runRegistry } from '../tasks/run-registry';
 import { maxConcurrentTasks } from '../utils/concurrency';
 import { esMain } from '../utils/esmain';
 
@@ -57,8 +57,6 @@ type ComparisonResult = {
 };
 type ResultMap = Record<PackageName, Result>;
 type ComparisonResultMap = Record<PackageName, ComparisonResult>;
-
-let registryController: AbortController | undefined;
 
 /**
  * This function benchmarks the size of Storybook packages and their dependencies. For each package,
@@ -416,8 +414,9 @@ const run = async () => {
   }
 
   if ((await detectFreePort(REGISTRY_PORT)) === REGISTRY_PORT) {
-    console.log('Starting local registry...');
-    registryController = await runRegistry({ dryRun: false, debug: false });
+    throw new Error(dedent`The local verdaccio registry must be running in the background for package benching to work,
+      and packages must be published to it in --no-link mode with 'yarn --task publish --no-link'
+      Then runn the registry with 'yarn --task run-registry --no-link'`);
   }
 
   // The amount of VCPUs for this task in CI is 2 (medium resource)
@@ -484,12 +483,10 @@ const run = async () => {
   }
 
   console.log(picocolors.green('Done benching all packages'));
-  registryController?.abort();
 };
 
 if (esMain(import.meta.url)) {
   run().catch((err) => {
-    registryController?.abort();
     console.error(err);
     process.exit(1);
   });

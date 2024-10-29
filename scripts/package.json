@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "bench-package": "jiti ./bench/bench-package.ts",
+    "bench-packages": "jiti ./bench/bench-packages.ts",
     "build-package": "jiti ./build-package.ts",
     "check": "jiti ./prepare/check-scripts.ts",
     "check-package": "jiti ./check-package.ts",
