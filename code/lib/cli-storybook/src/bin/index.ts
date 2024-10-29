@@ -42,7 +42,7 @@ const command = (name: string) =>
     .option('--enable-crash-reports', 'Enable sending crash reports to telemetry data');
 
 command('init')
-  .description('Initialize Storybook into your project.')
+  .description('Initialize Storybook into your project')
   .option('-f --force', 'Force add Storybook')
   .option('-s --skip-install', 'Skip installing deps')
   .option('--package-manager <npm|pnpm|yarn1|yarn2>', 'Force package manager for installing deps')

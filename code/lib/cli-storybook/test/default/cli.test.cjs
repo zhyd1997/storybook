@@ -20,7 +20,7 @@ describe('Help command', () => {
     expect(status).toBe(0);
     expect(stderr.toString()).toBe('');
     expect(stdout.toString()).toContain('init');
-    expect(stdout.toString()).toContain('Initialize Storybook into your project.');
+    expect(stdout.toString()).toContain('Initialize Storybook into your project');
   });
 
   it('should prints out "add" command', () => {
