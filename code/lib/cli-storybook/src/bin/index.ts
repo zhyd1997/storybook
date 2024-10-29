@@ -61,14 +61,17 @@ command('init')
     '--no-dev',
     'Complete the initialization of Storybook without launching the Storybook development server'
   )
-  .option('-V --version', 'output the version number')
-  .option('-h --help', 'display help for command')
-  .action((options) => {
-    initiate(options).catch((e) => {
+  .action((options) =>
+    withTelemetry('init', { cliOptions: options }, async () => {
+      await initiate(options);
+      if (!options.disableTelemetry) {
+        await telemetry('init', { source: 'cli' });
+      }
+    }).catch((e) => {
       logger.error(e);
       process.exit(1);
-    });
-  });
+    })
+  );
 
 command('add <addon>')
   .description('Add an addon to your Storybook')
