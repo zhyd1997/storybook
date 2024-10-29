@@ -345,15 +345,6 @@ const uploadToGithub = async ({
   benchmarkedAt: Date;
   pullRequest: number;
 }) => {
-  // TODO: send raw data instead
-  const humanReadableResults = Object.values(results).reduce(
-    (acc, result) => {
-      acc[result.package] = toHumanReadable(result);
-      return acc;
-    },
-    {} as Record<PackageName, ReturnType<typeof toHumanReadable>>
-  );
-
   console.log('Uploading results to GitHub...');
   // const response = await fetch('http://localhost:3000/package-bench', {
   const response = await fetch('https://storybook-benchmark-bot.vercel.app/package-bench', {
@@ -366,7 +357,7 @@ const uploadToGithub = async ({
       baseBranch,
       commit,
       benchmarkedAt: benchmarkedAt.toISOString(),
-      results: humanReadableResults,
+      results,
     }),
   });
   if (response.status < 200 || response.status >= 400) {
