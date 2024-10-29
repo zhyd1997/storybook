@@ -245,21 +245,18 @@ const compareResults = async ({
 
   const comparisonResults = {} as ComparisonResultMap;
   for (const result of Object.values(results)) {
-    const baseResult = baseResults.find((row) => row.package === result.package);
+    let baseResult = baseResults.find((row) => row.package === result.package);
     if (!baseResult) {
       console.warn(
-        `No base result found for ${picocolors.blue(result.package)}, skipping comparison.`
+        `No base result found for ${picocolors.blue(result.package)}, comparing with zero values.`
       );
-      // TODO: keep this in the report, comparing it to 0
-      continue;
+      baseResult = {
+        package: result.package,
+        dependencyCount: 0,
+        selfSize: 0,
+        dependencySize: 0,
+      };
     }
-    // console.log('LOG: faking base results', baseResult.package);
-    // baseResult = {
-    //   package: baseResult.package,
-    //   dependencyCount: Math.floor(baseResult.dependencyCount * Math.random()),
-    //   selfSize: Math.floor(baseResult.selfSize * Math.random()),
-    //   dependencySize: Math.floor(baseResult.dependencySize * Math.random()),
-    // };
 
     comparisonResults[result.package] = {
       package: result.package,
