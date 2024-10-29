@@ -2,9 +2,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 
-import chalk from 'chalk';
-import type { CommonOptions } from 'execa';
-import { execaCommand, execaCommandSync } from 'execa';
+// eslint-disable-next-line depend/ban-dependencies
+import { type CommonOptions, execaCommand, execaCommandSync } from 'execa';
+import picocolors from 'picocolors';
 import { gt, satisfies } from 'semver';
 import invariant from 'tiny-invariant';
 import { dedent } from 'ts-dedent';
@@ -49,6 +49,8 @@ export abstract class JsPackageManager {
   public abstract getRunStorybookCommand(): string;
 
   public abstract getRunCommand(command: string): string;
+
+  public abstract getRemoteRunCommand(): string;
 
   public readonly cwd?: string;
 
@@ -384,11 +386,11 @@ export abstract class JsPackageManager {
       latest = await this.latestVersion(packageName, constraint);
     } catch (e) {
       if (current) {
-        logger.warn(`\n     ${chalk.yellow(String(e))}`);
+        logger.warn(`\n     ${picocolors.yellow(String(e))}`);
         return current;
       }
 
-      logger.error(`\n     ${chalk.red(String(e))}`);
+      logger.error(`\n     ${picocolors.red(String(e))}`);
       throw new HandledError(e);
     }
 

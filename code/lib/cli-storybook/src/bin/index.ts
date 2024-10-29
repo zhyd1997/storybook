@@ -7,11 +7,11 @@ import { withTelemetry } from 'storybook/internal/core-server';
 import { logger } from 'storybook/internal/node-logger';
 import { addToGlobalContext, telemetry } from 'storybook/internal/telemetry';
 
-import chalk from 'chalk';
 import { program } from 'commander';
 import envinfo from 'envinfo';
 import { findPackageSync } from 'fd-package-json';
 import leven from 'leven';
+import picocolors from 'picocolors';
 import invariant from 'tiny-invariant';
 
 import { add } from '../add';
@@ -48,6 +48,7 @@ command('add <addon>')
   )
   .option('-c, --config-dir <dir-name>', 'Directory where to load Storybook configurations from')
   .option('-s --skip-postinstall', 'Skip package specific postinstall config modifications')
+  .option('-y --yes', 'Skip prompting the user')
   .action((addonName: string, options: any) => add(addonName, options));
 
 command('remove <addon>')
@@ -56,6 +57,7 @@ command('remove <addon>')
     '--package-manager <npm|pnpm|yarn1|yarn2>',
     'Force package manager for installing dependencies'
   )
+  .option('-c, --config-dir <dir-name>', 'Directory where to load Storybook configurations from')
   .action((addonName: string, options: any) =>
     withTelemetry('remove', { cliOptions: options }, async () => {
       await remove(addonName, options);
@@ -81,7 +83,7 @@ command('upgrade')
 command('info')
   .description('Prints debugging information about the local environment')
   .action(async () => {
-    consoleLogger.log(chalk.bold('\nStorybook Environment Info:'));
+    consoleLogger.log(picocolors.bold('\nStorybook Environment Info:'));
     const pkgManager = await JsPackageManagerFactory.getPackageManager();
     const activePackageManager = pkgManager.type.replace(/\d/, ''); // 'yarn1' -> 'yarn'
     const output = await envinfo.run({
@@ -95,7 +97,7 @@ command('info')
     consoleLogger.log(
       output.replace(
         activePackageManagerLine,
-        chalk.bold(`${activePackageManagerLine} <----- active`)
+        picocolors.bold(`${activePackageManagerLine} <----- active`)
       )
     );
   });
