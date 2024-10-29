@@ -79,7 +79,7 @@ describe('Help command', () => {
     );
   });
 
-  it('sholud prints out "automigrate" command', () => {
+  it('should prints out "automigrate" command', () => {
     const { status, stdout, stderr } = run(['help']);
 
     expect(status).toBe(0);
@@ -90,7 +90,7 @@ describe('Help command', () => {
     );
   });
 
-  it('sholud prints out "doctor" command', () => {
+  it('should prints out "doctor" command', () => {
     const { status, stdout, stderr } = run(['help']);
 
     expect(status).toBe(0);
