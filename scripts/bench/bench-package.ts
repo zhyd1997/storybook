@@ -84,6 +84,9 @@ export const benchPackage = async (packageName: PackageName) => {
       {
         name: `${packageName}-bench`,
         version: '1.0.0',
+        dependencies: {
+          [packageName]: versions[packageName],
+        },
         // Overrides ensures that Storybook packages outside the monorepo are using the versions we have in the monorepo
         overrides: versions,
       },
@@ -94,17 +97,15 @@ export const benchPackage = async (packageName: PackageName) => {
 
   const npmInstallResult = await x(
     'npm',
-    `install --save-exact --registry http://localhost:6001 --omit peer ${packageName}@${versions[packageName]}`.split(
-      ' '
-    ),
+    `install --registry http://localhost:6001 --omit peer --json`.split(' '),
     {
       nodeOptions: { cwd: tmpBenchPackagePath },
     }
   );
 
+  const { added } = JSON.parse(npmInstallResult.stdout) as { added: number };
   // -1 of reported packages added because we shouldn't count the actual package as a dependency
-  const dependencyCount =
-    Number.parseInt(npmInstallResult.stdout.match(/added (\d+) packages?/)?.[1] ?? '') - 1;
+  const dependencyCount = added - 1;
 
   const getDirSize = async (path: string) => {
     const entities = await readdir(path, {
@@ -249,6 +250,7 @@ const compareResults = async ({
       console.warn(
         `No base result found for ${picocolors.blue(result.package)}, skipping comparison.`
       );
+      // TODO: keep this in the report, comparing it to 0
       continue;
     }
     // console.log('LOG: faking base results', baseResult.package);
@@ -346,6 +348,7 @@ const uploadToGithub = async ({
   benchmarkedAt: Date;
   pullRequest: number;
 }) => {
+  // TODO: send raw data instead
   const humanReadableResults = Object.values(results).reduce(
     (acc, result) => {
       acc[result.package] = toHumanReadable(result);
@@ -411,7 +414,7 @@ const run = async () => {
     );
   program.parse(process.argv);
 
-  const packages = (
+  const packageNames = (
     program.args.length > 0 ? program.args : Object.keys(versions)
   ) as PackageName[];
   const options = program.opts<{ pullRequest?: number; baseBranch?: string; upload?: boolean }>();
@@ -435,8 +438,8 @@ const run = async () => {
   const limit = pLimit(concurrentLimt);
 
   const progressIntervalId = setInterval(() => {
-    const doneCount = packages.length - limit.activeCount - limit.pendingCount;
-    if (doneCount === packages.length) {
+    const doneCount = packageNames.length - limit.activeCount - limit.pendingCount;
+    if (doneCount === packageNames.length) {
       clearInterval(progressIntervalId);
       return;
     }
@@ -445,7 +448,7 @@ const run = async () => {
     );
   }, 2_000);
   const resultsArray = await Promise.all(
-    packages.map((packageName) => limit(() => benchPackage(packageName)))
+    packageNames.map((packageName) => limit(() => benchPackage(packageName)))
   );
   const results = resultsArray.reduce((acc, result) => {
     acc[result.package] = result;
