@@ -1,3 +1,7 @@
+## 8.4.0-beta.3
+
+- Addon Test: Only register testing module in Vite projects - [#29472](https://github.com/storybookjs/storybook/pull/29472), thanks @yannbf!
+
 ## 8.4.0-beta.2
 
 - Addon Test: Adjust file exports to be ESM/CJS compatible - [#29471](https://github.com/storybookjs/storybook/pull/29471), thanks @valentinpalkovic!
