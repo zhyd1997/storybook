@@ -65,7 +65,7 @@ export class StorybookReporter implements Reporter {
   sendReport: (payload: TestingModuleProgressReportPayload) => void;
 
   constructor(private testManager: TestManager) {
-    this.sendReport = throttle((payload) => this.testManager.sendProgressReport(payload), 200);
+    this.sendReport = throttle((payload) => this.testManager.sendProgressReport(payload), 1000);
   }
 
   onInit(ctx: Vitest) {
