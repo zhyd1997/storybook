@@ -80,7 +80,8 @@ const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: nu
 };
 
 addons.register(ADDON_ID, (api) => {
-  if (globalThis.STORYBOOK_BUILDER?.includes('vite')) {
+  const storybookBuilder = (globalThis as any).STORYBOOK_BUILDER || '';
+  if (storybookBuilder.includes('vite')) {
     const openAddonPanel = () => {
       api.setSelectedPanel(PANEL_ID);
       api.togglePanel(true);
