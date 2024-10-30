@@ -193,11 +193,11 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
       updateTestProvider(providerId, { details, running: false, crashed: true, watching: false });
     };
 
-    const onProgressReport = ({ providerId, ...details }: TestingModuleProgressReportPayload) => {
-      if (details.status === 'failed') {
-        updateTestProvider(providerId, { details, running: false, failed: true });
+    const onProgressReport = ({ providerId, ...result }: TestingModuleProgressReportPayload) => {
+      if (result.status === 'failed') {
+        updateTestProvider(providerId, { ...result, running: false, failed: true });
       } else {
-        const update = { ...details, running: details.status === 'pending' };
+        const update = { ...result, running: result.status === 'pending' };
         updateTestProvider(providerId, update);
 
         const { mapStatusUpdate, ...state } = testProviders[providerId];
