@@ -8,7 +8,6 @@ import { logger } from 'storybook/internal/node-logger';
 import { addToGlobalContext, telemetry } from 'storybook/internal/telemetry';
 
 import { program } from 'commander';
-import { initiate } from 'create-storybook';
 import envinfo from 'envinfo';
 import { findPackageSync } from 'fd-package-json';
 import leven from 'leven';
@@ -60,17 +59,6 @@ command('init')
   .option(
     '--no-dev',
     'Complete the initialization of Storybook without launching the Storybook development server'
-  )
-  .action((options) =>
-    withTelemetry('init', { cliOptions: options }, async () => {
-      await initiate(options);
-      if (!options.disableTelemetry) {
-        await telemetry('init', { source: 'cli' });
-      }
-    }).catch((e) => {
-      logger.error(e);
-      process.exit(1);
-    })
   );
 
 command('add <addon>')
