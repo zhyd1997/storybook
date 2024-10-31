@@ -75,7 +75,7 @@ export const scopedResolve = (id: string): string => {
   }
 
   const moduleFolderStrPosition = scopedModulePath.lastIndexOf(
-    id.replace(/\//g /* all '/' occurances */, sep)
+    id.replace(/\//g /* all '/' occurrences */, sep)
   );
   const beginningOfMainScriptPath = moduleFolderStrPosition + id.length;
   return scopedModulePath.substring(0, beginningOfMainScriptPath);
