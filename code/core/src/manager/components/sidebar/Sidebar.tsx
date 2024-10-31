@@ -229,7 +229,7 @@ export const Sidebar = React.memo(function Sidebar({
             )}
           </Search>
         </Top>
-        {isMobile || isLoading ? null : <SidebarBottom />}
+        {isMobile || isLoading ? null : <SidebarBottom isDevelopment={isDevelopment} />}
       </ScrollArea>
     </Container>
   );

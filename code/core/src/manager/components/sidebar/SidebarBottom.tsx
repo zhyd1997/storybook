@@ -92,9 +92,15 @@ interface SidebarBottomProps {
   api: API;
   notifications: State['notifications'];
   status: State['status'];
+  isDevelopment?: boolean;
 }
 
-export const SidebarBottomBase = ({ api, notifications = [], status = {} }: SidebarBottomProps) => {
+export const SidebarBottomBase = ({
+  api,
+  notifications = [],
+  status = {},
+  isDevelopment = globalThis.CONFIG_TYPE === 'DEVELOPMENT',
+}: SidebarBottomProps) => {
   const spacerRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [warningsActive, setWarningsActive] = useState(false);
@@ -228,7 +234,7 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
     <div id={SIDEBAR_BOTTOM_SPACER_ID} ref={spacerRef}>
       <Content id={SIDEBAR_BOTTOM_WRAPPER_ID} ref={wrapperRef}>
         <NotificationList notifications={notifications} clearNotification={api.clearNotification} />
-        {globalThis.CONFIG_TYPE === 'DEVELOPMENT' && (
+        {isDevelopment && (
           <TestingModule
             {...{
               testProviders: testProvidersArray,
@@ -249,8 +255,15 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
   );
 };
 
-export const SidebarBottom = () => {
+export const SidebarBottom = ({ isDevelopment }: { isDevelopment?: boolean }) => {
   const api = useStorybookApi();
   const { notifications, status } = useStorybookState();
-  return <SidebarBottomBase api={api} notifications={notifications} status={status} />;
+  return (
+    <SidebarBottomBase
+      api={api}
+      notifications={notifications}
+      status={status}
+      isDevelopment={isDevelopment}
+    />
+  );
 };
