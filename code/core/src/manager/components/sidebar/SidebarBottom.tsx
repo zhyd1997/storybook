@@ -99,7 +99,7 @@ export const SidebarBottomBase = ({
   api,
   notifications = [],
   status = {},
-  isDevelopment = globalThis.CONFIG_TYPE === 'DEVELOPMENT',
+  isDevelopment,
 }: SidebarBottomProps) => {
   const spacerRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
