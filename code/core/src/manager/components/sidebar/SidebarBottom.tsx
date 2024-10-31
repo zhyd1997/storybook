@@ -228,20 +228,22 @@ export const SidebarBottomBase = ({ api, notifications = [], status = {} }: Side
     <div id={SIDEBAR_BOTTOM_SPACER_ID} ref={spacerRef}>
       <Content id={SIDEBAR_BOTTOM_WRAPPER_ID} ref={wrapperRef}>
         <NotificationList notifications={notifications} clearNotification={api.clearNotification} />
-        <TestingModule
-          {...{
-            testProviders: testProvidersArray,
-            errorCount: errors.length,
-            errorsActive,
-            setErrorsActive,
-            warningCount: warnings.length,
-            warningsActive,
-            setWarningsActive,
-            onRunTests,
-            onCancelTests,
-            onSetWatchMode,
-          }}
-        />
+        {globalThis.CONFIG_TYPE === 'DEVELOPMENT' && (
+          <TestingModule
+            {...{
+              testProviders: testProvidersArray,
+              errorCount: errors.length,
+              errorsActive,
+              setErrorsActive,
+              warningCount: warnings.length,
+              warningsActive,
+              setWarningsActive,
+              onRunTests,
+              onCancelTests,
+              onSetWatchMode,
+            }}
+          />
+        )}
       </Content>
     </div>
   );
