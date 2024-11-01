@@ -55,12 +55,12 @@ export interface TooltipLinkListProps extends ComponentProps<typeof List> {
 
 export const TooltipLinkList = ({ links, LinkWrapper, ...props }: TooltipLinkListProps) => {
   const groups = Array.isArray(links[0]) ? (links as Link[][]) : [links as Link[]];
+  const isIndented = groups.some((group) => group.some((link) => link.icon));
   return (
     <List {...props}>
       {groups
         .filter((group) => group.length)
         .map((group, index) => {
-          const isIndented = group.some((link) => link.icon);
           return (
             <Group key={group.map((link) => link.id).join(`~${index}~`)}>
               {group.map((link) => (
