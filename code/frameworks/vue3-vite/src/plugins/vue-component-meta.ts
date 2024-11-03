@@ -146,6 +146,11 @@ export async function vueComponentMeta(tsconfigPath = 'tsconfig.json'): Promise<
         return undefined;
       }
     },
+    // handle hot updates to update the component meta on file changes
+    async handleHotUpdate({ file, read }) {
+      const content = await read();
+      checker.updateFile(file, content);
+    },
   };
 }
 
