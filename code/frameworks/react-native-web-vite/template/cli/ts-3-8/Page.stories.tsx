@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import * as HeaderStories from './Header.stories';
 import { Page } from './Page';
+import * as React from 'react';
 
 const meta: Meta<typeof Page> = {
   component: Page,

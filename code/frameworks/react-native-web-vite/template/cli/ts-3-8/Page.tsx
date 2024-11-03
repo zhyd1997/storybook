@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Linking } from 'react-native';
 import { Header } from './Header';
+import * as React from 'react';
 
 export type PageProps = {
   user?: {};

@@ -1,5 +1,6 @@
 import { Button } from './Button';
 import { View, Text, StyleSheet } from 'react-native';
+import * as React from 'react';
 
 export type HeaderProps = {
   user?: {};
