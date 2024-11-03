@@ -592,6 +592,29 @@ const baseTemplates = {
       builder: '@storybook/builder-webpack5',
     },
   },
+  'react-native-web-vite/expo-ts': {
+    name: 'React Native Expo Latest (Vite | TypeScript)',
+    script: 'npx create-expo-app -y {{beforeDir}}',
+    inDevelopment: true,
+    expected: {
+      framework: '@storybook/react-native-web-vite',
+      renderer: '@storybook/react',
+      builder: '@storybook/builder-vite',
+    },
+    skipTasks: ['bench'],
+  },
+  'react-native-web-vite/rn-cli-ts': {
+    name: 'React Native CLI Latest (Vite | TypeScript)',
+    script:
+      'npx @react-native-community/cli@latest init --install-pods=false --directory={{beforeDir}} rnapp',
+    inDevelopment: true,
+    expected: {
+      framework: '@storybook/react-native-web-vite',
+      renderer: '@storybook/react',
+      builder: '@storybook/builder-vite',
+    },
+    skipTasks: ['bench'],
+  },
 } satisfies Record<string, BaseTemplates>;
 
 /**
