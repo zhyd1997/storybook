@@ -157,6 +157,7 @@ export const frameworkToDefaultBuilder: Record<
   'preact-vite': CoreBuilder.Vite,
   'preact-webpack5': CoreBuilder.Webpack5,
   qwik: CoreBuilder.Vite,
+  'react-native-web-vite': CoreBuilder.Vite,
   'react-vite': CoreBuilder.Vite,
   'react-webpack5': CoreBuilder.Webpack5,
   'server-webpack5': CoreBuilder.Webpack5,

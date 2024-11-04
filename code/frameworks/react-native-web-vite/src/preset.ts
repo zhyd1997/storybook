@@ -2,14 +2,14 @@ import { hasVitePlugins } from '@storybook/builder-vite';
 
 import type { BabelOptions, Options as ReactOptions } from '@vitejs/plugin-react';
 import react from '@vitejs/plugin-react';
-import type { Plugin } from 'vite';
+import type { PluginOption } from 'vite';
 
 import type { FrameworkOptions, StorybookConfig } from './types';
 
 function reactNativeWeb(
   reactOptions: Omit<ReactOptions, 'babel'> & { babel?: BabelOptions }
-): Plugin {
-  const plugin: Plugin = {
+): PluginOption {
+  return {
     name: 'vite:react-native-web',
     enforce: 'pre',
     config(_userConfig, env) {
@@ -67,8 +67,6 @@ function reactNativeWeb(
       };
     },
   };
-
-  return plugin;
 }
 
 export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) => {
