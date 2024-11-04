@@ -367,7 +367,7 @@ If you need to release a change to an older minor version that is not the latest
 15. Confirm the new version has been released on npmjs with the tag `tag-for-publishing-older-releases`:
     1. [`@storybook/react-vite`](https://www.npmjs.com/package/@storybook/react-vite?activeTab=versions)
     2. [`storybook`](https://www.npmjs.com/package/storybook?activeTab=versions)
-    3. [`sb`](phttps://www.npmjs.com/package/sb?activeTab=versions)
+    3. [`sb`](https://www.npmjs.com/package/sb?activeTab=versions)
     4. [`create-storybook`](https://www.npmjs.com/package/create-storybook?activeTab=versions)
 16. Push
 17. Manually create a GitHub Release at https://github.com/storybookjs/storybook/releases/new with:
