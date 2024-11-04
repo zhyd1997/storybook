@@ -11,15 +11,8 @@ function reactNativeWeb(
 ): PluginOption {
   return {
     name: 'vite:react-native-web',
-    enforce: 'pre',
     config(_userConfig, env) {
       return {
-        plugins: [
-          react({
-            jsxRuntime: 'automatic',
-            ...reactOptions,
-          }),
-        ],
         define: {
           // reanimated support
           'global.__x': {},
@@ -75,9 +68,19 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
 
   const { plugins = [] } = config;
 
-  if (!(await hasVitePlugins(plugins, ['vite:react-native-web']))) {
-    plugins.push(reactNativeWeb(pluginReactOptions));
-  }
+  //  if (!(await hasVitePlugins(plugins, ['vite:react-native-web']))) {
+  plugins.push(
+    react({
+      babel: {
+        babelrc: false,
+        configFile: false,
+      },
+      jsxRuntime: 'automatic',
+      ...pluginReactOptions,
+    })
+  );
+  plugins.push(reactNativeWeb(pluginReactOptions));
+  //}
 
   return config;
 };
