@@ -595,13 +595,12 @@ const baseTemplates = {
   'react-native-web-vite/expo-ts': {
     name: 'React Native Expo Latest (Vite | TypeScript)',
     script: 'npx create-expo-app -y {{beforeDir}}',
-    inDevelopment: true,
     expected: {
       framework: '@storybook/react-native-web-vite',
       renderer: '@storybook/react',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['bench'],
+    skipTasks: ['bench', 'vitest-integration'],
   },
   'react-native-web-vite/rn-cli-ts': {
     name: 'React Native CLI Latest (Vite | TypeScript)',
@@ -613,7 +612,7 @@ const baseTemplates = {
       renderer: '@storybook/react',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['bench'],
+    skipTasks: ['bench', 'vitest-integration'],
   },
 } satisfies Record<string, BaseTemplates>;
 
