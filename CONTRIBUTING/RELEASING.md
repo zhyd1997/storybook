@@ -343,12 +343,12 @@ If you need to release a change to an older minor version that is not the latest
 4. Build all packages in `code` with `yarn task --task compile --no-link`
 5. Commit and push your changes.
 6. Trigger _daily_ CI manually on your branch:
-  1. Open https://app.circleci.com/pipelines/github/storybookjs/storybook
-  2. Click "Trigger Pipeline", top right corner
-  3. Pipeline: _"storybook default"_
-  4. Config Source: _"storybook"_
-  5. Branch: Your branch, eg. `patch-8-3-7`
-  6. Add a parameter, with _"name"_ `workflow`, _"value"_ `daily`
+  1. Open [CircleCI](https://app.circleci.com/pipelines/github/storybookjs/storybook) and click "Trigger Pipeline" on the top right corner of the page.
+  2. Set the following configuration options:
+    - Pipeline: _"storybook default"_
+    - Config Source: _"storybook"_
+    - Branch: Your branch, eg. `patch-8-3-7`
+  3. Add a parameter, with _"name"_ `workflow`, _"value"_ `daily`
 7. Wait for CI to finish successfully.
 8. Bump all package versions:
   1. `cd scripts`
@@ -356,25 +356,25 @@ If you need to release a change to an older minor version that is not the latest
 9.  Commit with `git commit -m "Bump version from <CURRENT_VERSION> to <NEXT_VERSION> MANUALLY"`
 10. Add a new entry to `CHANGELOG.md`, describing your changes
 11. Commit with `git commit -m "Update CHANGELOG.md with <NEXT_VERSION> MANUALLY"`
-12. Ensure you have the correct write permissions to all the Storybook npm packages. You need to be an admin of the _storybook_ org, as well as the packages not in the org. The simplest way to check this, is to ensure you can see the _"Settings"_ tab in the follwing packages:
+12. Ensure you have the correct write permissions for all the Storybook npm packages. You need to be an admin of the _storybook_ org, and the packages that are not in the org. The simplest way to check this is to ensure you can see the _"Settings"_ tab in the following packages:
   1.  [`@storybook/react-vite`](https://www.npmjs.com/package/@storybook/react-vite/access)
   2.  [`storybook`](https://www.npmjs.com/package/storybook/access)
   3.  [`sb`](https://www.npmjs.com/package/sb/access)
   4.  [`create-storybook`](https://www.npmjs.com/package/create-storybook/access)
-13. Get your npm access token or generate a new one at https://www.npmjs.com/settings/jreinhold/tokens. Remember to not only give it access to the `storybook` org, but also the packages not in the org as listed above.
+13. Get your npm access token or generate a new one at https://www.npmjs.com/settings/your-username/tokens. Remember to give it access to the `storybook` org and the packages not in the org, as listed above.
 14. Publish all packages with `YARN_NPM_AUTH_TOKEN=<NPM_TOKEN> yarn release:publish --tag tag-for-publishing-older-releases --verbose`
     - It goes through all packages and publishes them. If any number of packages fails to publish, it will retry 5 times, skipping those that have already been published.
-15. Confirm the new version has been released on npmjs with the tag `tag-for-publishing-older-releases`:
+15. Confirm the new version has been released on npm with the tag `tag-for-publishing-older-releases`:
     1. [`@storybook/react-vite`](https://www.npmjs.com/package/@storybook/react-vite?activeTab=versions)
     2. [`storybook`](https://www.npmjs.com/package/storybook?activeTab=versions)
     3. [`sb`](https://www.npmjs.com/package/sb?activeTab=versions)
     4. [`create-storybook`](https://www.npmjs.com/package/create-storybook?activeTab=versions)
 16. Push
 17. Manually create a GitHub Release at https://github.com/storybookjs/storybook/releases/new with:
-    1.  Create new tag: `v<VERSION>`, eg. `v8.3.7`
-    2.  Target: your branch, eg. `patch-8-3-7`
-    3.  Previous tag: `v<PREVIOUS_VERSION>`, eg. `v8.3.6`
-    4.  Title: `v<VERSION>`, eg. `v8.3.7`
+    1.  Create new tag: `v<VERSION>` (e.g., `v8.3.7`)
+    2.  Target: your branch (e.g., `patch-8-3-7`)
+    3.  Previous tag: `v<PREVIOUS_VERSION>` (e.g., `v8.3.6`)
+    4.  Title: `v<VERSION>` (e.g., `v8.3.7`)
     5.  Description: The content you added to `CHANGELOG.md`
     6.  Untick _"Set as the latest release"_
 18. Cherry-pick your changelog changes into `next`, so they are actually visible 
