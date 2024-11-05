@@ -160,7 +160,11 @@ export const Pair: Story = {
 };
 ```
 
-```js filename="ButtonGroup.stories.js" renderer="svelte" language="js"
+```svelte filename="ButtonGroup.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!-- TK if pattern is possible -->
+```
+
+```js filename="ButtonGroup.stories.js" renderer="svelte" language="js" tabTitle="CSF"
 import ButtonGroup from '../ButtonGroup.svelte';
 
 //👇 Imports the Button stories
@@ -178,7 +182,11 @@ export const Pair = {
 };
 ```
 
-```ts filename="ButtonGroup.stories.ts" renderer="svelte" language="ts-4-9"
+```svelte filename="ButtonGroup.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TK if pattern is possible -->
+```
+
+```ts filename="ButtonGroup.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import ButtonGroup from './ButtonGroup.svelte';
@@ -201,7 +209,11 @@ export const Pair: Story = {
 };
 ```
 
-```ts filename="ButtonGroup.stories.ts" renderer="svelte" language="ts"
+```svelte filename="ButtonGroup.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TK if pattern is possible -->
+```
+
+```ts filename="ButtonGroup.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import ButtonGroup from './ButtonGroup.svelte';
@@ -350,4 +362,3 @@ export const Pair: Story = {
   },
 };
 ```
-

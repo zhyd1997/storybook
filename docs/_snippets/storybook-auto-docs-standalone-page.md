@@ -1,5 +1,5 @@
-```mdx renderer="common" language="mdx"
-{/* src/GettingStarted.mdx */}
+```mdx filename="src/GettingStarted.mdx" renderer="common" language="mdx"
+{/* TK: Vet this against recommendation and filter out Svelte CSF */}
 
 # Getting Started
 
@@ -61,4 +61,3 @@ Your development environment is critical. Here are some tools and resources to h
 
 ---
 ```
-

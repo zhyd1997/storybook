@@ -34,7 +34,7 @@ export const WithAnImage = {
 };
 ```
 
-```tsx filename=" MyComponent.stories.ts|tsx" renderer="react" language="ts-4-9"
+```tsx filename="MyComponent.stories.ts|tsx" renderer="react" language="ts-4-9"
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { MyComponent } from './MyComponent';
@@ -52,7 +52,7 @@ export const WithAnImage: Story = {
 };
 ```
 
-```tsx filename=" MyComponent.stories.ts|tsx" renderer="react" language="ts"
+```tsx filename="MyComponent.stories.ts|tsx" renderer="react" language="ts"
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { MyComponent } from './MyComponent';
@@ -119,7 +119,27 @@ export const WithAnImage: Story = {
 };
 ```
 
-```js filename="MyComponent.stories.js" renderer="svelte" language="js"
+```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!-- TODO: Vet this example against recommendation -->
+
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import MyComponent from './MyComponent.svelte';
+
+	const { Story } = defineMeta({
+		component: MyComponent,
+	});
+</script>
+
+<Story name="WithAnImage">
+  <div>
+    <MyComponent src="/image.png" alt="my image" />
+  </div>
+</Story>
+```
+
+```js filename="MyComponent.stories.js" renderer="svelte" language="js" tabTitle="CSF"
 import MyComponent from './MyComponent.svelte';
 
 export default {
@@ -138,25 +158,27 @@ export const WithAnImage = {
 };
 ```
 
-```html renderer="svelte" language="ts" tabTitle="native-format"
-{/* MyComponent.stories.svelte */}
+```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TODO: Vet this example against recommendation -->
 
-<script>
-  import { Meta, Template, Story } from '@storybook/addon-svelte-csf';
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 
   import MyComponent from './MyComponent.svelte';
+
+	const { Story } = defineMeta({
+		component: MyComponent,
+	});
 </script>
 
-<meta title="img" component="{MyComponent}" />
-
-<template>
-  <MyComponent src="/image.png" alt="my image" />
-</template>
-
-<Story name="WithAnImage" />
+<Story name="WithAnImage">
+  <div>
+    <MyComponent src="/image.png" alt="my image" />
+  </div>
+</Story>
 ```
 
-```ts filename="MyComponent.stories.ts" renderer="svelte" language="ts-4-9"
+```ts filename="MyComponent.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import MyComponent from './MyComponent.svelte';
@@ -180,7 +202,27 @@ export const WithAnImage: Story = {
 };
 ```
 
-```ts filename="MyComponent.stories.ts" renderer="svelte" language="ts"
+```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TODO: Vetthis example against recommendation -->
+
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import MyComponent from './MyComponent.svelte';
+
+	const { Story } = defineMeta({
+		component: MyComponent,
+	});
+</script>
+
+<Story name="WithAnImage">
+  <div>
+    <MyComponent src="/image.png" alt="my image" />
+  </div>
+</Story>
+```
+
+```ts filename="MyComponent.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import MyComponent from './MyComponent.svelte';
@@ -287,4 +329,3 @@ export const WithAnImage: Story = {
   render: () => html`<img src="/image.png" alt="image" />`,
 };
 ```
-

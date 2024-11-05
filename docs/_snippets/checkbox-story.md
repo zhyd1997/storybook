@@ -1,6 +1,4 @@
-```mdx renderer="common" language="mdx"
-{/* Checkbox.mdx */}
-
+```mdx filename="Checkbox.mdx" renderer="common" language="mdx"
 import { Canvas, Meta } from '@storybook/blocks';
 
 import * as CheckboxStories from './Checkbox.stories';
@@ -9,17 +7,20 @@ import * as CheckboxStories from './Checkbox.stories';
 
 # Checkbox
 
-A checkbox is a square box that can be activated or deactivated when ticked. 
+A checkbox is a square box that can be activated or deactivated when ticked.
 
 Use checkboxes to select one or more options from a list of choices.
 
 <Canvas of={CheckboxStories.Unchecked} />
-````
+```
 
-```md renderer="react" language="mdx"
-{/* Checkbox.mdx */}
+```mdx filename="Checkbox.mdx" renderer="svelte" language="mdx"
+{/* TK: vet this against recomendation */}
+```
 
+```mdx filename="Checkbox.mdx" renderer="react" language="mdx"
 import { Canvas, Meta, Story } from '@storybook/blocks';
+
 import * as CheckboxStories from './Checkbox.stories';
 
 <Meta of={CheckboxStories} />
@@ -32,4 +33,3 @@ With `MDX` we can compose Markdown documentation with `Checkbox` stories and int
   <Story of={CheckboxStories.Unchecked} />
 </Canvas>
 ```
-

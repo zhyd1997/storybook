@@ -154,7 +154,11 @@ export const LoggedIn: Story = {
 };
 ```
 
-```js filename="Page.stories.js" renderer="svelte" language="js"
+```svelte filename="Page.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (eg., ts-4-9, ts) -->
+```
+
+```js filename="Page.stories.js" renderer="svelte" language="js" tabTitle="CSF"
 import Page from './Page.svelte';
 
 //👇 Imports all Header stories
@@ -171,7 +175,11 @@ export const LoggedIn = {
 };
 ```
 
-```ts filename="Page.stories.ts" renderer="svelte" language="ts-4-9"
+```svelte filename="Page.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (eg., ts-4-9, ts) -->
+```
+
+```ts filename="Page.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Page from './Page.svelte';
@@ -193,7 +201,11 @@ export const LoggedIn: Story = {
 };
 ```
 
-```ts filename="Page.stories.ts" renderer="svelte" language="ts"
+```svelte filename="Page.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (eg., ts-4-9, ts) -->
+```
+
+```ts filename="Page.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Page from './Page.svelte';
@@ -346,4 +358,3 @@ export const LoggedIn: Story = {
   },
 };
 ```
-

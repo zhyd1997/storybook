@@ -275,7 +275,39 @@ export const Tertiary: Story = {
 };
 ```
 
-```js filename="Button.stories.js" renderer="svelte" language="js"
+```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!-- TODO: Vet this example against recommendation -->
+
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+	const { Story } = defineMeta({
+		component: Button,
+	});
+</script>
+
+<Story name="Primary">
+  <div>
+    <Button backgroundColor="#ff0" label="Button" />
+  </div>
+</Story>
+
+<Story name="Secondary">
+  <div>
+    <Button backgroundColor="#ff0" label="😄👍😍💯" />
+  </div>
+</Story>
+
+<Story name="Tertiary">
+  <div>
+    <Button backgroundColor="#ff0" label="📚📕📈🤓" />
+  </div>
+</Story>
+```
+
+```js filename="Button.stories.js" renderer="svelte" language="js" tabTitle="CSF"
 import Button from './Button.svelte';
 
 export default {
@@ -318,29 +350,39 @@ export const Tertiary = {
 };
 ```
 
-```html renderer="svelte" language="ts" tabTitle="native-format"
-<script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf';
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TODO: Vet this example against recommendation -->
+
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 
   import Button from './Button.svelte';
+
+	const { Story } = defineMeta({
+		component: Button,
+	});
 </script>
 
-<meta title="Button" component="{Button}" />
-
 <Story name="Primary">
-  <button background="#ff0" label="Button" />
+  <div>
+    <Button backgroundColor="#ff0" label="Button" />
+  </div>
 </Story>
 
 <Story name="Secondary">
-  <button background="#ff0" label="😄👍😍💯" />
+  <div>
+    <Button backgroundColor="#ff0" label="😄👍😍💯" />
+  </div>
 </Story>
 
 <Story name="Tertiary">
-  <button background="#ff0" label="📚📕📈🤓" />
+  <div>
+    <Button backgroundColor="#ff0" label="📚📕📈🤓" />
+  </div>
 </Story>
 ```
 
-```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9"
+```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Button from './Button.svelte';
@@ -388,7 +430,39 @@ export const Tertiary: Story = {
 };
 ```
 
-```ts filename="Button.stories.ts" renderer="svelte" language="ts"
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TODO: Vet this example against recommendation -->
+
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+	const { Story } = defineMeta({
+		component: Button,
+	});
+</script>
+
+<Story name="Primary">
+  <div>
+    <Button backgroundColor="#ff0" label="Button" />
+  </div>
+</Story>
+
+<Story name="Secondary">
+  <div>
+    <Button backgroundColor="#ff0" label="😄👍😍💯" />
+  </div>
+</Story>
+
+<Story name="Tertiary">
+  <div>
+    <Button backgroundColor="#ff0" label="📚📕📈🤓" />
+  </div>
+</Story>
+```
+
+```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Button from './Button.svelte';
@@ -489,21 +563,21 @@ type Story = StoryObj<typeof Button>;
 export const Primary: Story = {
   render: () => ({
     components: { Button },
-    template: '<Button background="#ff0" label="Button" />',
+    template: '<Button backgroundColor="#ff0" label="Button" />',
   }),
 };
 
 export const Secondary: Story = {
   render: () => ({
     components: { Button },
-    template: '<Button background="#ff0" label="😄👍😍💯" />',
+    template: '<Button backgroundColor="#ff0" label="😄👍😍💯" />',
   }),
 };
 
 export const Tertiary: Story = {
   render: () => ({
     components: { Button },
-    template: '<Button background="#ff0" label="📚📕📈🤓" />',
+    template: '<Button backgroundColor="#ff0" label="📚📕📈🤓" />',
   }),
 };
 ```
@@ -528,21 +602,21 @@ type Story = StoryObj<typeof Button>;
 export const Primary: Story = {
   render: () => ({
     components: { Button },
-    template: '<Button background="#ff0" label="Button" />',
+    template: '<Button backgroundColor="#ff0" label="Button" />',
   }),
 };
 
 export const Secondary: Story = {
   render: () => ({
     components: { Button },
-    template: '<Button background="#ff0" label="😄👍😍💯" />',
+    template: '<Button backgroundColor="#ff0" label="😄👍😍💯" />',
   }),
 };
 
 export const Tertiary: Story = {
   render: () => ({
     components: { Button },
-    template: '<Button background="#ff0" label="📚📕📈🤓" />',
+    template: '<Button backgroundColor="#ff0" label="📚📕📈🤓" />',
   }),
 };
 ```
@@ -560,15 +634,15 @@ export default {
  * to learn how to use render functions.
  */
 export const Primary = {
-  render: () => html`<demo-button .background="#ff0" .label="Button"></demo-button>`,
+  render: () => html`<demo-button .backgroundColor="#ff0" .label="Button"></demo-button>`,
 };
 
 export const Secondary = {
-  render: () => html`<demo-button .background="#ff0" .label="😄👍😍💯"></demo-button>`,
+  render: () => html`<demo-button .backgroundColor="#ff0" .label="😄👍😍💯"></demo-button>`,
 };
 
 export const Tertiary = {
-  render: () => html`<demo-button .background="#ff0" .label="📚📕📈🤓"></demo-button>`,
+  render: () => html`<demo-button .backgroundColor="#ff0" .label="📚📕📈🤓"></demo-button>`,
 };
 ```
 
@@ -590,15 +664,14 @@ type Story = StoryObj;
  * to learn how to use render functions.
  */
 export const Primary: Story = {
-  render: () => html`<demo-button .background="#ff0" .label="Button"></demo-button>`,
+  render: () => html`<demo-button .backgroundColor="#ff0" .label="Button"></demo-button>`,
 };
 
 export const Secondary: Story = {
-  render: () => html`<demo-button .background="#ff0" .label="😄👍😍💯"></demo-button>`,
+  render: () => html`<demo-button .backgroundColor="#ff0" .label="😄👍😍💯"></demo-button>`,
 };
 
 export const Tertiary: Story = {
-  render: () => html`<demo-button .background="#ff0" .label="📚📕📈🤓"></demo-button>`,
+  render: () => html`<demo-button .backgroundColor="#ff0" .label="📚📕📈🤓"></demo-button>`,
 };
 ```
-

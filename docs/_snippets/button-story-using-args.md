@@ -12,8 +12,8 @@ type Story = StoryObj<Button>;
 
 export const Primary: Story = {
   args: {
-    label: 'Button',
     backgroundColor: '#ff0',
+    label: 'Button',
   },
 };
 
@@ -51,7 +51,7 @@ export default {
 export const Primary = {
   render: (args) => createButton(args),
   args: {
-    primary: true,
+    backgroundColor: '#ff0',
     label: 'Button',
   },
 };
@@ -96,7 +96,7 @@ type Story = StoryObj<ButtonArgs>;
 export const Primary: Story = {
   render: (args) => createButton(args),
   args: {
-    primary: true,
+    backgroundColor: '#ff0',
     label: 'Button',
   },
 };
@@ -312,7 +312,44 @@ export const Tertiary: Story = {
 };
 ```
 
-```js filename="Button.stories.js" renderer="svelte" language="js"
+```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!-- TODO: Vet this against recommendation -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+</script>
+
+<Story
+  name="Primary"
+  args={{
+    backgroundColor: '#ff0',
+    label: 'Button',
+  }}
+/>
+
+<Story
+  name="Secondary"
+  args={{
+    backgroundColor: '#ff0',
+    label: '😄👍😍💯',
+   }}
+/>
+
+<Story
+  name="Tertiary"
+  args={{
+    backgroundColor:'#ff0',
+    label: '📚📕📈🤓',
+  }}
+/>
+```
+
+```js filename="Button.stories.js" renderer="svelte" language="js" tabTitle="CSF"
 import Button from './Button.svelte';
 
 export default {
@@ -341,35 +378,49 @@ export const Tertiary = {
 };
 ```
 
-```html renderer="svelte" language="ts" tabTitle="native-format"
-{/* Button.stories.svelte */}
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TODO: Vet this against recommendation -->
 
-<script>
-  import { Meta, Template, Story } from '@storybook/addon-svelte-csf';
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
   import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
 </script>
 
-<Meta title="Button" component={Button} argTypes={{ label: { control: 'text' }, primary: { control:
-'boolean' }, }} />
+<Story
+  name="Primary"
+  args={{
+    backgroundColor: '#ff0',
+    label: 'Button',
+  }}
+/>
 
-{/* 👇 We create a “template” of how args map to rendering */}
-<template let:args>
-  <button {...args} />
-</template>
+<Story
+  name="Secondary"
+  args={{
+    backgroundColor: '#ff0',
+    label: '😄👍😍💯',
+   }}
+/>
 
-{/* 👇 Each story then reuses that template */}
-<Story name="Primary" args={{ background: '#ff0', label: 'Button' }} /> <Story name="Secondary"
-args={{ background: '#ff0', label: '😄👍😍💯' }} /> <Story name="Tertiary" args={{ background:
-'#ff0', label: '📚📕📈🤓' }} />
+<Story
+  name="Tertiary"
+  args={{
+    backgroundColor:'#ff0',
+    label: '📚📕📈🤓',
+  }}
+/>
 ```
 
-```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9"
+```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Button from './Button.svelte';
 
-//👇This default export determines where your story goes in the story list
 const meta = {
   component: Button,
 } satisfies Meta<typeof Button>;
@@ -399,12 +450,49 @@ export const Tertiary: Story = {
 };
 ```
 
-```ts filename="Button.stories.ts" renderer="svelte" language="ts"
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TODO: vet this against recommendation -->
+
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+</script>
+
+<Story
+  name="Primary"
+  args={{
+    backgroundColor: '#ff0',
+    label: 'Button',
+  }}
+/>
+
+<Story
+  name="Secondary"
+  args={{
+    backgroundColor: '#ff0',
+    label: '😄👍😍💯',
+   }}
+/>
+
+<Story
+  name="Tertiary"
+  args={{
+    backgroundColor:'#ff0',
+    label: '📚📕📈🤓',
+  }}
+/>
+```
+
+```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Button from './Button.svelte';
 
-//👇This default export determines where your story goes in the story list
 const meta: Meta<typeof Button> = {
   component: Button,
 };
@@ -575,7 +663,7 @@ export const Primary: Story = {
     template: '<Button v-bind="args" />',
   }),
   args: {
-    background: '#ff0',
+    backgroundColor: '#ff0',
     label: 'Button',
   },
 };
@@ -616,7 +704,7 @@ export default {
 
 export const Primary = {
   args: {
-    background: '#ff0',
+    backgroundColor: '#ff0',
     label: 'Button',
   },
 };
@@ -648,7 +736,7 @@ type Story = StoryObj;
 
 export const Primary: Story = {
   args: {
-    background: '#ff0',
+    backgroundColor: '#ff0',
     label: 'Button',
   },
 };
@@ -667,4 +755,3 @@ export const Tertiary: Story = {
   },
 };
 ```
-

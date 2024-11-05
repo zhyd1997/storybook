@@ -171,24 +171,23 @@ export const CustomFooter: Story = {
 };
 ```
 
-```html renderer="svelte" language="ts" tabTitle="native-format"
-{/* Page.stories.svelte */}
+```svelte filename="Page.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!--
+  TK: Needs example and should be replicated to the other languages (e.g., ts, ts-4-9) to ensure the snippets render correctly
+  This is a special case as the CSF JS/TS Storybook versions don't support the component "directive"
+  It's referenced in the following documentation:
+  - Essentials/Controls https://storybook.js.org/docs/essentials/controls#fully-custom-args
+  - Writing Stories/Args https://storybook.js.org/docs/writing-stories/args#args-can-modify-any-aspect-of-your-component
+  - Writing Stories/Typescript (https://storybook.js.org/docs/writing-stories/typescript#typing-custom-args)
+-->
+```
 
-<script>
-  import { Meta, Template, Story } from '@storybook/addon-svelte-csf';
+```svelte filename="Page.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TK -->
+```
 
-  import Page from './Page.svelte';
-</script>
-
-<meta title="Page" component="{Page}" />
-
-<template let:args>
-  <Page {...args}>
-    <footer>{args.footer}</footer>
-  </Page>
-</template>
-
-<Story name="CustomFooter" args={{ footer: 'Built with Storybook', }} />
+```svelte filename="Page.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TK -->
 ```
 
 ```js filename="Page.stories.js" renderer="vue" language="js" tabTitle="3"
@@ -336,4 +335,3 @@ export const CustomFooter: Story = {
   },
 };
 ```
-

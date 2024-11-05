@@ -358,42 +358,20 @@ export const ManyItems: Story = {
 };
 ```
 
-```html renderer="svelte" language="ts" tabTitle="native-format"
-{/* List.stories.svelte */}
+```svelte filename="List.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!--
+  TK: Needs example and should be replicated to the other languages (e.g., ts, ts-4-9) to ensure the snippets render correctly
+  This is a special case as the CSF JS/TS Storybook versions don't support the component "directive"
+  It's referenced in the Writing Docs/Index.mdx file (https://storybook.js.org/docs/writing-stories#stories-for-two-or-more-components)
+-->
+```
 
-<script>
-  import { Meta, Template, Story } from '@storybook/addon-svelte-csf';
+```svelte filename="List.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TK -->
+```
 
-  import List from './List.svelte';
-
-  import ListItem from './ListItem.svelte';
-</script>
-
-<meta title="List" component="{List}" />
-
-<template let:args id="Empty">
-  <List {...args} />
-</template>
-
-<template let:args id="OneItem">
-  <List {...args}>
-    <ListItem />
-  </List>
-</template>
-
-<template let:args id="ManyItems">
-  <List {...args}>
-    <ListItem />
-    <ListItem />
-    <ListItem />
-  </List>
-</template>
-
-<Story name="Empty" template="Empty" />
-
-<Story name="OneItem" template="OneItem" />
-
-<Story name="MultipleItems" template="ManyItems" />
+```svelte filename="List.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TK -->
 ```
 
 ```js filename="List.stories.js" renderer="vue" language="js"
@@ -599,4 +577,3 @@ export const ManyItems: Story = {
   `,
 };
 ```
-

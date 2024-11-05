@@ -22,8 +22,6 @@ export const Variant2: Story = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo: Story = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -32,7 +30,6 @@ export const Combo: Story = {
       <div>
         <demo-button variant={1}>
         <demo-button variant={2}>
-        {/* Etc... */}
       </div>
     `,
   }),
@@ -58,8 +55,6 @@ export const Variant2 = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -67,7 +62,6 @@ export const Combo = {
     <>
       <Button variant={1}>
       <Button variant={2}>
-      {/* Etc... */}
     </>
   ),
 };
@@ -97,8 +91,6 @@ export const Variant2: Story = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo: Story = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -106,7 +98,6 @@ export const Combo: Story = {
     <>
       <Button variant={1}>
       <Button variant={2}>
-      {/* Etc... */}
     </>
   ),
 };
@@ -136,8 +127,6 @@ export const Variant2: Story = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo: Story = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -145,7 +134,6 @@ export const Combo: Story = {
     <>
       <Button variant={1}>
       <Button variant={2}>
-      {/* Etc... */}
     </>
   ),
 };
@@ -170,8 +158,6 @@ export const Variant2 = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -179,7 +165,6 @@ export const Combo = {
     <>
       <Button variant={1}>
       <Button variant={2}>
-      {/* Etc... */}
     </>
   ),
 };
@@ -209,8 +194,6 @@ export const Variant2: Story = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo: Story = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -218,7 +201,6 @@ export const Combo: Story = {
     <>
       <Button variant={1}>
       <Button variant={2}>
-      {/* Etc... */}
     </>
   ),
 };
@@ -248,8 +230,6 @@ export const Variant2: Story = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo: Story = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -257,10 +237,23 @@ export const Combo: Story = {
     <>
       <Button variant={1}>
       <Button variant={2}>
-      {/* Etc... */}
     </>
   ),
 };
+```
+
+```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts)
+    If not suuported, adjust documentation to reflect it by making it conditionally render
+ -->
+```
+
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+```
+
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
 ```
 
 ```js filename="Button.stories.js" renderer="vue" language="js"
@@ -282,8 +275,6 @@ export const Variant2 = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -293,7 +284,6 @@ export const Combo = {
       <div>
         <Button variant={1}>
         <Button variant={2}>
-        {/* Etc... */}
       </div>
     `,
   }),
@@ -324,8 +314,6 @@ export const Variant2: Story = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo: Story = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -335,7 +323,6 @@ export const Combo: Story = {
       <div>
         <Button variant={1}>
         <Button variant={2}>
-        {/* Etc... */}
       </div>
     `,
   }),
@@ -366,8 +353,6 @@ export const Variant2: Story = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo: Story = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -377,7 +362,6 @@ export const Combo: Story = {
       <div>
         <Button variant={1}>
         <Button variant={2}>
-        {/* Etc... */}
       </div>
     `,
   }),
@@ -403,8 +387,6 @@ export const Variant2 = {
   tags: ['!dev', '!autodocs'],
   args: { variant: 2 },
 };
-
-// Etc...
 
 export const Combo = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
@@ -443,8 +425,6 @@ export const Variant2: Story = {
   args: { variant: 2 },
 };
 
-// Etc...
-
 export const Combo: Story = {
   // 👇 This story should not be tested, but will appear in the sidebar and docs page
   tags: ['!test'],
@@ -452,9 +432,7 @@ export const Combo: Story = {
     <div>
       <demo-button variant="1">
       <demo-button variant="2">
-      {/* Etc... */}
     </div>
   `,
 };
 ```
-

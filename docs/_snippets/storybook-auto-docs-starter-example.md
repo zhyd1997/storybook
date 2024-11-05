@@ -1,5 +1,5 @@
-```mdx renderer="common" language="mdx"
-{/* Button.mdx */}
+```mdx filename="Button.mdx" renderer="common" language="mdx"
+{/* TK: Vet this against recommendation and filter out Svelte CSF */}
 
 import { Meta, Story } from '@storybook/blocks';
 
@@ -19,4 +19,3 @@ Buttons are often used for form submissions and to toggle elements into view.
 
 <Story of={ButtonStories.Basic} />
 ```
-

@@ -25,6 +25,32 @@ export const Secondary: Story = {
 };
 ```
 
+```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+```
+
+```js filename="Button.stories.js|jsx" renderer="svelte" language="js" tabTitle="CSF"
+import Button from './Button.svelte';
+
+export default {
+  component: Button,
+};
+
+export const Primary = {
+  args: {
+    primary: true,
+    label: 'Button',
+  },
+};
+
+export const Secondary = {
+  args: {
+    ...Primary.args,
+    primary: false,
+  },
+};
+```
+
 ```js filename="Button.stories.js|jsx" renderer="common" language="js"
 import { Button } from './Button';
 
@@ -47,6 +73,37 @@ export const Secondary = {
 };
 ```
 
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+```
+
+```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
+import type { Meta, StoryObj } from '@storybook/svelte';
+
+import Button from './Button.svelte';
+
+const meta = {
+  component: Button,
+} satisfies Meta<typeof Button>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {
+    primary: true,
+    label: 'Button',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    ...Primary.args,
+    primary: false,
+  },
+};
+```
+
 ```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
@@ -59,6 +116,37 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {
+    primary: true,
+    label: 'Button',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    ...Primary.args,
+    primary: false,
+  },
+};
+```
+
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+```
+
+```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
+import type { Meta, StoryObj } from '@storybook/svelte';
+
+import Button from './Button.svelte';
+
+const meta: Meta<typeof Button> = {
+  component: Button,
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
@@ -147,4 +235,3 @@ export const Secondary: Story = {
   },
 };
 ```
-

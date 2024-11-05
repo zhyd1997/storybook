@@ -449,46 +449,47 @@ export const Primary: Story = {
 };
 ```
 
-```js filename="Button.stories.js" renderer="svelte" language="js"
-import Button from './Button.svelte';
+```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
+<!-- TODO: Vet this example against recommendation -->
 
-export default {
-  component: Button,
-};
-
-/*
- *👇 Render functions are a framework specific feature to allow you control on how the component renders.
- * See https://storybook.js.org/docs/api/csf
- * to learn how to use render functions.
- */
-export const Primary = {
-  render: () => ({
-    Component: Button,
-    props: {
-      primary: true,
-      label: 'Button',
-    },
-  }),
-};
-```
-
-```html renderer="svelte" language="ts" tabTitle="native-format"
-{/* Button.stories.svelte */}
-
-<script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf';
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 
   import Button from './Button.svelte';
+
+	const { Story } = defineMeta({
+		component: Button,
+	});
 </script>
 
-<meta title="Button" component="{Button}" />
-
 <Story name="Primary">
-  <button primary="true" label="Button" />
+  <div>
+    <Button primary="true" label="Button" />
+  </div>
 </Story>
 ```
 
-```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9"
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
+<!-- TODO: Vet this example against recommendation -->
+
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+	const { Story } = defineMeta({
+		component: Button,
+	});
+</script>
+
+<Story name="Primary">
+  <div>
+    <Button primary="true" label="Button" />
+  </div>
+</Story>
+```
+
+```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Button from './Button.svelte';
@@ -516,7 +517,27 @@ export const Primary: Story = {
 };
 ```
 
-```ts filename="Button.stories.ts" renderer="svelte" language="ts"
+```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
+<!-- TODO: Vet this example against recommendation -->
+
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+	const { Story } = defineMeta({
+		component: Button,
+	});
+</script>
+
+<Story name="Primary">
+  <div>
+    <Button primary="true" label="Button" />
+  </div>
+</Story>
+```
+
+```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Button from './Button.svelte';
@@ -642,4 +663,3 @@ export const Primary: Story = {
   render: () => html`<demo-button primary></demo-button>`,
 };
 ```
-
