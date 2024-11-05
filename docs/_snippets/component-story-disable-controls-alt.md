@@ -127,7 +127,7 @@ export default meta;
   import YourComponent from './YourComponent.svelte';
 
   const { Story } = defineMeta({
-    component: Histogram,
+    component: YourComponent,
     argTypes: {
       // foo is the property we want to remove from the UI
       foo: {

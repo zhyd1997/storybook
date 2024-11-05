@@ -229,7 +229,7 @@ export const Inaccessible: Story = {
 <Story name="Accessible" args={{ primary: false, label: 'Button' }} />
 
 <!-- This is not -->
-<Story name="Inaccessible" args={{ primary: false, label: 'Button' backgroundColor: 'red' }} />
+<Story name="Inaccessible" args={{ primary: false, label: 'Button', backgroundColor: 'red' }} />
 ```
 
 ```js filename="Button.stories.js" renderer="svelte" language="js" tabTitle="CSF"
@@ -277,7 +277,7 @@ export const Inaccessible = {
 <Story name="Accessible" args={{ primary: false, label: 'Button' }} />
 
 <!-- This is not -->
-<Story name="Inaccessible" args={{ primary: false, label: 'Button' backgroundColor: 'red' }} />
+<Story name="Inaccessible" args={{ primary: false, label: 'Button', backgroundColor: 'red' }} />
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
@@ -330,7 +330,7 @@ export const Inaccessible: Story = {
 <Story name="Accessible" args={{ primary: false, label: 'Button' }} />
 
 <!-- This is not -->
-<Story name="Inaccessible" args={{ primary: false, label: 'Button' backgroundColor: 'red' }} />
+<Story name="Inaccessible" args={{ primary: false, label: 'Button', backgroundColor: 'red' }} />
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"

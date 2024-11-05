@@ -52,7 +52,6 @@ const meta = {
 } satisfies Meta<typeof Button>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 ```
 
 ```ts filename="Button.stories.ts|tsx" renderer="react" language="ts"
@@ -93,7 +92,7 @@ export default {
 ```
 
 ```tsx filename="Button.stories.ts|tsx" renderer="solid" language="ts-4-9"
-import type { Meta, StoryObj } from 'storybook-solidjs';
+import type { Meta } from 'storybook-solidjs';
 
 import { Button } from './Button';
 
@@ -110,7 +109,6 @@ const meta = {
 } satisfies Meta<typeof Button>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 ```
 
 ```tsx filename="Button.stories.ts|tsx" renderer="solid" language="ts"

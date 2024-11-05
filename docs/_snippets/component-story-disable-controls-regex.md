@@ -47,7 +47,6 @@ export const RegexExclude: Story = {
   });
 </script>
 
-
 <Story
   name="ArrayInclude"
   parameters={{
@@ -152,7 +151,6 @@ export const RegexExclude = {
     component: YourComponent,
   });
 </script>
-
 
 <Story
   name="ArrayInclude"
@@ -270,7 +268,6 @@ export const RegexExclude: Story = {
   });
 </script>
 
-
 <Story
   name="ArrayInclude"
   parameters={{
@@ -300,7 +297,7 @@ export const RegexExclude: Story = {
 />
 ```
 
-```ts filename="YourComponent.stories.ts|tsx" renderer="svelte" language="ts" tabTitle="CSF"
+```ts filename="YourComponent.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import YourComponent from './YourComponent.svelte';

@@ -203,7 +203,7 @@ export const WithAnImage: Story = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TODO: Vetthis example against recommendation -->
+<!-- TODO: Vet this example against recommendation -->
 
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';

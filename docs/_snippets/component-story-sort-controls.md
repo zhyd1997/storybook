@@ -99,8 +99,7 @@ export default meta;
 ```
 
 ```ts filename="YourComponent.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
-// Replace your-framework with the name of your framework
-import type { Meta } from '@storybook/your-framework';
+import type { Meta } from '@storybook/svelte';
 
 import YourComponent from './YourComponent.svelte';
 

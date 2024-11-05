@@ -161,7 +161,7 @@ export const Pair: Story = {
 ```
 
 ```svelte filename="ButtonGroup.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK if pattern is possible -->
+<!-- TK: if pattern is possible -->
 ```
 
 ```js filename="ButtonGroup.stories.js" renderer="svelte" language="js" tabTitle="CSF"
@@ -183,7 +183,7 @@ export const Pair = {
 ```
 
 ```svelte filename="ButtonGroup.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK if pattern is possible -->
+<!-- TK: if pattern is possible -->
 ```
 
 ```ts filename="ButtonGroup.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
@@ -210,7 +210,7 @@ export const Pair: Story = {
 ```
 
 ```svelte filename="ButtonGroup.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK if pattern is possible -->
+<!-- TK: if pattern is possible -->
 ```
 
 ```ts filename="ButtonGroup.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"

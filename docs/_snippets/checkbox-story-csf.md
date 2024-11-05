@@ -31,7 +31,7 @@ export const Unchecked: Story = {
 <Story
   name="Unchecked"
   args={{
-    label: 'Unchecked'
+    label: 'Unchecked',
   }}
 />
 ```
@@ -78,7 +78,7 @@ export const Unchecked = {
 <Story
   name="Unchecked"
   args={{
-    label: 'Unchecked'
+    label: 'Unchecked',
   }}
 />
 ```
@@ -136,7 +136,7 @@ export const Unchecked: Story = {
 <Story
   name="Unchecked"
   args={{
-    label: 'Unchecked'
+    label: 'Unchecked',
   }}
 />
 ```

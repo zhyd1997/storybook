@@ -211,7 +211,7 @@ export const WithAnImage = {
 };
 ```
 
-```svelte filename="MyComponent.stories.svelte" renderer="svelte"language="ts-4-9" tabTitle="Svelte CSF"
+```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
 <!-- TODO: Vet this example against recommendation -->
 
 <script module>
@@ -265,7 +265,7 @@ export const WithAnImage: Story = {
 };
 ```
 
-```svelte filename="MyComponent.stories.svelte" renderer="svelte"language="ts" tabTitle="Svelte CSF"
+```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
 <!-- TODO: Vet this example against recommendation -->
 
 <script module>

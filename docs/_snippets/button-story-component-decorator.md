@@ -241,7 +241,7 @@ import MarginDecorator from './MarginDecorator.svelte';
 const meta = {
   component: Button,
   decorators: [() => MarginDecorator],
-} satisfies Meta<typeof YourComponent>;
+} satisfies Meta<typeof Button>;
 
 export default meta;
 ```
