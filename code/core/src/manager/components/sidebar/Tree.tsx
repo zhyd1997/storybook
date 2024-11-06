@@ -4,6 +4,12 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/core/components';
 import { styled, useTheme } from '@storybook/core/theming';
 import {
+  type API_HashEntry,
+  type API_StatusValue,
+  Addon_TypesEnum,
+  type StoryId,
+} from '@storybook/core/types';
+import {
   CollapseIcon as CollapseIconSvg,
   ExpandAltIcon,
   StatusFailIcon,
@@ -11,7 +17,6 @@ import {
   StatusWarnIcon,
   SyncIcon,
 } from '@storybook/icons';
-import type { API_HashEntry, API_StatusValue, StoryId } from '@storybook/types';
 
 import { PRELOAD_ENTRIES } from '@storybook/core/core-events';
 import { useStorybookApi } from '@storybook/core/manager-api';
@@ -26,6 +31,7 @@ import type {
 
 import { transparentize } from 'polished';
 
+import type { Link } from '../../../components/components/tooltip/TooltipLinkList';
 import { getGroupStatus, getHighestStatus, statusMapping } from '../../utils/status';
 import {
   createId,
@@ -302,10 +308,15 @@ const Node = React.memo<NodeProps>(function Node({
     const color = itemStatus ? statusMapping[itemStatus][1] : null;
     const BranchNode = item.type === 'component' ? ComponentNode : GroupNode;
 
+    const elements = api.getElements(Addon_TypesEnum.experimental_CONTEXT);
+
     const createLinks: (onHide: () => void) => ComponentProps<typeof TooltipLinkList>['links'] = (
       onHide
     ) => {
-      const links = [];
+      const links: Link[] = Object.entries(elements).map(([k, e]) => ({
+        id: k,
+        content: e.render({ entry: item }),
+      }));
       if (counts.error) {
         links.push({
           id: 'errors',

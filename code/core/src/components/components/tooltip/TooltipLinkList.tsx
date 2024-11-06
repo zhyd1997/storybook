@@ -1,7 +1,9 @@
-import type { ComponentProps, SyntheticEvent } from 'react';
+import type { ComponentProps, ReactElement, ReactNode, SyntheticEvent } from 'react';
 import React, { useCallback } from 'react';
 
 import { styled } from '@storybook/core/theming';
+
+import { has } from 'es-toolkit/compat';
 
 import type { LinkWrapperType, ListItemProps } from './ListItem';
 import ListItem from './ListItem';
@@ -25,7 +27,7 @@ const Group = styled.div(({ theme }) => ({
   },
 }));
 
-export interface Link extends Omit<ListItemProps, 'onClick'> {
+export interface NormalLink extends Omit<ListItemProps, 'onClick'> {
   id: string;
   onClick?: (
     event: SyntheticEvent,
@@ -33,7 +35,19 @@ export interface Link extends Omit<ListItemProps, 'onClick'> {
   ) => void;
 }
 
-interface ItemProps extends Link {
+export type Link = CustomLink | NormalLink;
+
+/**
+ * This is a custom link that can be used in the `TooltipLinkList` component. It allows for custom
+ * content to be rendered in the list; it does not have to be a link.
+ */
+interface CustomLink {
+  id: string;
+  icon?: any;
+  content: ReactNode;
+}
+
+interface ItemProps extends NormalLink {
   isIndented?: boolean;
 }
 
@@ -63,9 +77,14 @@ export const TooltipLinkList = ({ links, LinkWrapper, ...props }: TooltipLinkLis
         .map((group, index) => {
           return (
             <Group key={group.map((link) => link.id).join(`~${index}~`)}>
-              {group.map((link) => (
-                <Item key={link.id} isIndented={isIndented} LinkWrapper={LinkWrapper} {...link} />
-              ))}
+              {group.map((link) => {
+                if ('content' in link) {
+                  return link.content;
+                }
+                return (
+                  <Item key={link.id} isIndented={isIndented} LinkWrapper={LinkWrapper} {...link} />
+                );
+              })}
             </Group>
           );
         })}

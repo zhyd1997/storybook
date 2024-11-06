@@ -2,10 +2,11 @@
 import type { FC, PropsWithChildren, ReactElement, ReactNode } from 'react';
 
 import type { TestingModuleProgressReportProgress } from '../../core-events';
+import type { Addon } from '../../manager-api';
 import type { RenderData as RouterData } from '../../router/types';
 import type { ThemeVars } from '../../theming/types';
 import type { API_SidebarOptions } from './api';
-import type { API_StatusState, API_StatusUpdate } from './api-stories';
+import type { API_HashEntry, API_StatusState, API_StatusUpdate } from './api-stories';
 import type {
   Args,
   ArgsStoryFn as ArgsStoryFnForFramework,
@@ -326,6 +327,7 @@ export interface Addon_RenderOptions {
 export type Addon_Type =
   | Addon_BaseType
   | Addon_PageType
+  | Addon_ContextType
   | Addon_WrapperType
   | Addon_SidebarBottomType
   | Addon_SidebarTopType
@@ -427,6 +429,12 @@ export interface Addon_PageType {
    */
   render: FC;
 }
+export interface Addon_ContextType {
+  type: Addon_TypesEnum.experimental_CONTEXT;
+  /** The unique id. */
+  id: string;
+  render: FC<{ entry: API_HashEntry }>;
+}
 
 export interface Addon_WrapperType {
   type: Addon_TypesEnum.PREVIEW;
@@ -500,6 +508,7 @@ export type Addon_TestProviderState<Details extends { [key: string]: any } = Non
 type Addon_TypeBaseNames = Exclude<
   Addon_TypesEnum,
   | Addon_TypesEnum.PREVIEW
+  | Addon_TypesEnum.experimental_CONTEXT
   | Addon_TypesEnum.experimental_PAGE
   | Addon_TypesEnum.experimental_SIDEBAR_BOTTOM
   | Addon_TypesEnum.experimental_SIDEBAR_TOP
@@ -508,6 +517,7 @@ type Addon_TypeBaseNames = Exclude<
 
 export interface Addon_TypesMapping extends Record<Addon_TypeBaseNames, Addon_BaseType> {
   [Addon_TypesEnum.PREVIEW]: Addon_WrapperType;
+  [Addon_TypesEnum.experimental_CONTEXT]: Addon_ContextType;
   [Addon_TypesEnum.experimental_PAGE]: Addon_PageType;
   [Addon_TypesEnum.experimental_SIDEBAR_BOTTOM]: Addon_SidebarBottomType;
   [Addon_TypesEnum.experimental_SIDEBAR_TOP]: Addon_SidebarTopType;
@@ -577,4 +587,6 @@ export enum Addon_TypesEnum {
   experimental_SIDEBAR_TOP = 'sidebar-top',
   /** This adds items to the Testing Module in the sidebar. */
   experimental_TEST_PROVIDER = 'test-provider',
+  /** This adds items to the Testing Module in the sidebar. */
+  experimental_CONTEXT = 'context-menu',
 }
