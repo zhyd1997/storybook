@@ -239,6 +239,7 @@ jobs:
           steps:
             - run:
                 name: Benchmarking packages against base branch
+                working_directory: scripts
                 command: yarn bench-packages --base-branch << pipeline.parameters.ghBaseBranch >> --pull-request << pipeline.parameters.ghPrNumber >> --upload
       # if there is a NOT a base branch OR NOT a PR number in parameters, just upload benchmarks for the branch
       # this happens when runned directly on branches, like next or main
@@ -250,6 +251,7 @@ jobs:
           steps:
             - run:
                 name: Uploading package benchmarks for branch
+                working_directory: scripts
                 command: yarn bench-packages --upload
       - store_artifacts: 
           path: bench/packages/results.json
