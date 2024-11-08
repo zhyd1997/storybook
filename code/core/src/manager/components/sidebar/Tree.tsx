@@ -170,6 +170,14 @@ const Node = React.memo<NodeProps>(function Node({
     return null;
   }
 
+  const StatusIconMap = {
+    success: <StatusPassIcon color={theme.color.positive} />,
+    error: <StatusFailIcon color={theme.color.negative} />,
+    warn: <StatusWarnIcon color={theme.color.warning} />,
+    pending: <SyncIcon size={12} color={theme.color.defaultText} />,
+    unknown: null,
+  };
+
   const id = createId(item.id, refId);
   if (item.type === 'story' || item.type === 'docs') {
     const LeafNode = item.type === 'docs' ? DocumentNode : StoryNode;
@@ -178,6 +186,42 @@ const Node = React.memo<NodeProps>(function Node({
     const [icon, textColor] = statusMapping[statusValue];
 
     const statusOrder: API_StatusValue[] = ['success', 'error', 'warn', 'pending', 'unknown'];
+
+    function createLinks(onHide: () => void): Link[] | Link[][] {
+      const elements = api.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER);
+      const links: Link[] = Object.entries(elements)
+        .filter(([k, e]) => e.contextMenu)
+        .map(([k, e]) => {
+          const R = e.contextMenu;
+
+          const state = api.getTestproviderState(k);
+          console.log({ R, k, e, s: state });
+
+          return {
+            id: k,
+            content: R && state ? <R context={item} state={state} /> : null,
+          };
+        });
+
+      links.push(
+        ...Object.entries(status || {})
+          .sort((a, b) => statusOrder.indexOf(a[1].status) - statusOrder.indexOf(b[1].status))
+          .map(([addonId, value]) => ({
+            id: addonId,
+            title: value.title,
+            description: value.description,
+            'aria-label': `Test status for ${value.title}: ${value.status}`,
+            icon: StatusIconMap[value.status],
+            onClick: () => {
+              onSelectStoryId(item.id);
+              value.onClick?.();
+              onHide();
+            },
+          }))
+      );
+
+      return links;
+    }
 
     return (
       <LeafNodeStyleWrapper
@@ -220,32 +264,7 @@ const Node = React.memo<NodeProps>(function Node({
             closeOnTriggerHidden
             onClick={(event) => event.stopPropagation()}
             placement="bottom"
-            tooltip={({ onHide }) => (
-              <TooltipLinkList
-                links={Object.entries(status || {})
-                  .sort(
-                    (a, b) => statusOrder.indexOf(a[1].status) - statusOrder.indexOf(b[1].status)
-                  )
-                  .map(([addonId, value]) => ({
-                    id: addonId,
-                    title: value.title,
-                    description: value.description,
-                    'aria-label': `Test status for ${value.title}: ${value.status}`,
-                    icon: {
-                      success: <StatusPassIcon color={theme.color.positive} />,
-                      error: <StatusFailIcon color={theme.color.negative} />,
-                      warn: <StatusWarnIcon color={theme.color.warning} />,
-                      pending: <SyncIcon size={12} color={theme.color.defaultText} />,
-                      unknown: null,
-                    }[value.status],
-                    onClick: () => {
-                      onSelectStoryId(item.id);
-                      value.onClick?.();
-                      onHide();
-                    },
-                  }))}
-              />
-            )}
+            tooltip={({ onHide }) => <TooltipLinkList links={createLinks(onHide)} />}
           >
             <StatusButton
               aria-label={`Test status: ${statusValue}`}
@@ -308,15 +327,21 @@ const Node = React.memo<NodeProps>(function Node({
     const color = itemStatus ? statusMapping[itemStatus][1] : null;
     const BranchNode = item.type === 'component' ? ComponentNode : GroupNode;
 
-    const elements = api.getElements(Addon_TypesEnum.experimental_CONTEXT);
+    function createLinks(onHide: () => void): Link[] | Link[][] {
+      const elements = api.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER);
+      const links: Link[] = Object.entries(elements)
+        .filter(([k, e]) => e.contextMenu)
+        .map(([k, e]) => {
+          const R = e.contextMenu;
 
-    const createLinks: (onHide: () => void) => ComponentProps<typeof TooltipLinkList>['links'] = (
-      onHide
-    ) => {
-      const links: Link[] = Object.entries(elements).map(([k, e]) => ({
-        id: k,
-        content: e.render({ entry: item }),
-      }));
+          const state = api.getTestproviderState(k);
+          console.log({ R, k, e, s: state });
+
+          return {
+            id: k,
+            content: R && state ? <R context={item} state={state} /> : null,
+          };
+        });
       if (counts.error) {
         links.push({
           id: 'errors',
@@ -344,7 +369,7 @@ const Node = React.memo<NodeProps>(function Node({
         });
       }
       return links;
-    };
+    }
 
     return (
       <LeafNodeStyleWrapper

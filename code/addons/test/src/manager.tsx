@@ -93,6 +93,9 @@ addons.register(ADDON_ID, (api) => {
       watchable: true,
 
       name: 'Component tests',
+      contextMenu: ({ context, state }) => {
+        return <div>Testing {state.running ? '!' : '?'}</div>;
+      },
       title: ({ crashed, failed }) =>
         crashed || failed ? 'Component tests failed' : 'Component tests',
       description: ({ failed, running, watching, progress, crashed, error }) => {

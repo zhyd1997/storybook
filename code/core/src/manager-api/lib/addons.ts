@@ -20,7 +20,6 @@ import { global } from '@storybook/global';
 import { logger } from '@storybook/core/client-logger';
 import { SET_CONFIG } from '@storybook/core/core-events';
 
-import type { Addon_ContextType } from '../../types';
 import type { API } from '../root';
 import { mockChannel } from './storybook-channel-mock';
 
@@ -96,7 +95,6 @@ export class AddonStore {
       | Omit<Addon_SidebarBottomType, 'id'>
       | Omit<Addon_TestProviderType, 'id'>
       | Omit<Addon_PageType, 'id'>
-      | Omit<Addon_ContextType, 'id'>
       | Omit<Addon_WrapperType, 'id'>
   ): void {
     const { type } = addon;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { IconButton } from 'storybook/internal/components';
 import { addons } from 'storybook/internal/manager-api';
@@ -14,22 +14,26 @@ addons.setConfig({
   },
 });
 
-// TEMP, to demo new api
-addons.add('my-addon', {
-  type: Addon_TypesEnum.experimental_CONTEXT,
-  render(props) {
-    console.log({ props });
-    return <div>My Test</div>;
-  },
-});
+// // TEMP, to demo new api
+// addons.add('my-addon', {
+//   type: Addon_TypesEnum.experimental_CONTEXT,
+//   render(props) {
+//     console.log({ props });
+
+//     if (props.entry.type === 'docs') {
+//       return null;
+//     }
+
+//     return <div>My Test</div>;
+//   },
+// });
 
 // TEMP, to set status once, to have the status bullet show up
 addons.register('my-addon', (api) => {
   addons.add('my-addon2', {
     type: Addon_TypesEnum.TOOL,
     title: 'My Addon 2',
-    render(props) {
-      console.log({ props });
+    render() {
       return (
         <IconButton
           onClick={() => {
