@@ -593,6 +593,14 @@ const baseTemplates = {
     },
   },
   'react-native-web-vite/expo-ts': {
+    // NOTE: create-expo-app installs React 18.2.0. But yarn portal
+    // expects 18.3.1 (dunno why). Therefore to run this in dev you
+    // must either:
+    //  - edit the sandbox package.json to depend on react 18.3.1, OR
+    //  - build/run the sandbox in --no-link mode, which is fine
+    //
+    // Users & CI won't see this limitation because they are not using
+    // yarn portals.
     name: 'React Native Expo Latest (Vite | TypeScript)',
     script: 'npx create-expo-app -y {{beforeDir}}',
     expected: {
