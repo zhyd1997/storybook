@@ -30,7 +30,7 @@ export const getPackageAliases = ({ useESM = false }: { useESM?: boolean } = {})
       originalPath,
       // Use paths for both next/xyz and @storybook/nextjs/xyz imports
       // to make sure they all serve the MJS/CJS version of the file
-      getFullPath(`${aliasedPath}.${extension}`),
+      typeof aliasedPath === 'string' ? getFullPath(`${aliasedPath}.${extension}`) : aliasedPath,
     ])
   );
 
