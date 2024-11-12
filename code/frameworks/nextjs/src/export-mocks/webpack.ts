@@ -23,7 +23,7 @@ export const getPackageAliases = ({ useESM = false }: { useESM?: boolean } = {})
   const packageLocation = dirname(require.resolve('@storybook/nextjs/package.json'));
 
   const getFullPath = (path: string) =>
-    join(packageLocation, path.replace('@storybook/nextjs', ''));
+    path.startsWith('next') ? path : join(packageLocation, path.replace('@storybook/nextjs', ''));
 
   const aliases = Object.fromEntries(
     Object.entries(mapping).map(([originalPath, aliasedPath]) => [

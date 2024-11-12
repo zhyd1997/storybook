@@ -57,6 +57,11 @@
       "import": "./dist/compatibility/redirect-status-code.compat.mjs",
       "require": "./dist/compatibility/redirect-status-code.compat.js"
     },
+    "./dist/compatibility/draft-mode.compat": {
+      "types": "./dist/compatibility/draft-mode.compat.d.ts",
+      "import": "./dist/compatibility/draft-mode.compat.mjs",
+      "require": "./dist/compatibility/draft-mode.compat.js"
+    },
     "./export-mocks": {
       "types": "./dist/export-mocks/index.d.ts",
       "import": "./dist/export-mocks/index.mjs",
@@ -212,6 +217,7 @@
       "./src/export-mocks/navigation/index.ts",
       "./src/compatibility/segment.compat.ts",
       "./src/compatibility/redirect-status-code.compat.ts",
+      "./src/compatibility/draft-mode.compat.ts",
       "./src/next-image-loader-stub.ts",
       "./src/images/decorator.tsx",
       "./src/images/next-legacy-image.tsx",
