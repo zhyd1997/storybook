@@ -155,7 +155,19 @@ export const LoggedIn: Story = {
 ```
 
 ```svelte filename="Page.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (eg., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Page from './Page.svelte';
+  //👇 Imports all Header stories
+  import * as HeaderStories from './Header.stories.svelte';
+
+  const { Story } = defineMeta({
+    component: Page,
+  });
+</script>
+
+<Story name="LoggedIn" args={{ ...HeaderStories.LoggedIn.args }} />
 ```
 
 ```js filename="Page.stories.js" renderer="svelte" language="js" tabTitle="CSF"
@@ -176,7 +188,19 @@ export const LoggedIn = {
 ```
 
 ```svelte filename="Page.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (eg., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Page from './Page.svelte';
+  //👇 Imports all Header stories
+  import * as HeaderStories from './Header.stories.svelte';
+
+  const { Story } = defineMeta({
+    component: Page,
+  });
+</script>
+
+<Story name="LoggedIn" args={{ ...HeaderStories.LoggedIn.args }} />
 ```
 
 ```ts filename="Page.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
@@ -202,7 +226,19 @@ export const LoggedIn: Story = {
 ```
 
 ```svelte filename="Page.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (eg., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Page from './Page.svelte';
+  //👇 Imports all Header stories
+  import * as HeaderStories from './Header.stories.svelte';
+
+  const { Story } = defineMeta({
+    component: Page,
+  });
+</script>
+
+<Story name="LoggedIn" args={{ ...HeaderStories.LoggedIn.args }} />
 ```
 
 ```ts filename="Page.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"

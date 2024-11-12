@@ -26,7 +26,24 @@ export const Secondary: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+
+  const primaryArgs = {
+    primary: true,
+    label: 'Button',
+  }
+</script>
+
+<Story name="Primary" args={primaryArgs} />
+
+<Story name="Secondary" args={{...primaryArgs, primary: false}} />
 ```
 
 ```js filename="Button.stories.js|jsx" renderer="svelte" language="js" tabTitle="CSF"
@@ -74,7 +91,24 @@ export const Secondary = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+
+  const primaryArgs = {
+    primary: true,
+    label: 'Button',
+  }
+</script>
+
+<Story name="Primary" args={primaryArgs} />
+
+<Story name="Secondary" args={{...primaryArgs, primary: false}} />
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
@@ -133,7 +167,24 @@ export const Secondary: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+
+  const primaryArgs = {
+    primary: true,
+    label: 'Button',
+  }
+</script>
+
+<Story name="Primary" args={primaryArgs} />
+
+<Story name="Secondary" args={{...primaryArgs, primary: false}} />
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"

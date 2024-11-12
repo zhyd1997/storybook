@@ -26,7 +26,27 @@ export const PrimaryLongName: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK: Vet this against recommendation and apply to the other languages (e.g., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+
+  const primaryArgs = {
+    primary: true,
+    label: 'Button',
+  }
+</script>
+
+<Story name="Primary" args={primaryArgs} />
+
+<Story name="PrimaryLongName" args={{
+  ...primaryArgs,
+  label: 'Primary with a really long name'
+  }} />
 ```
 
 ```js filename="Button.stories.js" renderer="svelte" language="js" tabTitle="CSF"
@@ -74,7 +94,27 @@ export const PrimaryLongName = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK: Vet this against recommendation and apply to the other languages (e.g., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+
+  const primaryArgs = {
+    primary: true,
+    label: 'Button',
+  }
+</script>
+
+<Story name="Primary" args={primaryArgs} />
+
+<Story name="PrimaryLongName" args={{
+  ...primaryArgs,
+  label: 'Primary with a really long name'
+  }} />
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
@@ -133,7 +173,27 @@ export const PrimaryLongName: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK: Vet this against recommendation and apply to the other languages (e.g., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+
+  const primaryArgs = {
+    primary: true,
+    label: 'Button',
+  }
+</script>
+
+<Story name="Primary" args={primaryArgs} />
+
+<Story name="PrimaryLongName" args={{
+  ...primaryArgs,
+  label: 'Primary with a really long name'
+  }} />
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"

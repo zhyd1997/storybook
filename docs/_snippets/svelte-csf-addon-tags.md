@@ -27,7 +27,7 @@
 
 </script>
 
-<Story name="Default">
-  <MyComponent tags={['autodocs']} />
+<Story name="Default" tags={['autodocs']} >
+  <MyComponent />
 </Story>
 ```

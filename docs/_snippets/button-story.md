@@ -450,8 +450,6 @@ export const Primary: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -462,16 +460,10 @@ export const Primary: Story = {
 	});
 </script>
 
-<Story name="Primary">
-  <div>
-    <Button primary="true" label="Button" />
-  </div>
-</Story>
+<Story name="Primary" args={{ primary: true, label: 'Button' }} />
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -482,11 +474,7 @@ export const Primary: Story = {
 	});
 </script>
 
-<Story name="Primary">
-  <div>
-    <Button primary="true" label="Button" />
-  </div>
-</Story>
+<Story name="Primary" args={{ primary: true, label: 'Button' }} />
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
@@ -518,8 +506,6 @@ export const Primary: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -530,11 +516,7 @@ export const Primary: Story = {
 	});
 </script>
 
-<Story name="Primary">
-  <div>
-    <Button primary="true" label="Button" />
-  </div>
-</Story>
+<Story name="Primary" args={{ primary: true, label: 'Button' }} />
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"

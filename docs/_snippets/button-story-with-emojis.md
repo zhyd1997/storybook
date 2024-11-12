@@ -276,8 +276,6 @@ export const Tertiary: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -289,21 +287,15 @@ export const Tertiary: Story = {
 </script>
 
 <Story name="Primary">
-  <div>
-    <Button backgroundColor="#ff0" label="Button" />
-  </div>
+  <Button backgroundColor="#ff0" label="Button" />
 </Story>
 
 <Story name="Secondary">
-  <div>
-    <Button backgroundColor="#ff0" label="😄👍😍💯" />
-  </div>
+  <Button backgroundColor="#ff0" label="😄👍😍💯" />
 </Story>
 
 <Story name="Tertiary">
-  <div>
-    <Button backgroundColor="#ff0" label="📚📕📈🤓" />
-  </div>
+  <Button backgroundColor="#ff0" label="📚📕📈🤓" />
 </Story>
 ```
 
@@ -351,8 +343,6 @@ export const Tertiary = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -364,21 +354,15 @@ export const Tertiary = {
 </script>
 
 <Story name="Primary">
-  <div>
-    <Button backgroundColor="#ff0" label="Button" />
-  </div>
+  <Button backgroundColor="#ff0" label="Button" />
 </Story>
 
 <Story name="Secondary">
-  <div>
-    <Button backgroundColor="#ff0" label="😄👍😍💯" />
-  </div>
+  <Button backgroundColor="#ff0" label="😄👍😍💯" />
 </Story>
 
 <Story name="Tertiary">
-  <div>
-    <Button backgroundColor="#ff0" label="📚📕📈🤓" />
-  </div>
+  <Button backgroundColor="#ff0" label="📚📕📈🤓" />
 </Story>
 ```
 
@@ -444,21 +428,15 @@ export const Tertiary: Story = {
 </script>
 
 <Story name="Primary">
-  <div>
-    <Button backgroundColor="#ff0" label="Button" />
-  </div>
+  <Button backgroundColor="#ff0" label="Button" />
 </Story>
 
 <Story name="Secondary">
-  <div>
-    <Button backgroundColor="#ff0" label="😄👍😍💯" />
-  </div>
+  <Button backgroundColor="#ff0" label="😄👍😍💯" />
 </Story>
 
 <Story name="Tertiary">
-  <div>
-    <Button backgroundColor="#ff0" label="📚📕📈🤓" />
-  </div>
+  <Button backgroundColor="#ff0" label="📚📕📈🤓" />
 </Story>
 ```
 

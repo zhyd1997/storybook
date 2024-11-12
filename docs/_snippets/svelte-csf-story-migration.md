@@ -23,6 +23,5 @@
   });
 </script>
 
-
 <Story name="Default" />
 ```
