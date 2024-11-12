@@ -17,6 +17,7 @@ import {
   useAddonState,
   useStorybookApi,
 } from 'storybook/internal/manager-api';
+import { useTheme } from 'storybook/internal/theming';
 import {
   type API_HashEntry,
   type API_StatusObject,
@@ -27,7 +28,6 @@ import {
 } from 'storybook/internal/types';
 
 import { PlayIcon } from '@storybook/icons';
-import { useTheme } from '@storybook/theming';
 
 import { Panel } from './Panel';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
