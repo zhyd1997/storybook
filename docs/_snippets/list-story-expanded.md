@@ -359,19 +359,102 @@ export const ManyItems: Story = {
 ```
 
 ```svelte filename="List.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!--
-  TK: Needs example and should be replicated to the other languages (e.g., ts, ts-4-9) to ensure the snippets render correctly
-  This is a special case as the CSF JS/TS Storybook versions don't support the component "directive"
-  It's referenced in the Writing Docs/Index.mdx file (https://storybook.js.org/docs/writing-stories#stories-for-two-or-more-components)
--->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import List from './List.svelte';
+  import ListItem from './ListItem.svelte';
+
+  const { Story } = defineMeta({
+    component: List,
+  });
+</script>
+
+<Story name="Empty" />
+
+<Story name="One Item">
+  {#snippet children(args)}
+    <List {...args} >
+      <ListItem />
+    </List>
+  {/snippet}
+</Story>
+
+<Story name="Many Items">
+  {#snippet children(args)}
+    <List {...args} >
+      <ListItem />
+      <ListItem />
+      <ListItem />
+    </List>
+  {/snippet}
+</Story>
 ```
 
 ```svelte filename="List.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import List from './List.svelte';
+  import ListItem from './ListItem.svelte';
+
+  const { Story } = defineMeta({
+    component: List,
+  });
+</script>
+
+<Story name="Empty" />
+
+<Story name="One Item">
+  {#snippet children(args)}
+    <List {...args} >
+      <ListItem />
+    </List>
+  {/snippet}
+</Story>
+
+<Story name="Many Items">
+  {#snippet children(args)}
+    <List {...args} >
+      <ListItem />
+      <ListItem />
+      <ListItem />
+    </List>
+  {/snippet}
+</Story>
 ```
 
 ```svelte filename="List.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import List from './List.svelte';
+  import ListItem from './ListItem.svelte';
+
+  const { Story } = defineMeta({
+    component: List,
+  });
+</script>
+
+<Story name="Empty" />
+
+<Story name="One Item">
+  {#snippet children(args)}
+    <List {...args} >
+      <ListItem />
+    </List>
+  {/snippet}
+</Story>
+
+<Story name="Many Items">
+  {#snippet children(args)}
+    <List {...args} >
+      <ListItem />
+      <ListItem />
+      <ListItem />
+    </List>
+  {/snippet}
+</Story>
 ```
 
 ```js filename="List.stories.js" renderer="vue" language="js"

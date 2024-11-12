@@ -1,5 +1,4 @@
 ```svelte filename="MarginDecorator.svelte" renderer="svelte" language="js" tabTitle="Svelte 4"
-<!-- TK: Vet this against recommendation -->
 <div>
   <slot />
 </div>
@@ -12,13 +11,12 @@
 ```
 
 ```svelte filename="MarginDecorator.svelte" renderer="svelte" language="js" tabTitle="Svelte 5"
-<!-- TK: Vet this against recommendation -->
 <script>
-	let { children } = $props();
+  let { children } = $props();
 </script>
 
 <div>
-	{@render children()}
+  {@render children()}
 </div>
 
 <style>
@@ -29,7 +27,6 @@
 ```
 
 ```svelte filename="MarginDecorator.svelte" renderer="svelte" language="ts" tabTitle="Svelte 4"
-<!-- TK: Vet this against recommendation -->
 <div>
   <slot />
 </div>
@@ -42,14 +39,14 @@
 ```
 
 ```svelte filename="MarginDecorator.svelte" renderer="svelte" language="ts" tabTitle="Svelte 5"
-<!-- TK: Vet this against recommendation -->
 <script>
-	// @ts-nocheck
-	let { children } = $props();
+  import type { Snippet } from 'svelte';
+
+  let { children }: { children: Snippet } = $props();
 </script>
 
 <div>
-	{@render children()}
+  {@render children()}
 </div>
 
 <style>

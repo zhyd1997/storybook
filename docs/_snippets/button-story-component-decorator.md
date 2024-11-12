@@ -199,9 +199,7 @@ export default meta;
 
   const { Story } = defineMeta({
     component: Button,
-    decorators: [() => ({
-      Component: MarginDecorator,
-    })],
+    decorators: [() => MarginDecorators],
   });
 </script>
 ```
@@ -225,9 +223,7 @@ export default {
 
   const { Story } = defineMeta({
     component: Button,
-    decorators: [() => ({
-      Component: MarginDecorator,
-    })],
+    decorators: [() => MarginDecorators],
   });
 </script>
 ```
