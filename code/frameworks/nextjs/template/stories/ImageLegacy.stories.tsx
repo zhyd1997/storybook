@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Image from 'next/legacy/image';
@@ -12,9 +10,9 @@ export default {
     src: Accessibility,
     alt: 'Accessibility',
   },
-} as Meta<typeof Component>;
+} as Meta<typeof Image>;
 
-type Story = StoryObj<typeof Component>;
+type Story = StoryObj<typeof Image>;
 
 export const Default: Story = {};
 

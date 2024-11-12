@@ -14,7 +14,7 @@ export const localRubikStorm = localFont({
   variable: '--font-rubik-storm',
 });
 
-export default function Font({ variant }) {
+export default function Font({ variant }: { variant: 'className' | 'style' | 'variable' }) {
   switch (variant) {
     case 'className':
       return (

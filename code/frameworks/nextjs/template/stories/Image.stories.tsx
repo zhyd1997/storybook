@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
 
@@ -13,9 +13,9 @@ export default {
     src: Accessibility,
     alt: 'Accessibility',
   },
-} as Meta<typeof Component>;
+} as Meta<typeof Image>;
 
-type Story = StoryObj<typeof Component>;
+type Story = StoryObj<typeof Image>;
 
 export const Default: Story = {};
 
@@ -52,7 +52,7 @@ export const FilledParent: Story = {
   args: {
     fill: true,
   },
-  decorator: [
+  decorators: [
     (Story) => <div style={{ width: 500, height: 500, position: 'relative' }}>{Story()}</div>,
   ],
 };
@@ -61,10 +61,10 @@ export const Sized: Story = {
   args: {
     fill: true,
     sizes: '(max-width: 600px) 100vw, 600px',
-    decorator: [
-      (Story) => <div style={{ width: 800, height: 800, position: 'relative' }}>{Story()}</div>,
-    ],
   },
+  decorators: [
+    (Story) => <div style={{ width: 800, height: 800, position: 'relative' }}>{Story()}</div>,
+  ],
 };
 
 export const Lazy: Story = {
@@ -96,7 +96,7 @@ export const Eager: Story = {
 
 export const WithRef: Story = {
   render() {
-    const [ref, setRef] = useState(null);
+    const [ref, setRef] = useState<HTMLImageElement | null>(null);
 
     return (
       <div>

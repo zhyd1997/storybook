@@ -1,3 +1,4 @@
+/* eslint-disable local-rules/no-uncategorized-errors */
 import React from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
@@ -12,9 +13,9 @@ export default {
       rsc: true,
     },
   },
-} as Meta<typeof Component>;
+} as Meta<typeof RSC>;
 
-type Story = StoryObj<typeof Component>;
+type Story = StoryObj<typeof RSC>;
 
 export const Default: Story = {};
 
@@ -26,7 +27,7 @@ export const DisableRSC: Story = {
   },
 };
 
-export const Error: Story = {
+export const Errored: Story = {
   tags: ['!test'],
   parameters: {
     chromatic: { disable: true },

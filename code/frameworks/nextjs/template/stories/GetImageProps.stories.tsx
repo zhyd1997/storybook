@@ -8,7 +8,7 @@ import Accessibility from '../../assets/accessibility.svg';
 import Testing from '../../assets/testing.png';
 
 // referenced from https://nextjs.org/docs/pages/api-reference/components/image#theme-detection-picture
-const Component = (props) => {
+const Component = (props: any) => {
   const {
     props: { srcSet: dark },
   } = getImageProps({ src: Accessibility, ...props });
