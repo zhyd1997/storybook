@@ -79,6 +79,20 @@ const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: nu
   );
 };
 
+const COunter = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return <div>{count}</div>;
+};
+
 addons.register(ADDON_ID, (api) => {
   const storybookBuilder = (globalThis as any).STORYBOOK_BUILDER || '';
   if (storybookBuilder.includes('vite')) {
@@ -94,7 +108,16 @@ addons.register(ADDON_ID, (api) => {
 
       name: 'Component tests',
       contextMenu: ({ context, state }) => {
-        return <div>Testing {state.running ? '!' : '?'}</div>;
+        if (context.type === 'docs') {
+          return null;
+        }
+
+        return (
+          <div>
+            Testing {state?.progress?.percentageCompleted} {state.running ? '!' : '?'}
+          </div>
+        );
+        // return <COunter />;
       },
       title: ({ crashed, failed }) =>
         crashed || failed ? 'Component tests failed' : 'Component tests',

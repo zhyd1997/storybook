@@ -31,6 +31,7 @@ export interface SubAPI {
       | Addon_TypesEnum.experimental_CONTEXT
       | Addon_TypesEnum.experimental_PAGE
       | Addon_TypesEnum.experimental_SIDEBAR_BOTTOM
+      | Addon_TypesEnum.experimental_TEST_PROVIDER
       | Addon_TypesEnum.experimental_SIDEBAR_TOP = Addon_Types,
   >(
     type: T

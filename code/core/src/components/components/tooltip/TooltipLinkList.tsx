@@ -1,9 +1,7 @@
-import type { ComponentProps, ReactElement, ReactNode, SyntheticEvent } from 'react';
+import type { ComponentProps, ReactNode, SyntheticEvent } from 'react';
 import React, { useCallback } from 'react';
 
 import { styled } from '@storybook/core/theming';
-
-import { has } from 'es-toolkit/compat';
 
 import type { LinkWrapperType, ListItemProps } from './ListItem';
 import ListItem from './ListItem';

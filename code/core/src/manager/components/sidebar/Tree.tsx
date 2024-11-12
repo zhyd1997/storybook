@@ -1,5 +1,5 @@
-import type { ComponentProps, MutableRefObject } from 'react';
-import React, { useCallback, useMemo, useRef } from 'react';
+import type { ComponentProps, FC, MutableRefObject } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/core/components';
 import { styled, useTheme } from '@storybook/core/theming';
@@ -11,6 +11,7 @@ import {
 } from '@storybook/core/types';
 import {
   CollapseIcon as CollapseIconSvg,
+  EllipsisIcon,
   ExpandAltIcon,
   StatusFailIcon,
   StatusPassIcon,
@@ -18,8 +19,8 @@ import {
   SyncIcon,
 } from '@storybook/icons';
 
-import { PRELOAD_ENTRIES } from '@storybook/core/core-events';
-import { useStorybookApi } from '@storybook/core/manager-api';
+import { PRELOAD_ENTRIES, type TestProviders } from '@storybook/core/core-events';
+import { useStorybookApi, useStorybookState } from '@storybook/core/manager-api';
 import type {
   API,
   ComponentEntry,
@@ -52,6 +53,8 @@ import { useExpanded } from './useExpanded';
 
 export const TEST_ADDON_ID = 'storybook/test';
 export const TEST_PROVIDER_ID = `${TEST_ADDON_ID}/test-provider`;
+
+type ExcludesNull = <T>(x: T | null) => x is T;
 
 const Container = styled.div<{ hasOrphans: boolean }>((props) => ({
   marginTop: props.hasOrphans ? 20 : 0,
@@ -145,6 +148,36 @@ interface NodeProps {
   collapsedData: Record<string, API_HashEntry>;
 }
 
+const SuccessStatusIcon: FC<ComponentProps<typeof StatusPassIcon>> = (props) => {
+  const theme = useTheme();
+  return <StatusPassIcon {...props} color={theme.color.positive} />;
+};
+
+const ErrorStatusIcon: FC<ComponentProps<typeof StatusFailIcon>> = (props) => {
+  const theme = useTheme();
+  return <StatusFailIcon {...props} color={theme.color.negative} />;
+};
+
+const WarnStatusIcon: FC<ComponentProps<typeof StatusWarnIcon>> = (props) => {
+  const theme = useTheme();
+  return <StatusWarnIcon {...props} color={theme.color.warning} />;
+};
+
+const PendingStatusIcon: FC<ComponentProps<typeof SyncIcon>> = (props) => {
+  const theme = useTheme();
+  return <SyncIcon {...props} size={12} color={theme.color.defaultText} />;
+};
+
+const StatusIconMap = {
+  success: <SuccessStatusIcon />,
+  error: <ErrorStatusIcon />,
+  warn: <WarnStatusIcon />,
+  pending: <PendingStatusIcon />,
+  unknown: null,
+};
+
+const statusOrder: API_StatusValue[] = ['success', 'error', 'warn', 'pending', 'unknown'];
+
 const Node = React.memo<NodeProps>(function Node({
   item,
   status,
@@ -159,69 +192,81 @@ const Node = React.memo<NodeProps>(function Node({
   isExpanded,
   setExpanded,
   onSelectStoryId,
-  collapsedData,
   api,
 }) {
   const { isDesktop, isMobile, setMobileMenuOpen } = useLayout();
-  const theme = useTheme();
   const { counts, statuses } = useStatusSummary(item);
 
   if (!isDisplayed) {
     return null;
   }
 
-  const StatusIconMap = {
-    success: <StatusPassIcon color={theme.color.positive} />,
-    error: <StatusFailIcon color={theme.color.negative} />,
-    warn: <StatusWarnIcon color={theme.color.warning} />,
-    pending: <SyncIcon size={12} color={theme.color.defaultText} />,
-    unknown: null,
-  };
+  const statusLinks = useMemo<Link[]>(() => {
+    if (item.type === 'story' || item.type === 'docs') {
+      return Object.entries(status || {})
+        .sort((a, b) => statusOrder.indexOf(a[1].status) - statusOrder.indexOf(b[1].status))
+        .map(([addonId, value]) => ({
+          id: addonId,
+          title: value.title,
+          description: value.description,
+          'aria-label': `Test status for ${value.title}: ${value.status}`,
+          icon: StatusIconMap[value.status],
+          onClick: () => {
+            onSelectStoryId(item.id);
+            value.onClick?.();
+          },
+        }));
+    }
+
+    if (item.type === 'component' || item.type === 'group') {
+      const links: Link[] = [];
+      if (counts.error) {
+        links.push({
+          id: 'errors',
+          icon: StatusIconMap.error,
+          title: `${counts.error} ${counts.error === 1 ? 'story' : 'stories'} with errors`,
+          onClick: () => {
+            const [firstStoryId, [firstError]] = Object.entries(statuses.error)[0];
+            onSelectStoryId(firstStoryId);
+            firstError.onClick?.();
+          },
+        });
+      }
+      if (counts.warn) {
+        links.push({
+          id: 'warnings',
+          icon: StatusIconMap.warn,
+          title: `${counts.warn} ${counts.warn === 1 ? 'story' : 'stories'} with warnings`,
+          onClick: () => {
+            const [firstStoryId, [firstWarning]] = Object.entries(statuses.warn)[0];
+            onSelectStoryId(firstStoryId);
+            firstWarning.onClick?.();
+          },
+        });
+      }
+      return links;
+    }
+
+    return [];
+  }, [
+    counts.error,
+    counts.warn,
+    item.id,
+    item.type,
+    onSelectStoryId,
+    status,
+    statuses.error,
+    statuses.warn,
+  ]);
 
   const id = createId(item.id, refId);
+  const contextMenu = useContextMenu(item, statusLinks, api);
+
   if (item.type === 'story' || item.type === 'docs') {
     const LeafNode = item.type === 'docs' ? DocumentNode : StoryNode;
 
     const statusValue = getHighestStatus(Object.values(status || {}).map((s) => s.status));
     const [icon, textColor] = statusMapping[statusValue];
-
-    const statusOrder: API_StatusValue[] = ['success', 'error', 'warn', 'pending', 'unknown'];
-
-    function createLinks(onHide: () => void): Link[] | Link[][] {
-      const elements = api.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER);
-      const links: Link[] = Object.entries(elements)
-        .filter(([k, e]) => e.contextMenu)
-        .map(([k, e]) => {
-          const R = e.contextMenu;
-
-          const state = api.getTestproviderState(k);
-          console.log({ R, k, e, s: state });
-
-          return {
-            id: k,
-            content: R && state ? <R context={item} state={state} /> : null,
-          };
-        });
-
-      links.push(
-        ...Object.entries(status || {})
-          .sort((a, b) => statusOrder.indexOf(a[1].status) - statusOrder.indexOf(b[1].status))
-          .map(([addonId, value]) => ({
-            id: addonId,
-            title: value.title,
-            description: value.description,
-            'aria-label': `Test status for ${value.title}: ${value.status}`,
-            icon: StatusIconMap[value.status],
-            onClick: () => {
-              onSelectStoryId(item.id);
-              value.onClick?.();
-              onHide();
-            },
-          }))
-      );
-
-      return links;
-    }
 
     return (
       <LeafNodeStyleWrapper
@@ -233,6 +278,8 @@ const Node = React.memo<NodeProps>(function Node({
         data-parent-id={item.parent}
         data-nodetype={item.type === 'docs' ? 'document' : 'story'}
         data-highlightable={isDisplayed}
+        onMouseEnter={contextMenu.onMouseEnter}
+        onMouseLeave={contextMenu.onMouseLeave}
       >
         <LeafNode
           // @ts-expect-error (non strict)
@@ -258,14 +305,8 @@ const Node = React.memo<NodeProps>(function Node({
             <a href="#storybook-preview-wrapper">Skip to canvas</a>
           </SkipToContentLink>
         )}
-        {icon ? (
-          <WithTooltip
-            closeOnOutsideClick
-            closeOnTriggerHidden
-            onClick={(event) => event.stopPropagation()}
-            placement="bottom"
-            tooltip={({ onHide }) => <TooltipLinkList links={createLinks(onHide)} />}
-          >
+        {contextMenu.node ||
+          (icon ? (
             <StatusButton
               aria-label={`Test status: ${statusValue}`}
               role="status"
@@ -275,8 +316,7 @@ const Node = React.memo<NodeProps>(function Node({
             >
               {icon}
             </StatusButton>
-          </WithTooltip>
-        ) : null}
+          ) : null)}
       </LeafNodeStyleWrapper>
     );
   }
@@ -327,50 +367,6 @@ const Node = React.memo<NodeProps>(function Node({
     const color = itemStatus ? statusMapping[itemStatus][1] : null;
     const BranchNode = item.type === 'component' ? ComponentNode : GroupNode;
 
-    function createLinks(onHide: () => void): Link[] | Link[][] {
-      const elements = api.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER);
-      const links: Link[] = Object.entries(elements)
-        .filter(([k, e]) => e.contextMenu)
-        .map(([k, e]) => {
-          const R = e.contextMenu;
-
-          const state = api.getTestproviderState(k);
-          console.log({ R, k, e, s: state });
-
-          return {
-            id: k,
-            content: R && state ? <R context={item} state={state} /> : null,
-          };
-        });
-      if (counts.error) {
-        links.push({
-          id: 'errors',
-          icon: <StatusFailIcon color={theme.color.negative} />,
-          title: `${counts.error} ${counts.error === 1 ? 'story' : 'stories'} with errors`,
-          onClick: () => {
-            const [firstStoryId, [firstError]] = Object.entries(statuses.error)[0];
-            onSelectStoryId(firstStoryId);
-            firstError.onClick?.();
-            onHide();
-          },
-        });
-      }
-      if (counts.warn) {
-        links.push({
-          id: 'warnings',
-          icon: <StatusWarnIcon color={theme.color.gold} />,
-          title: `${counts.warn} ${counts.warn === 1 ? 'story' : 'stories'} with warnings`,
-          onClick: () => {
-            const [firstStoryId, [firstWarning]] = Object.entries(statuses.warn)[0];
-            onSelectStoryId(firstStoryId);
-            firstWarning.onClick?.();
-            onHide();
-          },
-        });
-      }
-      return links;
-    }
-
     return (
       <LeafNodeStyleWrapper
         key={id}
@@ -378,8 +374,10 @@ const Node = React.memo<NodeProps>(function Node({
         data-ref-id={refId}
         data-item-id={item.id}
         data-parent-id={item.parent}
-        data-nodetype={item.type === 'component' ? 'component' : 'group'}
+        data-nodetype={item.type}
         data-highlightable={isDisplayed}
+        onMouseEnter={contextMenu.onMouseEnter}
+        onMouseLeave={contextMenu.onMouseLeave}
       >
         <BranchNode
           id={id}
@@ -410,26 +408,90 @@ const Node = React.memo<NodeProps>(function Node({
           {(item.renderLabel as (i: typeof item, api: API) => React.ReactNode)?.(item, api) ||
             item.name}
         </BranchNode>
-        {['error', 'warn'].includes(itemStatus) && (
-          <WithTooltip
-            closeOnOutsideClick
-            onClick={(event) => event.stopPropagation()}
-            placement="bottom"
-            tooltip={({ onHide }) => <TooltipLinkList links={createLinks(onHide)} />}
-          >
+        {contextMenu.node ||
+          (['error', 'warn'].includes(itemStatus) && (
             <StatusButton type="button" status={itemStatus}>
               <svg key="icon" viewBox="0 0 6 6" width="6" height="6" type="dot">
                 <UseSymbol type="dot" />
               </svg>
             </StatusButton>
-          </WithTooltip>
-        )}
+          ))}
       </LeafNodeStyleWrapper>
     );
   }
 
   return null;
 });
+
+const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
+  const [isItemHovered, setIsItemHovered] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handlers = useMemo(() => {
+    return {
+      onMouseEnter: () => {
+        setIsItemHovered(true);
+      },
+      onMouseLeave: () => {
+        setIsItemHovered(false);
+      },
+      onOpen: (event: any) => {
+        event.stopPropagation();
+        setIsOpen(true);
+      },
+      onClose: () => {
+        setIsOpen(false);
+      },
+    };
+  }, []);
+
+  return useMemo(() => {
+    const testProviders = api.getElements(
+      Addon_TypesEnum.experimental_TEST_PROVIDER
+    ) as any as TestProviders;
+    const providerLinks = generateTestProviderLinks(testProviders, context);
+    const shouldDisplayLinks =
+      (isItemHovered || isOpen) && (providerLinks.length > 0 || links.length > 0);
+    return {
+      onMouseEnter: handlers.onMouseEnter,
+      onMouseLeave: handlers.onMouseLeave,
+      node: shouldDisplayLinks ? (
+        <WithTooltip
+          closeOnOutsideClick
+          onClick={handlers.onOpen}
+          placement="bottom-end"
+          onVisibleChange={(visisble) => {
+            if (!visisble) {
+              handlers.onClose();
+            } else {
+              setIsOpen(true);
+            }
+          }}
+          tooltip={({ onHide }) => (
+            <LiveContextMenu context={context} links={links} onClick={onHide} />
+          )}
+        >
+          <StatusButton type="button" status={'pending'}>
+            <EllipsisIcon />
+          </StatusButton>
+        </WithTooltip>
+      ) : null,
+    };
+  }, [api, context, handlers, isItemHovered, isOpen, links]);
+};
+
+const LiveContextMenu: FC<{ context: API_HashEntry } & ComponentProps<typeof TooltipLinkList>> = ({
+  context,
+  links,
+  ...rest
+}) => {
+  const { testProviders } = useStorybookState();
+  const providerLinks: Link[] = generateTestProviderLinks(testProviders, context);
+  const groups = Array.isArray(links[0]) ? (links as Link[][]) : [links as Link[]];
+  const all = groups.concat([providerLinks]);
+
+  return <TooltipLinkList {...rest} links={all} />;
+};
 
 const Root = React.memo<NodeProps & { expandableDescendants: string[] }>(function Root({
   setExpanded,
@@ -674,3 +736,26 @@ export const Tree = React.memo<{
     </StatusContext.Provider>
   );
 });
+
+function generateTestProviderLinks(testProviders: TestProviders, context: API_HashEntry): Link[] {
+  return Object.entries(testProviders)
+    .map(([k, e]) => {
+      const state = e;
+
+      if (!state) {
+        return null;
+      }
+
+      const content = e.contextMenu?.({ context, state });
+
+      if (!content) {
+        return null;
+      }
+
+      return {
+        id: k,
+        content,
+      };
+    })
+    .filter(Boolean as any as ExcludesNull);
+}

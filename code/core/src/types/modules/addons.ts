@@ -29,6 +29,7 @@ export type Addon_Types = Exclude<
   Addon_TypesEnum,
   | Addon_TypesEnum.experimental_PAGE
   | Addon_TypesEnum.experimental_SIDEBAR_BOTTOM
+  | Addon_TypesEnum.experimental_TEST_PROVIDER
   | Addon_TypesEnum.experimental_SIDEBAR_TOP
 >;
 
@@ -330,7 +331,7 @@ export type Addon_Type =
   | Addon_WrapperType
   | Addon_SidebarBottomType
   | Addon_SidebarTopType
-  | Addon_TestProviderType;
+  | Addon_TestProviderType<Addon_TestProviderState>;
 export interface Addon_BaseType {
   /**
    * The title of the addon. This can be a simple string, but it can also be a
@@ -475,7 +476,10 @@ export interface Addon_TestProviderType<
   name: string;
   title: (state: Addon_TestProviderState<Details>) => ReactNode;
   description: (state: Addon_TestProviderState<Details>) => ReactNode;
-  contextMenu?: FC<{ context: API_HashEntry; state: Addon_TestProviderState<Details> }>;
+  contextMenu?: (options: {
+    context: API_HashEntry;
+    state: Addon_TestProviderState<Details>;
+  }) => ReactNode;
   mapStatusUpdate?: (
     state: Addon_TestProviderState<Details>
   ) => API_StatusUpdate | ((state: API_StatusState) => API_StatusUpdate);
@@ -514,7 +518,7 @@ export interface Addon_TypesMapping extends Record<Addon_TypeBaseNames, Addon_Ba
   [Addon_TypesEnum.experimental_PAGE]: Addon_PageType;
   [Addon_TypesEnum.experimental_SIDEBAR_BOTTOM]: Addon_SidebarBottomType;
   [Addon_TypesEnum.experimental_SIDEBAR_TOP]: Addon_SidebarTopType;
-  [Addon_TypesEnum.experimental_TEST_PROVIDER]: Addon_TestProviderType;
+  [Addon_TypesEnum.experimental_TEST_PROVIDER]: Addon_TestProviderType<Addon_TestProviderState>;
 }
 
 export type Addon_Loader<API> = (api: API) => void;
