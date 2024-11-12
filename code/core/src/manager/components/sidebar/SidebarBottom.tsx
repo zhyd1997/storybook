@@ -190,7 +190,7 @@ export const SidebarBottomBase = ({
     };
   }, [api, testProviders, updateTestProvider, clearState]);
 
-  const testProvidersArray = Object.values(testProviders);
+  const testProvidersArray = Object.values(testProviders || {});
   if (!hasWarnings && !hasErrors && !testProvidersArray.length && !notifications.length) {
     return null;
   }

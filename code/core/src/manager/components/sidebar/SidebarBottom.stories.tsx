@@ -1,14 +1,40 @@
+import React from 'react';
+
 import { Addon_TypesEnum } from '@storybook/core/types';
+import type { Meta } from '@storybook/react/*';
 import { fn } from '@storybook/test';
 
+import { type API, ManagerContext } from '@storybook/core/manager-api';
+
 import { SidebarBottomBase } from './SidebarBottom';
+
+const managerContext: any = {
+  state: {
+    docsOptions: {
+      defaultName: 'Docs',
+      autodocs: 'tag',
+      docsMode: false,
+    },
+    testProviders: {},
+  },
+  api: {
+    on: fn().mockName('api::on'),
+    off: fn().mockName('api::off'),
+    getElements: fn(() => ({})),
+    updateTestproviderState: fn(),
+  },
+};
 
 export default {
   component: SidebarBottomBase,
   args: {
     isDevelopment: true,
+
     api: {
+      on: fn(),
+      off: fn(),
       clearNotification: fn(),
+      updateTestproviderState: fn(),
       emit: fn(),
       experimental_setFilter: fn(),
       getChannel: fn(),
@@ -29,9 +55,14 @@ export default {
           runnable: true,
         },
       })),
-    },
+    } as any as API,
   },
-};
+  decorators: [
+    (storyFn) => (
+      <ManagerContext.Provider value={managerContext}>{storyFn()}</ManagerContext.Provider>
+    ),
+  ],
+} as Meta<typeof SidebarBottomBase>;
 
 export const Errors = {
   args: {
