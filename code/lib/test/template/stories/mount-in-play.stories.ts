@@ -49,7 +49,6 @@ export const OrderOfHooks = {
     await userEvent.click(getByRole(canvasElement, 'button'));
   },
   async afterEach() {
-    console.log(1);
     console.log('8 - [from story afterEach]');
   },
 };
