@@ -1,5 +1,7 @@
 import React from 'react';
 
+import type { Meta, StoryObj } from '@storybook/react';
+
 import { getImageProps } from 'next/image';
 
 import Accessibility from '../../assets/accessibility.svg';
@@ -29,6 +31,6 @@ export default {
   args: {
     alt: 'getImageProps Example',
   },
-};
+} as Meta<typeof Component>;
 
-export const Default = {};
+export const Default: StoryObj<typeof Component> = {};

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import type { Meta, StoryObj } from '@storybook/react';
+
 import { Nested, RSC } from './RSC';
 
 export default {
@@ -10,11 +12,13 @@ export default {
       rsc: true,
     },
   },
-};
+} as Meta<typeof Component>;
 
-export const Default = {};
+type Story = StoryObj<typeof Component>;
 
-export const DisableRSC = {
+export const Default: Story = {};
+
+export const DisableRSC: Story = {
   tags: ['!test'],
   parameters: {
     chromatic: { disable: true },
@@ -22,7 +26,7 @@ export const DisableRSC = {
   },
 };
 
-export const Error = {
+export const Error: Story = {
   tags: ['!test'],
   parameters: {
     chromatic: { disable: true },
@@ -32,7 +36,7 @@ export const Error = {
   },
 };
 
-export const NestedRSC = {
+export const NestedRSC: Story = {
   render: (args) => (
     <Nested>
       <RSC {...args} />
