@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { FC, PropsWithChildren, ReactElement, ReactNode } from 'react';
 
+import type { ListItem } from '../../components';
 import type { TestingModuleProgressReportProgress } from '../../core-events';
 import type { Addon, StoryEntry } from '../../manager-api';
 import type { RenderData as RouterData } from '../../router/types';
@@ -476,10 +477,13 @@ export interface Addon_TestProviderType<
   name: string;
   title: (state: Addon_TestProviderState<Details>) => ReactNode;
   description: (state: Addon_TestProviderState<Details>) => ReactNode;
-  contextMenu?: (options: {
-    context: API_HashEntry;
-    state: Addon_TestProviderState<Details>;
-  }) => ReactNode;
+  contextMenu?: (
+    options: {
+      context: API_HashEntry;
+      state: Addon_TestProviderState<Details>;
+    },
+    components: { ListItem: typeof ListItem }
+  ) => ReactNode;
   mapStatusUpdate?: (
     state: Addon_TestProviderState<Details>
   ) => API_StatusUpdate | ((state: API_StatusState) => API_StatusUpdate);

@@ -1,7 +1,13 @@
 import type { ComponentProps, FC, MutableRefObject } from 'react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import { Button, IconButton, TooltipLinkList, WithTooltip } from '@storybook/core/components';
+import {
+  Button,
+  IconButton,
+  ListItem,
+  TooltipLinkList,
+  WithTooltip,
+} from '@storybook/core/components';
 import { styled, useTheme } from '@storybook/core/theming';
 import {
   type API_HashEntry,
@@ -174,6 +180,10 @@ const StatusIconMap = {
   warn: <WarnStatusIcon />,
   pending: <PendingStatusIcon />,
   unknown: null,
+};
+
+const ContextMenu = {
+  ListItem,
 };
 
 const statusOrder: API_StatusValue[] = ['success', 'error', 'warn', 'pending', 'unknown'];
@@ -746,7 +756,7 @@ function generateTestProviderLinks(testProviders: TestProviders, context: API_Ha
         return null;
       }
 
-      const content = e.contextMenu?.({ context, state });
+      const content = e.contextMenu?.({ context, state }, ContextMenu);
 
       if (!content) {
         return null;

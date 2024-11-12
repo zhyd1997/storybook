@@ -15,7 +15,8 @@ const List = styled.div(
   },
   ({ theme }) => ({
     borderRadius: theme.appBorderRadius + 2,
-  })
+  }),
+  ({ theme }) => (theme.base === 'dark' ? { background: theme.background.content } : {})
 );
 
 const Group = styled.div(({ theme }) => ({

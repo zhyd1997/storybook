@@ -1,15 +1,33 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type FC, type SyntheticEvent, useCallback, useEffect, useState } from 'react';
 
-import { AddonPanel, Badge, Link as LinkComponent, Spaced } from 'storybook/internal/components';
+import {
+  AddonPanel,
+  Badge,
+  Button,
+  Link as LinkComponent,
+  type ListItem,
+  Spaced,
+} from 'storybook/internal/components';
 import { TESTING_MODULE_RUN_ALL_REQUEST } from 'storybook/internal/core-events';
 import type { Combo } from 'storybook/internal/manager-api';
-import { Consumer, addons, types, useAddonState } from 'storybook/internal/manager-api';
 import {
+  Consumer,
+  addons,
+  types,
+  useAddonState,
+  useStorybookApi,
+} from 'storybook/internal/manager-api';
+import {
+  type API_HashEntry,
   type API_StatusObject,
   type API_StatusValue,
+  type Addon_TestProviderState,
   type Addon_TestProviderType,
   Addon_TypesEnum,
 } from 'storybook/internal/types';
+
+import { PlayIcon } from '@storybook/icons';
+import { useTheme } from '@storybook/theming';
 
 import { Panel } from './Panel';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
@@ -79,18 +97,38 @@ const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: nu
   );
 };
 
-const COunter = () => {
-  const [count, setCount] = useState(0);
+const ContextMenuItem: FC<{
+  context: API_HashEntry;
+  state: Addon_TestProviderState<{
+    testResults: TestResult[];
+  }>;
+  ListItem: typeof ListItem;
+}> = ({ context, state, ListItem }) => {
+  const api = useStorybookApi();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount((prev) => prev + 1);
-    }, 1000);
+  const onClick = useCallback(
+    (event: SyntheticEvent) => {
+      event.stopPropagation();
+      // TODO - actually send along a sub-set based on `context` to test.
+      api.getChannel().emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: TEST_PROVIDER_ID });
+    },
+    [api]
+  );
 
-    return () => clearInterval(interval);
-  }, []);
+  const theme = useTheme();
 
-  return <div>{count}</div>;
+  return (
+    <ListItem
+      title={'Component tests'}
+      right={
+        <Button variant="ghost" padding="small" disabled={state.crashed || state.running}>
+          <PlayIcon fill={theme.barTextColor} />
+        </Button>
+      }
+      center={state.running ? 'Running...' : 'Run tests'}
+      onClick={onClick}
+    />
+  );
 };
 
 addons.register(ADDON_ID, (api) => {
@@ -107,17 +145,12 @@ addons.register(ADDON_ID, (api) => {
       watchable: true,
 
       name: 'Component tests',
-      contextMenu: ({ context, state }) => {
+      contextMenu: ({ context, state }, { ListItem }) => {
         if (context.type === 'docs') {
           return null;
         }
 
-        return (
-          <div>
-            Testing {state?.progress?.percentageCompleted} {state.running ? '!' : '?'}
-          </div>
-        );
-        // return <COunter />;
+        return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
       },
       title: ({ crashed, failed }) =>
         crashed || failed ? 'Component tests failed' : 'Component tests',
@@ -207,20 +240,20 @@ addons.register(ADDON_ID, (api) => {
     }>);
   }
 
+  const filter = ({ state }: Combo) => {
+    return {
+      storyId: state.storyId,
+    };
+  };
+
   addons.add(PANEL_ID, {
     type: types.PANEL,
     title: Title,
     match: ({ viewMode }) => viewMode === 'story',
     render: ({ active }) => {
-      const newLocal = useCallback(({ state }: Combo) => {
-        return {
-          storyId: state.storyId,
-        };
-      }, []);
-
       return (
         <AddonPanel active={active}>
-          <Consumer filter={newLocal}>{({ storyId }) => <Panel storyId={storyId} />}</Consumer>
+          <Consumer filter={filter}>{({ storyId }) => <Panel storyId={storyId} />}</Consumer>
         </AddonPanel>
       );
     },
