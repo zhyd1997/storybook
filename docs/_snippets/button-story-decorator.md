@@ -174,9 +174,7 @@ export const Primary: Story = {
 <Story
   name="Primary"
   decorators={[
-    () => ({
-      Component: MarginDecorator
-    })
+    () => MarginDecorator
   ]}
 />
 ```
@@ -209,9 +207,7 @@ export const Primary = {
 <Story
   name="Primary"
   decorators={[
-    () => ({
-      Component: MarginDecorator
-    })
+    () => MarginDecorator
   ]}
 />
 ```
@@ -249,9 +245,7 @@ export const Primary: Story = {
 <Story
   name="Primary"
   decorators={[
-    () => ({
-      Component: MarginDecorator
-    })
+    () => MarginDecorator
   ]}
 />
 ```
