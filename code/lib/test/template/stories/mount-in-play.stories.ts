@@ -9,11 +9,26 @@ const meta = {
   beforeEach() {
     console.log('2 - [from meta beforeEach]');
   },
+  async afterEach() {
+    console.log('9 - [from meta afterEach]');
+
+    await expect(mocked(console.log).mock.calls).toEqual([
+      ['1 - [from loaders]'],
+      ['2 - [from meta beforeEach]'],
+      ['3 - [from story beforeEach]'],
+      ['4 - [before mount]'],
+      ['5 - [from decorator]'],
+      ['6 - [after mount]'],
+      ['7 - [from onClick]'],
+      ['8 - [from story afterEach]'],
+      ['9 - [from meta afterEach]'],
+    ]);
+  },
 };
 
 export default meta;
 
-export const MountInPlay = {
+export const OrderOfHooks = {
   beforeEach() {
     console.log('3 - [from story beforeEach]');
   },
@@ -32,15 +47,9 @@ export const MountInPlay = {
     await mount();
     console.log('6 - [after mount]');
     await userEvent.click(getByRole(canvasElement, 'button'));
-    await expect(mocked(console.log).mock.calls).toEqual([
-      ['1 - [from loaders]'],
-      ['2 - [from meta beforeEach]'],
-      ['3 - [from story beforeEach]'],
-      ['4 - [before mount]'],
-      ['5 - [from decorator]'],
-      ['6 - [after mount]'],
-      ['7 - [from onClick]'],
-    ]);
+  },
+  async afterEach() {
+    console.log('8 - [from story afterEach]');
   },
 };
 
