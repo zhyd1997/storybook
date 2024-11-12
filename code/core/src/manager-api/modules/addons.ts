@@ -28,7 +28,6 @@ export interface SubAPI {
   getElements: <
     T extends
       | Addon_Types
-      | Addon_TypesEnum.experimental_CONTEXT
       | Addon_TypesEnum.experimental_PAGE
       | Addon_TypesEnum.experimental_SIDEBAR_BOTTOM
       | Addon_TypesEnum.experimental_TEST_PROVIDER

@@ -510,7 +510,6 @@ export type Addon_TestProviderState<Details extends { [key: string]: any } = Non
 type Addon_TypeBaseNames = Exclude<
   Addon_TypesEnum,
   | Addon_TypesEnum.PREVIEW
-  | Addon_TypesEnum.experimental_CONTEXT
   | Addon_TypesEnum.experimental_PAGE
   | Addon_TypesEnum.experimental_SIDEBAR_BOTTOM
   | Addon_TypesEnum.experimental_SIDEBAR_TOP
@@ -588,6 +587,4 @@ export enum Addon_TypesEnum {
   experimental_SIDEBAR_TOP = 'sidebar-top',
   /** This adds items to the Testing Module in the sidebar. */
   experimental_TEST_PROVIDER = 'test-provider',
-  /** This adds items to the Testing Module in the sidebar. */
-  experimental_CONTEXT = 'context-menu',
 }
