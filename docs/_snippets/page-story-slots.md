@@ -182,7 +182,7 @@ export const CustomFooter: Story = {
   });
 </script>
 
-<Story name="CustomFooter" arg={{ footer: 'Built with Storybook' }}>
+<Story name="CustomFooter" args={{ footer: 'Built with Storybook' }}>
   {#snippet children(args)}
     <Page {...args} >
       <footer>{args.footer}</footer>
@@ -202,7 +202,7 @@ export const CustomFooter: Story = {
   });
 </script>
 
-<Story name="CustomFooter" arg={{ footer: 'Built with Storybook' }}>
+<Story name="CustomFooter" args={{ footer: 'Built with Storybook' }}>
   {#snippet children(args)}
     <Page {...args} >
       <footer>{args.footer}</footer>
@@ -222,7 +222,7 @@ export const CustomFooter: Story = {
   });
 </script>
 
-<Story name="CustomFooter" arg={{ footer: 'Built with Storybook' }}>
+<Story name="CustomFooter" args={{ footer: 'Built with Storybook' }}>
   {#snippet children(args)}
     <Page {...args} >
       <footer>{args.footer}</footer>

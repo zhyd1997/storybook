@@ -204,27 +204,24 @@ If you haven't used the CLI to set the configuration, or if you want to define y
 
 {/* prettier-ignore-end */}
 
-<IfRenderer renderer={['angular', 'ember', 'html', 'preact', 'qwik', 'react', 'solid', 'vue', 'web-components' ]}>
-  {/* Uncomment once frameworks that support custom templates are enabled to prevent misinformation about the example */}
+## Fully custom args
 
-  ## Fully custom args
+Until now, we only used auto-generated controls based on the component for which we're writing stories. If we are writing [complex stories](../writing-stories/stories-for-multiple-components.mdx), we may want to add controls for args that aren’t part of the component. For example, here's how you could use a `footer` arg to populate a child component:
 
-  Until now, we only used auto-generated controls based on the component for which we're writing stories. If we are writing [complex stories](../writing-stories/stories-for-multiple-components.mdx), we may want to add controls for args that aren’t part of the component. For example, here's how you could use a `footer` arg to populate a child component:
+{/* prettier-ignore-start */}
 
-  {/* prettier-ignore-start */}
+<CodeSnippets path="page-story-slots.md"/>
 
-  <CodeSnippets path="page-story-slots.md"/>
+{/* prettier-ignore-end */}
 
-  {/* prettier-ignore-end */}
-
-  By default, Storybook will add controls for all args that:
+By default, Storybook will add controls for all args that:
 
   * It infers from the component definition [if your framework supports it](../configure/integration/frameworks-feature-support.mdx).
 
   * Appear in the list of args for your story.
 
-  Using `argTypes`, you can change the display and behavior of each control.
-</IfRenderer>
+Using `argTypes`, you can change the display and behavior of each control.
+
 
 ### Dealing with complex values
 

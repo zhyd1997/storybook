@@ -103,19 +103,15 @@ Args are useful when writing stories for composite components that are assembled
 
 {/* prettier-ignore-end */}
 
-<IfRenderer renderer={[ 'angular', 'ember', 'html', 'preact', 'qwik', 'react', 'solid', 'vue', 'web-components' ]}>
-  {/* Uncomment once frameworks that support custom templates are enabled to prevent misinformation about the example */}
+## Args can modify any aspect of your component
 
-  ## Args can modify any aspect of your component
+You can use args in your stories to configure the component's appearance, similar to what you would do in an application. For example, here's how you could use a `footer` arg to populate a child component:
 
-  You can use args in your stories to configure the component's appearance, similar to what you would do in an application. For example, here's how you could use a `footer` arg to populate a child component:
+{/* prettier-ignore-start */}
 
-  {/* prettier-ignore-start */}
+<CodeSnippets path="page-story-slots.md" />
 
-  <CodeSnippets path="page-story-slots.md" />
-
-  {/* prettier-ignore-end */}
-</IfRenderer>
+{/* prettier-ignore-end */}
 
 ## Setting args through the URL
 
