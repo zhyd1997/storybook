@@ -14,8 +14,6 @@ export type SubState = {
   testProviders: TestProviders;
 };
 
-const STORAGE_KEY = '@storybook/manager/test-providers';
-
 const initialTestProviderState: TestProviderState = {
   details: {} as { [key: string]: any },
   cancellable: false,
@@ -39,15 +37,8 @@ export type SubAPI = {
 };
 
 export const init: ModuleFn = ({ store, fullAPI }) => {
-  let sessionState: TestProviders = {};
-  try {
-    sessionState = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}');
-  } catch (_) {
-    //
-  }
-
   const state: SubState = {
-    testProviders: sessionState,
+    testProviders: store.getState().testProviders,
   };
 
   const api: SubAPI = {
@@ -81,7 +72,17 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
     },
     runTestprovider(id, options) {
       if (options?.selection) {
-        const listOfFiles = [];
+        const listOfFiles: string[] = [];
+
+        // TODO: get actual list and emit, this notification is for development purposes
+        fullAPI.addNotification({
+          id: 'testing-module',
+
+          content: {
+            headline: 'Running tests',
+            subHeadline: `Running tests for ${listOfFiles} stories`,
+          },
+        });
         // fullAPI.emit(TESTING_MODULE_RUN_REQUEST, { providerId: id, selection: [] });
       } else {
         fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: id });
@@ -96,9 +97,16 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
   };
 
   const initModule = async () => {
-    const initialState = Object.fromEntries(
+    const initialState: TestProviders = Object.fromEntries(
       Object.entries(fullAPI.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER)).map(
-        ([id, config]) => [id, { ...config, ...initialTestProviderState, ...sessionState[id] }]
+        ([id, config]) => [
+          id,
+          {
+            ...config,
+            ...initialTestProviderState,
+            ...state.testProviders[id],
+          } as TestProviders[0],
+        ]
       )
     );
 

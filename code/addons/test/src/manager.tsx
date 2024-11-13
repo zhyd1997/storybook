@@ -109,8 +109,7 @@ const ContextMenuItem: FC<{
   const onClick = useCallback(
     (event: SyntheticEvent) => {
       event.stopPropagation();
-      // TODO - actually send along a sub-set based on `context` to test.
-      api.getChannel().emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: TEST_PROVIDER_ID });
+      api.runTestprovider(TEST_PROVIDER_ID, { selection: [context.id] });
     },
     [api]
   );

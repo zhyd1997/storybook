@@ -1,4 +1,4 @@
-import type { ComponentProps, FC, MutableRefObject } from 'react';
+import type { ComponentProps, FC, MutableRefObject, SyntheticEvent } from 'react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import {
@@ -445,7 +445,7 @@ const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
       onMouseLeave: () => {
         setIsItemHovered(false);
       },
-      onOpen: (event: any) => {
+      onOpen: (event: SyntheticEvent) => {
         event.stopPropagation();
         setIsOpen(true);
       },
@@ -470,8 +470,8 @@ const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
           closeOnOutsideClick
           onClick={handlers.onOpen}
           placement="bottom-end"
-          onVisibleChange={(visisble) => {
-            if (!visisble) {
+          onVisibleChange={(visible) => {
+            if (!visible) {
               handlers.onClose();
             } else {
               setIsOpen(true);
@@ -749,21 +749,19 @@ export const Tree = React.memo<{
 
 function generateTestProviderLinks(testProviders: TestProviders, context: API_HashEntry): Link[] {
   return Object.entries(testProviders)
-    .map(([k, e]) => {
-      const state = e;
-
+    .map(([testProviderId, state]) => {
       if (!state) {
         return null;
       }
 
-      const content = e.contextMenu?.({ context, state }, ContextMenu);
+      const content = state.contextMenu?.({ context, state }, ContextMenu);
 
       if (!content) {
         return null;
       }
 
       return {
-        id: k,
+        id: testProviderId,
         content,
       };
     })

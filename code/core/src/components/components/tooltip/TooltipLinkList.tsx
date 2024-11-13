@@ -42,7 +42,6 @@ export type Link = CustomLink | NormalLink;
  */
 interface CustomLink {
   id: string;
-  icon?: any;
   content: ReactNode;
 }
 
@@ -68,7 +67,7 @@ export interface TooltipLinkListProps extends ComponentProps<typeof List> {
 
 export const TooltipLinkList = ({ links, LinkWrapper, ...props }: TooltipLinkListProps) => {
   const groups = Array.isArray(links[0]) ? (links as Link[][]) : [links as Link[]];
-  const isIndented = groups.some((group) => group.some((link) => link.icon));
+  const isIndented = groups.some((group) => group.some((link) => 'icon' in link && link.icon));
   return (
     <List {...props}>
       {groups
