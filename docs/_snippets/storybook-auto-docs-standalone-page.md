@@ -1,6 +1,4 @@
 ```mdx filename="src/GettingStarted.mdx" renderer="common" language="mdx"
-{/* TK: Vet this against recommendation and filter out Svelte CSF */}
-
 # Getting Started
 
 Welcome! Whether you're a designer or a developer, this guide will help you get started and connect you to the essential resources you need.
@@ -8,6 +6,7 @@ Welcome! Whether you're a designer or a developer, this guide will help you get 
 ## Table of Contents
 
 - [Design Resources](#design-resources)
+
   - [Figma](#figma)
   - [UI/UX Design Guidelines](#uiux-design-guidelines)
   - [Design Assets](#design-assets)
