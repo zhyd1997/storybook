@@ -72,7 +72,7 @@ export async function generateTypesFiles(
           } else {
             console.log('Generated types for', picocolors.cyan(relative(cwd, dtsEntries[index])));
 
-            if (dtsEntries[index].includes('src/theming.index.ts')) {
+            if (dtsEntries[index].includes('src/theming/index')) {
               console.log('Modifying theme types');
               await modifyThemeTypes();
             }
