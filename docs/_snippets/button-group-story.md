@@ -1,4 +1,4 @@
-````ts filename="ButtonGroup.stories.ts" renderer="angular" language="ts"
+```ts filename="ButtonGroup.stories.ts" renderer="angular" language="ts"
 import type { Meta, StoryObj } from '@storybook/angular';
 
 import { moduleMetadata } from '@storybook/angular';
@@ -48,7 +48,7 @@ export const Pair = {
     orientation: 'horizontal',
   },
 };
-````
+```
 
 ```ts filename="ButtonGroup.stories.ts|tsx" renderer="react" language="ts-4-9"
 import type { Meta, StoryObj } from '@storybook/react';
