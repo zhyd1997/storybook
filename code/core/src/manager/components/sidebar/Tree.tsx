@@ -1,23 +1,11 @@
-import type { ComponentProps, FC, MutableRefObject, SyntheticEvent } from 'react';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import type { ComponentProps, FC, MutableRefObject } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 
-import {
-  Button,
-  IconButton,
-  ListItem,
-  TooltipLinkList,
-  WithTooltip,
-} from '@storybook/core/components';
+import { Button, IconButton, ListItem } from '@storybook/core/components';
 import { styled, useTheme } from '@storybook/core/theming';
-import {
-  type API_HashEntry,
-  type API_StatusValue,
-  Addon_TypesEnum,
-  type StoryId,
-} from '@storybook/core/types';
+import { type API_HashEntry, type API_StatusValue, type StoryId } from '@storybook/core/types';
 import {
   CollapseIcon as CollapseIconSvg,
-  EllipsisIcon,
   ExpandAltIcon,
   StatusFailIcon,
   StatusPassIcon,
@@ -25,8 +13,8 @@ import {
   SyncIcon,
 } from '@storybook/icons';
 
-import { PRELOAD_ENTRIES, type TestProviders } from '@storybook/core/core-events';
-import { useStorybookApi, useStorybookState } from '@storybook/core/manager-api';
+import { PRELOAD_ENTRIES } from '@storybook/core/core-events';
+import { useStorybookApi } from '@storybook/core/manager-api';
 import type {
   API,
   ComponentEntry,
@@ -48,6 +36,7 @@ import {
   isStoryHoistable,
 } from '../../utils/tree';
 import { useLayout } from '../layout/LayoutProvider';
+import { useContextMenu } from './ContextMenu';
 import { IconSymbols, UseSymbol } from './IconSymbols';
 import { StatusButton } from './StatusButton';
 import { StatusContext, useStatusSummary } from './StatusContext';
@@ -57,10 +46,7 @@ import type { Highlight, Item } from './types';
 import type { ExpandAction, ExpandedState } from './useExpanded';
 import { useExpanded } from './useExpanded';
 
-export const TEST_ADDON_ID = 'storybook/test';
-export const TEST_PROVIDER_ID = `${TEST_ADDON_ID}/test-provider`;
-
-type ExcludesNull = <T>(x: T | null) => x is T;
+export type ExcludesNull = <T>(x: T | null) => x is T;
 
 const Container = styled.div<{ hasOrphans: boolean }>((props) => ({
   marginTop: props.hasOrphans ? 20 : 0,
@@ -182,7 +168,7 @@ const StatusIconMap = {
   unknown: null,
 };
 
-const ContextMenu = {
+export const ContextMenu = {
   ListItem,
 };
 
@@ -433,76 +419,6 @@ const Node = React.memo<NodeProps>(function Node({
   return null;
 });
 
-const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
-  const [isItemHovered, setIsItemHovered] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handlers = useMemo(() => {
-    return {
-      onMouseEnter: () => {
-        setIsItemHovered(true);
-      },
-      onMouseLeave: () => {
-        setIsItemHovered(false);
-      },
-      onOpen: (event: SyntheticEvent) => {
-        event.stopPropagation();
-        setIsOpen(true);
-      },
-      onClose: () => {
-        setIsOpen(false);
-      },
-    };
-  }, []);
-
-  return useMemo(() => {
-    const testProviders = api.getElements(
-      Addon_TypesEnum.experimental_TEST_PROVIDER
-    ) as any as TestProviders;
-    const providerLinks = generateTestProviderLinks(testProviders, context);
-    const shouldDisplayLinks =
-      (isItemHovered || isOpen) && (providerLinks.length > 0 || links.length > 0);
-    return {
-      onMouseEnter: handlers.onMouseEnter,
-      onMouseLeave: handlers.onMouseLeave,
-      node: shouldDisplayLinks ? (
-        <WithTooltip
-          closeOnOutsideClick
-          onClick={handlers.onOpen}
-          placement="bottom-end"
-          onVisibleChange={(visible) => {
-            if (!visible) {
-              handlers.onClose();
-            } else {
-              setIsOpen(true);
-            }
-          }}
-          tooltip={({ onHide }) => (
-            <LiveContextMenu context={context} links={links} onClick={onHide} />
-          )}
-        >
-          <StatusButton type="button" status={'pending'}>
-            <EllipsisIcon />
-          </StatusButton>
-        </WithTooltip>
-      ) : null,
-    };
-  }, [api, context, handlers, isItemHovered, isOpen, links]);
-};
-
-const LiveContextMenu: FC<{ context: API_HashEntry } & ComponentProps<typeof TooltipLinkList>> = ({
-  context,
-  links,
-  ...rest
-}) => {
-  const { testProviders } = useStorybookState();
-  const providerLinks: Link[] = generateTestProviderLinks(testProviders, context);
-  const groups = Array.isArray(links[0]) ? (links as Link[][]) : [links as Link[]];
-  const all = groups.concat([providerLinks]);
-
-  return <TooltipLinkList {...rest} links={all} />;
-};
-
 const Root = React.memo<NodeProps & { expandableDescendants: string[] }>(function Root({
   setExpanded,
   isFullyExpanded,
@@ -746,24 +662,3 @@ export const Tree = React.memo<{
     </StatusContext.Provider>
   );
 });
-
-function generateTestProviderLinks(testProviders: TestProviders, context: API_HashEntry): Link[] {
-  return Object.entries(testProviders)
-    .map(([testProviderId, state]) => {
-      if (!state) {
-        return null;
-      }
-
-      const content = state.contextMenu?.({ context, state }, ContextMenu);
-
-      if (!content) {
-        return null;
-      }
-
-      return {
-        id: testProviderId,
-        content,
-      };
-    })
-    .filter(Boolean as any as ExcludesNull);
-}
