@@ -220,19 +220,45 @@ jobs:
           clone_options: "--depth 1 --verbose"
       - attach_workspace:
           at: .
-      - run:
-          name: Benchmarking Packages
-          working_directory: scripts
-          command: |
-            yarn local-registry --open &
-            until curl -s http://localhost:6001 > /dev/null; do
-              echo 'Waiting for local registry to be available...'
-              sleep 2
-            done
-            yarn bench-packages --baseBranch << pipeline.parameters.ghBaseBranch >> --pull-request << pipeline.parameters.ghPrNumber >> --upload
-      - store_artifacts: 
+      # if there is a base branch AND a PR number in parameters, benchmark packages against those
+      # this happens when run against a PR
+      - when:
+          condition:
+            and:
+              - << pipeline.parameters.ghBaseBranch >>
+              - << pipeline.parameters.ghPrNumber >>
+          steps:
+            - run:
+                name: Benchmarking packages against base branch
+                working_directory: scripts
+                command: |
+                  yarn local-registry --open &
+                  until curl -s http://localhost:6001 > /dev/null; do
+                    echo 'Waiting for local registry to be available...'
+                    sleep 2
+                  done
+                  yarn bench-packages --base-branch << pipeline.parameters.ghBaseBranch >> --pull-request << pipeline.parameters.ghPrNumber >> --upload
+      # if there is a NOT a base branch OR NOT a PR number in parameters, just upload benchmarks for the branch
+      # this happens when runned directly on branches, like next or main
+      - when:
+          condition:
+            or:
+              - not: << pipeline.parameters.ghBaseBranch >>
+              - not: << pipeline.parameters.ghPrNumber >>
+          steps:
+            - run:
+                name: Uploading package benchmarks for branch
+                working_directory: scripts
+                command: |
+                  yarn local-registry --open &
+                  until curl -s http://localhost:6001 > /dev/null; do
+                    echo 'Waiting for local registry to be available...'
+                    sleep 2
+                  done
+                  yarn bench-packages --upload
+      - store_artifacts:
           path: bench/packages/results.json
-      - store_artifacts: 
+      - store_artifacts:
           path: bench/packages/compare-with-<< pipeline.parameters.ghBaseBranch >>.json
       - report-workflow-on-failure
       - cancel-workflow-on-failure
@@ -954,22 +980,22 @@ workflows:
           requires:
             - build
       - create-sandboxes:
-          parallelism: 38
+          parallelism: 37
           requires:
             - build
       # - smoke-test-sandboxes: # disabled for now
       #     requires:
       #       - create-sandboxes
       - build-sandboxes:
-          parallelism: 38
+          parallelism: 37
           requires:
             - create-sandboxes
       - chromatic-sandboxes:
-          parallelism: 35
+          parallelism: 34
           requires:
             - build-sandboxes
       - e2e-production:
-          parallelism: 33
+          parallelism: 32
           requires:
             - build-sandboxes
       - e2e-dev:
@@ -977,7 +1003,7 @@ workflows:
           requires:
             - create-sandboxes
       - test-runner-production:
-          parallelism: 33
+          parallelism: 32
           requires:
             - build-sandboxes
       - vitest-integration:
