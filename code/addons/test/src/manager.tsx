@@ -1,55 +1,21 @@
-import React, { type FC, type SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {
-  AddonPanel,
-  Badge,
-  Button,
-  Link as LinkComponent,
-  type ListItem,
-  Spaced,
-} from 'storybook/internal/components';
+import { AddonPanel, Link as LinkComponent } from 'storybook/internal/components';
 import { TESTING_MODULE_RUN_ALL_REQUEST } from 'storybook/internal/core-events';
 import type { Combo } from 'storybook/internal/manager-api';
+import { Consumer, addons, types } from 'storybook/internal/manager-api';
 import {
-  Consumer,
-  addons,
-  types,
-  useAddonState,
-  useStorybookApi,
-} from 'storybook/internal/manager-api';
-import { useTheme } from 'storybook/internal/theming';
-import {
-  type API_HashEntry,
   type API_StatusObject,
   type API_StatusValue,
-  type Addon_TestProviderState,
   type Addon_TestProviderType,
   Addon_TypesEnum,
 } from 'storybook/internal/types';
 
-import { PlayIcon } from '@storybook/icons';
-
-import { Panel } from './Panel';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
+import { Panel } from './components/Panel';
+import { Title } from './components/Title';
 import { ADDON_ID, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 import type { TestResult } from './node/reporter';
-
-function Title() {
-  const [addonState = {}] = useAddonState(ADDON_ID);
-  const { hasException, interactionsCount } = addonState as any;
-
-  return (
-    <div>
-      <Spaced col={1}>
-        <span style={{ display: 'inline-block', verticalAlign: 'middle' }}>Component tests</span>
-        {interactionsCount && !hasException ? (
-          <Badge status="neutral">{interactionsCount}</Badge>
-        ) : null}
-        {hasException ? <Badge status="negative">{interactionsCount}</Badge> : null}
-      </Spaced>
-    </div>
-  );
-}
 
 const statusMap: Record<any['status'], API_StatusValue> = {
   failed: 'error',
@@ -94,39 +60,6 @@ const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: nu
   return (
     relativeTimeString &&
     `Ran ${testCount} ${testCount === 1 ? 'test' : 'tests'} ${relativeTimeString}`
-  );
-};
-
-const ContextMenuItem: FC<{
-  context: API_HashEntry;
-  state: Addon_TestProviderState<{
-    testResults: TestResult[];
-  }>;
-  ListItem: typeof ListItem;
-}> = ({ context, state, ListItem }) => {
-  const api = useStorybookApi();
-
-  const onClick = useCallback(
-    (event: SyntheticEvent) => {
-      event.stopPropagation();
-      api.runTestprovider(TEST_PROVIDER_ID, { selection: [context.id] });
-    },
-    [api]
-  );
-
-  const theme = useTheme();
-
-  return (
-    <ListItem
-      title={'Component tests'}
-      right={
-        <Button variant="ghost" padding="small" disabled={state.crashed || state.running}>
-          <PlayIcon fill={theme.barTextColor} />
-        </Button>
-      }
-      center={state.running ? 'Running...' : 'Run tests'}
-      onClick={onClick}
-    />
   );
 };
 
