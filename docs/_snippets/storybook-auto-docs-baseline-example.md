@@ -1,6 +1,4 @@
-
 ```mdx filename="Button.mdx" renderer="common" language="mdx" tabTitle="custom-title"
-{/* TK: vet this against recommendation and filter out if not supported by Svelte's CSF*/}
 import { Meta, Controls } from '@storybook/blocks';
 
 <Meta title="Button" />
@@ -24,9 +22,7 @@ Button has the following properties:
 <Controls />
 ```
 
-
 ```mdx filename="Button.mdx" renderer="common" language="mdx" tabTitle="of-prop"
-{/* TK: vet this against recommendation and filter out if not supported by Svelte's CSF*/}
 import { Meta, Controls } from '@storybook/blocks';
 
 import * as ButtonStories from './Button.stories';

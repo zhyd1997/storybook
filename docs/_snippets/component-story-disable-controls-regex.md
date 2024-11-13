@@ -36,7 +36,6 @@ export const RegexExclude: Story = {
 ```
 
 ```svelte filename="YourComponent.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -141,7 +140,6 @@ export const RegexExclude = {
 ```
 
 ```svelte filename="YourComponent.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -257,7 +255,6 @@ export const RegexExclude: Story = {
 ```
 
 ```svelte filename="YourComponent.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 

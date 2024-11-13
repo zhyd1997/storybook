@@ -12,7 +12,6 @@ export default meta;
 ```
 
 ```svelte filename="YourComponent.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK: vet against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -44,7 +43,6 @@ export default {
 ```
 
 ```svelte filename="YourComponent.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK: vet against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -85,7 +83,6 @@ export default meta;
 ```
 
 ```svelte filename="YourComponent.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK: vet against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 

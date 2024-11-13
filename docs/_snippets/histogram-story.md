@@ -238,7 +238,6 @@ export const Default: Story = {
   });
 </script>
 
-
 <Story
   name="Default"
   args={{
@@ -277,7 +276,6 @@ export const Default = {
     component: Histogram,
   });
 </script>
-
 
 <Story
   name="Default"
@@ -322,7 +320,6 @@ export const Default: Story = {
     component: Histogram,
   });
 </script>
-
 
 <Story
   name="Default"

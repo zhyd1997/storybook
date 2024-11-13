@@ -319,7 +319,10 @@ export const ExampleStory: Story = {
   }}
 >
   {#snippet children(args)}
-    <YourComponent {...args} someProperty={someFunction(args.propertyA, args.propertyB)} />
+    <YourComponent
+      {...args}
+      someProperty={someFunction(args.propertyA, args.propertyB)}
+    />
   {/snippet}
 </Story>
 ```
@@ -395,7 +398,10 @@ export const ExampleStory = {
   }}
 >
   {#snippet children(args)}
-    <YourComponent {...args} someProperty={someFunction(args.propertyA, args.propertyB)} />
+    <YourComponent
+      {...args}
+      someProperty={someFunction(args.propertyA, args.propertyB)}
+    />
   {/snippet}
 </Story>
 ```
@@ -476,7 +482,10 @@ export const ExampleStory: Story = {
   }}
 >
   {#snippet children(args)}
-    <YourComponent {...args} someProperty={someFunction(args.propertyA, args.propertyB)} />
+    <YourComponent
+      {...args}
+      someProperty={someFunction(args.propertyA, args.propertyB)}
+    />
   {/snippet}
 </Story>
 ```

@@ -163,8 +163,6 @@ export const WithAnImage: Story = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -183,9 +181,7 @@ export const WithAnImage: Story = {
 </script>
 
 <Story name="WithAnImage">
-	<div>
-		<MyComponent {image} />
-	</div>
+  <MyComponent {image} />
 </Story>
 ```
 
@@ -212,8 +208,6 @@ export const WithAnImage = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -232,9 +226,7 @@ export const WithAnImage = {
 </script>
 
 <Story name="WithAnImage">
-	<div>
-		<MyComponent {image} />
-	</div>
+	<MyComponent {image} />
 </Story>
 ```
 
@@ -266,8 +258,6 @@ export const WithAnImage: Story = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -286,9 +276,7 @@ export const WithAnImage: Story = {
 </script>
 
 <Story name="WithAnImage">
-	<div>
-		<MyComponent {image} />
-	</div>
+  <MyComponent {image} />
 </Story>
 ```
 

@@ -1,7 +1,4 @@
-
 ```mdx filename="src/components/Select.mdx" renderer="common" language="mdx"
-{/* TK: vet this against recommendation and filter out Svelte CSF */}
-
 # Select
 
 Select is a type of input that allows users to choose one or more options from a list of choices.

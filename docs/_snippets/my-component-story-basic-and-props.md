@@ -126,8 +126,6 @@ export const WithProp: Story = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -139,15 +137,11 @@ export const WithProp: Story = {
 </script>
 
 <Story name="Basic">
-	<div>
-		<MyComponent />
-	</div>
+  <MyComponent />
 </Story>
 
 <Story name="WithProp">
-	<div>
-		<MyComponent prop="value" />
-	</div>
+  <MyComponent prop="value" />
 </Story>
 ```
 
@@ -176,8 +170,6 @@ export const WithProp = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -189,15 +181,11 @@ export const WithProp = {
 </script>
 
 <Story name="Basic">
-	<div>
-		<MyComponent />
-	</div>
+  <MyComponent />
 </Story>
 
 <Story name="WithProp">
-	<div>
-		<MyComponent prop="value" />
-	</div>
+  <MyComponent prop="value" />
 </Story>
 ```
 
@@ -231,8 +219,6 @@ export const WithProp: Story = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TODO: Vet this example against recommendation -->
-
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -244,15 +230,11 @@ export const WithProp: Story = {
 </script>
 
 <Story name="Basic">
-	<div>
-		<MyComponent />
-	</div>
+  <MyComponent />
 </Story>
 
 <Story name="WithProp">
-	<div>
-		<MyComponent prop="value" />
-	</div>
+  <MyComponent prop="value" />
 </Story>
 ```
 

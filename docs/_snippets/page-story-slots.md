@@ -172,22 +172,63 @@ export const CustomFooter: Story = {
 ```
 
 ```svelte filename="Page.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!--
-  TK: Needs example and should be replicated to the other languages (e.g., ts, ts-4-9) to ensure the snippets render correctly
-  This is a special case as the CSF JS/TS Storybook versions don't support the component "directive"
-  It's referenced in the following documentation:
-  - Essentials/Controls https://storybook.js.org/docs/essentials/controls#fully-custom-args
-  - Writing Stories/Args https://storybook.js.org/docs/writing-stories/args#args-can-modify-any-aspect-of-your-component
-  - Writing Stories/Typescript (https://storybook.js.org/docs/writing-stories/typescript#typing-custom-args)
--->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Page from './Page.svelte';
+
+  const { Story } = defineMeta({
+    component: Page
+  });
+</script>
+
+<Story name="CustomFooter" arg={{ footer: 'Built with Storybook' }}>
+  {#snippet children(args)}
+    <Page {...args} >
+      <footer>{args.footer}</footer>
+    </Page>
+  {/snippet}
+</Story>
 ```
 
 ```svelte filename="Page.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Page from './Page.svelte';
+
+  const { Story } = defineMeta({
+    component: Page
+  });
+</script>
+
+<Story name="CustomFooter" arg={{ footer: 'Built with Storybook' }}>
+  {#snippet children(args)}
+    <Page {...args} >
+      <footer>{args.footer}</footer>
+    </Page>
+  {/snippet}
+</Story>
 ```
 
 ```svelte filename="Page.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Page from './Page.svelte';
+
+  const { Story } = defineMeta({
+    component: Page
+  });
+</script>
+
+<Story name="CustomFooter" arg={{ footer: 'Built with Storybook' }}>
+  {#snippet children(args)}
+    <Page {...args} >
+      <footer>{args.footer}</footer>
+    </Page>
+  {/snippet}
+</Story>
 ```
 
 ```js filename="Page.stories.js" renderer="vue" language="js" tabTitle="3"

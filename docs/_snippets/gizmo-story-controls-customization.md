@@ -58,7 +58,6 @@ export default meta;
 ```
 
 ```svelte filename="Gizmo.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK: Vet against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -228,7 +227,6 @@ export default {
 ```
 
 ```svelte filename="Gizmo.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK: Vet against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -407,7 +405,6 @@ export default meta;
 ```
 
 ```svelte filename="Gizmo.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK: Vet against recommendation -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 

@@ -448,8 +448,6 @@ export const Tertiary: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TODO: vet this against recommendation -->
-
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 

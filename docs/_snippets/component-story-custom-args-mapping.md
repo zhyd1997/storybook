@@ -31,11 +31,38 @@ export default meta;
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK: Needs example and should be replicated to the other languages (e.g., ts, ts-4-9) to ensure the snippets render correctly  -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './components/Button.svelte';
+
+  import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from './icons';
+
+  const arrows = { ArrowUp, ArrowDown, ArrowLeft, ArrowRight };
+
+  const { Story } = defineMeta({
+    component: Button,
+    argTypes: {
+      arrow: {
+        options: Object.keys(arrows), // An array of serializable values
+        mapping: arrows, // Maps serializable option values to complex arg values
+        control: {
+          type: 'select', // Type 'select' is automatically inferred when 'options' is defined
+          labels: {
+            // 'labels' maps option values to string labels
+            ArrowUp: 'Up',
+            ArrowDown: 'Down',
+            ArrowLeft: 'Left',
+            ArrowRight: 'Right',
+          },
+        },
+      },
+    },
+  });
+</script>
 ```
 
 ```js filename="Button.stories.js" renderer="svelte" language="js" tabTitle="CSF"
-/* TK: Needs follow up and vetting before extending it to other languages (e.g., ts-4-9, ts) */
 import Button from './Button.svelte';
 
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from './icons';
@@ -92,11 +119,38 @@ export default {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK: Needs example and should be replicated to the other languages (e.g., ts, ts-4-9) to ensure the snippets render correctly  -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './components/Button.svelte';
+
+  import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from './icons';
+
+  const arrows = { ArrowUp, ArrowDown, ArrowLeft, ArrowRight };
+
+  const { Story } = defineMeta({
+    component: Button,
+    argTypes: {
+      arrow: {
+        options: Object.keys(arrows), // An array of serializable values
+        mapping: arrows, // Maps serializable option values to complex arg values
+        control: {
+          type: 'select', // Type 'select' is automatically inferred when 'options' is defined
+          labels: {
+            // 'labels' maps option values to string labels
+            ArrowUp: 'Up',
+            ArrowDown: 'Down',
+            ArrowLeft: 'Left',
+            ArrowRight: 'Right',
+          },
+        },
+      },
+    },
+  });
+</script>
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts-4-9" tabTitle="CSF"
-/* TK */
 import type { Meta } from '@storybook/svelte';
 
 import Button from './Button.svelte';
@@ -162,11 +216,38 @@ export default meta;
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK: Needs example and should be replicated to the other languages (e.g., ts, ts-4-9) to ensure the snippets render correctly  -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+
+  import Button from './components/Button.svelte';
+
+  import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from './icons';
+
+  const arrows = { ArrowUp, ArrowDown, ArrowLeft, ArrowRight };
+
+  const { Story } = defineMeta({
+    component: Button,
+    argTypes: {
+      arrow: {
+        options: Object.keys(arrows), // An array of serializable values
+        mapping: arrows, // Maps serializable option values to complex arg values
+        control: {
+          type: 'select', // Type 'select' is automatically inferred when 'options' is defined
+          labels: {
+            // 'labels' maps option values to string labels
+            ArrowUp: 'Up',
+            ArrowDown: 'Down',
+            ArrowLeft: 'Left',
+            ArrowRight: 'Right',
+          },
+        },
+      },
+    },
+  });
+</script>
 ```
 
 ```ts filename="Button.stories.ts" renderer="svelte" language="ts" tabTitle="CSF"
-/* TK */
 import type { Meta } from '@storybook/svelte';
 
 import Button from './Button.svelte';

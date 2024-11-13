@@ -243,17 +243,96 @@ export const Combo: Story = {
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts)
-    If not suuported, adjust documentation to reflect it by making it conditionally render
- -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { Button } from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+</script>
+
+<!-- 👇 This story will not appear in Storybook's sidebar or docs page -->
+<Story
+  name="Variant1"
+  tags={['!dev', '!autodocs']}
+  args={{ variant: 1 }}
+/>
+
+<!-- 👇 This story will not appear in Storybook's sidebar or docs page -->
+<Story
+  name="Variant1"
+  tags={['!dev', '!autodocs']}
+  args={{ variant: 2 }}
+/>
+
+<!-- 👇 This story should not be tested, but will appear in the sidebar and docs page -->
+<Story name="Variant1" tags={['!dev', '!autodocs']}>
+  <Button variant={1}>
+  <Button variant={2}>
+</Story>
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { Button } from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+</script>
+
+<!-- 👇 This story will not appear in Storybook's sidebar or docs page -->
+<Story
+  name="Variant1"
+  tags={['!dev', '!autodocs']}
+  args={{ variant: 1 }}
+/>
+
+<!-- 👇 This story will not appear in Storybook's sidebar or docs page -->
+<Story
+  name="Variant1"
+  tags={['!dev', '!autodocs']}
+  args={{ variant: 2 }}
+/>
+
+<!-- 👇 This story should not be tested, but will appear in the sidebar and docs page -->
+<Story name="Variant1" tags={['!dev', '!autodocs']}>
+  <Button variant={1}>
+  <Button variant={2}>
+</Story>
 ```
 
 ```svelte filename="Button.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TK: vet this against recommendation and apply it to the other languages (e.g., ts-4-9, ts) -->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { Button } from './Button.svelte';
+
+  const { Story } = defineMeta({
+    component: Button,
+  });
+</script>
+
+<!-- 👇 This story will not appear in Storybook's sidebar or docs page -->
+<Story
+  name="Variant1"
+  tags={['!dev', '!autodocs']}
+  args={{ variant: 1 }}
+/>
+
+<!-- 👇 This story will not appear in Storybook's sidebar or docs page -->
+<Story
+  name="Variant1"
+  tags={['!dev', '!autodocs']}
+  args={{ variant: 2 }}
+/>
+
+<!-- 👇 This story should not be tested, but will appear in the sidebar and docs page -->
+<Story name="Variant1" tags={['!dev', '!autodocs']}>
+  <Button variant={1}>
+  <Button variant={2}>
+</Story>
 ```
 
 ```js filename="Button.stories.js" renderer="vue" language="js"

@@ -39,8 +39,6 @@ export const ExampleChangeEvent: Story = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="js" tabTitle="Svelte CSF"
-<!-- TODO: Vet this against recommendation -->
-
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -51,9 +49,7 @@ export const ExampleChangeEvent: Story = {
   const { Story } = defineMeta({
     component: MyComponent,
   });
-</script>
 
-<script>
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -150,8 +146,6 @@ export const ExampleChangeEvent = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts-4-9" tabTitle="Svelte CSF"
-<!-- TODO: Vet this against recommendation -->
-
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -162,9 +156,7 @@ export const ExampleChangeEvent = {
   const { Story } = defineMeta({
     component: MyComponent,
   });
-</script>
 
-<script>
   function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -272,8 +264,6 @@ export const ExampleChangeEvent: Story = {
 ```
 
 ```svelte filename="MyComponent.stories.svelte" renderer="svelte" language="ts" tabTitle="Svelte CSF"
-<!-- TODO: Vet this against recommendation -->
-
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
 
@@ -284,9 +274,7 @@ export const ExampleChangeEvent: Story = {
   const { Story } = defineMeta({
     component: MyComponent,
   });
-</script>
 
-<script>
   function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
