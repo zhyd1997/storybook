@@ -11,6 +11,7 @@ import {
   Addon_TypesEnum,
 } from 'storybook/internal/types';
 
+import { ContextMenuItem } from './components/ContextMenuItem';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
 import { Panel } from './components/Panel';
 import { Title } from './components/Title';
@@ -77,14 +78,18 @@ addons.register(ADDON_ID, (api) => {
       watchable: true,
 
       name: 'Component tests',
-      // disabled for now
-      // contextMenu: ({ context, state }, { ListItem }) => {
-      //   if (context.type === 'docs') {
-      //     return null;
-      //   }
+      contextMenu: ({ context, state }, { ListItem }) => {
+        if (context.type === 'docs') {
+          return null;
+        }
 
-      //   return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
-      // },
+        // TODO: remove this... right now: always returns false, to disable the feature
+        if ('true') {
+          return false;
+        }
+
+        return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
+      },
       title: ({ crashed, failed }) =>
         crashed || failed ? 'Component tests failed' : 'Component tests',
       description: ({ failed, running, watching, progress, crashed, error }) => {

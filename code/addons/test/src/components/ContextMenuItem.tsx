@@ -1,4 +1,4 @@
-import React, { type FC, type SyntheticEvent, useCallback } from 'react';
+import React, { type FC, type SyntheticEvent, useCallback, useRef } from 'react';
 
 import { Button, type ListItem } from 'storybook/internal/components';
 import { useStorybookApi } from 'storybook/internal/manager-api';
@@ -10,7 +10,7 @@ import { PlayIcon } from '@storybook/icons';
 import { TEST_PROVIDER_ID } from '../constants';
 import type { TestResult } from '../node/reporter';
 
-const ContextMenuItem: FC<{
+export const ContextMenuItem: FC<{
   context: API_HashEntry;
   state: Addon_TestProviderState<{
     testResults: TestResult[];
@@ -18,11 +18,14 @@ const ContextMenuItem: FC<{
   ListItem: typeof ListItem;
 }> = ({ context, state, ListItem }) => {
   const api = useStorybookApi();
+  const id = useRef(context.id);
+
+  id.current = context.id;
 
   const onClick = useCallback(
     (event: SyntheticEvent) => {
       event.stopPropagation();
-      api.runTestprovider(TEST_PROVIDER_ID, { selection: [context.id] });
+      api.runTestProvider(TEST_PROVIDER_ID, { selection: [id.current] });
     },
     [api]
   );

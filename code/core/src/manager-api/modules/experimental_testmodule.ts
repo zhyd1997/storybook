@@ -29,11 +29,11 @@ interface RunOptions {
 }
 
 export type SubAPI = {
-  getTestproviderState(id: string): TestProviderState | undefined;
-  updateTestproviderState(id: TestProviderId, update: Partial<TestProviderState>): void;
-  clearTestproviderState(id: TestProviderId): void;
-  runTestprovider(id: TestProviderId, options?: RunOptions): void;
-  cancelTestprovider(id: TestProviderId): void;
+  getTestProviderState(id: string): TestProviderState | undefined;
+  updateTestProviderState(id: TestProviderId, update: Partial<TestProviderState>): void;
+  clearTestProviderState(id: TestProviderId): void;
+  runTestProvider(id: TestProviderId, options?: RunOptions): void;
+  cancelTestProvider(id: TestProviderId): void;
 };
 
 export const init: ModuleFn = ({ store, fullAPI }) => {
@@ -42,12 +42,12 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
   };
 
   const api: SubAPI = {
-    getTestproviderState(id) {
+    getTestProviderState(id) {
       const { testProviders } = store.getState();
 
       return testProviders?.[id];
     },
-    updateTestproviderState(id, update) {
+    updateTestProviderState(id, update) {
       return store.setState(
         ({ testProviders }) => {
           return { testProviders: { ...testProviders, [id]: { ...testProviders[id], ...update } } };
@@ -55,7 +55,7 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
         { persistence: 'session' }
       );
     },
-    clearTestproviderState(id) {
+    clearTestProviderState(id) {
       const update = {
         cancelling: false,
         running: true,
@@ -70,7 +70,7 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
         { persistence: 'session' }
       );
     },
-    runTestprovider(id, options) {
+    runTestProvider(id, options) {
       if (options?.selection) {
         const listOfFiles: string[] = [];
 
@@ -88,10 +88,10 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
         fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: id });
       }
 
-      return () => api.cancelTestprovider(id);
+      return () => api.cancelTestProvider(id);
     },
-    cancelTestprovider(id) {
-      api.updateTestproviderState(id, { cancelling: true });
+    cancelTestProvider(id) {
+      api.updateTestProviderState(id, { cancelling: true });
       fullAPI.emit(TESTING_MODULE_CANCEL_TEST_RUN_REQUEST, { providerId: id });
     },
   };
