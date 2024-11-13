@@ -26,11 +26,15 @@ const initialTestProviderState: TestProviderState = {
   crashed: false,
 };
 
+interface RunOptions {
+  selection?: string[];
+}
+
 export type SubAPI = {
   getTestproviderState(id: string): TestProviderState | undefined;
   updateTestproviderState(id: TestProviderId, update: Partial<TestProviderState>): void;
   clearTestproviderState(id: TestProviderId): void;
-  runTestprovider(id: TestProviderId): void;
+  runTestprovider(id: TestProviderId, options?: RunOptions): void;
   cancelTestprovider(id: TestProviderId): void;
 };
 
@@ -75,8 +79,13 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
         { persistence: 'session' }
       );
     },
-    runTestprovider(id) {
-      fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: id });
+    runTestprovider(id, options) {
+      if (options?.selection) {
+        const listOfFiles = [];
+        // fullAPI.emit(TESTING_MODULE_RUN_REQUEST, { providerId: id, selection: [] });
+      } else {
+        fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: id });
+      }
 
       return () => api.cancelTestprovider(id);
     },

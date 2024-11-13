@@ -145,13 +145,14 @@ addons.register(ADDON_ID, (api) => {
       watchable: true,
 
       name: 'Component tests',
-      contextMenu: ({ context, state }, { ListItem }) => {
-        if (context.type === 'docs') {
-          return null;
-        }
+      // disabled for now
+      // contextMenu: ({ context, state }, { ListItem }) => {
+      //   if (context.type === 'docs') {
+      //     return null;
+      //   }
 
-        return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
-      },
+      //   return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
+      // },
       title: ({ crashed, failed }) =>
         crashed || failed ? 'Component tests failed' : 'Component tests',
       description: ({ failed, running, watching, progress, crashed, error }) => {
