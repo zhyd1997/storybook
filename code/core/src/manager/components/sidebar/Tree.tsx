@@ -617,6 +617,10 @@ export const Tree = React.memo<{
 
       const isDisplayed = !item.parent || ancestry[itemId].every((a: string) => expanded[a]);
 
+      if (isDisplayed === false) {
+        return null;
+      }
+
       return (
         <Node
           api={api}
