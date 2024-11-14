@@ -317,15 +317,15 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
           }
           this.checkIfAborted(abortSignal);
 
-          await this.runPhase(abortSignal, 'afterEach', async () => {
-            await applyAfterEach(context);
-          });
-
           if (!ignoreUnhandledErrors && unhandledErrors.size > 0) {
             await this.runPhase(abortSignal, 'errored');
           } else {
             await this.runPhase(abortSignal, 'played');
           }
+
+          await this.runPhase(abortSignal, 'afterEach', async () => {
+            await applyAfterEach(context);
+          });
         } catch (error) {
           // Remove the loading screen, even if there was an error before rendering
           this.callbacks.showStoryDuringRender?.();

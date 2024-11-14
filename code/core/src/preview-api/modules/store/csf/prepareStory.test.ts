@@ -792,6 +792,7 @@ describe('prepareMeta', () => {
       story,
       applyLoaders,
       applyBeforeEach,
+      applyAfterEach,
       originalStoryFn,
       unboundStoryFn,
       undecoratedStoryFn,
