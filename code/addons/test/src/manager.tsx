@@ -17,6 +17,7 @@ import { EyeIcon, PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
 import { Panel } from './components/Panel';
+import { Title } from './components/Title';
 import { ADDON_ID, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 import type { TestResult } from './node/reporter';
 
@@ -72,7 +73,7 @@ const Info = styled.div({
   marginLeft: 6,
 });
 
-const Title = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
+const Title2 = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
   fontSize: theme.typography.size.s1,
   fontWeight: crashed ? 'bold' : 'normal',
   color: crashed ? theme.color.negativeText : theme.color.defaultText,
@@ -155,9 +156,9 @@ addons.register(ADDON_ID, (api) => {
         return (
           <>
             <Info>
-              <Title crashed={state.crashed} id="testing-module-title">
+              <Title2 crashed={state.crashed} id="testing-module-title">
                 {title}
-              </Title>
+              </Title2>
               <Description id="testing-module-description">{description}</Description>
             </Info>
 
@@ -255,7 +256,7 @@ addons.register(ADDON_ID, (api) => {
 
   addons.add(PANEL_ID, {
     type: types.PANEL,
-    title: Title,
+    title: () => <Title />,
     match: ({ viewMode }) => viewMode === 'story',
     render: ({ active }) => {
       return (
