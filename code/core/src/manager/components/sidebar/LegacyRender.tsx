@@ -52,7 +52,7 @@ export const LegacyRender = ({ ...state }: TestProviders[keyof TestProviders]) =
             variant="ghost"
             padding="small"
             active={state.watching}
-            onClick={() => api.onSetWatchMode(state.id, !state.watching)}
+            onClick={() => api.setTestProviderWatchMode(state.id, !state.watching)}
             disabled={state.crashed || state.running}
           >
             <EyeIcon />
@@ -65,7 +65,7 @@ export const LegacyRender = ({ ...state }: TestProviders[keyof TestProviders]) =
                 aria-label={`Stop ${name}`}
                 variant="ghost"
                 padding="small"
-                onClick={() => api.onCancelTests(state.id)}
+                onClick={() => api.cancelTestProvider(state.id)}
                 disabled={state.cancelling}
               >
                 <StopAltHollowIcon />
@@ -75,7 +75,7 @@ export const LegacyRender = ({ ...state }: TestProviders[keyof TestProviders]) =
                 aria-label={`Start ${state.name}`}
                 variant="ghost"
                 padding="small"
-                onClick={() => api.onRunTests(state.id)}
+                onClick={() => api.runTestProvider(state.id)}
                 disabled={state.crashed || state.running}
               >
                 <PlayHollowIcon />
