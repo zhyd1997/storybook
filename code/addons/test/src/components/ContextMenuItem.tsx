@@ -5,7 +5,7 @@ import { useStorybookApi } from 'storybook/internal/manager-api';
 import { useTheme } from 'storybook/internal/theming';
 import { type API_HashEntry, type Addon_TestProviderState } from 'storybook/internal/types';
 
-import { PlayIcon } from '@storybook/icons';
+import { PlayHollowIcon, PlayIcon, StopAltHollowIcon } from '@storybook/icons';
 
 import { TEST_PROVIDER_ID } from '../constants';
 import type { TestResult } from '../node/reporter';
@@ -19,29 +19,35 @@ export const ContextMenuItem: FC<{
 }> = ({ context, state, ListItem }) => {
   const api = useStorybookApi();
   const id = useRef(context.id);
+  const cancelRun = useRef<() => void>();
+
+  const Icon = state.running ? StopAltHollowIcon : PlayHollowIcon;
 
   id.current = context.id;
 
   const onClick = useCallback(
     (event: SyntheticEvent) => {
       event.stopPropagation();
-      api.runTestProvider(TEST_PROVIDER_ID, { entryId: id.current });
+      if (state.running) {
+        cancelRun.current?.();
+        return;
+      } else {
+        cancelRun.current = api.runTestProvider(TEST_PROVIDER_ID, { entryId: id.current });
+      }
     },
-    [api]
+    [api, state.running]
   );
 
   const theme = useTheme();
 
   return (
     <ListItem
-      title={'Component tests'}
+      title={'Run local tests'}
       right={
-        <Button variant="ghost" padding="small" disabled={state.crashed || state.running}>
-          <PlayIcon fill={theme.barTextColor} />
+        <Button onClick={onClick} variant="ghost" padding="small" disabled={state.crashed}>
+          <Icon fill={theme.barTextColor} />
         </Button>
       }
-      center={state.running ? 'Running...' : 'Run tests'}
-      onClick={onClick}
     />
   );
 };

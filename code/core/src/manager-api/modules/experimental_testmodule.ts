@@ -36,7 +36,7 @@ export type SubAPI = {
   getTestProviderState(id: string): TestProviderState | undefined;
   updateTestProviderState(id: TestProviderId, update: Partial<TestProviderState>): void;
   clearTestProviderState(id: TestProviderId): void;
-  runTestProvider(id: TestProviderId, options?: RunOptions): void;
+  runTestProvider(id: TestProviderId, options?: RunOptions): () => void;
   setTestProviderWatchMode(id: TestProviderId, watchMode: boolean): void;
   cancelTestProvider(id: TestProviderId): void;
 };
@@ -127,14 +127,15 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
               (childId) => index[childId].type === 'story'
             );
             if (!firstStoryId) {
-              // TODO: can this happen? docs only in a component or something?
-              throw new Error('No story found for component?');
+              // happens when there are only docs in the component
+              return;
             }
             payloads.add({ importPath: (index[firstStoryId] as API_StoryEntry).importPath });
             return;
           case 'story': {
-            // this really shouldn't happen because we don't visit components' children.
-            // unless groups can have stories directly?
+            // this shouldn't happen because we don't visit components' children.
+            // so we never get to a story directly.
+            // unless groups can have direct stories without components?
             console.log(`Adding story entry: ${entryId}`);
             payloads.add({
               importPath: foundEntry.importPath,
