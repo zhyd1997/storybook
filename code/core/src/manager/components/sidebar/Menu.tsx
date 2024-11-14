@@ -59,7 +59,7 @@ const SidebarMenuList: FC<{
   menu: MenuList;
   onClick: () => void;
 }> = ({ menu, onClick }) => {
-  return <TooltipLinkList links={menu} />;
+  return <TooltipLinkList links={menu} onClick={onClick} />;
 };
 
 export interface SidebarMenuProps {
