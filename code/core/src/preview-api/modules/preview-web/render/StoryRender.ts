@@ -14,7 +14,7 @@ import type {
 
 import {
   PLAY_FUNCTION_THREW_EXCEPTION,
-  STORY_COMPLETED,
+  STORY_FINISHED,
   STORY_RENDERED,
   STORY_RENDER_PHASE_CHANGED,
   UNHANDLED_ERRORS_WHILE_PLAYING,
@@ -362,7 +362,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
 
       // The event name 'completed' is unfortunately already reserved by the STORY_RENDERED event
       await this.runPhase(abortSignal, 'finished', async () =>
-        this.channel.emit(STORY_COMPLETED, {
+        this.channel.emit(STORY_FINISHED, {
           storyId: id,
           status: !ignoreUnhandledErrors && unhandledErrors.size > 0 ? 'error' : 'success',
           reporters: context.reporting.reports,
@@ -373,7 +373,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
       this.callbacks.showException(err as Error);
 
       await this.runPhase(abortSignal, 'finished', async () =>
-        this.channel.emit(STORY_COMPLETED, {
+        this.channel.emit(STORY_FINISHED, {
           storyId: id,
           status: 'error',
           reporters: [],

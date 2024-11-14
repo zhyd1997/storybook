@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { STORY_COMPLETED } from 'storybook/internal/core-events';
+import { STORY_FINISHED } from 'storybook/internal/core-events';
 
 import { Channel } from '@storybook/core/channels';
 import type { PreparedStory, Renderer, StoryContext, StoryIndexEntry } from '@storybook/core/types';
@@ -293,7 +293,7 @@ describe('StoryRender', () => {
 
     // Assert - ensure finished phase is handled correctly
     expect(render.phase).toBe('finished');
-    expect(emitSpy).toHaveBeenCalledWith(STORY_COMPLETED, {
+    expect(emitSpy).toHaveBeenCalledWith(STORY_FINISHED, {
       reporters: [],
       status: 'success',
       storyId: 'id',
@@ -338,7 +338,7 @@ describe('StoryRender', () => {
 
     // Assert - ensure finished phase is handled correctly
     expect(render.phase).toBe('finished');
-    expect(emitSpy).toHaveBeenCalledWith(STORY_COMPLETED, {
+    expect(emitSpy).toHaveBeenCalledWith(STORY_FINISHED, {
       reporters: [],
       status: 'error',
       storyId: 'id',
