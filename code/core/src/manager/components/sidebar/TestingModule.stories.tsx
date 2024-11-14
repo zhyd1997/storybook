@@ -23,8 +23,13 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'component-tests',
     name: 'Component tests',
-    title: () => 'Component tests',
-    description: () => 'Ran 2 seconds ago',
+    render: () => (
+      <>
+        Component tests
+        <br />
+        Ran 2 seconds ago
+      </>
+    ),
     runnable: true,
     watchable: true,
     ...baseState,
@@ -33,8 +38,13 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'visual-tests',
     name: 'Visual tests',
-    title: () => 'Visual tests',
-    description: () => 'Not run',
+    render: () => (
+      <>
+        Visual tests
+        <br />
+        Not run
+      </>
+    ),
     runnable: true,
     ...baseState,
   },
@@ -42,8 +52,13 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'linting',
     name: 'Linting',
-    title: () => 'Linting',
-    description: () => 'Watching for changes',
+    render: () => (
+      <>
+        Linting
+        <br />
+        Watching for changes
+      </>
+    ),
     ...baseState,
     watching: true,
   },
@@ -180,8 +195,13 @@ export const Crashed: Story = {
     testProviders: [
       {
         ...testProviders[0],
-        title: () => "Component tests didn't complete",
-        description: () => 'Problems!',
+        render: () => (
+          <>
+            Component tests didn't complete
+            <br />
+            Problems!
+          </>
+        ),
         crashed: true,
       },
       ...testProviders.slice(1),

@@ -2,8 +2,7 @@
 import type { FC, PropsWithChildren, ReactElement, ReactNode } from 'react';
 
 import type { ListItem } from '../../components';
-import type { TestingModuleProgressReportProgress } from '../../core-events';
-import type { Addon, StoryEntry } from '../../manager-api';
+import type { TestProviderConfig, TestingModuleProgressReportProgress } from '../../core-events';
 import type { RenderData as RouterData } from '../../router/types';
 import type { ThemeVars } from '../../theming/types';
 import type { API_SidebarOptions } from './api';
@@ -475,8 +474,11 @@ export interface Addon_TestProviderType<
   /** The unique id of the test provider. */
   id: string;
   name: string;
-  title: (state: Addon_TestProviderState<Details>) => ReactNode;
-  description: (state: Addon_TestProviderState<Details>) => ReactNode;
+  /** @deprecated Use render instead */
+  title?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
+  /** @deprecated Use render instead */
+  description?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
+  render?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
   contextMenu?: (
     options: {
       context: API_HashEntry;

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { AddonPanel, Link as LinkComponent } from 'storybook/internal/components';
+import { AddonPanel, Button, Link as LinkComponent } from 'storybook/internal/components';
 import { TESTING_MODULE_RUN_ALL_REQUEST } from 'storybook/internal/core-events';
 import type { Combo } from 'storybook/internal/manager-api';
 import { Consumer, addons, types } from 'storybook/internal/manager-api';
+import { styled } from 'storybook/internal/theming';
 import {
   type API_StatusObject,
   type API_StatusValue,
@@ -11,10 +12,11 @@ import {
   Addon_TypesEnum,
 } from 'storybook/internal/types';
 
+import { EyeIcon, PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
+
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
 import { Panel } from './components/Panel';
-import { Title } from './components/Title';
 import { ADDON_ID, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 import type { TestResult } from './node/reporter';
 
@@ -64,6 +66,28 @@ const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: nu
   );
 };
 
+const Info = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  marginLeft: 6,
+});
+
+const Title = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
+  fontSize: theme.typography.size.s1,
+  fontWeight: crashed ? 'bold' : 'normal',
+  color: crashed ? theme.color.negativeText : theme.color.defaultText,
+}));
+
+const Description = styled.div(({ theme }) => ({
+  fontSize: theme.typography.size.s1,
+  color: theme.barTextColor,
+}));
+
+const Actions = styled.div({
+  display: 'flex',
+  gap: 6,
+});
+
 addons.register(ADDON_ID, (api) => {
   const storybookBuilder = (globalThis as any).STORYBOOK_BUILDER || '';
   if (storybookBuilder.includes('vite')) {
@@ -76,37 +100,36 @@ addons.register(ADDON_ID, (api) => {
       type: Addon_TypesEnum.experimental_TEST_PROVIDER,
       runnable: true,
       watchable: true,
-
       name: 'Component tests',
+
       contextMenu: ({ context, state }, { ListItem }) => {
         if (context.type === 'docs') {
           return null;
         }
 
         // TODO: remove this... right now: always returns false, to disable the feature
-        if ('true') {
+        if (Date.now()) {
           return false;
         }
 
         return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
       },
-      title: ({ crashed, failed }) =>
-        crashed || failed ? 'Component tests failed' : 'Component tests',
-      description: ({ failed, running, watching, progress, crashed, error }) => {
+
+      render: (state) => {
         const [isModalOpen, setIsModalOpen] = useState(false);
 
-        const errorMessage = error?.message;
+        const title = state.crashed || state.failed ? 'Component tests failed' : 'Component tests';
+        const errorMessage = state.error?.message;
+        let description: string | React.ReactNode = 'Not run';
 
-        let message: string | React.ReactNode = 'Not run';
-
-        if (running) {
-          message = progress
-            ? `Testing... ${progress.numPassedTests}/${progress.numTotalTests}`
+        if (state.running) {
+          description = state.progress
+            ? `Testing... ${state.progress.numPassedTests}/${state.progress.numTotalTests}`
             : 'Starting...';
-        } else if (failed && !errorMessage) {
-          message = '';
-        } else if (crashed || (failed && errorMessage)) {
-          message = (
+        } else if (state.failed && !errorMessage) {
+          description = '';
+        } else if (state.crashed || (state.failed && errorMessage)) {
+          description = (
             <>
               <LinkComponent
                 isButton
@@ -114,24 +137,70 @@ addons.register(ADDON_ID, (api) => {
                   setIsModalOpen(true);
                 }}
               >
-                {error?.name || 'View full error'}
+                {state.error?.name || 'View full error'}
               </LinkComponent>
             </>
           );
-        } else if (progress?.finishedAt) {
-          message = (
+        } else if (state.progress?.finishedAt) {
+          description = (
             <RelativeTime
-              timestamp={new Date(progress.finishedAt)}
-              testCount={progress.numTotalTests}
+              timestamp={new Date(state.progress.finishedAt)}
+              testCount={state.progress.numTotalTests}
             />
           );
-        } else if (watching) {
-          message = 'Watching for file changes';
+        } else if (state.watching) {
+          description = 'Watching for file changes';
         }
 
         return (
           <>
-            {message}
+            <Info>
+              <Title crashed={state.crashed} id="testing-module-title">
+                {title}
+              </Title>
+              <Description id="testing-module-description">{description}</Description>
+            </Info>
+
+            <Actions>
+              {state.watchable && (
+                <Button
+                  aria-label={`${state.watching ? 'Disable' : 'Enable'} watch mode for ${state.name}`}
+                  variant="ghost"
+                  padding="small"
+                  active={state.watching}
+                  onClick={() => api.onSetWatchMode(state.id, !state.watching)}
+                  disabled={state.crashed || state.running}
+                >
+                  <EyeIcon />
+                </Button>
+              )}
+              {state.runnable && (
+                <>
+                  {state.running && state.cancellable ? (
+                    <Button
+                      aria-label={`Stop ${state.name}`}
+                      variant="ghost"
+                      padding="small"
+                      onClick={() => api.onCancelTests(state.id)}
+                      disabled={state.cancelling}
+                    >
+                      <StopAltHollowIcon />
+                    </Button>
+                  ) : (
+                    <Button
+                      aria-label={`Start ${state.name}`}
+                      variant="ghost"
+                      padding="small"
+                      onClick={() => api.onRunTests(state.id)}
+                      disabled={state.crashed || state.running}
+                    >
+                      <PlayHollowIcon />
+                    </Button>
+                  )}
+                </>
+              )}
+            </Actions>
+
             <GlobalErrorModal
               error={errorMessage}
               open={isModalOpen}
