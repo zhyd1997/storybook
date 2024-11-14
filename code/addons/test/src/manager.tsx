@@ -169,7 +169,7 @@ addons.register(ADDON_ID, (api) => {
                   variant="ghost"
                   padding="small"
                   active={state.watching}
-                  onClick={() => api.onSetWatchMode(state.id, !state.watching)}
+                  onClick={() => api.setTestProviderWatchMode(state.id, !state.watching)}
                   disabled={state.crashed || state.running}
                 >
                   <EyeIcon />
@@ -182,7 +182,7 @@ addons.register(ADDON_ID, (api) => {
                       aria-label={`Stop ${state.name}`}
                       variant="ghost"
                       padding="small"
-                      onClick={() => api.onCancelTests(state.id)}
+                      onClick={() => api.cancelTestProvider(state.id)}
                       disabled={state.cancelling}
                     >
                       <StopAltHollowIcon />
@@ -192,7 +192,7 @@ addons.register(ADDON_ID, (api) => {
                       aria-label={`Start ${state.name}`}
                       variant="ghost"
                       padding="small"
-                      onClick={() => api.onRunTests(state.id)}
+                      onClick={() => api.runTestProvider(state.id)}
                       disabled={state.crashed || state.running}
                     >
                       <PlayHollowIcon />
