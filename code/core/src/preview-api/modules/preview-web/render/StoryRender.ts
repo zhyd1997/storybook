@@ -33,6 +33,7 @@ export type RenderPhase =
   | 'rendering'
   | 'playing'
   | 'played'
+  | 'afterEach'
   | 'completed'
   | 'aborted'
   | 'errored';
@@ -132,7 +133,9 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
   }
 
   isPending() {
-    return ['loading', 'beforeEach', 'rendering', 'playing'].includes(this.phase as RenderPhase);
+    return ['loading', 'beforeEach', 'rendering', 'playing', 'afterEach'].includes(
+      this.phase as RenderPhase
+    );
   }
 
   async renderToElement(canvasElement: TRenderer['canvasElement']) {
@@ -180,6 +183,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
       tags,
       applyLoaders,
       applyBeforeEach,
+      applyAfterEach,
       unboundStoryFn,
       playFunction,
       runStep,
@@ -318,6 +322,10 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
           } else {
             await this.runPhase(abortSignal, 'played');
           }
+
+          await this.runPhase(abortSignal, 'afterEach', async () => {
+            await applyAfterEach(context);
+          });
         } catch (error) {
           // Remove the loading screen, even if there was an error before rendering
           this.callbacks.showStoryDuringRender?.();

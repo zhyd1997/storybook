@@ -60,6 +60,10 @@ export function normalizeStory<TRenderer extends Renderer>(
     ...normalizeArrays(storyObject.beforeEach),
     ...normalizeArrays(story?.beforeEach),
   ];
+  const afterEach = [
+    ...normalizeArrays(storyObject.afterEach),
+    ...normalizeArrays(story?.afterEach),
+  ];
   const { render, play, tags = [], globals = {} } = storyObject;
 
   // eslint-disable-next-line no-underscore-dangle
@@ -75,6 +79,7 @@ export function normalizeStory<TRenderer extends Renderer>(
     argTypes: normalizeInputTypes(argTypes),
     loaders,
     beforeEach,
+    afterEach,
     globals,
     ...(render && { render }),
     ...(userStoryFn && { userStoryFn }),

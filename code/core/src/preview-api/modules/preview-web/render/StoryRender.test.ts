@@ -40,6 +40,7 @@ const buildStory = (overrides: Partial<PreparedStory> = {}): PreparedStory =>
     tags: [],
     applyLoaders: vi.fn(),
     applyBeforeEach: vi.fn(),
+    applyAfterEach: vi.fn(),
     unboundStoryFn: vi.fn(),
     playFunction: vi.fn(),
     mount: (context: StoryContext) => () => mountSpy(context),

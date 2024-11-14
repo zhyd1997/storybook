@@ -52,6 +52,7 @@ describe('normalizeStory', () => {
       const meta = { id: 'title', title: 'title' };
       expect(normalizeStory('storyExport', storyFn, meta)).toMatchInlineSnapshot(`
         {
+          "afterEach": [],
           "argTypes": {},
           "args": {},
           "beforeEach": [],
@@ -123,6 +124,7 @@ describe('normalizeStory', () => {
         const normalized = normalizeStory('storyExport', storyObj, meta);
         expect(normalized).toMatchInlineSnapshot(`
           {
+            "afterEach": [],
             "argTypes": {},
             "args": {},
             "beforeEach": [],
@@ -152,6 +154,7 @@ describe('normalizeStory', () => {
         const { moduleExport, ...normalized } = normalizeStory('storyExport', storyObj, meta);
         expect(normalized).toMatchInlineSnapshot(`
           {
+            "afterEach": [],
             "argTypes": {
               "storyArgType": {
                 "name": "storyArgType",
@@ -202,6 +205,7 @@ describe('normalizeStory', () => {
         const { moduleExport, ...normalized } = normalizeStory('storyExport', storyObj, meta);
         expect(normalized).toMatchInlineSnapshot(`
           {
+            "afterEach": [],
             "argTypes": {
               "storyArgType": {
                 "name": "storyArgType",

@@ -408,4 +408,6 @@ async function runStory<TRenderer extends Renderer>(
     }
     await playFunction(context);
   }
+
+  await story.applyAfterEach(context);
 }
