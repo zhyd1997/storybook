@@ -19,7 +19,6 @@ export const ContextMenuItem: FC<{
 }> = ({ context, state, ListItem }) => {
   const api = useStorybookApi();
   const id = useRef(context.id);
-  const cancelRun = useRef<() => void>();
 
   const Icon = state.running ? StopAltHollowIcon : PlayHollowIcon;
 
@@ -29,10 +28,9 @@ export const ContextMenuItem: FC<{
     (event: SyntheticEvent) => {
       event.stopPropagation();
       if (state.running) {
-        cancelRun.current?.();
-        return;
+        api.cancelTestProvider(TEST_PROVIDER_ID);
       } else {
-        cancelRun.current = api.runTestProvider(TEST_PROVIDER_ID, { entryId: id.current });
+        api.runTestProvider(TEST_PROVIDER_ID, { entryId: id.current });
       }
     },
     [api, state.running]
