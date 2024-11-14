@@ -6435,6 +6435,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/csf@npm:0.1.12--canary.110.7611f0c.0":
+  version: 0.1.12--canary.110.7611f0c.0
+  resolution: "@storybook/csf@npm:0.1.12--canary.110.7611f0c.0"
+  dependencies:
+    type-fest: "npm:^2.19.0"
+  checksum: 10c0/c4505f34967328e360c8d24c5b730d39ee2a9e678e09999e5fdd5f2ce07e0ac87ffceb51bde78a1ffaa9e9f0b8d85d939c65ea2625960719e03b8b024d6de2d9
+  languageName: node
+  linkType: hard
+
 "@storybook/csf@npm:^0.0.1":
   version: 0.0.1
   resolution: "@storybook/csf@npm:0.0.1"
@@ -7120,7 +7129,7 @@ __metadata:
     "@storybook/codemod": "workspace:*"
     "@storybook/core": "workspace:*"
     "@storybook/core-webpack": "workspace:*"
-    "@storybook/csf": "npm:0.1.12--canary.109.1cc9957.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
     "@storybook/csf-plugin": "workspace:*"
     "@storybook/ember": "workspace:*"
     "@storybook/eslint-config-storybook": "npm:^4.0.0"
