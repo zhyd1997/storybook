@@ -105,6 +105,7 @@ export const SidebarBottomBase = ({
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [warningsActive, setWarningsActive] = useState(false);
   const { testProviders } = useStorybookState();
+
   const {
     updateTestProviderState: updateTestProvider,
     clearTestProviderState,

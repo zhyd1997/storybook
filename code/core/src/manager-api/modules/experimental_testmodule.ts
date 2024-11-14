@@ -38,7 +38,7 @@ export type SubAPI = {
 
 export const init: ModuleFn = ({ store, fullAPI }) => {
   const state: SubState = {
-    testProviders: store.getState().testProviders,
+    testProviders: store.getState().testProviders || {},
   };
 
   const api: SubAPI = {
@@ -104,7 +104,7 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
           {
             ...config,
             ...initialTestProviderState,
-            ...state.testProviders[id],
+            ...(state?.testProviders?.[id] || {}),
           } as TestProviders[0],
         ]
       )
