@@ -6,6 +6,7 @@ import { fn, userEvent } from '@storybook/test';
 
 import type { TestProviders } from '@storybook/core/core-events';
 
+import { ManagerContext } from '../../../manager-api';
 import { TestingModule } from './TestingModule';
 
 const baseState = {
@@ -64,6 +65,15 @@ const testProviders: TestProviders[keyof TestProviders][] = [
   },
 ];
 
+const managerContext: any = {
+  api: {
+    runTestProvider: fn().mockName('api::runTestProvider'),
+    cancelTestProvider: fn().mockName('api::cancelTestProvider'),
+    updateTestProviderState: fn().mockName('api::updateTestProviderState'),
+    setTestProviderWatchMode: fn().mockName('api::setTestProviderWatchMode'),
+  },
+};
+
 const meta = {
   component: TestingModule,
   args: {
@@ -74,11 +84,11 @@ const meta = {
     warningCount: 0,
     warningsActive: false,
     setWarningsActive: fn(),
-    onRunTests: fn(),
-    onCancelTests: fn(),
-    onSetWatchMode: fn(),
   },
   decorators: [
+    (storyFn) => (
+      <ManagerContext.Provider value={managerContext}>{storyFn()}</ManagerContext.Provider>
+    ),
     (StoryFn) => (
       <div style={{ maxWidth: 232 }}>
         <StoryFn />

@@ -217,7 +217,7 @@ export const TestingModule = ({
                 e.stopPropagation();
                 testProviders
                   .filter((state) => !state.crashed && !state.running && state.runnable)
-                  .forEach(({ id }) => api.onRunTests(id));
+                  .forEach(({ id }) => api.runTestProvider(id));
               }}
               disabled={running}
             >
