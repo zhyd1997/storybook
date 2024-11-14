@@ -84,12 +84,10 @@ describe('TestManager', () => {
         {
           stories: [],
           importPath: 'path/to/file',
-          componentPath: 'path/to/component',
         },
         {
           stories: [],
           importPath: 'path/to/another/file',
-          componentPath: 'path/to/another/component',
         },
       ],
     });
@@ -107,7 +105,6 @@ describe('TestManager', () => {
         {
           stories: [],
           importPath: 'path/to/unknown/file',
-          componentPath: 'path/to/unknown/component',
         },
       ],
     });
@@ -119,7 +116,6 @@ describe('TestManager', () => {
         {
           stories: [],
           importPath: 'path/to/file',
-          componentPath: 'path/to/component',
         },
       ],
     });

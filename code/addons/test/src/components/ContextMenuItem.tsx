@@ -25,7 +25,7 @@ export const ContextMenuItem: FC<{
   const onClick = useCallback(
     (event: SyntheticEvent) => {
       event.stopPropagation();
-      api.runTestProvider(TEST_PROVIDER_ID, { selection: [id.current] });
+      api.runTestProvider(TEST_PROVIDER_ID, { entryId: id.current });
     },
     [api]
   );
