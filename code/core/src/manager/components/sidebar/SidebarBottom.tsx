@@ -106,10 +106,10 @@ export const SidebarBottomBase = ({
   const [warningsActive, setWarningsActive] = useState(false);
   const { testProviders } = useStorybookState();
   const {
-    updateTestproviderState: updateTestProvider,
-    clearTestproviderState,
-    runTestprovider: onRunTests,
-    cancelTestprovider: onCancelTests,
+    updateTestProviderState: updateTestProvider,
+    clearTestProviderState,
+    runTestProvider: onRunTests,
+    cancelTestProvider: onCancelTests,
   } = useStorybookApi();
   const [errorsActive, setErrorsActive] = useState(false);
 
@@ -124,12 +124,12 @@ export const SidebarBottomBase = ({
 
   const clearState = useCallback(
     ({ providerId }: { providerId: TestProviderId }) => {
-      clearTestproviderState(providerId);
+      clearTestProviderState(providerId);
       api.experimental_updateStatus(providerId, (state = {}) =>
         Object.fromEntries(Object.keys(state).map((key) => [key, null]))
       );
     },
-    [api, clearTestproviderState]
+    [api, clearTestProviderState]
   );
 
   const onSetWatchMode = useCallback(

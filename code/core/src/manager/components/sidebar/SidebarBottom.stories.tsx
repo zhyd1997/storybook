@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Addon_TypesEnum } from '@storybook/core/types';
-import type { Meta } from '@storybook/react/*';
+import type { Meta } from '@storybook/react';
 import { fn } from '@storybook/test';
 
 import { type API, ManagerContext } from '@storybook/core/manager-api';
@@ -21,7 +21,7 @@ const managerContext: any = {
     on: fn().mockName('api::on'),
     off: fn().mockName('api::off'),
     getElements: fn(() => ({})),
-    updateTestproviderState: fn(),
+    updateTestProviderState: fn(),
   },
 };
 
@@ -34,7 +34,7 @@ export default {
       on: fn(),
       off: fn(),
       clearNotification: fn(),
-      updateTestproviderState: fn(),
+      updateTestProviderState: fn(),
       emit: fn(),
       experimental_setFilter: fn(),
       getChannel: fn(),
