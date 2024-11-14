@@ -360,11 +360,18 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         this.channel.emit(STORY_RENDERED, id)
       );
 
-      // The event name 'completed' is unfortunately already reserved by the STORY_RENDERED event
+      const hasUnhandledErrors = !ignoreUnhandledErrors && unhandledErrors.size > 0;
+
+      const hasSomeReportsFailed = context.reporting.reports.some(
+        (report) => report.status === 'failed'
+      );
+
+      const hasStoryErrored = hasUnhandledErrors || hasSomeReportsFailed;
+
       await this.runPhase(abortSignal, 'finished', async () =>
         this.channel.emit(STORY_FINISHED, {
           storyId: id,
-          status: !ignoreUnhandledErrors && unhandledErrors.size > 0 ? 'error' : 'success',
+          status: hasStoryErrored ? 'error' : 'success',
           reporters: context.reporting.reports,
         })
       );
