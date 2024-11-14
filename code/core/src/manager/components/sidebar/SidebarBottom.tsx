@@ -104,15 +104,8 @@ export const SidebarBottomBase = ({
   const spacerRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [warningsActive, setWarningsActive] = useState(false);
-  const { testProviders } = useStorybookState();
-
-  const {
-    updateTestProviderState: updateTestProvider,
-    clearTestProviderState,
-    runTestProvider: onRunTests,
-    cancelTestProvider: onCancelTests,
-  } = useStorybookApi();
   const [errorsActive, setErrorsActive] = useState(false);
+  const { testProviders } = useStorybookState();
 
   const warnings = Object.values(status).filter((statusByAddonId) =>
     Object.values(statusByAddonId).some((value) => value?.status === 'warn')
@@ -122,24 +115,6 @@ export const SidebarBottomBase = ({
   );
   const hasWarnings = warnings.length > 0;
   const hasErrors = errors.length > 0;
-
-  const clearState = useCallback(
-    ({ providerId }: { providerId: TestProviderId }) => {
-      clearTestProviderState(providerId);
-      api.experimental_updateStatus(providerId, (state = {}) =>
-        Object.fromEntries(Object.keys(state).map((key) => [key, null]))
-      );
-    },
-    [api, clearTestProviderState]
-  );
-
-  const onSetWatchMode = useCallback(
-    (providerId: string, watchMode: boolean) => {
-      updateTestProvider(providerId, { watching: watchMode });
-      api.emit(TESTING_MODULE_WATCH_MODE_REQUEST, { providerId, watchMode });
-    },
-    [api, updateTestProvider]
-  );
 
   useEffect(() => {
     const spacer = spacerRef.current;
@@ -162,15 +137,27 @@ export const SidebarBottomBase = ({
 
   useEffect(() => {
     const onCrashReport = ({ providerId, ...details }: TestingModuleCrashReportPayload) => {
-      updateTestProvider(providerId, { details, running: false, crashed: true, watching: false });
+      api.updateTestProvider(providerId, {
+        details,
+        running: false,
+        crashed: true,
+        watching: false,
+      });
+    };
+
+    const clearState = ({ providerId }: { providerId: TestProviderId }) => {
+      api.clearTestProviderState(providerId);
+      api.experimental_updateStatus(providerId, (state = {}) =>
+        Object.fromEntries(Object.keys(state).map((key) => [key, null]))
+      );
     };
 
     const onProgressReport = ({ providerId, ...result }: TestingModuleProgressReportPayload) => {
       if (result.status === 'failed') {
-        updateTestProvider(providerId, { ...result, running: false, failed: true });
+        api.updateTestProvider(providerId, { ...result, running: false, failed: true });
       } else {
         const update = { ...result, running: result.status === 'pending' };
-        updateTestProvider(providerId, update);
+        api.updateTestProvider(providerId, update);
 
         const { mapStatusUpdate, ...state } = testProviders[providerId];
         const statusUpdate = mapStatusUpdate?.({ ...state, ...update });
@@ -189,7 +176,7 @@ export const SidebarBottomBase = ({
       api.off(TESTING_MODULE_PROGRESS_REPORT, onProgressReport);
       api.off(TESTING_MODULE_RUN_ALL_REQUEST, clearState);
     };
-  }, [api, testProviders, updateTestProvider, clearState]);
+  }, [api, testProviders]);
 
   const testProvidersArray = Object.values(testProviders || {});
   if (!hasWarnings && !hasErrors && !testProvidersArray.length && !notifications.length) {
@@ -210,9 +197,6 @@ export const SidebarBottomBase = ({
               warningCount: warnings.length,
               warningsActive,
               setWarningsActive,
-              onRunTests,
-              onCancelTests,
-              onSetWatchMode,
             }}
           />
         )}

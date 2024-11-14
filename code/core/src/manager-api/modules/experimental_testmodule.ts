@@ -3,6 +3,7 @@ import { Addon_TypesEnum } from '@storybook/core/types';
 import {
   TESTING_MODULE_CANCEL_TEST_RUN_REQUEST,
   TESTING_MODULE_RUN_ALL_REQUEST,
+  TESTING_MODULE_WATCH_MODE_REQUEST,
   type TestProviderId,
   type TestProviderState,
   type TestProviders,
@@ -33,6 +34,7 @@ export type SubAPI = {
   updateTestProviderState(id: TestProviderId, update: Partial<TestProviderState>): void;
   clearTestProviderState(id: TestProviderId): void;
   runTestProvider(id: TestProviderId, options?: RunOptions): void;
+  setTestProviderWatchMode(id: TestProviderId, watchMode: boolean): void;
   cancelTestProvider(id: TestProviderId): void;
 };
 
@@ -89,6 +91,10 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
       }
 
       return () => api.cancelTestProvider(id);
+    },
+    setTestProviderWatchMode(id, watchMode) {
+      api.updateTestProviderState(id, { watching: watchMode });
+      fullAPI.emit(TESTING_MODULE_WATCH_MODE_REQUEST, { providerId: id, watchMode });
     },
     cancelTestProvider(id) {
       api.updateTestProviderState(id, { cancelling: true });
