@@ -364,9 +364,6 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
       await this.runPhase(abortSignal, 'finished', async () =>
         this.channel.emit(STORY_COMPLETED, {
           storyId: id,
-          unhandledExceptions: !ignoreUnhandledErrors
-            ? Array.from(unhandledErrors).map(serializeError)
-            : [],
           status: !ignoreUnhandledErrors && unhandledErrors.size > 0 ? 'error' : 'success',
           reporters: context.reporting.reports,
         })
@@ -378,7 +375,6 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
       await this.runPhase(abortSignal, 'finished', async () =>
         this.channel.emit(STORY_COMPLETED, {
           storyId: id,
-          unhandledExceptions: [serializeError(err)],
           status: 'error',
           reporters: [],
         })

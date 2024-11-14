@@ -297,7 +297,6 @@ describe('StoryRender', () => {
       reporters: [],
       status: 'success',
       storyId: 'id',
-      unhandledExceptions: [],
     });
   });
 
@@ -343,7 +342,6 @@ describe('StoryRender', () => {
       reporters: [],
       status: 'error',
       storyId: 'id',
-      unhandledExceptions: [serializeError(error)],
     });
   });
 
