@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { AddonPanel, Button, Link as LinkComponent } from 'storybook/internal/components';
 import { TESTING_MODULE_RUN_ALL_REQUEST } from 'storybook/internal/core-events';
@@ -14,6 +14,7 @@ import {
 
 import { EyeIcon, PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
 
+import { RelativeTime } from './RelativeTime';
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
 import { Panel } from './components/Panel';
@@ -45,27 +46,6 @@ export function getRelativeTimeString(date: Date): string {
   const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
   return rtf.format(Math.floor(delta / divisor), units[unitIndex]);
 }
-
-const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: number }) => {
-  const [relativeTimeString, setRelativeTimeString] = useState(null);
-
-  useEffect(() => {
-    if (timestamp) {
-      setRelativeTimeString(getRelativeTimeString(timestamp).replace(/^now$/, 'just now'));
-
-      const interval = setInterval(() => {
-        setRelativeTimeString(getRelativeTimeString(timestamp).replace(/^now$/, 'just now'));
-      }, 10000);
-
-      return () => clearInterval(interval);
-    }
-  }, [timestamp]);
-
-  return (
-    relativeTimeString &&
-    `Ran ${testCount} ${testCount === 1 ? 'test' : 'tests'} ${relativeTimeString}`
-  );
-};
 
 const Info = styled.div({
   display: 'flex',

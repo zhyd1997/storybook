@@ -55,8 +55,8 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
       onMouseEnter: handlers.onMouseEnter,
       node: isRendered ? (
         <WithTooltip
+          data-displayed={isOpen ? 'on' : 'off'}
           closeOnOutsideClick
-          onClick={handlers.onOpen}
           placement="bottom-end"
           onVisibleChange={(visible) => {
             if (!visible) {
@@ -69,7 +69,7 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
             <LiveContextMenu context={context} links={links} onClick={onHide} />
           )}
         >
-          <StatusButton type="button" status={'pending'} data-displayed={isOpen ? 'on' : 'off'}>
+          <StatusButton type="button" status={'pending'}>
             <EllipsisIcon />
           </StatusButton>
         </WithTooltip>
