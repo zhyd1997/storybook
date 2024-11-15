@@ -11,4 +11,5 @@ export interface A11yParameters {
   config?: Spec;
   options?: RunOptions;
   manual?: boolean;
+  disable?: boolean;
 }
