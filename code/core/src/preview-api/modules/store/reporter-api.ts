@@ -1,7 +1,7 @@
-export interface Report {
+export interface Report<T = unknown> {
   id: string;
   version: number;
-  result: unknown;
+  result: T;
   status: 'failed' | 'passed' | 'warning';
 }
 
