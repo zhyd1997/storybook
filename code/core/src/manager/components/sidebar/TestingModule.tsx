@@ -1,6 +1,6 @@
 import React, { type SyntheticEvent, useEffect, useRef, useState } from 'react';
 
-import { Button } from '@storybook/core/components';
+import { Button, TooltipNote } from '@storybook/core/components';
 import { keyframes, styled } from '@storybook/core/theming';
 import {
   ChevronSmallUpIcon,
@@ -11,6 +11,8 @@ import {
 } from '@storybook/icons';
 
 import type { TestProviders } from '@storybook/core/core-events';
+
+import { WithTooltip } from '../../../components/components/tooltip/WithTooltip';
 
 const DEFAULT_HEIGHT = 500;
 
@@ -173,10 +175,10 @@ const DynamicInfo = ({ state }: { state: TestProviders[keyof TestProviders] }) =
   const Title = state.title;
   return (
     <Info>
-      <TitleWrapper crashed={state.crashed}>
+      <TitleWrapper crashed={state.crashed} id="testing-module-title">
         <Title {...state} />
       </TitleWrapper>
-      <DescriptionWrapper>
+      <DescriptionWrapper id="testing-module-description">
         <Description {...state} />
       </DescriptionWrapper>
     </Info>
@@ -227,7 +229,12 @@ export const TestingModule = ({
   const testing = testProviders.length > 0;
 
   return (
-    <Outline running={running} crashed={crashed} failed={failed || errorCount > 0}>
+    <Outline
+      id="storybook-testing-module"
+      running={running}
+      crashed={crashed}
+      failed={failed || errorCount > 0}
+    >
       <Card>
         <Collapsible
           style={{
@@ -237,7 +244,7 @@ export const TestingModule = ({
         >
           <Content ref={contentRef}>
             {testProviders.map((state) => (
-              <TestProvider key={state.id}>
+              <TestProvider key={state.id} data-module-id={state.id}>
                 <DynamicInfo state={state} />
                 <Actions>
                   {state.watchable && (
@@ -320,36 +327,48 @@ export const TestingModule = ({
             )}
 
             {errorCount > 0 && (
-              <StatusButton
-                id="errors-found-filter"
-                variant="ghost"
-                padding={errorCount < 10 ? 'medium' : 'small'}
-                status="negative"
-                active={errorsActive}
-                onClick={(e: SyntheticEvent) => {
-                  e.stopPropagation();
-                  setErrorsActive(!errorsActive);
-                }}
-                aria-label="Show errors"
+              <WithTooltip
+                hasChrome={false}
+                tooltip={<TooltipNote note="Toggle errors" />}
+                trigger="hover"
               >
-                {errorCount < 100 ? errorCount : '99+'}
-              </StatusButton>
+                <StatusButton
+                  id="errors-found-filter"
+                  variant="ghost"
+                  padding={errorCount < 10 ? 'medium' : 'small'}
+                  status="negative"
+                  active={errorsActive}
+                  onClick={(e: SyntheticEvent) => {
+                    e.stopPropagation();
+                    setErrorsActive(!errorsActive);
+                  }}
+                  aria-label="Toggle errors"
+                >
+                  {errorCount < 100 ? errorCount : '99+'}
+                </StatusButton>
+              </WithTooltip>
             )}
             {warningCount > 0 && (
-              <StatusButton
-                id="warnings-found-filter"
-                variant="ghost"
-                padding={warningCount < 10 ? 'medium' : 'small'}
-                status="warning"
-                active={warningsActive}
-                onClick={(e: SyntheticEvent) => {
-                  e.stopPropagation();
-                  setWarningsActive(!warningsActive);
-                }}
-                aria-label="Show warnings"
+              <WithTooltip
+                hasChrome={false}
+                tooltip={<TooltipNote note="Toggle warnings" />}
+                trigger="hover"
               >
-                {warningCount < 100 ? warningCount : '99+'}
-              </StatusButton>
+                <StatusButton
+                  id="warnings-found-filter"
+                  variant="ghost"
+                  padding={warningCount < 10 ? 'medium' : 'small'}
+                  status="warning"
+                  active={warningsActive}
+                  onClick={(e: SyntheticEvent) => {
+                    e.stopPropagation();
+                    setWarningsActive(!warningsActive);
+                  }}
+                  aria-label="Toggle warnings"
+                >
+                  {warningCount < 100 ? warningCount : '99+'}
+                </StatusButton>
+              </WithTooltip>
             )}
           </Filters>
         </Bar>
