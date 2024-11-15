@@ -33,6 +33,10 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
     };
   }, []);
 
+  /**
+   * Calculate the providerLinks whenever the user mouses over the container. We use an incrementer,
+   * instead of a simple boolean to ensure that the links are recalculated
+   */
   const providerLinks = useMemo(() => {
     const testProviders = api.getElements(
       Addon_TypesEnum.experimental_TEST_PROVIDER
@@ -44,12 +48,12 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
     return [];
   }, [api, context, hoverCount]);
 
+  const isRendered = providerLinks.length > 0 || links.length > 0;
+
   return useMemo(() => {
-    const rendered = providerLinks.length > 0 || links.length > 0;
-    const forceDisplay = isOpen;
     return {
       onMouseEnter: handlers.onMouseEnter,
-      node: rendered ? (
+      node: isRendered ? (
         <WithTooltip
           closeOnOutsideClick
           onClick={handlers.onOpen}
@@ -65,17 +69,13 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
             <LiveContextMenu context={context} links={links} onClick={onHide} />
           )}
         >
-          <StatusButton
-            type="button"
-            status={'pending'}
-            data-displayed={forceDisplay ? 'on' : 'off'}
-          >
+          <StatusButton type="button" status={'pending'} data-displayed={isOpen ? 'on' : 'off'}>
             <EllipsisIcon />
           </StatusButton>
         </WithTooltip>
       ) : null,
     };
-  }, [context, handlers, isOpen, links, providerLinks.length]);
+  }, [context, handlers, isOpen, isRendered, links]);
 };
 
 /**
