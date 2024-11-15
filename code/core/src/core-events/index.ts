@@ -173,3 +173,4 @@ export * from './data/request-response';
 export * from './data/save-story';
 export * from './data/whats-new';
 export * from './data/testing-module';
+export * from './data/phases';

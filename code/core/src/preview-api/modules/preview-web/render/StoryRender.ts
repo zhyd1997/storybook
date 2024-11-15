@@ -17,6 +17,7 @@ import {
   STORY_FINISHED,
   STORY_RENDERED,
   STORY_RENDER_PHASE_CHANGED,
+  type StoryFinishedPayload,
   UNHANDLED_ERRORS_WHILE_PLAYING,
 } from '@storybook/core/core-events';
 import { MountMustBeDestructuredError, NoStoryMountedError } from '@storybook/core/preview-errors';
@@ -324,10 +325,6 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
           } else {
             await this.runPhase(abortSignal, 'played');
           }
-
-          await this.runPhase(abortSignal, 'afterEach', async () => {
-            await applyAfterEach(context);
-          });
         } catch (error) {
           // Remove the loading screen, even if there was an error before rendering
           this.callbacks.showStoryDuringRender?.();
@@ -360,6 +357,12 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
         this.channel.emit(STORY_RENDERED, id)
       );
 
+      if (this.phase !== 'errored') {
+        await this.runPhase(abortSignal, 'afterEach', async () => {
+          await applyAfterEach(context);
+        });
+      }
+
       const hasUnhandledErrors = !ignoreUnhandledErrors && unhandledErrors.size > 0;
 
       const hasSomeReportsFailed = context.reporting.reports.some(
@@ -373,7 +376,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
           storyId: id,
           status: hasStoryErrored ? 'error' : 'success',
           reporters: context.reporting.reports,
-        })
+        } as StoryFinishedPayload)
       );
     } catch (err) {
       this.phase = 'errored';
@@ -384,7 +387,7 @@ export class StoryRender<TRenderer extends Renderer> implements Render<TRenderer
           storyId: id,
           status: 'error',
           reporters: [],
-        })
+        } as StoryFinishedPayload)
       );
     }
 
