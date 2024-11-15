@@ -85,6 +85,14 @@ export const LeafNodeStyleWrapper = styled.div(({ theme }) => ({
     outline: 'none',
   },
 
+  '& [data-displayed="off"]': {
+    visibility: 'hidden',
+  },
+
+  '&:hover [data-displayed="off"]': {
+    visibility: 'visible',
+  },
+
   '&[data-selected="true"]': {
     color: theme.color.lightest,
     background: theme.color.secondary,
@@ -275,7 +283,6 @@ const Node = React.memo<NodeProps>(function Node({
         data-nodetype={item.type === 'docs' ? 'document' : 'story'}
         data-highlightable={isDisplayed}
         onMouseEnter={contextMenu.onMouseEnter}
-        onMouseLeave={contextMenu.onMouseLeave}
       >
         <LeafNode
           // @ts-expect-error (non strict)
@@ -373,7 +380,6 @@ const Node = React.memo<NodeProps>(function Node({
         data-nodetype={item.type}
         data-highlightable={isDisplayed}
         onMouseEnter={contextMenu.onMouseEnter}
-        onMouseLeave={contextMenu.onMouseLeave}
       >
         <BranchNode
           id={id}

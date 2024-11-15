@@ -15,16 +15,13 @@ import type { ExcludesNull } from './Tree';
 import { ContextMenu } from './Tree';
 
 export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
-  const [isItemHovered, setIsItemHovered] = useState(false);
+  const [hoverCount, setHoverCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
   const handlers = useMemo(() => {
     return {
       onMouseEnter: () => {
-        setIsItemHovered(true);
-      },
-      onMouseLeave: () => {
-        setIsItemHovered(false);
+        setHoverCount((c) => c + 1);
       },
       onOpen: (event: SyntheticEvent) => {
         event.stopPropagation();
@@ -36,17 +33,23 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
     };
   }, []);
 
-  return useMemo(() => {
+  const providerLinks = useMemo(() => {
     const testProviders = api.getElements(
       Addon_TypesEnum.experimental_TEST_PROVIDER
     ) as any as TestProviders;
-    const providerLinks = generateTestProviderLinks(testProviders, context);
-    const shouldDisplayLinks =
-      (isItemHovered || isOpen) && (providerLinks.length > 0 || links.length > 0);
+
+    if (hoverCount) {
+      return generateTestProviderLinks(testProviders, context);
+    }
+    return [];
+  }, [api, context, hoverCount]);
+
+  return useMemo(() => {
+    const rendered = providerLinks.length > 0 || links.length > 0;
+    const forceDisplay = isOpen;
     return {
       onMouseEnter: handlers.onMouseEnter,
-      onMouseLeave: handlers.onMouseLeave,
-      node: shouldDisplayLinks ? (
+      node: rendered ? (
         <WithTooltip
           closeOnOutsideClick
           onClick={handlers.onOpen}
@@ -62,13 +65,17 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
             <LiveContextMenu context={context} links={links} onClick={onHide} />
           )}
         >
-          <StatusButton type="button" status={'pending'}>
+          <StatusButton
+            type="button"
+            status={'pending'}
+            data-displayed={forceDisplay ? 'on' : 'off'}
+          >
             <EllipsisIcon />
           </StatusButton>
         </WithTooltip>
       ) : null,
     };
-  }, [api, context, handlers, isItemHovered, isOpen, links]);
+  }, [context, handlers, isOpen, links, providerLinks.length]);
 };
 
 /**
