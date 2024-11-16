@@ -1,3 +1,4 @@
+// @ts-expect-error FIXME
 import { viteFinal as reactViteFinal } from '@storybook/react-vite/preset';
 
 import type { BabelOptions, Options as ReactOptions } from '@vitejs/plugin-react';
