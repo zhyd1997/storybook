@@ -1,18 +1,5 @@
-import type { StyleProp, ViewStyle } from 'react-native';
+import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-export interface ButtonProps {
-  /** Is this the principal call to action on the page? */
-  primary?: boolean;
-  /** What background color to use */
-  backgroundColor?: string;
-  /** How large should the button be? */
-  size?: 'small' | 'medium' | 'large';
-  /** Button contents */
-  label: string;
-  /** Optional click handler */
-  onPress?: () => void;
-}
 
 /** Primary UI component for user interaction */
 export const Button = ({
@@ -20,8 +7,9 @@ export const Button = ({
   size = 'medium',
   backgroundColor,
   label,
+  style,
   onPress,
-}: ButtonProps) => {
+}) => {
   const modeStyle = primary ? styles.primary : styles.secondary;
   const textModeStyle = primary ? styles.primaryText : styles.secondaryText;
 
@@ -96,4 +84,26 @@ const textSizeStyles = {
   small: styles.smallText,
   medium: styles.mediumText,
   large: styles.largeText,
+};
+
+Button.propTypes = {
+  /** Is this the principal call to action on the page? */
+  primary: PropTypes.bool,
+  /** What background color to use */
+  backgroundColor: PropTypes.string,
+  /** How large should the button be? */
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  /** Button contents */
+  label: PropTypes.string.isRequired,
+  /** Optional click handler */
+  onPress: PropTypes.func,
+  /** Optional extra styles */
+  style: PropTypes.object,
+};
+
+Button.defaultProps = {
+  backgroundColor: null,
+  primary: false,
+  size: 'medium',
+  onClick: undefined,
 };
