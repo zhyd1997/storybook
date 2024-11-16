@@ -1,4 +1,4 @@
-import { hasVitePlugins } from '@storybook/builder-vite';
+import { viteFinal as reactViteFinal } from '@storybook/react-vite/preset';
 
 import type { BabelOptions, Options as ReactOptions } from '@vitejs/plugin-react';
 import react from '@vitejs/plugin-react';
@@ -66,10 +66,10 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
   const { pluginReactOptions = {} } =
     await options.presets.apply<FrameworkOptions>('frameworkOptions');
 
-  const { plugins = [] } = config;
+  const reactConfig = await reactViteFinal(config, options);
+  const { plugins = [] } = reactConfig;
 
-  //  if (!(await hasVitePlugins(plugins, ['vite:react-native-web']))) {
-  plugins.push(
+  plugins.unshift(
     react({
       babel: {
         babelrc: false,
@@ -80,9 +80,8 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
     })
   );
   plugins.push(reactNativeWeb(pluginReactOptions));
-  //}
 
-  return config;
+  return reactConfig;
 };
 
 export const core = {

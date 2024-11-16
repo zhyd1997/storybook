@@ -614,7 +614,7 @@ const baseTemplates = {
     name: 'React Native CLI Latest (Vite | TypeScript)',
     script:
       'npx @react-native-community/cli@latest init --install-pods=false --directory={{beforeDir}} rnapp',
-    inDevelopment: true,
+    inDevelopment: false,
     expected: {
       framework: '@storybook/react-native-web-vite',
       renderer: '@storybook/react',
