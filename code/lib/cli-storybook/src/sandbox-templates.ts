@@ -609,7 +609,7 @@ const baseTemplates = {
       renderer: '@storybook/react',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['bench', 'vitest-integration'],
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
   'react-native-web-vite/rn-cli-ts': {
     // NOTE: create-expo-app installs React 18.2.0. But yarn portal
@@ -628,7 +628,7 @@ const baseTemplates = {
       renderer: '@storybook/react',
       builder: '@storybook/builder-vite',
     },
-    skipTasks: ['bench', 'vitest-integration'],
+    skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
 } satisfies Record<string, BaseTemplates>;
 
@@ -797,8 +797,6 @@ export const normal: TemplateKey[] = [
   'bench/react-vite-default-ts-test-build',
   'bench/react-webpack-18-ts-test-build',
   'ember/default-js',
-  'react-native-web-vite/expo-ts',
-  'react-native-web-vite/rn-cli-ts',
 ];
 
 export const merged: TemplateKey[] = [
@@ -831,6 +829,8 @@ export const daily: TemplateKey[] = [
   'html-vite/default-js',
   'internal/react16-webpack',
   'internal/react18-webpack-babel',
+  'react-native-web-vite/expo-ts',
+  // 'react-native-web-vite/rn-cli-ts',
 ];
 
 export const templatesByCadence = { normal, merged, daily };

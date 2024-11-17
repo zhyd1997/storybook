@@ -18,7 +18,13 @@ export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps
 
       <View style={styles.buttonContainer}>
         {user ? (
-          <Button style={styles.button} size="small" onPress={onLogout} label="Log out" />
+          <>
+            <>
+              <Text>Welcome, </Text>
+              <Text style={styles.userName}>{user.name}!</Text>
+            </>
+            <Button style={styles.button} size="small" onPress={onLogout} label="Log out" />
+          </>
         ) : (
           <>
             <Button style={styles.button} size="small" onPress={onLogin} label="Log in" />
@@ -64,5 +70,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  userName: {
+    fontWeight: '700',
   },
 });
