@@ -194,6 +194,13 @@ export async function getVersionSafe(packageManager: JsPackageManager, packageNa
   return undefined;
 }
 
+export const cliStoriesTargetPath = async () => {
+  if (existsSync('./src')) {
+    return './src/stories';
+  }
+  return './stories';
+};
+
 export async function copyTemplateFiles({
   packageManager,
   renderer,
@@ -253,14 +260,7 @@ export async function copyTemplateFiles({
     throw new Error(`Unsupported renderer: ${renderer} (${baseDir})`);
   };
 
-  const targetPath = async () => {
-    if (existsSync('./src')) {
-      return './src/stories';
-    }
-    return './stories';
-  };
-
-  const destinationPath = destination ?? (await targetPath());
+  const destinationPath = destination ?? (await cliStoriesTargetPath());
   if (commonAssetsDir) {
     await cp(commonAssetsDir, destinationPath, {
       recursive: true,
