@@ -797,6 +797,8 @@ export const normal: TemplateKey[] = [
   'bench/react-vite-default-ts-test-build',
   'bench/react-webpack-18-ts-test-build',
   'ember/default-js',
+  'react-native-web-vite/expo-ts',
+  'react-native-web-vite/rn-cli-ts',
 ];
 
 export const merged: TemplateKey[] = [
