@@ -1,11 +1,10 @@
 ```js filename=".storybook/main.js" renderer="react-native-web" language="js"
 export default {
   addons: [
-    // '@storybook/addon-react-native-web', 👈 Remove this
+    '@storybook/addon-react-native-web', // 👈 Remove the addon
   ],
-  // ...
-  // framework: '@storybook/react-webpack5', 👈 Remove this
-  framework: '@storybook/react-native-web-vite', // 👈 Add this
+  // Replace @storybook/react-webpack5 with the Vite framework
+  framework: '@storybook/react-native-web-vite',
 };
 ```
 
@@ -14,11 +13,10 @@ import { StorybookConfig } from '@storybook/react-native-web-vite';
 
 const config: StorybookConfig = {
   addons: [
-    // '@storybook/addon-react-native-web', 👈 Remove this
+    '@storybook/addon-react-native-web', // 👈 Remove the addon
   ],
-  // ...
-  // framework: '@storybook/react-webpack5', 👈 Remove this
-  framework: '@storybook/react-native-web-vite', // 👈 Add this
+  // Replace @storybook/react-webpack5 with the Vite framework
+  framework: '@storybook/react-native-web-vite',
 };
 
 export default config;
