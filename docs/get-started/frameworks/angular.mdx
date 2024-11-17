@@ -74,16 +74,11 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   Finally, update your `angular.json` to include the Storybook builder:
 
-  ```jsonc
-  // angular.json
+  ```jsonc title="angular.json"
   {
-    ...
     "projects": {
-      ...
       "your-project": {
-        ...
         "architect": {
-          ...
           "storybook": {
             "builder": "@storybook/angular:start-storybook",
             "options": {
@@ -149,20 +144,14 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   Add the following option to your Storybook Builder:
 
-  ```jsonc
-  // angular.json
+  ```jsonc title="angular.json"
   {
-    ...
     "projects": {
-      ...
       "your-project": {
-        ...
         "architect": {
-          ...
           "storybook": {
             "builder": "@storybook/angular:start-storybook",
             "options": {
-              ...
               // 👇 Add these
               "compodoc": true,
               "compodocArgs": [
@@ -177,7 +166,6 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
           "build-storybook": {
             "builder": "@storybook/angular:build-storybook",
             "options": {
-              ...
               // 👇 Add these
               "compodoc": true,
               "compodocArgs": [
@@ -210,8 +198,7 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   If your component relies on application-wide providers, like the ones defined by BrowserAnimationsModule or any other modules which use the forRoot pattern to provide a ModuleWithProviders, you can apply the `applicationConfig` [decorator](../../writing-stories/decorators.mdx) to all stories for that component. This will provide them to the [bootstrapApplication function](https://angular.io/guide/standalone-components#configuring-dependency-injection), which is used to bootstrap the component in Storybook.
 
-  ```ts
-  // ChipsModule.stories.ts
+  ```ts title="ChipsModule.stories.ts"
   import { Meta, applicationConfig, StoryObj } from '@storybook/angular';
   import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
   import { importProvidersFrom } from '@angular/core';
@@ -254,8 +241,7 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   If your component has dependencies on other Angular directives and modules, these can be supplied using the `moduleMetadata` [decorator](../../writing-stories/decorators.mdx) either for all stories of a component or for individual stories.
 
-  ```ts
-  // YourComponent.stories.ts
+  ```ts title="YourComponent.stories.ts"
   import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
   import { YourComponent } from './your.component';
@@ -306,7 +292,7 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   Second, adjust your `package.json` script section. Usually, it will look like this:
 
-  ```jsonc
+  ```jsonc title="package.json"
   {
     "scripts": {
       "storybook": "start-storybook -p 6006", // or `storybook dev -p 6006`
@@ -317,7 +303,7 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   Now, you can run Storybook with `ng run <your-project>:storybook` and build it with `ng run <your-project>:build-storybook`. Adjust the scripts in your `package.json` accordingly.
 
-  ```json
+  ```json title="package.json"
   {
     "scripts": {
       "storybook": "ng run <project-name>:storybook",
@@ -328,7 +314,7 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   Also compodoc is now built-in in `@storybook/angular` and you don't have to call it explicitly. If were running compodoc in your `package.json` scripts like this:
 
-  ```json
+  ```json title="package.json"
   {
     "scripts": {
       "docs:json": "compodoc -p tsconfig.json -e json -d ./documentation",
@@ -340,7 +326,7 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   Change it to:
 
-  ```json
+  ```json title="package.json"
   {
     "scripts": {
       "storybook": "ng run <project-name>:storybook",
@@ -390,10 +376,7 @@ Storybook for Angular is a [framework](../../contribute/framework.mdx) that make
 
   You can pass an options object for additional configuration if needed:
 
-  ```js
-  // .storybook/main.js
-  import * as path from 'path';
-
+  ```js title=".storybook/main.js"
   export default {
     // ...
     framework: {

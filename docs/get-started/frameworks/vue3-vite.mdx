@@ -79,8 +79,7 @@ Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that m
 
   Therefore, Storybook provides you with a `setup` function exported from this package, which receives as a callback your Storybook instance, which you can interact with and add your custom configuration.
 
-  ```js
-  // .storybook/preview.js
+  ```js title=".storybook/preview.js"
   import { setup } from '@storybook/vue3';
 
   setup((app) => {
@@ -104,8 +103,7 @@ Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that m
 
   If you want to use `vue-component-meta`, you can configure it in your `.storybook/main.js|ts` file:
 
-  ```ts
-  // .storybook/main.ts
+  ```ts title=".storybook/main.ts"
   import type { StorybookConfig } from '@storybook/vue3-vite';
 
   const config: StorybookConfig = {
@@ -132,8 +130,7 @@ Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that m
 
   To provide a description for a prop, including tags, you can use JSDoc comments in your component's props definition:
 
-  ```html
-  {/* YourComponent.vue */}
+  ```html title="YourComponent.vue"
   <script setup lang="ts">
     interface MyComponentProps {
       /** The name of the user */
@@ -160,8 +157,7 @@ Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that m
 
   To provide a type for an emitted event, you can use TypeScript types (including JSDoc comments) in your component's `defineEmits` call:
 
-  ```html
-  {/* YourComponent.vue */}
+  ```html title="YourComponent.vue"
   <script setup lang="ts">
     type MyChangeEvent = 'change';
 
@@ -186,8 +182,7 @@ Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that m
 
   The slot types are automatically extracted from your component definition and displayed in the controls panel.
 
-  ```html
-  {/* YourComponent.vue */}
+  ```html title="YourComponent.vue"
   <template>
     <slot :num="123"></slot>
     <br />
@@ -224,8 +219,7 @@ Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that m
 
   The properties and methods exposed by your component are automatically extracted and displayed in the controls panel.
 
-  ```html
-  {/* YourComponent.vue */}
+  ```html title="YourComponent.vue"
   <script setup lang="ts">
     import { ref } from 'vue';
 
@@ -249,8 +243,7 @@ Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that m
 
   If you're working with a project that relies on [`tsconfig references`](https://www.typescriptlang.org/docs/handbook/project-references.html) to link to other existing configuration files (e.g. `tsconfig.app.json`, `tsconfig.node.json`), we recommend that you update your [`.storybook/main.js|ts`](../../configure/index.mdx) configuration file and add the following:
 
-  ```ts
-  // .storybook/main.ts
+  ```ts title=".storybook/main.ts"
   import type { StorybookConfig } from '@storybook/vue3-vite';
 
   const config: StorybookConfig = {
@@ -292,8 +285,7 @@ Storybook for Vue & Vite is a [framework](../../contribute/framework.mdx) that m
 
   You can pass an options object for additional configuration if needed:
 
-  ```ts
-  // .storybook/main.ts
+  ```ts title=".storybook/main.ts"
   import type { StorybookConfig } from '@storybook/vue3-vite';
 
   const config: StorybookConfig = {
