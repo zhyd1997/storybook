@@ -17,6 +17,9 @@ const vitest = vi.hoisted(() => ({
   cancelCurrentRun: vi.fn(),
   globTestSpecs: vi.fn(),
   getModuleProjects: vi.fn(() => []),
+  configOverride: {
+    testNamePattern: undefined,
+  },
 }));
 
 vi.mock('vitest/node', () => ({
