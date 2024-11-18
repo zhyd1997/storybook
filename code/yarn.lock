@@ -7176,17 +7176,11 @@ __metadata:
   resolution: "@storybook/react-native-web-vite@workspace:frameworks/react-native-web-vite"
   dependencies:
     "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.3.0"
-    "@rollup/pluginutils": "npm:^5.0.2"
     "@storybook/builder-vite": "workspace:*"
     "@storybook/react": "workspace:*"
     "@storybook/react-vite": "workspace:*"
     "@types/node": "npm:^22.0.0"
     "@vitejs/plugin-react": "npm:^4.3.2"
-    find-up: "npm:^5.0.0"
-    magic-string: "npm:^0.30.0"
-    react-docgen: "npm:^7.0.0"
-    resolve: "npm:^1.22.8"
-    tsconfig-paths: "npm:^4.2.0"
     typescript: "npm:^5.3.2"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
