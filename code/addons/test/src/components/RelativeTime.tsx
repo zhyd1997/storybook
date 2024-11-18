@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getRelativeTimeString } from './manager';
+import { getRelativeTimeString } from '../manager';
 
 export const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: number }) => {
   const [relativeTimeString, setRelativeTimeString] = useState(null);

@@ -14,9 +14,9 @@ import { type API_HashEntry, type Addon_TestProviderState } from 'storybook/inte
 
 import { PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
 
-import { RelativeTime } from '../RelativeTime';
 import { TEST_PROVIDER_ID } from '../constants';
 import type { TestResult } from '../node/reporter';
+import { RelativeTime } from './RelativeTime';
 
 export const ContextMenuItem: FC<{
   context: API_HashEntry;

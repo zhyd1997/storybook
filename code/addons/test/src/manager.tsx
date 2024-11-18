@@ -14,10 +14,10 @@ import {
 
 import { EyeIcon, PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
 
-import { RelativeTime } from './RelativeTime';
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
 import { Panel } from './components/Panel';
+import { RelativeTime } from './components/RelativeTime';
 import { Title } from './components/Title';
 import { ADDON_ID, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 import type { TestResult } from './node/reporter';
