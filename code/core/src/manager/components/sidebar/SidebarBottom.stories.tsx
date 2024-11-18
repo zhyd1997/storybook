@@ -15,18 +15,34 @@ const managerContext: any = {
       autodocs: 'tag',
       docsMode: false,
     },
-    testProviders: {},
+    testProviders: {
+      'component-tests': {
+        type: Addon_TypesEnum.experimental_TEST_PROVIDER,
+        id: 'component-tests',
+        title: () => 'Component tests',
+        description: () => 'Ran 2 seconds ago',
+        runnable: true,
+        watchable: true,
+      },
+      'visual-tests': {
+        type: Addon_TypesEnum.experimental_TEST_PROVIDER,
+        id: 'visual-tests',
+        title: () => 'Visual tests',
+        description: () => 'Not run',
+        runnable: true,
+      },
+    },
   },
   api: {
     on: fn().mockName('api::on'),
     off: fn().mockName('api::off'),
-    getElements: fn(() => ({})),
     updateTestProviderState: fn(),
   },
 };
 
 export default {
   component: SidebarBottomBase,
+  title: 'Sidebar/SidebarBottom',
   args: {
     isDevelopment: true,
 
@@ -38,23 +54,7 @@ export default {
       emit: fn(),
       experimental_setFilter: fn(),
       getChannel: fn(),
-      getElements: fn(() => ({
-        'component-tests': {
-          type: Addon_TypesEnum.experimental_TEST_PROVIDER,
-          id: 'component-tests',
-          title: () => 'Component tests',
-          description: () => 'Ran 2 seconds ago',
-          runnable: true,
-          watchable: true,
-        },
-        'visual-tests': {
-          type: Addon_TypesEnum.experimental_TEST_PROVIDER,
-          id: 'visual-tests',
-          title: () => 'Visual tests',
-          description: () => 'Not run',
-          runnable: true,
-        },
-      })),
+      getElements: fn(() => ({})),
     } as any as API,
   },
   decorators: [
