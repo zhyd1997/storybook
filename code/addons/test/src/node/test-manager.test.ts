@@ -17,6 +17,7 @@ const vitest = vi.hoisted(() => ({
   cancelCurrentRun: vi.fn(),
   globTestSpecs: vi.fn(),
   getModuleProjects: vi.fn(() => []),
+  configOverride: {},
 }));
 
 vi.mock('vitest/node', () => ({
@@ -36,6 +37,31 @@ const tests = [
     moduleId: path.join(process.cwd(), 'path/to/another/file'),
   },
 ];
+
+global.fetch = vi.fn().mockResolvedValue({
+  json: () =>
+    new Promise((resolve) =>
+      resolve({
+        v: 5,
+        entries: {
+          'story--one': {
+            type: 'story',
+            id: 'story--one',
+            name: 'One',
+            title: 'story/one',
+            importPath: 'path/to/file',
+          },
+          'another--one': {
+            type: 'story',
+            id: 'another--one',
+            name: 'One',
+            title: 'another/one',
+            importPath: 'path/to/another/file',
+          },
+        },
+      })
+    ),
+});
 
 const options: ConstructorParameters<typeof TestManager>[1] = {
   onError: (message, error) => {
@@ -80,16 +106,7 @@ describe('TestManager', () => {
 
     await testManager.handleRunRequest({
       providerId: TEST_PROVIDER_ID,
-      payload: [
-        {
-          stories: [],
-          importPath: 'path/to/file',
-        },
-        {
-          stories: [],
-          importPath: 'path/to/another/file',
-        },
-      ],
+      indexUrl: 'http://localhost:6006/index.json',
     });
     expect(createVitest).toHaveBeenCalledTimes(1);
     expect(vitest.runFiles).toHaveBeenCalledWith(tests, true);
@@ -101,33 +118,16 @@ describe('TestManager', () => {
 
     await testManager.handleRunRequest({
       providerId: TEST_PROVIDER_ID,
-      payload: [
-        {
-          stories: [],
-          importPath: 'path/to/unknown/file',
-        },
-      ],
+      indexUrl: 'http://localhost:6006/index.json',
+      storyIds: [],
     });
     expect(vitest.runFiles).toHaveBeenCalledWith([], true);
 
     await testManager.handleRunRequest({
       providerId: TEST_PROVIDER_ID,
-      payload: [
-        {
-          stories: [],
-          importPath: 'path/to/file',
-        },
-      ],
+      indexUrl: 'http://localhost:6006/index.json',
+      storyIds: ['story--one'],
     });
     expect(vitest.runFiles).toHaveBeenCalledWith(tests.slice(0, 1), true);
-  });
-
-  it('should handle run all request', async () => {
-    const testManager = await TestManager.start(mockChannel, options);
-    expect(createVitest).toHaveBeenCalledTimes(1);
-
-    await testManager.handleRunAllRequest({ providerId: TEST_PROVIDER_ID });
-    expect(createVitest).toHaveBeenCalledTimes(1);
-    expect(vitest.runFiles).toHaveBeenCalledWith(tests, true);
   });
 });

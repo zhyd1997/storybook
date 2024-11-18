@@ -64,7 +64,7 @@ export class StorybookReporter implements Reporter {
 
   sendReport: (payload: TestingModuleProgressReportPayload) => void;
 
-  constructor(private testManager: TestManager) {
+  constructor(public testManager: TestManager) {
     this.sendReport = throttle((payload) => this.testManager.sendProgressReport(payload), 1000);
   }
 
@@ -76,8 +76,12 @@ export class StorybookReporter implements Reporter {
   getProgressReport(finishedAt?: number) {
     const files = this.ctx.state.getFiles();
     const fileTests = getTests(files);
-    // The number of total tests is dynamic and can change during the run
-    const numTotalTests = fileTests.length;
+
+    // The total number of tests reported by Vitest is dynamic and can change during the run, so we
+    // use `storyCountForCurrentRun` instead, based on the list of stories provided in the run request.
+    const numTotalTests = finishedAt
+      ? fileTests.length
+      : Math.max(fileTests.length, this.testManager.vitestManager.storyCountForCurrentRun);
 
     const numFailedTests = fileTests.filter((t) => t.result?.state === 'fail').length;
     const numPassedTests = fileTests.filter((t) => t.result?.state === 'pass').length;

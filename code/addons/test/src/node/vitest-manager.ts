@@ -6,6 +6,8 @@ import type { TestProject, TestSpecification, Vitest, WorkspaceProject } from 'v
 import type { Channel } from 'storybook/internal/channels';
 import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-events';
 
+import type { StoryIndex } from '@storybook/types';
+
 import slash from 'slash';
 
 import { log } from '../logger';
@@ -16,6 +18,8 @@ export class VitestManager {
   vitest: Vitest | null = null;
 
   vitestStartupCounter = 0;
+
+  storyCountForCurrentRun: number = 0;
 
   constructor(
     private channel: Channel,
@@ -54,23 +58,6 @@ export class VitestManager {
     }
   }
 
-  async runAllTests() {
-    if (!this.vitest) {
-      await this.startVitest();
-    }
-    this.resetTestNamePattern();
-
-    const storybookTests = await this.getStorybookTestSpecs();
-    for (const storybookTest of storybookTests) {
-      // make sure to clear the file cache so test results are updated even if watch mode is not enabled
-      if (!this.testManager.watchMode) {
-        this.updateLastChanged(storybookTest.moduleId);
-      }
-    }
-    await this.cancelCurrentRun();
-    await this.vitest!.runFiles(storybookTests, true);
-  }
-
   private updateLastChanged(filepath: string) {
     const projects = this.vitest!.getModuleProjects(filepath);
     projects.forEach(({ server, browser }) => {
@@ -84,55 +71,48 @@ export class VitestManager {
     });
   }
 
-  async runTests(testPayload: TestingModuleRunRequestPayload['payload']) {
+  async runTests(requestPayload: TestingModuleRunRequestPayload) {
     if (!this.vitest) {
       await this.startVitest();
     }
     this.resetTestNamePattern();
 
-    // This list contains all the test files (story files) that need to be run
-    // based on the test files that are passed in the tests array
-    // This list does NOT contain any filtering of specific
-    // test cases (story) within the test files
-    const testList: TestSpecification[] = [];
+    const index = (await fetch(requestPayload.indexUrl).then((res) => res.json())) as StoryIndex;
+    const { storyIds = Object.keys(index.entries) } = requestPayload;
+    const stories = storyIds.map((id) => index.entries[id]);
+    const vitestTestSpecs = await this.getStorybookTestSpecs();
+    const isSingleStoryRun = requestPayload.storyIds?.length === 1;
 
-    const storybookTests = await this.getStorybookTestSpecs();
-
-    const filteredStoryNames: string[] = [];
-
-    for (const storybookTest of storybookTests) {
-      const match = testPayload.find((test) => {
-        const absoluteImportPath = path.join(process.cwd(), test.importPath);
-        return absoluteImportPath === storybookTest.moduleId;
-      });
-      if (match) {
-        // make sure to clear the file cache so test results are updated even if watch mode is not enabled
-        if (!this.testManager.watchMode) {
-          this.updateLastChanged(storybookTest.moduleId);
+    const { filteredTestFiles, totalTestCount } = vitestTestSpecs.reduce(
+      (acc, vitestTestSpec) => {
+        const matches = stories.filter((story) => {
+          const absoluteImportPath = path.join(process.cwd(), story.importPath);
+          return absoluteImportPath === vitestTestSpec.moduleId;
+        });
+        if (matches.length) {
+          if (!this.testManager.watchMode) {
+            // Clear the file cache if watch mode is not enabled
+            this.updateLastChanged(vitestTestSpec.moduleId);
+          }
+          acc.filteredTestFiles.push(vitestTestSpec);
+          acc.totalTestCount += matches.length;
         }
-
-        if (match.stories?.length) {
-          filteredStoryNames.push(...match.stories.map((story) => story.name));
-        }
-        testList.push(storybookTest);
-      }
-    }
+        return acc;
+      },
+      { filteredTestFiles: [] as TestSpecification[], totalTestCount: 0 }
+    );
 
     await this.cancelCurrentRun();
+    this.storyCountForCurrentRun = totalTestCount;
 
-    if (filteredStoryNames.length > 0) {
-      // temporarily set the test name pattern to only run the selected stories
-      // converting a list of story names to a single regex pattern
-      // ie. ['My Story', 'Other Story'] => /^(My Story|Other Story)$/
-      const testNamePattern = new RegExp(
-        `^(${filteredStoryNames
-          .map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-          .join('|')})$`
+    if (isSingleStoryRun) {
+      const storyName = stories[0].name;
+      this.vitest!.configOverride.testNamePattern = new RegExp(
+        `^${storyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`
       );
-      this.vitest!.configOverride.testNamePattern = testNamePattern;
     }
 
-    await this.vitest!.runFiles(testList, true);
+    await this.vitest!.runFiles(filteredTestFiles, true);
     this.resetTestNamePattern();
   }
 
@@ -224,6 +204,7 @@ export class VitestManager {
     const id = slash(file);
     this.vitest?.logger.clearHighlightCache(id);
     this.updateLastChanged(id);
+    this.storyCountForCurrentRun = 0;
 
     await this.runAffectedTests(file);
   }

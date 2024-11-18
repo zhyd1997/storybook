@@ -1,14 +1,12 @@
-import { type API_StoryEntry, Addon_TypesEnum, type StoryId } from '@storybook/core/types';
+import { Addon_TypesEnum, type StoryId } from '@storybook/core/types';
 
 import {
   TESTING_MODULE_CANCEL_TEST_RUN_REQUEST,
-  TESTING_MODULE_RUN_ALL_REQUEST,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
   type TestProviderId,
   type TestProviderState,
   type TestProviders,
-  type TestingModuleRunAllRequestPayload,
   type TestingModuleRunRequestPayload,
 } from '@storybook/core/core-events';
 
@@ -76,96 +74,42 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
       );
     },
     runTestProvider(id, options) {
-      console.log('LOG: runTestProvider', id, options);
-      if (!options?.entryId) {
-        console.log('LOG: runTestProvider: no entryId, running all tests');
-        const payload: TestingModuleRunAllRequestPayload = { providerId: id };
-        fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, payload);
-        return () => api.cancelTestProvider(id);
-      }
-
-      const index = store.getState().index;
+      const { index } = store.getState();
       if (!index) {
-        throw new Error('no index?');
+        throw new Error('No story index available. This is likely a bug.');
       }
 
-      const entry = index[options.entryId];
+      const indexUrl = new URL('index.json', window.location.href).toString();
 
-      if (!entry) {
-        throw new Error('no entry?');
-      }
-
-      if (entry.type === 'story') {
-        console.log('LOG: runTestProvider: running single story', entry);
+      if (!options?.entryId) {
         const payload: TestingModuleRunRequestPayload = {
           providerId: id,
-          payload: [
-            {
-              importPath: entry.importPath,
-              stories: [
-                {
-                  id: entry.id,
-                  name: entry.name,
-                },
-              ],
-            },
-          ],
+          indexUrl,
         };
         fullAPI.emit(TESTING_MODULE_RUN_REQUEST, payload);
         return () => api.cancelTestProvider(id);
       }
 
-      const payloads = new Set<TestingModuleRunRequestPayload['payload'][0]>();
+      if (!index[options.entryId]) {
+        throw new Error('Could not find story entry for id: ' + options.entryId);
+      }
 
-      const findComponents = (entryId: StoryId) => {
-        const foundEntry = index[entryId];
-        console.log(`Processing entry: ${entryId}`, foundEntry);
-        switch (foundEntry.type) {
-          case 'component':
-            console.log(`Adding component entry: ${entryId}`);
-            const firstStoryId = foundEntry.children.find(
-              (childId) => index[childId].type === 'story'
-            );
-            if (!firstStoryId) {
-              // happens when there are only docs in the component
-              return;
-            }
-            payloads.add({ importPath: (index[firstStoryId] as API_StoryEntry).importPath });
-            return;
-          case 'story': {
-            // this shouldn't happen because we don't visit components' children.
-            // so we never get to a story directly.
-            // unless groups can have direct stories without components?
-            console.log(`Adding story entry: ${entryId}`);
-            payloads.add({
-              importPath: foundEntry.importPath,
-              stories: [
-                {
-                  id: foundEntry.id,
-                  name: foundEntry.name,
-                },
-              ],
-            });
-            return;
-          }
-          case 'docs': {
-            return;
-          }
-          default:
-            console.log(`Processing children of entry: ${entryId}`);
-            foundEntry.children.forEach(findComponents);
+      const findStories = (entryId: StoryId, results: StoryId[] = []): StoryId[] => {
+        const node = index[entryId];
+        if (node.type === 'story') {
+          results.push(node.id);
+        } else if ('children' in node) {
+          node.children.forEach((childId) => findStories(childId, results));
         }
+        return results;
       };
-      console.log(`Starting to find components for entryId:`, options.entryId);
-      findComponents(options.entryId);
 
       const payload: TestingModuleRunRequestPayload = {
         providerId: id,
-        payload: Array.from(payloads),
+        indexUrl,
+        storyIds: findStories(options.entryId),
       };
-      console.log('LOG: payload', payload);
       fullAPI.emit(TESTING_MODULE_RUN_REQUEST, payload);
-
       return () => api.cancelTestProvider(id);
     },
     setTestProviderWatchMode(id, watchMode) {

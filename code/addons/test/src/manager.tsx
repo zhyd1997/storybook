@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { AddonPanel, Button, Link as LinkComponent } from 'storybook/internal/components';
-import { TESTING_MODULE_RUN_ALL_REQUEST } from 'storybook/internal/core-events';
 import type { Combo } from 'storybook/internal/manager-api';
 import { Consumer, addons, types } from 'storybook/internal/manager-api';
 import { styled } from 'storybook/internal/theming';
@@ -210,9 +209,7 @@ addons.register(ADDON_ID, (api) => {
               }}
               onRerun={() => {
                 setIsModalOpen(false);
-                api
-                  .getChannel()
-                  .emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: TEST_PROVIDER_ID });
+                api.runTestProvider(TEST_PROVIDER_ID);
               }}
             />
           </>
