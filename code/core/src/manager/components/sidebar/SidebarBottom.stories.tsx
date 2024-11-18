@@ -42,6 +42,7 @@ const managerContext: any = {
 
 export default {
   component: SidebarBottomBase,
+  title: 'Sidebar/SidebarBottom',
   args: {
     isDevelopment: true,
 

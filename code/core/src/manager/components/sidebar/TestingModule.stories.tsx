@@ -76,6 +76,7 @@ const managerContext: any = {
 
 const meta = {
   component: TestingModule,
+  title: 'Sidebar/TestingModule',
   args: {
     testProviders,
     errorCount: 0,
