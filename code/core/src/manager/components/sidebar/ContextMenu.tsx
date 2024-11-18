@@ -58,6 +58,7 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
           data-displayed={isOpen ? 'on' : 'off'}
           closeOnOutsideClick
           placement="bottom-end"
+          data-testid="context-menu"
           onVisibleChange={(visible) => {
             if (!visible) {
               handlers.onClose();
