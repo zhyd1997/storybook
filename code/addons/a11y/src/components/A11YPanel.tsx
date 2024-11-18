@@ -103,6 +103,7 @@ export const A11YPanel: React.FC = () => {
       },
     ];
   }, [results]);
+
   return (
     <>
       {status === 'initial' && <Centered>Initializing...</Centered>}

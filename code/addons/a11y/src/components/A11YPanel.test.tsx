@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import React from 'react';
 
+import { ThemeProvider, convert, themes } from 'storybook/internal/theming';
+
 import { A11YPanel } from './A11YPanel';
 import { type A11yContextStore, useA11yContext } from './A11yContext';
 
@@ -33,10 +35,14 @@ describe('A11YPanel', () => {
       error: null,
     } as Partial<A11yContextStore> as any);
 
-    render(<A11YPanel />);
+    const component = render(
+      <ThemeProvider theme={convert(themes.light)}>
+        <A11YPanel />
+      </ThemeProvider>
+    );
 
-    expect(screen.getByText('Manually run the accessibility scan.')).toBeInTheDocument();
-    const runTestButton = screen.getByText('Run test');
+    expect(component.getByText('Manually run the accessibility scan.')).toBeInTheDocument();
+    const runTestButton = component.getByText('Run test');
     expect(runTestButton).toBeInTheDocument();
 
     fireEvent.click(runTestButton);
@@ -51,10 +57,14 @@ describe('A11YPanel', () => {
       error: null,
     } as Partial<A11yContextStore> as any);
 
-    render(<A11YPanel />);
+    const component = render(
+      <ThemeProvider theme={convert(themes.light)}>
+        <A11YPanel />
+      </ThemeProvider>
+    );
 
     expect(
-      screen.getByText('Please wait while the accessibility scan is running ...')
+      component.getByText('Please wait while the accessibility scan is running ...')
     ).toBeInTheDocument();
   });
 
@@ -64,20 +74,26 @@ describe('A11YPanel', () => {
       results: {
         passes: [{ id: 'pass1' } as any],
         incomplete: [{ id: 'incomplete1' } as any],
-        violations: [{ id: 'violation1' } as any],
+        violations: [{ id: 'violation1', nodes: [] } as any],
       },
       status: 'ready',
+      tab: 0,
       handleManual,
+      highlighted: [],
       error: null,
     } as Partial<A11yContextStore> as any);
 
-    render(<A11YPanel />);
+    const component = render(
+      <ThemeProvider theme={convert(themes.light)}>
+        <A11YPanel />
+      </ThemeProvider>
+    );
 
-    expect(screen.getByText('1 Violations')).toBeInTheDocument();
-    expect(screen.getByText('1 Passes')).toBeInTheDocument();
-    expect(screen.getByText('1 Incomplete')).toBeInTheDocument();
+    expect(component.getByText('1 Violations')).toBeInTheDocument();
+    expect(component.getByText('1 Passes')).toBeInTheDocument();
+    expect(component.getByText('1 Incomplete')).toBeInTheDocument();
 
-    const rerunTestsButton = screen.getByText('Rerun tests');
+    const rerunTestsButton = component.getByText('Rerun tests');
     expect(rerunTestsButton).toBeInTheDocument();
 
     fireEvent.click(rerunTestsButton);
@@ -92,10 +108,10 @@ describe('A11YPanel', () => {
       error: 'Test error message',
     } as Partial<A11yContextStore> as any);
 
-    render(<A11YPanel />);
+    const component = render(<A11YPanel />);
 
-    expect(screen.getByText('The accessibility scan encountered an error.')).toBeInTheDocument();
-    expect(screen.getByText('Test error message')).toBeInTheDocument();
+    expect(component.container).toHaveTextContent('The accessibility scan encountered an error.');
+    expect(component.container).toHaveTextContent('Test error message');
   });
 
   it('should render error state with object error', () => {
@@ -106,11 +122,11 @@ describe('A11YPanel', () => {
       error: { message: 'Test error object message' },
     } as Partial<A11yContextStore> as any);
 
-    render(<A11YPanel />);
+    const component = render(<A11YPanel />);
 
-    expect(screen.getByText('The accessibility scan encountered an error.')).toBeInTheDocument();
-    expect(
-      screen.getByText(JSON.stringify({ message: 'Test error object message' }))
-    ).toBeInTheDocument();
+    expect(component.container).toHaveTextContent('The accessibility scan encountered an error.');
+    expect(component.container).toHaveTextContent(
+      JSON.stringify({ message: 'Test error object message' })
+    );
   });
 });
