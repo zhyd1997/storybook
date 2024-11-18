@@ -41,7 +41,7 @@ export type SubAPI = {
   cancelTestProvider(id: TestProviderId): void;
 };
 
-export const init: ModuleFn = ({ store, fullAPI }) => {
+export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
   const state: SubState = {
     testProviders: store.getState().testProviders || {},
   };
@@ -194,6 +194,5 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
 
     store.setState({ testProviders: initialState }, { persistence: 'session' });
   };
-
   return { init: initModule, state, api };
 };

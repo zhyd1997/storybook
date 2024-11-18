@@ -88,11 +88,6 @@ addons.register(ADDON_ID, (api) => {
           return null;
         }
 
-        // TODO: remove this... right now: always returns false, to disable the feature
-        if (Date.now()) {
-          return false;
-        }
-
         return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
       },
 
