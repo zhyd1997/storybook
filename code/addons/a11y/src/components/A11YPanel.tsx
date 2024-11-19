@@ -8,6 +8,7 @@ import { CheckIcon, SyncIcon } from '@storybook/icons';
 import { useA11yContext } from './A11yContext';
 import { Report } from './Report';
 import { Tabs } from './Tabs';
+import { TestDiscrepancyMessage } from './TestDiscrepancyMessage';
 
 export enum RuleType {
   VIOLATION,
@@ -43,7 +44,7 @@ const Centered = styled.span({
 });
 
 export const A11YPanel: React.FC = () => {
-  const { results, status, handleManual, error } = useA11yContext();
+  const { results, status, handleManual, error, discrepancy } = useA11yContext();
 
   const manualActionItems = useMemo(
     () => [{ title: 'Run test', onClick: handleManual }],
@@ -106,31 +107,35 @@ export const A11YPanel: React.FC = () => {
 
   return (
     <>
-      {status === 'initial' && <Centered>Initializing...</Centered>}
-      {status === 'manual' && (
-        <>
-          <Centered>Manually run the accessibility scan.</Centered>
-          <ActionBar key="actionbar" actionItems={manualActionItems} />
-        </>
-      )}
-      {status === 'running' && (
-        <Centered>
-          <RotatingIcon size={12} /> Please wait while the accessibility scan is running ...
-        </Centered>
-      )}
-      {(status === 'ready' || status === 'ran') && (
+      {discrepancy && <TestDiscrepancyMessage discrepancy={discrepancy} />}
+      {status === 'ready' || status === 'ran' ? (
         <>
           <ScrollArea vertical horizontal>
             <Tabs key="tabs" tabs={tabs} />
           </ScrollArea>
           <ActionBar key="actionbar" actionItems={readyActionItems} />
         </>
-      )}
-      {status === 'error' && (
-        <Centered>
-          The accessibility scan encountered an error.
-          <br />
-          {typeof error === 'string' ? error : JSON.stringify(error)}
+      ) : (
+        <Centered style={{ marginTop: discrepancy ? '1em' : 0 }}>
+          {status === 'initial' && 'Initializing...'}
+          {status === 'manual' && (
+            <>
+              <>Manually run the accessibility scan.</>
+              <ActionBar key="actionbar" actionItems={manualActionItems} />
+            </>
+          )}
+          {status === 'running' && (
+            <>
+              <RotatingIcon size={12} /> Please wait while the accessibility scan is running ...
+            </>
+          )}
+          {status === 'error' && (
+            <>
+              The accessibility scan encountered an error.
+              <br />
+              {typeof error === 'string' ? error : JSON.stringify(error)}
+            </>
+          )}
         </Centered>
       )}
     </>
