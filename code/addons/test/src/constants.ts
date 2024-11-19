@@ -18,4 +18,5 @@ interface Options {
 export type Details = {
   testResults: TestResult[];
   options: Options;
+  editing: boolean;
 };
