@@ -1,4 +1,4 @@
-import React, { type SyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, { Fragment, type SyntheticEvent, useEffect, useRef, useState } from 'react';
 
 import { Button, TooltipNote } from '@storybook/core/components';
 import { keyframes, styled } from '@storybook/core/theming';
@@ -199,9 +199,13 @@ export const TestingModule = ({
           <Content ref={contentRef}>
             {testProviders.map((state) => {
               const { render: Render } = state;
-              return (
+              return Render ? (
+                <Fragment key={state.id}>
+                  <Render {...state} />
+                </Fragment>
+              ) : (
                 <TestProvider key={state.id} data-module-id={state.id}>
-                  {Render ? <Render {...state} /> : <LegacyRender {...state} />}
+                  <LegacyRender {...state} />
                 </TestProvider>
               );
             })}
