@@ -83,7 +83,7 @@ addons.register(ADDON_ID, (api) => {
       watchable: true,
       name: 'Component tests',
 
-      contextMenu: ({ context, state }, { ListItem }) => {
+      sidebarContextMenu: ({ context, state }, { ListItem }) => {
         if (context.type === 'docs') {
           return null;
         }

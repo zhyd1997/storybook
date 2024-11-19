@@ -479,7 +479,7 @@ export interface Addon_TestProviderType<
   /** @deprecated Use render instead */
   description?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
   render?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
-  contextMenu?: (
+  sidebarContextMenu?: (
     options: {
       context: API_HashEntry;
       state: Addon_TestProviderState<Details>;
