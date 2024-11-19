@@ -76,7 +76,12 @@ export const ContextMenuItem: FC<{
   }
 
   return (
-    <div onClick={(event) => event.stopPropagation()}>
+    <div
+      onClick={(event) => {
+        // stopPropagation to prevent the parent from closing the context menu, which is the default behavior onClick
+        event.stopPropagation();
+      }}
+    >
       <ListItem
         title={title}
         center={description}

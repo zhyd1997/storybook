@@ -12,6 +12,8 @@ import {
   type TestingModuleRunRequestPayload,
 } from '@storybook/core/core-events';
 
+import invariant from 'tiny-invariant';
+
 import type { ModuleFn } from '../lib/types';
 
 export type SubState = {
@@ -76,27 +78,20 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
       );
     },
     runTestProvider(id, options) {
-      console.log('LOG: runTestProvider', id, options);
       if (!options?.entryId) {
-        console.log('LOG: runTestProvider: no entryId, running all tests');
         const payload: TestingModuleRunAllRequestPayload = { providerId: id };
         fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, payload);
         return () => api.cancelTestProvider(id);
       }
 
       const index = store.getState().index;
-      if (!index) {
-        throw new Error('no index?');
-      }
+      invariant(index, 'The index is currently unavailable');
 
       const entry = index[options.entryId];
 
-      if (!entry) {
-        throw new Error('no entry?');
-      }
+      invariant(entry, `No entry found in the index for id '${options.entryId}'`);
 
       if (entry.type === 'story') {
-        console.log('LOG: runTestProvider: running single story', entry);
         const payload: TestingModuleRunRequestPayload = {
           providerId: id,
           payload: [
@@ -119,10 +114,8 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
 
       const findComponents = (entryId: StoryId) => {
         const foundEntry = index[entryId];
-        console.log(`Processing entry: ${entryId}`, foundEntry);
         switch (foundEntry.type) {
           case 'component':
-            console.log(`Adding component entry: ${entryId}`);
             const firstStoryId = foundEntry.children.find(
               (childId) => index[childId].type === 'story'
             );
@@ -135,8 +128,6 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
           case 'story': {
             // this shouldn't happen because we don't visit components' children.
             // so we never get to a story directly.
-            // unless groups can have direct stories without components?
-            console.log(`Adding story entry: ${entryId}`);
             payloads.add({
               importPath: foundEntry.importPath,
               stories: [
@@ -152,18 +143,15 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
             return;
           }
           default:
-            console.log(`Processing children of entry: ${entryId}`);
             foundEntry.children.forEach(findComponents);
         }
       };
-      console.log(`Starting to find components for entryId:`, options.entryId);
       findComponents(options.entryId);
 
       const payload: TestingModuleRunRequestPayload = {
         providerId: id,
         payload: Array.from(payloads),
       };
-      console.log('LOG: payload', payload);
       fullAPI.emit(TESTING_MODULE_RUN_REQUEST, payload);
 
       return () => api.cancelTestProvider(id);
