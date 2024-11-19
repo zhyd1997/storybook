@@ -75,7 +75,7 @@ export class StorybookReporter implements Reporter {
 
   getProgressReport(finishedAt?: number) {
     const files = this.ctx.state.getFiles();
-    const fileTests = getTests(files);
+    const fileTests = getTests(files).filter((t) => t.mode === 'run' || t.mode === 'only');
 
     // The total number of tests reported by Vitest is dynamic and can change during the run, so we
     // use `storyCountForCurrentRun` instead, based on the list of stories provided in the run request.
@@ -85,12 +85,9 @@ export class StorybookReporter implements Reporter {
 
     const numFailedTests = fileTests.filter((t) => t.result?.state === 'fail').length;
     const numPassedTests = fileTests.filter((t) => t.result?.state === 'pass').length;
-    const numPendingTests = fileTests.filter(
-      (t) => t.result?.state === 'run' || t.mode === 'skip' || t.result?.state === 'skip'
-    ).length;
-    const testResults: TestResult[] = [];
+    const numPendingTests = fileTests.filter((t) => t.result?.state === 'run').length;
 
-    for (const file of files) {
+    const testResults: TestResult[] = files.map((file) => {
       const tests = getTests([file]);
       let startTime = tests.reduce(
         (prev, next) => Math.min(prev, next.result?.startTime ?? Number.POSITIVE_INFINITY),
@@ -106,7 +103,7 @@ export class StorybookReporter implements Reporter {
         startTime
       );
 
-      const assertionResults = tests.flatMap<TestResultResult>((t) => {
+      const results = tests.flatMap<TestResultResult>((t) => {
         const ancestorTitles: string[] = [];
         let iter: Suite | undefined = t.suite;
         while (iter) {
@@ -133,15 +130,14 @@ export class StorybookReporter implements Reporter {
       });
 
       const hasFailedTests = tests.some((t) => t.result?.state === 'fail');
-
-      testResults.push({
-        results: assertionResults,
+      return {
+        results,
         startTime,
         endTime,
         status: file.result?.state === 'fail' || hasFailedTests ? 'failed' : 'passed',
         message: file.result?.errors?.[0]?.stack || file.result?.errors?.[0]?.message,
-      });
-    }
+      };
+    });
 
     return {
       cancellable: !finishedAt,

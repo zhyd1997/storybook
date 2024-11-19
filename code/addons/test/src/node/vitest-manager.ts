@@ -78,7 +78,7 @@ export class VitestManager {
         new Promise((_, reject) => setTimeout(reject, 3000, new Error('Request took too long'))),
       ])) as StoryIndex;
       const storyIds = requestStoryIds || Object.keys(index.entries);
-      return storyIds.map((id) => index.entries[id]);
+      return storyIds.map((id) => index.entries[id]).filter((story) => story.type === 'story');
     } catch (e) {
       log('Failed to fetch story index: ' + e.message);
       return [];
