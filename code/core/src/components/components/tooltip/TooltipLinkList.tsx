@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode, SyntheticEvent } from 'react';
-import React, { useCallback } from 'react';
+import React, { Fragment, useCallback } from 'react';
 
 import { styled } from '@storybook/core/theming';
 
@@ -77,7 +77,7 @@ export const TooltipLinkList = ({ links, LinkWrapper, ...props }: TooltipLinkLis
             <Group key={group.map((link) => link.id).join(`~${index}~`)}>
               {group.map((link) => {
                 if ('content' in link) {
-                  return link.content;
+                  return <Fragment key={link.id}>{link.content}</Fragment>;
                 }
                 return (
                   <Item key={link.id} isIndented={isIndented} LinkWrapper={LinkWrapper} {...link} />
