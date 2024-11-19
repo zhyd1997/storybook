@@ -87,6 +87,9 @@ addons.register(ADDON_ID, (api) => {
         if (context.type === 'docs') {
           return null;
         }
+        if (context.type === 'story' && !context.tags.includes('test')) {
+          return null;
+        }
 
         return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
       },
