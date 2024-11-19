@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { createVitest } from 'vitest/node';
 
 import { Channel, type ChannelTransport } from '@storybook/core/channels';
+import type { StoryIndex } from '@storybook/types';
 
 import path from 'path';
 
@@ -59,7 +60,7 @@ global.fetch = vi.fn().mockResolvedValue({
             importPath: 'path/to/another/file',
           },
         },
-      })
+      } as StoryIndex)
     ),
 });
 
