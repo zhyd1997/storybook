@@ -4,7 +4,8 @@ type DateNow = number;
 
 export type TestProviderId = Addon_TestProviderType['id'];
 export type TestProviderConfig = Addon_TestProviderType;
-export type TestProviderState = Addon_TestProviderState;
+export type TestProviderState<Details extends { [key: string]: any } = NonNullable<unknown>> =
+  Addon_TestProviderState<Details>;
 
 export type TestProviders = Record<TestProviderId, TestProviderConfig & TestProviderState>;
 
