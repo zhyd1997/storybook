@@ -71,15 +71,27 @@ export class VitestManager {
     });
   }
 
+  private async fetchStories(indexUrl: string, requestStoryIds?: string[]) {
+    try {
+      const index = (await Promise.race([
+        fetch(indexUrl).then((res) => res.json()),
+        new Promise((_, reject) => setTimeout(reject, 3000, new Error('Request took too long'))),
+      ])) as StoryIndex;
+      const storyIds = requestStoryIds || Object.keys(index.entries);
+      return storyIds.map((id) => index.entries[id]);
+    } catch (e) {
+      log('Failed to fetch story index: ' + e.message);
+      return [];
+    }
+  }
+
   async runTests(requestPayload: TestingModuleRunRequestPayload) {
     if (!this.vitest) {
       await this.startVitest();
     }
     this.resetTestNamePattern();
 
-    const index = (await fetch(requestPayload.indexUrl).then((res) => res.json())) as StoryIndex;
-    const { storyIds = Object.keys(index.entries) } = requestPayload;
-    const stories = storyIds.map((id) => index.entries[id]);
+    const stories = await this.fetchStories(requestPayload.indexUrl, requestPayload.storyIds);
     const vitestTestSpecs = await this.getStorybookTestSpecs();
     const isSingleStoryRun = requestPayload.storyIds?.length === 1;
 
