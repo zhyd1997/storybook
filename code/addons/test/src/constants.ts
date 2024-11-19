@@ -2,7 +2,6 @@ export const ADDON_ID = 'storybook/test';
 export const TEST_PROVIDER_ID = `${ADDON_ID}/test-provider`;
 export const PANEL_ID = `${ADDON_ID}/panel`;
 export const STORYBOOK_ADDON_TEST_CHANNEL = 'STORYBOOK_ADDON_TEST_CHANNEL';
-export const RUN_TESTS_EVENT = `${ADDON_ID}/RUN_TESTS`;
 
 export const TUTORIAL_VIDEO_LINK = 'https://youtu.be/Waht9qq7AoA';
 export const DOCUMENTATION_LINK = 'writing-tests/test-addon';
