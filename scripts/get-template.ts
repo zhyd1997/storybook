@@ -54,7 +54,10 @@ export async function getTemplate(
 
   potentialTemplateKeys = potentialTemplateKeys.filter((t) => {
     const currentTemplate = allTemplates[t] as Template;
-    return !currentTemplate.skipTasks?.includes(scriptName as SkippableTask);
+    return (
+      currentTemplate.inDevelopment !== true &&
+      !currentTemplate.skipTasks?.includes(scriptName as SkippableTask)
+    );
   });
 
   if (potentialTemplateKeys.length !== total) {
@@ -111,7 +114,10 @@ async function checkParallelism(cadence?: Cadence, scriptName?: TaskKey) {
       const templateKeysPerScript = potentialTemplateKeys.filter((t) => {
         const currentTemplate = allTemplates[t] as Template;
 
-        return !currentTemplate.skipTasks?.includes(script as SkippableTask);
+        return (
+          currentTemplate.inDevelopment !== true &&
+          !currentTemplate.skipTasks?.includes(script as SkippableTask)
+        );
       });
       const workflowJobsRaw: (string | { [key: string]: any })[] = data.workflows[cad].jobs;
       const workflowJobs = workflowJobsRaw
@@ -142,29 +148,6 @@ async function checkParallelism(cadence?: Cadence, scriptName?: TaskKey) {
     });
   });
 
-  const inDevelopmentTemplates = Object.entries(allTemplates)
-    .filter(([_, t]) => t.inDevelopment)
-    .map(([k]) => k);
-
-  if (inDevelopmentTemplates.length > 0) {
-    summary.push(
-      `\n\n👇 Some templates are flagged to be in development. Please review if they should still contain this flag:\n\n${inDevelopmentTemplates
-        .map((k) => {
-          const includedInCadence = cadences.find((c) =>
-            templatesByCadence[c]?.includes(k as TemplateKey)
-          );
-
-          return `- ${k} ${includedInCadence ? `(included in ${includedInCadence})` : '(not part of any cadence)'}`;
-        })
-        .sort((a, b) => (a.includes('included') && !b.includes('included') ? -1 : 1))
-        .join('\n')}`
-    );
-
-    summary.push(
-      '\n💡 If a template in this list is part of any cadence, please consider removing the `inDevelopment` flag if applicable. If the template is not in any cadence for a long time, please consider checking it to see if it still works, and see if it still makes sense to have it in the sandbox generation.'
-    );
-  }
-
   if (isIncorrect) {
     summary.unshift(
       'The parellism count is incorrect for some jobs in .circleci/config.yml, you have to update them:'
@@ -173,6 +156,18 @@ async function checkParallelism(cadence?: Cadence, scriptName?: TaskKey) {
   } else {
     summary.unshift('✅  The parallelism count is correct for all jobs in .circleci/config.yml:');
     console.log(summary.concat('\n').join('\n'));
+  }
+
+  const inDevelopmentTemplates = Object.entries(allTemplates)
+    .filter(([_, t]) => t.inDevelopment)
+    .map(([k]) => k);
+
+  if (inDevelopmentTemplates.length > 0) {
+    console.log(
+      `👇 Some templates were skipped as they are flagged to be in development. Please review if they should still contain this flag:\n${inDevelopmentTemplates
+        .map((k) => `- ${k}`)
+        .join('\n')}`
+    );
   }
 }
 

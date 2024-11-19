@@ -235,7 +235,7 @@ const baseTemplates = {
   'experimental-nextjs-vite/default-ts': {
     name: 'Next.js Latest (Vite | TypeScript)',
     script:
-      'npx create-next-app {{beforeDir}} --eslint --tailwind --app --import-alias="@/*" --src-dir --typescript --no-turbopack',
+      'npx create-next-app {{beforeDir}} --eslint --tailwind --app --import-alias="@/*" --src-dir',
     expected: {
       framework: '@storybook/experimental-nextjs-vite',
       renderer: '@storybook/react',
@@ -253,8 +253,6 @@ const baseTemplates = {
         'prop-types',
       ],
     },
-    // TODO: Remove this as soon as sandboxes are updated. This way we can test a Next 15 project.
-    inDevelopment: true,
     skipTasks: ['e2e-tests-dev', 'bench'],
   },
   'react-vite/default-js': {
