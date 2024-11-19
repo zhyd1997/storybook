@@ -9,6 +9,7 @@ import path from 'path';
 import { TEST_PROVIDER_ID } from '../constants';
 import { TestManager } from './test-manager';
 
+const setTestNamePattern = vi.hoisted(() => vi.fn());
 const vitest = vi.hoisted(() => ({
   projects: [{}],
   init: vi.fn(),
@@ -18,7 +19,16 @@ const vitest = vi.hoisted(() => ({
   cancelCurrentRun: vi.fn(),
   globTestSpecs: vi.fn(),
   getModuleProjects: vi.fn(() => []),
-  configOverride: {},
+  configOverride: {
+    actualTestNamePattern: undefined,
+    get testNamePattern() {
+      return this.actualTestNamePattern;
+    },
+    set testNamePattern(value: string) {
+      setTestNamePattern(value);
+      this.actualTestNamePattern = value;
+    },
+  },
 }));
 
 vi.mock('vitest/node', () => ({
@@ -123,12 +133,14 @@ describe('TestManager', () => {
       storyIds: [],
     });
     expect(vitest.runFiles).toHaveBeenCalledWith([], true);
+    expect(vitest.configOverride.testNamePattern).toBeUndefined();
 
     await testManager.handleRunRequest({
       providerId: TEST_PROVIDER_ID,
       indexUrl: 'http://localhost:6006/index.json',
       storyIds: ['story--one'],
     });
+    expect(setTestNamePattern).toHaveBeenCalledWith(/^One$/);
     expect(vitest.runFiles).toHaveBeenCalledWith(tests.slice(0, 1), true);
   });
 });
