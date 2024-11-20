@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 
 import { AddonPanel, Button, Link as LinkComponent } from 'storybook/internal/components';
 import { TESTING_MODULE_RUN_ALL_REQUEST } from 'storybook/internal/core-events';
@@ -13,6 +13,8 @@ import {
 } from 'storybook/internal/types';
 
 import { EyeIcon, PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
+
+import type { ReportNode } from 'istanbul-lib-report';
 
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
@@ -77,6 +79,38 @@ addons.register(ADDON_ID, (api) => {
       api.togglePanel(true);
     };
 
+    type CoverageSummaryData = ReturnType<ReportNode['getCoverageSummary']>['data'];
+    const coverageStore = {
+      data: undefined as CoverageSummaryData | undefined,
+      subscribe: () => {
+        const listener = (data: CoverageSummaryData) => {
+          console.log('LOG: got coverage data on channel', data);
+          coverageStore.data = data;
+        };
+        const channel = api.getChannel();
+        channel.on('storybook/coverage', listener);
+        return () => channel.off('storybook/coverage', listener);
+      },
+      getSnapshot: () => coverageStore.data,
+    };
+    const useCoverage = () => {
+      const coverageSummaryData = useSyncExternalStore(
+        coverageStore.subscribe,
+        coverageStore.getSnapshot
+      );
+      console.log('LOG: coverageSummaryData', coverageSummaryData);
+      if (!coverageSummaryData) {
+        return;
+      }
+
+      let total = 0;
+      let covered = 0;
+      for (const metric of Object.values(coverageSummaryData)) {
+        total += metric.total;
+        covered += metric.covered;
+      }
+      return covered / total;
+    };
     addons.add(TEST_PROVIDER_ID, {
       type: Addon_TypesEnum.experimental_TEST_PROVIDER,
       runnable: true,
@@ -96,6 +130,8 @@ addons.register(ADDON_ID, (api) => {
 
       render: (state) => {
         const [isModalOpen, setIsModalOpen] = useState(false);
+
+        const coverage = useCoverage();
 
         const title = state.crashed || state.failed ? 'Component tests failed' : 'Component tests';
         const errorMessage = state.error?.message;
@@ -122,10 +158,13 @@ addons.register(ADDON_ID, (api) => {
           );
         } else if (state.progress?.finishedAt) {
           description = (
-            <RelativeTime
-              timestamp={new Date(state.progress.finishedAt)}
-              testCount={state.progress.numTotalTests}
-            />
+            <>
+              <RelativeTime
+                timestamp={new Date(state.progress.finishedAt)}
+                testCount={state.progress.numTotalTests}
+              />
+              {coverage ? ` (${Math.round(coverage * 100)}% coverage)` : ''}
+            </>
           );
         } else if (state.watching) {
           description = 'Watching for file changes';
