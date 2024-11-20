@@ -332,6 +332,75 @@ describe('stories API', () => {
         tags: ['shared', 'two-specific'],
       });
     });
+
+    it('intersects story/docs tags to compute tags for group entries', () => {
+      const moduleArgs = createMockModuleArgs({});
+      const { api } = initStories(moduleArgs as unknown as ModuleArgs);
+      const { store } = moduleArgs;
+      api.setIndex({
+        v: 5,
+        entries: {
+          'a-sampleone': {
+            type: 'story',
+            id: 'a-sampleone',
+            title: 'A/SampleOne',
+            name: '1',
+            tags: ['shared', 'one-specific'],
+            importPath: './a.ts',
+          },
+          'a-sampletwo': {
+            type: 'story',
+            id: 'a-sampletwo',
+            title: 'A/SampleTwo',
+            name: '2',
+            tags: ['shared', 'two-specific'],
+            importPath: './a.ts',
+          },
+          'a-embedded-othertopic': {
+            type: 'docs',
+            id: 'a-embedded-othertopic',
+            title: 'A/Embedded/OtherTopic',
+            name: '3',
+            tags: ['shared', 'embedded-docs-specific', 'other'],
+            storiesImports: [],
+            importPath: './embedded/other.mdx',
+          },
+          'a-embedded-extras': {
+            type: 'docs',
+            id: 'a-embedded-extras',
+            title: 'A/Embedded/Extras',
+            name: '3',
+            tags: ['shared', 'embedded-docs-specific', 'extras'],
+            storiesImports: [],
+            importPath: './embedded/extras.mdx',
+          },
+        },
+      });
+      const { index } = store.getState();
+      // We need exact key ordering, even if in theory JS doesn't guarantee it
+      expect(Object.keys(index!)).toEqual([
+        'a',
+        'a-sampleone',
+        'a-sampletwo',
+        'a-embedded',
+        'a-embedded-othertopic',
+        'a-embedded-extras',
+      ]);
+      // Acts as the root, so that the next level is a group we're testing.
+      expect(index!.a).toMatchObject({
+        type: 'root',
+        id: 'a',
+        children: ['a-sampleone', 'a-sampletwo', 'a-embedded'],
+      });
+      // The object of this test.
+      expect(index!['a-embedded']).toMatchObject({
+        type: 'group',
+        id: 'a-embedded',
+        parent: 'a',
+        name: 'Embedded',
+        tags: ['shared', 'embedded-docs-specific'],
+      });
+    });
     // Stories can get out of order for a few reasons -- see reproductions on
     //   https://github.com/storybookjs/storybook/issues/5518
     it('does the right thing for out of order stories', async () => {

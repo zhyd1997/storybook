@@ -289,6 +289,8 @@ export const transformStoryIndexToStoriesHash = (
             children: [childId],
           }),
         });
+        // same as the merge for the component conditional branch above.
+        acc[id].tags = intersect(acc[id]?.tags ?? item.tags, item.tags);
       }
     });
 

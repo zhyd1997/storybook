@@ -21,6 +21,7 @@ export interface API_GroupEntry extends API_BaseEntry {
   type: 'group';
   parent?: StoryId;
   children: StoryId[];
+  tags: Tag[];
 }
 
 export interface API_ComponentEntry extends API_BaseEntry {
