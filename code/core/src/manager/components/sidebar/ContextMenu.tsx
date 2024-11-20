@@ -106,8 +106,7 @@ export function generateTestProviderLinks(
       if (!state) {
         return null;
       }
-
-      const content = state.contextMenu?.({ context, state }, ContextMenu);
+      const content = state.sidebarContextMenu?.({ context, state }, ContextMenu);
 
       if (!content) {
         return null;

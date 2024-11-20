@@ -21,7 +21,7 @@ const Info = styled.div({
   marginLeft: 6,
 });
 
-const Title2 = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
+const Title = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
   fontSize: theme.typography.size.s1,
   fontWeight: crashed ? 'bold' : 'normal',
   color: crashed ? theme.color.negativeText : theme.color.defaultText,
@@ -50,9 +50,9 @@ export const TestProviderRender: FC<{
     <Fragment>
       <Head>
         <Info>
-          <Title2 crashed={state.crashed} id="testing-module-title">
+          <Title crashed={state.crashed} id="testing-module-title">
             {title}
-          </Title2>
+          </Title>
           <Description errorMessage={errorMessage} setIsModalOpen={setIsModalOpen} state={state} />
         </Info>
 

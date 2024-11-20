@@ -12,8 +12,8 @@ import {
 
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { Panel } from './components/Panel';
+import { PanelTitle } from './components/PanelTitle';
 import { TestProviderRender } from './components/TestProviderRender';
-import { Title } from './components/Title';
 import { ADDON_ID, type Details, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 
 const statusMap: Record<any['status'], API_StatusValue> = {
@@ -36,8 +36,11 @@ addons.register(ADDON_ID, (api) => {
       watchable: true,
       name: 'Component tests',
 
-      contextMenu: ({ context, state }, { ListItem }) => {
+      sidebarContextMenu: ({ context, state }, { ListItem }) => {
         if (context.type === 'docs') {
+          return null;
+        }
+        if (context.type === 'story' && !context.tags.includes('test')) {
           return null;
         }
 
@@ -81,7 +84,7 @@ addons.register(ADDON_ID, (api) => {
 
   addons.add(PANEL_ID, {
     type: types.PANEL,
-    title: () => <Title />,
+    title: () => <PanelTitle />,
     match: ({ viewMode }) => viewMode === 'story',
     render: ({ active }) => {
       return (
