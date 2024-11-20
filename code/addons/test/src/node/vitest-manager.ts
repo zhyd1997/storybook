@@ -6,13 +6,19 @@ import type { TestProject, TestSpecification, Vitest, WorkspaceProject } from 'v
 import type { Channel } from 'storybook/internal/channels';
 import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-events';
 
-import type { StoryIndex } from '@storybook/types';
+import type { StoryIndex, StoryIndexEntry } from '@storybook/types';
 
 import slash from 'slash';
 
 import { log } from '../logger';
 import { StorybookReporter } from './reporter';
 import type { TestManager } from './test-manager';
+
+type TagsFilter = {
+  include: string[];
+  exclude: string[];
+  skip: string[];
+};
 
 export class VitestManager {
   vitest: Vitest | null = null;
@@ -85,6 +91,23 @@ export class VitestManager {
     }
   }
 
+  private filterStories(story: StoryIndexEntry, moduleId: string, tagsFilter: TagsFilter) {
+    const absoluteImportPath = path.join(process.cwd(), story.importPath);
+    if (absoluteImportPath !== moduleId) {
+      return false;
+    }
+    if (tagsFilter.include.length && !tagsFilter.include.some((tag) => story.tags?.includes(tag))) {
+      return false;
+    }
+    if (tagsFilter.exclude.some((tag) => story.tags?.includes(tag))) {
+      return false;
+    }
+    if (tagsFilter.skip.some((tag) => story.tags?.includes(tag))) {
+      return false;
+    }
+    return true;
+  }
+
   async runTests(requestPayload: TestingModuleRunRequestPayload) {
     if (!this.vitest) {
       await this.startVitest();
@@ -96,17 +119,23 @@ export class VitestManager {
     const isSingleStoryRun = requestPayload.storyIds?.length === 1;
 
     const { filteredTestFiles, totalTestCount } = vitestTestSpecs.reduce(
-      (acc, vitestTestSpec) => {
-        const matches = stories.filter((story) => {
-          const absoluteImportPath = path.join(process.cwd(), story.importPath);
-          return absoluteImportPath === vitestTestSpec.moduleId;
-        });
+      (acc, spec) => {
+        /* eslint-disable no-underscore-dangle */
+        const { env = {} } = spec.project.config;
+        const include = env.__VITEST_INCLUDE_TAGS__?.split(',').filter(Boolean) ?? ['test'];
+        const exclude = env.__VITEST_EXCLUDE_TAGS__?.split(',').filter(Boolean) ?? [];
+        const skip = env.__VITEST_SKIP_TAGS__?.split(',').filter(Boolean) ?? [];
+        /* eslint-enable no-underscore-dangle */
+
+        const matches = stories.filter((story) =>
+          this.filterStories(story, spec.moduleId, { include, exclude, skip })
+        );
         if (matches.length) {
           if (!this.testManager.watchMode) {
             // Clear the file cache if watch mode is not enabled
-            this.updateLastChanged(vitestTestSpec.moduleId);
+            this.updateLastChanged(spec.moduleId);
           }
-          acc.filteredTestFiles.push(vitestTestSpec);
+          acc.filteredTestFiles.push(spec);
           acc.totalTestCount += matches.length;
         }
         return acc;
