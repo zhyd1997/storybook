@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from 'react';
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import {
   STORY_FINISHED,
@@ -10,6 +10,7 @@ import {
   useAddonState,
   useChannel,
   useParameter,
+  useStorybookApi,
   useStorybookState,
 } from 'storybook/internal/manager-api';
 import type { Report } from 'storybook/internal/preview-api';
@@ -19,9 +20,10 @@ import { HIGHLIGHT } from '@storybook/addon-highlight';
 
 import type { AxeResults, Result } from 'axe-core';
 
-import { ADDON_ID, EVENTS } from '../constants';
+import { ADDON_ID, EVENTS, TEST_PROVIDER_ID } from '../constants';
 import type { A11yParameters } from '../params';
 import type { A11YReport } from '../types';
+import type { TestDiscrepancy } from './TestDiscrepancyMessage';
 
 export interface Results {
   passes: Result[];
@@ -40,6 +42,7 @@ export interface A11yContextStore {
   setStatus: (status: Status) => void;
   error: unknown;
   handleManual: () => void;
+  discrepancy: TestDiscrepancy;
 }
 
 const colorsByType = [
@@ -63,6 +66,7 @@ export const A11yContext = createContext<A11yContextStore>({
   status: 'initial',
   error: undefined,
   handleManual: () => {},
+  discrepancy: null,
 });
 
 const defaultResult = {
@@ -80,12 +84,15 @@ export const A11yContextProvider: FC<PropsWithChildren> = (props) => {
 
   const getInitialStatus = useCallback((manual = false) => (manual ? 'manual' : 'initial'), []);
 
+  const api = useStorybookApi();
   const [results, setResults] = useAddonState<Results>(ADDON_ID, defaultResult);
   const [tab, setTab] = useState(0);
   const [error, setError] = React.useState<unknown>(undefined);
   const [status, setStatus] = useState<Status>(getInitialStatus(parameters.manual!));
   const [highlighted, setHighlighted] = useState<string[]>([]);
+
   const { storyId } = useStorybookState();
+  const storyStatus = api.getCurrentStoryStatus();
 
   const handleToggleHighlight = useCallback((target: string[], highlight: boolean) => {
     setHighlighted((prevHighlighted) =>
@@ -178,6 +185,28 @@ export const A11yContextProvider: FC<PropsWithChildren> = (props) => {
     emit(HIGHLIGHT, { elements: highlighted, color: colorsByType[tab] });
   }, [emit, highlighted, tab]);
 
+  const discrepancy: TestDiscrepancy = useMemo(() => {
+    const storyStatusA11y = storyStatus[TEST_PROVIDER_ID]?.status;
+
+    if (storyStatusA11y) {
+      if (storyStatusA11y === 'success' && results.violations.length > 0) {
+        return 'cliPassedBrowserFailed';
+      }
+
+      if (storyStatusA11y === 'error' && results.violations.length === 0) {
+        if (status === 'ready' || status === 'ran') {
+          return 'browserPassedCliFailed';
+        }
+
+        if (status === 'manual') {
+          return 'cliFailedButModeManual';
+        }
+      }
+    }
+
+    return null;
+  }, [results.violations.length, status, storyStatus]);
+
   return (
     <A11yContext.Provider
       value={{
@@ -191,6 +220,7 @@ export const A11yContextProvider: FC<PropsWithChildren> = (props) => {
         setStatus,
         error,
         handleManual,
+        discrepancy,
       }}
       {...props}
     />
