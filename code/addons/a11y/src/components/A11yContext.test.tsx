@@ -13,7 +13,7 @@ import * as api from 'storybook/internal/manager-api';
 
 import type { AxeResults } from 'axe-core';
 
-import { EVENTS } from '../constants';
+import { EVENTS, TEST_PROVIDER_ID } from '../constants';
 import { A11yContextProvider, useA11yContext } from './A11yContext';
 
 vi.mock('storybook/internal/manager-api');
@@ -65,16 +65,22 @@ describe('A11yContext', () => {
 
   const getCurrentStoryData = vi.fn();
   const getParameters = vi.fn();
-
-  mockedApi.useAddonState.mockImplementation((_, defaultState) => React.useState(defaultState));
-  mockedApi.useChannel.mockReturnValue(vi.fn());
-  getCurrentStoryData.mockReturnValue({ id: storyId, type: 'story' });
-  getParameters.mockReturnValue({});
-  mockedApi.useStorybookApi.mockReturnValue({ getCurrentStoryData, getParameters } as any);
-  mockedApi.useParameter.mockReturnValue({ manual: false });
-  mockedApi.useStorybookState.mockReturnValue({ storyId } as any);
+  const getCurrentStoryStatus = vi.fn();
 
   beforeEach(() => {
+    mockedApi.useAddonState.mockImplementation((_, defaultState) => React.useState(defaultState));
+    mockedApi.useChannel.mockReturnValue(vi.fn());
+    getCurrentStoryData.mockReturnValue({ id: storyId, type: 'story' });
+    getParameters.mockReturnValue({});
+    getCurrentStoryStatus.mockReturnValue({ [TEST_PROVIDER_ID]: { status: 'success' } });
+    mockedApi.useStorybookApi.mockReturnValue({
+      getCurrentStoryData,
+      getParameters,
+      getCurrentStoryStatus,
+    } as any);
+    mockedApi.useParameter.mockReturnValue({ manual: false });
+    mockedApi.useStorybookState.mockReturnValue({ storyId } as any);
+
     mockedApi.useChannel.mockClear();
     mockedApi.useStorybookApi.mockClear();
     mockedApi.useAddonState.mockClear();
@@ -144,6 +150,59 @@ describe('A11yContext', () => {
     expect(queryByTestId('anyViolationsResults')).toHaveTextContent(
       JSON.stringify(axeResult.violations)
     );
+  });
+
+  it('should set discrepancy to cliFailedButModeManual when in manual mode', () => {
+    mockedApi.useParameter.mockReturnValue({ manual: true });
+    getCurrentStoryStatus.mockReturnValue({ [TEST_PROVIDER_ID]: { status: 'error' } });
+
+    const Component = () => {
+      const { discrepancy } = useA11yContext();
+      return <div data-testid="discrepancy">{discrepancy}</div>;
+    };
+
+    const { getByTestId } = render(
+      <A11yContextProvider>
+        <Component />
+      </A11yContextProvider>
+    );
+
+    expect(getByTestId('discrepancy').textContent).toBe('cliFailedButModeManual');
+  });
+
+  it('should set discrepancy to cliPassedBrowserFailed', () => {
+    mockedApi.useParameter.mockReturnValue({ manual: true });
+    getCurrentStoryStatus.mockReturnValue({ [TEST_PROVIDER_ID]: { status: 'success' } });
+
+    const Component = () => {
+      const { discrepancy } = useA11yContext();
+      return <div data-testid="discrepancy">{discrepancy}</div>;
+    };
+
+    const { getByTestId } = render(
+      <A11yContextProvider>
+        <Component />
+      </A11yContextProvider>
+    );
+
+    const storyFinishedPayload: StoryFinishedPayload = {
+      storyId,
+      status: 'error',
+      reporters: [
+        {
+          id: 'a11y',
+          result: axeResult as any,
+          status: 'failed',
+          version: 1,
+        },
+      ],
+    };
+
+    const useChannelArgs = mockedApi.useChannel.mock.calls[0][0];
+
+    act(() => useChannelArgs[STORY_FINISHED](storyFinishedPayload));
+
+    expect(getByTestId('discrepancy').textContent).toBe('cliPassedBrowserFailed');
   });
 
   it('should handle STORY_RENDER_PHASE_CHANGED event correctly', () => {
