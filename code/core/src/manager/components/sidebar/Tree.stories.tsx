@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, fn, within } from '@storybook/test';
+import { expect, fn, userEvent, within } from '@storybook/test';
 
 import { type ComponentEntry, type IndexHash, ManagerContext } from '@storybook/core/manager-api';
 
@@ -19,12 +19,45 @@ const managerContext: any = {
       autodocs: 'tag',
       docsMode: false,
     },
-    testProviders: {},
+    testProviders: {
+      'component-tests': {
+        type: 'experimental_TEST_PROVIDER',
+        id: 'component-tests',
+        render: () => 'Component tests',
+        sidebarContextMenu: () => <div>TEST_PROVIDER_CONTEXT_CONTENT</div>,
+        runnable: true,
+        watchable: true,
+      },
+      'visual-tests': {
+        type: 'experimental_TEST_PROVIDER',
+        id: 'visual-tests',
+        render: () => 'Visual tests',
+        sidebarContextMenu: () => null,
+        runnable: true,
+      },
+    },
   },
   api: {
     on: fn().mockName('api::on'),
     off: fn().mockName('api::off'),
-    getElements: fn(() => ({})),
+    emit: fn().mockName('api::emit'),
+    getElements: fn(() => ({
+      'component-tests': {
+        type: 'experimental_TEST_PROVIDER',
+        id: 'component-tests',
+        render: () => 'Component tests',
+        sidebarContextMenu: () => <div>TEST_PROVIDER_CONTEXT_CONTENT</div>,
+        runnable: true,
+        watchable: true,
+      },
+      'visual-tests': {
+        type: 'experimental_TEST_PROVIDER',
+        id: 'visual-tests',
+        render: () => 'Visual tests',
+        sidebarContextMenu: () => null,
+        runnable: true,
+      },
+    })),
   },
 };
 
@@ -252,5 +285,43 @@ export const SkipToCanvasLinkFocused: Story = {
     await link.focus();
 
     await expect(link).toBeVisible();
+  },
+};
+
+// SkipToCanvas Link only shows on desktop widths
+export const WithContextContent: Story = {
+  ...DocsOnlySingleStoryComponents,
+  parameters: {
+    chromatic: { viewports: [1280] },
+    viewport: {
+      options: {
+        desktop: {
+          name: 'Desktop',
+          styles: {
+            width: '100%',
+            height: '100%',
+          },
+        },
+      },
+    },
+  },
+  globals: {
+    viewport: { value: 'desktop' },
+  },
+  play: async ({ canvasElement }) => {
+    const screen = await within(canvasElement);
+
+    const link = await screen.findByText('TooltipBuildList');
+    await userEvent.hover(link);
+
+    const contextButton = await screen.findByTestId('context-menu');
+    await userEvent.click(contextButton);
+
+    const body = await within(document.body);
+
+    const tooltip = await body.findByTestId('tooltip');
+
+    await expect(tooltip).toBeVisible();
+    expect(tooltip).toHaveTextContent('TEST_PROVIDER_CONTEXT_CONTENT');
   },
 };

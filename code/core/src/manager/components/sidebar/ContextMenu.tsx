@@ -15,16 +15,13 @@ import type { ExcludesNull } from './Tree';
 import { ContextMenu } from './Tree';
 
 export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
-  const [isItemHovered, setIsItemHovered] = useState(false);
+  const [hoverCount, setHoverCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
   const handlers = useMemo(() => {
     return {
       onMouseEnter: () => {
-        setIsItemHovered(true);
-      },
-      onMouseLeave: () => {
-        setIsItemHovered(false);
+        setHoverCount((c) => c + 1);
       },
       onOpen: (event: SyntheticEvent) => {
         event.stopPropagation();
@@ -36,21 +33,32 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
     };
   }, []);
 
-  return useMemo(() => {
+  /**
+   * Calculate the providerLinks whenever the user mouses over the container. We use an incrementer,
+   * instead of a simple boolean to ensure that the links are recalculated
+   */
+  const providerLinks = useMemo(() => {
     const testProviders = api.getElements(
       Addon_TypesEnum.experimental_TEST_PROVIDER
     ) as any as TestProviders;
-    const providerLinks = generateTestProviderLinks(testProviders, context);
-    const shouldDisplayLinks =
-      (isItemHovered || isOpen) && (providerLinks.length > 0 || links.length > 0);
+
+    if (hoverCount) {
+      return generateTestProviderLinks(testProviders, context);
+    }
+    return [];
+  }, [api, context, hoverCount]);
+
+  const isRendered = providerLinks.length > 0 || links.length > 0;
+
+  return useMemo(() => {
     return {
       onMouseEnter: handlers.onMouseEnter,
-      onMouseLeave: handlers.onMouseLeave,
-      node: shouldDisplayLinks ? (
+      node: isRendered ? (
         <WithTooltip
+          data-displayed={isOpen ? 'on' : 'off'}
           closeOnOutsideClick
-          onClick={handlers.onOpen}
           placement="bottom-end"
+          data-testid="context-menu"
           onVisibleChange={(visible) => {
             if (!visible) {
               handlers.onClose();
@@ -68,7 +76,7 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
         </WithTooltip>
       ) : null,
     };
-  }, [api, context, handlers, isItemHovered, isOpen, links]);
+  }, [context, handlers, isOpen, isRendered, links]);
 };
 
 /**
@@ -98,8 +106,7 @@ export function generateTestProviderLinks(
       if (!state) {
         return null;
       }
-
-      const content = state.contextMenu?.({ context, state }, ContextMenu);
+      const content = state.sidebarContextMenu?.({ context, state }, ContextMenu);
 
       if (!content) {
         return null;

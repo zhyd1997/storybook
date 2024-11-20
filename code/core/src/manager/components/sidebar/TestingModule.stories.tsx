@@ -5,8 +5,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { fn, userEvent } from '@storybook/test';
 
 import type { TestProviders } from '@storybook/core/core-events';
+import { ManagerContext } from '@storybook/core/manager-api';
 
-import { ManagerContext } from '../../../manager-api';
 import { TestingModule } from './TestingModule';
 
 const baseState = {
@@ -76,6 +76,7 @@ const managerContext: any = {
 
 const meta = {
   component: TestingModule,
+  title: 'Sidebar/TestingModule',
   args: {
     testProviders,
     errorCount: 0,

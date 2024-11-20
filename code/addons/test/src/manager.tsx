@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { AddonPanel, Button, Link as LinkComponent } from 'storybook/internal/components';
 import type { Combo } from 'storybook/internal/manager-api';
@@ -16,7 +16,8 @@ import { EyeIcon, PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { GlobalErrorModal } from './components/GlobalErrorModal';
 import { Panel } from './components/Panel';
-import { Title } from './components/Title';
+import { PanelTitle } from './components/PanelTitle';
+import { RelativeTime } from './components/RelativeTime';
 import { ADDON_ID, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 import type { TestResult } from './node/reporter';
 
@@ -45,34 +46,13 @@ export function getRelativeTimeString(date: Date): string {
   return rtf.format(Math.floor(delta / divisor), units[unitIndex]);
 }
 
-const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: number }) => {
-  const [relativeTimeString, setRelativeTimeString] = useState(null);
-
-  useEffect(() => {
-    if (timestamp) {
-      setRelativeTimeString(getRelativeTimeString(timestamp).replace(/^now$/, 'just now'));
-
-      const interval = setInterval(() => {
-        setRelativeTimeString(getRelativeTimeString(timestamp).replace(/^now$/, 'just now'));
-      }, 10000);
-
-      return () => clearInterval(interval);
-    }
-  }, [timestamp]);
-
-  return (
-    relativeTimeString &&
-    `Ran ${testCount} ${testCount === 1 ? 'test' : 'tests'} ${relativeTimeString}`
-  );
-};
-
 const Info = styled.div({
   display: 'flex',
   flexDirection: 'column',
   marginLeft: 6,
 });
 
-const Title2 = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
+const SidebarContextMenuTitle = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
   fontSize: theme.typography.size.s1,
   fontWeight: crashed ? 'bold' : 'normal',
   color: crashed ? theme.color.negativeText : theme.color.defaultText,
@@ -102,14 +82,12 @@ addons.register(ADDON_ID, (api) => {
       watchable: true,
       name: 'Component tests',
 
-      contextMenu: ({ context, state }, { ListItem }) => {
+      sidebarContextMenu: ({ context, state }, { ListItem }) => {
         if (context.type === 'docs') {
           return null;
         }
-
-        // TODO: remove this... right now: always returns false, to disable the feature
-        if (Date.now()) {
-          return false;
+        if (context.type === 'story' && !context.tags.includes('test')) {
+          return null;
         }
 
         return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
@@ -155,9 +133,9 @@ addons.register(ADDON_ID, (api) => {
         return (
           <>
             <Info>
-              <Title2 crashed={state.crashed} id="testing-module-title">
+              <SidebarContextMenuTitle crashed={state.crashed} id="testing-module-title">
                 {title}
-              </Title2>
+              </SidebarContextMenuTitle>
               <Description id="testing-module-description">{description}</Description>
             </Info>
 
@@ -253,7 +231,7 @@ addons.register(ADDON_ID, (api) => {
 
   addons.add(PANEL_ID, {
     type: types.PANEL,
-    title: () => <Title />,
+    title: () => <PanelTitle />,
     match: ({ viewMode }) => viewMode === 'story',
     render: ({ active }) => {
       return (

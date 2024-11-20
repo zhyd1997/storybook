@@ -5,7 +5,7 @@ import { useAddonState } from 'storybook/internal/manager-api';
 
 import { ADDON_ID } from '../constants';
 
-export function Title() {
+export function PanelTitle() {
   const [addonState = {}] = useAddonState(ADDON_ID);
   const { hasException, interactionsCount } = addonState as any;
 

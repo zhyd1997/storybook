@@ -85,6 +85,22 @@ export const LeafNodeStyleWrapper = styled.div(({ theme }) => ({
     outline: 'none',
   },
 
+  '& [data-displayed="off"]': {
+    visibility: 'hidden',
+  },
+
+  '&:hover [data-displayed="off"]': {
+    visibility: 'visible',
+  },
+
+  '& [data-displayed="on"] + *': {
+    display: 'none',
+  },
+
+  '&:hover [data-displayed="off"] + *': {
+    display: 'none',
+  },
+
   '&[data-selected="true"]': {
     color: theme.color.lightest,
     background: theme.color.secondary,
@@ -275,7 +291,6 @@ const Node = React.memo<NodeProps>(function Node({
         data-nodetype={item.type === 'docs' ? 'document' : 'story'}
         data-highlightable={isDisplayed}
         onMouseEnter={contextMenu.onMouseEnter}
-        onMouseLeave={contextMenu.onMouseLeave}
       >
         <LeafNode
           // @ts-expect-error (non strict)
@@ -301,18 +316,18 @@ const Node = React.memo<NodeProps>(function Node({
             <a href="#storybook-preview-wrapper">Skip to canvas</a>
           </SkipToContentLink>
         )}
-        {contextMenu.node ||
-          (icon ? (
-            <StatusButton
-              aria-label={`Test status: ${statusValue}`}
-              role="status"
-              type="button"
-              status={statusValue}
-              selectedItem={isSelected}
-            >
-              {icon}
-            </StatusButton>
-          ) : null)}
+        {contextMenu.node}
+        {icon ? (
+          <StatusButton
+            aria-label={`Test status: ${statusValue}`}
+            role="status"
+            type="button"
+            status={statusValue}
+            selectedItem={isSelected}
+          >
+            {icon}
+          </StatusButton>
+        ) : null}
       </LeafNodeStyleWrapper>
     );
   }
@@ -373,7 +388,6 @@ const Node = React.memo<NodeProps>(function Node({
         data-nodetype={item.type}
         data-highlightable={isDisplayed}
         onMouseEnter={contextMenu.onMouseEnter}
-        onMouseLeave={contextMenu.onMouseLeave}
       >
         <BranchNode
           id={id}
@@ -404,14 +418,14 @@ const Node = React.memo<NodeProps>(function Node({
           {(item.renderLabel as (i: typeof item, api: API) => React.ReactNode)?.(item, api) ||
             item.name}
         </BranchNode>
-        {contextMenu.node ||
-          (['error', 'warn'].includes(itemStatus) && (
-            <StatusButton type="button" status={itemStatus}>
-              <svg key="icon" viewBox="0 0 6 6" width="6" height="6" type="dot">
-                <UseSymbol type="dot" />
-              </svg>
-            </StatusButton>
-          ))}
+        {contextMenu.node}
+        {['error', 'warn'].includes(itemStatus) && (
+          <StatusButton type="button" status={itemStatus}>
+            <svg key="icon" viewBox="0 0 6 6" width="6" height="6" type="dot">
+              <UseSymbol type="dot" />
+            </svg>
+          </StatusButton>
+        )}
       </LeafNodeStyleWrapper>
     );
   }

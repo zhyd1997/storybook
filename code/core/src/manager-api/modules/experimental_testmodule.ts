@@ -10,6 +10,8 @@ import {
   type TestingModuleRunRequestPayload,
 } from '@storybook/core/core-events';
 
+import invariant from 'tiny-invariant';
+
 import type { ModuleFn } from '../lib/types';
 
 export type SubState = {
@@ -39,7 +41,7 @@ export type SubAPI = {
   cancelTestProvider(id: TestProviderId): void;
 };
 
-export const init: ModuleFn = ({ store, fullAPI }) => {
+export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
   const state: SubState = {
     testProviders: store.getState().testProviders || {},
   };
@@ -74,10 +76,8 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
       );
     },
     runTestProvider(id, options) {
-      const { index } = store.getState();
-      if (!index) {
-        throw new Error('No story index available. This is likely a bug.');
-      }
+      const index = store.getState().index;
+      invariant(index, 'The index is currently unavailable');
 
       const indexUrl = new URL('index.json', window.location.href).toString();
 
@@ -90,9 +90,8 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
         return () => api.cancelTestProvider(id);
       }
 
-      if (!index[options.entryId]) {
-        throw new Error('Could not find story entry for id: ' + options.entryId);
-      }
+      const entry = index[options.entryId];
+      invariant(entry, `No entry found in the index for id '${options.entryId}'`);
 
       const findStories = (entryId: StoryId, results: StoryId[] = []): StoryId[] => {
         const node = index[entryId];
@@ -138,6 +137,5 @@ export const init: ModuleFn = ({ store, fullAPI }) => {
 
     store.setState({ testProviders: initialState }, { persistence: 'session' });
   };
-
   return { init: initModule, state, api };
 };
