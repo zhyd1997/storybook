@@ -186,7 +186,7 @@ export const A11yContextProvider: FC<PropsWithChildren> = (props) => {
   }, [emit, highlighted, tab]);
 
   const discrepancy: TestDiscrepancy = useMemo(() => {
-    const storyStatusA11y = storyStatus[TEST_PROVIDER_ID]?.status;
+    const storyStatusA11y = storyStatus?.[TEST_PROVIDER_ID]?.status;
 
     if (storyStatusA11y) {
       if (storyStatusA11y === 'success' && results.violations.length > 0) {
