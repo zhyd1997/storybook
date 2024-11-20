@@ -2,9 +2,14 @@ import React from 'react';
 
 import { Link as LinkComponent } from 'storybook/internal/components';
 import { type TestProviderConfig, type TestProviderState } from 'storybook/internal/core-events';
+import { styled } from 'storybook/internal/theming';
 
 import { RelativeTime } from './RelativeTime';
-import { DescriptionStyle } from './TestProviderRender';
+
+export const DescriptionStyle = styled.div(({ theme }) => ({
+  fontSize: theme.typography.size.s1,
+  color: theme.barTextColor,
+}));
 
 export function Description({
   errorMessage,

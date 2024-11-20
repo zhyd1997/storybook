@@ -27,11 +27,6 @@ const Title2 = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
   color: crashed ? theme.color.negativeText : theme.color.defaultText,
 }));
 
-export const DescriptionStyle = styled.div(({ theme }) => ({
-  fontSize: theme.typography.size.s1,
-  color: theme.barTextColor,
-}));
-
 const Actions = styled.div({
   display: 'flex',
   gap: 6,
