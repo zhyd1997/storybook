@@ -493,21 +493,24 @@ export interface Addon_TestProviderType<
   watchable?: boolean;
 }
 
-export type Addon_TestProviderState<Details extends { [key: string]: any } = NonNullable<unknown>> =
-  Pick<Addon_TestProviderType, 'runnable' | 'watchable'> & {
-    progress?: TestingModuleProgressReportProgress;
-    details: Details;
-    cancellable: boolean;
-    cancelling: boolean;
-    running: boolean;
-    watching: boolean;
-    failed: boolean;
-    crashed: boolean;
-    error?: {
-      name: string;
-      message?: string;
-    };
+export type Addon_TestProviderState<
+  Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = Pick<Addon_TestProviderType, 'runnable' | 'watchable'> & {
+  progress?: TestingModuleProgressReportProgress;
+  details: Details;
+  cancellable: boolean;
+  cancelling: boolean;
+  running: boolean;
+  watching: boolean;
+  failed: boolean;
+  crashed: boolean;
+  error?: {
+    name: string;
+    message?: string;
   };
+  config?: Config;
+};
 
 type Addon_TypeBaseNames = Exclude<
   Addon_TypesEnum,

@@ -6,9 +6,9 @@ import { styled } from 'storybook/internal/theming';
 import { Addon_TypesEnum } from 'storybook/internal/types';
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn, within } from '@storybook/test';
 
-import type { Details } from '../constants';
+import type { Config, Details } from '../constants';
 import { TestProviderRender } from './TestProviderRender';
 
 type Story = StoryObj<typeof TestProviderRender>;
@@ -25,6 +25,7 @@ const managerContext: any = {
   api: {
     getDocsUrl: fn().mockName('api::getDocsUrl'),
     emit: fn().mockName('api::emit'),
+    updateTestProviderState: fn().mockName('api::updateTestProviderState'),
   },
 };
 
@@ -36,7 +37,7 @@ const config: TestProviderConfig = {
   watchable: true,
 };
 
-const baseState: TestProviderState<Details> = {
+const baseState: TestProviderState<Details, Config> = {
   cancellable: true,
   cancelling: false,
   crashed: false,
@@ -44,12 +45,11 @@ const baseState: TestProviderState<Details> = {
   failed: false,
   running: false,
   watching: false,
+  config: {
+    a11y: false,
+    coverage: false,
+  },
   details: {
-    editing: false,
-    options: {
-      a11y: false,
-      coverage: false,
-    },
     testResults: [
       {
         endTime: 0,
@@ -84,17 +84,18 @@ export default {
       ...config,
       ...baseState,
     },
+    api: managerContext.api,
   },
   decorators: [
-    (StoryFn) => (
-      <ManagerContext.Provider value={managerContext}>
-        <StoryFn api={managerContext.api} />
-      </ManagerContext.Provider>
-    ),
     (StoryFn) => (
       <Content>
         <StoryFn />
       </Content>
+    ),
+    (StoryFn) => (
+      <ManagerContext.Provider value={managerContext}>
+        <StoryFn />
+      </ManagerContext.Provider>
     ),
   ],
 } as Meta<typeof TestProviderRender>;
@@ -124,13 +125,34 @@ export const EnableA11y: Story = {
       ...config,
       ...baseState,
       details: {
-        editing: false,
-        options: {
-          a11y: true,
-          coverage: false,
-        },
+        testResults: [],
+      },
+      config: {
+        a11y: true,
+        coverage: false,
+      },
+    },
+  },
+};
+
+export const EnableEditing: Story = {
+  args: {
+    state: {
+      ...config,
+      ...baseState,
+      config: {
+        a11y: true,
+        coverage: false,
+      },
+      details: {
         testResults: [],
       },
     },
+  },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement);
+
+    screen.getByLabelText('Edit').click();
   },
 };

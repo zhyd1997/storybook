@@ -1,4 +1,4 @@
-import React, { type FC, Fragment, useState } from 'react';
+import React, { type FC, Fragment, useCallback, useRef, useState } from 'react';
 
 import { Button } from 'storybook/internal/components';
 import {
@@ -9,9 +9,9 @@ import {
 import type { API } from 'storybook/internal/manager-api';
 import { styled } from 'storybook/internal/theming';
 
-import { EyeIcon, PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
+import { EditIcon, EyeIcon, PlayHollowIcon, StopAltHollowIcon } from '@storybook/icons';
 
-import { type Details, TEST_PROVIDER_ID } from '../constants';
+import { type Config, type Details, TEST_PROVIDER_ID } from '../constants';
 import { Description } from './Description';
 import { GlobalErrorModal } from './GlobalErrorModal';
 
@@ -40,12 +40,21 @@ const Head = styled.div({
 
 export const TestProviderRender: FC<{
   api: API;
-  state: TestProviderConfig & TestProviderState<Details>;
+  state: TestProviderConfig & TestProviderState<Details, Config>;
 }> = ({ state, api }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const title = state.crashed || state.failed ? 'Component tests failed' : 'Component tests';
   const errorMessage = state.error?.message;
+
+  const [config, changeConfig] = useConfig(
+    state.id,
+    state.config || { a11y: false, coverage: false },
+    api
+  );
+
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
     <Fragment>
       <Head>
@@ -57,6 +66,15 @@ export const TestProviderRender: FC<{
         </Info>
 
         <Actions>
+          <Button
+            aria-label={`Edit`}
+            variant="ghost"
+            padding="small"
+            active={isEditing}
+            onClick={() => setIsEditing((v) => !v)}
+          >
+            <EditIcon />
+          </Button>
           {state.watchable && (
             <Button
               aria-label={`${state.watching ? 'Disable' : 'Enable'} watch mode for ${state.name}`}
@@ -86,7 +104,7 @@ export const TestProviderRender: FC<{
                   aria-label={`Start ${state.name}`}
                   variant="ghost"
                   padding="small"
-                  onClick={() => api.runTestProvider(state.id)}
+                  onClick={() => api.runTestProvider(state.id, {})}
                   disabled={state.crashed || state.running}
                 >
                   <PlayHollowIcon />
@@ -97,15 +115,26 @@ export const TestProviderRender: FC<{
         </Actions>
       </Head>
 
-      {!state.details.editing ? (
+      {!isEditing ? (
         <Fragment>
-          {state.details?.options?.a11y ? <div>A11Y</div> : null}
-          {state.details?.options?.coverage ? <div>COVERAGE</div> : null}
+          {Object.entries(config).map(([key, value]) => (
+            <div key={key}>
+              {key}: {value ? 'ON' : 'OFF'}
+            </div>
+          ))}
         </Fragment>
       ) : (
         <Fragment>
-          <div>EDITING A11Y</div>
-          <div>EDITING COVERAGE</div>
+          {Object.entries(config).map(([key, value]) => (
+            <div
+              key={key}
+              onClick={() => {
+                changeConfig({ [key]: !value });
+              }}
+            >
+              {key}: {value ? 'ON' : 'OFF'}
+            </div>
+          ))}
         </Fragment>
       )}
 
@@ -123,3 +152,25 @@ export const TestProviderRender: FC<{
     </Fragment>
   );
 };
+
+function useConfig(id: string, config: Config, api: API) {
+  const data = useRef<Config>(config);
+  data.current = config || {
+    a11y: false,
+    coverage: false,
+  };
+
+  const changeConfig = useCallback(
+    (update: Partial<Config>) => {
+      api.updateTestProviderState(id, {
+        config: {
+          ...data.current,
+          ...update,
+        },
+      });
+    },
+    [api, id]
+  );
+
+  return [data.current, changeConfig] as const;
+}

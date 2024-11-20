@@ -79,7 +79,11 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
     },
     runTestProvider(id, options) {
       if (!options?.entryId) {
-        const payload: TestingModuleRunAllRequestPayload = { providerId: id };
+        const provider = store.getState().testProviders[id];
+        const payload: TestingModuleRunAllRequestPayload = {
+          providerId: id,
+          config: provider.config,
+        };
         fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, payload);
         return () => api.cancelTestProvider(id);
       }

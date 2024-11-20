@@ -4,8 +4,10 @@ type DateNow = number;
 
 export type TestProviderId = Addon_TestProviderType['id'];
 export type TestProviderConfig = Addon_TestProviderType;
-export type TestProviderState<Details extends { [key: string]: any } = NonNullable<unknown>> =
-  Addon_TestProviderState<Details>;
+export type TestProviderState<
+  Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = Addon_TestProviderState<Details, Config>;
 
 export type TestProviders = Record<TestProviderId, TestProviderConfig & TestProviderState>;
 
@@ -25,6 +27,7 @@ export type TestingModuleRunRequestPayload = {
 
 export type TestingModuleRunAllRequestPayload = {
   providerId: TestProviderId;
+  config?: TestProviderState['config'];
 };
 
 export type TestingModuleProgressReportPayload =
