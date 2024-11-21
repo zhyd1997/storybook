@@ -44,7 +44,7 @@ The classes correspond to markdown elements (e.g. `sbdocs-title`, `sbdocs-subtit
 
 You can style these classes in `.storybook/preview-head.html`. For example, here's how to make the content wider for UHD displays:
 
-```html title=".storybook/preview-head.html"
+```html
 <style>
   .sbdocs.sbdocs-content {
     max-width: 1440px;
