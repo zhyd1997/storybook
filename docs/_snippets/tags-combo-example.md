@@ -299,8 +299,8 @@ export const Combo: Story = {
 
 <!-- 👇 This story should not be tested, but will appear in the sidebar and docs page -->
 <Story name="Combo" tags={['!test']}>
-  <Button variant={1}>
-  <Button variant={2}>
+  <Button variant={1} />
+  <Button variant={2} />
 </Story>
 ```
 
@@ -330,8 +330,8 @@ export const Combo: Story = {
 
 <!-- 👇 This story should not be tested, but will appear in the sidebar and docs page -->
 <Story name="Combo" tags={['!test']}>
-  <Button variant={1}>
-  <Button variant={2}>
+  <Button variant={1} />
+  <Button variant={2} />
 </Story>
 ```
 
