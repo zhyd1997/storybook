@@ -38,16 +38,13 @@ export class VitestManager {
       coverage: {
         provider: 'v8',
         reporter: [
-          // 'html',
+          'html',
           [
             // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
             '@storybook/experimental-addon-test/internal/coverage-reporter',
             { channel: this.channel },
           ],
         ],
-        reportOnFailure: true,
-        enabled: true,
-        cleanOnRerun: false,
       },
     });
 
@@ -142,7 +139,14 @@ export class VitestManager {
       this.vitest!.configOverride.testNamePattern = testNamePattern;
     }
 
-    await this.vitest!.runFiles(testList, true);
+    // console.log('LOG: conf', this.vitest.config.coverage);
+    // console.log('LOG: confOver', this.vitest.configOverride.coverage);
+    // this.vitest.configOverride.coverage = {
+    //   enabled: Math.random() > 0.5,
+    // };
+
+    await this.vitest!.runFiles(testList, false);
+
     this.resetTestNamePattern();
   }
 
@@ -226,7 +230,7 @@ export class VitestManager {
     if (triggerAffectedTests.length) {
       await this.vitest.cancelCurrentRun('keyboard-input');
       await this.vitest.runningPromise;
-      await this.vitest.runFiles(triggerAffectedTests, true);
+      await this.vitest.runFiles(triggerAffectedTests, false);
     }
   }
 
