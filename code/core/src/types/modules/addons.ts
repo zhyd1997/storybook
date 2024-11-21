@@ -469,16 +469,17 @@ export interface Addon_SidebarTopType {
 
 export interface Addon_TestProviderType<
   Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
 > {
   type: Addon_TypesEnum.experimental_TEST_PROVIDER;
   /** The unique id of the test provider. */
   id: string;
   name: string;
   /** @deprecated Use render instead */
-  title?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
+  title?: (state: TestProviderConfig & Addon_TestProviderState<Details, Config>) => ReactNode;
   /** @deprecated Use render instead */
-  description?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
-  render?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
+  description?: (state: TestProviderConfig & Addon_TestProviderState<Details, Config>) => ReactNode;
+  render?: (state: TestProviderConfig & Addon_TestProviderState<Details, Config>) => ReactNode;
   sidebarContextMenu?: (
     options: {
       context: API_HashEntry;

@@ -14,7 +14,7 @@ import { ContextMenuItem } from './components/ContextMenuItem';
 import { Panel } from './components/Panel';
 import { PanelTitle } from './components/PanelTitle';
 import { TestProviderRender } from './components/TestProviderRender';
-import { ADDON_ID, type Details, PANEL_ID, TEST_PROVIDER_ID } from './constants';
+import { ADDON_ID, type Config, type Details, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 
 const statusMap: Record<any['status'], API_StatusValue> = {
   failed: 'error',
@@ -73,7 +73,7 @@ addons.register(ADDON_ID, (api) => {
               .filter(Boolean)
           )
         ),
-    } as Addon_TestProviderType<Details>);
+    } as Addon_TestProviderType<Details, Config>);
   }
 
   const filter = ({ state }: Combo) => {

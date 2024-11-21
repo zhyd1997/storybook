@@ -1,11 +1,7 @@
 import React, { type FC, Fragment, useCallback, useRef, useState } from 'react';
 
 import { Button } from 'storybook/internal/components';
-import {
-  TESTING_MODULE_RUN_ALL_REQUEST,
-  type TestProviderConfig,
-  type TestProviderState,
-} from 'storybook/internal/core-events';
+import { type TestProviderConfig, type TestProviderState } from 'storybook/internal/core-events';
 import type { API } from 'storybook/internal/manager-api';
 import { styled } from 'storybook/internal/theming';
 
@@ -146,7 +142,7 @@ export const TestProviderRender: FC<{
         }}
         onRerun={() => {
           setIsModalOpen(false);
-          api.getChannel().emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: TEST_PROVIDER_ID });
+          api.runTestProvider(TEST_PROVIDER_ID);
         }}
       />
     </Fragment>
