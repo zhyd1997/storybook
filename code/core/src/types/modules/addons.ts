@@ -489,7 +489,7 @@ export interface Addon_TestProviderType<
   stateUpdater?: (
     state: TestProviderConfig & Addon_TestProviderState<Details>,
     update: Partial<Addon_TestProviderState<Details>>
-  ) => Partial<TestProviderConfig & Addon_TestProviderState<Details>>;
+  ) => void | Partial<TestProviderConfig & Addon_TestProviderState<Details>>;
   runnable?: boolean;
   watchable?: boolean;
 }

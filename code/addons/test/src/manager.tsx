@@ -224,7 +224,6 @@ addons.register(ADDON_ID, (api) => {
           );
           api.experimental_updateStatus(TEST_PROVIDER_ID, statusUpdate);
         }
-        return { ...state, ...update };
       },
     } as Addon_TestProviderType<{
       testResults: TestResult[];
