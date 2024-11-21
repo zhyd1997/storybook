@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import type { Channel } from 'storybook/internal/channels';
 
 import type { ReportNode, Visitor } from 'istanbul-lib-report';
@@ -16,6 +18,8 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
       return;
     }
     const coverageSummary = node.getCoverageSummary(false);
-    this.#channel.emit('storybook/coverage', coverageSummary);
+    this.#channel.emit('storybook/coverage', {
+      coverageSummary,
+    });
   }
 }

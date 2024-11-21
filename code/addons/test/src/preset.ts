@@ -9,7 +9,7 @@ import {
   TESTING_MODULE_WATCH_MODE_REQUEST,
 } from 'storybook/internal/core-events';
 import { oneWayHash, telemetry } from 'storybook/internal/telemetry';
-import type { Options, PresetProperty, StoryId } from 'storybook/internal/types';
+import type { Options, PresetProperty, PresetPropertyFn, StoryId } from 'storybook/internal/types';
 
 import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
@@ -127,4 +127,14 @@ export const managerEntries: PresetProperty<'managerEntries'> = async (entry = [
 
   // for whatever reason seems like the return type of managerEntries is not correct (it expects never instead of string[])
   return entry as never;
+};
+
+export const staticDirs: PresetPropertyFn<'staticDirs'> = async (values = []) => {
+  return [
+    {
+      from: join(process.cwd(), 'coverage'),
+      to: '/coverage',
+    },
+    ...values,
+  ];
 };

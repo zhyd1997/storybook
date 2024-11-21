@@ -79,11 +79,13 @@ addons.register(ADDON_ID, (api) => {
       api.togglePanel(true);
     };
 
-    type CoverageSummaryData = ReturnType<ReportNode['getCoverageSummary']>['data'];
+    type CoverageSummary = {
+      coverageSummary: ReturnType<ReportNode['getCoverageSummary']>['data'];
+    };
     const coverageStore = {
-      data: undefined as CoverageSummaryData | undefined,
+      data: undefined as CoverageSummary | undefined,
       subscribe: () => {
-        const listener = (data: CoverageSummaryData) => {
+        const listener = (data: CoverageSummary) => {
           console.log('LOG: got coverage data on channel', data);
           coverageStore.data = data;
         };
@@ -105,11 +107,13 @@ addons.register(ADDON_ID, (api) => {
 
       let total = 0;
       let covered = 0;
-      for (const metric of Object.values(coverageSummaryData)) {
+      for (const metric of Object.values(coverageSummaryData.coverageSummary)) {
         total += metric.total;
         covered += metric.covered;
       }
-      return covered / total;
+      return {
+        percentage: covered / total,
+      };
     };
     addons.add(TEST_PROVIDER_ID, {
       type: Addon_TypesEnum.experimental_TEST_PROVIDER,
@@ -163,7 +167,15 @@ addons.register(ADDON_ID, (api) => {
                 timestamp={new Date(state.progress.finishedAt)}
                 testCount={state.progress.numTotalTests}
               />
-              {coverage ? ` (${Math.round(coverage * 100)}% coverage)` : ''}
+              {coverage ? (
+                <LinkComponent
+                  href="/coverage/index.html"
+                  target="_blank"
+                  rel="noreferrer"
+                >{`(${Math.round(coverage.percentage * 100)}% coverage)`}</LinkComponent>
+              ) : (
+                ''
+              )}
             </>
           );
         } else if (state.watching) {
