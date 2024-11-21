@@ -66,7 +66,7 @@ export const Default: StoryFn<typeof Button> = (args) => ({
 ```js filename="CSF 2 - Button.stories.js" renderer="web-components" language="js"
 // Other imports and story implementation
 
-export const Default = ({ primary, backgroundColor, size, label }) =>
+export const Default = ({ primary, size, label }) =>
   html`<custom-button ?primary="${primary}" size="${size}" label="${label}"></custom-button>`;
 ```
 

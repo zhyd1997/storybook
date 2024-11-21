@@ -85,7 +85,7 @@ export const Default: Story = {
 // Other imports and story implementation
 
 export const Default = {
-  render: (args) => html`<demo-button label="Hello" @click=${action('clicked')}></custom-button>`,
+  render: (args) => html`<demo-button label="Hello" @click=${action('clicked')}></demo-button>`,
 };
 ```
 

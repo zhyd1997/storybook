@@ -1,4 +1,4 @@
-```js filename=".storybook/main.js" renderer="react" language="js"
+```js filename=".storybook/main.js" renderer="vue" language="js"
 export default {
   framework: {
     name: '@storybook/vue3-vite',
@@ -9,7 +9,7 @@ export default {
 };
 ```
 
-```ts filename=".storybook/main.jsts" renderer="vue" language="ts"
+```ts filename=".storybook/main.ts" renderer="vue" language="ts"
 import type { StorybookConfig } from '@storybook/vue3-vite';
 
 const config: StorybookConfig = {

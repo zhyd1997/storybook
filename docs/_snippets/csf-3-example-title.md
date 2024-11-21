@@ -7,7 +7,7 @@ import { Meta, Story } from '@storybook/blocks';
 {/* 👇 Component documentation page */}
 import * as ButtonStories from './Button.stories';
 
-<Meta of={ExampleComponentStories} />
+<Meta of={ButtonStories} />
 
 <Story of={ButtonStories.Primary} />
 ```
