@@ -91,7 +91,7 @@ export default { component: Button };
 export const Primary = { args: { primary: true } };
 ```
 
-```ts filename="Button.stories.ts" renderer="svelte" language="ts"
+```ts filename="CSF 3 - Button.stories.ts" renderer="svelte" language="ts"
 import type { Meta, StoryObj } from '@storybook/svelte';
 
 import Button from './Button.svelte';

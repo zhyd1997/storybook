@@ -2,6 +2,7 @@
 import { Meta, Story } from '@storybook/blocks';
 
 {/* 👇 Documentation-only page */}
+
 <Meta title="Documentation" />
 
 {/* 👇 Component documentation page */}
@@ -23,7 +24,7 @@ export default {
 };
 
 // The story variable name will be used if `name` is not set
-const Primary: Story = {
+const Primary = {
   // Sets the name for that particular story
   name: 'Primary',
   args: {

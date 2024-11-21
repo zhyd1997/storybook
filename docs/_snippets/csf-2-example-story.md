@@ -35,7 +35,7 @@ export const Default = (args) => ({
 
 ```ts filename="CSF 2 - Button.stories.ts" renderer="svelte" language="ts"
 // Other imports and story implementation
-export const Primary: StoryFn<typeof Button> = (args) => ({
+export const Default: StoryFn<typeof Button> = (args) => ({
   Component: Button,
   props: args,
 });
