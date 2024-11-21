@@ -161,9 +161,9 @@ MyNonCheckedStory.parameters = {
 };
 ```
 
-## Parameters
+## Parameters and globals
 
-For more customizability use parameters to configure [aXe options](https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#api-name-axeconfigure).
+For more customizability use parameters and globals to configure [aXe options](https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#api-name-axeconfigure).
 You can override these options [at story level too](https://storybook.js.org/docs/react/configure/features-and-behavior#per-story-options).
 
 ```js
@@ -180,10 +180,16 @@ export default {
       config: {},
       // axe-core optionsParameter (https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#options-parameter)
       options: {},
-      // optional flag to prevent the automatic check
-      manual: true,
+      // Defines which impact levels will be considered as warnings instead of errors if executed via Storybook's component testing
+      warnings: <'minor' | 'moderate' | 'serious' | 'critical'>[]
     },
   },
+  globals: {
+    a11y: {
+      // optional flag to prevent the automatic check
+      manual: true,
+    }
+  }
 };
 
 export const accessible = () => <button>Accessible button</button>;
@@ -192,6 +198,27 @@ export const inaccessible = () => (
   <button style={{ backgroundColor: 'red', color: 'darkRed' }}>Inaccessible button</button>
 );
 ```
+
+## Violation impact levels
+
+By default, the addon will consider all violations as errors. However, you can configure the addon to consider some violations as warnings instead of errors. This can be useful when @storybook/addon-a11y is used in combination with `@storybook/experimental-addon-test`. To do this, set the `warnings` parameter in the `a11y` object to an array of impact levels that should be considered as warnings.
+
+```js
+export default {
+  title: 'button',
+  parameters: {
+    a11y: {
+      /**
+       * @default [ ]
+       * @type: Array<'minor' | 'moderate' | 'serious' | 'critical'>
+       */
+      warnings: ['minor', 'moderate'],
+    },
+  },
+};
+```
+
+In this example, all violations with an impact level of `minor` or `moderate` will be considered as warnings. All other violations will be considered as errors. When running automated UI tests featured by Vitest, all violations with an impact level of `serious` or `critical` will now fail the test. This failure is reflected as an error in the sidebar or when running Vitest separately. `minor` and `moderate` violations will be reported as warnings but will not fail the test.
 
 ## Automate accessibility tests with test runner
 
