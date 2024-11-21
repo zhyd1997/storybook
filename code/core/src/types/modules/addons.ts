@@ -486,9 +486,10 @@ export interface Addon_TestProviderType<
     },
     components: { ListItem: typeof ListItem }
   ) => ReactNode;
-  mapStatusUpdate?: (
-    state: Addon_TestProviderState<Details>
-  ) => API_StatusUpdate | ((state: API_StatusState) => API_StatusUpdate);
+  stateUpdater?: (
+    state: TestProviderConfig & Addon_TestProviderState<Details>,
+    update: Partial<Addon_TestProviderState<Details>>
+  ) => Partial<TestProviderConfig & Addon_TestProviderState<Details>>;
   runnable?: boolean;
   watchable?: boolean;
 }

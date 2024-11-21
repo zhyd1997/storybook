@@ -197,30 +197,35 @@ addons.register(ADDON_ID, (api) => {
         );
       },
 
-      mapStatusUpdate: (state) =>
-        Object.fromEntries(
-          (state.details.testResults || []).flatMap((testResult) =>
-            testResult.results
-              .map(({ storyId, status, testRunId, ...rest }) => {
-                if (storyId) {
-                  const statusObject: API_StatusObject = {
-                    title: 'Component tests',
-                    status: statusMap[status],
-                    description:
-                      'failureMessages' in rest && rest.failureMessages?.length
-                        ? rest.failureMessages.join('\n')
-                        : '',
-                    data: {
-                      testRunId,
-                    },
-                    onClick: openAddonPanel,
-                  };
-                  return [storyId, statusObject];
-                }
-              })
-              .filter(Boolean)
-          )
-        ),
+      stateUpdater: (state, update) => {
+        if (update.details?.testResults) {
+          const statusUpdate = Object.fromEntries(
+            update.details.testResults.flatMap((testResult) =>
+              testResult.results
+                .map(({ storyId, status, testRunId, ...rest }) => {
+                  if (storyId) {
+                    const statusObject: API_StatusObject = {
+                      title: 'Component tests',
+                      status: statusMap[status],
+                      description:
+                        'failureMessages' in rest && rest.failureMessages?.length
+                          ? rest.failureMessages.join('\n')
+                          : '',
+                      data: {
+                        testRunId,
+                      },
+                      onClick: openAddonPanel,
+                    };
+                    return [storyId, statusObject];
+                  }
+                })
+                .filter(Boolean)
+            )
+          );
+          api.experimental_updateStatus(TEST_PROVIDER_ID, statusUpdate);
+        }
+        return { ...state, ...update };
+      },
     } as Addon_TestProviderType<{
       testResults: TestResult[];
     }>);
