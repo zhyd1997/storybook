@@ -35,7 +35,7 @@ const Description = styled.div(({ theme }) => ({
 
 const Actions = styled.div({
   display: 'flex',
-  gap: 6,
+  gap: 2,
 });
 
 interface TestProviderProps {

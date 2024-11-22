@@ -78,10 +78,8 @@ const Collapsible = styled.div(({ theme }) => ({
 }));
 
 const Content = styled.div({
-  padding: '12px 6px',
   display: 'flex',
   flexDirection: 'column',
-  gap: '12px',
 });
 
 const Bar = styled.div<{ onClick?: (e: SyntheticEvent) => void }>(({ onClick }) => ({
@@ -138,11 +136,16 @@ const StatusButton = styled(Button)<{ status: 'negative' | 'warning' }>(
         })
 );
 
-const TestProvider = styled.div({
+const TestProvider = styled.div(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
+  padding: '12px 6px',
   gap: 6,
-});
+
+  '&:not(:last-child)': {
+    boxShadow: `inset 0 -1px 0 ${theme.appBorderColor}`,
+  },
+}));
 
 interface TestingModuleProps {
   testProviders: TestProviders[keyof TestProviders][];
