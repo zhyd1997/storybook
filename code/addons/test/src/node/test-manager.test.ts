@@ -61,6 +61,7 @@ global.fetch = vi.fn().mockResolvedValue({
             name: 'One',
             title: 'story/one',
             importPath: 'path/to/file',
+            tags: ['test'],
           },
           'another--one': {
             type: 'story',
@@ -68,6 +69,7 @@ global.fetch = vi.fn().mockResolvedValue({
             name: 'One',
             title: 'another/one',
             importPath: 'path/to/another/file',
+            tags: ['test'],
           },
         },
       } as StoryIndex)
