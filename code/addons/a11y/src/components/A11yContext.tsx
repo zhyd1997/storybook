@@ -9,6 +9,7 @@ import {
 import {
   useAddonState,
   useChannel,
+  useGlobals,
   useParameter,
   useStorybookApi,
   useStorybookState,
@@ -82,13 +83,20 @@ export const A11yContextProvider: FC<PropsWithChildren> = (props) => {
     manual: false,
   });
 
+  const [globals] = useGlobals() ?? [];
+
   const getInitialStatus = useCallback((manual = false) => (manual ? 'manual' : 'initial'), []);
+
+  const manual = useMemo(
+    () => globals?.a11y?.manual ?? parameters.manual ?? false,
+    [globals?.a11y?.manual, parameters.manual]
+  );
 
   const api = useStorybookApi();
   const [results, setResults] = useAddonState<Results>(ADDON_ID, defaultResult);
   const [tab, setTab] = useState(0);
   const [error, setError] = React.useState<unknown>(undefined);
-  const [status, setStatus] = useState<Status>(getInitialStatus(parameters.manual!));
+  const [status, setStatus] = useState<Status>(getInitialStatus(manual));
   const [highlighted, setHighlighted] = useState<string[]>([]);
 
   const { storyId } = useStorybookState();
@@ -152,14 +160,14 @@ export const A11yContextProvider: FC<PropsWithChildren> = (props) => {
     ({ newPhase }: { newPhase: string }) => {
       if (newPhase === 'loading') {
         setResults(defaultResult);
-        if (parameters.manual) {
+        if (manual) {
           setStatus('manual');
         } else {
           setStatus('running');
         }
       }
     },
-    [parameters.manual, setResults]
+    [manual, setResults]
   );
 
   const emit = useChannel(
@@ -178,8 +186,8 @@ export const A11yContextProvider: FC<PropsWithChildren> = (props) => {
   }, [emit, parameters, storyId]);
 
   useEffect(() => {
-    setStatus(getInitialStatus(parameters.manual));
-  }, [getInitialStatus, parameters.manual]);
+    setStatus(getInitialStatus(manual));
+  }, [getInitialStatus, manual]);
 
   useEffect(() => {
     emit(HIGHLIGHT, { elements: highlighted, color: colorsByType[tab] });

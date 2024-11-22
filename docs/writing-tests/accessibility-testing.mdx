@@ -75,7 +75,7 @@ If you need to dismiss an accessibility rule or modify its settings across all s
 
 <IfRenderer renderer={['angular', 'vue', 'web-components', 'ember', 'html', 'react', 'preact', 'qwik', 'solid']}>
 
-  You can also customize your own set of rules for all stories of a component. Update your story's default export and add a parameter with the required configuration:
+  You can also customize your own set of rules for all stories of a component. Update your story's default export and add parameters and globals with the required configuration:
 
 </IfRenderer>
 
@@ -95,17 +95,17 @@ Customize the a11y ruleset at the story level by updating your story to include 
 
 {/* prettier-ignore-end */}
 
-#### How to disable a11y tests
+#### How to not run a11y tests automatically
 
 <IfRenderer renderer="svelte">
 
-  If you are using Svelte CSF, you can turn off accessibility testing for stories or components by adding a parameter to your story or adjusting the defineMeta function with the required configuration. With a regular CSF story, you can add the following to your story's export or component's default export:
+  If you are using Svelte CSF, you can turn off automated accessibility testing for stories or components by adding globals to your story or adjusting the defineMeta function with the required configuration. With a regular CSF story, you can add the following to your story's export or component's default export:
   
 </IfRenderer>
 
 <IfRenderer renderer={['angular', 'vue', 'web-components', 'ember', 'html', 'react', 'preact', 'qwik', 'solid']}>
 
-  Disable accessibility testing for stories or components by adding the following parameter to your story’s export or component’s default export respectively:
+  Disable automated accessibility testing for stories or components by adding the following globals to your story’s export or component’s default export respectively:
 
 </IfRenderer>
 
@@ -115,6 +115,13 @@ Customize the a11y ruleset at the story level by updating your story to include 
 <CodeSnippets path="storybook-addon-a11y-disable.md" />
 
 {/* prettier-ignore-end */}
+
+## What happens when there are different results in multiple environments
+
+The a11y addon is compatible with Storybook's newest feature, [component testing](./component-testing.mdx). When you run component tests, the a11y addon can automatically check for accessibility issues in the rendered components. If there are any violations, the test will fail, and you will see the results in the sidebar.
+
+When you run tests with the @storybook/experimental-addon-test, they are run as Vitest tests with whatever configuration you have set up in your project. By default, they will run in browser mode, using Playwright's Chromium browser. Sometimes, tests will fail when run in the addon (or via CLI), but then pass when viewed in the Component tests addon panel (or vice versa). This can happen because the tests are run in different environments, which can have different behaviors.
+We are using axe-core under the hood and it can happen, that axe-core is reporting different results in different environments. This can be due to different browser versions or different browser configurations. If you encounter this issue, please let us know and open an issue on [GitHub](https://github.com/storybookjs/storybook/issues)
 
 ## Automate accessibility tests with test runner
 

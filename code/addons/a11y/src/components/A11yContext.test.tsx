@@ -80,12 +80,14 @@ describe('A11yContext', () => {
     } as any);
     mockedApi.useParameter.mockReturnValue({ manual: false });
     mockedApi.useStorybookState.mockReturnValue({ storyId } as any);
+    mockedApi.useGlobals.mockReturnValue([{ a11y: {} }] as any);
 
     mockedApi.useChannel.mockClear();
     mockedApi.useStorybookApi.mockClear();
     mockedApi.useAddonState.mockClear();
     mockedApi.useParameter.mockClear();
     mockedApi.useStorybookState.mockClear();
+    mockedApi.useGlobals.mockClear();
   });
 
   it('should render children', () => {
@@ -170,6 +172,24 @@ describe('A11yContext', () => {
     expect(getByTestId('discrepancy').textContent).toBe('cliFailedButModeManual');
   });
 
+  it('should set discrepancy to cliFailedButModeManual when in manual mode (set via globals', () => {
+    mockedApi.useGlobals.mockReturnValue([{ a11y: { manual: true } }] as any);
+    getCurrentStoryStatus.mockReturnValue({ [TEST_PROVIDER_ID]: { status: 'error' } });
+
+    const Component = () => {
+      const { discrepancy } = useA11yContext();
+      return <div data-testid="discrepancy">{discrepancy}</div>;
+    };
+
+    const { getByTestId } = render(
+      <A11yContextProvider>
+        <Component />
+      </A11yContextProvider>
+    );
+
+    expect(getByTestId('discrepancy').textContent).toBe('cliFailedButModeManual');
+  });
+
   it('should set discrepancy to cliPassedBrowserFailed', () => {
     mockedApi.useParameter.mockReturnValue({ manual: true });
     getCurrentStoryStatus.mockReturnValue({ [TEST_PROVIDER_ID]: { status: 'success' } });
@@ -234,6 +254,35 @@ describe('A11yContext', () => {
 
   it('should handle STORY_RENDER_PHASE_CHANGED event correctly when in manual mode', () => {
     mockedApi.useParameter.mockReturnValue({ manual: true });
+
+    const emit = vi.fn();
+    mockedApi.useChannel.mockReturnValue(emit);
+
+    const Component = () => {
+      const { status } = useA11yContext();
+      return <div data-testid="status">{status}</div>;
+    };
+
+    const { queryByTestId } = render(
+      <A11yContextProvider>
+        <Component />
+      </A11yContextProvider>
+    );
+
+    expect(queryByTestId('status')).toHaveTextContent('manual');
+
+    const useChannelArgs = mockedApi.useChannel.mock.calls[0][0];
+    const storyRenderPhaseChangedPayload = {
+      newPhase: 'loading',
+    };
+
+    act(() => useChannelArgs[STORY_RENDER_PHASE_CHANGED](storyRenderPhaseChangedPayload));
+
+    expect(queryByTestId('status')).toHaveTextContent('manual');
+  });
+
+  it('should handle STORY_RENDER_PHASE_CHANGED event correctly when in manual mode (set via globals)', () => {
+    mockedApi.useGlobals.mockReturnValue([{ a11y: { manual: true } }] as any);
 
     const emit = vi.fn();
     mockedApi.useChannel.mockReturnValue(emit);

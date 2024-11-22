@@ -15,7 +15,7 @@ export const run = async (input: A11yParameters = defaultParameters) => {
   const { default: axe } = await import('axe-core');
 
   const { element = '#storybook-root', config, options = {} } = input;
-  const htmlElement = document.querySelector(element as string);
+  const htmlElement = document.querySelector(element as string) ?? document.body;
 
   if (!htmlElement) {
     return;
