@@ -82,7 +82,7 @@ addons.register(ADDON_ID, (api) => {
       watchable: true,
       name: 'Component tests',
 
-      sidebarContextMenu: ({ context, state }, { ListItem }) => {
+      sidebarContextMenu: ({ context, state }) => {
         if (context.type === 'docs') {
           return null;
         }
@@ -90,7 +90,7 @@ addons.register(ADDON_ID, (api) => {
           return null;
         }
 
-        return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
+        return <ContextMenuItem context={context} state={state} />;
       },
 
       render: (state) => {
