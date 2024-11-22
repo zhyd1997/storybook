@@ -480,13 +480,10 @@ export interface Addon_TestProviderType<
   /** @deprecated Use render instead */
   description?: (state: TestProviderConfig & Addon_TestProviderState<Details, Config>) => ReactNode;
   render?: (state: TestProviderConfig & Addon_TestProviderState<Details, Config>) => ReactNode;
-  sidebarContextMenu?: (
-    options: {
-      context: API_HashEntry;
-      state: Addon_TestProviderState<Details>;
-    },
-    components: { ListItem: typeof ListItem }
-  ) => ReactNode;
+  sidebarContextMenu?: (options: {
+    context: API_HashEntry;
+    state: Addon_TestProviderState<Details>;
+  }) => ReactNode;
   mapStatusUpdate?: (
     state: Addon_TestProviderState<Details>
   ) => API_StatusUpdate | ((state: API_StatusState) => API_StatusUpdate);
