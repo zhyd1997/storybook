@@ -74,4 +74,10 @@ export type TestingModuleCancelTestRunResponsePayload =
 export type TestingModuleWatchModeRequestPayload = {
   providerId: TestProviderId;
   watchMode: boolean;
+  config: TestProviderState['config'];
+};
+
+export type TestingModuleConfigChangePayload = {
+  providerId: TestProviderId;
+  config: TestProviderState['config'];
 };

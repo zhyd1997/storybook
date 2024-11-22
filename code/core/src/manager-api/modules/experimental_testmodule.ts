@@ -8,6 +8,7 @@ import {
   type TestProviderState,
   type TestProviders,
   type TestingModuleRunRequestPayload,
+  type TestingModuleWatchModeRequestPayload,
 } from '@storybook/core/core-events';
 
 import invariant from 'tiny-invariant';
@@ -119,7 +120,12 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
     },
     setTestProviderWatchMode(id, watchMode) {
       api.updateTestProviderState(id, { watching: watchMode });
-      fullAPI.emit(TESTING_MODULE_WATCH_MODE_REQUEST, { providerId: id, watchMode });
+      const config = store.getState().testProviders[id].config;
+      fullAPI.emit(TESTING_MODULE_WATCH_MODE_REQUEST, {
+        providerId: id,
+        watchMode,
+        config,
+      } as TestingModuleWatchModeRequestPayload);
     },
     cancelTestProvider(id) {
       api.updateTestProviderState(id, { cancelling: true });

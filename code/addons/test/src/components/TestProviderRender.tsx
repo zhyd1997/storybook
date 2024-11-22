@@ -1,7 +1,12 @@
 import React, { type FC, Fragment, useCallback, useRef, useState } from 'react';
 
 import { Button } from 'storybook/internal/components';
-import { type TestProviderConfig, type TestProviderState } from 'storybook/internal/core-events';
+import {
+  TESTING_MODULE_CONFIG_CHANGE,
+  type TestProviderConfig,
+  type TestProviderState,
+  type TestingModuleConfigChangePayload,
+} from 'storybook/internal/core-events';
 import type { API } from 'storybook/internal/manager-api';
 import { styled } from 'storybook/internal/theming';
 
@@ -158,12 +163,17 @@ function useConfig(id: string, config: Config, api: API) {
 
   const changeConfig = useCallback(
     (update: Partial<Config>) => {
+      const newConfig = {
+        ...data.current,
+        ...update,
+      };
       api.updateTestProviderState(id, {
-        config: {
-          ...data.current,
-          ...update,
-        },
+        config: newConfig,
       });
+      api.emit(TESTING_MODULE_CONFIG_CHANGE, {
+        providerId: id,
+        config: newConfig,
+      } as TestingModuleConfigChangePayload);
     },
     [api, id]
   );
