@@ -1,13 +1,13 @@
 import { existsSync } from 'node:fs';
-import path, { normalize } from 'node:path';
 
 import type { TestProject, TestSpecification, Vitest, WorkspaceProject } from 'vitest/node';
 
 import type { Channel } from 'storybook/internal/channels';
 import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-events';
 
-import type { StoryIndex, StoryIndexEntry } from '@storybook/types';
+import type { DocsIndexEntry, StoryIndex, StoryIndexEntry } from '@storybook/types';
 
+import path, { normalize } from 'pathe';
 import slash from 'slash';
 
 import { log } from '../logger';
@@ -91,7 +91,11 @@ export class VitestManager {
     }
   }
 
-  private filterStories(story: StoryIndexEntry, moduleId: string, tagsFilter: TagsFilter) {
+  private filterStories(
+    story: StoryIndexEntry | DocsIndexEntry,
+    moduleId: string,
+    tagsFilter: TagsFilter
+  ) {
     const absoluteImportPath = path.join(process.cwd(), story.importPath);
     if (absoluteImportPath !== moduleId) {
       return false;
