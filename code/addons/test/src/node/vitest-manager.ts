@@ -106,9 +106,7 @@ export class VitestManager {
     if (tagsFilter.exclude.some((tag) => story.tags?.includes(tag))) {
       return false;
     }
-    if (tagsFilter.skip.some((tag) => story.tags?.includes(tag))) {
-      return false;
-    }
+    // Skipped tests are intentionally included here
     return true;
   }
 
@@ -140,7 +138,10 @@ export class VitestManager {
             this.updateLastChanged(spec.moduleId);
           }
           acc.filteredTestFiles.push(spec);
-          acc.totalTestCount += matches.length;
+          acc.totalTestCount += matches.filter(
+            // Don't count skipped stories, because StorybookReporter doesn't include them either
+            (story) => !skip.some((tag) => story.tags?.includes(tag))
+          ).length;
         }
         return acc;
       },
