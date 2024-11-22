@@ -2580,9 +2580,9 @@ Please visit https://angular.io/guide/standalone-components#configuring-dependen
 
 The `parameters.angularLegacyRendering` option is removed. You cannot use the old legacy renderer anymore.
 
-#### Angular: initializer functions
+#### Angular: Initializer functions
 
-Initializer functions that use the `APP_INITIALIZER` token only run when Angular components are rendered. To ensure that an initailizer runs whether or not Angular components are rendered, call the function inside `preview.js`:
+Initializer functions using the `APP_INITIALIZER` dependency injection token only run when the component renders. To ensure an initializer function is always executed, you can adjust your `.storybook/preview.ts` and invoke it directly.
 
 ```js
 myCustomInitializer();
