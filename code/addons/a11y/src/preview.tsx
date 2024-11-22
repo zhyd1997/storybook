@@ -11,7 +11,7 @@ expect.extend(matchers);
 
 // @ts-expect-error - ignore
 // todo: check in webpack environments
-const isVitestStandaloneRun = import.meta?.env?.STORYBOOK !== 'true';
+const isVitestStandaloneRun = import.meta?.env?.STORYBOOK && import.meta?.env?.STORYBOOK !== 'true';
 
 export const afterEach = async ({ reporting, parameters, globals, id }: StoryContext) => {
   const a11yParameter: A11yParameters | undefined = parameters.a11y;
