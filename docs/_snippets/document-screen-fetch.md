@@ -211,7 +211,7 @@ export function DocumentScreen() {
 }
 ```
 
-```svelte filename="YourPage.svelte " renderer="svelte" language="js"
+```svelte filename="YourPage.svelte" renderer="svelte" language="js"
 <script>
   import { onMount } from 'svelte';
 

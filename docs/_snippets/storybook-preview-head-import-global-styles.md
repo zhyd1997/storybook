@@ -1,4 +1,4 @@
-```html filename=".storybook/preview-head.html" renderer="common" language="ts" tabTitle="html"
+```html filename=".storybook/preview-head.html" renderer="common" language="ts"
 <!-- Loads a font from a CDN -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
