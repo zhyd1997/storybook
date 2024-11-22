@@ -9,7 +9,9 @@ import type { A11yParameters } from './params';
 
 expect.extend(matchers);
 
-const isVitestStandaloneRun = process?.env?.STORYBOOK !== 'true';
+// @ts-expect-error - ignore
+// todo: check in webpack environments
+const isVitestStandaloneRun = import.meta?.env?.STORYBOOK !== 'true';
 
 export const afterEach = async ({ reporting, parameters, globals, id }: StoryContext) => {
   const a11yParameter: A11yParameters | undefined = parameters.a11y;
