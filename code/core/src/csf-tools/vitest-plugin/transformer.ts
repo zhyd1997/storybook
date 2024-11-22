@@ -25,9 +25,7 @@ const isValidTest = (storyTags: string[], tagsFilter: TagsFilter) => {
   if (tagsFilter.exclude.some((tag) => storyTags?.includes(tag))) {
     return false;
   }
-  if (tagsFilter.skip.some((tag) => storyTags?.includes(tag))) {
-    return false;
-  }
+  // Skipped tests are intentionally included here
   return true;
 };
 /**
