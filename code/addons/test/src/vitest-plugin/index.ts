@@ -1,6 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import { join, resolve } from 'node:path';
-
 import type { Plugin } from 'vitest/config';
 
 import {
@@ -11,6 +9,8 @@ import {
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { StoriesEntry } from 'storybook/internal/types';
+
+import { join, resolve } from 'pathe';
 
 import type { InternalOptions, UserOptions } from './types';
 
@@ -129,6 +129,16 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       config.test.server.deps.inline ??= [];
       if (Array.isArray(config.test.server.deps.inline)) {
         config.test.server.deps.inline.push('@storybook/experimental-addon-test');
+      }
+
+      config.optimizeDeps ??= {};
+      config.optimizeDeps = {
+        ...config.optimizeDeps,
+        include: [...(config.optimizeDeps.include ?? []), '@storybook/experimental-addon-test/**'],
+      };
+
+      if (frameworkName?.includes('react') || frameworkName?.includes('nextjs')) {
+        config.optimizeDeps.include.push('react-dom/test-utils');
       }
 
       if (frameworkName?.includes('vue3')) {
