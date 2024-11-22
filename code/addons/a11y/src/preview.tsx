@@ -1,9 +1,13 @@
 // Source: https://github.com/chaance/vitest-axe/blob/main/src/to-have-no-violations.ts
+import * as matchers from 'vitest-axe/matchers';
+
 import type { StoryContext } from '@storybook/csf';
+import { expect } from '@storybook/test';
 
 import { run } from './a11yRunner';
 import type { A11yParameters } from './params';
-import { getA11yViolationsReport } from './utils/a11yViolationsReporter';
+
+expect.extend(matchers);
 
 const isVitestStandaloneRun = process?.env?.STORYBOOK !== 'true';
 
@@ -43,13 +47,9 @@ export const afterEach = async ({ reporting, parameters, globals, id }: StoryCon
          *   implement proper try catch handling.
          */
         if (isVitestStandaloneRun) {
-          const errorMessage = getA11yViolationsReport(result, id);
-
           if (hasErrors) {
-            // eslint-disable-next-line local-rules/no-uncategorized-errors
-            throw new Error(errorMessage);
-          } else if (hasViolations) {
-            console.log(errorMessage);
+            // @ts-expect-error - todo - fix type extension of expect from @storybook/test
+            expect(result).toHaveNoViolations();
           }
         }
       }

@@ -56,7 +56,9 @@
   },
   "dependencies": {
     "@storybook/addon-highlight": "workspace:*",
-    "axe-core": "^4.2.0"
+    "@storybook/test": "workspace:*",
+    "axe-core": "^4.2.0",
+    "vitest-axe": "^0.1.0"
   },
   "devDependencies": {
     "@storybook/global": "^5.0.0",

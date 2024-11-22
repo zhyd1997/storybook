@@ -1,3 +1,4 @@
+// @vitest-environment happy-dom
 import { describe, expect, it, vi } from 'vitest';
 
 import type { StoryContext } from '@storybook/csf';
@@ -6,6 +7,7 @@ import { run } from './a11yRunner';
 import { afterEach } from './preview';
 
 vi.mock('./a11yRunner');
+
 const mockedRun = vi.mocked(run);
 
 const violations = [
@@ -80,7 +82,7 @@ describe('afterEach', () => {
 
     mockedRun.mockResolvedValue(result as any);
 
-    await expect(async () => afterEach(context)).rejects.toThrowErrorMatchingSnapshot();
+    await expect(async () => afterEach(context)).rejects.toThrowError();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
 
