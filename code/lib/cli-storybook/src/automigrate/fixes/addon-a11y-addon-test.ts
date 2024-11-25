@@ -144,6 +144,10 @@ export function transformSetupFile(setupFile: string) {
     },
   });
 
+  if (setProjectAnnotationsCall.length === 0) {
+    throw new Error('Could not find setProjectAnnotations call in vitest.setup file');
+  }
+
   // Add a11yAddonAnnotations to the annotations array
   setProjectAnnotationsCall.find(j.ArrayExpression).forEach((p) => {
     p.value.elements.push(j.identifier('a11yAddonAnnotations'));

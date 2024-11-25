@@ -118,7 +118,21 @@ describe('addonA11yAddonTest', () => {
     });
   });
 
-  describe('transformSetupFile', () => {
+  describe('transformSetupFile', async () => {
+    it('should throw', async () => {
+      const setupFile = '/path/to/vitest.setup.ts';
+      const source = dedent`
+        import { beforeAll } from 'vitest';
+        import { setProjectAnnotations } from 'storybook';
+
+        beforeAll(project.beforeAll);
+      `;
+
+      vi.mocked(readFileSync).mockReturnValue(source);
+
+      expect(() => transformSetupFile(setupFile)).toThrow();
+    });
+
     it('should transform setup file correctly - 1', () => {
       const setupFile = '/path/to/vitest.setup.ts';
       const source = dedent`
