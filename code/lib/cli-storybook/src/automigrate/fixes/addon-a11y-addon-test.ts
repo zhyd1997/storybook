@@ -96,8 +96,8 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
 
       ${picocolors.gray('beforeAll(annotations.beforeAll);')}
 
-      For more information, please refer to the component tests documentation: 
-      ${picocolors.cyan('https://storybook.js.org/docs/writing-tests/component-testing')}
+      For more information, please refer to the addon test documentation: 
+      ${picocolors.cyan('https://storybook.js.org/docs/writing-tests/addon-test')}
       `;
     }
 
