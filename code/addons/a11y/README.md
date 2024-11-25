@@ -222,7 +222,7 @@ In this example, all violations with an impact level of `minor` or `moderate` wi
 
 ## Integration with [Addon Test](https://storybook.js.org/docs/writing-tests/test-addon)
 
-The a11y addon is compatible with Storybook's newest feature, [component testing](https://storybook.js.org/docs/writing-tests/component-testing). When you run component tests, the a11y addon can automatically check for accessibility issues for all of your stories in the background. If there are any violations, the test will fail, and you will see the results in the sidebar.
+The a11y addon is compatible with Storybook's newest addon, [addon test](https://storybook.js.org/docs/writing-tests/test-addon). When you run component tests, the a11y addon can automatically check for accessibility issues for all of your stories in the background. If there are any violations, the test will fail, and you will see the results in the sidebar.
 
 ### Automatic setup
 
