@@ -2,6 +2,8 @@ import { addons } from 'storybook/internal/preview-api';
 
 import { global } from '@storybook/global';
 
+import type { AxeResults } from 'axe-core';
+
 import { EVENTS } from './constants';
 import type { A11yParameters } from './params';
 
@@ -45,7 +47,7 @@ export const run = async (input: A11yParameters = defaultParameters) => {
     axe.configure(config);
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise<AxeResults>((resolve, reject) => {
     const task = async () => {
       try {
         const result = await axe.run(htmlElement, options);
