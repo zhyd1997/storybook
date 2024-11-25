@@ -220,6 +220,32 @@ export default {
 
 In this example, all violations with an impact level of `minor` or `moderate` will be considered as warnings. All other violations will be considered as errors. When running automated UI tests featured by Vitest, all violations with an impact level of `serious` or `critical` will now fail the test. This failure is reflected as an error in the sidebar or when running Vitest separately. `minor` and `moderate` violations will be reported as warnings but will not fail the test.
 
+## Integration with [Component Testing](https://storybook.js.org/docs/writing-tests/component-testing)
+
+The a11y addon is compatible with Storybook's newest feature, [component testing](https://storybook.js.org/docs/writing-tests/component-testing). When you run component tests, the a11y addon can automatically check for accessibility issues for all of your stories in the background. If there are any violations, the test will fail, and you will see the results in the sidebar.
+
+### Automatic setup
+
+When you add the a11y addon via [add](../api/cli-options.mdx#add) command, it will automatically be integrated with the component testing feature. You don't need to do anything else to enable accessibility checks in your component tests.
+
+### Manual setup
+
+If you have already a11y addon installed and you have upgraded manually to Storybook 8.5 or later, you can enable the integration by adding the following configuration to your `.storybook/vitest.config.ts` file:
+
+```diff
+// .storybook/vitest.config.ts
+...
++import * as a11yAddonAnnotations from '@storybook/addon-a11y/preview';
+
+const annotations = setProjectAnnotations([
+  previewAnnotations,
++ a11yAddonAnnotations,
+]);
+
+// Run Storybook's beforeAll hook
+beforeAll(annotations.beforeAll);
+```
+
 ## Automate accessibility tests with test runner
 
 The test runner does not apply any rules that you have set on your stories by default. You can configure the runner to correctly apply the rules by [following the guide on the Storybook docs](https://storybook.js.org/docs/writing-tests/accessibility-testing#automate-accessibility-tests-with-test-runner).
