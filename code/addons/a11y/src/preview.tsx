@@ -9,9 +9,16 @@ import type { A11yParameters } from './params';
 
 expect.extend(matchers);
 
-const isVitestStandaloneRun =
-  // @ts-expect-error - ignore
-  !import.meta?.env?.STORYBOOK || import.meta?.env?.STORYBOOK !== 'true';
+const getIsVitestStandaloneRun = () => {
+  try {
+    // @ts-expect-error - todo - ignore for now
+    return (process?.env || import.meta.env).STORYBOOK !== 'true';
+  } catch (e) {
+    return false;
+  }
+};
+
+const isVitestStandaloneRun = getIsVitestStandaloneRun();
 
 export const afterEach = async ({ reporting, parameters, globals, id }: StoryContext) => {
   const a11yParameter: A11yParameters | undefined = parameters.a11y;
