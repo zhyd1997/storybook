@@ -16,7 +16,7 @@ export type TestingModuleRunRequestPayload = {
   // TODO: Avoid needing to do a fetch request server-side to retrieve the index
   indexUrl: string; // e.g. http://localhost:6006/index.json
   storyIds?: string[]; // ['button--primary', 'button--secondary']
-  config: TestProviderState['config'];
+  config?: TestProviderState['config'];
 };
 
 export type TestingModuleProgressReportPayload =
@@ -74,7 +74,7 @@ export type TestingModuleCancelTestRunResponsePayload =
 export type TestingModuleWatchModeRequestPayload = {
   providerId: TestProviderId;
   watchMode: boolean;
-  config: TestProviderState['config'];
+  config?: TestProviderState['config'];
 };
 
 export type TestingModuleConfigChangePayload = {
