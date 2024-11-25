@@ -12,6 +12,7 @@ import type { StoriesEntry } from 'storybook/internal/types';
 
 import { join, resolve } from 'pathe';
 
+import { TestManager } from '../node/test-manager';
 import type { InternalOptions, UserOptions } from './types';
 
 const defaultOptions: UserOptions = {
@@ -103,6 +104,14 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
       if (config.test.browser) {
         config.test.browser.screenshotFailures ??= false;
+
+        config.test.browser.commands ??= {
+          getInitialGlobals: () => ({
+            a11y: {
+              manual: !TestManager.a11y,
+            },
+          }),
+        };
       }
 
       config.resolve ??= {};

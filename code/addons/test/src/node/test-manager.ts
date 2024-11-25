@@ -20,6 +20,8 @@ export class TestManager {
 
   watchMode = false;
 
+  static a11y = true;
+
   constructor(
     private channel: Channel,
     private options: {

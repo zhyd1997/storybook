@@ -11,6 +11,25 @@ const channel = addons.getChannel();
 
 const defaultParameters = { config: {}, options: {} };
 
+// A simple queue to run axe-core in sequence
+// This is necessary because axe-core is not designed to run in parallel
+const queue: (() => Promise<void>)[] = [];
+let isRunning = false;
+
+const runNext = async () => {
+  if (queue.length === 0) {
+    isRunning = false;
+    return;
+  }
+
+  isRunning = true;
+  const next = queue.shift();
+  if (next) {
+    await next();
+  }
+  runNext();
+};
+
 export const run = async (input: A11yParameters = defaultParameters) => {
   const { default: axe } = await import('axe-core');
 
@@ -26,7 +45,22 @@ export const run = async (input: A11yParameters = defaultParameters) => {
     axe.configure(config);
   }
 
-  return axe.run(htmlElement, options);
+  return new Promise((resolve, reject) => {
+    const task = async () => {
+      try {
+        const result = await axe.run(htmlElement, options);
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    queue.push(task);
+
+    if (!isRunning) {
+      runNext();
+    }
+  });
 };
 
 channel.on(EVENTS.MANUAL, async (storyId: string, input: A11yParameters = defaultParameters) => {

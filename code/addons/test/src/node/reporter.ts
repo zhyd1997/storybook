@@ -116,7 +116,11 @@ export class StorybookReporter implements Reporter {
 
         const status = StatusMap[t.result?.state || t.mode] || 'skipped';
         const storyId = (t.meta as any).storyId as string;
-        const reports = (t.meta as any).reports as Report[];
+        const reports =
+          ((t.meta as any).reports as Report[])?.map((report) => ({
+            status: report.status,
+            id: report.id,
+          })) ?? [];
         const duration = t.result?.duration || 0;
         const testRunId = this.start.toString();
 
