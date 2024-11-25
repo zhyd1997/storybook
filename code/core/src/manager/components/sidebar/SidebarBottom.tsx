@@ -1,17 +1,14 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { styled } from '@storybook/core/theming';
-import { type API_FilterFunction, Addon_TypesEnum } from '@storybook/core/types';
+import { type API_FilterFunction, type API_StatusValue } from '@storybook/core/types';
 
 import {
-  TESTING_MODULE_CANCEL_TEST_RUN_REQUEST,
   TESTING_MODULE_CRASH_REPORT,
   TESTING_MODULE_PROGRESS_REPORT,
   TESTING_MODULE_RUN_ALL_REQUEST,
-  TESTING_MODULE_WATCH_MODE_REQUEST,
   type TestProviderId,
   type TestProviderState,
-  type TestProviders,
   type TestingModuleCrashReportPayload,
   type TestingModuleProgressReportPayload,
 } from '@storybook/core/core-events';
@@ -152,7 +149,10 @@ export const SidebarBottomBase = ({
       );
     };
 
-    const onProgressReport = ({ providerId, ...result }: TestingModuleProgressReportPayload) => {
+    const onProgressReport = async ({
+      providerId,
+      ...result
+    }: TestingModuleProgressReportPayload) => {
       if (result.status === 'failed') {
         api.updateTestProviderState(providerId, { ...result, running: false, failed: true });
       } else {
@@ -161,8 +161,47 @@ export const SidebarBottomBase = ({
 
         const { mapStatusUpdate, ...state } = testProviders[providerId];
         const statusUpdate = mapStatusUpdate?.({ ...state, ...update });
+
+        // TODO: Remove as soon as frontend is refactored to use the new statusUpdate
+        const testProviderID = 'storybook/test/test-provider';
+        const a11yProviderID = 'storybook/addon-a11y/test-provider';
+        const a11yPanelID = 'storybook/a11y/panel';
+        const statusMap: Record<any['status'], API_StatusValue> = {
+          failed: 'error',
+          passed: 'success',
+          warning: 'warn',
+          pending: 'pending',
+        };
+
+        if (providerId === testProviderID) {
+          const obj = Object.fromEntries(
+            (result.details?.testResults || []).flatMap((testResult: any) =>
+              testResult.results
+                .map(({ storyId, status: reportStatus, testRunId, reports, ...rest }: any) => {
+                  const report = reports.find((r: any) => r.id === 'a11y');
+                  if (storyId && report) {
+                    const statusObject = {
+                      title: 'Accessibility tests',
+                      status: statusMap[report.status],
+                      data: {
+                        testRunId,
+                      },
+                      onClick: () => {
+                        api.setSelectedPanel(a11yPanelID);
+                        api.togglePanel(true);
+                      },
+                    };
+                    return [storyId, statusObject];
+                  }
+                })
+                .filter(Boolean)
+            )
+          );
+          await api.experimental_updateStatus(a11yProviderID, obj);
+        }
+        // TODOEND: Remove as soon as frontend is refactored to use the new statusUpdate
         if (statusUpdate) {
-          api.experimental_updateStatus(providerId, statusUpdate);
+          await api.experimental_updateStatus(providerId, statusUpdate);
         }
       }
     };
