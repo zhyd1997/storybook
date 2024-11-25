@@ -220,7 +220,7 @@ export default {
 
 In this example, all violations with an impact level of `minor` or `moderate` will be considered as warnings. All other violations will be considered as errors. When running automated UI tests featured by Vitest, all violations with an impact level of `serious` or `critical` will now fail the test. This failure is reflected as an error in the sidebar or when running Vitest separately. `minor` and `moderate` violations will be reported as warnings but will not fail the test.
 
-## Integration with [Component Testing](https://storybook.js.org/docs/writing-tests/component-testing)
+## Integration with [Addon Test](https://storybook.js.org/docs/writing-tests/test-addon)
 
 The a11y addon is compatible with Storybook's newest feature, [component testing](https://storybook.js.org/docs/writing-tests/component-testing). When you run component tests, the a11y addon can automatically check for accessibility issues for all of your stories in the background. If there are any violations, the test will fail, and you will see the results in the sidebar.
 
