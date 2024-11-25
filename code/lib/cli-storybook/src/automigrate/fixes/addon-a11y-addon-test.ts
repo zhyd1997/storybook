@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import * as jscodeshift from 'jscodeshift';
 import path from 'path';
 import picocolors from 'picocolors';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
 
 import { getAddonNames } from '../helpers/mainConfigFile';
 import type { Fix } from '../types';
