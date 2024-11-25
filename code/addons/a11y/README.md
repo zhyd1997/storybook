@@ -226,7 +226,7 @@ The a11y addon is compatible with Storybook's newest addon, [addon test](https:/
 
 ### Automatic setup
 
-When you add the a11y addon via [add](../api/cli-options.mdx#add) command, it will automatically be integrated with the component testing feature. You don't need to do anything else to enable accessibility checks in your component tests.
+When you add the a11y addon via `npx storybook add` command, it will automatically be integrated with the component testing feature. You don't need to do anything else to enable accessibility checks in your component tests.
 
 ### Manual setup
 
