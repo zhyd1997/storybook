@@ -1,11 +1,11 @@
-import React, { Fragment, type SyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, { type SyntheticEvent, useEffect, useRef, useState } from 'react';
 
 import { Button, TooltipNote } from '@storybook/core/components';
 import { WithTooltip } from '@storybook/core/components';
 import { keyframes, styled } from '@storybook/core/theming';
 import { ChevronSmallUpIcon, PlayAllHollowIcon } from '@storybook/icons';
 
-import type { TestProviders } from '@storybook/core/core-events';
+import { TESTING_MODULE_CONFIG_CHANGE, type TestProviders } from '@storybook/core/core-events';
 import { useStorybookApi } from '@storybook/core/manager-api';
 
 import { LegacyRender } from './LegacyRender';
@@ -22,42 +22,42 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 });
 
-const Outline = styled.div<{ crashed: boolean; failed: boolean; running: boolean }>(
-  ({ crashed, running, theme, failed }) => ({
-    position: 'relative',
-    lineHeight: '20px',
-    width: '100%',
-    padding: 1,
-    overflow: 'hidden',
-    background: `var(--sb-sidebar-bottom-card-background, ${theme.background.content})`,
-    borderRadius:
-      `var(--sb-sidebar-bottom-card-border-radius, ${theme.appBorderRadius + 1}px)` as any,
-    boxShadow: `inset 0 0 0 1px ${crashed && !running ? theme.color.negative : theme.appBorderColor}, var(--sb-sidebar-bottom-card-box-shadow, 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app})`,
-    transitionProperty:
-      'color, background-color, border-color, text-decoration-color, fill, stroke',
-    transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-    transitionDuration: '0.15s',
+const Outline = styled.div<{
+  crashed: boolean;
+  failed: boolean;
+  running: boolean;
+  updated: boolean;
+}>(({ crashed, failed, running, theme, updated }) => ({
+  position: 'relative',
+  lineHeight: '20px',
+  width: '100%',
+  padding: 1,
+  overflow: 'hidden',
+  backgroundColor: `var(--sb-sidebar-bottom-card-background, ${theme.background.content})`,
+  borderRadius:
+    `var(--sb-sidebar-bottom-card-border-radius, ${theme.appBorderRadius + 1}px)` as any,
+  boxShadow: `inset 0 0 0 1px ${crashed && !running ? theme.color.negative : updated ? theme.color.positive : theme.appBorderColor}, var(--sb-sidebar-bottom-card-box-shadow, 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0px -5px 20px 10px ${theme.background.app})`,
+  transition: 'box-shadow 1s',
 
-    '&:after': {
-      content: '""',
-      display: running ? 'block' : 'none',
-      position: 'absolute',
-      left: '50%',
-      top: '50%',
-      marginLeft: 'calc(max(100vw, 100vh) * -0.5)',
-      marginTop: 'calc(max(100vw, 100vh) * -0.5)',
-      height: 'max(100vw, 100vh)',
-      width: 'max(100vw, 100vh)',
-      animation: `${spin} 3s linear infinite`,
-      background: failed
-        ? // Hardcoded colors to prevent themes from messing with them (orange+gold, secondary+seafoam)
-          `conic-gradient(transparent 90deg, #FC521F 150deg, #FFAE00 210deg, transparent 270deg)`
-        : `conic-gradient(transparent 90deg, #029CFD 150deg, #37D5D3 210deg, transparent 270deg)`,
-      opacity: 1,
-      willChange: 'auto',
-    },
-  })
-);
+  '&:after': {
+    content: '""',
+    display: running ? 'block' : 'none',
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    marginLeft: 'calc(max(100vw, 100vh) * -0.5)',
+    marginTop: 'calc(max(100vw, 100vh) * -0.5)',
+    height: 'max(100vw, 100vh)',
+    width: 'max(100vw, 100vh)',
+    animation: `${spin} 3s linear infinite`,
+    background: failed
+      ? // Hardcoded colors to prevent themes from messing with them (orange+gold, secondary+seafoam)
+        `conic-gradient(transparent 90deg, #FC521F 150deg, #FFAE00 210deg, transparent 270deg)`
+      : `conic-gradient(transparent 90deg, #029CFD 150deg, #37D5D3 210deg, transparent 270deg)`,
+    opacity: 1,
+    willChange: 'auto',
+  },
+}));
 
 const Card = styled.div(({ theme }) => ({
   position: 'relative',
@@ -165,6 +165,7 @@ export const TestingModule = ({
 }: TestingModuleProps) => {
   const api = useStorybookApi();
   const contentRef = useRef<HTMLDivElement>(null);
+  const [updated, setUpdated] = useState(false);
   const [animating, setAnimating] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
   const [maxHeight, setMaxHeight] = useState(DEFAULT_HEIGHT);
@@ -172,6 +173,19 @@ export const TestingModule = ({
   useEffect(() => {
     setMaxHeight(contentRef.current?.offsetHeight || DEFAULT_HEIGHT);
   }, []);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    const handler = () => {
+      setUpdated(true);
+      timeout = setTimeout(setUpdated, 1000, false);
+    };
+    api.on(TESTING_MODULE_CONFIG_CHANGE, handler);
+    return () => {
+      api.off(TESTING_MODULE_CONFIG_CHANGE, handler);
+      clearTimeout(timeout);
+    };
+  }, [api]);
 
   const toggleCollapsed = () => {
     setAnimating(true);
@@ -191,6 +205,7 @@ export const TestingModule = ({
       running={running}
       crashed={crashed}
       failed={failed || errorCount > 0}
+      updated={updated}
     >
       <Card>
         <Collapsible

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { styled } from '@storybook/core/theming';
 import { Addon_TypesEnum } from '@storybook/core/types';
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn, userEvent } from '@storybook/test';
@@ -8,6 +9,11 @@ import type { TestProviders } from '@storybook/core/core-events';
 import { ManagerContext } from '@storybook/core/manager-api';
 
 import { TestingModule } from './TestingModule';
+
+const TestProvider = styled.div({
+  padding: 8,
+  fontSize: 12,
+});
 
 const baseState = {
   details: {},
@@ -25,11 +31,11 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     id: 'component-tests',
     name: 'Component tests',
     render: () => (
-      <>
+      <TestProvider>
         Component tests
         <br />
         Ran 2 seconds ago
-      </>
+      </TestProvider>
     ),
     runnable: true,
     watchable: true,
@@ -40,11 +46,11 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     id: 'visual-tests',
     name: 'Visual tests',
     render: () => (
-      <>
+      <TestProvider>
         Visual tests
         <br />
         Not run
-      </>
+      </TestProvider>
     ),
     runnable: true,
     ...baseState,
@@ -54,11 +60,11 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     id: 'linting',
     name: 'Linting',
     render: () => (
-      <>
+      <TestProvider>
         Linting
         <br />
         Watching for changes
-      </>
+      </TestProvider>
     ),
     ...baseState,
     watching: true,
@@ -67,6 +73,8 @@ const testProviders: TestProviders[keyof TestProviders][] = [
 
 const managerContext: any = {
   api: {
+    on: fn().mockName('api::on'),
+    off: fn().mockName('api::off'),
     runTestProvider: fn().mockName('api::runTestProvider'),
     cancelTestProvider: fn().mockName('api::cancelTestProvider'),
     updateTestProviderState: fn().mockName('api::updateTestProviderState'),
@@ -104,9 +112,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Collapsed: Story = {
+export const Expanded: Story = {
   play: async ({ canvas }) => {
-    const button = await canvas.findByRole('button', { name: /Collapse/ });
+    const button = await canvas.findByRole('button', { name: /Expand/ });
     await userEvent.click(button);
   },
 };
@@ -116,6 +124,7 @@ export const Statuses: Story = {
     errorCount: 14,
     warningCount: 42,
   },
+  play: Expanded.play,
 };
 
 export const ErrorsActive: Story = {
@@ -123,6 +132,7 @@ export const ErrorsActive: Story = {
     ...Statuses.args,
     errorsActive: true,
   },
+  play: Expanded.play,
 };
 
 export const WarningsActive: Story = {
@@ -130,6 +140,7 @@ export const WarningsActive: Story = {
     ...Statuses.args,
     warningsActive: true,
   },
+  play: Expanded.play,
 };
 
 export const BothActive: Story = {
@@ -138,28 +149,31 @@ export const BothActive: Story = {
     errorsActive: true,
     warningsActive: true,
   },
+  play: Expanded.play,
 };
 
 export const CollapsedStatuses: Story = {
   args: Statuses.args,
-  play: Collapsed.play,
+  play: Expanded.play,
 };
 
 export const Running: Story = {
   args: {
     testProviders: [{ ...testProviders[0], running: true }, ...testProviders.slice(1)],
   },
+  play: Expanded.play,
 };
 
 export const RunningAll: Story = {
   args: {
     testProviders: testProviders.map((tp) => ({ ...tp, running: !!tp.runnable })),
   },
+  play: Expanded.play,
 };
 
 export const CollapsedRunning: Story = {
   args: RunningAll.args,
-  play: Collapsed.play,
+  play: Expanded.play,
 };
 
 export const Cancellable: Story = {
@@ -169,6 +183,7 @@ export const Cancellable: Story = {
       ...testProviders.slice(1),
     ],
   },
+  play: Expanded.play,
 };
 
 export const Cancelling: Story = {
@@ -178,12 +193,14 @@ export const Cancelling: Story = {
       ...testProviders.slice(1),
     ],
   },
+  play: Expanded.play,
 };
 
 export const Watching: Story = {
   args: {
     testProviders: [{ ...testProviders[0], watching: true }, ...testProviders.slice(1)],
   },
+  play: Expanded.play,
 };
 
 export const Failing: Story = {
@@ -193,12 +210,14 @@ export const Failing: Story = {
       ...testProviders.slice(1),
     ],
   },
+  play: Expanded.play,
 };
 
 export const Failed: Story = {
   args: {
     testProviders: [{ ...testProviders[0], failed: true }, ...testProviders.slice(1)],
   },
+  play: Expanded.play,
 };
 
 export const Crashed: Story = {
@@ -207,15 +226,16 @@ export const Crashed: Story = {
       {
         ...testProviders[0],
         render: () => (
-          <>
+          <TestProvider>
             Component tests didn't complete
             <br />
             Problems!
-          </>
+          </TestProvider>
         ),
         crashed: true,
       },
       ...testProviders.slice(1),
     ],
   },
+  play: Expanded.play,
 };
