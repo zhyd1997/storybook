@@ -5897,7 +5897,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/addon-links@workspace:addons/links"
   dependencies:
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     "@storybook/global": "npm:^5.0.0"
     ts-dedent: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
@@ -6123,7 +6123,7 @@ __metadata:
   resolution: "@storybook/blocks@workspace:lib/blocks"
   dependencies:
     "@storybook/addon-actions": "workspace:*"
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     "@storybook/icons": "npm:^1.2.12"
     "@storybook/react": "workspace:*"
     "@storybook/test": "workspace:*"
@@ -6293,7 +6293,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.24.4"
     "@babel/types": "npm:^7.24.0"
     "@storybook/core": "workspace:*"
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     "@types/cross-spawn": "npm:^6.0.2"
     "@types/jscodeshift": "npm:^0.11.10"
     ansi-regex: "npm:^6.0.1"
@@ -6389,7 +6389,7 @@ __metadata:
     "@radix-ui/react-dialog": "npm:^1.0.5"
     "@radix-ui/react-scroll-area": "npm:1.2.0-rc.7"
     "@radix-ui/react-slot": "npm:^1.0.2"
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     "@storybook/docs-mdx": "npm:4.0.0-next.1"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.12"
@@ -6528,12 +6528,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@storybook/csf@npm:0.1.12--canary.110.7611f0c.0":
-  version: 0.1.12--canary.110.7611f0c.0
-  resolution: "@storybook/csf@npm:0.1.12--canary.110.7611f0c.0"
+"@storybook/csf@npm:0.1.12--canary.110.100825f.0":
+  version: 0.1.12--canary.110.100825f.0
+  resolution: "@storybook/csf@npm:0.1.12--canary.110.100825f.0"
   dependencies:
     type-fest: "npm:^2.19.0"
-  checksum: 10c0/c4505f34967328e360c8d24c5b730d39ee2a9e678e09999e5fdd5f2ce07e0ac87ffceb51bde78a1ffaa9e9f0b8d85d939c65ea2625960719e03b8b024d6de2d9
+  checksum: 10c0/44fa7923ef617ff2c8848831279be707ac4c703d4f2811c927b84ca183cd7f15673ba39bebc7ec676fd70c16c83adcdce670ee77878a1e02d2f418cf8a33a0ae
   languageName: node
   linkType: hard
 
@@ -6600,7 +6600,7 @@ __metadata:
   resolution: "@storybook/experimental-addon-test@workspace:addons/test"
   dependencies:
     "@devtools-ds/object-inspector": "npm:^1.1.2"
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.2.12"
     "@storybook/instrumenter": "workspace:*"
@@ -7244,7 +7244,7 @@ __metadata:
     "@storybook/codemod": "workspace:*"
     "@storybook/core": "workspace:*"
     "@storybook/core-webpack": "workspace:*"
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     "@storybook/csf-plugin": "workspace:*"
     "@storybook/ember": "workspace:*"
     "@storybook/eslint-config-storybook": "npm:^4.0.0"
@@ -7390,7 +7390,7 @@ __metadata:
   resolution: "@storybook/server@workspace:renderers/server"
   dependencies:
     "@storybook/components": "workspace:*"
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/manager-api": "workspace:*"
     "@storybook/preview-api": "workspace:*"
@@ -7407,7 +7407,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/source-loader@workspace:lib/source-loader"
   dependencies:
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     es-toolkit: "npm:^1.22.0"
     estraverse: "npm:^5.2.0"
     prettier: "npm:^3.1.1"
@@ -7521,7 +7521,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@storybook/test@workspace:lib/test"
   dependencies:
-    "@storybook/csf": "npm:0.1.12--canary.110.7611f0c.0"
+    "@storybook/csf": "npm:0.1.12--canary.110.100825f.0"
     "@storybook/global": "npm:^5.0.0"
     "@storybook/instrumenter": "workspace:*"
     "@testing-library/dom": "npm:10.4.0"

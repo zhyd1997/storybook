@@ -43,7 +43,7 @@
     "prep": "jiti ../../../scripts/prepare/bundle.ts"
   },
   "dependencies": {
-    "@storybook/csf": "0.1.12--canary.110.7611f0c.0",
+    "@storybook/csf": "0.1.12--canary.110.100825f.0",
     "@storybook/global": "^5.0.0",
     "@storybook/instrumenter": "workspace:*",
     "@testing-library/dom": "10.4.0",
