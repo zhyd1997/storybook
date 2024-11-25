@@ -1,4 +1,4 @@
-import React, { type SyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, { Fragment, type SyntheticEvent, useEffect, useRef, useState } from 'react';
 
 import { Button, TooltipNote } from '@storybook/core/components';
 import { WithTooltip } from '@storybook/core/components';
@@ -137,10 +137,7 @@ const StatusButton = styled(Button)<{ status: 'negative' | 'warning' }>(
 );
 
 const TestProvider = styled.div(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  padding: '12px 6px',
-  gap: 6,
+  padding: 4,
 
   '&:not(:last-child)': {
     boxShadow: `inset 0 -1px 0 ${theme.appBorderColor}`,
@@ -168,7 +165,8 @@ export const TestingModule = ({
 }: TestingModuleProps) => {
   const api = useStorybookApi();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const [animating, setAnimating] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [maxHeight, setMaxHeight] = useState(DEFAULT_HEIGHT);
 
   useEffect(() => {
@@ -176,8 +174,10 @@ export const TestingModule = ({
   }, []);
 
   const toggleCollapsed = () => {
+    setAnimating(true);
     setMaxHeight(contentRef.current?.offsetHeight || DEFAULT_HEIGHT);
     setCollapsed(!collapsed);
+    setTimeout(() => setAnimating(false), 250);
   };
 
   const running = testProviders.some((tp) => tp.running);
@@ -196,7 +196,7 @@ export const TestingModule = ({
         <Collapsible
           style={{
             display: testing ? 'block' : 'none',
-            maxHeight: collapsed ? 0 : maxHeight,
+            maxHeight: collapsed ? 0 : animating ? maxHeight : 'auto',
           }}
         >
           <Content ref={contentRef}>

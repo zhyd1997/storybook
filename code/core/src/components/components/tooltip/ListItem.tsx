@@ -140,8 +140,8 @@ const Item = styled.div<ItemProps>(
       paddingLeft: 10,
     },
   }),
-  ({ theme, href, onClick }) =>
-    (href || onClick) && {
+  ({ theme, href, onClick, as }) =>
+    (href || onClick || as === 'label') && {
       cursor: 'pointer',
       '&:hover': {
         background: theme.background.hoverable,

@@ -13,13 +13,8 @@ import {
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { Panel } from './components/Panel';
 import { PanelTitle } from './components/PanelTitle';
-import { TestProvider } from './components/TestProvider';
-import { ADDON_ID, PANEL_ID, TEST_PROVIDER_ID } from './constants';
-import type { TestResult } from './node/reporter';
-
-export type Details = {
-  testResults: TestResult[];
-};
+import { TestProviderRender } from './components/TestProviderRender';
+import { ADDON_ID, type Config, type Details, PANEL_ID, TEST_PROVIDER_ID } from './constants';
 
 const statusMap: Record<any['status'], API_StatusValue> = {
   failed: 'error',
@@ -40,9 +35,9 @@ addons.register(ADDON_ID, (api) => {
       runnable: true,
       watchable: true,
       name: 'Component tests',
-      render: (state) => <TestProvider api={api} state={state} />,
+      render: (state) => <TestProviderRender api={api} state={state} />,
 
-      sidebarContextMenu: ({ context, state }, { ListItem }) => {
+      sidebarContextMenu: ({ context, state }) => {
         if (context.type === 'docs') {
           return null;
         }
@@ -50,7 +45,7 @@ addons.register(ADDON_ID, (api) => {
           return null;
         }
 
-        return <ContextMenuItem context={context} state={state} ListItem={ListItem} />;
+        return <ContextMenuItem context={context} state={state} />;
       },
 
       mapStatusUpdate: (state) =>
@@ -77,7 +72,7 @@ addons.register(ADDON_ID, (api) => {
               .filter(Boolean)
           )
         ),
-    } as Addon_TestProviderType<Details>);
+    } as Addon_TestProviderType<Details, Config>);
   }
 
   const filter = ({ state }: Combo) => {
