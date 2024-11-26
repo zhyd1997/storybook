@@ -158,6 +158,7 @@ export const TestProviderRender: FC<{
             right={
               <Checkbox
                 type="checkbox"
+                disabled // TODO: Implement coverage
                 checked={config.coverage}
                 onChange={() => updateConfig({ coverage: !config.coverage })}
               />
@@ -170,6 +171,7 @@ export const TestProviderRender: FC<{
             right={
               <Checkbox
                 type="checkbox"
+                disabled // TODO: Implement a11y
                 checked={config.a11y}
                 onChange={() => updateConfig({ a11y: !config.a11y })}
               />
