@@ -294,7 +294,7 @@ export class VitestManager {
         [
           // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
           '@storybook/experimental-addon-test/internal/coverage-reporter',
-          { channel: this.channel },
+          { getTestManager: () => this.testManager },
         ],
       ],
       reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),

@@ -1,14 +1,15 @@
-import type { Channel } from 'storybook/internal/channels';
-
 import type { ReportNode, Visitor } from 'istanbul-lib-report';
 import { ReportBase } from 'istanbul-lib-report';
 
-export default class StorybookCoverageReporter extends ReportBase implements Partial<Visitor> {
-  #channel: Channel;
+import { TEST_PROVIDER_ID } from '../constants';
+import type { TestManager } from './test-manager';
 
-  constructor(opts: { channel: Channel }) {
+export default class StorybookCoverageReporter extends ReportBase implements Partial<Visitor> {
+  #testManager: TestManager;
+
+  constructor(opts: { getTestManager: () => TestManager }) {
     super();
-    this.#channel = opts.channel;
+    this.#testManager = opts.getTestManager();
   }
 
   onSummary(node: ReportNode) {
@@ -16,8 +17,11 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
       return;
     }
     const coverageSummary = node.getCoverageSummary(false);
-    this.#channel.emit('storybook/coverage', {
-      coverageSummary,
+    this.#testManager.sendProgressReport({
+      providerId: TEST_PROVIDER_ID,
+      details: {
+        coverageSummary: coverageSummary.data,
+      },
     });
   }
 }

@@ -37,6 +37,10 @@ export type TestingModuleProgressReportPayload =
         message: string;
         stack?: string;
       };
+    }
+  | {
+      providerId: TestProviderId;
+      details: { [key: string]: any };
     };
 
 export type TestingModuleCrashReportPayload = {
