@@ -162,6 +162,7 @@ describe('stories API', () => {
       expect(index!['design-system']).toMatchObject({
         type: 'root',
         name: 'Design System', // root name originates from `kind`, so it gets trimmed
+        tags: [],
       });
       expect(index!['design-system-some-component']).toMatchObject({
         type: 'component',
@@ -186,6 +187,7 @@ describe('stories API', () => {
             title: 'Root/First',
             name: 'Story 1',
             importPath: './path/to/root/first.ts',
+            tags: [],
           },
           ...mockEntries,
         },
@@ -207,6 +209,7 @@ describe('stories API', () => {
         type: 'root',
         id: 'root',
         children: ['root-first'],
+        tags: [],
       });
     });
     it('sets roots when showRoots = true', () => {
@@ -222,6 +225,7 @@ describe('stories API', () => {
             id: 'a-b--1',
             title: 'a/b',
             name: '1',
+            tags: [],
             importPath: './a/b.ts',
           },
         },
@@ -233,6 +237,7 @@ describe('stories API', () => {
         type: 'root',
         id: 'a',
         children: ['a-b'],
+        tags: [],
       });
       expect(index!['a-b']).toMatchObject({
         type: 'component',
@@ -333,7 +338,7 @@ describe('stories API', () => {
       });
     });
 
-    it('intersects story/docs tags to compute tags for group entries', () => {
+    it('intersects story/docs tags to compute tags for root and group entries', () => {
       const moduleArgs = createMockModuleArgs({});
       const { api } = initStories(moduleArgs as unknown as ModuleArgs);
       const { store } = moduleArgs;
@@ -391,6 +396,7 @@ describe('stories API', () => {
         type: 'root',
         id: 'a',
         children: ['a-sampleone', 'a-sampletwo', 'a-embedded'],
+        tags: ['shared'],
       });
       // The object of this test.
       expect(index!['a-embedded']).toMatchObject({
@@ -1584,6 +1590,7 @@ describe('stories API', () => {
             "parent": "a",
             "prepared": false,
             "renderLabel": undefined,
+            "tags": [],
             "title": "a",
             "type": "story",
           },
@@ -1595,6 +1602,7 @@ describe('stories API', () => {
             "parent": "a",
             "prepared": false,
             "renderLabel": undefined,
+            "tags": [],
             "title": "a",
             "type": "story",
           },
@@ -1650,6 +1658,7 @@ describe('stories API', () => {
             "parent": "a",
             "prepared": false,
             "renderLabel": undefined,
+            "tags": [],
             "title": "a",
             "type": "story",
           },
@@ -1692,6 +1701,7 @@ describe('stories API', () => {
             "parent": "a",
             "prepared": false,
             "renderLabel": undefined,
+            "tags": [],
             "title": "a",
             "type": "story",
           },
@@ -1703,6 +1713,7 @@ describe('stories API', () => {
             "parent": "a",
             "prepared": false,
             "renderLabel": undefined,
+            "tags": [],
             "title": "a",
             "type": "story",
           },
