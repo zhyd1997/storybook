@@ -31,13 +31,8 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'component-tests',
     name: 'Component tests',
-    render: () => (
-      <TestProvider>
-        Component tests
-        <br />
-        Ran 2 seconds ago
-      </TestProvider>
-    ),
+    title: () => 'Component tests',
+    description: () => 'Ran 2 seconds ago',
     runnable: true,
     watchable: true,
     ...baseState,
@@ -46,13 +41,8 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'visual-tests',
     name: 'Visual tests',
-    render: () => (
-      <TestProvider>
-        Visual tests
-        <br />
-        Not run
-      </TestProvider>
-    ),
+    title: () => 'Visual tests',
+    description: () => 'Not run',
     runnable: true,
     ...baseState,
   },
@@ -60,13 +50,7 @@ const testProviders: TestProviders[keyof TestProviders][] = [
     type: Addon_TypesEnum.experimental_TEST_PROVIDER,
     id: 'linting',
     name: 'Linting',
-    render: () => (
-      <TestProvider>
-        Linting
-        <br />
-        Watching for changes
-      </TestProvider>
-    ),
+    render: () => <TestProvider>Custom render function</TestProvider>,
     ...baseState,
     watching: true,
   },
@@ -163,7 +147,6 @@ export const BothActive: Story = {
 
 export const CollapsedStatuses: Story = {
   args: Statuses.args,
-  play: Expanded.play,
 };
 
 export const Running: Story = {
@@ -182,7 +165,6 @@ export const RunningAll: Story = {
 
 export const CollapsedRunning: Story = {
   args: RunningAll.args,
-  play: Expanded.play,
 };
 
 export const Cancellable: Story = {

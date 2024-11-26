@@ -158,6 +158,6 @@ export const EnableEditing: Story = {
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement);
 
-    screen.getByLabelText('Edit').click();
+    screen.getByLabelText(/Open settings/).click();
   },
 };
