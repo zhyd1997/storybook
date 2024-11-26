@@ -11,11 +11,6 @@ import type { Report } from 'storybook/internal/preview-api';
 import type { API_StatusUpdate } from '@storybook/types';
 
 import type { Suite } from '@vitest/runner';
-// TODO
-// We can theoretically avoid the `@vitest/runner` dependency by copying over the necessary
-// functions from the `@vitest/runner` package. It is not complex and does not have
-// any significant dependencies.
-import { getTests } from '@vitest/runner/utils';
 import { throttle } from 'es-toolkit';
 
 import { TEST_PROVIDER_ID } from '../constants';
@@ -76,7 +71,13 @@ export class StorybookReporter implements Reporter {
     this.start = Date.now();
   }
 
-  getProgressReport(finishedAt?: number) {
+  async getProgressReport(finishedAt?: number) {
+    // TODO
+    // We can theoretically avoid the `@vitest/runner` dependency by copying over the necessary
+    // functions from the `@vitest/runner` package. It is not complex and does not have
+    // any significant dependencies.
+    const { getTests } = await import('@vitest/runner/utils');
+
     const files = this.ctx.state.getFiles();
     const fileTests = getTests(files).filter((t) => t.mode === 'run' || t.mode === 'only');
 
@@ -177,7 +178,7 @@ export class StorybookReporter implements Reporter {
       this.sendReport({
         providerId: TEST_PROVIDER_ID,
         status: 'pending',
-        ...this.getProgressReport(),
+        ...(await this.getProgressReport()),
       });
     } catch (e) {
       this.sendReport({
@@ -208,7 +209,7 @@ export class StorybookReporter implements Reporter {
     const unhandledErrors = this.ctx.state.getUnhandledErrors();
 
     const isCancelled = this.ctx.isCancelling;
-    const report = this.getProgressReport(Date.now());
+    const report = await this.getProgressReport(Date.now());
 
     const testSuiteFailures = report.details.testResults.filter(
       (t) => t.status === 'failed' && t.results.length === 0
