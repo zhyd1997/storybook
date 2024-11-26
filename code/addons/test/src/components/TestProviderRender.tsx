@@ -1,11 +1,10 @@
-import React, { type FC, Fragment, useCallback, useRef, useState } from 'react';
+import React, { type FC, useCallback, useRef, useState } from 'react';
 
 import { Button, ListItem } from 'storybook/internal/components';
 import {
   TESTING_MODULE_CONFIG_CHANGE,
   type TestProviderConfig,
   type TestProviderState,
-  type TestingModuleConfigChangePayload,
 } from 'storybook/internal/core-events';
 import type { API } from 'storybook/internal/manager-api';
 import { styled, useTheme } from 'storybook/internal/theming';
@@ -19,6 +18,8 @@ import {
   ShieldIcon,
   StopAltHollowIcon,
 } from '@storybook/icons';
+
+import { debounce } from 'es-toolkit/compat';
 
 import { type Config, type Details, TEST_PROVIDER_ID } from '../constants';
 import { Description } from './Description';
@@ -76,10 +77,10 @@ export const TestProviderRender: FC<{
   const title = state.crashed || state.failed ? 'Local tests failed' : 'Run local tests';
   const errorMessage = state.error?.message;
 
-  const [config, changeConfig] = useConfig(
+  const [config, updateConfig] = useConfig(
+    api,
     state.id,
-    state.config || { a11y: false, coverage: false },
-    api
+    state.config || { a11y: false, coverage: false }
   );
 
   return (
@@ -157,7 +158,7 @@ export const TestProviderRender: FC<{
               <Checkbox
                 type="checkbox"
                 checked={config.coverage}
-                onChange={() => changeConfig({ coverage: !config.coverage })}
+                onChange={() => updateConfig({ coverage: !config.coverage })}
               />
             }
           />
@@ -169,7 +170,7 @@ export const TestProviderRender: FC<{
               <Checkbox
                 type="checkbox"
                 checked={config.a11y}
-                onChange={() => changeConfig({ a11y: !config.a11y })}
+                onChange={() => updateConfig({ a11y: !config.a11y })}
               />
             }
           />
@@ -201,29 +202,27 @@ export const TestProviderRender: FC<{
   );
 };
 
-function useConfig(id: string, config: Config, api: API) {
-  const data = useRef<Config>(config);
-  data.current = config || {
-    a11y: false,
-    coverage: false,
-  };
+function useConfig(api: API, providerId: string, initialConfig: Config) {
+  const [currentConfig, setConfig] = useState<Config>(initialConfig);
 
-  const changeConfig = useCallback(
-    (update: Partial<Config>) => {
-      const newConfig = {
-        ...data.current,
-        ...update,
-      };
-      api.updateTestProviderState(id, {
-        config: newConfig,
-      });
-      api.emit(TESTING_MODULE_CONFIG_CHANGE, {
-        providerId: id,
-        config: newConfig,
-      } as TestingModuleConfigChangePayload);
-    },
-    [api, id]
+  const saveConfig = useCallback(
+    debounce((config: Config) => {
+      api.updateTestProviderState(providerId, { config });
+      api.emit(TESTING_MODULE_CONFIG_CHANGE, { providerId, config });
+    }, 500),
+    [api, providerId]
   );
 
-  return [data.current, changeConfig] as const;
+  const updateConfig = useCallback(
+    (update: Partial<Config>) => {
+      setConfig((value) => {
+        const updated = { ...value, ...update };
+        saveConfig(updated);
+        return updated;
+      });
+    },
+    [saveConfig]
+  );
+
+  return [currentConfig, updateConfig] as const;
 }
