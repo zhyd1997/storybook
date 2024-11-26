@@ -175,10 +175,10 @@ export const TestingModule = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
-  const [isCollapsed, setCollapsed] = useState(false);
-  const [isSlow, setSlow] = useState(false);
   const [maxHeight, setMaxHeight] = useState(DEFAULT_HEIGHT);
 
+  const [isCollapsed, setCollapsed] = useState(false);
+  const [isSlow, setSlow] = useState(false);
   useEffect(() => {
     if (contentRef.current) {
       setMaxHeight(contentRef.current?.getBoundingClientRect().height || DEFAULT_HEIGHT);
@@ -209,45 +209,51 @@ export const TestingModule = ({
     }, 250);
   }, []);
 
-  const running = testProviders.some((tp) => tp.running);
-  const crashed = testProviders.some((tp) => tp.crashed);
-  const failed = testProviders.some((tp) => tp.failed);
-  const testing = testProviders.length > 0;
+  const isRunning = testProviders.some((tp) => tp.running);
+  const isCrashed = testProviders.some((tp) => tp.crashed);
+  const isFailed = testProviders.some((tp) => tp.failed);
+  const hasTestProviders = testProviders.length > 0;
+
+  if (!hasTestProviders && (!errorCount || !warningCount)) {
+    return null;
+  }
 
   return (
     <Outline
       id="storybook-testing-module"
-      running={running}
-      crashed={crashed}
-      failed={failed || errorCount > 0}
+      running={isRunning}
+      crashed={isCrashed}
+      failed={isFailed || errorCount > 0}
     >
       <Card>
-        <Collapsible
-          data-testid="collapse"
-          style={{
-            transition: isSlow ? 'max-height 250ms' : 'max-height 0ms',
-            display: testing ? 'block' : 'none',
-            maxHeight: isCollapsed ? 0 : maxHeight,
-          }}
-        >
-          <Content ref={contentRef}>
-            {testProviders.map((state) => {
-              const { render: Render } = state;
-              return Render ? (
-                <Fragment key={state.id}>
-                  <Render {...state} />
-                </Fragment>
-              ) : (
-                <TestProvider key={state.id} data-module-id={state.id}>
-                  <LegacyRender {...state} />
-                </TestProvider>
-              );
-            })}
-          </Content>
-        </Collapsible>
+        {hasTestProviders && (
+          <Collapsible
+            data-testid="collapse"
+            style={{
+              transition: isSlow ? 'max-height 250ms' : 'max-height 0ms',
+              display: hasTestProviders ? 'block' : 'none',
+              maxHeight: isCollapsed ? 0 : maxHeight,
+            }}
+          >
+            <Content ref={contentRef}>
+              {testProviders.map((state) => {
+                const { render: Render } = state;
+                return Render ? (
+                  <Fragment key={state.id}>
+                    <Render {...state} />
+                  </Fragment>
+                ) : (
+                  <TestProvider key={state.id} data-module-id={state.id}>
+                    <LegacyRender {...state} />
+                  </TestProvider>
+                );
+              })}
+            </Content>
+          </Collapsible>
+        )}
 
-        <Bar onClick={testing ? toggleCollapsed : undefined}>
-          {testing && (
+        <Bar {...(hasTestProviders ? { onClick: toggleCollapsed } : {})}>
+          {hasTestProviders && (
             <Button
               variant="ghost"
               padding="small"
@@ -257,14 +263,14 @@ export const TestingModule = ({
                   .filter((state) => !state.crashed && !state.running && state.runnable)
                   .forEach(({ id }) => api.runTestProvider(id));
               }}
-              disabled={running}
+              disabled={isRunning}
             >
               <PlayAllHollowIcon />
-              {running ? 'Running...' : 'Run tests'}
+              {isRunning ? 'Running...' : 'Run tests'}
             </Button>
           )}
           <Filters>
-            {testing && (
+            {hasTestProviders && (
               <CollapseToggle
                 variant="ghost"
                 padding="small"
