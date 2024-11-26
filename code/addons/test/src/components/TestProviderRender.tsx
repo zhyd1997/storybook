@@ -60,6 +60,9 @@ const Extras = styled.div({
 
 const Checkbox = styled.input({
   margin: 0,
+  '&:enabled': {
+    cursor: 'pointer',
+  },
 });
 
 export const TestProviderRender: FC<{
