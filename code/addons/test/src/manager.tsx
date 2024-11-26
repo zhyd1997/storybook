@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 
 import { AddonPanel } from 'storybook/internal/components';
 import type { Combo } from 'storybook/internal/manager-api';
@@ -9,6 +9,8 @@ import {
   type Addon_TestProviderType,
   Addon_TypesEnum,
 } from 'storybook/internal/types';
+
+import type { ReportNode } from 'istanbul-lib-report';
 
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { Panel } from './components/Panel';
@@ -45,26 +47,6 @@ addons.register(ADDON_ID, (api) => {
         return () => channel.off('storybook/coverage', listener);
       },
       getSnapshot: () => coverageStore.data,
-    };
-    const useCoverage = () => {
-      const coverageSummaryData = useSyncExternalStore(
-        coverageStore.subscribe,
-        coverageStore.getSnapshot
-      );
-      console.log('LOG: coverageSummaryData', coverageSummaryData);
-      if (!coverageSummaryData) {
-        return;
-      }
-
-      let total = 0;
-      let covered = 0;
-      for (const metric of Object.values(coverageSummaryData.coverageSummary)) {
-        total += metric.total;
-        covered += metric.covered;
-      }
-      return {
-        percentage: covered / total,
-      };
     };
     addons.add(TEST_PROVIDER_ID, {
       type: Addon_TypesEnum.experimental_TEST_PROVIDER,

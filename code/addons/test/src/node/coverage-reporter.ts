@@ -1,5 +1,3 @@
-import { join } from 'node:path';
-
 import type { Channel } from 'storybook/internal/channels';
 
 import type { ReportNode, Visitor } from 'istanbul-lib-report';

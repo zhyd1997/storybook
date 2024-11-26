@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import type { TestProject, TestSpecification, Vitest, WorkspaceProject } from 'vitest/node';
 
 import type { Channel } from 'storybook/internal/channels';
+import { resolvePathInStorybookCache } from 'storybook/internal/common';
 import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-events';
 
 import type { DocsIndexEntry, StoryIndex, StoryIndexEntry } from '@storybook/types';
@@ -10,6 +11,7 @@ import type { DocsIndexEntry, StoryIndex, StoryIndexEntry } from '@storybook/typ
 import path, { normalize } from 'pathe';
 import slash from 'slash';
 
+import { COVERAGE_DIRECTORY } from '../constants';
 import { log } from '../logger';
 import { StorybookReporter } from './reporter';
 import type { TestManager } from './test-manager';
@@ -295,6 +297,7 @@ export class VitestManager {
           { channel: this.channel },
         ],
       ],
+      reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
     };
   }
 

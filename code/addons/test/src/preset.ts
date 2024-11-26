@@ -1,7 +1,13 @@
 import { readFileSync } from 'node:fs';
+import { mkdir } from 'node:fs/promises';
 
 import type { Channel } from 'storybook/internal/channels';
-import { checkAddonOrder, getFrameworkName, serverRequire } from 'storybook/internal/common';
+import {
+  checkAddonOrder,
+  getFrameworkName,
+  resolvePathInStorybookCache,
+  serverRequire,
+} from 'storybook/internal/common';
 import {
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
@@ -13,7 +19,7 @@ import { isAbsolute, join } from 'pathe';
 import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
 
-import { STORYBOOK_ADDON_TEST_CHANNEL } from './constants';
+import { COVERAGE_DIRECTORY, STORYBOOK_ADDON_TEST_CHANNEL } from './constants';
 import { log } from './logger';
 import { runTestRunner } from './node/boot-test-runner';
 
@@ -127,10 +133,16 @@ export const managerEntries: PresetProperty<'managerEntries'> = async (entry = [
   return entry as never;
 };
 
-export const staticDirs: PresetPropertyFn<'staticDirs'> = async (values = []) => {
+export const staticDirs: PresetPropertyFn<'staticDirs'> = async (values = [], options) => {
+  if (options.configType === 'PRODUCTION') {
+    return values;
+  }
+
+  const coverageDirectory = resolvePathInStorybookCache(COVERAGE_DIRECTORY);
+  await mkdir(coverageDirectory, { recursive: true });
   return [
     {
-      from: join(process.cwd(), 'coverage'),
+      from: coverageDirectory,
       to: '/coverage',
     },
     ...values,
