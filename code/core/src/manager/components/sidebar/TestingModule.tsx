@@ -243,7 +243,7 @@ export const TestingModule = ({
                     <Render {...state} />
                   </Fragment>
                 ) : (
-                  <TestProvider key={state.id} data-module-id={state.id}>
+                  <TestProvider key={state.id}>
                     <LegacyRender {...state} />
                   </TestProvider>
                 );
