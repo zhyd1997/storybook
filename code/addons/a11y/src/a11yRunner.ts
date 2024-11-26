@@ -13,6 +13,12 @@ const channel = addons.getChannel();
 
 const defaultParameters = { config: {}, options: {} };
 
+const disabledRules = [
+  // In component testing, landmarks are not always present
+  // and the rule check can cause false positives
+  'region',
+];
+
 // A simple queue to run axe-core in sequence
 // This is necessary because axe-core is not designed to run in parallel
 const queue: (() => Promise<void>)[] = [];
@@ -43,8 +49,14 @@ export const run = async (input: A11yParameters = defaultParameters) => {
   }
 
   axe.reset();
+
+  const configWithDefault = {
+    ...config,
+    rules: [...disabledRules.map((id) => ({ id, enabled: false })), ...(config?.rules ?? [])],
+  };
+
   if (config) {
-    axe.configure(config);
+    axe.configure(configWithDefault);
   }
 
   return new Promise<AxeResults>((resolve, reject) => {

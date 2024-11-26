@@ -148,6 +148,30 @@ export const parameters = {
 };
 ```
 
+#### Overriding defaults
+
+Per default, Storybook has disabled the axe rule 'region' as it overreports in component testing.
+Landmarks are a good practice, but are usually applied during component composition, not on a component level. For example, a button itself doesn't define a landmark, whereas a whole page or a section of a page does.
+
+If you still want to enable the rule, you can do so by setting the `enabled` property to `true`:
+
+```ts
+// .storybook/preview.ts
+
+export const parameters = {
+  a11y: {
+    config: {
+      rules: [
+        {
+          id: 'region',
+          enabled: true,
+        },
+      ],
+    },
+  },
+};
+```
+
 ### Disabling checks
 
 If you wish to entirely disable `a11y` checks for a subset of stories, you can control this with story parameters:
