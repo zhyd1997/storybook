@@ -6172,7 +6172,7 @@ __metadata:
     vite: "npm:^4.0.4"
   peerDependencies:
     storybook: "workspace:^"
-    vite: ^4.0.0 || ^5.0.0
+    vite: ^4.0.0 || ^5.0.0 || ^6.0.0
   languageName: unknown
   linkType: soft
 
@@ -6612,6 +6612,7 @@ __metadata:
     execa: "npm:^8.0.1"
     find-up: "npm:^7.0.0"
     formik: "npm:^2.2.9"
+    pathe: "npm:^1.1.2"
     picocolors: "npm:^1.1.0"
     polished: "npm:^4.2.2"
     prompts: "npm:^2.4.0"
@@ -6657,7 +6658,7 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     storybook: "workspace:^"
-    vite: ^5.0.0
+    vite: ^5.0.0 || ^6.0.0
   dependenciesMeta:
     sharp:
       optional: true
@@ -7111,7 +7112,7 @@ __metadata:
     react-native: ">=0.74.5"
     react-native-web: ^0.19.12
     storybook: "workspace:^"
-    vite: ^5.0.0
+    vite: ^5.0.0 || ^6.0.0
   languageName: unknown
   linkType: soft
 
@@ -7135,7 +7136,7 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     storybook: "workspace:^"
-    vite: ^4.0.0 || ^5.0.0
+    vite: ^4.0.0 || ^5.0.0 || ^6.0.0
   languageName: unknown
   linkType: soft
 
@@ -7432,7 +7433,7 @@ __metadata:
     "@sveltejs/vite-plugin-svelte": ^2.0.0 || ^3.0.0 || ^4.0.0
     storybook: "workspace:^"
     svelte: ^4.0.0 || ^5.0.0
-    vite: ^4.0.0 || ^5.0.0
+    vite: ^4.0.0 || ^5.0.0 || ^6.0.0
   languageName: unknown
   linkType: soft
 
@@ -7491,7 +7492,7 @@ __metadata:
   peerDependencies:
     storybook: "workspace:^"
     svelte: ^4.0.0 || ^5.0.0
-    vite: ^4.0.0 || ^5.0.0
+    vite: ^4.0.0 || ^5.0.0 || ^6.0.0
   languageName: unknown
   linkType: soft
 
@@ -7586,7 +7587,7 @@ __metadata:
     vue-docgen-api: "npm:^4.75.1"
   peerDependencies:
     storybook: "workspace:^"
-    vite: ^4.0.0 || ^5.0.0
+    vite: ^4.0.0 || ^5.0.0 || ^6.0.0
   languageName: unknown
   linkType: soft
 
