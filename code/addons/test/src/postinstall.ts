@@ -296,7 +296,7 @@ export default async function postInstall(options: PostinstallOptions) {
 
       // This is an important step to apply the right configuration when testing your stories.
       // More info at: https://storybook.js.org/docs/api/portable-stories/portable-stories-vitest#setprojectannotations
-      const project = setProjectAnnotations('[${projectAnnotations.join(', ')}]');
+      const project = setProjectAnnotations([${projectAnnotations.join(', ')}]);
 
       beforeAll(project.beforeAll);
     `
