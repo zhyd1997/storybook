@@ -10,9 +10,12 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
   constructor(opts: { getTestManager: () => TestManager }) {
     super();
     this.#testManager = opts.getTestManager();
+
+    console.log('StorybookCoverageReporter created');
   }
 
   onSummary(node: ReportNode) {
+    console.log(node.isRoot(), node.getRelativeName());
     if (!node.isRoot()) {
       return;
     }
@@ -23,5 +26,7 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
         coverageSummary: coverageSummary.data,
       },
     });
+
+    console.log('StorybookCoverageReporter onSummary', Object.keys(coverageSummary));
   }
 }

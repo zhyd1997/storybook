@@ -37,6 +37,8 @@ export class VitestManager {
   async startVitest(watchMode = false) {
     const { createVitest } = await import('vitest/node');
 
+    console.log('STARTING VITEST WITH COVERAGE REPORTING');
+
     this.vitest = await createVitest('test', {
       watch: watchMode,
       passWithNoTests: false,
@@ -47,6 +49,22 @@ export class VitestManager {
       // find a way to just show errors and warnings for example
       // Otherwise it might be hard for the user to discover Storybook related logs
       reporters: ['default', new StorybookReporter(this.testManager)],
+      // @ts-expect-error (no provider needed)
+      coverage: {
+        enabled: true, // @JReinhold we want to disable this, but then it doesn't work
+        cleanOnRerun: !watchMode,
+        reportOnFailure: true,
+        // TODO: merge with existing coverage config? (if it exists)
+        reporter: [
+          ['html', {}],
+          [
+            // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
+            '@storybook/experimental-addon-test/internal/coverage-reporter',
+            { getTestManager: () => this.testManager },
+          ],
+        ],
+        reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
+      },
     });
 
     if (this.vitest) {
@@ -60,8 +78,6 @@ export class VitestManager {
     if (watchMode) {
       await this.setupWatchers();
     }
-
-    this.setCoverageConfig();
   }
 
   private updateLastChanged(filepath: string) {
@@ -156,6 +172,28 @@ export class VitestManager {
       this.vitest!.configOverride.testNamePattern = new RegExp(
         `^${storyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`
       );
+    }
+
+    // TODO based on the event payload config / state
+    if (true) {
+      console.log('SETTING UP COVERAGE REPORTING');
+      this.vitest.config.coverage.enabled = true;
+      // // @ts-expect-error (no provider needed)
+      // this.vitest.configOverride.coverage = {
+      //   enabled: true,
+      //   cleanOnRerun: true,
+      //   reportOnFailure: true,
+      //   // TODO: merge with existing coverage config? (if it exists)
+      //   reporter: [
+      //     ['html', {}],
+      //     [
+      //       // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
+      //       '@storybook/experimental-addon-test/internal/coverage-reporter',
+      //       { getTestManager: () => this.testManager },
+      //     ],
+      //   ],
+      //   reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
+      // };
     }
 
     await this.vitest!.runFiles(filteredTestFiles, true);
@@ -280,25 +318,6 @@ export class VitestManager {
     if (this.vitest) {
       this.vitest.configOverride.testNamePattern = undefined;
     }
-  }
-
-  setCoverageConfig() {
-    if (!this.vitest) {
-      return;
-    }
-    this.vitest.configOverride.coverage = {
-      // TODO: merge with existing coverage config? (if it exists)
-      reporter: [
-        //@ts-expect-error wrong upstream types
-        'html',
-        [
-          // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
-          '@storybook/experimental-addon-test/internal/coverage-reporter',
-          { getTestManager: () => this.testManager },
-        ],
-      ],
-      reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
-    };
   }
 
   isStorybookProject(project: TestProject | WorkspaceProject) {
