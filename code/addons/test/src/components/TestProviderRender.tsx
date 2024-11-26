@@ -116,6 +116,12 @@ export const TestProviderRender: FC<{
         </Actions>
       </Head>
 
+      {state.details?.coverageSummary ? (
+        <div>{state.details?.coverageSummary?.lines.pct || 0}% coverage</div>
+      ) : (
+        <div>nothing</div>
+      )}
+
       {!isEditing ? (
         <Fragment>
           {Object.entries(config).map(([key, value]) => (
