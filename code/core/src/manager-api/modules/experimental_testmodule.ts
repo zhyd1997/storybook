@@ -20,7 +20,6 @@ export type SubState = {
 };
 
 const initialTestProviderState: TestProviderState = {
-  config: {} as { [key: string]: any },
   details: {} as { [key: string]: any },
   cancellable: false,
   cancelling: false,

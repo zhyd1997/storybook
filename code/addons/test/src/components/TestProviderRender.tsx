@@ -19,6 +19,7 @@ import {
   StopAltHollowIcon,
 } from '@storybook/icons';
 
+import { isEqual } from 'es-toolkit';
 import { debounce } from 'es-toolkit/compat';
 
 import { type Config, type Details, TEST_PROVIDER_ID } from '../constants';
@@ -204,11 +205,15 @@ export const TestProviderRender: FC<{
 
 function useConfig(api: API, providerId: string, initialConfig: Config) {
   const [currentConfig, setConfig] = useState<Config>(initialConfig);
+  const lastConfig = useRef(initialConfig);
 
   const saveConfig = useCallback(
     debounce((config: Config) => {
-      api.updateTestProviderState(providerId, { config });
-      api.emit(TESTING_MODULE_CONFIG_CHANGE, { providerId, config });
+      if (!isEqual(config, lastConfig.current)) {
+        api.updateTestProviderState(providerId, { config });
+        api.emit(TESTING_MODULE_CONFIG_CHANGE, { providerId, config });
+        lastConfig.current = config;
+      }
     }, 500),
     [api, providerId]
   );
