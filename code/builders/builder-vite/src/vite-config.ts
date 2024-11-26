@@ -47,7 +47,7 @@ export async function commonConfig(
   _type: PluginConfigType
 ): Promise<ViteInlineConfig> {
   const configEnv = _type === 'development' ? configEnvServe : configEnvBuild;
-  const { loadConfigFromFile, mergeConfig } = await import('vite');
+  const { loadConfigFromFile, mergeConfig, ...restViteConfig } = await import('vite');
 
   const { viteConfigPath } = await getBuilderOptions<BuilderOptions>(options);
 
@@ -67,7 +67,13 @@ export async function commonConfig(
     base: './',
     plugins: await pluginConfig(options),
     resolve: {
-      conditions: ['storybook', 'stories', 'test'],
+      conditions: [
+        'storybook',
+        'stories',
+        'test',
+        // @ts-expect-error this property only exists in Vite 6
+        ...(restViteConfig.defaultClientConditions || []),
+      ],
       preserveSymlinks: isPreservingSymlinks(),
       alias: {
         assert: require.resolve('browser-assert'),
