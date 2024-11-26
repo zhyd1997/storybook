@@ -35,17 +35,6 @@ export class VitestManager {
       // find a way to just show errors and warnings for example
       // Otherwise it might be hard for the user to discover Storybook related logs
       reporters: ['default', new StorybookReporter(this.testManager)],
-      coverage: {
-        provider: 'v8',
-        reporter: [
-          'html',
-          [
-            // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
-            '@storybook/experimental-addon-test/internal/coverage-reporter',
-            { channel: this.channel },
-          ],
-        ],
-      },
     });
 
     if (this.vitest) {
@@ -59,6 +48,8 @@ export class VitestManager {
     if (watchMode) {
       await this.setupWatchers();
     }
+
+    this.setCoverageConfig();
   }
 
   async runAllTests() {
@@ -267,6 +258,24 @@ export class VitestManager {
     if (this.vitest) {
       this.vitest.configOverride.testNamePattern = undefined;
     }
+  }
+
+  setCoverageConfig() {
+    if (!this.vitest) {
+      return;
+    }
+    this.vitest.configOverride.coverage = {
+      // TODO: merge with existing coverage config? (if it exists)
+      reporter: [
+        //@ts-expect-error wrong upstream types
+        'html',
+        [
+          // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
+          '@storybook/experimental-addon-test/internal/coverage-reporter',
+          { channel: this.channel },
+        ],
+      ],
+    };
   }
 
   isStorybookProject(project: TestProject | WorkspaceProject) {
