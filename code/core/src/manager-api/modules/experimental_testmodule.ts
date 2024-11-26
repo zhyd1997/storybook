@@ -8,6 +8,7 @@ import {
   type TestProviderState,
   type TestProviders,
   type TestingModuleRunRequestPayload,
+  type TestingModuleWatchModeRequestPayload,
 } from '@storybook/core/core-events';
 
 import invariant from 'tiny-invariant';
@@ -19,6 +20,7 @@ export type SubState = {
 };
 
 const initialTestProviderState: TestProviderState = {
+  config: {} as { [key: string]: any },
   details: {} as { [key: string]: any },
   cancellable: false,
   cancelling: false,
@@ -79,13 +81,17 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
       const index = store.getState().index;
       invariant(index, 'The index is currently unavailable');
 
+      const provider = store.getState().testProviders[id];
+
       const indexUrl = new URL('index.json', window.location.href).toString();
 
       if (!options?.entryId) {
         const payload: TestingModuleRunRequestPayload = {
           providerId: id,
           indexUrl,
+          config: provider.config,
         };
+
         fullAPI.emit(TESTING_MODULE_RUN_REQUEST, payload);
         return () => api.cancelTestProvider(id);
       }
@@ -107,13 +113,19 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
         providerId: id,
         indexUrl,
         storyIds: findStories(options.entryId),
+        config: provider.config,
       };
       fullAPI.emit(TESTING_MODULE_RUN_REQUEST, payload);
       return () => api.cancelTestProvider(id);
     },
     setTestProviderWatchMode(id, watchMode) {
       api.updateTestProviderState(id, { watching: watchMode });
-      fullAPI.emit(TESTING_MODULE_WATCH_MODE_REQUEST, { providerId: id, watchMode });
+      const config = store.getState().testProviders[id].config;
+      fullAPI.emit(TESTING_MODULE_WATCH_MODE_REQUEST, {
+        providerId: id,
+        watchMode,
+        config,
+      } as TestingModuleWatchModeRequestPayload);
     },
     cancelTestProvider(id) {
       api.updateTestProviderState(id, { cancelling: true });
