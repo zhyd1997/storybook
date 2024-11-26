@@ -178,7 +178,7 @@ export const TestingModule = ({
   const [maxHeight, setMaxHeight] = useState(DEFAULT_HEIGHT);
 
   const [isCollapsed, setCollapsed] = useState(false);
-  const [isSlow, setSlow] = useState(false);
+  const [isChangingCollapse, setChangingCollapse] = useState(false);
   useEffect(() => {
     if (contentRef.current) {
       setMaxHeight(contentRef.current?.getBoundingClientRect().height || DEFAULT_HEIGHT);
@@ -199,13 +199,13 @@ export const TestingModule = ({
 
   const toggleCollapsed = useCallback((event: SyntheticEvent) => {
     event.stopPropagation();
-    setSlow(true);
+    setChangingCollapse(true);
     setCollapsed((s) => !s);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      setSlow(false);
+      setChangingCollapse(false);
     }, 250);
   }, []);
 
@@ -230,7 +230,7 @@ export const TestingModule = ({
           <Collapsible
             data-testid="collapse"
             style={{
-              transition: isSlow ? 'max-height 250ms' : 'max-height 0ms',
+              transition: isChangingCollapse ? 'max-height 250ms' : 'max-height 0ms',
               display: hasTestProviders ? 'block' : 'none',
               maxHeight: isCollapsed ? 0 : maxHeight,
             }}
@@ -243,7 +243,7 @@ export const TestingModule = ({
                     <Render {...state} />
                   </Fragment>
                 ) : (
-                  <TestProvider key={state.id} data-module-id={state.id}>
+                  <TestProvider key={state.id}>
                     <LegacyRender {...state} />
                   </TestProvider>
                 );
