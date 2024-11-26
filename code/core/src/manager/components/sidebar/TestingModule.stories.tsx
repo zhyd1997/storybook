@@ -1,12 +1,13 @@
 import React from 'react';
 
+import type { Listener } from '@storybook/core/channels';
 import { styled } from '@storybook/core/theming';
 import { Addon_TypesEnum } from '@storybook/core/types';
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn, userEvent } from '@storybook/test';
+import { fireEvent, fn } from '@storybook/test';
 
-import type { TestProviders } from '@storybook/core/core-events';
-import { ManagerContext } from '@storybook/core/manager-api';
+import { TESTING_MODULE_CONFIG_CHANGE, type TestProviders } from '@storybook/core/core-events';
+import { ManagerContext, mockChannel } from '@storybook/core/manager-api';
 
 import { TestingModule } from './TestingModule';
 
@@ -71,10 +72,17 @@ const testProviders: TestProviders[keyof TestProviders][] = [
   },
 ];
 
+let triggerUpdate: () => void;
+const channel = mockChannel();
 const managerContext: any = {
   api: {
-    on: fn().mockName('api::on'),
-    off: fn().mockName('api::off'),
+    on: (eventName: string, listener: Listener) => {
+      if (eventName === TESTING_MODULE_CONFIG_CHANGE) {
+        triggerUpdate = listener;
+      }
+      return channel.on(eventName, listener);
+    },
+    off: (eventName: string, listener: Listener) => channel.off(eventName, listener),
     runTestProvider: fn().mockName('api::runTestProvider'),
     cancelTestProvider: fn().mockName('api::cancelTestProvider'),
     updateTestProviderState: fn().mockName('api::updateTestProviderState'),
@@ -115,7 +123,8 @@ export const Default: Story = {};
 export const Expanded: Story = {
   play: async ({ canvas }) => {
     const button = await canvas.findByRole('button', { name: /Expand/ });
-    await userEvent.click(button);
+    await fireEvent.click(button);
+    await new Promise((resolve) => setTimeout(resolve, 500));
   },
 };
 
@@ -238,4 +247,12 @@ export const Crashed: Story = {
     ],
   },
   play: Expanded.play,
+};
+
+export const Updated: Story = {
+  args: {},
+  play: async (context) => {
+    await Expanded.play!(context);
+    triggerUpdate?.();
+  },
 };
