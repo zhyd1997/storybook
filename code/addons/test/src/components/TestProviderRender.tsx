@@ -178,13 +178,20 @@ export const TestProviderRender: FC<{
         </Extras>
       ) : (
         <Extras>
-          <ListItem title="Component tests" icon={<TestStatusIcon status="positive" />} />
+          <ListItem
+            title="Component tests"
+            icon={<TestStatusIcon status="positive" aria-label="status: passed" />}
+          />
           <ListItem
             title="Coverage"
-            icon={<TestStatusIcon percentage={60} status="warning" />}
+            icon={<TestStatusIcon percentage={60} status="warning" aria-label="status: warning" />}
             right={`60%`}
           />
-          <ListItem title="Accessibility" icon={<TestStatusIcon status="negative" />} right={73} />
+          <ListItem
+            title="Accessibility"
+            icon={<TestStatusIcon status="negative" aria-label="status: failed" />}
+            right={73}
+          />
         </Extras>
       )}
 
