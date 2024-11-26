@@ -29,9 +29,6 @@ export class VitestManager {
       watch: watchMode,
       passWithNoTests: false,
       changed: watchMode,
-      env: {
-        STORYBOOK: 'true',
-      },
       // TODO:
       // Do we want to enable Vite's default reporter?
       // The output in the terminal might be too spamy and it might be better to
@@ -43,6 +40,11 @@ export class VitestManager {
         enabled: false,
       },
     });
+
+    this.vitest.configOverride.env = {
+      // We signal to the test runner that we are running it via Storybook
+      STORYBOOK: 'true',
+    };
 
     if (this.vitest) {
       this.vitest.onCancel(() => {
