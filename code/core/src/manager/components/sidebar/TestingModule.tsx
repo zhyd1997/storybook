@@ -1,4 +1,11 @@
-import React, { Fragment, type SyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  Fragment,
+  type SyntheticEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import { Button, TooltipNote } from '@storybook/core/components';
 import { WithTooltip } from '@storybook/core/components';
@@ -72,7 +79,7 @@ const Card = styled.div(({ theme }) => ({
 
 const Collapsible = styled.div(({ theme }) => ({
   overflow: 'hidden',
-  transition: 'max-height 250ms',
+
   willChange: 'auto',
   boxShadow: `inset 0 -1px 0 ${theme.appBorderColor}`,
 }));
@@ -164,18 +171,43 @@ export const TestingModule = ({
   setWarningsActive,
 }: TestingModuleProps) => {
   const api = useStorybookApi();
+
   const contentRef = useRef<HTMLDivElement>(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const timeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
+
+  const [isCollapsed, setCollapsed] = useState(false);
+  const [isSlow, setSlow] = useState(false);
   const [maxHeight, setMaxHeight] = useState(DEFAULT_HEIGHT);
 
   useEffect(() => {
-    setMaxHeight(contentRef.current?.offsetHeight || DEFAULT_HEIGHT);
-  }, []);
+    if (contentRef.current) {
+      setMaxHeight(contentRef.current?.getBoundingClientRect().height || DEFAULT_HEIGHT);
 
-  const toggleCollapsed = () => {
-    setMaxHeight(contentRef.current?.offsetHeight || DEFAULT_HEIGHT);
-    setCollapsed(!collapsed);
-  };
+      const resizeObserver = new ResizeObserver(() => {
+        requestAnimationFrame(() => {
+          if (contentRef.current && !isCollapsed) {
+            const height = contentRef.current?.getBoundingClientRect().height || DEFAULT_HEIGHT;
+
+            setMaxHeight(height);
+          }
+        });
+      });
+      resizeObserver.observe(contentRef.current);
+      return () => resizeObserver.disconnect();
+    }
+  }, [isCollapsed]);
+
+  const toggleCollapsed = useCallback((event: SyntheticEvent) => {
+    event.stopPropagation();
+    setSlow(true);
+    setCollapsed((s) => !s);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setSlow(false);
+    }, 250);
+  }, []);
 
   const running = testProviders.some((tp) => tp.running);
   const crashed = testProviders.some((tp) => tp.crashed);
@@ -191,9 +223,11 @@ export const TestingModule = ({
     >
       <Card>
         <Collapsible
+          data-testid="collapse"
           style={{
+            transition: isSlow ? 'max-height 250ms' : 'max-height 0ms',
             display: testing ? 'block' : 'none',
-            maxHeight: collapsed ? 0 : maxHeight,
+            maxHeight: isCollapsed ? 0 : maxHeight,
           }}
         >
           <Content ref={contentRef}>
@@ -236,11 +270,11 @@ export const TestingModule = ({
                 padding="small"
                 onClick={toggleCollapsed}
                 id="testing-module-collapse-toggle"
-                aria-label={collapsed ? 'Expand testing module' : 'Collapse testing module'}
+                aria-label={isCollapsed ? 'Expand testing module' : 'Collapse testing module'}
               >
                 <ChevronSmallUpIcon
                   style={{
-                    transform: collapsed ? 'none' : 'rotate(180deg)',
+                    transform: isCollapsed ? 'none' : 'rotate(180deg)',
                     transition: 'transform 250ms',
                     willChange: 'auto',
                   }}
