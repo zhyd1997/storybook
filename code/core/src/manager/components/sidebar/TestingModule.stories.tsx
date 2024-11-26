@@ -256,3 +256,9 @@ export const Updated: Story = {
     triggerUpdate?.();
   },
 };
+
+export const NoTestProvider: Story = {
+  args: {
+    testProviders: [],
+  },
+};
