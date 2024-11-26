@@ -191,7 +191,7 @@ export const TestingModule = ({
   }, [isCollapsed]);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
     const handler = () => {
       setUpdated(true);
       timeout = setTimeout(setUpdated, 1000, false);
