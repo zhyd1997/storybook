@@ -7,15 +7,12 @@ import type { TestManager } from './test-manager';
 export default class StorybookCoverageReporter extends ReportBase implements Partial<Visitor> {
   #testManager: TestManager;
 
-  constructor(opts: { getTestManager: () => TestManager }) {
+  constructor(opts: { testManager: TestManager }) {
     super();
-    this.#testManager = opts.getTestManager();
-
-    console.log('StorybookCoverageReporter created');
+    this.#testManager = opts.testManager;
   }
 
   onSummary(node: ReportNode) {
-    console.log(node.isRoot(), node.getRelativeName());
     if (!node.isRoot()) {
       return;
     }
@@ -26,7 +23,5 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
         coverageSummary: coverageSummary.data,
       },
     });
-
-    console.log('StorybookCoverageReporter onSummary', Object.keys(coverageSummary));
   }
 }

@@ -29,15 +29,10 @@ export class VitestManager {
 
   storyCountForCurrentRun: number = 0;
 
-  constructor(
-    private channel: Channel,
-    private testManager: TestManager
-  ) {}
+  constructor(private testManager: TestManager) {}
 
-  async startVitest(watchMode = false) {
+  async startVitest({ watchMode = false, coverage = false } = {}) {
     const { createVitest } = await import('vitest/node');
-
-    console.log('STARTING VITEST WITH COVERAGE REPORTING');
 
     this.vitest = await createVitest('test', {
       watch: watchMode,
@@ -51,16 +46,16 @@ export class VitestManager {
       reporters: ['default', new StorybookReporter(this.testManager)],
       // @ts-expect-error (no provider needed)
       coverage: {
-        enabled: true, // @JReinhold we want to disable this, but then it doesn't work
+        enabled: coverage,
         cleanOnRerun: !watchMode,
         reportOnFailure: true,
         // TODO: merge with existing coverage config? (if it exists)
         reporter: [
-          ['html', {}],
+          'html',
           [
             // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
             '@storybook/experimental-addon-test/internal/coverage-reporter',
-            { getTestManager: () => this.testManager },
+            { testManager: this.testManager },
           ],
         ],
         reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
@@ -172,28 +167,6 @@ export class VitestManager {
       this.vitest!.configOverride.testNamePattern = new RegExp(
         `^${storyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`
       );
-    }
-
-    // TODO based on the event payload config / state
-    if (true) {
-      console.log('SETTING UP COVERAGE REPORTING');
-      this.vitest.config.coverage.enabled = true;
-      // // @ts-expect-error (no provider needed)
-      // this.vitest.configOverride.coverage = {
-      //   enabled: true,
-      //   cleanOnRerun: true,
-      //   reportOnFailure: true,
-      //   // TODO: merge with existing coverage config? (if it exists)
-      //   reporter: [
-      //     ['html', {}],
-      //     [
-      //       // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
-      //       '@storybook/experimental-addon-test/internal/coverage-reporter',
-      //       { getTestManager: () => this.testManager },
-      //     ],
-      //   ],
-      //   reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
-      // };
     }
 
     await this.vitest!.runFiles(filteredTestFiles, true);

@@ -20,6 +20,8 @@ export class TestManager {
 
   watchMode = false;
 
+  coverage = false;
+
   constructor(
     private channel: Channel,
     private options: {
@@ -27,7 +29,7 @@ export class TestManager {
       onReady?: () => void;
     } = {}
   ) {
-    this.vitestManager = new VitestManager(channel, this);
+    this.vitestManager = new VitestManager(this);
 
     this.channel.on(TESTING_MODULE_RUN_REQUEST, this.handleRunRequest.bind(this));
     this.channel.on(TESTING_MODULE_CONFIG_CHANGE, this.handleConfigChange.bind(this));
@@ -37,21 +39,31 @@ export class TestManager {
     this.vitestManager.startVitest().then(() => options.onReady?.());
   }
 
-  async restartVitest(watchMode = false) {
+  async restartVitest({ watchMode, coverage }: { watchMode: boolean; coverage: boolean }) {
     await this.vitestManager.vitest?.runningPromise;
     await this.vitestManager.closeVitest();
-    await this.vitestManager.startVitest(watchMode);
+    await this.vitestManager.startVitest({ watchMode, coverage });
   }
 
   async handleConfigChange(payload: TestingModuleConfigChangePayload) {
-    // TODO do something with the config
     const config = payload.config;
+    console.log('LOG: handleConfigChange', config);
+
+    try {
+      if (payload.providerId !== TEST_PROVIDER_ID) {
+        return;
+      }
+      //@ts-expect-error - TODO: fix types, should allow a generic Config type
+      if (this.coverage !== payload.config.coverage) {
+        this.coverage = payload.config.coverage;
+        await this.restartVitest({ watchMode: this.watchMode, coverage: this.coverage });
+      }
+    } catch (e) {
+      this.reportFatalError('Failed to change coverage mode', e);
+    }
   }
 
   async handleWatchModeRequest(payload: TestingModuleWatchModeRequestPayload) {
-    // TODO do something with the config
-    const config = payload.config;
-
     try {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
@@ -59,7 +71,7 @@ export class TestManager {
 
       if (this.watchMode !== payload.watchMode) {
         this.watchMode = payload.watchMode;
-        await this.restartVitest(this.watchMode);
+        await this.restartVitest({ watchMode: this.watchMode, coverage: this.coverage });
       }
     } catch (e) {
       this.reportFatalError('Failed to change watch mode', e);
@@ -71,8 +83,19 @@ export class TestManager {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
       }
+      // If we have coverage enabled and we're running a subset of stories, we need to temporarily disable coverage
+      // as a coverage report for a subset of stories is not useful.
+      const temporarilyDisableCoverage = this.coverage && payload.storyIds?.length > 0;
+
+      if (temporarilyDisableCoverage) {
+        await this.restartVitest({ watchMode: this.watchMode, coverage: false });
+      }
 
       await this.vitestManager.runTests(payload);
+
+      if (temporarilyDisableCoverage) {
+        await this.restartVitest({ watchMode: this.watchMode, coverage: this.coverage });
+      }
     } catch (e) {
       this.reportFatalError('Failed to run tests', e);
     }
