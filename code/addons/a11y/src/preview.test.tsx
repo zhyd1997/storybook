@@ -82,7 +82,7 @@ describe('afterEach', () => {
 
     mockedRun.mockResolvedValue(result as any);
 
-    await afterEach(context);
+    await expect(() => afterEach(context)).rejects.toThrow();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
 
@@ -186,7 +186,7 @@ describe('afterEach', () => {
     const error = new Error('Test error');
     mockedRun.mockRejectedValue(error);
 
-    await afterEach(context);
+    await expect(() => afterEach(context)).rejects.toThrow();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
     expect(context.reporting.addReport).toHaveBeenCalledWith({
