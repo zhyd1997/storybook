@@ -2,6 +2,7 @@ import { Addon_TypesEnum, type StoryId } from '@storybook/core/types';
 
 import {
   TESTING_MODULE_CANCEL_TEST_RUN_REQUEST,
+  TESTING_MODULE_RUN_ALL_REQUEST,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
   type TestProviderId,
@@ -87,6 +88,10 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
           indexUrl,
         };
         fullAPI.emit(TESTING_MODULE_RUN_REQUEST, payload);
+
+        // For backwards compatibility:
+        fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: id });
+
         return () => api.cancelTestProvider(id);
       }
 
