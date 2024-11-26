@@ -1,1 +1,1 @@
-{"version":"8.5.0-alpha.8","info":{"plain":"- UI: Sidebar context menu addon API - [#29557](https://github.com/storybookjs/storybook/pull/29557), thanks @ndelangen!"}}
+{"version":"8.5.0-alpha.10","info":{"plain":"- Addon Test: Use pathe for better windows support - [#29676](https://github.com/storybookjs/storybook/pull/29676), thanks @yannbf!\n- Angular: Default to standalone components in Angular v19 - [#29677](https://github.com/storybookjs/storybook/pull/29677), thanks @ingowagner!"}}

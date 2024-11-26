@@ -4,26 +4,19 @@ type DateNow = number;
 
 export type TestProviderId = Addon_TestProviderType['id'];
 export type TestProviderConfig = Addon_TestProviderType;
-export type TestProviderState = Addon_TestProviderState;
+export type TestProviderState<
+  Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = Addon_TestProviderState<Details, Config>;
 
 export type TestProviders = Record<TestProviderId, TestProviderConfig & TestProviderState>;
 
-export type TestingModuleRunRequestStory = {
-  id: string; // button--primary
-  name: string; // Primary
-};
-
 export type TestingModuleRunRequestPayload = {
   providerId: TestProviderId;
-  payload: {
-    importPath: string; // ./.../button.stories.tsx
-    stories?: TestingModuleRunRequestStory[];
-    componentPath?: string; // ./.../button.tsx
-  }[];
-};
-
-export type TestingModuleRunAllRequestPayload = {
-  providerId: TestProviderId;
+  // TODO: Avoid needing to do a fetch request server-side to retrieve the index
+  indexUrl: string; // e.g. http://localhost:6006/index.json
+  storyIds?: string[]; // ['button--primary', 'button--secondary']
+  config?: TestProviderState['config'];
 };
 
 export type TestingModuleProgressReportPayload =
@@ -81,4 +74,10 @@ export type TestingModuleCancelTestRunResponsePayload =
 export type TestingModuleWatchModeRequestPayload = {
   providerId: TestProviderId;
   watchMode: boolean;
+  config?: TestProviderState['config'];
+};
+
+export type TestingModuleConfigChangePayload = {
+  providerId: TestProviderId;
+  config: TestProviderState['config'];
 };
