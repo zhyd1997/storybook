@@ -26,6 +26,7 @@ import { type Config, type Details, TEST_PROVIDER_ID } from '../constants';
 import { Description } from './Description';
 import { GlobalErrorModal } from './GlobalErrorModal';
 import { TestStatusIcon } from './TestStatusIcon';
+import { Title } from './Title';
 
 const Container = styled.div({
   display: 'flex',
@@ -44,12 +45,6 @@ const Info = styled.div({
   flexDirection: 'column',
   marginLeft: 6,
 });
-
-const Title = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
-  fontSize: theme.typography.size.s1,
-  fontWeight: crashed ? 'bold' : 'normal',
-  color: crashed ? theme.color.negativeText : theme.color.defaultText,
-}));
 
 const Actions = styled.div({
   display: 'flex',
@@ -75,9 +70,6 @@ export const TestProviderRender: FC<{
   const [isModalOpen, setIsModalOpen] = useState(false);
   const theme = useTheme();
 
-  const title = state.crashed || state.failed ? 'Local tests failed' : 'Run local tests';
-  const errorMessage = state.error?.message;
-
   const [config, updateConfig] = useConfig(
     api,
     state.id,
@@ -88,10 +80,12 @@ export const TestProviderRender: FC<{
     <Container>
       <Heading>
         <Info>
-          <Title crashed={state.crashed} id="testing-module-title">
-            {title}
-          </Title>
-          <Description errorMessage={errorMessage} setIsModalOpen={setIsModalOpen} state={state} />
+          <Title id="testing-module-title" state={state} />
+          <Description
+            id="testing-module-description"
+            setIsModalOpen={setIsModalOpen}
+            state={state}
+          />
         </Info>
 
         <Actions>
@@ -199,7 +193,7 @@ export const TestProviderRender: FC<{
       )}
 
       <GlobalErrorModal
-        error={errorMessage}
+        error={state.error?.message}
         open={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
