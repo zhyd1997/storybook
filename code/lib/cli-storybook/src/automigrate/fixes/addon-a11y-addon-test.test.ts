@@ -148,7 +148,7 @@ describe('addonA11yAddonTest', () => {
         import { setProjectAnnotations } from 'storybook';
         import * as projectAnnotations from './preview';
 
-        const project = setProjectAnnotations([projectAnnotations, a11yAddonAnnotations]);
+        const project = setProjectAnnotations([a11yAddonAnnotations, projectAnnotations]);
 
         beforeAll(project.beforeAll);"
       `);
@@ -176,7 +176,7 @@ describe('addonA11yAddonTest', () => {
         import { setProjectAnnotations } from 'storybook';
         import * as projectAnnotations from './preview';
 
-        const project = setProjectAnnotations([projectAnnotations, a11yAddonAnnotations]);
+        const project = setProjectAnnotations([a11yAddonAnnotations, projectAnnotations]);
 
         beforeAll(project.beforeAll);"
       `);

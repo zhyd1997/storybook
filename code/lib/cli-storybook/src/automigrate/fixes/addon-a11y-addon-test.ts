@@ -150,7 +150,7 @@ export function transformSetupFile(setupFile: string) {
 
   // Add a11yAddonAnnotations to the annotations array
   setProjectAnnotationsCall.find(j.ArrayExpression).forEach((p) => {
-    p.value.elements.push(j.identifier('a11yAddonAnnotations'));
+    p.value.elements.unshift(j.identifier('a11yAddonAnnotations'));
   });
 
   // Add the import declaration at the top
