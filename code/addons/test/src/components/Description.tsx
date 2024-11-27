@@ -4,6 +4,7 @@ import { Link as LinkComponent } from 'storybook/internal/components';
 import { type TestProviderConfig, type TestProviderState } from 'storybook/internal/core-events';
 import { styled } from 'storybook/internal/theming';
 
+import { GlobalErrorContext } from './GlobalErrorModal';
 import { RelativeTime } from './RelativeTime';
 
 export const Wrapper = styled.div(({ theme }) => ({
@@ -15,16 +16,14 @@ const PositiveText = styled.span(({ theme }) => ({
   color: theme.color.positiveText,
 }));
 
-export function Description({
-  setIsModalOpen,
-  state,
-  ...props
-}: {
+interface DescriptionProps extends ComponentProps<typeof Wrapper> {
   state: TestProviderConfig & TestProviderState;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-} & ComponentProps<typeof Wrapper>) {
+}
+
+export function Description({ state, ...props }: DescriptionProps) {
   const isMounted = React.useRef(false);
   const [isUpdated, setUpdated] = React.useState(false);
+  const { setModalOpen } = React.useContext(GlobalErrorContext);
 
   useEffect(() => {
     if (isMounted.current) {
@@ -51,12 +50,7 @@ export function Description({
   } else if (state.crashed || (state.failed && errorMessage)) {
     description = (
       <>
-        <LinkComponent
-          isButton
-          onClick={() => {
-            setIsModalOpen(true);
-          }}
-        >
+        <LinkComponent isButton onClick={() => setModalOpen(true)}>
           {state.error?.name || 'View full error'}
         </LinkComponent>
       </>

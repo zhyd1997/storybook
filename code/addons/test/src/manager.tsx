@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { AddonPanel } from 'storybook/internal/components';
 import type { Combo } from 'storybook/internal/manager-api';
@@ -11,6 +11,7 @@ import {
 } from 'storybook/internal/types';
 
 import { ContextMenuItem } from './components/ContextMenuItem';
+import { GlobalErrorContext, GlobalErrorModal } from './components/GlobalErrorModal';
 import { Panel } from './components/Panel';
 import { PanelTitle } from './components/PanelTitle';
 import { TestProviderRender } from './components/TestProviderRender';
@@ -35,7 +36,22 @@ addons.register(ADDON_ID, (api) => {
       runnable: true,
       watchable: true,
       name: 'Component tests',
-      render: (state) => <TestProviderRender api={api} state={state} />,
+      render: (state) => {
+        const [isModalOpen, setModalOpen] = useState(false);
+        return (
+          <GlobalErrorContext.Provider
+            value={{ error: state.error?.message, isModalOpen, setModalOpen }}
+          >
+            <TestProviderRender api={api} state={state} />
+            <GlobalErrorModal
+              onRerun={() => {
+                setModalOpen(false);
+                api.runTestProvider(TEST_PROVIDER_ID);
+              }}
+            />
+          </GlobalErrorContext.Provider>
+        );
+      },
 
       sidebarContextMenu: ({ context, state }) => {
         if (context.type === 'docs') {
@@ -44,7 +60,7 @@ addons.register(ADDON_ID, (api) => {
         if (context.type === 'story' && !context.tags.includes('test')) {
           return null;
         }
-        return <ContextMenuItem context={context} state={state} />;
+        return <TestProviderRender api={api} state={{ ...state, watchable: false }} />;
       },
 
       mapStatusUpdate: (state) =>

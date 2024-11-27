@@ -24,7 +24,6 @@ import { debounce } from 'es-toolkit/compat';
 
 import { type Config, type Details, TEST_PROVIDER_ID } from '../constants';
 import { Description } from './Description';
-import { GlobalErrorModal } from './GlobalErrorModal';
 import { TestStatusIcon } from './TestStatusIcon';
 import { Title } from './Title';
 
@@ -67,7 +66,6 @@ export const TestProviderRender: FC<{
   state: TestProviderConfig & TestProviderState<Details, Config>;
 }> = ({ state, api }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const theme = useTheme();
 
   const [config, updateConfig] = useConfig(
@@ -81,11 +79,7 @@ export const TestProviderRender: FC<{
       <Heading>
         <Info>
           <Title id="testing-module-title" state={state} />
-          <Description
-            id="testing-module-description"
-            setIsModalOpen={setIsModalOpen}
-            state={state}
-          />
+          <Description id="testing-module-description" state={state} />
         </Info>
 
         <Actions>
@@ -191,18 +185,6 @@ export const TestProviderRender: FC<{
           />
         </Extras>
       )}
-
-      <GlobalErrorModal
-        error={state.error?.message}
-        open={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-        onRerun={() => {
-          setIsModalOpen(false);
-          api.runTestProvider(TEST_PROVIDER_ID);
-        }}
-      />
     </Container>
   );
 };

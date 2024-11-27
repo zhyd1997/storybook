@@ -66,9 +66,7 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
               setIsOpen(true);
             }
           }}
-          tooltip={({ onHide }) => (
-            <LiveContextMenu context={context} links={links} onClick={onHide} />
-          )}
+          tooltip={<LiveContextMenu context={context} links={links} />}
         >
           <StatusButton type="button" status={'pending'}>
             <EllipsisIcon />

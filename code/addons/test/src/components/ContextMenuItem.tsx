@@ -59,7 +59,7 @@ export const ContextMenuItem: FC<{
     >
       <ListItem
         title={<Title state={state} />}
-        center={<Description setIsModalOpen={() => {}} state={state} />}
+        center={<Description state={state} />}
         right={
           <Button
             onClick={onClick}
