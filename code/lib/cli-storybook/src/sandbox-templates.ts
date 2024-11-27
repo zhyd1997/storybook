@@ -853,8 +853,7 @@ export const daily: TemplateKey[] = [
   'html-vite/default-js',
   'internal/react16-webpack',
   'internal/react18-webpack-babel',
-  // TODO: bring this back once ts-docgen supports Vite 6
-  // 'react-native-web-vite/expo-ts',
+  'react-native-web-vite/expo-ts',
   // 'react-native-web-vite/rn-cli-ts',
 ];
 
