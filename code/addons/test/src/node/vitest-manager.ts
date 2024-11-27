@@ -40,22 +40,24 @@ export class VitestManager {
   async startVitest({ watchMode = false, coverage = false } = {}) {
     const { createVitest } = await import('vitest/node');
 
-    const coverageOptions: CoverageOptions = coverage
-      ? ({
-          enabled: true,
-          clean: false,
-          cleanOnRerun: false,
-          reportOnFailure: true,
-          reporter: [
-            ['html', {}],
-            [
-              '@storybook/experimental-addon-test/internal/coverage-reporter',
-              { testManager: this.testManager },
+    const coverageOptions = (
+      coverage
+        ? {
+            enabled: true,
+            clean: false,
+            cleanOnRerun: false,
+            reportOnFailure: true,
+            reporter: [
+              ['html', {}],
+              [
+                '@storybook/experimental-addon-test/internal/coverage-reporter',
+                { testManager: this.testManager },
+              ],
             ],
-          ],
-          reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
-        } as CoverageOptions)
-      : ({ enabled: false } as CoverageOptions);
+            reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
+          }
+        : { enabled: false }
+    ) as CoverageOptions;
 
     this.vitest = await createVitest('test', {
       watch: watchMode,
