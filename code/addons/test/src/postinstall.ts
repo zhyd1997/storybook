@@ -279,14 +279,14 @@ export default async function postInstall(options: PostinstallOptions) {
 
   const projectAnnotations = [];
 
-  if (previewExists) {
-    imports.push(`import * as projectAnnotations from './preview';`);
-    projectAnnotations.push('projectAnnotations');
-  }
-
   if (a11yAddon) {
     imports.push(`import * as a11yAddonAnnotations from '@storybook/addon-a11y/preview';`);
     projectAnnotations.push('a11yAddonAnnotations');
+  }
+
+  if (previewExists) {
+    imports.push(`import * as projectAnnotations from './preview';`);
+    projectAnnotations.push('projectAnnotations');
   }
 
   await writeFile(
