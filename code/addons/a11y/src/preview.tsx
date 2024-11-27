@@ -12,7 +12,7 @@ expect.extend(matchers);
 const getIsVitestStandaloneRun = () => {
   try {
     // @ts-expect-error - todo - ignore for now
-    return (process?.env || import.meta.env).STORYBOOK !== 'true';
+    return (import.meta.env || process?.env).STORYBOOK !== 'true';
   } catch (e) {
     return false;
   }
