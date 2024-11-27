@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 
 import { styled } from '@storybook/core/theming';
 import { type API_FilterFunction, type API_StatusValue } from '@storybook/core/types';
@@ -46,6 +46,10 @@ const getFilter = (warningsActive = false, errorsActive = false) => {
   }
   return filterNone;
 };
+
+const Spacer = styled.div({
+  pointerEvents: 'none',
+});
 
 const Content = styled.div(({ theme }) => ({
   position: 'absolute',
@@ -99,15 +103,13 @@ export const SidebarBottomBase = ({
   const hasErrors = errors.length > 0;
 
   useEffect(() => {
-    const spacer = spacerRef.current;
-    const wrapper = wrapperRef.current;
-    if (spacer && wrapper) {
+    if (spacerRef.current && wrapperRef.current) {
       const resizeObserver = new ResizeObserver(() => {
-        if (spacer && wrapper) {
-          spacer.style.height = `${wrapper.clientHeight}px`;
+        if (spacerRef.current && wrapperRef.current) {
+          spacerRef.current.style.height = `${wrapperRef.current.scrollHeight}px`;
         }
       });
-      resizeObserver.observe(wrapper);
+      resizeObserver.observe(wrapperRef.current);
       return () => resizeObserver.disconnect();
     }
   }, []);
@@ -199,7 +201,8 @@ export const SidebarBottomBase = ({
   }
 
   return (
-    <div id={SIDEBAR_BOTTOM_SPACER_ID} ref={spacerRef}>
+    <Fragment>
+      <Spacer id={SIDEBAR_BOTTOM_SPACER_ID} ref={spacerRef}></Spacer>
       <Content id={SIDEBAR_BOTTOM_WRAPPER_ID} ref={wrapperRef}>
         <NotificationList notifications={notifications} clearNotification={api.clearNotification} />
         {isDevelopment && (
@@ -216,13 +219,14 @@ export const SidebarBottomBase = ({
           />
         )}
       </Content>
-    </div>
+    </Fragment>
   );
 };
 
 export const SidebarBottom = ({ isDevelopment }: { isDevelopment?: boolean }) => {
   const api = useStorybookApi();
   const { notifications, status } = useStorybookState();
+
   return (
     <SidebarBottomBase
       api={api}
