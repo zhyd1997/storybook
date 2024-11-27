@@ -1,12 +1,29 @@
 // @vitest-environment happy-dom
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { StoryContext } from '@storybook/csf';
 
 import { run } from './a11yRunner';
+import { A11Y_TEST_TAG } from './constants';
 import { afterEach } from './preview';
+import { getIsVitestRunning, getIsVitestStandaloneRun } from './utils';
 
-vi.mock('./a11yRunner');
+const mocks = vi.hoisted(() => {
+  return {
+    getIsVitestRunning: vi.fn(),
+    getIsVitestStandaloneRun: vi.fn(),
+  };
+});
+
+vi.mock(import('./a11yRunner'));
+vi.mock(import('./utils'), async (importOriginal) => {
+  const mod = await importOriginal(); // type is inferred
+  return {
+    ...mod,
+    getIsVitestRunning: mocks.getIsVitestRunning,
+    getIsVitestStandaloneRun: mocks.getIsVitestStandaloneRun,
+  };
+});
 
 const mockedRun = vi.mocked(run);
 
@@ -59,6 +76,11 @@ const violations = [
 ];
 
 describe('afterEach', () => {
+  beforeEach(() => {
+    vi.mocked(getIsVitestRunning).mockReturnValue(false);
+    vi.mocked(getIsVitestStandaloneRun).mockReturnValue(true);
+  });
+
   const createContext = (overrides: Partial<StoryContext> = {}): StoryContext =>
     ({
       reporting: {
@@ -71,6 +93,7 @@ describe('afterEach', () => {
       globals: {
         a11y: {},
       },
+      tags: [A11Y_TEST_TAG],
       ...overrides,
     }) as any;
 
@@ -83,6 +106,27 @@ describe('afterEach', () => {
     mockedRun.mockResolvedValue(result as any);
 
     await expect(() => afterEach(context)).rejects.toThrow();
+
+    expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
+
+    expect(context.reporting.addReport).toHaveBeenCalledWith({
+      id: 'a11y',
+      version: 1,
+      result,
+      status: 'failed',
+    });
+  });
+
+  it('should run accessibility checks and report results without throwing', async () => {
+    const context = createContext();
+    const result = {
+      violations,
+    };
+
+    mockedRun.mockResolvedValue(result as any);
+    mocks.getIsVitestStandaloneRun.mockReturnValue(false);
+
+    await afterEach(context);
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
 
@@ -136,6 +180,27 @@ describe('afterEach', () => {
     });
   });
 
+  it('should run accessibility checks if "a11ytest" flag is not available and is not running in Vitest', async () => {
+    const context = createContext({
+      tags: [],
+    });
+    const result = {
+      violations: [],
+    };
+    mockedRun.mockResolvedValue(result as any);
+    vi.mocked(getIsVitestRunning).mockReturnValue(false);
+
+    await afterEach(context);
+
+    expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
+    expect(context.reporting.addReport).toHaveBeenCalledWith({
+      id: 'a11y',
+      version: 1,
+      result,
+      status: 'passed',
+    });
+  });
+
   it('should not run accessibility checks when manual is true', async () => {
     const context = createContext({
       parameters: {
@@ -179,6 +244,36 @@ describe('afterEach', () => {
 
     expect(mockedRun).not.toHaveBeenCalled();
     expect(context.reporting.addReport).not.toHaveBeenCalled();
+  });
+
+  it('should not run accessibility checks if vitest is running and story is not tagged with a11ytest', async () => {
+    const context = createContext({
+      tags: [],
+    });
+    vi.mocked(getIsVitestRunning).mockReturnValue(true);
+
+    await afterEach(context);
+
+    expect(mockedRun).not.toHaveBeenCalled();
+    expect(context.reporting.addReport).not.toHaveBeenCalled();
+  });
+
+  it('should report error when run throws an error', async () => {
+    const context = createContext();
+    const error = new Error('Test error');
+    mockedRun.mockRejectedValue(error);
+
+    await expect(() => afterEach(context)).rejects.toThrow();
+
+    expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
+    expect(context.reporting.addReport).toHaveBeenCalledWith({
+      id: 'a11y',
+      version: 1,
+      result: {
+        error,
+      },
+      status: 'failed',
+    });
   });
 
   it('should report error when run throws an error', async () => {

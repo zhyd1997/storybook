@@ -17,9 +17,9 @@ import * as projectAnnotations from './preview';
 vi.spyOn(console, 'warn').mockImplementation((...args) => console.log(...args));
 
 const annotations = setProjectAnnotations([
+  a11yAddonAnnotations,
   projectAnnotations,
   componentAnnotations,
-  a11yAddonAnnotations,
   coreAnnotations,
   testAnnotations,
   {

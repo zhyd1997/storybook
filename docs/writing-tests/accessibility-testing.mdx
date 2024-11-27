@@ -142,6 +142,35 @@ const annotations = setProjectAnnotations([
 beforeAll(annotations.beforeAll);
 ```
 
+### How to not get overwhelmed by a11y violations in addon-test
+
+Accessibility testing can be overwhelming, especially when you have a large number of stories and you have just started to use the a11y addon in combination with the test addon.
+
+You can disable accessibility tests which are running via the test addon for all of your stories at once. Just set the `!a11ytest` tag in your preview file:
+  
+```js
+// .storybook/preview.js
+export const tags = ['!a11ytest'];
+```
+
+Now you can step-by-step enable accessibility tests for your stories by adding the `a11ytest` tag to the stories' meta or by adding the `a11ytest` tag to the story's tags directly:
+
+```js
+// Button.stories.js
+export default {
+  title: 'Button',
+  component: Button,
+  // add the tag to the meta to enable accessibility checks for all of your stories
+  tags: ['a11ytest'],
+};
+
+export const Primary = {
+  // add the tag to story itself to just enable the accessibility check for this story
+  tags: ['a11ytest'],
+  ...
+}
+```
+
 ### What happens when there are different results in multiple environments
 
 The a11y addon is compatible with Storybook's newest addon, [test addon](./test-addon.mdx). When you run component tests, the a11y addon can automatically check for accessibility issues in the rendered components. If there are any violations, the test will fail, and you will see the results in the sidebar.

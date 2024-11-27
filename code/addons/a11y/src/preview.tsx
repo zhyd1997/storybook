@@ -5,31 +5,26 @@ import type { StoryContext } from '@storybook/csf';
 import { expect } from '@storybook/test';
 
 import { run } from './a11yRunner';
+import { A11Y_TEST_TAG } from './constants';
 import type { A11yParameters } from './params';
+import { getIsVitestRunning, getIsVitestStandaloneRun } from './utils';
 
 expect.extend(matchers);
 
-const getIsVitestStandaloneRun = () => {
-  try {
-    // @ts-expect-error - todo - ignore for now
-    return (import.meta.env || process?.env).STORYBOOK !== 'true';
-  } catch (e) {
-    return false;
-  }
-};
-
-const isVitestStandaloneRun = getIsVitestStandaloneRun();
-
-export const afterEach = async ({ reporting, parameters, globals, id }: StoryContext) => {
+export const afterEach = async ({ reporting, parameters, globals, tags }: StoryContext) => {
   const a11yParameter: A11yParameters | undefined = parameters.a11y;
   const a11yGlobals = globals.a11y;
   const warnings = a11yParameter?.warnings ?? [];
 
-  if (
+  const shouldRunEnvironmentIndependent =
     a11yParameter?.manual !== true &&
     a11yParameter?.disable !== true &&
-    a11yGlobals?.manual !== true
-  ) {
+    a11yGlobals?.manual !== true;
+
+  if (shouldRunEnvironmentIndependent) {
+    if (getIsVitestRunning() && !tags.includes(A11Y_TEST_TAG)) {
+      return;
+    }
     try {
       const result = await run(a11yParameter);
 
@@ -55,7 +50,7 @@ export const afterEach = async ({ reporting, parameters, globals, id }: StoryCon
          *   issues. This is a temporary solution. Later, portable stories and Storybook should
          *   implement proper try catch handling.
          */
-        if (isVitestStandaloneRun) {
+        if (getIsVitestStandaloneRun()) {
           if (hasErrors) {
             // @ts-expect-error - todo - fix type extension of expect from @storybook/test
             expect(result).toHaveNoViolations();
@@ -76,9 +71,12 @@ export const afterEach = async ({ reporting, parameters, globals, id }: StoryCon
         status: 'failed',
       });
 
-      if (isVitestStandaloneRun) {
+      if (getIsVitestStandaloneRun()) {
         throw e;
       }
     }
   }
 };
+
+// A11Y_TEST_TAG constant in ./constants.ts. Has to be statically analyzable.
+export const tags = ['a11ytest'];

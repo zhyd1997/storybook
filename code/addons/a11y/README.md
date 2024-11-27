@@ -223,27 +223,6 @@ export const inaccessible = () => (
 );
 ```
 
-## Violation impact levels
-
-By default, the addon will consider all violations as errors. However, you can configure the addon to consider some violations as warnings instead of errors. This can be useful when @storybook/addon-a11y is used in combination with `@storybook/experimental-addon-test`. To do this, set the `warnings` parameter in the `a11y` object to an array of impact levels that should be considered as warnings.
-
-```js
-export default {
-  title: 'button',
-  parameters: {
-    a11y: {
-      /**
-       * @default [ ]
-       * @type: Array<'minor' | 'moderate' | 'serious' | 'critical'>
-       */
-      warnings: ['minor', 'moderate'],
-    },
-  },
-};
-```
-
-In this example, all violations with an impact level of `minor` or `moderate` will be considered as warnings. All other violations will be considered as errors. When running automated UI tests featured by Vitest, all violations with an impact level of `serious` or `critical` will now fail the test. This failure is reflected as an error in the sidebar or when running Vitest separately. `minor` and `moderate` violations will be reported as warnings but will not fail the test.
-
 ## Integration with [Addon Test](https://storybook.js.org/docs/writing-tests/test-addon)
 
 The a11y addon is compatible with Storybook's newest addon, [addon test](https://storybook.js.org/docs/writing-tests/test-addon). When you run component tests, the a11y addon can automatically check for accessibility issues for all of your stories in the background. If there are any violations, the test will fail, and you will see the results in the sidebar.
@@ -269,6 +248,56 @@ const annotations = setProjectAnnotations([
 // Run Storybook's beforeAll hook
 beforeAll(annotations.beforeAll);
 ```
+
+### How to not get overwhelmed by a11y violations in addon-test
+
+Accessibility testing can be overwhelming, especially when you have a large number of stories and you have just started to use the a11y addon in combination with the test addon.
+
+You can disable accessibility tests which are running via the test addon for all of your stories at once. Just set the `!a11ytest` tag in your preview file:
+
+```js
+// .storybook/preview.js
+export const tags = ['!a11ytest'];
+```
+
+Now you can step-by-step enable accessibility tests for your stories by adding the `a11ytest` tag to the stories' meta or by adding the `a11ytest` tag to the story's tags directly:
+
+```js
+// Button.stories.js
+export default {
+  title: 'Button',
+  component: Button,
+  // add the tag to the meta to enable accessibility checks for all of your stories
+  tags: ['a11ytest'],
+};
+
+export const Primary = {
+  // add the tag to story itself to just enable the accessibility check for this story
+  tags: ['a11ytest'],
+  ...
+}
+```
+
+### Violation impact levels
+
+By default, the addon will consider all violations as errors. However, you can configure the addon to consider some violations as warnings instead of errors. This can be useful when `@storybook/addon-a11y` is used in combination with `@storybook/experimental-addon-test`. To do this, set the `warnings` parameter in the `a11y` object to an array of impact levels that should be considered as warnings.
+
+```js
+export default {
+  title: 'button',
+  parameters: {
+    a11y: {
+      /**
+       * @default [ ]
+       * @type: Array<'minor' | 'moderate' | 'serious' | 'critical'>
+       */
+      warnings: ['minor', 'moderate'],
+    },
+  },
+};
+```
+
+In this example, all violations with an impact level of `minor` or `moderate` will be considered as warnings. All other violations will be considered as errors. When running automated UI tests featured by Vitest, all violations with an impact level of `serious` or `critical` will now fail the test. This failure is reflected as an error in the sidebar or when running Vitest separately. `minor` and `moderate` violations will be reported as warnings but will not fail the test.
 
 ## Automate accessibility tests with test runner
 
