@@ -53,7 +53,7 @@ export class VitestManager {
 
     this.vitest.configOverride.env = {
       // We signal to the test runner that we are running it via Storybook
-      STORYBOOK: 'true',
+      VITEST_STORYBOOK: 'true',
     };
 
     if (this.vitest) {

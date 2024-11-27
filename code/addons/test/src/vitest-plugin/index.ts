@@ -100,6 +100,9 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         ...config.test.env,
         // To be accessed by the setup file
         __STORYBOOK_URL__: storybookUrl,
+        // We signal the test runner that we are not running it via Storybook
+        // We are overriding the environment variable to 'true' if vitest runs via @storybook/addon-test's backend
+        VITEST_STORYBOOK: 'false',
         __VITEST_INCLUDE_TAGS__: finalOptions.tags.include.join(','),
         __VITEST_EXCLUDE_TAGS__: finalOptions.tags.exclude.join(','),
         __VITEST_SKIP_TAGS__: finalOptions.tags.skip.join(','),

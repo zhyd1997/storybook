@@ -1,10 +1,10 @@
 export function getIsVitestStandaloneRun() {
   try {
-    return process?.env.STORYBOOK !== 'true';
+    return process?.env.VITEST_STORYBOOK === 'false';
   } catch {
     try {
       // @ts-expect-error Suppress TypeScript warning about wrong setting. Doesn't matter, because we don't use tsc for bundling.
-      return import.meta.env.STORYBOOK !== 'true';
+      return import.meta.env.VITEST_STORYBOOK === 'false';
     } catch (e) {
       return false;
     }
