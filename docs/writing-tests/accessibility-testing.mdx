@@ -116,9 +116,9 @@ Customize the a11y ruleset at the story level by updating your story to include 
 
 {/* prettier-ignore-end */}
 
-## Integration with [Addon Test](./test-addon.mdx)
+## Integration with Addon Test
 
-The a11y addon is compatible with Storybook's newest addon, [test addon](./test-addon.mdx). When you run component tests, the a11y addon can automatically check for accessibility issues for all of your stories in the background. If there are any violations, the test will fail, and you will see the results in the sidebar.
+The a11y addon is compatible with Storybook's newest addon, the [test addon](./test-addon.mdx). When you run component tests, the a11y addon can automatically check for accessibility issues for all of your stories in the background. If there are any violations, the test will fail, and you will see the results in the sidebar.
 
 ### Automatic setup
 
@@ -130,7 +130,6 @@ If you have already a11y addon installed and you have upgraded manually to Story
 
 ```diff
 // .storybook/vitest.config.ts
-...
 +import * as a11yAddonAnnotations from '@storybook/addon-a11y/preview';
 
 const annotations = setProjectAnnotations([
@@ -141,6 +140,27 @@ const annotations = setProjectAnnotations([
 // Run Storybook's beforeAll hook
 beforeAll(annotations.beforeAll);
 ```
+
+### Violation impact levels
+
+By default, the addon will consider all violations as errors. However, you can configure the addon to consider some violations as warnings instead of errors. This can be useful when `@storybook/addon-a11y` is used in combination with `@storybook/experimental-addon-test`. To do this, set the `warnings` parameter in the `a11y` object to an array of impact levels that should be considered as warnings.
+
+```js
+export default {
+  title: 'button',
+  parameters: {
+    a11y: {
+      /**
+       * @default [ ]
+       * @type: Array<'minor' | 'moderate' | 'serious' | 'critical'>
+       */
+      warnings: ['minor', 'moderate'],
+    },
+  },
+};
+```
+
+In this example, all violations with an impact level of `minor` or `moderate` will be considered as warnings. All other violations will be considered as errors. When running automated UI tests featured by Vitest, all violations with an impact level of `serious` or `critical` will now fail the test. This failure is reflected as an error in the sidebar or when running Vitest separately. `minor` and `moderate` violations will be reported as warnings but will not fail the test.
 
 ### How to not get overwhelmed by a11y violations in addon-test
 
@@ -173,10 +193,9 @@ export const Primary = {
 
 ### What happens when there are different results in multiple environments
 
-The a11y addon is compatible with Storybook's newest addon, [test addon](./test-addon.mdx). When you run component tests, the a11y addon can automatically check for accessibility issues in the rendered components. If there are any violations, the test will fail, and you will see the results in the sidebar.
+When you run tests with the `@storybook/experimental-addon-test`, they are run as Vitest tests with whatever configuration you have set up in your project. By default, they will run in browser mode, using Playwright's Chromium browser. Sometimes, tests will fail when run in the addon (or via CLI), but then pass when viewed in the Component tests addon panel (or vice versa). This can happen because the tests are run in different environments, which can have different behaviors.
 
-When you run tests with the @storybook/experimental-addon-test, they are run as Vitest tests with whatever configuration you have set up in your project. By default, they will run in browser mode, using Playwright's Chromium browser. Sometimes, tests will fail when run in the addon (or via CLI), but then pass when viewed in the Component tests addon panel (or vice versa). This can happen because the tests are run in different environments, which can have different behaviors.
-We are using axe-core under the hood and it can happen, that axe-core is reporting different results in different environments. This can be due to different browser versions or different browser configurations. If you encounter this issue, please let us know and open an issue on [GitHub](https://github.com/storybookjs/storybook/issues)
+We are using `axe-core` under the hood and it can happen, that axe-core is reporting different results in different environments. This can be due to different browser versions or different browser configurations. If you encounter this issue, please let us know and open an issue on [GitHub](https://github.com/storybookjs/storybook/issues).
 
 ## Automate accessibility tests with test runner
 
