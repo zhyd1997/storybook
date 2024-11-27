@@ -1,6 +1,12 @@
 import { existsSync } from 'node:fs';
 
-import type { TestProject, TestSpecification, Vitest, WorkspaceProject } from 'vitest/node';
+import type {
+  CoverageOptions,
+  TestProject,
+  TestSpecification,
+  Vitest,
+  WorkspaceProject,
+} from 'vitest/node';
 
 import type { Channel } from 'storybook/internal/channels';
 import { resolvePathInStorybookCache } from 'storybook/internal/common';
@@ -34,6 +40,23 @@ export class VitestManager {
   async startVitest({ watchMode = false, coverage = false } = {}) {
     const { createVitest } = await import('vitest/node');
 
+    const coverageOptions: CoverageOptions = coverage
+      ? ({
+          enabled: true,
+          clean: false,
+          cleanOnRerun: false,
+          reportOnFailure: true,
+          reporter: [
+            ['html', {}],
+            [
+              '@storybook/experimental-addon-test/internal/coverage-reporter',
+              { testManager: this.testManager },
+            ],
+          ],
+          reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
+        } as CoverageOptions)
+      : ({ enabled: false } as CoverageOptions);
+
     this.vitest = await createVitest('test', {
       watch: watchMode,
       passWithNoTests: false,
@@ -44,27 +67,12 @@ export class VitestManager {
       // find a way to just show errors and warnings for example
       // Otherwise it might be hard for the user to discover Storybook related logs
       reporters: ['default', new StorybookReporter(this.testManager)],
-      // @ts-expect-error (no provider needed)
-      coverage: {
-        enabled: coverage,
-        cleanOnRerun: !watchMode,
-        reportOnFailure: true,
-        // TODO: merge with existing coverage config? (if it exists)
-        reporter: [
-          'html',
-          [
-            // TODO: use require.resolve here instead? (or import.meta.resolve) how does this behave in monorepos?
-            '@storybook/experimental-addon-test/internal/coverage-reporter',
-            { testManager: this.testManager },
-          ],
-        ],
-        reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
-      },
+      coverage: coverageOptions,
     });
 
     if (this.vitest) {
       this.vitest.onCancel(() => {
-        // TODO: handle cancelation
+        // TODO: handle cancellation
       });
     }
 

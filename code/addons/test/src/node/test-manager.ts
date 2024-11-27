@@ -47,7 +47,6 @@ export class TestManager {
 
   async handleConfigChange(payload: TestingModuleConfigChangePayload) {
     const config = payload.config;
-    console.log('LOG: handleConfigChange', config);
 
     try {
       if (payload.providerId !== TEST_PROVIDER_ID) {
