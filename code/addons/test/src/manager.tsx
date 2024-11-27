@@ -56,26 +56,22 @@ addons.register(ADDON_ID, (api) => {
         api.experimental_updateStatus(
           TEST_PROVIDER_ID,
           Object.fromEntries(
-            update.details.testResults.flatMap((testResult) =>
+            state.details.testResults.flatMap((testResult) =>
               testResult.results
-                .map(({ storyId, status, testRunId, ...rest }) => {
-                  if (storyId) {
-                    const statusObject: API_StatusObject = {
-                      title: 'Component tests',
-                      status: statusMap[status],
-                      description:
-                        'failureMessages' in rest && rest.failureMessages?.length
-                          ? rest.failureMessages.join('\n')
-                          : '',
-                      data: {
-                        testRunId,
-                      },
-                      onClick: openAddonPanel,
-                    };
-                    return [storyId, statusObject];
-                  }
-                })
-                .filter(Boolean)
+                .filter(({ storyId }) => storyId)
+                .map(({ storyId, status, testRunId, ...rest }) => [
+                  storyId,
+                  {
+                    title: 'Component tests',
+                    status: statusMap[status],
+                    description:
+                      'failureMessages' in rest && rest.failureMessages
+                        ? rest.failureMessages.join('\n')
+                        : '',
+                    data: { testRunId },
+                    onClick: openAddonPanel,
+                  } as API_StatusObject,
+                ])
             )
           )
         );
