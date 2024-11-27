@@ -82,10 +82,7 @@ describe('addonA11yAddonTest', () => {
   describe('prompt', () => {
     it('should return manual prompt if setupFile is null', () => {
       const result = addonA11yAddonTest.prompt({ setupFile: null, transformedSetupCode: null });
-      console.log(result);
-      expect(result).toContain(
-        "We couldn't find or automatically update your .storybook/vitest.setup.<ts|js>"
-      );
+      expect(result).toContain("We couldn't find or automatically update your");
     });
 
     it('should return auto prompt if setupFile and transformedSetupCode are present', () => {
@@ -93,9 +90,7 @@ describe('addonA11yAddonTest', () => {
         setupFile: '/path/to/vitest.setup.ts',
         transformedSetupCode: 'transformed code',
       });
-      expect(result).toContain(
-        'We need to update your .storybook/vitest.setup.ts file for smooth integration.'
-      );
+      expect(result).toContain('In order for these checks to be enabled we have to update your');
     });
   });
 

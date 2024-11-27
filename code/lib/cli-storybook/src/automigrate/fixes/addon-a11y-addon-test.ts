@@ -74,16 +74,16 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
 
   prompt({ setupFile, transformedSetupCode }) {
     const introduction = dedent`
-      We have detected that you have addon-a11y and experimental-addon-test installed.
+      We have detected that you have ${picocolors.magenta(`@storybook/addon-a11y`)} and ${picocolors.magenta(`@storybook/experimental-addon-test`)} installed.
 
-      ${picocolors.cyan(`@storybook/addon-a11y`)} integrates now with ${picocolors.cyan(`@storybook/experimental-addon-test`)} to provide automatic accessibility checks for your stories, powered by axe and Vitest.
+      ${picocolors.magenta(`@storybook/addon-a11y`)} integrates now with ${picocolors.magenta(`@storybook/experimental-addon-test`)} to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
     `;
 
     if (setupFile === null || transformedSetupCode === null) {
       return dedent`
       ${introduction}
 
-      We couldn't find or automatically update your .storybook/vitest.setup.<ts|js> in your project to smoothly set up project annotations from addon-a11y. 
+      We couldn't find or automatically update your ${picocolors.cyan(`.storybook/vitest.setup.<ts|js>`)} in your project to smoothly set up project annotations from ${picocolors.magenta(`@storybook/addon-a11y`)}. 
       Please manually update your vitest.setup.ts file to include the following:
 
       ${picocolors.gray('...')}   
@@ -104,11 +104,11 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
     const fileExtension = path.extname(setupFile);
 
     return dedent`
-      We have detected that you have addon-a11y and experimental-addon-test installed.
+      We have detected that you have ${picocolors.magenta(`@storybook/addon-a11y`)} and ${picocolors.magenta(`@storybook/experimental-addon-test`)} installed.
 
-      ${picocolors.cyan(`@storybook/addon-a11y`)} integrates now with ${picocolors.cyan(`@storybook/experimental-addon-test`)} to provide automatic accessibility checks for your stories, powered by axe and Vitest.
+      ${picocolors.magenta(`@storybook/addon-a11y`)} integrates now with ${picocolors.magenta(`@storybook/experimental-addon-test`)} to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
 
-      We need to update your .storybook/vitest.setup${fileExtension} file for smooth integration.
+      In order for these checks to be enabled we have to update your ${picocolors.cyan(`.storybook/vitest.setup${fileExtension}`)} file.
     `;
   },
 
