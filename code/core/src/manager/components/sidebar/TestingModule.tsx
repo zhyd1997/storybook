@@ -167,10 +167,10 @@ export const TestingModule = ({
 
   const timeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [updated, setUpdated] = useState(false);
-  const [isCollapsed, setCollapsed] = useState(true);
-  const [isSlow, setSlow] = useState(false);
   const [maxHeight, setMaxHeight] = useState(DEFAULT_HEIGHT);
+  const [isUpdated, setUpdated] = useState(false);
+  const [isCollapsed, setCollapsed] = useState(false);
+  const [isChangingCollapse, setChangingCollapse] = useState(false);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -205,13 +205,13 @@ export const TestingModule = ({
 
   const toggleCollapsed = useCallback((event: SyntheticEvent) => {
     event.stopPropagation();
-    setSlow(true);
+    setChangingCollapse(true);
     setCollapsed((s) => !s);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      setSlow(false);
+      setChangingCollapse(false);
     }, 250);
   }, []);
 
@@ -230,14 +230,14 @@ export const TestingModule = ({
       running={isRunning}
       crashed={isCrashed}
       failed={isFailed || errorCount > 0}
-      updated={updated}
+      updated={isUpdated}
     >
       <Card>
         {hasTestProviders && (
           <Collapsible
             data-testid="collapse"
             style={{
-              transition: isSlow ? 'max-height 250ms' : 'max-height 0ms',
+              transition: isChangingCollapse ? 'max-height 250ms' : 'max-height 0ms',
               display: hasTestProviders ? 'block' : 'none',
               maxHeight: isCollapsed ? 0 : maxHeight,
             }}
