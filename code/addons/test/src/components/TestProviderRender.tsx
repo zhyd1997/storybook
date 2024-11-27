@@ -147,6 +147,7 @@ export const TestProviderRender: FC<{
       {isEditing ? (
         <Extras>
           <ListItem
+            as="label"
             title="Component tests"
             icon={<PointerHandIcon color={theme.textMutedColor} />}
             right={<Checkbox type="checkbox" checked disabled />}

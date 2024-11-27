@@ -140,14 +140,23 @@ const Item = styled.div<ItemProps>(
       paddingLeft: 10,
     },
   }),
-  ({ theme, href, onClick, as }) =>
-    (href || onClick || as === 'label') && {
+  ({ theme, href, onClick }) =>
+    (href || onClick) && {
       cursor: 'pointer',
       '&:hover': {
         background: theme.background.hoverable,
       },
       '&:hover svg': {
         opacity: 1,
+      },
+    },
+  ({ theme, as }) =>
+    as === 'label' && {
+      '&:has(input:not(:disabled))': {
+        cursor: 'pointer',
+        '&:hover': {
+          background: theme.background.hoverable,
+        },
       },
     },
   ({ disabled }) => disabled && { cursor: 'not-allowed' }
