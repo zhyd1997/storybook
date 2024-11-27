@@ -45,14 +45,15 @@ export class TestManager {
     await this.vitestManager.startVitest({ watchMode, coverage });
   }
 
-  async handleConfigChange(payload: TestingModuleConfigChangePayload) {
+  async handleConfigChange(
+    payload: TestingModuleConfigChangePayload<any, { coverage: boolean; a11y: boolean }>
+  ) {
     const config = payload.config;
 
     try {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
       }
-      //@ts-expect-error - TODO: fix types, should allow a generic Config type
       if (this.coverage !== payload.config.coverage) {
         this.coverage = payload.config.coverage;
         await this.restartVitest({ watchMode: this.watchMode, coverage: this.coverage });

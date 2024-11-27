@@ -81,7 +81,10 @@ export type TestingModuleWatchModeRequestPayload = {
   config?: TestProviderState['config'];
 };
 
-export type TestingModuleConfigChangePayload = {
+export type TestingModuleConfigChangePayload<
+  Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = {
   providerId: TestProviderId;
-  config: TestProviderState['config'];
+  config: TestProviderState<Details, Config>['config'];
 };
