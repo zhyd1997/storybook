@@ -24,14 +24,18 @@ export function Description({
   errorMessage: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const isMounted = React.useRef(false);
   const [isUpdated, setUpdated] = React.useState(false);
 
   useEffect(() => {
-    setUpdated(true);
-    const timeout = setTimeout(setUpdated, 2000, false);
-    return () => {
-      clearTimeout(timeout);
-    };
+    if (isMounted.current) {
+      setUpdated(true);
+      const timeout = setTimeout(setUpdated, 2000, false);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+    isMounted.current = true;
   }, [state.config]);
 
   let description: string | React.ReactNode = 'Not run';
