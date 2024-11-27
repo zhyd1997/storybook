@@ -41,7 +41,7 @@ const runNext = async () => {
 export const run = async (input: A11yParameters = defaultParameters) => {
   const { default: axe } = await import('axe-core');
 
-  const { element = '#storybook-root', config, options = {} } = input;
+  const { element = '#storybook-root', config = {}, options = {} } = input;
   const htmlElement = document.querySelector(element as string) ?? document.body;
 
   if (!htmlElement) {
@@ -55,9 +55,7 @@ export const run = async (input: A11yParameters = defaultParameters) => {
     rules: [...disabledRules.map((id) => ({ id, enabled: false })), ...(config?.rules ?? [])],
   };
 
-  if (config) {
-    axe.configure(configWithDefault);
-  }
+  axe.configure(configWithDefault);
 
   return new Promise<AxeResults>((resolve, reject) => {
     const task = async () => {

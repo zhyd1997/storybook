@@ -165,18 +165,48 @@ describe('afterEach', () => {
       },
     });
     const result = {
-      violations: [{ impact: 'minor', nodes: [] }],
+      violations: [
+        { impact: 'minor', nodes: [] },
+        { impact: 'critical', nodes: [] },
+      ],
     };
     mockedRun.mockResolvedValue(result as any);
 
-    await afterEach(context);
+    await expect(async () => afterEach(context)).rejects.toThrow();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
     expect(context.reporting.addReport).toHaveBeenCalledWith({
       id: 'a11y',
       version: 1,
       result,
-      status: 'warning',
+      status: 'failed',
+    });
+  });
+
+  it('should report error status when there are warnings and errors', async () => {
+    const context = createContext({
+      parameters: {
+        a11y: {
+          warnings: ['minor'],
+        },
+      },
+    });
+    const result = {
+      violations: [
+        { impact: 'minor', nodes: [] },
+        { impact: 'critical', nodes: [] },
+      ],
+    };
+    mockedRun.mockResolvedValue(result as any);
+
+    await expect(async () => afterEach(context)).rejects.toThrow();
+
+    expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
+    expect(context.reporting.addReport).toHaveBeenCalledWith({
+      id: 'a11y',
+      version: 1,
+      result,
+      status: 'failed',
     });
   });
 

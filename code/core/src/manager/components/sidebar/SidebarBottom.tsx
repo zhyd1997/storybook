@@ -156,8 +156,8 @@ export const SidebarBottomBase = ({
         if (providerId === testProviderID) {
           const obj = Object.fromEntries(
             (result.details?.testResults || []).flatMap((testResult: any) =>
-              testResult.results
-                .map(({ storyId, status: reportStatus, testRunId, reports, ...rest }: any) => {
+              testResult.results.map(
+                ({ storyId, status: reportStatus, testRunId, reports, ...rest }: any) => {
                   const report = reports.find((r: any) => r.id === 'a11y');
                   if (storyId && report) {
                     const statusObject = {
@@ -172,9 +172,11 @@ export const SidebarBottomBase = ({
                       },
                     };
                     return [storyId, statusObject];
+                  } else {
+                    return [storyId, null];
                   }
-                })
-                .filter(Boolean)
+                }
+              )
             )
           );
           await api.experimental_updateStatus(a11yProviderID, obj);
