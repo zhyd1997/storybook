@@ -27,15 +27,8 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
       return;
     }
     const coverageSummary = node.getCoverageSummary(false);
-    let total = 0;
-    let covered = 0;
 
-    for (const metric of Object.values(coverageSummary.data)) {
-      total += metric.total;
-      covered += metric.covered;
-    }
-
-    const percentage = Math.round((covered / total) * 100);
+    const percentage = Math.round(coverageSummary.data.statements.pct);
 
     // Fallback to Vitest's default watermarks https://vitest.dev/config/#coverage-watermarks
     const [lowWatermark = 50, highWatermark = 80] =
