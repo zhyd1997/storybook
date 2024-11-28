@@ -17,7 +17,7 @@ import type { DocsIndexEntry, StoryIndex, StoryIndexEntry } from '@storybook/typ
 import path, { normalize } from 'pathe';
 import slash from 'slash';
 
-import { COVERAGE_DIRECTORY } from '../constants';
+import { COVERAGE_DIRECTORY, type Config } from '../constants';
 import { log } from '../logger';
 import type { StorybookCoverageReporterOptions } from './coverage-reporter';
 import { StorybookReporter } from './reporter';
@@ -133,10 +133,17 @@ export class VitestManager {
     return true;
   }
 
-  async runTests(requestPayload: TestingModuleRunRequestPayload) {
-    if (!this.vitest) {
+  async runTests(requestPayload: TestingModuleRunRequestPayload<Config>) {
+    if (requestPayload.config?.coverage && (requestPayload.storyIds ?? []).length === 0) {
+      // For some reason we need to restart Vitest between every coverage run,
+      // otherwise the coverage is not updated correctly
+      await this.vitest?.runningPromise;
+      await this.closeVitest();
+      await this.startVitest({ watchMode: false, coverage: true });
+    } else if (!this.vitest) {
       await this.startVitest();
     }
+
     this.resetTestNamePattern();
 
     const stories = await this.fetchStories(requestPayload.indexUrl, requestPayload.storyIds);

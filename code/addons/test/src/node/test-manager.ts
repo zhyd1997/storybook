@@ -12,7 +12,7 @@ import {
   type TestingModuleWatchModeRequestPayload,
 } from 'storybook/internal/core-events';
 
-import { TEST_PROVIDER_ID } from '../constants';
+import { type Config, TEST_PROVIDER_ID } from '../constants';
 import { VitestManager } from './vitest-manager';
 
 export class TestManager {
@@ -76,7 +76,7 @@ export class TestManager {
     }
   }
 
-  async handleRunRequest(payload: TestingModuleRunRequestPayload) {
+  async handleRunRequest(payload: TestingModuleRunRequestPayload<Config>) {
     try {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;

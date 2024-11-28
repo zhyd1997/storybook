@@ -67,7 +67,7 @@ const bootTestRunner = async (channel: Channel, initEvent?: string, initArgs?: a
 
   const startChildProcess = () =>
     new Promise<void>((resolve, reject) => {
-      child = execaNode(vitestModulePath, undefined, { stdio: 'inherit' });
+      child = execaNode(vitestModulePath);
       stderr = [];
 
       child.stdout?.on('data', log);

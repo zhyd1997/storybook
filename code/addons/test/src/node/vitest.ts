@@ -30,11 +30,6 @@ new TestManager(channel, {
   },
 });
 
-// Enable raw mode to get keystrokes
-process.stdin.setRawMode(true);
-process.stdin.resume();
-process.stdin.setEncoding('utf8');
-
 const exit = (code = 0) => {
   channel?.removeAllListeners();
   process.exit(code);
