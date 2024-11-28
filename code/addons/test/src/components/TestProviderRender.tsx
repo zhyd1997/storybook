@@ -160,7 +160,8 @@ export const TestProviderRender: FC<{
             right={
               <Checkbox
                 type="checkbox"
-                checked={config.coverage}
+                checked={state.watching ? false : config.coverage}
+                disabled={state.watching}
                 onChange={() => updateConfig({ coverage: !config.coverage })}
               />
             }

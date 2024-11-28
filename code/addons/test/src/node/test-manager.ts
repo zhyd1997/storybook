@@ -69,7 +69,7 @@ export class TestManager {
 
       if (this.watchMode !== payload.watchMode) {
         this.watchMode = payload.watchMode;
-        await this.restartVitest({ watchMode: this.watchMode, coverage: this.coverage });
+        await this.restartVitest({ watchMode: this.watchMode, coverage: false });
       }
     } catch (e) {
       this.reportFatalError('Failed to change watch mode', e);
