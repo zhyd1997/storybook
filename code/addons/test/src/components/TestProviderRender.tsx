@@ -234,7 +234,6 @@ function useConfig(api: API, providerId: string, initialConfig: Config) {
     debounce((config: Config) => {
       if (!isEqual(config, lastConfig.current)) {
         api.updateTestProviderState(providerId, { config });
-        console.log('LOG: saveConfig', { providerId, config });
         api.emit(TESTING_MODULE_CONFIG_CHANGE, { providerId, config });
         lastConfig.current = config;
       }

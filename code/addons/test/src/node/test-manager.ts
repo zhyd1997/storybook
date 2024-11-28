@@ -48,16 +48,16 @@ export class TestManager {
   async handleConfigChange(
     payload: TestingModuleConfigChangePayload<any, { coverage: boolean; a11y: boolean }>
   ) {
-    try {
-      if (payload.providerId !== TEST_PROVIDER_ID) {
-        return;
-      }
-      if (this.coverage !== payload.config.coverage) {
+    if (payload.providerId !== TEST_PROVIDER_ID) {
+      return;
+    }
+    if (this.coverage !== payload.config.coverage) {
+      try {
         this.coverage = payload.config.coverage;
         await this.restartVitest({ watchMode: this.watchMode, coverage: this.coverage });
+      } catch (e) {
+        this.reportFatalError('Failed to change coverage mode', e);
       }
-    } catch (e) {
-      this.reportFatalError('Failed to change coverage mode', e);
     }
   }
 
@@ -81,17 +81,25 @@ export class TestManager {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
       }
-      // If we have coverage enabled and we're running a subset of stories, we need to temporarily disable coverage
-      // as a coverage report for a subset of stories is not useful.
-      const temporarilyDisableCoverage = this.coverage && payload.storyIds?.length > 0;
 
-      if (temporarilyDisableCoverage) {
-        await this.restartVitest({ watchMode: this.watchMode, coverage: false });
+      const allTestsRun = (payload.storyIds ?? []).length === 0;
+      if (this.coverage) {
+        // If we have coverage enabled and we're running all stories,
+        // we have to restart Vitest AND disable watch mode
+        // otherwise the coverage report will be incorrect.
+
+        // If we're only running a subset of stories, we have to temporarily disable coverage,
+        // as a coverage report for a subset of stories is not useful.
+        await this.restartVitest({
+          watchMode: allTestsRun ? false : this.watchMode,
+          coverage: allTestsRun,
+        });
       }
 
       await this.vitestManager.runTests(payload);
 
-      if (temporarilyDisableCoverage) {
+      if (this.coverage && !allTestsRun) {
+        // Re-enable coverage if it was temporarily disabled because of a subset of stories was run
         await this.restartVitest({ watchMode: this.watchMode, coverage: this.coverage });
       }
     } catch (e) {

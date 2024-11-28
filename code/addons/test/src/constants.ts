@@ -1,5 +1,3 @@
-import type { CoverageSummaryData } from 'istanbul-lib-coverage';
-
 import type { TestResult } from './node/reporter';
 
 export const ADDON_ID = 'storybook/test';

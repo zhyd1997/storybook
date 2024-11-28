@@ -134,13 +134,7 @@ export class VitestManager {
   }
 
   async runTests(requestPayload: TestingModuleRunRequestPayload<Config>) {
-    if (requestPayload.config?.coverage && (requestPayload.storyIds ?? []).length === 0) {
-      // For some reason we need to restart Vitest between every coverage run,
-      // otherwise the coverage is not updated correctly
-      await this.vitest?.runningPromise;
-      await this.closeVitest();
-      await this.startVitest({ watchMode: false, coverage: true });
-    } else if (!this.vitest) {
+    if (!this.vitest) {
       await this.startVitest();
     }
 
