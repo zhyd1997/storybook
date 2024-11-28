@@ -94,7 +94,7 @@ export const addWorkaroundResolutions = async ({
     '@testing-library/user-event': '^14.5.2',
   };
 
-  if (key.includes('svelte-kit')) {
+  if (key?.includes('svelte-kit')) {
     packageJson.resolutions['@sveltejs/vite-plugin-svelte'] = '^3.0.0';
   }
 
