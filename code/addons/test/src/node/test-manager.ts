@@ -48,8 +48,6 @@ export class TestManager {
   async handleConfigChange(
     payload: TestingModuleConfigChangePayload<any, { coverage: boolean; a11y: boolean }>
   ) {
-    const config = payload.config;
-
     try {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;

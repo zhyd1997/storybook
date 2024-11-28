@@ -17,10 +17,21 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
       return;
     }
     const coverageSummary = node.getCoverageSummary(false);
+    let total = 0;
+    let covered = 0;
+
+    for (const metric of Object.values(coverageSummary.data)) {
+      total += metric.total;
+      covered += metric.covered;
+    }
+
     this.#testManager.sendProgressReport({
       providerId: TEST_PROVIDER_ID,
       details: {
-        coverageSummary: coverageSummary.data,
+        coverage: {
+          status: 'warning', // TODO: determine status based on thresholds/watermarks
+          percentage: Math.round((covered / total) * 100),
+        },
       },
     });
   }

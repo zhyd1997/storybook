@@ -21,5 +21,8 @@ export interface Config {
 
 export type Details = {
   testResults: TestResult[];
-  coverageSummary: CoverageSummaryData;
+  coverage?: {
+    status: 'positive' | 'warning' | 'negative' | 'unknown';
+    percentage: number;
+  };
 };

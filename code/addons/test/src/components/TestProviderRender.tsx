@@ -77,6 +77,7 @@ export const TestProviderRender: FC<{
 
   const title = state.crashed || state.failed ? 'Local tests failed' : 'Run local tests';
   const errorMessage = state.error?.message;
+  const coverage = state.details?.coverage;
 
   const [config, updateConfig] = useConfig(
     api,
@@ -159,7 +160,6 @@ export const TestProviderRender: FC<{
             right={
               <Checkbox
                 type="checkbox"
-                disabled // TODO: Implement coverage
                 checked={config.coverage}
                 onChange={() => updateConfig({ coverage: !config.coverage })}
               />
@@ -185,11 +185,24 @@ export const TestProviderRender: FC<{
             title="Component tests"
             icon={<TestStatusIcon status="positive" aria-label="status: passed" />}
           />
-          <ListItem
-            title="Coverage"
-            icon={<TestStatusIcon percentage={60} status="warning" aria-label="status: warning" />}
-            right={`60%`}
-          />
+          {coverage ? (
+            <ListItem
+              title="Coverage"
+              icon={
+                <TestStatusIcon
+                  percentage={coverage.percentage}
+                  status={coverage.status}
+                  aria-label={`status: ${coverage.status}`}
+                />
+              }
+              right={`${coverage.percentage}%`}
+            />
+          ) : (
+            <ListItem
+              title="Coverage"
+              icon={<TestStatusIcon status="unknown" aria-label={`status: unknown`} />}
+            />
+          )}
           <ListItem
             title="Accessibility"
             icon={<TestStatusIcon status="negative" aria-label="status: failed" />}
@@ -221,6 +234,7 @@ function useConfig(api: API, providerId: string, initialConfig: Config) {
     debounce((config: Config) => {
       if (!isEqual(config, lastConfig.current)) {
         api.updateTestProviderState(providerId, { config });
+        console.log('LOG: saveConfig', { providerId, config });
         api.emit(TESTING_MODULE_CONFIG_CHANGE, { providerId, config });
         lastConfig.current = config;
       }
