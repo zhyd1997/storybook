@@ -1,15 +1,25 @@
+import type { ResolvedCoverageOptions } from 'vitest/node';
+
 import type { ReportNode, Visitor } from 'istanbul-lib-report';
 import { ReportBase } from 'istanbul-lib-report';
 
-import { TEST_PROVIDER_ID } from '../constants';
+import { type Details, TEST_PROVIDER_ID } from '../constants';
 import type { TestManager } from './test-manager';
 
-export default class StorybookCoverageReporter extends ReportBase implements Partial<Visitor> {
-  #testManager: TestManager;
+export type StorybookCoverageReporterOptions = {
+  testManager: TestManager;
+  getCoverageOptions: () => ResolvedCoverageOptions<'v8'>;
+};
 
-  constructor(opts: { testManager: TestManager }) {
+export default class StorybookCoverageReporter extends ReportBase implements Partial<Visitor> {
+  #testManager: StorybookCoverageReporterOptions['testManager'];
+
+  #getCoverageOptions: StorybookCoverageReporterOptions['getCoverageOptions'];
+
+  constructor(opts: StorybookCoverageReporterOptions) {
     super();
     this.#testManager = opts.testManager;
+    this.#getCoverageOptions = opts.getCoverageOptions;
   }
 
   onSummary(node: ReportNode) {
@@ -25,13 +35,25 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
       covered += metric.covered;
     }
 
+    const percentage = Math.round((covered / total) * 100);
+
+    // Fallback to Vitest's default watermarks https://vitest.dev/config/#coverage-watermarks
+    const [lowWatermark = 50, highWatermark = 80] =
+      this.#getCoverageOptions().watermarks?.statements ?? [];
+
+    const coverageDetails: Details['coverage'] = {
+      percentage,
+      status:
+        percentage < lowWatermark
+          ? 'negative'
+          : percentage < highWatermark
+            ? 'warning'
+            : 'positive',
+    };
     this.#testManager.sendProgressReport({
       providerId: TEST_PROVIDER_ID,
       details: {
-        coverage: {
-          status: 'warning', // TODO: determine status based on thresholds/watermarks
-          percentage: Math.round((covered / total) * 100),
-        },
+        coverage: coverageDetails,
       },
     });
   }

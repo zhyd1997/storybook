@@ -2,13 +2,13 @@ import { existsSync } from 'node:fs';
 
 import type {
   CoverageOptions,
+  ResolvedCoverageOptions,
   TestProject,
   TestSpecification,
   Vitest,
   WorkspaceProject,
 } from 'vitest/node';
 
-import type { Channel } from 'storybook/internal/channels';
 import { resolvePathInStorybookCache } from 'storybook/internal/common';
 import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-events';
 
@@ -19,6 +19,7 @@ import slash from 'slash';
 
 import { COVERAGE_DIRECTORY } from '../constants';
 import { log } from '../logger';
+import type { StorybookCoverageReporterOptions } from './coverage-reporter';
 import { StorybookReporter } from './reporter';
 import type { TestManager } from './test-manager';
 
@@ -40,20 +41,21 @@ export class VitestManager {
   async startVitest({ watchMode = false, coverage = false } = {}) {
     const { createVitest } = await import('vitest/node');
 
+    const storybookCoverageReporter: [string, StorybookCoverageReporterOptions] = [
+      '@storybook/experimental-addon-test/internal/coverage-reporter',
+      {
+        testManager: this.testManager,
+        getCoverageOptions: () => this.vitest?.config?.coverage as ResolvedCoverageOptions<'v8'>,
+      },
+    ];
     const coverageOptions = (
       coverage
         ? {
             enabled: true,
             clean: false,
-            cleanOnRerun: false,
+            cleanOnRerun: !watchMode,
             reportOnFailure: true,
-            reporter: [
-              ['html', {}],
-              [
-                '@storybook/experimental-addon-test/internal/coverage-reporter',
-                { testManager: this.testManager },
-              ],
-            ],
+            reporter: [['html', {}], storybookCoverageReporter],
             reportsDirectory: resolvePathInStorybookCache(COVERAGE_DIRECTORY),
           }
         : { enabled: false }
