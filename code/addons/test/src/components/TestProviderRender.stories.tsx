@@ -23,7 +23,9 @@ const managerContext: any = {
     },
   },
   api: {
-    getDocsUrl: fn().mockName('api::getDocsUrl'),
+    getDocsUrl: fn(({ subpath }) => `https://storybook.js.org/docs/${subpath}`).mockName(
+      'api::getDocsUrl'
+    ),
     emit: fn().mockName('api::emit'),
     updateTestProviderState: fn().mockName('api::updateTestProviderState'),
   },
@@ -99,6 +101,9 @@ export default {
       </ManagerContext.Provider>
     ),
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
 } as Meta<typeof TestProviderRender>;
 
 export const Default: Story = {
@@ -154,6 +159,6 @@ export const EnableEditing: Story = {
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement);
 
-    screen.getByLabelText('Edit').click();
+    screen.getByLabelText(/Open settings/).click();
   },
 };
