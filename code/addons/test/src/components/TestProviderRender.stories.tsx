@@ -62,6 +62,7 @@ const baseState: TestProviderState<Details, Config> = {
             status: 'success',
             duration: 100,
             testRunId: 'test-run-id',
+            reports: [],
           },
         ],
       },
