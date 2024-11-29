@@ -34,7 +34,7 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
     const [lowWatermark = 50, highWatermark = 80] =
       this.#getCoverageOptions().watermarks?.statements ?? [];
 
-    const coverageDetails: Details['coverage'] = {
+    const coverageDetails: Details['coverageSummary'] = {
       percentage,
       status:
         percentage < lowWatermark
@@ -46,7 +46,7 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
     this.#testManager.sendProgressReport({
       providerId: TEST_PROVIDER_ID,
       details: {
-        coverage: coverageDetails,
+        coverageSummary: coverageDetails,
       },
     });
   }
