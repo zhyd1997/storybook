@@ -44,6 +44,7 @@ const Info = styled.div({
   display: 'flex',
   flexDirection: 'column',
   marginLeft: 6,
+  minWidth: 0,
 });
 
 const Actions = styled.div({
