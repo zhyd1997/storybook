@@ -8,18 +8,18 @@ import type { TestManager } from './test-manager';
 
 export type StorybookCoverageReporterOptions = {
   testManager: TestManager;
-  getCoverageOptions: () => ResolvedCoverageOptions<'v8'>;
+  coverageOptions: ResolvedCoverageOptions<'v8'>;
 };
 
 export default class StorybookCoverageReporter extends ReportBase implements Partial<Visitor> {
   #testManager: StorybookCoverageReporterOptions['testManager'];
 
-  #getCoverageOptions: StorybookCoverageReporterOptions['getCoverageOptions'];
+  #coverageOptions: StorybookCoverageReporterOptions['coverageOptions'];
 
   constructor(opts: StorybookCoverageReporterOptions) {
     super();
     this.#testManager = opts.testManager;
-    this.#getCoverageOptions = opts.getCoverageOptions;
+    this.#coverageOptions = opts.coverageOptions;
   }
 
   onSummary(node: ReportNode) {
@@ -32,9 +32,9 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
 
     // Fallback to Vitest's default watermarks https://vitest.dev/config/#coverage-watermarks
     const [lowWatermark = 50, highWatermark = 80] =
-      this.#getCoverageOptions().watermarks?.statements ?? [];
+      this.#coverageOptions.watermarks?.statements ?? [];
 
-    const coverageDetails: Details['coverage'] = {
+    const coverageDetails: Details['coverageSummary'] = {
       percentage,
       status:
         percentage < lowWatermark
@@ -46,7 +46,7 @@ export default class StorybookCoverageReporter extends ReportBase implements Par
     this.#testManager.sendProgressReport({
       providerId: TEST_PROVIDER_ID,
       details: {
-        coverage: coverageDetails,
+        coverageSummary: coverageDetails,
       },
     });
   }

@@ -45,7 +45,7 @@ export class VitestManager {
       '@storybook/experimental-addon-test/internal/coverage-reporter',
       {
         testManager: this.testManager,
-        getCoverageOptions: () => this.vitest?.config?.coverage as ResolvedCoverageOptions<'v8'>,
+        coverageOptions: this.vitest?.config?.coverage as ResolvedCoverageOptions<'v8'>,
       },
     ];
     const coverageOptions = (

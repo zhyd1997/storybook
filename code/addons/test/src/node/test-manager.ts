@@ -46,7 +46,7 @@ export class TestManager {
   }
 
   async handleConfigChange(
-    payload: TestingModuleConfigChangePayload<any, { coverage: boolean; a11y: boolean }>
+    payload: TestingModuleConfigChangePayload<{ coverage: boolean; a11y: boolean }>
   ) {
     if (payload.providerId !== TEST_PROVIDER_ID) {
       return;
@@ -90,6 +90,9 @@ export class TestManager {
     try {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
+      }
+      if (payload.config && this.coverage !== payload.config.coverage) {
+        this.coverage = payload.config.coverage;
       }
 
       const allTestsRun = (payload.storyIds ?? []).length === 0;

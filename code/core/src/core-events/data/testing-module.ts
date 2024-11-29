@@ -18,7 +18,7 @@ export type TestingModuleRunRequestPayload<
   // TODO: Avoid needing to do a fetch request server-side to retrieve the index
   indexUrl: string; // e.g. http://localhost:6006/index.json
   storyIds?: string[]; // ['button--primary', 'button--secondary']
-  config?: TestProviderState<NonNullable<unknown>, Config>['config'];
+  config?: Config;
 };
 
 export type TestingModuleProgressReportPayload =
@@ -77,16 +77,17 @@ export type TestingModuleCancelTestRunResponsePayload =
       message: string;
     };
 
-export type TestingModuleWatchModeRequestPayload = {
-  providerId: TestProviderId;
-  watchMode: boolean;
-  config?: TestProviderState['config'];
-};
-
-export type TestingModuleConfigChangePayload<
-  Details extends { [key: string]: any } = NonNullable<unknown>,
+export type TestingModuleWatchModeRequestPayload<
   Config extends { [key: string]: any } = NonNullable<unknown>,
 > = {
   providerId: TestProviderId;
-  config: TestProviderState<Details, Config>['config'];
+  watchMode: boolean;
+  config?: Config;
+};
+
+export type TestingModuleConfigChangePayload<
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = {
+  providerId: TestProviderId;
+  config: Config;
 };

@@ -80,7 +80,7 @@ export const TestProviderRender: FC<{
 
   const title = state.crashed || state.failed ? 'Local tests failed' : 'Run local tests';
   const errorMessage = state.error?.message;
-  const coverage = state.details?.coverage;
+  const coverageSummary = state.details?.coverageSummary;
 
   const isA11yAddon = addons.experimental_getRegisteredAddons().includes(A11Y_ADDON_ID);
 
@@ -227,7 +227,7 @@ export const TestProviderRender: FC<{
             title="Component tests"
             icon={<TestStatusIcon status="positive" aria-label="status: passed" />}
           />
-          {coverage ? (
+          {coverageSummary ? (
             <ListItem
               title="Coverage"
               href={'/coverage/index.html'}
@@ -235,12 +235,12 @@ export const TestProviderRender: FC<{
               target="_blank"
               icon={
                 <TestStatusIcon
-                  percentage={coverage.percentage}
-                  status={coverage.status}
-                  aria-label={`status: ${coverage.status}`}
+                  percentage={coverageSummary.percentage}
+                  status={coverageSummary.status}
+                  aria-label={`status: ${coverageSummary.status}`}
                 />
               }
-              right={`${coverage.percentage}%`}
+              right={`${coverageSummary.percentage}%`}
             />
           ) : (
             <ListItem
