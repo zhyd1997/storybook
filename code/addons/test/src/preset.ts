@@ -9,6 +9,7 @@ import {
   serverRequire,
 } from 'storybook/internal/common';
 import {
+  TESTING_MODULE_CONFIG_CHANGE,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
 } from 'storybook/internal/core-events';
@@ -19,7 +20,7 @@ import { isAbsolute, join } from 'pathe';
 import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
 
-import { COVERAGE_DIRECTORY, STORYBOOK_ADDON_TEST_CHANNEL } from './constants';
+import { COVERAGE_DIRECTORY, STORYBOOK_ADDON_TEST_CHANNEL, TEST_PROVIDER_ID } from './constants';
 import { log } from './logger';
 import { runTestRunner } from './node/boot-test-runner';
 
@@ -70,7 +71,9 @@ export const experimental_serverChannel = async (channel: Channel, options: Opti
   const execute =
     (eventName: string) =>
     (...args: any[]) => {
-      runTestRunner(channel, eventName, args);
+      if (args[0]?.providerId === TEST_PROVIDER_ID) {
+        runTestRunner(channel, eventName, args);
+      }
     };
 
   channel.on(TESTING_MODULE_RUN_REQUEST, execute(TESTING_MODULE_RUN_REQUEST));
@@ -79,6 +82,7 @@ export const experimental_serverChannel = async (channel: Channel, options: Opti
       execute(TESTING_MODULE_WATCH_MODE_REQUEST)(payload);
     }
   });
+  channel.on(TESTING_MODULE_CONFIG_CHANGE, execute(TESTING_MODULE_CONFIG_CHANGE));
 
   if (!core.disableTelemetry) {
     const packageJsonPath = require.resolve('@storybook/experimental-addon-test/package.json');

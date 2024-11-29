@@ -1,4 +1,4 @@
-import React, { useSyncExternalStore } from 'react';
+import React from 'react';
 
 import { AddonPanel } from 'storybook/internal/components';
 import type { Combo } from 'storybook/internal/manager-api';
@@ -9,8 +9,6 @@ import {
   type Addon_TestProviderType,
   Addon_TypesEnum,
 } from 'storybook/internal/types';
-
-import type { ReportNode } from 'istanbul-lib-report';
 
 import { ContextMenuItem } from './components/ContextMenuItem';
 import { Panel } from './components/Panel';
@@ -32,27 +30,12 @@ addons.register(ADDON_ID, (api) => {
       api.togglePanel(true);
     };
 
-    type CoverageSummary = {
-      coverageSummary: ReturnType<ReportNode['getCoverageSummary']>['data'];
-    };
-    const coverageStore = {
-      data: undefined as CoverageSummary | undefined,
-      subscribe: () => {
-        const listener = (data: CoverageSummary) => {
-          console.log('LOG: got coverage data on channel', data);
-          coverageStore.data = data;
-        };
-        const channel = api.getChannel();
-        channel.on('storybook/coverage', listener);
-        return () => channel.off('storybook/coverage', listener);
-      },
-      getSnapshot: () => coverageStore.data,
-    };
     addons.add(TEST_PROVIDER_ID, {
       type: Addon_TypesEnum.experimental_TEST_PROVIDER,
       runnable: true,
       watchable: true,
       name: 'Component tests',
+      render: (state) => <TestProviderRender api={api} state={state} />,
 
       sidebarContextMenu: ({ context, state }) => {
         if (context.type === 'docs') {
@@ -64,8 +47,6 @@ addons.register(ADDON_ID, (api) => {
 
         return <ContextMenuItem context={context} state={state} />;
       },
-
-      render: (state) => <TestProviderRender api={api} state={state} />,
 
       mapStatusUpdate: (state) =>
         Object.fromEntries(

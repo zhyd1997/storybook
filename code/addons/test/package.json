@@ -1,6 +1,6 @@
 {
   "name": "@storybook/experimental-addon-test",
-  "version": "8.5.0-alpha.10",
+  "version": "8.5.0-alpha.13",
   "description": "Integrate Vitest with Storybook",
   "keywords": [
     "storybook-addons",
@@ -92,7 +92,6 @@
   },
   "devDependencies": {
     "@devtools-ds/object-inspector": "^1.1.2",
-    "@storybook/icons": "^1.2.12",
     "@types/istanbul-lib-report": "^3.0.3",
     "@types/node": "^22.0.0",
     "@types/semver": "^7",

@@ -1,32 +1,53 @@
+import type { ResolvedCoverageOptions } from 'vitest/node';
+
 import type { ReportNode, Visitor } from 'istanbul-lib-report';
 import { ReportBase } from 'istanbul-lib-report';
 
-import { TEST_PROVIDER_ID } from '../constants';
+import { type Details, TEST_PROVIDER_ID } from '../constants';
 import type { TestManager } from './test-manager';
 
+export type StorybookCoverageReporterOptions = {
+  testManager: TestManager;
+  coverageOptions: ResolvedCoverageOptions<'v8'>;
+};
+
 export default class StorybookCoverageReporter extends ReportBase implements Partial<Visitor> {
-  #testManager: TestManager;
+  #testManager: StorybookCoverageReporterOptions['testManager'];
 
-  constructor(opts: { getTestManager: () => TestManager }) {
+  #coverageOptions: StorybookCoverageReporterOptions['coverageOptions'];
+
+  constructor(opts: StorybookCoverageReporterOptions) {
     super();
-    this.#testManager = opts.getTestManager();
-
-    console.log('StorybookCoverageReporter created');
+    this.#testManager = opts.testManager;
+    this.#coverageOptions = opts.coverageOptions;
   }
 
   onSummary(node: ReportNode) {
-    console.log(node.isRoot(), node.getRelativeName());
     if (!node.isRoot()) {
       return;
     }
     const coverageSummary = node.getCoverageSummary(false);
+
+    const percentage = Math.round(coverageSummary.data.statements.pct);
+
+    // Fallback to Vitest's default watermarks https://vitest.dev/config/#coverage-watermarks
+    const [lowWatermark = 50, highWatermark = 80] =
+      this.#coverageOptions.watermarks?.statements ?? [];
+
+    const coverageDetails: Details['coverageSummary'] = {
+      percentage,
+      status:
+        percentage < lowWatermark
+          ? 'negative'
+          : percentage < highWatermark
+            ? 'warning'
+            : 'positive',
+    };
     this.#testManager.sendProgressReport({
       providerId: TEST_PROVIDER_ID,
       details: {
-        coverageSummary: coverageSummary.data,
+        coverageSummary: coverageDetails,
       },
     });
-
-    console.log('StorybookCoverageReporter onSummary', Object.keys(coverageSummary));
   }
 }

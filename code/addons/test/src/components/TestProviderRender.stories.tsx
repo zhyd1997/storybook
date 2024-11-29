@@ -23,7 +23,9 @@ const managerContext: any = {
     },
   },
   api: {
-    getDocsUrl: fn().mockName('api::getDocsUrl'),
+    getDocsUrl: fn(({ subpath }) => `https://storybook.js.org/docs/${subpath}`).mockName(
+      'api::getDocsUrl'
+    ),
     emit: fn().mockName('api::emit'),
     updateTestProviderState: fn().mockName('api::updateTestProviderState'),
   },
@@ -98,6 +100,9 @@ export default {
       </ManagerContext.Provider>
     ),
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
 } as Meta<typeof TestProviderRender>;
 
 export const Default: Story = {
@@ -119,29 +124,83 @@ export const Running: Story = {
   },
 };
 
-export const EnableA11y: Story = {
+export const Watching: Story = {
+  args: {
+    state: {
+      ...config,
+      ...baseState,
+      watching: true,
+    },
+  },
+};
+
+export const WithCoverageNegative: Story = {
   args: {
     state: {
       ...config,
       ...baseState,
       details: {
         testResults: [],
+        coverageSummary: {
+          percentage: 20,
+          status: 'negative',
+        },
       },
       config: {
-        a11y: true,
-        coverage: false,
+        a11y: false,
+        coverage: true,
       },
     },
   },
 };
 
-export const EnableEditing: Story = {
+export const WithCoverageWarning: Story = {
+  args: {
+    state: {
+      ...config,
+      ...baseState,
+      details: {
+        testResults: [],
+        coverageSummary: {
+          percentage: 50,
+          status: 'warning',
+        },
+      },
+      config: {
+        a11y: false,
+        coverage: true,
+      },
+    },
+  },
+};
+
+export const WithCoveragePositive: Story = {
+  args: {
+    state: {
+      ...config,
+      ...baseState,
+      details: {
+        testResults: [],
+        coverageSummary: {
+          percentage: 80,
+          status: 'positive',
+        },
+      },
+      config: {
+        a11y: false,
+        coverage: true,
+      },
+    },
+  },
+};
+
+export const Editing: Story = {
   args: {
     state: {
       ...config,
       ...baseState,
       config: {
-        a11y: true,
+        a11y: false,
         coverage: false,
       },
       details: {
@@ -153,6 +212,24 @@ export const EnableEditing: Story = {
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement);
 
-    screen.getByLabelText('Edit').click();
+    screen.getByLabelText(/Open settings/).click();
   },
+};
+
+export const EditingAndWatching: Story = {
+  args: {
+    state: {
+      ...config,
+      ...baseState,
+      watching: true,
+      config: {
+        a11y: true,
+        coverage: true, // should be automatically disabled in the UI
+      },
+      details: {
+        testResults: [],
+      },
+    },
+  },
+  play: Editing.play,
 };

@@ -2,6 +2,7 @@ import { Addon_TypesEnum, type StoryId } from '@storybook/core/types';
 
 import {
   TESTING_MODULE_CANCEL_TEST_RUN_REQUEST,
+  TESTING_MODULE_RUN_ALL_REQUEST,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
   type TestProviderId,
@@ -20,7 +21,6 @@ export type SubState = {
 };
 
 const initialTestProviderState: TestProviderState = {
-  config: {} as { [key: string]: any },
   details: {} as { [key: string]: any },
   cancellable: false,
   cancelling: false,
@@ -105,6 +105,10 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
         };
 
         fullAPI.emit(TESTING_MODULE_RUN_REQUEST, payload);
+
+        // For backwards compatibility:
+        fullAPI.emit(TESTING_MODULE_RUN_ALL_REQUEST, { providerId: id });
+
         return () => api.cancelTestProvider(id);
       }
 
