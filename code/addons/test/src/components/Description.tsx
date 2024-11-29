@@ -8,6 +8,7 @@ import { GlobalErrorContext } from './GlobalErrorModal';
 import { RelativeTime } from './RelativeTime';
 
 export const Wrapper = styled.div(({ theme }) => ({
+  minHeight: 20,
   fontSize: theme.typography.size.s1,
   color: theme.barTextColor,
 }));
@@ -46,7 +47,7 @@ export function Description({ state, ...props }: DescriptionProps) {
       ? `Testing... ${state.progress.numPassedTests}/${state.progress.numTotalTests}`
       : 'Starting...';
   } else if (state.failed && !errorMessage) {
-    description = '';
+    description = 'Failed';
   } else if (state.crashed || (state.failed && errorMessage)) {
     description = (
       <>
