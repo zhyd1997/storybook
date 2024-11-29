@@ -84,12 +84,15 @@ export class TestManager {
 
       const allTestsRun = (payload.storyIds ?? []).length === 0;
       if (this.coverage) {
-        // If we have coverage enabled and we're running all stories,
-        // we have to restart Vitest AND disable watch mode
-        // otherwise the coverage report will be incorrect.
-
-        // If we're only running a subset of stories, we have to temporarily disable coverage,
-        // as a coverage report for a subset of stories is not useful.
+        /*
+           If we have coverage enabled and we're running all stories,
+           we have to restart Vitest AND disable watch mode otherwise the coverage report will be incorrect,
+           Vitest behaves wonky when re-using the same Vitest instance but with watch mode disabled,
+           among other things it causes the coverage report to be incorrect and stale.
+           
+           If we're only running a subset of stories, we have to temporarily disable coverage,
+           as a coverage report for a subset of stories is not useful.
+         */
         await this.restartVitest({
           watchMode: allTestsRun ? false : this.watchMode,
           coverage: allTestsRun,
