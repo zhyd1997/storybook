@@ -84,7 +84,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
       ${introduction}
 
       We couldn't find or automatically update your ${picocolors.cyan(`.storybook/vitest.setup.<ts|js>`)} in your project to smoothly set up project annotations from ${picocolors.magenta(`@storybook/addon-a11y`)}. 
-      Please manually update your vitest.setup.ts file to include the following:
+      Please manually update your ${picocolors.cyan(`vitest.setup.ts`)} file to include the following:
 
       ${picocolors.gray('...')}   
       ${picocolors.green('+ import * as a11yAddonAnnotations from "@storybook/addon-a11y/preview";')}
