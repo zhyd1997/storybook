@@ -93,12 +93,11 @@ describe('normalizeGitUrl', () => {
 });
 
 describe('unhashedProjectId', () => {
-    it('does not touch unix paths', () => {
+  it('does not touch unix paths', () => {
     expect(
       unhashedProjectId('https://github.com/storybookjs/storybook.git\n', 'path/to/storybook')
     ).toBe('github.com/storybookjs/storybook.gitpath/to/storybook');
   });
-
 
   it('normalizes windows paths', () => {
     expect(
