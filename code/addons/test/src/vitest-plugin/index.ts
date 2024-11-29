@@ -112,11 +112,15 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         config.test.browser.screenshotFailures ??= false;
 
         config.test.browser.commands ??= {
-          getInitialGlobals: () => ({
-            a11y: {
-              manual: !TestManager.a11y,
-            },
-          }),
+          getInitialGlobals: () => {
+            const envConfig = JSON.parse(process.env.VITEST_STORYBOOK_CONFIG ?? '{}');
+
+            return {
+              a11y: {
+                manual: !envConfig.a11y,
+              },
+            };
+          },
         };
       }
 

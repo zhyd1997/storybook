@@ -1,4 +1,4 @@
-import React, { type FC, useCallback, useRef, useState } from 'react';
+import React, { type FC, useCallback, useMemo, useRef, useState } from 'react';
 
 import { Button, ListItem } from 'storybook/internal/components';
 import {
@@ -6,6 +6,7 @@ import {
   type TestProviderConfig,
   type TestProviderState,
 } from 'storybook/internal/core-events';
+import { addons } from 'storybook/internal/manager-api';
 import type { API } from 'storybook/internal/manager-api';
 import { styled, useTheme } from 'storybook/internal/theming';
 
@@ -22,6 +23,8 @@ import {
 import { isEqual } from 'es-toolkit';
 import { debounce } from 'es-toolkit/compat';
 
+// Relatively importing from a11y to get the ADDON_ID
+import { ADDON_ID as A11Y_ADDON_ID } from '../../../a11y/src/constants';
 import { type Config, type Details, TEST_PROVIDER_ID } from '../constants';
 import { Description } from './Description';
 import { GlobalErrorModal } from './GlobalErrorModal';
@@ -79,11 +82,48 @@ export const TestProviderRender: FC<{
   const errorMessage = state.error?.message;
   const coverage = state.details?.coverage;
 
+  const isA11yAddon = addons.experimental_getRegisteredAddons().includes(A11Y_ADDON_ID);
+
   const [config, updateConfig] = useConfig(
     api,
     state.id,
     state.config || { a11y: false, coverage: false }
   );
+
+  const a11yResults = useMemo(() => {
+    if (!isA11yAddon) {
+      return [];
+    }
+
+    return state.details?.testResults?.flatMap((result) =>
+      result.results.map((r) => r.reports.find((report) => report.type))
+    );
+  }, [isA11yAddon, state.details?.testResults]);
+
+  const a11yStatus = useMemo<'positive' | 'warning' | 'negative' | 'unknown'>(() => {
+    if (!isA11yAddon || config.a11y === false) {
+      return 'unknown';
+    }
+
+    if (!a11yResults) {
+      return 'unknown';
+    }
+
+    const failed = a11yResults.some((result) => result?.status === 'failed');
+    const warning = a11yResults.some((result) => result?.status === 'warning');
+
+    if (failed) {
+      return 'negative';
+    } else if (warning) {
+      return 'warning';
+    }
+
+    return 'positive';
+  }, [a11yResults, isA11yAddon, config.a11y]);
+
+  const a11yNotPassedAmount = a11yResults?.filter(
+    (result) => result?.status === 'failed' || result?.status === 'warning'
+  ).length;
 
   return (
     <Container>
@@ -166,19 +206,20 @@ export const TestProviderRender: FC<{
               />
             }
           />
-          <ListItem
-            as="label"
-            title="Accessibility"
-            icon={<AccessibilityIcon color={theme.textMutedColor} />}
-            right={
-              <Checkbox
-                type="checkbox"
-                disabled // TODO: Implement a11y
-                checked={config.a11y}
-                onChange={() => updateConfig({ a11y: !config.a11y })}
-              />
-            }
-          />
+          {isA11yAddon && (
+            <ListItem
+              as="label"
+              title="Accessibility"
+              icon={<AccessibilityIcon color={theme.textMutedColor} />}
+              right={
+                <Checkbox
+                  type="checkbox"
+                  checked={config.a11y}
+                  onChange={() => updateConfig({ a11y: !config.a11y })}
+                />
+              }
+            />
+          )}
         </Extras>
       ) : (
         <Extras>
@@ -207,11 +248,13 @@ export const TestProviderRender: FC<{
               icon={<TestStatusIcon status="unknown" aria-label={`status: unknown`} />}
             />
           )}
-          <ListItem
-            title="Accessibility"
-            icon={<TestStatusIcon status="negative" aria-label="status: failed" />}
-            right={73}
-          />
+          {isA11yAddon && (
+            <ListItem
+              title="Accessibility"
+              icon={<TestStatusIcon status={a11yStatus} aria-label={`status: ${a11yStatus}`} />}
+              right={a11yNotPassedAmount || null}
+            />
+          )}
         </Extras>
       )}
 
