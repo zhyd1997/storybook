@@ -85,6 +85,9 @@ export class TestManager {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
       }
+      if (payload.config && this.coverage !== payload.config.coverage) {
+        this.coverage = payload.config.coverage;
+      }
 
       /*
         If we're only running a subset of stories, we have to temporarily disable coverage,
