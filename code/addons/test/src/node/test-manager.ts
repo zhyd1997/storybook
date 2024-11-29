@@ -81,6 +81,9 @@ export class TestManager {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
       }
+      if (payload.config && this.coverage !== payload.config.coverage) {
+        this.coverage = payload.config.coverage;
+      }
 
       const allTestsRun = (payload.storyIds ?? []).length === 0;
       if (this.coverage) {
