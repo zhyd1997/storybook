@@ -365,6 +365,7 @@ describe('composeConfigs', () => {
       { runStep: (label, play, context) => fn(`${label}3`, play(context)) },
     ]);
 
+    // @ts-expect-error We don't care about the context value here
     runStep('Label', () => {}, {});
 
     expect(fn).toHaveBeenCalledTimes(3);
