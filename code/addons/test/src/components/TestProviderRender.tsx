@@ -128,7 +128,7 @@ export const TestProviderRender: FC<
               padding="small"
               active={state.watching}
               onClick={() => api.setTestProviderWatchMode(state.id, !state.watching)}
-              disabled={state.crashed || state.running}
+              disabled={state.crashed || state.running || isEditing}
             >
               <EyeIcon />
             </Button>
