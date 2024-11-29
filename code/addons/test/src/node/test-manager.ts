@@ -46,7 +46,7 @@ export class TestManager {
   }
 
   async handleConfigChange(
-    payload: TestingModuleConfigChangePayload<any, { coverage: boolean; a11y: boolean }>
+    payload: TestingModuleConfigChangePayload<{ coverage: boolean; a11y: boolean }>
   ) {
     if (payload.providerId !== TEST_PROVIDER_ID) {
       return;

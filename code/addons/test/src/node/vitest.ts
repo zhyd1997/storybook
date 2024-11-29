@@ -2,7 +2,6 @@ import process from 'node:process';
 
 import { Channel } from 'storybook/internal/channels';
 
-import { TEST_PROVIDER_ID } from '../constants';
 import { TestManager } from './test-manager';
 
 process.env.TEST = 'true';
