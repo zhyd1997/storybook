@@ -72,11 +72,13 @@ const statusMap: Record<TestStatus, ComponentProps<typeof TestStatusIcon>['statu
   pending: 'unknown',
 };
 
-export const TestProviderRender: FC<{
-  api: API;
-  state: TestProviderConfig & TestProviderState<Details, Config>;
-  entryId?: string;
-}> = ({ state, api, entryId }) => {
+export const TestProviderRender: FC<
+  {
+    api: API;
+    state: TestProviderConfig & TestProviderState<Details, Config>;
+    entryId?: string;
+  } & ComponentProps<typeof Container>
+> = ({ state, api, entryId, ...props }) => {
   const [isEditing, setIsEditing] = useState(false);
   const theme = useTheme();
 
@@ -101,7 +103,7 @@ export const TestProviderRender: FC<{
   const status = (state.failed ? 'failed' : results[0]?.status) || 'unknown';
 
   return (
-    <Container>
+    <Container {...props}>
       <Heading>
         <Info>
           <Title id="testing-module-title" state={state} />

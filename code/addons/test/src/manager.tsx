@@ -62,7 +62,14 @@ addons.register(ADDON_ID, (api) => {
         if (context.type === 'story' && !context.tags.includes('test')) {
           return null;
         }
-        return <TestProviderRender api={api} state={state} entryId={context.id} />;
+        return (
+          <TestProviderRender
+            api={api}
+            state={state}
+            entryId={context.id}
+            style={{ minWidth: 240 }}
+          />
+        );
       },
 
       mapStatusUpdate: (state) =>
