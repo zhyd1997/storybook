@@ -84,5 +84,11 @@ export const experimental_afterEach = async ({
   }
 };
 
+export const initialGlobals = {
+  a11y: {
+    manual: false,
+  },
+};
+
 // A11Y_TEST_TAG constant in ./constants.ts. Has to be statically analyzable.
 export const tags = ['a11ytest'];
