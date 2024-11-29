@@ -11,12 +11,14 @@ export type TestProviderState<
 
 export type TestProviders = Record<TestProviderId, TestProviderConfig & TestProviderState>;
 
-export type TestingModuleRunRequestPayload = {
+export type TestingModuleRunRequestPayload<
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = {
   providerId: TestProviderId;
   // TODO: Avoid needing to do a fetch request server-side to retrieve the index
   indexUrl: string; // e.g. http://localhost:6006/index.json
   storyIds?: string[]; // ['button--primary', 'button--secondary']
-  config?: TestProviderState['config'];
+  config?: TestProviderState<NonNullable<unknown>, Config>['config'];
 };
 
 export type TestingModuleProgressReportPayload =
@@ -37,6 +39,10 @@ export type TestingModuleProgressReportPayload =
         message: string;
         stack?: string;
       };
+    }
+  | {
+      providerId: TestProviderId;
+      details: { [key: string]: any };
     };
 
 export type TestingModuleCrashReportPayload = {
@@ -77,7 +83,10 @@ export type TestingModuleWatchModeRequestPayload = {
   config?: TestProviderState['config'];
 };
 
-export type TestingModuleConfigChangePayload = {
+export type TestingModuleConfigChangePayload<
+  Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = {
   providerId: TestProviderId;
-  config: TestProviderState['config'];
+  config: TestProviderState<Details, Config>['config'];
 };
