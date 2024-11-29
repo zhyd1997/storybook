@@ -136,7 +136,7 @@ describe('A11yContext', () => {
       status: 'error',
       reporters: [
         {
-          id: 'a11y',
+          type: 'a11y',
           result: axeResult as any,
           status: 'failed',
           version: 1,
@@ -210,7 +210,7 @@ describe('A11yContext', () => {
       status: 'error',
       reporters: [
         {
-          id: 'a11y',
+          type: 'a11y',
           result: axeResult as any,
           status: 'failed',
           version: 1,
@@ -335,7 +335,7 @@ describe('A11yContext', () => {
         {
           status: 'failed',
           version: 1,
-          id: 'a11y',
+          type: 'a11y',
           result: { error: new Error('Test error') } as any,
         },
       ],

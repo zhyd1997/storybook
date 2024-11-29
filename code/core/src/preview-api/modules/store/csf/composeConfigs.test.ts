@@ -25,7 +25,7 @@ describe('composeConfigs', () => {
       loaders: [],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -54,7 +54,7 @@ describe('composeConfigs', () => {
       loaders: [],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -87,7 +87,7 @@ describe('composeConfigs', () => {
       loaders: [],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -126,7 +126,7 @@ describe('composeConfigs', () => {
       loaders: [],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -168,7 +168,7 @@ describe('composeConfigs', () => {
       loaders: [],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -201,7 +201,7 @@ describe('composeConfigs', () => {
       loaders: ['1', '2', '3', '4'],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -234,7 +234,7 @@ describe('composeConfigs', () => {
       loaders: ['1', '2', '3'],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -263,7 +263,7 @@ describe('composeConfigs', () => {
       loaders: [],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -293,7 +293,7 @@ describe('composeConfigs', () => {
       loaders: [],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       runStep: expect.any(Function),
       tags: [],
     });
@@ -326,7 +326,7 @@ describe('composeConfigs', () => {
       loaders: [],
       beforeAll: expect.any(Function),
       beforeEach: [],
-      afterEach: [],
+      experimental_afterEach: [],
       render: 'render-2',
       renderToCanvas: 'renderToCanvas-2',
       applyDecorators: 'applyDecorators-2',
@@ -365,7 +365,6 @@ describe('composeConfigs', () => {
       { runStep: (label, play, context) => fn(`${label}3`, play(context)) },
     ]);
 
-    // @ts-expect-error We don't care about the context value here
     runStep('Label', () => {}, {});
 
     expect(fn).toHaveBeenCalledTimes(3);

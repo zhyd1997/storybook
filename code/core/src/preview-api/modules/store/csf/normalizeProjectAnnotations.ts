@@ -26,7 +26,7 @@ export function normalizeProjectAnnotations<TRenderer extends Renderer>({
   decorators,
   loaders,
   beforeEach,
-  afterEach,
+  experimental_afterEach,
   globals,
   initialGlobals,
   ...annotations
@@ -45,7 +45,7 @@ export function normalizeProjectAnnotations<TRenderer extends Renderer>({
     decorators: normalizeArrays(decorators),
     loaders: normalizeArrays(loaders),
     beforeEach: normalizeArrays(beforeEach),
-    afterEach: normalizeArrays(afterEach),
+    experimental_afterEach: normalizeArrays(experimental_afterEach),
     argTypesEnhancers: [
       ...(argTypesEnhancers || []),
       inferArgTypes,

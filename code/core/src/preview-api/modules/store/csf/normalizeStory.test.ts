@@ -52,11 +52,11 @@ describe('normalizeStory', () => {
       const meta = { id: 'title', title: 'title' };
       expect(normalizeStory('storyExport', storyFn, meta)).toMatchInlineSnapshot(`
         {
-          "afterEach": [],
           "argTypes": {},
           "args": {},
           "beforeEach": [],
           "decorators": [],
+          "experimental_afterEach": [],
           "globals": {},
           "id": "title--story-export",
           "loaders": [],
@@ -124,11 +124,11 @@ describe('normalizeStory', () => {
         const normalized = normalizeStory('storyExport', storyObj, meta);
         expect(normalized).toMatchInlineSnapshot(`
           {
-            "afterEach": [],
             "argTypes": {},
             "args": {},
             "beforeEach": [],
             "decorators": [],
+            "experimental_afterEach": [],
             "globals": {},
             "id": "title--story-export",
             "loaders": [],
@@ -154,7 +154,6 @@ describe('normalizeStory', () => {
         const { moduleExport, ...normalized } = normalizeStory('storyExport', storyObj, meta);
         expect(normalized).toMatchInlineSnapshot(`
           {
-            "afterEach": [],
             "argTypes": {
               "storyArgType": {
                 "name": "storyArgType",
@@ -170,6 +169,7 @@ describe('normalizeStory', () => {
             "decorators": [
               [Function],
             ],
+            "experimental_afterEach": [],
             "globals": {},
             "id": "title--story-export",
             "loaders": [
@@ -205,7 +205,6 @@ describe('normalizeStory', () => {
         const { moduleExport, ...normalized } = normalizeStory('storyExport', storyObj, meta);
         expect(normalized).toMatchInlineSnapshot(`
           {
-            "afterEach": [],
             "argTypes": {
               "storyArgType": {
                 "name": "storyArgType",
@@ -229,6 +228,7 @@ describe('normalizeStory', () => {
               [Function],
               [Function],
             ],
+            "experimental_afterEach": [],
             "globals": {},
             "id": "title--story-export",
             "loaders": [

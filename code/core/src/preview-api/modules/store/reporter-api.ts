@@ -1,5 +1,5 @@
 export interface Report<T = unknown> {
-  id: string;
+  type: string;
   version?: number;
   result: T;
   status: 'failed' | 'passed' | 'warning';

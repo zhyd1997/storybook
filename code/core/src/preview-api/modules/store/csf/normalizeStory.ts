@@ -60,9 +60,10 @@ export function normalizeStory<TRenderer extends Renderer>(
     ...normalizeArrays(storyObject.beforeEach),
     ...normalizeArrays(story?.beforeEach),
   ];
-  const afterEach = [
-    ...normalizeArrays(storyObject.afterEach),
-    ...normalizeArrays(story?.afterEach),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const experimental_afterEach = [
+    ...normalizeArrays(storyObject.experimental_afterEach),
+    ...normalizeArrays(story?.experimental_afterEach),
   ];
   const { render, play, tags = [], globals = {} } = storyObject;
 
@@ -79,7 +80,7 @@ export function normalizeStory<TRenderer extends Renderer>(
     argTypes: normalizeInputTypes(argTypes),
     loaders,
     beforeEach,
-    afterEach,
+    experimental_afterEach,
     globals,
     ...(render && { render }),
     ...(userStoryFn && { userStoryFn }),

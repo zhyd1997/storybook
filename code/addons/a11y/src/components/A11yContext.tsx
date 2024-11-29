@@ -143,7 +143,7 @@ export const A11yContextProvider: FC<PropsWithChildren> = (props) => {
 
   const handleReport = useCallback(
     ({ reporters }: StoryFinishedPayload) => {
-      const a11yReport = reporters.find((r) => r.id === 'a11y') as Report<A11YReport> | undefined;
+      const a11yReport = reporters.find((r) => r.type === 'a11y') as Report<A11YReport> | undefined;
 
       if (a11yReport) {
         if ('error' in a11yReport.result) {

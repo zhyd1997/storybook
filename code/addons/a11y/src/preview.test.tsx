@@ -5,7 +5,7 @@ import type { StoryContext } from '@storybook/csf';
 
 import { run } from './a11yRunner';
 import { A11Y_TEST_TAG } from './constants';
-import { afterEach } from './preview';
+import { experimental_afterEach } from './preview';
 import { getIsVitestRunning, getIsVitestStandaloneRun } from './utils';
 
 const mocks = vi.hoisted(() => {
@@ -105,12 +105,12 @@ describe('afterEach', () => {
 
     mockedRun.mockResolvedValue(result as any);
 
-    await expect(() => afterEach(context)).rejects.toThrow();
+    await expect(() => experimental_afterEach(context)).rejects.toThrow();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
 
     expect(context.reporting.addReport).toHaveBeenCalledWith({
-      id: 'a11y',
+      type: 'a11y',
       version: 1,
       result,
       status: 'failed',
@@ -126,12 +126,12 @@ describe('afterEach', () => {
     mockedRun.mockResolvedValue(result as any);
     mocks.getIsVitestStandaloneRun.mockReturnValue(false);
 
-    await afterEach(context);
+    await experimental_afterEach(context);
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
 
     expect(context.reporting.addReport).toHaveBeenCalledWith({
-      id: 'a11y',
+      type: 'a11y',
       version: 1,
       result,
       status: 'failed',
@@ -145,11 +145,11 @@ describe('afterEach', () => {
     };
     mockedRun.mockResolvedValue(result as any);
 
-    await afterEach(context);
+    await experimental_afterEach(context);
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
     expect(context.reporting.addReport).toHaveBeenCalledWith({
-      id: 'a11y',
+      type: 'a11y',
       version: 1,
       result,
       status: 'passed',
@@ -172,11 +172,11 @@ describe('afterEach', () => {
     };
     mockedRun.mockResolvedValue(result as any);
 
-    await expect(async () => afterEach(context)).rejects.toThrow();
+    await expect(async () => experimental_afterEach(context)).rejects.toThrow();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
     expect(context.reporting.addReport).toHaveBeenCalledWith({
-      id: 'a11y',
+      type: 'a11y',
       version: 1,
       result,
       status: 'failed',
@@ -199,11 +199,11 @@ describe('afterEach', () => {
     };
     mockedRun.mockResolvedValue(result as any);
 
-    await expect(async () => afterEach(context)).rejects.toThrow();
+    await expect(async () => experimental_afterEach(context)).rejects.toThrow();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
     expect(context.reporting.addReport).toHaveBeenCalledWith({
-      id: 'a11y',
+      type: 'a11y',
       version: 1,
       result,
       status: 'failed',
@@ -220,11 +220,11 @@ describe('afterEach', () => {
     mockedRun.mockResolvedValue(result as any);
     vi.mocked(getIsVitestRunning).mockReturnValue(false);
 
-    await afterEach(context);
+    await experimental_afterEach(context);
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
     expect(context.reporting.addReport).toHaveBeenCalledWith({
-      id: 'a11y',
+      type: 'a11y',
       version: 1,
       result,
       status: 'passed',
@@ -240,7 +240,7 @@ describe('afterEach', () => {
       },
     });
 
-    await afterEach(context);
+    await experimental_afterEach(context);
 
     expect(mockedRun).not.toHaveBeenCalled();
     expect(context.reporting.addReport).not.toHaveBeenCalled();
@@ -255,7 +255,7 @@ describe('afterEach', () => {
       },
     });
 
-    await afterEach(context);
+    await experimental_afterEach(context);
 
     expect(mockedRun).not.toHaveBeenCalled();
     expect(context.reporting.addReport).not.toHaveBeenCalled();
@@ -270,7 +270,7 @@ describe('afterEach', () => {
       },
     });
 
-    await afterEach(context);
+    await experimental_afterEach(context);
 
     expect(mockedRun).not.toHaveBeenCalled();
     expect(context.reporting.addReport).not.toHaveBeenCalled();
@@ -282,7 +282,7 @@ describe('afterEach', () => {
     });
     vi.mocked(getIsVitestRunning).mockReturnValue(true);
 
-    await afterEach(context);
+    await experimental_afterEach(context);
 
     expect(mockedRun).not.toHaveBeenCalled();
     expect(context.reporting.addReport).not.toHaveBeenCalled();
@@ -293,11 +293,11 @@ describe('afterEach', () => {
     const error = new Error('Test error');
     mockedRun.mockRejectedValue(error);
 
-    await expect(() => afterEach(context)).rejects.toThrow();
+    await expect(() => experimental_afterEach(context)).rejects.toThrow();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
     expect(context.reporting.addReport).toHaveBeenCalledWith({
-      id: 'a11y',
+      type: 'a11y',
       version: 1,
       result: {
         error,
@@ -311,11 +311,11 @@ describe('afterEach', () => {
     const error = new Error('Test error');
     mockedRun.mockRejectedValue(error);
 
-    await expect(() => afterEach(context)).rejects.toThrow();
+    await expect(() => experimental_afterEach(context)).rejects.toThrow();
 
     expect(mockedRun).toHaveBeenCalledWith(context.parameters.a11y);
     expect(context.reporting.addReport).toHaveBeenCalledWith({
-      id: 'a11y',
+      type: 'a11y',
       version: 1,
       result: {
         error,

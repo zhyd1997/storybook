@@ -11,7 +11,13 @@ import { getIsVitestRunning, getIsVitestStandaloneRun } from './utils';
 
 expect.extend(matchers);
 
-export const afterEach = async ({ reporting, parameters, globals, tags }: StoryContext) => {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const experimental_afterEach = async ({
+  reporting,
+  parameters,
+  globals,
+  tags,
+}: StoryContext) => {
   const a11yParameter: A11yParameters | undefined = parameters.a11y;
   const a11yGlobals = globals.a11y;
   const warnings = a11yParameter?.warnings ?? [];
@@ -36,7 +42,7 @@ export const afterEach = async ({ reporting, parameters, globals, tags }: StoryC
         );
 
         reporting.addReport({
-          id: 'a11y',
+          type: 'a11y',
           version: 1,
           result: result,
           status: hasErrors ? 'failed' : hasViolations ? 'warning' : 'passed',
@@ -63,7 +69,7 @@ export const afterEach = async ({ reporting, parameters, globals, tags }: StoryC
        */
     } catch (e) {
       reporting.addReport({
-        id: 'a11y',
+        type: 'a11y',
         version: 1,
         result: {
           error: e,
