@@ -8,7 +8,9 @@ import { GlobalErrorContext } from './GlobalErrorModal';
 import { RelativeTime } from './RelativeTime';
 
 export const Wrapper = styled.div(({ theme }) => ({
-  minHeight: 20,
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
   fontSize: theme.typography.size.s1,
   color: theme.barTextColor,
 }));
