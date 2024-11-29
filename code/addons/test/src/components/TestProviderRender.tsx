@@ -189,6 +189,9 @@ export const TestProviderRender: FC<{
           {coverage ? (
             <ListItem
               title="Coverage"
+              href={'/coverage/index.html'}
+              // @ts-expect-error ListItem doesn't include all anchor attributes in types, but it is an achor element
+              target="_blank"
               icon={
                 <TestStatusIcon
                   percentage={coverage.percentage}
