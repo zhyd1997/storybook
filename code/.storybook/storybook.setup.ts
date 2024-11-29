@@ -14,6 +14,8 @@ import * as projectAnnotations from './preview';
 
 vi.spyOn(console, 'warn').mockImplementation((...args) => console.log(...args));
 
+globalThis.CONFIG_TYPE = 'DEVELOPMENT';
+
 const annotations = setProjectAnnotations([
   // @ts-expect-error check type errors later
   projectAnnotations,
