@@ -12,7 +12,6 @@ import type { API } from '@storybook/core/manager-api';
 import type { Link } from '../../../components/components/tooltip/TooltipLinkList';
 import { StatusButton } from './StatusButton';
 import type { ExcludesNull } from './Tree';
-import { ContextMenu } from './Tree';
 
 export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
   const [hoverCount, setHoverCount] = useState(0);

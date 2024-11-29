@@ -10,17 +10,19 @@ import {
   Addon_TypesEnum,
 } from 'storybook/internal/types';
 
-import { ContextMenuItem } from './components/ContextMenuItem';
 import { GlobalErrorContext, GlobalErrorModal } from './components/GlobalErrorModal';
 import { Panel } from './components/Panel';
 import { PanelTitle } from './components/PanelTitle';
 import { TestProviderRender } from './components/TestProviderRender';
 import { ADDON_ID, type Config, type Details, PANEL_ID, TEST_PROVIDER_ID } from './constants';
+import type { TestStatus } from './node/reporter';
 
-const statusMap: Record<any['status'], API_StatusValue> = {
+const statusMap: Record<TestStatus, API_StatusValue> = {
   failed: 'error',
   passed: 'success',
   pending: 'pending',
+  warning: 'warn',
+  skipped: 'unknown',
 };
 
 addons.register(ADDON_ID, (api) => {
@@ -60,12 +62,12 @@ addons.register(ADDON_ID, (api) => {
         if (context.type === 'story' && !context.tags.includes('test')) {
           return null;
         }
-        return <TestProviderRender api={api} state={{ ...state, watchable: false }} />;
+        return <TestProviderRender api={api} state={state} entryId={context.id} />;
       },
 
       mapStatusUpdate: (state) =>
         Object.fromEntries(
-          (state.details.testResults || []).flatMap((testResult) =>
+          (state.details?.testResults || []).flatMap((testResult) =>
             testResult.results
               .map(({ storyId, status, testRunId, ...rest }) => {
                 if (storyId) {
@@ -80,6 +82,7 @@ addons.register(ADDON_ID, (api) => {
                       testRunId,
                     },
                     onClick: openAddonPanel,
+                    sidebarContextMenu: false,
                   };
                   return [storyId, statusObject];
                 }

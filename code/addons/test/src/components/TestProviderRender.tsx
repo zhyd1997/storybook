@@ -1,4 +1,4 @@
-import React, { type FC, useCallback, useRef, useState } from 'react';
+import React, { type ComponentProps, type FC, useCallback, useRef, useState } from 'react';
 
 import { Button, ListItem } from 'storybook/internal/components';
 import {
@@ -22,7 +22,8 @@ import {
 import { isEqual } from 'es-toolkit';
 import { debounce } from 'es-toolkit/compat';
 
-import { type Config, type Details, TEST_PROVIDER_ID } from '../constants';
+import { type Config, type Details } from '../constants';
+import { type TestStatus } from '../node/reporter';
 import { Description } from './Description';
 import { TestStatusIcon } from './TestStatusIcon';
 import { Title } from './Title';
@@ -36,7 +37,7 @@ const Heading = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
   padding: '8px 2px',
-  gap: 6,
+  gap: 12,
 });
 
 const Info = styled.div({
@@ -47,7 +48,7 @@ const Info = styled.div({
 
 const Actions = styled.div({
   display: 'flex',
-  gap: 6,
+  gap: 2,
 });
 
 const Extras = styled.div({
@@ -61,10 +62,20 @@ const Checkbox = styled.input({
   },
 });
 
+const statusOrder: TestStatus[] = ['failed', 'warning', 'pending', 'passed', 'skipped'];
+const statusMap: Record<TestStatus, ComponentProps<typeof TestStatusIcon>['status']> = {
+  failed: 'negative',
+  warning: 'warning',
+  passed: 'positive',
+  skipped: 'unknown',
+  pending: 'unknown',
+};
+
 export const TestProviderRender: FC<{
   api: API;
   state: TestProviderConfig & TestProviderState<Details, Config>;
-}> = ({ state, api }) => {
+  entryId?: string;
+}> = ({ state, api, entryId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const theme = useTheme();
 
@@ -73,6 +84,20 @@ export const TestProviderRender: FC<{
     state.id,
     state.config || { a11y: false, coverage: false }
   );
+
+  const storyId = entryId?.includes('--') ? entryId : undefined;
+  const results = (state.details?.testResults || [])
+    .flatMap((test) => {
+      if (!entryId) {
+        return test.results;
+      }
+      return test.results.filter((result) =>
+        storyId ? result.storyId === storyId : result.storyId?.startsWith(`${entryId}-`)
+      );
+    })
+    .sort((a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status));
+
+  const status = (state.failed ? 'failed' : results[0]?.status) || 'unknown';
 
   return (
     <Container>
@@ -88,11 +113,12 @@ export const TestProviderRender: FC<{
             variant="ghost"
             padding="small"
             active={isEditing}
+            disabled={state.running && !isEditing}
             onClick={() => setIsEditing(!isEditing)}
           >
             <EditIcon />
           </Button>
-          {state.watchable && (
+          {state.watchable && !entryId && (
             <Button
               aria-label={`${state.watching ? 'Disable' : 'Enable'} watch mode for ${state.name}`}
               variant="ghost"
@@ -121,8 +147,8 @@ export const TestProviderRender: FC<{
                   aria-label={`Start ${state.name}`}
                   variant="ghost"
                   padding="small"
-                  onClick={() => api.runTestProvider(state.id)}
-                  disabled={state.crashed || state.running}
+                  onClick={() => api.runTestProvider(state.id, { entryId })}
+                  disabled={state.crashed || state.running || isEditing}
                 >
                   <PlayHollowIcon />
                 </Button>
@@ -147,7 +173,7 @@ export const TestProviderRender: FC<{
             right={
               <Checkbox
                 type="checkbox"
-                disabled // TODO: Implement coverage
+                disabled={state.running}
                 checked={config.coverage}
                 onChange={() => updateConfig({ coverage: !config.coverage })}
               />
@@ -160,7 +186,7 @@ export const TestProviderRender: FC<{
             right={
               <Checkbox
                 type="checkbox"
-                disabled // TODO: Implement a11y
+                disabled={state.running}
                 checked={config.a11y}
                 onChange={() => updateConfig({ a11y: !config.a11y })}
               />
@@ -171,7 +197,15 @@ export const TestProviderRender: FC<{
         <Extras>
           <ListItem
             title="Component tests"
-            icon={<TestStatusIcon status="positive" aria-label="status: passed" />}
+            icon={
+              state.crashed ? (
+                <TestStatusIcon status="critical" aria-label="status: crashed" />
+              ) : status === 'unknown' ? (
+                <TestStatusIcon status="unknown" aria-label="status: unknown" />
+              ) : (
+                <TestStatusIcon status={statusMap[status]} aria-label={`status: ${status}`} />
+              )
+            }
           />
           <ListItem
             title="Coverage"
