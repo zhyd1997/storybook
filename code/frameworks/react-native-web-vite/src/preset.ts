@@ -90,7 +90,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
   return mergeConfig(reactConfig, {
     optimizeDeps: {
       esbuildOptions: {
-        plugins: [esbuildFlowPlugin()],
+        plugins: [esbuildFlowPlugin(new RegExp(/\.(flow|jsx?)$/), (_path: string) => 'jsx')],
       },
     },
   } satisfies InlineConfig);
