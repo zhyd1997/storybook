@@ -53,6 +53,7 @@
     "prep": "jiti ../../../scripts/prepare/bundle.ts"
   },
   "dependencies": {
+    "@bunchtogether/vite-plugin-flow": "^1.0.2",
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.2",
     "@storybook/builder-vite": "workspace:*",
     "@storybook/react": "workspace:*",
