@@ -93,6 +93,8 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
       const index = store.getState().index;
       invariant(index, 'The index is currently unavailable');
 
+      api.updateTestProviderState(id, { running: true, failed: false, crashed: false });
+
       const provider = store.getState().testProviders[id];
 
       const indexUrl = new URL('index.json', window.location.href).toString();
@@ -158,6 +160,7 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
             ...config,
             ...initialTestProviderState,
             ...(state?.testProviders?.[id] || {}),
+            running: false,
           } as TestProviders[0],
         ]
       )
