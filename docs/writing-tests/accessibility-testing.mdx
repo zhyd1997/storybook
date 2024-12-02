@@ -126,18 +126,7 @@ The accessibility addon provides seamless integration with Storybook's [test add
 
 If you enabled the addon and you're manually upgrading to Storybook 8.5 or later, you'll need to adjust your existing configuration (i.e., `.storybook/vitest.config.ts`) to enable the integration as follows:
 
-```diff
-// .storybook/vitest.config.ts
-+import * as a11yAddonAnnotations from '@storybook/addon-a11y/preview';
-
-const annotations = setProjectAnnotations([
-  previewAnnotations,
-+ a11yAddonAnnotations,
-]);
-
-// Run Storybook's beforeAll hook
-beforeAll(annotations.beforeAll);
-```
+<CodeSnippets path="storybook-addon-a11y-test-setup.md" />
 
 ### Override accessibility violation levels
 
