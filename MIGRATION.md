@@ -424,11 +424,11 @@
 
 ## From version 8.4.x to 8.5.x
 
-### Addon-a11y: Integration into `component tests`
+### Addon-a11y: Component test integration
 
-In Storybook 8.4, we have introduced a new addon called [addon test](https://storybook.js.org/docs/writing-tests/test-addon). This addon allows you to watch and run tests for all of your components in Storybook, featured by Vitest under the hood!
+In Storybook 8.4, we introduced a new addon called [addon test](https://storybook.js.org/docs/writing-tests/test-addon). Powered by Vitest under the hood, this addon lets you watch, run, and debug your component tests directly in Storybook.
 
-In 8.5, we have revamped the `addon-a11y` to integrate with the component tests feature. Now, you can run a11y tests for your components in Storybook using the `addon-a11y` in component tests. If you upgrade to 8.5 via `npx storybook@latest upgrade`, the `addon-a11y` will be automatically integrated into your component tests. If you update to 8.5 manually and you already have `@storybook/experimental-addon-test` installed, please make the following changes to your `.storybook/vitest.setup.ts` file:
+In Storybook 8.5, we revamped the Accessibility addon (`@storybook/addon-a11y`) to integrate it with the component tests feature. This means you can now extend your component tests to include accessibility tests. If you upgrade to Storybook 8.5 via `npx storybook@latest upgrade`, the Accessibility addon will be automatically configured to work with the component tests. However, if you're upgrading manually and you have the [addon test](https://storybook.js.org/docs/writing-tests/test-addon) installed, adjust your configuration as follows:
 
 ```diff
 // .storybook/vitest.config.ts
