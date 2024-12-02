@@ -166,19 +166,6 @@ export const TestProviderRender: FC<{
               />
             }
           />
-          <ListItem
-            as="label"
-            title="Accessibility"
-            icon={<AccessibilityIcon color={theme.textMutedColor} />}
-            right={
-              <Checkbox
-                type="checkbox"
-                disabled // TODO: Implement a11y
-                checked={config.a11y}
-                onChange={() => updateConfig({ a11y: !config.a11y })}
-              />
-            }
-          />
         </Extras>
       ) : (
         <Extras>
@@ -207,11 +194,6 @@ export const TestProviderRender: FC<{
               icon={<TestStatusIcon status="unknown" aria-label={`status: unknown`} />}
             />
           )}
-          <ListItem
-            title="Accessibility"
-            icon={<TestStatusIcon status="negative" aria-label="status: failed" />}
-            right={73}
-          />
         </Extras>
       )}
 
