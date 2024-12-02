@@ -8,7 +8,7 @@ const ERROR = `${ADDON_ID}/error`;
 const MANUAL = `${ADDON_ID}/manual`;
 
 export const DOCUMENTATION_LINK = 'writing-tests/accessibility-testing';
-export const DOCUMENTATION_DISCREPANCY_LINK = `${DOCUMENTATION_LINK}#what-happens-when-there-are-different-results-in-multiple-environments`;
+export const DOCUMENTATION_DISCREPANCY_LINK = `${DOCUMENTATION_LINK}#why-are-my-tests-failing-in-different-environments`;
 
 export const TEST_PROVIDER_ID = 'storybook/addon-a11y/test-provider';
 
