@@ -19,11 +19,14 @@ type TagsFilter = {
 };
 
 const isValidTest = (storyTags: string[], tagsFilter: TagsFilter) => {
-  const isIncluded =
-    tagsFilter?.include.length === 0 || tagsFilter?.include.some((tag) => storyTags.includes(tag));
-  const isNotExcluded = tagsFilter?.exclude.every((tag) => !storyTags.includes(tag));
-
-  return isIncluded && isNotExcluded;
+  if (tagsFilter.include.length && !tagsFilter.include.some((tag) => storyTags?.includes(tag))) {
+    return false;
+  }
+  if (tagsFilter.exclude.some((tag) => storyTags?.includes(tag))) {
+    return false;
+  }
+  // Skipped tests are intentionally included here
+  return true;
 };
 /**
  * TODO: the functionality in this file can be moved back to the vitest plugin itself It can use
@@ -201,10 +204,12 @@ export async function vitestTransform({
     ast.program.body.push(isRunningFromThisFileDeclaration);
 
     const getTestStatementForStory = ({
+      localName,
       exportName,
       testTitle,
       node,
     }: {
+      localName: string;
       exportName: string;
       testTitle: string;
       node: t.Node;
@@ -215,7 +220,7 @@ export async function vitestTransform({
           t.stringLiteral(testTitle),
           t.callExpression(testStoryId, [
             t.stringLiteral(exportName),
-            t.identifier(exportName),
+            t.identifier(localName),
             t.identifier(metaExportName),
             skipTagsId,
           ]),
@@ -241,9 +246,10 @@ export async function vitestTransform({
           return;
         }
 
+        const localName = parsed._stories[exportName].localName ?? exportName;
         // use the story's name as the test title for vitest, and fallback to exportName
         const testTitle = parsed._stories[exportName].name ?? exportName;
-        return getTestStatementForStory({ testTitle, exportName, node });
+        return getTestStatementForStory({ testTitle, localName, exportName, node });
       })
       .filter((st) => !!st) as t.ExpressionStatement[];
 
