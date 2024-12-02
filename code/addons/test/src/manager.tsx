@@ -80,7 +80,7 @@ addons.register(ADDON_ID, (api) => {
         api.experimental_updateStatus(
           TEST_PROVIDER_ID,
           Object.fromEntries(
-            state.details.testResults.flatMap((testResult) =>
+            update.details.testResults.flatMap((testResult) =>
               testResult.results
                 .filter(({ storyId }) => storyId)
                 .map(({ storyId, status, testRunId, ...rest }) => [
