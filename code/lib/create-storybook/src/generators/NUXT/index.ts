@@ -6,7 +6,7 @@ const generator: Generator = async (packageManager, npmOptions, options) => {
     packageManager,
     npmOptions,
     options,
-    'nuxt',
+    'vue3',
     {
       extraPackages: async () => {
         return ['@nuxtjs/storybook'];

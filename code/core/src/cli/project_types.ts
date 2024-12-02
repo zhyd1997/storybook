@@ -1,5 +1,5 @@
 import type {
-  SupportedRenderers as CoreSupportedFrameworks,
+  SupportedRenderers as CoreSupportedRenderers,
   SupportedFrameworks,
 } from '@storybook/core/types';
 
@@ -24,11 +24,16 @@ export type ExternalFramework = {
 export const externalFrameworks: ExternalFramework[] = [
   { name: 'qwik', packageName: 'storybook-framework-qwik' },
   { name: 'solid', frameworks: ['storybook-solidjs-vite'], renderer: 'storybook-solidjs' },
-  { name: 'nuxt', packageName: '@storybook-vue/nuxt' },
+  {
+    name: 'nuxt',
+    packageName: '@storybook-vue/nuxt',
+    frameworks: ['@storybook-vue/nuxt'],
+    renderer: '@storybook/vue3',
+  },
 ];
 
-/** @deprecated Please use `SupportedFrameworks` from `@storybook/types` instead */
-export type SupportedRenderers = CoreSupportedFrameworks;
+/** @deprecated Please use `SupportedRenderers` from `@storybook/types` instead */
+export type SupportedRenderers = CoreSupportedRenderers;
 
 export const SUPPORTED_RENDERERS: SupportedRenderers[] = [
   'react',

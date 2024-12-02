@@ -1,14 +1,14 @@
 import { mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
-import type { NpmOptions } from 'storybook/internal/cli';
-import type { Builder, SupportedRenderers } from 'storybook/internal/cli';
+import type { Builder, NpmOptions } from 'storybook/internal/cli';
 import { SupportedLanguage, externalFrameworks } from 'storybook/internal/cli';
 import { copyTemplateFiles } from 'storybook/internal/cli';
 import { configureEslintPlugin, extractEslintInfo } from 'storybook/internal/cli';
 import { detectBuilder } from 'storybook/internal/cli';
 import type { JsPackageManager } from 'storybook/internal/common';
 import { getPackageDetails, versions as packageVersions } from 'storybook/internal/common';
+import type { SupportedRenderers } from 'storybook/internal/types';
 import type { SupportedFrameworks } from 'storybook/internal/types';
 
 // eslint-disable-next-line depend/ban-dependencies
@@ -84,13 +84,10 @@ const getFrameworkPackage = (framework: string | undefined, renderer: string, bu
     );
   }
 
-  if (externalFramework.frameworks !== undefined) {
-    return externalFramework.frameworks.find((item) =>
-      item.match(new RegExp(`-${storybookBuilder}`))
-    );
-  }
-
-  return externalFramework.packageName;
+  return (
+    externalFramework.frameworks?.find((item) => item.match(new RegExp(`-${storybookBuilder}`))) ??
+    externalFramework.packageName
+  );
 };
 
 const getRendererPackage = (framework: string | undefined, renderer: string) => {
@@ -119,6 +116,7 @@ const getFrameworkDetails = (
   framework?: string;
   renderer?: string;
   rendererId: SupportedRenderers;
+  frameworkPackage?: string;
 } => {
   const frameworkPackage = getFrameworkPackage(framework, renderer, builder);
   invariant(frameworkPackage, 'Missing framework package.');
@@ -146,6 +144,7 @@ const getFrameworkDetails = (
     return {
       packages: [rendererPackage, frameworkPackage],
       framework: frameworkPackagePath,
+      frameworkPackage,
       rendererId: renderer,
       type: 'framework',
     };
@@ -171,8 +170,18 @@ const stripVersions = (addons: string[]) => addons.map((addon) => getPackageDeta
 const hasInteractiveStories = (rendererId: SupportedRenderers) =>
   ['react', 'angular', 'preact', 'svelte', 'vue3', 'html', 'solid', 'qwik'].includes(rendererId);
 
-const hasFrameworkTemplates = (framework?: SupportedFrameworks) =>
-  framework ? ['angular', 'nextjs'].includes(framework) : false;
+const hasFrameworkTemplates = (framework?: SupportedFrameworks) => {
+  if (!framework) {
+    return false;
+  }
+  // Nuxt has framework templates, but for sandboxes we create them from the Vue3 renderer
+  // As the Nuxt framework templates are not compatible with the stories we need for CI.
+  // See: https://github.com/storybookjs/storybook/pull/28607#issuecomment-2467903327
+  if (framework === 'nuxt') {
+    return process.env.IN_STORYBOOK_SANDBOX !== 'true';
+  }
+  return ['angular', 'nextjs'].includes(framework);
+};
 
 export async function baseGenerator(
   packageManager: JsPackageManager,
@@ -195,6 +204,7 @@ export async function baseGenerator(
     rendererId,
     framework: frameworkInclude,
     builder: builderInclude,
+    frameworkPackage,
   } = getFrameworkDetails(
     renderer,
     builder,
@@ -360,6 +370,7 @@ export async function baseGenerator(
         name: frameworkInclude,
         options: options.framework || {},
       },
+      frameworkPackage,
       prefixes,
       storybookConfigFolder,
       addons: shouldApplyRequireWrapperOnPackageNames
