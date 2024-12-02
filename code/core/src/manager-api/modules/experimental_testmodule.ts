@@ -60,6 +60,7 @@ export const init: ModuleFn<SubAPI, SubState> = ({ store, fullAPI }) => {
           const updatedState = currentState.stateUpdater?.(currentState, update) ?? {
             ...currentState,
             ...update,
+            details: { ...currentState.details, ...update.details },
           };
           return { testProviders: { ...testProviders, [id]: updatedState } };
         },
