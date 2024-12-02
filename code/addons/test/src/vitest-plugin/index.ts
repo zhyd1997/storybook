@@ -109,6 +109,12 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       };
 
       if (config.test.browser) {
+        config.define ??= {
+          ...config.define,
+          // polyfilling process.env.VITEST_STORYBOOK to 'false' in the browser
+          'process.env.VITEST_STORYBOOK': JSON.stringify('false'),
+        };
+
         config.test.browser.screenshotFailures ??= false;
 
         config.test.browser.commands ??= {
