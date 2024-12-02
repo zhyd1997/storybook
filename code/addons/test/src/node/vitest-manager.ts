@@ -86,13 +86,9 @@ export class VitestManager {
       const isV8 = e.message?.includes('@vitest/coverage-v8');
       const isIstanbul = e.message?.includes('@vitest/coverage-istanbul');
 
-      console.log('HELLO');
-
-      if (e.message?.includes('Failed to load url') && (isIstanbul || isV8)) {
+      if (e.message?.includes('Error: Failed to load url') && (isIstanbul || isV8)) {
         const coveragePackage = isIstanbul ? 'coverage-istanbul' : 'coverage-v8';
         e.message = `Please install the @vitest/${coveragePackage} package to run with coverage`;
-        this.testManager.reportFatalError('Failed to change coverage mode', e);
-        return;
       }
 
       this.testManager.reportFatalError('Failed to init Vitest', e);
