@@ -273,6 +273,8 @@ export class VitestManager {
     this.updateLastChanged(id);
     this.storyCountForCurrentRun = 0;
 
+    // when watch mode is disabled, don't trigger any tests (below)
+    // but still invalidate the cache for the changed file, which is handled above
     if (!this.testManager.watchMode) {
       return;
     }

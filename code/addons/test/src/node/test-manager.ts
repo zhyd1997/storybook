@@ -70,10 +70,10 @@ export class TestManager {
     try {
       if (payload.watchMode && this.coverage) {
         // if watch mode is toggled on and coverage is already enabled, restart vitest without coverage to automatically disable it
-        this.restartVitest({ coverage: false });
+        await this.restartVitest({ coverage: false });
       } else if (!payload.watchMode && this.coverage) {
         // if watch mode is toggled off and coverage is already enabled, restart vitest with coverage to automatically re-enable it
-        this.restartVitest({ coverage: this.coverage });
+        await this.restartVitest({ coverage: this.coverage });
       }
     } catch (e) {
       this.reportFatalError('Failed to change watch mode', e);
@@ -93,7 +93,8 @@ export class TestManager {
         If we're only running a subset of stories, we have to temporarily disable coverage,
         as a coverage report for a subset of stories is not useful.
       */
-      const temporarilyDisableCoverage = this.coverage && (payload.storyIds ?? []).length === 0;
+      const temporarilyDisableCoverage =
+        this.coverage && !this.watchMode && (payload.storyIds ?? []).length > 0;
       if (temporarilyDisableCoverage) {
         await this.restartVitest({
           coverage: false,
