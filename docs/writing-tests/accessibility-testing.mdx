@@ -160,34 +160,21 @@ export default {
 
 In this example, all violations with an impact level of `minor` or `moderate` will be considered as warnings. All other violations will be considered as errors. When running automated UI tests featured by Vitest, all violations with an impact level of `serious` or `critical` will now fail the test. This failure is reflected as an error in the sidebar or when running Vitest separately. `minor` and `moderate` violations will be reported as warnings but will not fail the test.
 
-### How to not get overwhelmed by a11y violations in addon-test
+### Configure accessibility tests with the test addon
 
-Accessibility testing can be overwhelming, especially when you have a large number of stories and you have just started to use the a11y addon in combination with the test addon.
+If you want to run accessibility tests only for a subset of your stories, you can use the [tags](../writing-stories/tags.mdx) mechanism to filter the tests you want to run with the test addon. For example, to turn off accessibility tests for a specific story, add the `!a11ytest` tag to the story's meta or directly to the story's `tags` configuration option. For example:
 
-You can disable accessibility tests which are running via the test addon for all of your stories at once. Just set the `!a11ytest` tag in your preview file:
-  
-```js
-// .storybook/preview.js
-export const tags = ['!a11ytest'];
-```
+{/* prettier-ignore-start */}
 
-Now you can step-by-step enable accessibility tests for your stories by adding the `a11ytest` tag to the stories' meta or by adding the `a11ytest` tag to the story's tags directly:
+<CodeSnippets path="storybook-test-addon-disable-tests.md" />
 
-```js
-// Button.stories.js
-export default {
-  title: 'Button',
-  component: Button,
-  // add the tag to the meta to enable accessibility checks for all of your stories
-  tags: ['a11ytest'],
-};
+{/* prettier-ignore-end */}
 
-export const Primary = {
-  // add the tag to story itself to just enable the accessibility check for this story
-  tags: ['a11ytest'],
-  ...
-}
-```
+<Callout variant="info">
+
+  Tags can be applied at the project, component (meta), or story levels. Read our [documentation](../writing-stories/tags.mdx) for more information on configuring tags. 
+ 
+</Callout>
 
 ## Troubleshooting
 
