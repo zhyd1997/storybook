@@ -139,26 +139,17 @@ const annotations = setProjectAnnotations([
 beforeAll(annotations.beforeAll);
 ```
 
-### Violation impact levels
+### Override accessibility violation levels
 
-By default, the addon will consider all violations as errors. However, you can configure the addon to consider some violations as warnings instead of errors. This can be useful when `@storybook/addon-a11y` is used in combination with `@storybook/experimental-addon-test`. To do this, set the `warnings` parameter in the `a11y` object to an array of impact levels that should be considered as warnings.
+By default, when the accessibility addon runs with the test addon enabled, it interprets all violations as errors. This means that if a story has a minor accessibility violation, the test will fail. However, you can override this behavior by setting the `warnings` parameter in the `a11y` configuration object to define an array of impact levels that should be considered warnings.
 
-```js
-export default {
-  title: 'button',
-  parameters: {
-    a11y: {
-      /**
-       * @default [ ]
-       * @type: Array<'minor' | 'moderate' | 'serious' | 'critical'>
-       */
-      warnings: ['minor', 'moderate'],
-    },
-  },
-};
-```
+{/* prettier-ignore-start */}
 
-In this example, all violations with an impact level of `minor` or `moderate` will be considered as warnings. All other violations will be considered as errors. When running automated UI tests featured by Vitest, all violations with an impact level of `serious` or `critical` will now fail the test. This failure is reflected as an error in the sidebar or when running Vitest separately. `minor` and `moderate` violations will be reported as warnings but will not fail the test.
+<CodeSnippets path="storybook-test-override-warning-levels.md" />
+
+{/* prettier-ignore-end */}
+
+In the example above, we configured all the `minor` or `moderate` accessibility violations to be considered warnings. All other levels (i.e., `serious` or `critical`) will continue to be considered errors, fail the test, and report the results accordingly in the Storybook UI or Vitest.
 
 ### Configure accessibility tests with the test addon
 
