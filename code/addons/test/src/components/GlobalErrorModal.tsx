@@ -49,7 +49,7 @@ export const GlobalErrorContext = React.createContext<{
 }>({
   isModalOpen: false,
   setModalOpen: () => {},
-  error: '',
+  error: undefined,
 });
 
 interface GlobalErrorModalProps {
