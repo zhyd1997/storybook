@@ -15,7 +15,7 @@ export const Title = ({
 }: { state: TestProviderConfig & TestProviderState } & ComponentProps<typeof Wrapper>) => {
   return (
     <Wrapper crashed={state.crashed} {...props}>
-      {state.crashed || state.failed ? 'Component tests failed' : 'Component tests'}
+      {state.crashed || state.failed ? 'Local tests failed' : 'Run local tests'}
     </Wrapper>
   );
 };
