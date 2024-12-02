@@ -191,11 +191,11 @@ export const Primary = {
 }
 ```
 
-### What happens when there are different results in multiple environments
+## Troubleshooting
 
-When you run tests with the `@storybook/experimental-addon-test`, they are run as Vitest tests with whatever configuration you have set up in your project. By default, they will run in browser mode, using Playwright's Chromium browser. Sometimes, tests will fail when run in the addon (or via CLI), but then pass when viewed in the Component tests addon panel (or vice versa). This can happen because the tests are run in different environments, which can have different behaviors.
+### Why are my tests failing in different environments?
 
-We are using `axe-core` under the hood and it can happen, that axe-core is reporting different results in different environments. This can be due to different browser versions or different browser configurations. If you encounter this issue, please let us know and open an issue on [GitHub](https://github.com/storybookjs/storybook/issues).
+If you enabled the experimental test addon (i.e.,`@storybook/experimental-addon-test`), your tests run in Vitest using your project's configuration with Playwright's Chromium browser. This can lead to inconsistent test results reported in the Storybook UI or CLI. The inconsistency can be due to `axe-core` reporting different results in different environments, such as browser versions or configurations. If you encounter this issue, we recommend reaching out using the default communication channels (e.g., [GitHub discussions](https://github.com/storybookjs/storybook/discussions/new?category=help), [Github issues](https://github.com/storybookjs/storybook/issues/new?template=bug_report.yml)).
 
 ## Automate accessibility tests with test runner
 
