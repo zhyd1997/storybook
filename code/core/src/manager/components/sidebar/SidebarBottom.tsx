@@ -122,7 +122,7 @@ export const SidebarBottomBase = ({
   useEffect(() => {
     const onCrashReport = ({ providerId, ...details }: TestingModuleCrashReportPayload) => {
       api.updateTestProviderState(providerId, {
-        details,
+        error: { name: 'Crashed!', message: details.error.message },
         running: false,
         crashed: true,
         watching: false,
@@ -130,18 +130,13 @@ export const SidebarBottomBase = ({
     };
 
     const onProgressReport = ({ providerId, ...result }: TestingModuleProgressReportPayload) => {
-      if (result.status === 'failed') {
-        api.updateTestProviderState(providerId, { ...result, running: false, failed: true });
-      } else {
-        const update = { ...result, running: result.status === 'pending' };
-        api.updateTestProviderState(providerId, update);
-
-        const { mapStatusUpdate, ...state } = testProviders[providerId];
-        const statusUpdate = mapStatusUpdate?.({ ...state, ...update });
-        if (statusUpdate) {
-          api.experimental_updateStatus(providerId, statusUpdate);
-        }
-      }
+      const statusResult = 'status' in result ? result.status : undefined;
+      api.updateTestProviderState(
+        providerId,
+        statusResult === 'failed'
+          ? { ...result, running: false, failed: true }
+          : { ...result, running: statusResult === 'pending' }
+      );
     };
 
     api.on(TESTING_MODULE_CRASH_REPORT, onCrashReport);
