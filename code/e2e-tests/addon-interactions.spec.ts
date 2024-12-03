@@ -1,17 +1,17 @@
 import { expect, test } from '@playwright/test';
 import process from 'process';
 
-import { SbPage } from './util';
+import { SbPage, hasVitestIntegration } from './util';
 
 const storybookUrl = process.env.STORYBOOK_URL || 'http://localhost:8001';
 const templateName = process.env.STORYBOOK_TEMPLATE_NAME || '';
 
 test.describe('addon-interactions', () => {
-  // TODO: fix the skip statement below when we introduce a sandbox that tests interactions
   test.skip(
-    templateName !== 'todo-sandbox-with-addon-interactions',
+    hasVitestIntegration,
     `Skipping ${templateName}, which does not have addon-interactions set up.`
   );
+
   test.beforeEach(async ({ page }) => {
     await page.goto(storybookUrl);
     await new SbPage(page, expect).waitUntilLoaded();
@@ -22,6 +22,10 @@ test.describe('addon-interactions', () => {
     test.skip(
       /^(lit)/i.test(`${templateName}`),
       `Skipping ${templateName}, which does not support addon-interactions`
+    );
+    test.skip(
+      templateName.includes('react-native-web'),
+      'React Native does not use className locators'
     );
 
     const sbPage = new SbPage(page, expect);

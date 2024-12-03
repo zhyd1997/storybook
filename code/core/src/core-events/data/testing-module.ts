@@ -1,33 +1,30 @@
 import type { Addon_TestProviderState, Addon_TestProviderType } from '@storybook/core/types';
 
+type DateNow = number;
+
 export type TestProviderId = Addon_TestProviderType['id'];
 export type TestProviderConfig = Addon_TestProviderType;
-export type TestProviderState = Addon_TestProviderState;
+export type TestProviderState<
+  Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = Addon_TestProviderState<Details, Config>;
 
 export type TestProviders = Record<TestProviderId, TestProviderConfig & TestProviderState>;
 
-export type TestingModuleRunRequestStories = {
-  id: string;
-  name: string;
-};
-
-export type TestingModuleRunRequestPayload = {
+export type TestingModuleRunRequestPayload<
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = {
   providerId: TestProviderId;
-  payload: {
-    stories: TestingModuleRunRequestStories[];
-    importPath: string;
-    componentPath: string;
-  }[];
-};
-
-export type TestingModuleRunAllRequestPayload = {
-  providerId: TestProviderId;
+  // TODO: Avoid needing to do a fetch request server-side to retrieve the index
+  indexUrl: string; // e.g. http://localhost:6006/index.json
+  storyIds?: string[]; // ['button--primary', 'button--secondary']
+  config?: Config;
 };
 
 export type TestingModuleProgressReportPayload =
   | {
       providerId: TestProviderId;
-      status: 'success' | 'pending';
+      status: 'success' | 'pending' | 'cancelled';
       cancellable?: boolean;
       progress?: TestingModuleProgressReportProgress;
       details?: { [key: string]: any };
@@ -35,21 +32,29 @@ export type TestingModuleProgressReportPayload =
   | {
       providerId: TestProviderId;
       status: 'failed';
+      progress?: TestingModuleProgressReportProgress;
+      details?: { [key: string]: any };
       error: {
         name: string;
         message: string;
         stack?: string;
       };
+    }
+  | {
+      providerId: TestProviderId;
+      details: { [key: string]: any };
     };
 
 export type TestingModuleCrashReportPayload = {
   providerId: TestProviderId;
-  message: string;
+  error: {
+    message: string;
+  };
 };
 
 export type TestingModuleProgressReportProgress = {
-  startedAt: Date;
-  finishedAt?: Date;
+  startedAt: DateNow;
+  finishedAt?: DateNow;
   numTotalTests?: number;
   numPassedTests?: number;
   numFailedTests?: number;
@@ -72,7 +77,17 @@ export type TestingModuleCancelTestRunResponsePayload =
       message: string;
     };
 
-export type TestingModuleWatchModeRequestPayload = {
+export type TestingModuleWatchModeRequestPayload<
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = {
   providerId: TestProviderId;
   watchMode: boolean;
+  config?: Config;
+};
+
+export type TestingModuleConfigChangePayload<
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = {
+  providerId: TestProviderId;
+  config: Config;
 };

@@ -49,11 +49,14 @@ test.describe("component testing", () => {
 
     await sbPage.navigateToStory("addons/test", "Mismatch Failure");
 
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
     // For whatever reason, sometimes it takes longer for the story to load
     const storyElement = sbPage
       .getCanvasBodyElement()
       .getByRole("button", { name: "test" });
-    await expect(storyElement).toBeVisible({ timeout: 10000 });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
 
     await sbPage.viewAddonPanel("Component tests");
 
@@ -66,12 +69,20 @@ test.describe("component testing", () => {
       testStoryElement.click();
     }
 
-    // TODO: This is just temporary, the UI will be different
-    await page.locator("#addons").getByRole("button").nth(2).click();
+    const testingModuleDescription = await page.locator('#testing-module-description');
+
+    await expect(testingModuleDescription).toContainText('Not run');
+
+    const runTestsButton = await page.getByLabel('Start component tests')
+    await runTestsButton.click();
+
+    await expect(testingModuleDescription).toContainText('Testing', { timeout: 60000 });
 
     // Wait for test results to appear
-    const errorFilter = page.getByLabel("Show errors");
-    await expect(errorFilter).toBeVisible({ timeout: 30000 });
+    await expect(testingModuleDescription).toHaveText(/Ran \d+ tests/, { timeout: 60000 });
+
+    const errorFilter = page.getByLabel("Toggle errors");
+    await expect(errorFilter).toBeVisible();
 
     // Assert discrepancy: CLI pass + Browser fail
     const failingStoryElement = page.locator(
@@ -109,18 +120,39 @@ test.describe("component testing", () => {
     const sbPage = new SbPage(page, expect);
     await sbPage.navigateToStory("addons/test", "Expected Failure");
 
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
     // For whatever reason, sometimes it takes longer for the story to load
     const storyElement = sbPage
       .getCanvasBodyElement()
       .getByRole("button", { name: "test" });
-    await expect(storyElement).toBeVisible({ timeout: 10000 });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
 
-    // TODO: This is just temporary, the UI will be different
-    await page.locator("#addons").getByRole("button").nth(2).click();
+    await expect(page.locator('#testing-module-title')).toHaveText('Run local tests');
+
+    const testingModuleDescription = await page.locator('#testing-module-description');
+
+    await expect(testingModuleDescription).toContainText('Not run');
+
+    const runTestsButton = await page.getByLabel('Start component tests')
+    const watchModeButton = await page.getByLabel('Enable watch mode for Component tests')
+    await expect(runTestsButton).toBeEnabled();
+    await expect(watchModeButton).toBeEnabled();
+
+    await runTestsButton.click();
+    await expect(watchModeButton).toBeDisabled();
+
+    await expect(testingModuleDescription).toContainText('Testing');
 
     // Wait for test results to appear
-    const errorFilter = page.getByLabel("Show errors");
-    await expect(errorFilter).toBeVisible({ timeout: 30000 });
+    await expect(testingModuleDescription).toHaveText(/Ran \d+ tests/, { timeout: 30000 });
+
+    await expect(runTestsButton).toBeEnabled();
+    await expect(watchModeButton).toBeEnabled();
+
+    const errorFilter = page.getByLabel("Toggle errors");
+    await expect(errorFilter).toBeVisible();
 
     // Assert for expected success
     const successfulStoryElement = page.locator(
@@ -149,7 +181,7 @@ test.describe("component testing", () => {
     await expect(sidebarItems).toHaveCount(1);
   });
 
-  test("should execute tests via testing module UI watch mode", async ({
+  test("should execute watch mode tests via testing module UI", async ({
     page,
     browserName,
   }) => {
@@ -159,13 +191,16 @@ test.describe("component testing", () => {
     const sbPage = new SbPage(page, expect);
     await sbPage.navigateToStory("addons/test", "Expected Failure");
 
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
     // For whatever reason, sometimes it takes longer for the story to load
     const storyElement = sbPage
       .getCanvasBodyElement()
       .getByRole("button", { name: "test" });
-    await expect(storyElement).toBeVisible({ timeout: 10000 });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
 
-    await page.getByLabel("Toggle watch mode").click();
+    await page.getByLabel("Enable watch mode for Component tests").click();
 
     // We shouldn't have to do an arbitrary wait, but because there is no UI for loading state yet, we have to
     await page.waitForTimeout(8000);
@@ -173,7 +208,7 @@ test.describe("component testing", () => {
     await setForceFailureFlag(true);
 
     // Wait for test results to appear
-    const errorFilter = page.getByLabel("Show errors");
+    const errorFilter = page.getByLabel("Toggle errors");
     await expect(errorFilter).toBeVisible({ timeout: 30000 });
 
     // Assert for expected success

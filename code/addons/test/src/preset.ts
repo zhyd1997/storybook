@@ -1,20 +1,26 @@
 import { readFileSync } from 'node:fs';
-import { isAbsolute, join } from 'node:path';
+import { mkdir } from 'node:fs/promises';
 
 import type { Channel } from 'storybook/internal/channels';
-import { checkAddonOrder, getFrameworkName, serverRequire } from 'storybook/internal/common';
 import {
-  TESTING_MODULE_RUN_ALL_REQUEST,
+  checkAddonOrder,
+  getFrameworkName,
+  resolvePathInStorybookCache,
+  serverRequire,
+} from 'storybook/internal/common';
+import {
+  TESTING_MODULE_CONFIG_CHANGE,
   TESTING_MODULE_RUN_REQUEST,
   TESTING_MODULE_WATCH_MODE_REQUEST,
 } from 'storybook/internal/core-events';
 import { oneWayHash, telemetry } from 'storybook/internal/telemetry';
-import type { Options, StoryId } from 'storybook/internal/types';
+import type { Options, PresetProperty, PresetPropertyFn, StoryId } from 'storybook/internal/types';
 
+import { isAbsolute, join } from 'pathe';
 import picocolors from 'picocolors';
 import { dedent } from 'ts-dedent';
 
-import { STORYBOOK_ADDON_TEST_CHANNEL } from './constants';
+import { COVERAGE_DIRECTORY, STORYBOOK_ADDON_TEST_CHANNEL, TEST_PROVIDER_ID } from './constants';
 import { log } from './logger';
 import { runTestRunner } from './node/boot-test-runner';
 
@@ -59,23 +65,24 @@ export const experimental_serverChannel = async (channel: Channel, options: Opti
         Information on how to upgrade here: ${picocolors.yellow('https://storybook.js.org/docs/get-started/frameworks/nextjs#with-vite')}\n
       `);
     }
-
     return channel;
   }
 
   const execute =
     (eventName: string) =>
     (...args: any[]) => {
-      runTestRunner(channel, eventName, args);
+      if (args[0]?.providerId === TEST_PROVIDER_ID) {
+        runTestRunner(channel, eventName, args);
+      }
     };
 
-  channel.on(TESTING_MODULE_RUN_ALL_REQUEST, execute(TESTING_MODULE_RUN_ALL_REQUEST));
   channel.on(TESTING_MODULE_RUN_REQUEST, execute(TESTING_MODULE_RUN_REQUEST));
   channel.on(TESTING_MODULE_WATCH_MODE_REQUEST, (payload) => {
     if (payload.watchMode) {
       execute(TESTING_MODULE_WATCH_MODE_REQUEST)(payload);
     }
   });
+  channel.on(TESTING_MODULE_CONFIG_CHANGE, execute(TESTING_MODULE_CONFIG_CHANGE));
 
   if (!core.disableTelemetry) {
     const packageJsonPath = require.resolve('@storybook/experimental-addon-test/package.json');
@@ -98,4 +105,50 @@ export const experimental_serverChannel = async (channel: Channel, options: Opti
   }
 
   return channel;
+};
+
+export const previewAnnotations: PresetProperty<'previewAnnotations'> = async (
+  entry = [],
+  options
+) => {
+  checkActionsLoaded(options.configDir);
+  return entry;
+};
+
+export const managerEntries: PresetProperty<'managerEntries'> = async (entry = [], options) => {
+  // Throw an error when addon-interactions is used.
+  // This is done by reading an annotation defined in addon-interactions, which although not ideal,
+  // is a way to handle addon conflict without having to worry about the order of which they are registered
+  const annotation = await options.presets.apply('ADDON_INTERACTIONS_IN_USE', false);
+  if (annotation) {
+    // eslint-disable-next-line local-rules/no-uncategorized-errors
+    const error = new Error(
+      dedent`
+        You have both "@storybook/addon-interactions" and "@storybook/experimental-addon-test" listed as addons in your Storybook config. This is not allowed, as @storybook/experimental-addon-test is a replacement for @storybook/addon-interactions.
+
+        Please remove "@storybook/addon-interactions" from the addons array in your main Storybook config at ${options.configDir} and remove the dependency from your package.json file.
+      `
+    );
+    error.name = 'AddonConflictError';
+    throw error;
+  }
+
+  // for whatever reason seems like the return type of managerEntries is not correct (it expects never instead of string[])
+  return entry as never;
+};
+
+export const staticDirs: PresetPropertyFn<'staticDirs'> = async (values = [], options) => {
+  if (options.configType === 'PRODUCTION') {
+    return values;
+  }
+
+  const coverageDirectory = resolvePathInStorybookCache(COVERAGE_DIRECTORY);
+  await mkdir(coverageDirectory, { recursive: true });
+  return [
+    {
+      from: coverageDirectory,
+      to: '/coverage',
+    },
+    ...values,
+  ];
 };

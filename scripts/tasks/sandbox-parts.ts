@@ -22,11 +22,7 @@ import dedent from 'ts-dedent';
 import { babelParse } from '../../code/core/src/babel/babelParse';
 import { detectLanguage } from '../../code/core/src/cli/detect';
 import { SupportedLanguage } from '../../code/core/src/cli/project_types';
-import {
-  JsPackageManagerFactory,
-  removeAddon,
-  versions as storybookPackages,
-} from '../../code/core/src/common';
+import { JsPackageManagerFactory, versions as storybookPackages } from '../../code/core/src/common';
 import type { ConfigFile } from '../../code/core/src/csf-tools';
 import { writeConfig } from '../../code/core/src/csf-tools';
 import type { TemplateKey } from '../../code/lib/cli-storybook/src/sandbox-templates';
@@ -93,7 +89,7 @@ export const install: Task['run'] = async ({ sandboxDir, key }, { link, dryRun, 
       dryRun,
       debug,
     });
-    await addWorkaroundResolutions({ cwd, dryRun, debug });
+    await addWorkaroundResolutions({ cwd, dryRun, debug, key });
   } else {
     // We need to add package resolutions to ensure that we only ever install the latest version
     // of any storybook packages as verdaccio is not able to both proxy to npm and publish over
@@ -114,7 +110,7 @@ export const install: Task['run'] = async ({ sandboxDir, key }, { link, dryRun, 
       'vue3-vite/default-js',
       'vue3-vite/default-ts',
     ];
-    if (sandboxesNeedingWorkarounds.includes(key)) {
+    if (sandboxesNeedingWorkarounds.includes(key) || key.includes('vite')) {
       await addWorkaroundResolutions({ cwd, dryRun, debug });
     }
 
@@ -142,6 +138,8 @@ export const init: Task['run'] = async (
     extra = { type: 'html' };
   } else if (template.expected.renderer === '@storybook/server') {
     extra = { type: 'server' };
+  } else if (template.expected.framework === '@storybook/react-native-web-vite') {
+    extra = { type: 'react_native_web' };
   }
 
   await executeCLIStep(steps.init, {
@@ -181,8 +179,13 @@ export const init: Task['run'] = async (
 
   if (!skipTemplateStories) {
     for (const addon of addons) {
-      const addonName = `@storybook/addon-${addon}`;
-      await executeCLIStep(steps.add, { argument: addonName, cwd, dryRun, debug });
+      await executeCLIStep(steps.add, {
+        argument: addon,
+        cwd,
+        dryRun,
+        debug,
+        optionValues: { yes: true },
+      });
     }
   }
 };
@@ -395,13 +398,6 @@ const getVitestPluginInfo = (details: TemplateDetails) => {
 
 export async function setupVitest(details: TemplateDetails, options: PassedOptionValues) {
   const { sandboxDir, template } = details;
-  // Remove interactions addon to avoid issues with Vitest
-  // TODO: add an if statement when we introduce a sandbox that tests interactions
-  await removeAddon('@storybook/addon-interactions', {
-    cwd: details.sandboxDir,
-    configDir: join(details.sandboxDir, '.storybook'),
-  });
-
   const packageJsonPath = join(sandboxDir, 'package.json');
   const packageJson = await readJson(packageJsonPath);
 
@@ -802,9 +798,6 @@ export const extendMain: Task['run'] = async ({ template, sandboxDir, key }, { d
     updatedStories = updatedStories.filter((specifier) => !specifier.endsWith('.mdx'));
     mainConfig.setFieldValue(['stories'], updatedStories);
   }
-
-  const addons = mainConfig.getFieldValue(['addons']);
-  mainConfig.setFieldValue(['addons'], [...addons, '@storybook/experimental-addon-test']);
 
   if (template.expected.builder === '@storybook/builder-vite') {
     setSandboxViteFinal(mainConfig);
