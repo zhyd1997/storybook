@@ -1,4 +1,4 @@
-```md renderer="common" language="mdx"
+````js renderer="common" language="mdx"
 {/* MyComponent.mdx */}
 
 import { Meta } from '@storybook/blocks';
@@ -20,4 +20,4 @@ font: 100% $font-stack;
   color: $primary-color;
 }
 "
-```
+````

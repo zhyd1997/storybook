@@ -14,7 +14,7 @@ export function CustomDocumentationComponent() {
 }
 ```
 
-```md renderer="common" language="mdx"
+```jsx renderer="common" language="mdx"
 {/* Custom-MDX-Documentation.mdx */}
 
 # Replacing DocsPage with custom `MDX` content
@@ -76,6 +76,7 @@ If you didn't include the title in the story's default export, use this approach
 
 <Story id="your-directory-button--small" />
 ```
+
 ```ts filename="CustomDocumentationComponent.ts|tsx" renderer="common" language="ts" tabTitle="ts-component"
 export const CustomDocumentationComponent: React.FC = () => {
   return (
@@ -89,4 +90,3 @@ export const CustomDocumentationComponent: React.FC = () => {
   );
 };
 ```
-

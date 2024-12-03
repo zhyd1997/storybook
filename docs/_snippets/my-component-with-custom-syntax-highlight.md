@@ -1,4 +1,4 @@
-````md renderer="common" language="mdx"
+````jsx renderer="common" language="mdx"
 {/* MyComponent.mdx */}
 
 import { Meta } from '@storybook/blocks';
@@ -28,4 +28,3 @@ export const Component = () => {
   return <SyntaxHighlighter/>;
 };
 ````
-
