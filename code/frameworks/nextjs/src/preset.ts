@@ -170,10 +170,7 @@ export const webpackFinal: StorybookConfig['webpackFinal'] = async (baseConfig, 
 
   configureNextFont(baseConfig, useSWC);
   configureRuntimeNextjsVersionResolution(baseConfig);
-  configureImports({
-    baseConfig,
-    configDir: options.configDir,
-  });
+  configureImports({ baseConfig, configDir: options.configDir });
   configureCss(baseConfig, nextConfig);
   configureImages(baseConfig, nextConfig);
   configureStyledJsx(baseConfig);
