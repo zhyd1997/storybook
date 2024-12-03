@@ -1,4 +1,5 @@
-```jsx filename="DocumentationTemplate.mdx" renderer="common" language="mdx"
+<!-- prettier-ignore -->
+```mdx filename="DocumentationTemplate.mdx" renderer="common" language="mdx"
 import { Meta, Title, Primary, Controls, Stories } from '@storybook/blocks';
 
 {/*

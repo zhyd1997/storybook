@@ -14,9 +14,8 @@ export function CustomDocumentationComponent() {
 }
 ```
 
-```jsx renderer="common" language="mdx"
-{/* Custom-MDX-Documentation.mdx */}
-
+<!-- prettier-ignore -->
+```mdx filename="Custom-MDX-Documentation.mdx" renderer="common" language="mdx"
 # Replacing DocsPage with custom `MDX` content
 
 This file is a documentation-only `MDX`file to customize Storybook's [DocsPage](https://storybook.js.org/docs/writing-docs/docs-page#replacing-docspage).

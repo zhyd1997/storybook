@@ -1,6 +1,5 @@
-````js renderer="common" language="mdx"
-{/* MyComponent.mdx */}
-
+<!-- prettier-ignore -->
+```mdx filename="MyComponent.mdx" renderer="common" language="mdx"
 import { Meta } from '@storybook/blocks';
 
 <Meta title="A storybook story with syntax highlight registered globally" />
@@ -20,4 +19,4 @@ font: 100% $font-stack;
   color: $primary-color;
 }
 "
-````
+```
