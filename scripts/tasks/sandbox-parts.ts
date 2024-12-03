@@ -89,7 +89,7 @@ export const install: Task['run'] = async ({ sandboxDir, key }, { link, dryRun, 
       dryRun,
       debug,
     });
-    await addWorkaroundResolutions({ cwd, dryRun, debug });
+    await addWorkaroundResolutions({ cwd, dryRun, debug, key });
   } else {
     // We need to add package resolutions to ensure that we only ever install the latest version
     // of any storybook packages as verdaccio is not able to both proxy to npm and publish over
@@ -109,11 +109,8 @@ export const install: Task['run'] = async ({ sandboxDir, key }, { link, dryRun, 
       'svelte-vite/default-ts',
       'vue3-vite/default-js',
       'vue3-vite/default-ts',
-      'angular-cli/15-ts',
-      'angular-cli/default-ts',
-      'angular-cli/prerelease',
     ];
-    if (sandboxesNeedingWorkarounds.includes(key)) {
+    if (sandboxesNeedingWorkarounds.includes(key) || key.includes('vite')) {
       await addWorkaroundResolutions({ cwd, dryRun, debug });
     }
 

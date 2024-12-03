@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { FC, PropsWithChildren, ReactElement, ReactNode } from 'react';
 
-import type { ListItem } from '../../components';
 import type { TestProviderConfig, TestingModuleProgressReportProgress } from '../../core-events';
 import type { RenderData as RouterData } from '../../router/types';
 import type { ThemeVars } from '../../theming/types';
@@ -469,45 +468,47 @@ export interface Addon_SidebarTopType {
 
 export interface Addon_TestProviderType<
   Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
 > {
   type: Addon_TypesEnum.experimental_TEST_PROVIDER;
   /** The unique id of the test provider. */
   id: string;
   name: string;
   /** @deprecated Use render instead */
-  title?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
+  title?: (state: TestProviderConfig & Addon_TestProviderState<Details, Config>) => ReactNode;
   /** @deprecated Use render instead */
-  description?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
-  render?: (state: TestProviderConfig & Addon_TestProviderState<Details>) => ReactNode;
-  sidebarContextMenu?: (
-    options: {
-      context: API_HashEntry;
-      state: Addon_TestProviderState<Details>;
-    },
-    components: { ListItem: typeof ListItem }
-  ) => ReactNode;
-  mapStatusUpdate?: (
-    state: Addon_TestProviderState<Details>
-  ) => API_StatusUpdate | ((state: API_StatusState) => API_StatusUpdate);
+  description?: (state: TestProviderConfig & Addon_TestProviderState<Details, Config>) => ReactNode;
+  render?: (state: TestProviderConfig & Addon_TestProviderState<Details, Config>) => ReactNode;
+  sidebarContextMenu?: (options: {
+    context: API_HashEntry;
+    state: TestProviderConfig & Addon_TestProviderState<Details, Config>;
+  }) => ReactNode;
+  stateUpdater?: (
+    state: TestProviderConfig & Addon_TestProviderState<Details, Config>,
+    update: Partial<Addon_TestProviderState<Details, Config>>
+  ) => void | Partial<TestProviderConfig & Addon_TestProviderState<Details, Config>>;
   runnable?: boolean;
   watchable?: boolean;
 }
 
-export type Addon_TestProviderState<Details extends { [key: string]: any } = NonNullable<unknown>> =
-  Pick<Addon_TestProviderType, 'runnable' | 'watchable'> & {
-    progress?: TestingModuleProgressReportProgress;
-    details: Details;
-    cancellable: boolean;
-    cancelling: boolean;
-    running: boolean;
-    watching: boolean;
-    failed: boolean;
-    crashed: boolean;
-    error?: {
-      name: string;
-      message?: string;
-    };
+export type Addon_TestProviderState<
+  Details extends { [key: string]: any } = NonNullable<unknown>,
+  Config extends { [key: string]: any } = NonNullable<unknown>,
+> = Pick<Addon_TestProviderType, 'runnable' | 'watchable'> & {
+  progress?: TestingModuleProgressReportProgress;
+  details: Details;
+  cancellable: boolean;
+  cancelling: boolean;
+  running: boolean;
+  watching: boolean;
+  failed: boolean;
+  crashed: boolean;
+  error?: {
+    name: string;
+    message?: string;
   };
+  config?: Config;
+};
 
 type Addon_TypeBaseNames = Exclude<
   Addon_TypesEnum,
