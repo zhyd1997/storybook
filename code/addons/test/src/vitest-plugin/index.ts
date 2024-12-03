@@ -87,6 +87,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
       const framework = await presets.apply('framework', undefined);
       const frameworkName = typeof framework === 'string' ? framework : framework.name;
+      const storybookEnv = await presets.apply('env', {});
 
       // If we end up needing to know if we are running in browser mode later
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
@@ -96,6 +97,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
       config.test.env ??= {};
       config.test.env = {
+        ...storybookEnv,
         ...config.test.env,
         // To be accessed by the setup file
         __STORYBOOK_URL__: storybookUrl,
@@ -103,6 +105,8 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         __VITEST_EXCLUDE_TAGS__: finalOptions.tags.exclude.join(','),
         __VITEST_SKIP_TAGS__: finalOptions.tags.skip.join(','),
       };
+
+      config.envPrefix = Array.from(new Set([...(config.envPrefix || []), 'STORYBOOK_', 'VITE_']));
 
       if (config.test.browser) {
         config.test.browser.screenshotFailures ??= false;
