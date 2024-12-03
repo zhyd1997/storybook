@@ -61,6 +61,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
   let previewLevelTags: string[];
   let storiesGlobs: StoriesEntry[];
+  let storiesFiles: string[];
 
   return {
     name: 'vite-plugin-storybook-test',
@@ -102,7 +103,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
       await generator.initialize();
 
-      const storyFiles = generator.storyFileNames();
+      storiesFiles = generator.storyFileNames();
 
       previewLevelTags = await extractTagsFromPreview(configDir);
 
@@ -117,7 +118,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       config.test ??= {};
 
       config.test.include ??= [];
-      config.test.include.push(...storyFiles);
+      config.test.include.push(...storiesFiles);
 
       config.test.exclude ??= [];
       config.test.exclude.push('**/*.mdx');
@@ -191,7 +192,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         return code;
       }
 
-      if (id.match(/(story|stories)\.[cm]?[jt]sx?$/)) {
+      if (storiesFiles.includes(id)) {
         return vitestTransform({
           code,
           fileName: id,
