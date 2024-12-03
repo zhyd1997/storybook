@@ -237,4 +237,56 @@ test.describe("component testing", () => {
     );
     await expect(sidebarItems).toHaveCount(1);
   });
+
+  test("should collect coverage to testing module and HTML report", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName !== "chromium", `Skipping tests for ${browserName}`);
+    // Arrange - Prepare Storybook
+    await setForceFailureFlag(false);
+
+    const sbPage = new SbPage(page, expect);
+    await sbPage.navigateToStory("addons/test", "Expected Failure");
+
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
+    const storyElement = sbPage
+      .getCanvasBodyElement()
+      .getByRole("button", { name: "test" });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
+
+    // Assert - No coverage report initially
+    await expect(page.getByLabel("Open coverage report")).toHaveCount(0);
+
+    // Act - Enable coverage and run tests
+    await page.getByLabel("Open settings for Component tests").click();
+    await page.getByLabel("Coverage").click();
+    await expect(page.getByText("Settings updated")).toBeVisible({ timeout: 3000 });
+    await page.getByLabel("Close settings for Component tests").click();
+    // Potentially wait for Vitest to have (re)started
+    await page.waitForTimeout(2000);
+
+    await page.getByLabel("Start Component tests").click();
+
+    // Assert - Coverage report is collected and shown
+    await expect(page.getByLabel("Open coverage report")).toBeVisible({ timeout: 30000 });
+    const sbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
+    expect(sbPercentageText).toMatch(/^\d+\s%$/);
+    const sbPercentage = Number.parseInt(sbPercentageText!.replace(' %', '') ?? '');
+    expect(sbPercentage).toBeGreaterThanOrEqual(0);
+    expect(sbPercentage).toBeLessThanOrEqual(100);
+
+    // Act - Open HTML coverage report
+    const coverageReportLink = await page.getByLabel("Open coverage report");
+    // Remove target="_blank" attribute to open in the same tab
+    await coverageReportLink.evaluate((elem) => elem.removeAttribute("target"));
+    await page.getByLabel("Open coverage report").click();
+
+    // Assert - HTML coverage report is accessible and reports the same coverage percentage as Storybook
+    const htmlPercentageText = await page.locator('span:has(+ :text("Statements"))').first().textContent() ?? '';
+    const htmlPercentage = Number.parseFloat(htmlPercentageText.replace('% ', ''));
+    expect(Math.round(htmlPercentage)).toBe(sbPercentage);
+  });
 });
