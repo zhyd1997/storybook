@@ -1,20 +1,30 @@
-import { resolve, posix, sep } from 'path';
-import { readJSON } from 'fs-extra';
-import prompts from 'prompts';
-import program from 'commander';
-import chalk from 'chalk';
-import windowSize from 'window-size';
+import { program } from 'commander';
+// eslint-disable-next-line depend/ban-dependencies
 import { execaCommand } from 'execa';
-import { getWorkspaces } from './utils/workspace';
+// eslint-disable-next-line depend/ban-dependencies
+import { readJSON } from 'fs-extra';
+import { posix, resolve, sep } from 'path';
+import picocolors from 'picocolors';
+import prompts from 'prompts';
+import windowSize from 'window-size';
+
 import { findMostMatchText } from './utils/diff';
+import { getWorkspaces } from './utils/workspace';
 
 async function run() {
-  const packages = await getWorkspaces();
+  const packages = (await getWorkspaces()).filter(({ name }) => name !== '@storybook/root');
   const packageTasks = packages
     .map((pkg) => {
+      let suffix = pkg.name.replace('@storybook/', '');
+      if (pkg.name === '@storybook/cli') {
+        suffix = 'sb-cli';
+      }
+      if (pkg.name === 'storybook') {
+        suffix = 'cli';
+      }
       return {
         ...pkg,
-        suffix: pkg.name.replace('@storybook/', ''),
+        suffix,
         defaultValue: false,
         helpText: `build only the ${pkg.name} package`,
       };
@@ -56,16 +66,19 @@ async function run() {
     ...packageTasks,
   };
 
-  const main = program.version('5.0.0').option('--all', `build everything ${chalk.gray('(all)')}`);
+  const main = program
+    .version('5.0.0')
+    .option('--all', `build everything ${picocolors.gray('(all)')}`);
 
   Object.keys(tasks)
     .reduce((acc, key) => acc.option(tasks[key].suffix, tasks[key].helpText), main)
     .parse(process.argv);
 
   Object.keys(tasks).forEach((key) => {
+    const opts = program.opts();
     // checks if a flag is passed e.g. yarn build --@storybook/addon-docs --watch
-    const containsFlag = program.rawArgs.includes(tasks[key].suffix);
-    tasks[key].value = containsFlag || program.all;
+    const containsFlag = program.args.includes(tasks[key].suffix);
+    tasks[key].value = containsFlag || opts.all;
   });
 
   let selection;
@@ -122,13 +135,18 @@ async function run() {
   }
 
   selection?.filter(Boolean).forEach(async (v) => {
-    const commmand = (await readJSON(resolve('../code', v.location, 'package.json'))).scripts.prep
+    const command = (await readJSON(resolve('../code', v.location, 'package.json'))).scripts?.prep
       .split(posix.sep)
       .join(sep);
 
+    if (!command) {
+      console.log(`No prep script found for ${v.name}`);
+      return;
+    }
+
     const cwd = resolve(__dirname, '..', 'code', v.location);
     const sub = execaCommand(
-      `${commmand}${watchMode ? ' --watch' : ''}${prodMode ? ' --optimized' : ''}`,
+      `${command}${watchMode ? ' --watch' : ''}${prodMode ? ' --optimized' : ''}`,
       {
         cwd,
         buffer: false,
@@ -141,10 +159,10 @@ async function run() {
     );
 
     sub.stdout?.on('data', (data) => {
-      process.stdout.write(`${chalk.cyan(v.name)}:\n${data}`);
+      process.stdout.write(`${picocolors.cyan(v.name)}:\n${data}`);
     });
     sub.stderr?.on('data', (data) => {
-      process.stderr.write(`${chalk.red(v.name)}:\n${data}`);
+      process.stderr.write(`${picocolors.red(v.name)}:\n${data}`);
     });
   });
 
@@ -169,7 +187,6 @@ async function run() {
 }
 
 run().catch((e) => {
-  // eslint-disable-next-line no-console
   console.log(e);
   process.exit(1);
 });
