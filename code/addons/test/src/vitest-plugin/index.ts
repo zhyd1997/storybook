@@ -22,39 +22,6 @@ const defaultOptions: UserOptions = {
   storybookUrl: 'http://localhost:6006',
 };
 
-async function extractStorybookData(finalOptions: InternalOptions) {
-  const configDir = finalOptions.configDir;
-  try {
-    await validateConfigurationFiles(configDir);
-  } catch (err) {
-    throw new MainFileMissingError({
-      location: configDir,
-      source: 'vitest',
-    });
-  }
-  const previewLevelTags = await extractTagsFromPreview(configDir);
-
-  const presets = await loadAllPresets({
-    configDir,
-    corePresets: [],
-    overridePresets: [],
-    packageJson: {},
-  });
-  const stories = await presets.apply('stories', []);
-
-  const normalizedStories = normalizeStories(stories, {
-    configDir: finalOptions.configDir,
-    workingDir: process.cwd(),
-  });
-
-  const storiesGlobs = normalizedStories.map((entry) => `${entry.directory}/${entry.files}`);
-  // To discuss: Do we want to filter out mdx files?
-  // The vitest plugin ignores mdx files, but perhaps it might still give side effects based on user's config
-  // However if we do filter out mdx, how do we do it without affecting things like ./*.stories.@(js|jsx|ts|mdx|tsx)?
-  // .filter((entry) => !entry.includes('mdx'));
-  return { previewLevelTags, stories, storiesGlobs };
-}
-
 const extractTagsFromPreview = async (configDir: string) => {
   const previewConfigPath = getInterpretedFile(join(resolve(configDir), 'preview'));
 
@@ -137,8 +104,6 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
       const storyFiles = generator.storyFileNames();
 
-      // console.log({ storyFiles });
-
       previewLevelTags = await extractTagsFromPreview(configDir);
 
       const framework = await presets.apply('framework', undefined);
@@ -155,8 +120,6 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
       config.test.exclude ??= [];
       config.test.exclude.push('**/*.mdx');
-
-      // console.log(config.test);
 
       config.test.env ??= {};
       config.test.env = {
