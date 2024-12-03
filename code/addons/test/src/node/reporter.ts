@@ -20,15 +20,17 @@ import { throttle } from 'es-toolkit';
 import { TEST_PROVIDER_ID } from '../constants';
 import type { TestManager } from './test-manager';
 
+export type TestStatus = 'passed' | 'failed' | 'warning' | 'pending' | 'skipped';
+
 export type TestResultResult =
   | {
-      status: 'success' | 'pending';
+      status: Extract<TestStatus, 'passed' | 'pending'>;
       storyId: string;
       testRunId: string;
       duration: number;
     }
   | {
-      status: 'failed';
+      status: Extract<TestStatus, 'failed'>;
       storyId: string;
       duration: number;
       testRunId: string;
@@ -39,20 +41,17 @@ export type TestResult = {
   results: TestResultResult[];
   startTime: number;
   endTime: number;
-  status: 'passed' | 'failed';
+  status: Extract<TestStatus, 'passed' | 'failed'>;
   message?: string;
 };
 
-const StatusMap: Record<
-  TaskState,
-  'passed' | 'failed' | 'skipped' | 'pending' | 'todo' | 'disabled'
-> = {
+const statusMap: Record<TaskState, TestStatus> = {
   fail: 'failed',
   only: 'pending',
   pass: 'passed',
   run: 'pending',
   skip: 'skipped',
-  todo: 'todo',
+  todo: 'skipped',
 };
 
 export class StorybookReporter implements Reporter {
@@ -64,7 +63,7 @@ export class StorybookReporter implements Reporter {
 
   sendReport: (payload: TestingModuleProgressReportPayload) => void;
 
-  constructor(private testManager: TestManager) {
+  constructor(public testManager: TestManager) {
     this.sendReport = throttle((payload) => this.testManager.sendProgressReport(payload), 1000);
   }
 
@@ -75,18 +74,19 @@ export class StorybookReporter implements Reporter {
 
   getProgressReport(finishedAt?: number) {
     const files = this.ctx.state.getFiles();
-    const fileTests = getTests(files);
-    // The number of total tests is dynamic and can change during the run
-    const numTotalTests = fileTests.length;
+    const fileTests = getTests(files).filter((t) => t.mode === 'run' || t.mode === 'only');
+
+    // The total number of tests reported by Vitest is dynamic and can change during the run, so we
+    // use `storyCountForCurrentRun` instead, based on the list of stories provided in the run request.
+    const numTotalTests = finishedAt
+      ? fileTests.length
+      : Math.max(fileTests.length, this.testManager.vitestManager.storyCountForCurrentRun);
 
     const numFailedTests = fileTests.filter((t) => t.result?.state === 'fail').length;
     const numPassedTests = fileTests.filter((t) => t.result?.state === 'pass').length;
-    const numPendingTests = fileTests.filter(
-      (t) => t.result?.state === 'run' || t.mode === 'skip' || t.result?.state === 'skip'
-    ).length;
-    const testResults: TestResult[] = [];
+    const numPendingTests = fileTests.filter((t) => t.result?.state === 'run').length;
 
-    for (const file of files) {
+    const testResults: TestResult[] = files.map((file) => {
       const tests = getTests([file]);
       let startTime = tests.reduce(
         (prev, next) => Math.min(prev, next.result?.startTime ?? Number.POSITIVE_INFINITY),
@@ -102,7 +102,7 @@ export class StorybookReporter implements Reporter {
         startTime
       );
 
-      const assertionResults = tests.flatMap<TestResultResult>((t) => {
+      const results = tests.flatMap<TestResultResult>((t) => {
         const ancestorTitles: string[] = [];
         let iter: Suite | undefined = t.suite;
         while (iter) {
@@ -111,7 +111,7 @@ export class StorybookReporter implements Reporter {
         }
         ancestorTitles.reverse();
 
-        const status = StatusMap[t.result?.state || t.mode] || 'skipped';
+        const status = statusMap[t.result?.state || t.mode] || 'skipped';
         const storyId = (t.meta as any).storyId as string;
         const duration = t.result?.duration || 0;
         const testRunId = this.start.toString();
@@ -129,15 +129,14 @@ export class StorybookReporter implements Reporter {
       });
 
       const hasFailedTests = tests.some((t) => t.result?.state === 'fail');
-
-      testResults.push({
-        results: assertionResults,
+      return {
+        results,
         startTime,
         endTime,
         status: file.result?.state === 'fail' || hasFailedTests ? 'failed' : 'passed',
         message: file.result?.errors?.[0]?.stack || file.result?.errors?.[0]?.message,
-      });
-    }
+      };
+    });
 
     return {
       cancellable: !finishedAt,

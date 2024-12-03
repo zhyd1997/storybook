@@ -180,7 +180,7 @@ const hasFrameworkTemplates = (framework?: SupportedFrameworks) => {
   if (framework === 'nuxt') {
     return process.env.IN_STORYBOOK_SANDBOX !== 'true';
   }
-  return ['angular', 'nextjs'].includes(framework);
+  return ['angular', 'nextjs', 'react-native-web-vite'].includes(framework);
 };
 
 export async function baseGenerator(
@@ -258,12 +258,7 @@ export async function baseGenerator(
     ...extraAddonsToInstall,
   ].filter(Boolean);
 
-  // TODO: migrate template stories in solid and qwik to use @storybook/test
-  if (['solid', 'qwik'].includes(rendererId)) {
-    addonPackages.push('@storybook/testing-library');
-  } else {
-    addonPackages.push('@storybook/test');
-  }
+  addonPackages.push('@storybook/test');
 
   if (hasInteractiveStories(rendererId)) {
     addons.push('@storybook/addon-interactions');
