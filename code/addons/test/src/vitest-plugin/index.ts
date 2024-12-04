@@ -13,6 +13,8 @@ import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
 
+// eslint-disable-next-line depend/ban-dependencies
+import { escape } from 'glob';
 import { join, resolve } from 'pathe';
 
 import type { InternalOptions, UserOptions } from './types';
@@ -125,6 +127,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
       const framework = await presets.apply('framework', undefined);
       const frameworkName = typeof framework === 'string' ? framework : framework.name;
+      const storybookEnv = await presets.apply('env', {});
 
       // If we end up needing to know if we are running in browser mode later
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
@@ -137,13 +140,18 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       config.test ??= {};
 
       config.test.include ??= [];
-      config.test.include.push(...storiesFiles);
+      config.test.include.push(
+        // Escape magic characters in paths because they shouldn't be treated as glob patterns
+        // Paths are resolved using `pathe` to convert Windows paths to POSIX paths first
+        ...storiesFiles.map((path) => escape(resolve(path)))
+      );
 
       config.test.exclude ??= [];
       config.test.exclude.push('**/*.mdx');
 
       config.test.env ??= {};
       config.test.env = {
+        ...storybookEnv,
         ...config.test.env,
         // To be accessed by the setup file
         __STORYBOOK_URL__: storybookUrl,
@@ -151,6 +159,8 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         __VITEST_EXCLUDE_TAGS__: finalOptions.tags.exclude.join(','),
         __VITEST_SKIP_TAGS__: finalOptions.tags.skip.join(','),
       };
+
+      config.envPrefix = Array.from(new Set([...(config.envPrefix || []), 'STORYBOOK_', 'VITE_']));
 
       if (config.test.browser) {
         config.test.browser.screenshotFailures ??= false;

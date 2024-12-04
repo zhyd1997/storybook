@@ -6623,6 +6623,7 @@ __metadata:
     execa: "npm:^8.0.1"
     find-up: "npm:^7.0.0"
     formik: "npm:^2.2.9"
+    glob: "npm:^10.0.0"
     istanbul-lib-report: "npm:^3.0.1"
     pathe: "npm:^1.1.2"
     picocolors: "npm:^1.1.0"
@@ -7146,10 +7147,14 @@ __metadata:
     typescript: "npm:^5.3.2"
     vite: "npm:^4.0.0"
   peerDependencies:
+    "@storybook/test": "workspace:*"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     storybook: "workspace:^"
     vite: ^4.0.0 || ^5.0.0 || ^6.0.0
+  peerDependenciesMeta:
+    "@storybook/test":
+      optional: true
   languageName: unknown
   linkType: soft
 
