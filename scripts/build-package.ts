@@ -81,14 +81,13 @@ async function run() {
     tasks[key].value = containsFlag || opts.all;
   });
 
-  // hits here when running yarn build --packagename
   let watchMode = process.argv.includes('--watch');
   let prodMode = process.argv.includes('--prod');
   let selection = Object.keys(tasks)
     .map((key) => tasks[key])
     .filter((item) => !['watch', 'prod'].includes(item.name) && item.value === true);
 
-  // user has passed an invalid package name(s) - try to guess the correct package name(s)
+  // user has passed invalid package name(s) - try to guess the correct package name(s)
   if ((!selection.length && main.args.length >= 1) || selection.length !== main.args.length) {
     const suffixList = Object.values(tasks)
       .filter((t) => t.name.includes('@storybook'))
