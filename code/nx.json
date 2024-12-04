@@ -5,9 +5,6 @@
   "nxCloudAccessToken": "NGVmYTkxMmItYzY3OS00MjkxLTk1ZDktZDFmYTFmNmVlNGY4fHJlYWQ=",
   "defaultBase": "next",
   "parallel": 8,
-  "affected": {
-    "defaultBase": "next"
-  },
   "cli": {
     "packageManager": "yarn"
   },
