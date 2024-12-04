@@ -1,7 +1,7 @@
 <h1>Migration</h1>
 
 - [From version 8.4.x to 8.5.x](#from-version-84x-to-85x)
-  - [Added source code pnael to docs](#added-source-code-pnael-to-docs)
+  - [Added source code panel to docs](#added-source-code-panel-to-docs)
 - [From version 8.2.x to 8.3.x](#from-version-82x-to-83x)
   - [Removed `experimental_SIDEBAR_BOTTOM` and deprecated `experimental_SIDEBAR_TOP` addon types](#removed-experimental_sidebar_bottom-and-deprecated-experimental_sidebar_top-addon-types)
   - [New parameters format for addon backgrounds](#new-parameters-format-for-addon-backgrounds)
@@ -423,7 +423,7 @@
 
 ## From version 8.4.x to 8.5.x
 
-### Added source code pnael to docs
+### Added source code panel to docs
 
 Starting in 8.5, Storybook Docs (`@storybook/addon-docs`) automatically adds a new addon panel to stories that displays a source snippet beneath each story. This works similarly to the existing [source snippet doc block](https://storybook.js.org/docs/writing-docs/doc-blocks#source), but in the story view. It is intended to replace the [Storysource addon](https://storybook.js.org/addons/@storybook/addon-storysource).
 
