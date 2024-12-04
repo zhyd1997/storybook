@@ -353,7 +353,7 @@ export default async function postInstall(options: PostinstallOptions) {
           {
             extends: '${viteConfigFile ? relative(dirname(browserWorkspaceFile), viteConfigFile) : ''}',
             plugins: [
-              // The plugin will run tests in the stories defined in your Storybook config 
+              // The plugin will run tests for the stories defined in your Storybook config 
               // See options at: https://storybook.js.org/docs/writing-tests/vitest-plugin#storybooktest
               storybookTest({ configDir: '${options.configDir}' }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
             ],
@@ -390,7 +390,7 @@ export default async function postInstall(options: PostinstallOptions) {
         // More info at: https://storybook.js.org/docs/writing-tests/vitest-plugin
         export default defineConfig({
           plugins: [
-            // The plugin will run tests in the stories defined in your Storybook config 
+            // The plugin will run tests for the stories defined in your Storybook config 
             // See options at: https://storybook.js.org/docs/writing-tests/vitest-plugin#storybooktest
             storybookTest({ configDir: '${options.configDir}' }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
           ],
