@@ -6623,6 +6623,7 @@ __metadata:
     execa: "npm:^8.0.1"
     find-up: "npm:^7.0.0"
     formik: "npm:^2.2.9"
+    glob: "npm:^10.0.0"
     istanbul-lib-report: "npm:^3.0.1"
     pathe: "npm:^1.1.2"
     picocolors: "npm:^1.1.0"
