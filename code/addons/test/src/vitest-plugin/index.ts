@@ -64,13 +64,30 @@ export const storybookTest = (options?: UserOptions): Plugin => {
   let storiesGlobs: StoriesEntry[];
   let storiesFiles: string[];
 
+  const configDir = finalOptions.configDir;
+
+  const presetPromise = loadAllPresets({
+    configDir,
+    corePresets: [],
+    overridePresets: [],
+    packageJson: {},
+  });
+
   return {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
+    async transformIndexHtml(html) {
+      const presets = await presetPromise;
+
+      const headHtmlSnippet = await presets.apply<string | undefined>('previewHead');
+      const bodyHtmlSnippet = await presets.apply<string | undefined>('previewBody');
+
+      html
+        .replace(/<\/head>/, `${headHtmlSnippet}</head>`)
+        .replace(/<body>/, `<body>${bodyHtmlSnippet}`);
+    },
     async config(input) {
       let config = input;
-
-      const configDir = finalOptions.configDir;
 
       try {
         await validateConfigurationFiles(configDir);
@@ -81,12 +98,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         });
       }
 
-      const presets = await loadAllPresets({
-        configDir,
-        corePresets: [],
-        overridePresets: [],
-        packageJson: {},
-      });
+      const presets = await presetPromise;
 
       const workingDir = process.cwd();
       const directories = {
