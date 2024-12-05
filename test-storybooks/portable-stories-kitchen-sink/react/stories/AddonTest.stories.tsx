@@ -1,18 +1,23 @@
-import { Meta } from '@storybook/react'
+import { expect } from '@storybook/test';
+import { Meta, type StoryObj } from '@storybook/react'
 import { instrument } from '@storybook/instrumenter'
 import type { StoryAnnotations } from 'storybook/internal/types';
 
 declare global {
-  // eslint-disable-next-line no-var, @typescript-eslint/naming-convention
+  // eslint-disable-next-line no-var
   var __vitest_browser__: boolean;
 }
 
 const Component = () => <button>test</button>
 
-export default {
-  title: 'Addons/Test',
+const meta = {
+  title: 'Addons/Group/Test',
   component: Component,
 } as Meta<typeof Component>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
 
 const { pass } = instrument({
   pass: async () => {},
@@ -57,5 +62,16 @@ export const MismatchSuccess = {
     if(globalThis.__vitest_browser__) {
       throw new Error('Unexpected success');
     }
-  }
+  },
+  tags: ['fail-on-purpose'],
 } satisfies StoryAnnotations;
+
+export const PreviewHeadTest: Story = {
+  play: async () => {
+    const styles = window.getComputedStyle(document.body);
+    // set in preview-head.html
+    expect(styles.backgroundColor).toBe('rgb(250, 250, 210)');
+    // set in main.js#previewHead
+    expect(styles.borderColor).toBe('rgb(255, 0, 0)');
+  }
+};

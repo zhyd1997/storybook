@@ -6,16 +6,13 @@ import { expect, test } from "@playwright/test";
 
 import { SbPage } from "../../../../code/e2e-tests/util";
 
-const storybookUrl = "http://localhost:6006";
-const testStoryPath = path.resolve(
-  __dirname,
-  "..",
-  "stories/AddonTest.stories.tsx"
-);
+const STORYBOOK_URL = "http://localhost:6006";
+const TEST_STORY_PATH = path.resolve(__dirname, "..", "stories", "AddonTest.stories.tsx");
+const BUTTON_COMPONENT_PATH = path.resolve(__dirname, "..", "stories", "Button.tsx");
 
 const setForceFailureFlag = async (value: boolean) => {
   // Read the story file content asynchronously
-  const storyContent = (await fs.readFile(testStoryPath)).toString();
+  const storyContent = (await fs.readFile(TEST_STORY_PATH)).toString();
 
   // Create a regex to match 'forceFailure: true' or 'forceFailure: false'
   const forceFailureRegex = /forceFailure:\s*(true|false)/;
@@ -27,7 +24,7 @@ const setForceFailureFlag = async (value: boolean) => {
   );
 
   // Write the updated content back to the file asynchronously
-  await fs.writeFile(testStoryPath, updatedContent);
+  await fs.writeFile(TEST_STORY_PATH, updatedContent);
 };
 
 test.describe("component testing", () => {
@@ -35,7 +32,7 @@ test.describe("component testing", () => {
   test.beforeEach(async ({ page }) => {
     const sbPage = new SbPage(page, expect);
 
-    await page.goto(storybookUrl);
+    await page.goto(STORYBOOK_URL);
     await page.evaluate(() => window.sessionStorage.clear());
     await sbPage.waitUntilLoaded();
   });
@@ -47,7 +44,7 @@ test.describe("component testing", () => {
     test.skip(browserName !== "chromium", `Skipping tests for ${browserName}`);
     const sbPage = new SbPage(page, expect);
 
-    await sbPage.navigateToStory("addons/test", "Mismatch Failure");
+    await sbPage.navigateToStory("addons/group/test", "Mismatch Failure");
 
     const expandButton = await page.getByLabel('Expand testing module')
     await expandButton.click();
@@ -97,7 +94,7 @@ test.describe("component testing", () => {
     );
 
     // Assert discrepancy: CLI fail + Browser pass
-    await sbPage.navigateToStory("addons/test", "Mismatch Success");
+    await sbPage.navigateToStory("addons/group/test", "Mismatch Success");
     const successfulStoryElement = page.locator(
       '[data-item-id="addons-test--mismatch-success"] [role="status"]'
     );
@@ -118,7 +115,7 @@ test.describe("component testing", () => {
     await setForceFailureFlag(true);
 
     const sbPage = new SbPage(page, expect);
-    await sbPage.navigateToStory("addons/test", "Expected Failure");
+    await sbPage.navigateToStory("addons/group/test", "Expected Failure");
 
     const expandButton = await page.getByLabel('Expand testing module')
     await expandButton.click();
@@ -189,7 +186,7 @@ test.describe("component testing", () => {
     await setForceFailureFlag(false);
 
     const sbPage = new SbPage(page, expect);
-    await sbPage.navigateToStory("addons/test", "Expected Failure");
+    await sbPage.navigateToStory("addons/group/test", "Expected Failure");
 
     const expandButton = await page.getByLabel('Expand testing module')
     await expandButton.click();
@@ -247,7 +244,7 @@ test.describe("component testing", () => {
     await setForceFailureFlag(false);
 
     const sbPage = new SbPage(page, expect);
-    await sbPage.navigateToStory("addons/test", "Expected Failure");
+    await sbPage.navigateToStory("addons/group/test", "Expected Failure");
 
     const expandButton = await page.getByLabel('Expand testing module')
     await expandButton.click();
@@ -265,7 +262,7 @@ test.describe("component testing", () => {
     await page.getByLabel("Coverage").click();
     await expect(page.getByText("Settings updated")).toBeVisible({ timeout: 3000 });
     await page.getByLabel("Close settings for Component tests").click();
-    // Potentially wait for Vitest to have (re)started
+    // Wait for Vitest to have (re)started
     await page.waitForTimeout(2000);
 
     await page.getByLabel("Start Component tests").click();
@@ -288,5 +285,190 @@ test.describe("component testing", () => {
     const htmlPercentageText = await page.locator('span:has(+ :text("Statements"))').first().textContent() ?? '';
     const htmlPercentage = Number.parseFloat(htmlPercentageText.replace('% ', ''));
     expect(Math.round(htmlPercentage)).toBe(sbPercentage);
+
+    // Cleanup - Disable coverage again
+    await page.getByLabel("Open settings for Component tests").click();
+    await page.getByLabel("Coverage").click();
+    await expect(page.getByText("Settings updated")).toBeVisible({ timeout: 3000 });
   });
+
+  test("should run focused test for a single story", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName !== "chromium", `Skipping tests for ${browserName}`);
+    // Arrange - Prepare Storybook
+    await setForceFailureFlag(false);
+
+    const sbPage = new SbPage(page, expect);
+    await sbPage.navigateToStory("addons/group/test", "Expected Failure");
+
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
+    const storyElement = sbPage
+      .getCanvasBodyElement()
+      .getByRole("button", { name: "test" });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
+
+    // Act - Open sidebar context menu and start focused test
+    await page.locator('[data-item-id="addons-group-test--expected-failure"]').hover();
+    await page.locator('[data-item-id="addons-group-test--expected-failure"] div[data-testid="context-menu"] button').click();
+    const sidebarContextMenu = page.getByTestId('tooltip');
+    await sidebarContextMenu.getByLabel('Start Component tests').click();
+
+    // Assert - Only one test is running and reported
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toHaveText('Testing... 0/1');
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test');
+    await expect(sidebarContextMenu.getByLabel('status: passed')).toHaveCount(1);
+    await page.click('body');
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: success' })).toHaveCount(1);
+  });
+
+  test("should run focused test for a component", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName !== "chromium", `Skipping tests for ${browserName}`);
+    // Arrange - Prepare Storybook
+    await setForceFailureFlag(false);
+
+    const sbPage = new SbPage(page, expect);
+    await sbPage.navigateToStory("addons/group/test", "Expected Failure");
+
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
+    const storyElement = sbPage
+      .getCanvasBodyElement()
+      .getByRole("button", { name: "test" });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
+
+    // Act - Open sidebar context menu and start focused test
+    await page.locator('[data-item-id="addons-group-test"]').hover();
+    await page.locator('[data-item-id="addons-group-test"] div[data-testid="context-menu"] button').click();
+    const sidebarContextMenu = page.getByTestId('tooltip');
+    await sidebarContextMenu.getByLabel('Start Component tests').click();
+
+    // Assert - 5 tests are running and reported
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toHaveText('Testing... 0/5');
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 5 test');
+    // Assert - 1 failing test shows as a failed status
+    await expect(sidebarContextMenu.getByText('1 story with errors')).toBeVisible();
+    await expect(sidebarContextMenu.getByLabel('status: failed')).toHaveCount(1);
+
+    await page.click('body');
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: success' })).toHaveCount(4);
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: error' })).toHaveCount(1);
+  });
+
+  test("should run focused test for a group", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName !== "chromium", `Skipping tests for ${browserName}`);
+    // Arrange - Prepare Storybook
+    await setForceFailureFlag(false);
+
+    const sbPage = new SbPage(page, expect);
+    await sbPage.navigateToStory("addons/group/test", "Expected Failure");
+
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
+    const storyElement = sbPage
+      .getCanvasBodyElement()
+      .getByRole("button", { name: "test" });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
+
+    // Act - Open sidebar context menu and start focused test
+    await page.locator('[data-item-id="addons-group"]').hover();
+    await page.locator('[data-item-id="addons-group"] div[data-testid="context-menu"] button').click();
+    const sidebarContextMenu = page.getByTestId('tooltip');
+    await sidebarContextMenu.getByLabel('Start Component tests').click();
+
+    // Assert - 5 tests are running and reported
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toHaveText('Testing... 0/7');
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 7 test');
+    // Assert - 1 failing test shows as a failed status
+    await expect(sidebarContextMenu.getByText('2 story with errors')).toBeVisible();
+    await expect(sidebarContextMenu.getByLabel('status: failed')).toHaveCount(1);
+
+    await page.click('body');
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: success' })).toHaveCount(4);
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: error' })).toHaveCount(1);
+  });
+
+  test("should run focused tests without coverage, even when enabled", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName !== "chromium", `Skipping tests for ${browserName}`);
+    // Arrange - Prepare Storybook
+    await setForceFailureFlag(false);
+
+    const sbPage = new SbPage(page, expect);
+    await sbPage.navigateToStory("example/button", "CSF 3 Primary");
+
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
+    const storyElement = sbPage
+      .getCanvasBodyElement()
+      .getByRole("button", { name: "test" });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
+
+    // Act - Enable coverage and run ALL tests
+    await page.getByLabel("Open settings for Component tests").click();
+    await page.getByLabel("Coverage").click();
+    await expect(page.getByText("Settings updated")).toBeVisible({ timeout: 3000 });
+    await page.getByLabel("Close settings for Component tests").click();
+    // Wait for Vitest to have (re)started
+    await page.waitForTimeout(2000);
+
+    await page.getByLabel("Start Component tests").click();
+
+    // Assert - Coverage report is collected and shown
+    await expect(page.getByLabel("Open coverage report")).toBeVisible({ timeout: 30000 });
+    const firstSbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
+    expect(firstSbPercentageText).toMatch(/^\d+\s%$/);
+    const firstSbPercentage = Number.parseInt(firstSbPercentageText!.replace(' %', '') ?? '');
+
+    // Arrange - Add uncovered lines to Button.tsx to force coverage to drop
+    const initialButtonContent = (await fs.readFile(BUTTON_COMPONENT_PATH)).toString();
+    await fs.writeFile(BUTTON_COMPONENT_PATH, [initialButtonContent,
+      `export const uncovered = () => {
+        ${Array.from({ length: 300 }).map(() => 'void;').join('\n')}
+      };`].join('\n'));
+//TODO: CLEANUP
+    // Act - Open sidebar context menu and start focused test
+    await page.locator('[data-item-id="example-button--csf-3-primary"]').hover();
+    await page.locator('[data-item-id="example-button--csf-3-primary"] div[data-testid="context-menu"] button').click();
+    const sidebarContextMenu = page.getByTestId('tooltip');
+    await sidebarContextMenu.getByLabel('Start Component tests').click();
+
+    // Arrange - Wait for test to finish and unfocus sidebar context menu
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test');
+    await page.click('body');
+
+    // Assert - Coverage percentage is unchanged
+    console.log('LOG: firstSbPercentageText', firstSbPercentageText);
+    console.log('LOG: secondSbPercentageText', await page.getByLabel(/percent coverage$/).textContent());
+    expect(await page.getByLabel(/percent coverage$/).textContent()).toEqual(firstSbPercentageText);
+
+    // Act - Run ALL tests again
+    await page.getByLabel("Start Component tests").click();
+    
+    // Arrange - Wait for tests to finish
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText(/Ran \d{2,} tests/);
+    
+    // Assert - Coverage percentage is updated to reflect the new coverage
+    const updatedSbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
+    expect(updatedSbPercentageText).toMatch(/^\d+\s%$/);
+    const updatedSbPercentage = Number.parseInt(updatedSbPercentageText!.replace(' %', '') ?? '');
+    expect(updatedSbPercentage).toBeGreaterThanOrEqual(0);
+    expect(updatedSbPercentage).toBeLessThan(firstSbPercentage);
+
+  });
+
 });

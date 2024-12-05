@@ -1792,11 +1792,11 @@ __metadata:
   linkType: soft
 
 "@storybook/components@file:../../../code/deprecated/components::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-alpha.15
-  resolution: "@storybook/components@file:../../../code/deprecated/components#../../../code/deprecated/components::hash=0be72f&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-alpha.17
+  resolution: "@storybook/components@file:../../../code/deprecated/components#../../../code/deprecated/components::hash=88319a&locator=portable-stories-react%40workspace%3A."
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/744a23254c29518601e7f3ff9e549693c6c17b5bf75fccb532826213860fb78c8b3d9dc1be0e4f6dbaa4f42b439521017f79f0d0d43ddaacddf9938174048ff6
+  checksum: 10/d3e6ae03a1f331ae8e67e593d9f18f40fb2e3a8be4d8c8c495826ccb7b052775f68824371c514daaa87484182685007a636de76796ac1e5c26009407a7e6a64d
   languageName: node
   linkType: hard
 
@@ -1852,8 +1852,8 @@ __metadata:
   linkType: hard
 
 "@storybook/experimental-addon-test@file:../../../code/addons/test::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-alpha.15
-  resolution: "@storybook/experimental-addon-test@file:../../../code/addons/test#../../../code/addons/test::hash=8c5acc&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-alpha.17
+  resolution: "@storybook/experimental-addon-test@file:../../../code/addons/test#../../../code/addons/test::hash=769cd0&locator=portable-stories-react%40workspace%3A."
   dependencies:
     "@storybook/csf": "npm:^0.1.11"
     "@storybook/global": "npm:^5.0.0"
@@ -1876,7 +1876,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10/0dca94606557f8b58c5d09621e7b9b1360ee9d5f80ffb349fbf0cbe1233d839318a6eecf9e8430440e391127bd2ee9ebe96b7d1a25bb213522ac171437533e74
+  checksum: 10/b78c23be02c5622a4ef5afc4229a92cd6cbe0c1bb60b739d7b2d823c6313db6f95642d5581ebee7fbf9b0f4da437cf88d97f5240901c1c5a98890edde6500396
   languageName: node
   linkType: hard
 
@@ -1909,20 +1909,20 @@ __metadata:
   linkType: soft
 
 "@storybook/manager-api@file:../../../code/deprecated/manager-api::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-alpha.15
-  resolution: "@storybook/manager-api@file:../../../code/deprecated/manager-api#../../../code/deprecated/manager-api::hash=524260&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-alpha.17
+  resolution: "@storybook/manager-api@file:../../../code/deprecated/manager-api#../../../code/deprecated/manager-api::hash=98fa43&locator=portable-stories-react%40workspace%3A."
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/fcef37968ca864618fda44849c4442f89ffa1349239a0107b00c830d289e44bc48602c0f5b1ea90a092939cf3bb51030649ac042f6a8210dfa18ed87efcf4b80
+  checksum: 10/7276107e58c3598282d0359fce675b0eb95dd11792d2ec944caffcd5eb254b32b61d1900a74fd318ecc158959347aabae2642a3be6715f2ddcc9290a6468c05f
   languageName: node
   linkType: hard
 
 "@storybook/preview-api@file:../../../code/deprecated/preview-api::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-alpha.15
-  resolution: "@storybook/preview-api@file:../../../code/deprecated/preview-api#../../../code/deprecated/preview-api::hash=a4220e&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-alpha.17
+  resolution: "@storybook/preview-api@file:../../../code/deprecated/preview-api#../../../code/deprecated/preview-api::hash=a9de97&locator=portable-stories-react%40workspace%3A."
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/7e69d44343f24a1291b9604450d85e11149dccf61755ded28268d9791e887f6a60b3ec05b76df4d9dd9be6b2b30a6d6bb7db1feea27448e0ab904162e5fbb630
+  checksum: 10/ac50a70d12304ab0661fdfdf7591d31d1dd943ac79f59cd554cff31f8dcc93de817256dabfff8f6d81db404d7ffcc46453e0cd2ef1983152f2668da618ebc4c9
   languageName: node
   linkType: hard
 
@@ -1950,10 +1950,14 @@ __metadata:
     resolve: "npm:^1.22.8"
     tsconfig-paths: "npm:^4.2.0"
   peerDependencies:
+    "@storybook/test": "workspace:*"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     storybook: "workspace:^"
     vite: ^4.0.0 || ^5.0.0 || ^6.0.0
+  peerDependenciesMeta:
+    "@storybook/test":
+      optional: true
   languageName: node
   linkType: soft
 
@@ -1999,11 +2003,11 @@ __metadata:
   linkType: soft
 
 "@storybook/theming@file:../../../code/deprecated/theming::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-alpha.15
-  resolution: "@storybook/theming@file:../../../code/deprecated/theming#../../../code/deprecated/theming::hash=6dcd01&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-alpha.17
+  resolution: "@storybook/theming@file:../../../code/deprecated/theming#../../../code/deprecated/theming::hash=6cb022&locator=portable-stories-react%40workspace%3A."
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/070e791f22ca7bb55dffdd43e52d80aa1ae367a64375718d7634b73798536f4f1210820f1547991e7c00f821e2763edb8b30e64f22af5eaf10b4af21b3ad230e
+  checksum: 10/4b59447f28ca2682e24ab2cf62976fdaaea63c1aa97e687ec6da9e7865716d13439b8ea259aa742c8a0ede23f52025f57c7562f9acf794cddbe7c9a054bea069
   languageName: node
   linkType: hard
 
@@ -2839,6 +2843,23 @@ __metadata:
   dependencies:
     tinyspy: "npm:^3.0.2"
   checksum: 10/9a1cb9cf6b23c122681469b5890d91ca26fc8d74953b3d46d293a5d2a4944490106891f6a178cd732ab7a8abbda339f43681c81d1594565ecc3bf3e7f9b7735f
+  languageName: node
+  linkType: hard
+
+"@vitest/ui@npm:2.1.8":
+  version: 2.1.8
+  resolution: "@vitest/ui@npm:2.1.8"
+  dependencies:
+    "@vitest/utils": "npm:2.1.8"
+    fflate: "npm:^0.8.2"
+    flatted: "npm:^3.3.1"
+    pathe: "npm:^1.1.2"
+    sirv: "npm:^3.0.0"
+    tinyglobby: "npm:^0.2.10"
+    tinyrainbow: "npm:^1.2.0"
+  peerDependencies:
+    vitest: 2.1.8
+  checksum: 10/7ff0532b3b0e3f93c037cad3528b8fde8a93188f3222b92faae42e0fdd996e9284b362c4e5e9d725ce0a019870d3b0b7ad80c1874f74b43ffc5a1d703803fdd8
   languageName: node
   linkType: hard
 
@@ -4769,6 +4790,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fdir@npm:^6.4.2":
+  version: 6.4.2
+  resolution: "fdir@npm:6.4.2"
+  peerDependencies:
+    picomatch: ^3 || ^4
+  peerDependenciesMeta:
+    picomatch:
+      optional: true
+  checksum: 10/5ff80d1d2034e75cc68be175401c9f64c4938a6b2c1e9a0c27f2d211ffbe491fd86d29e4576825d9da8aff9bd465f0283427c2dddc11653457906c46d3bbc448
+  languageName: node
+  linkType: hard
+
+"fflate@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "fflate@npm:0.8.2"
+  checksum: 10/2bd26ba6d235d428de793c6a0cd1aaa96a06269ebd4e21b46c8fd1bd136abc631acf27e188d47c3936db090bf3e1ede11d15ce9eae9bffdc4bfe1b9dc66ca9cb
+  languageName: node
+  linkType: hard
+
 "figures@npm:^3.2.0":
   version: 3.2.0
   resolution: "figures@npm:3.2.0"
@@ -4831,6 +4871,13 @@ __metadata:
   version: 3.3.1
   resolution: "flatted@npm:3.3.1"
   checksum: 10/7b8376061d5be6e0d3658bbab8bde587647f68797cf6bfeae9dea0e5137d9f27547ab92aaff3512dd9d1299086a6d61be98e9d48a56d17531b634f77faadbc49
+  languageName: node
+  linkType: hard
+
+"flatted@npm:^3.3.1":
+  version: 3.3.2
+  resolution: "flatted@npm:3.3.2"
+  checksum: 10/ac3c159742e01d0e860a861164bcfd35bb567ccbebb8a0dd041e61cf3c64a435b917dd1e7ed1c380c2ebca85735fb16644485ec33665bc6aafc3b316aa1eed44
   languageName: node
   linkType: hard
 
@@ -7339,6 +7386,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"picomatch@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "picomatch@npm:4.0.2"
+  checksum: 10/ce617b8da36797d09c0baacb96ca8a44460452c89362d7cb8f70ca46b4158ba8bc3606912de7c818eb4a939f7f9015cef3c766ec8a0c6bfc725fdc078e39c717
+  languageName: node
+  linkType: hard
+
 "pify@npm:^2.2.0":
   version: 2.3.0
   resolution: "pify@npm:2.3.0"
@@ -7421,6 +7475,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.2.1"
     "@vitest/browser": "npm:^2.1.6"
     "@vitest/coverage-v8": "npm:^2.1.6"
+    "@vitest/ui": "npm:2.1.8"
     cypress: "npm:^13.6.4"
     eslint: "npm:^8.56.0"
     eslint-plugin-react-hooks: "npm:^4.6.0"
@@ -8450,6 +8505,16 @@ __metadata:
   version: 0.3.1
   resolution: "tinyexec@npm:0.3.1"
   checksum: 10/0537c70590d52d354f40c0255ff0f654a3d18ddb3812b440ddf9d436edf516c8057838ad5a38744c0c59670ec03e3cf23fbe04ae3d49f031d948274e99002569
+  languageName: node
+  linkType: hard
+
+"tinyglobby@npm:^0.2.10":
+  version: 0.2.10
+  resolution: "tinyglobby@npm:0.2.10"
+  dependencies:
+    fdir: "npm:^6.4.2"
+    picomatch: "npm:^4.0.2"
+  checksum: 10/10c976866d849702edc47fc3fef27d63f074c40f75ef17171ecc1452967900699fa1e62373681dd58e673ddff2e3f6094bcd0a2101e3e4b30f4c2b9da41397f2
   languageName: node
   linkType: hard
 

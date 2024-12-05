@@ -79,14 +79,17 @@ export const storybookTest = (options?: UserOptions): Plugin => {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
     async transformIndexHtml(html) {
+      console.log('LOG: transformIndexHtml');
       const presets = await presetPromise;
 
       const headHtmlSnippet = await presets.apply<string | undefined>('previewHead');
       const bodyHtmlSnippet = await presets.apply<string | undefined>('previewBody');
 
-      html
-        .replace(/<\/head>/, `${headHtmlSnippet}</head>`)
-        .replace(/<body>/, `<body>${bodyHtmlSnippet}`);
+      const result = html
+        .replace('</head>', `${headHtmlSnippet ?? ''}</head>`)
+        .replace('<body>', `<body>${bodyHtmlSnippet ?? ''}`);
+      console.log('LOG: result', result);
+      return result;
     },
     async config(input) {
       let config = input;
