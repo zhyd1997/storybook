@@ -4,7 +4,6 @@ import { mergeConfig } from 'vitest/config';
 
 import {
   getInterpretedFile,
-  loadAllPresets,
   normalizeStories,
   validateConfigurationFiles,
 } from 'storybook/internal/common';
