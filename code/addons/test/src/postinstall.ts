@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import { writeFile } from 'node:fs/promises';
 
+import type { types } from 'storybook/internal/babel';
 import { traverse } from 'storybook/internal/babel';
 import {
   JsPackageManagerFactory,
@@ -86,7 +87,7 @@ export default async function postInstall(options: PostinstallOptions) {
         },
       });
 
-      config.setFieldNode(['framework'], node as babel.types.Expression);
+      config.setFieldNode(['framework'], node as types.Expression);
 
       await writeConfig(config, mainJsPath);
 
