@@ -8,7 +8,7 @@ import {
   normalizeStories,
   validateConfigurationFiles,
 } from 'storybook/internal/common';
-import { StoryIndexGenerator } from 'storybook/internal/core-server';
+import { StoryIndexGenerator, experimental_loadStorybook } from 'storybook/internal/core-server';
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
@@ -68,10 +68,8 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
   const configDir = finalOptions.configDir;
 
-  const presetPromise = loadAllPresets({
+  const presetPromise = experimental_loadStorybook({
     configDir,
-    corePresets: [],
-    overridePresets: [],
     packageJson: {},
   });
 
@@ -80,7 +78,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
     enforce: 'pre',
     async transformIndexHtml(html) {
       console.log('LOG: transformIndexHtml');
-      const presets = await presetPromise;
+      const { presets } = await presetPromise;
 
       const headHtmlSnippet = await presets.apply<string | undefined>('previewHead');
       const bodyHtmlSnippet = await presets.apply<string | undefined>('previewBody');
@@ -103,7 +101,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         });
       }
 
-      const presets = await presetPromise;
+      const { presets } = await presetPromise;
 
       const workingDir = process.cwd();
       const directories = {
