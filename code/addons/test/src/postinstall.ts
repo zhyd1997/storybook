@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import { writeFile } from 'node:fs/promises';
 
+import { traverse } from 'storybook/internal/babel';
 import {
   JsPackageManagerFactory,
   extractProperFrameworkName,
@@ -75,7 +76,17 @@ export default async function postInstall(options: PostinstallOptions) {
 
       const config = await readConfig(mainJsPath);
 
-      config.setFieldValue(['framework'], '@storybook/experimental-nextjs-vite');
+      const node = config.getFieldNode(['framework']);
+
+      traverse(node, {
+        StringLiteral(path) {
+          if (path.node.value === '@storybook/next') {
+            path.node.value = '@storybook/experimental-nextjs-vite';
+          }
+        },
+      });
+
+      config.setFieldNode(['framework'], node as babel.types.Expression);
 
       await writeConfig(config, mainJsPath);
 
