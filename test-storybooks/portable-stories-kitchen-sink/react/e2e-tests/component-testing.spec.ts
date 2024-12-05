@@ -453,7 +453,7 @@ test.describe("component testing", () => {
       await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test', { timeout: 30000 });
       await page.click('body');
       
-      // Assert - Coverage percentage is unchanged
+      // Assert - Coverage percentage is unchanged because Focused Tests shouldn't collect coverage
       console.log('LOG: firstSbPercentageText', firstSbPercentageText);
       console.log('LOG: secondSbPercentageText', await page.getByLabel(/percent coverage$/).textContent());
       expect(await page.getByLabel(/percent coverage$/).textContent()).toEqual(firstSbPercentageText);
@@ -464,7 +464,7 @@ test.describe("component testing", () => {
       // Arrange - Wait for tests to finish
       await expect(page.locator('#testing-module-description')).toContainText(/Ran \d{2,} tests/, { timeout: 30000 });
       
-      // Assert - Coverage percentage is updated to reflect the new coverage
+      // Assert - Coverage percentage is now updated because running all tests automatically re-enables coverage
       const updatedSbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
       expect(updatedSbPercentageText).toMatch(/^\d+\s%$/);
       const updatedSbPercentage = Number.parseInt(updatedSbPercentageText!.replace(' %', '') ?? '');
