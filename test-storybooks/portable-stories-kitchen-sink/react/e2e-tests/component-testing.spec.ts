@@ -415,7 +415,7 @@ test.describe("component testing", () => {
 
     const storyElement = sbPage
       .getCanvasBodyElement()
-      .getByRole("button", { name: "test" });
+      .getByRole("button", { name: "foo" });
     await expect(storyElement).toBeVisible({ timeout: 30000 });
 
     // Act - Enable coverage and run ALL tests
@@ -437,10 +437,12 @@ test.describe("component testing", () => {
     // Arrange - Add uncovered lines to Button.tsx to force coverage to drop
     const initialButtonContent = (await fs.readFile(BUTTON_COMPONENT_PATH)).toString();
     await fs.writeFile(BUTTON_COMPONENT_PATH, [initialButtonContent,
-      `export const uncovered = () => {
-        ${Array.from({ length: 300 }).map(() => 'void;').join('\n')}
-      };`].join('\n'));
-//TODO: CLEANUP
+      `const voidFn = () => {};
+
+export const uncovered = () => {
+  ${Array.from({ length: 300 }).map(() => 'voidFn();').join('\n  ')}
+};`].join('\n'));
+
     // Act - Open sidebar context menu and start focused test
     await page.locator('[data-item-id="example-button--csf-3-primary"]').hover();
     await page.locator('[data-item-id="example-button--csf-3-primary"] div[data-testid="context-menu"] button').click();
@@ -460,7 +462,7 @@ test.describe("component testing", () => {
     await page.getByLabel("Start Component tests").click();
     
     // Arrange - Wait for tests to finish
-    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText(/Ran \d{2,} tests/);
+    await expect(page.locator('#testing-module-description')).toContainText(/Ran \d{2,} tests/, { timeout: 30000 });
     
     // Assert - Coverage percentage is updated to reflect the new coverage
     const updatedSbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
@@ -469,6 +471,8 @@ test.describe("component testing", () => {
     expect(updatedSbPercentage).toBeGreaterThanOrEqual(0);
     expect(updatedSbPercentage).toBeLessThan(firstSbPercentage);
 
+    // Cleanup - Remove uncovered lines from Button.tsx
+    await fs.writeFile(BUTTON_COMPONENT_PATH, initialButtonContent);
   });
 
 });
