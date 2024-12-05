@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   Directive,
-  importProvidersFrom,
   Injectable,
   InjectionToken,
   Input,
@@ -11,6 +10,8 @@ import {
   Pipe,
   Provider,
   ɵReflectionCapabilities as ReflectionCapabilities,
+  importProvidersFrom,
+  VERSION,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
@@ -19,7 +20,8 @@ import {
   provideAnimations,
   provideNoopAnimations,
 } from '@angular/platform-browser/animations';
-import dedent from 'ts-dedent';
+import { dedent } from 'ts-dedent';
+
 import { NgModuleMetadata } from '../../types';
 import { isComponentAlreadyDeclared } from './NgModulesAnalyzer';
 
@@ -98,8 +100,6 @@ export class PropertyExtractor implements NgModuleMetadata {
    * - Removes Restricted Imports
    * - Extracts providers from ModuleWithProviders
    * - Returns a new NgModuleMetadata object
-   *
-   *
    */
   private analyzeMetadata = (metadata: NgModuleMetadata) => {
     const declarations = [...(metadata?.declarations || [])];
@@ -175,7 +175,22 @@ export class PropertyExtractor implements NgModuleMetadata {
     const isPipe = decorators.some((d) => this.isDecoratorInstanceOf(d, 'Pipe'));
 
     const isDeclarable = isComponent || isDirective || isPipe;
-    const isStandalone = (isComponent || isDirective) && decorators.some((d) => d.standalone);
+
+    // Check if the hierarchically lowest Component or Directive decorator (the only relevant for importing dependencies) is standalone.
+
+    let isStandalone =
+      (isComponent || isDirective) &&
+      [...decorators]
+        .reverse() // reflectionCapabilities returns decorators in a hierarchically top-down order
+        .find(
+          (d) =>
+            this.isDecoratorInstanceOf(d, 'Component') || this.isDecoratorInstanceOf(d, 'Directive')
+        )?.standalone;
+
+    //Starting in Angular 19 the default (in case it's undefined) value for standalone is true
+    if (isStandalone === undefined) {
+      isStandalone = !!(VERSION.major && Number(VERSION.major) >= 19);
+    }
 
     return { isDeclarable, isStandalone };
   };

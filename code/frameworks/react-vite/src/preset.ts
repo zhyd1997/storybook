@@ -1,5 +1,7 @@
-import type { PresetProperty } from '@storybook/types';
-import { dirname, join } from 'path';
+import { dirname, join } from 'node:path';
+
+import type { PresetProperty } from 'storybook/internal/types';
+
 import type { StorybookConfig } from './types';
 
 const getAbsolutePath = <I extends string>(input: I): I =>
@@ -43,7 +45,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, { presets 
     // Needs to run before the react plugin, so add to the front
     plugins.unshift(
       // If react-docgen is specified, use it for everything, otherwise only use it for non-typescript files
-      reactDocgen({
+      await reactDocgen({
         include: reactDocgenOption === 'react-docgen' ? /\.(mjs|tsx?|jsx?)$/ : /\.(mjs|jsx?)$/,
       })
     );
