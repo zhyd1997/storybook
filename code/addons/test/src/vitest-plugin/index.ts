@@ -4,15 +4,17 @@ import type { Plugin } from 'vitest/config';
 import {
   getInterpretedFile,
   loadAllPresets,
+  normalizeStories,
   validateConfigurationFiles,
 } from 'storybook/internal/common';
-import { mapStaticDir } from 'storybook/internal/core-server';
+import { StoryIndexGenerator, mapStaticDir } from 'storybook/internal/core-server';
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
-import type { StoriesEntry } from 'storybook/internal/types';
+import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
 
 import { join, resolve } from 'pathe';
 import sirv from 'sirv';
+import { convertPathToPattern } from 'tinyglobby';
 
 import type { InternalOptions, UserOptions } from './types';
 
@@ -53,8 +55,6 @@ export const storybookTest = (options?: UserOptions): Plugin => {
   process.env.__STORYBOOK_URL__ = storybookUrl;
   process.env.__STORYBOOK_SCRIPT__ = finalOptions.storybookScript;
 
-  let stories: StoriesEntry[];
-
   if (!finalOptions.configDir) {
     finalOptions.configDir = resolve(join(process.cwd(), '.storybook'));
   } else {
@@ -62,6 +62,8 @@ export const storybookTest = (options?: UserOptions): Plugin => {
   }
 
   let previewLevelTags: string[];
+  let storiesGlobs: StoriesEntry[];
+  let storiesFiles: string[];
   const statics: ReturnType<typeof mapStaticDir>[] = [];
 
   return {
@@ -85,7 +87,27 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         packageJson: {},
       });
 
-      stories = await presets.apply('stories', []);
+      const workingDir = process.cwd();
+      const directories = {
+        configDir,
+        workingDir,
+      };
+      storiesGlobs = await presets.apply('stories');
+      const indexers = await presets.apply('experimental_indexers', []);
+      const docsOptions = await presets.apply<DocsOptions>('docs', {});
+      const normalizedStories = normalizeStories(await storiesGlobs, directories);
+
+      const generator = new StoryIndexGenerator(normalizedStories, {
+        ...directories,
+        indexers: indexers,
+        docs: docsOptions,
+        workingDir,
+      });
+
+      await generator.initialize();
+
+      storiesFiles = generator.storyFileNames();
+
       previewLevelTags = await extractTagsFromPreview(configDir);
 
       const framework = await presets.apply('framework', undefined);
@@ -105,7 +127,14 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
       //   plugin.name?.startsWith('vitest:browser')
       // )
+
       config.test ??= {};
+
+      config.test.include ??= [];
+      config.test.include.push(...storiesFiles.map((path) => convertPathToPattern(path)));
+
+      config.test.exclude ??= [];
+      config.test.exclude.push('**/*.mdx');
 
       config.test.env ??= {};
       config.test.env = {
@@ -191,13 +220,13 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         return code;
       }
 
-      if (id.match(/(story|stories)\.[cm]?[jt]sx?$/)) {
+      if (storiesFiles.includes(id)) {
         return vitestTransform({
           code,
           fileName: id,
           configDir: finalOptions.configDir,
           tagsFilter: finalOptions.tags,
-          stories,
+          stories: storiesGlobs,
           previewLevelTags,
         });
       }

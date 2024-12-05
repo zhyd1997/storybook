@@ -7,3 +7,4 @@ export * from './build-dev';
 export * from './withTelemetry';
 export { default as build } from './standalone';
 export { mapStaticDir } from './utils/server-statics';
+export { StoryIndexGenerator } from './utils/StoryIndexGenerator';
