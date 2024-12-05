@@ -1,5 +1,4 @@
-import { Meta } from '@storybook/react'
-import type { StoryAnnotations } from 'storybook/internal/types';
+import { Meta, type StoryObj } from '@storybook/react'
 
 declare global {
   // eslint-disable-next-line no-var
@@ -8,17 +7,21 @@ declare global {
 
 const Component = () => <button>test</button>
 
-export default {
+const meta = {
   title: 'Addons/Group/Other',
   component: Component,
 } as Meta<typeof Component>;
 
-export const Passes = {
-} satisfies StoryAnnotations;
+export default meta;
 
-export const Fails = {
+type Story = StoryObj<typeof meta>;
+
+export const Passes: Story = {
+};
+
+export const Fails: Story = {
   play: async () => {
     throw new Error('Expected failure');
   },
   tags: ['fail-on-purpose'],
-} satisfies StoryAnnotations;
+};

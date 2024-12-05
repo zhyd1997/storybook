@@ -1,7 +1,6 @@
 import { expect } from '@storybook/test';
 import { Meta, type StoryObj } from '@storybook/react'
 import { instrument } from '@storybook/instrumenter'
-import type { StoryAnnotations } from 'storybook/internal/types';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -23,7 +22,7 @@ const { pass } = instrument({
   pass: async () => {},
 }, { intercept: true })
 
-export const ExpectedFailure = {
+export const ExpectedFailure: Story = {
   args: {
     forceFailure: false,
   },
@@ -33,30 +32,30 @@ export const ExpectedFailure = {
       throw new Error('Expected failure');
     }
   }
-} satisfies StoryAnnotations;
+};
 
-export const ExpectedSuccess = {
+export const ExpectedSuccess: Story = {
   play: async () => {
     await pass();
   }
-} satisfies StoryAnnotations;
+};
 
-export const LongRunning = {
+export const LongRunning: Story = {
   loaders: [async () => new Promise((resolve) => setTimeout(resolve, 800))],
-} satisfies StoryAnnotations;
+};
 
 // Tests will pass in browser, but fail in CLI
-export const MismatchFailure = {
+export const MismatchFailure: Story = {
   play: async () => {
     await pass();
     if(!globalThis.__vitest_browser__) {
       throw new Error('Expected failure');
     }
   }
-} satisfies StoryAnnotations;
+};
 
 // Tests will fail in browser, but pass in CLI
-export const MismatchSuccess = {
+export const MismatchSuccess: Story = {
   play: async () => {
     await pass();
     if(globalThis.__vitest_browser__) {
@@ -64,7 +63,7 @@ export const MismatchSuccess = {
     }
   },
   tags: ['fail-on-purpose'],
-} satisfies StoryAnnotations;
+};
 
 export const PreviewHeadTest: Story = {
   play: async () => {
