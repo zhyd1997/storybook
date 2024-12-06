@@ -111,6 +111,8 @@ export class VitestManager {
         resolve();
       } catch (e) {
         reject(e);
+      } finally {
+        this.vitestRestartPromise = null;
       }
     });
     return this.vitestRestartPromise;
