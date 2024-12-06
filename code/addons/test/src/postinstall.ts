@@ -352,8 +352,6 @@ export default async function postInstall(options: PostinstallOptions) {
     // If there's an existing config, we create a workspace file so we can run Storybook tests alongside.
     const extension = extname(rootConfig);
     const browserWorkspaceFile = resolve(dirname(rootConfig), `vitest.workspace${extension}`);
-    // to be set in vitest config
-    const vitestSetupFilePath = relative(dirname(browserWorkspaceFile), vitestSetupFile);
 
     logger.line(1);
     logger.plain(`${step} Creating a Vitest project workspace file:`);
@@ -371,6 +369,7 @@ export default async function postInstall(options: PostinstallOptions) {
           {
             extends: '${viteConfigFile ? relative(dirname(browserWorkspaceFile), viteConfigFile) : ''}',
             plugins: [
+              // The plugin will run tests for the stories defined in your Storybook config 
               // See options at: https://storybook.js.org/docs/writing-tests/vitest-plugin#storybooktest
               storybookTest({ configDir: '${options.configDir}' }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
             ],
@@ -382,9 +381,7 @@ export default async function postInstall(options: PostinstallOptions) {
                 name: 'chromium',
                 provider: 'playwright',
               },
-              // Make sure to adjust this pattern to match your stories files.
-              include: ['**/*.stories.?(m)[jt]s?(x)'],
-              setupFiles: ['${vitestSetupFilePath}'],
+              setupFiles: ['./.storybook/vitest.setup.ts'],
             },
           },
         ]);
@@ -409,6 +406,7 @@ export default async function postInstall(options: PostinstallOptions) {
         // More info at: https://storybook.js.org/docs/writing-tests/vitest-plugin
         export default defineConfig({
           plugins: [
+            // The plugin will run tests for the stories defined in your Storybook config 
             // See options at: https://storybook.js.org/docs/writing-tests/vitest-plugin#storybooktest
             storybookTest({ configDir: '${options.configDir}' }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
           ],
@@ -420,8 +418,6 @@ export default async function postInstall(options: PostinstallOptions) {
               name: 'chromium',
               provider: 'playwright',
             },
-            // Make sure to adjust this pattern to match your stories files.
-            include: ['**/*.stories.?(m)[jt]s?(x)'],
             setupFiles: ['${vitestSetupFilePath}'],
           },
         });

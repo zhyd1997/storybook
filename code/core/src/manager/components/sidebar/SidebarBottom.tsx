@@ -122,7 +122,7 @@ export const SidebarBottomBase = ({
   useEffect(() => {
     const onCrashReport = ({ providerId, ...details }: TestingModuleCrashReportPayload) => {
       api.updateTestProviderState(providerId, {
-        details,
+        error: { name: 'Crashed!', message: details.error.message },
         running: false,
         crashed: true,
         watching: false,
@@ -134,60 +134,12 @@ export const SidebarBottomBase = ({
       ...result
     }: TestingModuleProgressReportPayload) => {
       const statusResult = 'status' in result ? result.status : undefined;
-
-      if (statusResult === 'failed') {
-        api.updateTestProviderState(providerId, { ...result, running: false, failed: true });
-      } else {
-        const update = { ...result, running: statusResult === 'pending' };
-        api.updateTestProviderState(providerId, update);
-
-        const { mapStatusUpdate, ...state } = testProviders[providerId];
-        const statusUpdate = mapStatusUpdate?.({ ...state, ...update });
-
-        // TODO: Remove as soon as frontend is refactored to use the new statusUpdate
-        const testProviderID = 'storybook/test/test-provider';
-        const a11yProviderID = 'storybook/addon-a11y/test-provider';
-        const a11yPanelID = 'storybook/a11y/panel';
-        const statusMap: Record<any['status'], API_StatusValue> = {
-          failed: 'error',
-          passed: 'success',
-          warning: 'warn',
-          pending: 'pending',
-        };
-
-        if (providerId === testProviderID) {
-          const obj = Object.fromEntries(
-            (result.details?.testResults || []).flatMap((testResult: any) =>
-              testResult.results.map(
-                ({ storyId, status: reportStatus, testRunId, reports, ...rest }: any) => {
-                  const report = reports.find((r: any) => r.type === 'a11y');
-                  if (storyId && report) {
-                    const statusObject = {
-                      title: 'Accessibility tests',
-                      status: statusMap[report.status],
-                      data: {
-                        testRunId,
-                      },
-                      onClick: () => {
-                        api.setSelectedPanel(a11yPanelID);
-                        api.togglePanel(true);
-                      },
-                    };
-                    return [storyId, statusObject];
-                  } else {
-                    return [storyId, null];
-                  }
-                }
-              )
-            )
-          );
-          await api.experimental_updateStatus(a11yProviderID, obj);
-        }
-        // TODOEND: Remove as soon as frontend is refactored to use the new statusUpdate
-        if (statusUpdate) {
-          await api.experimental_updateStatus(providerId, statusUpdate);
-        }
-      }
+      api.updateTestProviderState(
+        providerId,
+        statusResult === 'failed'
+          ? { ...result, running: false, failed: true }
+          : { ...result, running: statusResult === 'pending' }
+      );
     };
 
     api.on(TESTING_MODULE_CRASH_REPORT, onCrashReport);

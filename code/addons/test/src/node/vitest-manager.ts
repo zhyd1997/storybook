@@ -94,7 +94,19 @@ export class VitestManager {
       });
     }
 
-    await this.vitest.init();
+    try {
+      await this.vitest.init();
+    } catch (e) {
+      const isV8 = e.message?.includes('@vitest/coverage-v8');
+      const isIstanbul = e.message?.includes('@vitest/coverage-istanbul');
+
+      if (e.message?.includes('Error: Failed to load url') && (isIstanbul || isV8)) {
+        const coveragePackage = isIstanbul ? 'coverage-istanbul' : 'coverage-v8';
+        e.message = `Please install the @vitest/${coveragePackage} package to run with coverage`;
+      }
+
+      this.testManager.reportFatalError('Failed to init Vitest', e);
+    }
 
     if (watchMode) {
       await this.setupWatchers();
