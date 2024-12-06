@@ -85,11 +85,13 @@ export class TestManager {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
       }
+
+      const allTestsRun = (payload.storyIds ?? []).length === 0;
+
       if (payload.config && this.coverage !== payload.config.coverage) {
         this.coverage = payload.config.coverage;
       }
 
-      const allTestsRun = (payload.storyIds ?? []).length === 0;
       if (this.coverage) {
         /*
            If we have coverage enabled and we're running all stories,
@@ -100,13 +102,14 @@ export class TestManager {
            If we're only running a subset of stories, we have to temporarily disable coverage,
            as a coverage report for a subset of stories is not useful.
          */
-        this.vitestManager.restartVitest({
+        await this.vitestManager.restartVitest({
           watchMode: allTestsRun ? false : this.watchMode,
           coverage: allTestsRun,
         });
+      } else {
+        await this.vitestManager.vitestRestartPromise;
       }
 
-      await this.vitestManager.vitestRestartPromise;
       await this.vitestManager.runTests(payload);
 
       if (this.coverage && !allTestsRun) {
