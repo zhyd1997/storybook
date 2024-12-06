@@ -61,6 +61,7 @@ const bootTestRunner = async (channel: Channel) => {
 
   const exit = (code = 0) => {
     killChild();
+    eventQueue.length = 0;
     process.exit(code);
   };
 
@@ -128,6 +129,7 @@ const bootTestRunner = async (channel: Channel) => {
 
   await Promise.race([startChildProcess(), timeout]).catch((e) => {
     reportFatalError(e);
+    eventQueue.length = 0;
     throw e;
   });
 };
@@ -148,4 +150,5 @@ export const killTestRunner = () => {
     child.kill();
     child = null;
   }
+  eventQueue.length = 0;
 };
