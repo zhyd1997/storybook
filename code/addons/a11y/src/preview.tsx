@@ -1,7 +1,8 @@
 // Source: https://github.com/chaance/vitest-axe/blob/main/src/to-have-no-violations.ts
 import * as matchers from 'vitest-axe/matchers';
 
-import type { StoryContext } from '@storybook/csf';
+import type { AfterEach } from 'storybook/internal/types';
+
 import { expect } from '@storybook/test';
 
 import { run } from './a11yRunner';
@@ -12,12 +13,12 @@ import { getIsVitestRunning, getIsVitestStandaloneRun } from './utils';
 expect.extend(matchers);
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export const experimental_afterEach = async ({
+export const experimental_afterEach: AfterEach<any> = async ({
   reporting,
   parameters,
   globals,
   tags,
-}: StoryContext) => {
+}) => {
   const a11yParameter: A11yParameters | undefined = parameters.a11y;
   const a11yGlobals = globals.a11y;
   const warnings = a11yParameter?.warnings ?? [];
