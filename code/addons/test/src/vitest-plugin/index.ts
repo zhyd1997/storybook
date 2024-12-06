@@ -7,12 +7,13 @@ import {
   normalizeStories,
   validateConfigurationFiles,
 } from 'storybook/internal/common';
-import { StoryIndexGenerator } from 'storybook/internal/core-server';
+import { StoryIndexGenerator, mapStaticDir } from 'storybook/internal/core-server';
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
 
 import { join, resolve } from 'pathe';
+import sirv from 'sirv';
 import { convertPathToPattern } from 'tinyglobby';
 
 import type { InternalOptions, UserOptions } from './types';
@@ -63,6 +64,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
   let previewLevelTags: string[];
   let storiesGlobs: StoriesEntry[];
   let storiesFiles: string[];
+  const statics: ReturnType<typeof mapStaticDir>[] = [];
 
   return {
     name: 'vite-plugin-storybook-test',
@@ -111,6 +113,15 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       const framework = await presets.apply('framework', undefined);
       const frameworkName = typeof framework === 'string' ? framework : framework.name;
       const storybookEnv = await presets.apply('env', {});
+      const staticDirs = await presets.apply('staticDirs', []);
+
+      for (const staticDir of staticDirs) {
+        try {
+          statics.push(mapStaticDir(staticDir, configDir));
+        } catch (e) {
+          console.warn(e);
+        }
+      }
 
       // If we end up needing to know if we are running in browser mode later
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
@@ -191,6 +202,18 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         config.define ??= {};
         config.define.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = 'false';
       }
+    },
+    configureServer(server) {
+      statics.map(({ staticPath, targetEndpoint }) => {
+        server.middlewares.use(
+          targetEndpoint,
+          sirv(staticPath, {
+            dev: true,
+            etag: true,
+            extensions: [],
+          })
+        );
+      });
     },
     async transform(code, id) {
       if (process.env.VITEST !== 'true') {
