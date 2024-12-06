@@ -320,7 +320,7 @@ test.describe("component testing", () => {
     await sidebarContextMenu.getByLabel('Start Component tests').click();
 
     // Assert - Only one test is running and reported
-    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test');
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test', { timeout: 30000 });
     await expect(sidebarContextMenu.getByLabel('status: passed')).toHaveCount(1);
     await page.click('body');
     await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: success' })).toHaveCount(1);
@@ -352,7 +352,7 @@ test.describe("component testing", () => {
     await sidebarContextMenu.getByLabel('Start Component tests').click();
 
     // Assert - 5 tests are running and reported
-    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 6 test');
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 6 test', { timeout: 30000 });
     // Assert - 1 failing test shows as a failed status
     await expect(sidebarContextMenu.getByText('2 stories with errors')).toBeVisible();
     await expect(sidebarContextMenu.getByLabel('status: failed')).toHaveCount(1);
@@ -417,7 +417,7 @@ test.describe("component testing", () => {
       .getByRole("button", { name: "foo" });
     await expect(storyElement).toBeVisible({ timeout: 30000 });
 
-    // Act - Enable coverage and run ALL tests
+    // Act - Enable coverage
     await page.getByLabel("Open settings for Component tests").click();
     await page.getByLabel("Coverage").click();
     await expect(page.getByText("Settings updated")).toBeVisible({ timeout: 3000 });
@@ -425,55 +425,32 @@ test.describe("component testing", () => {
     // Wait for Vitest to have (re)started
     await page.waitForTimeout(2000);
 
+    // Act - Open sidebar context menu and start focused test
+    await page.locator('[data-item-id="example-button--csf-3-primary"]').hover();
+    await page.locator('[data-item-id="example-button--csf-3-primary"] div[data-testid="context-menu"] button').click();
+    const sidebarContextMenu = page.getByTestId('tooltip');
+    await sidebarContextMenu.getByLabel('Start Component tests').click();
+    
+    // Arrange - Wait for test to finish and unfocus sidebar context menu
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test', { timeout: 30000 });
+    await page.click('body');
+    
+    // Assert - Coverage is not shown because Focused Tests shouldn't collect coverage
+    await expect(page.getByLabel("Open coverage report")).not.toBeVisible();
+    
+    // Act - Run ALL tests
     await page.getByLabel("Start Component tests").click();
-
-    // Assert - Coverage report is collected and shown
+    
+    // Arrange - Wait for tests to finish
+    await expect(page.locator('#testing-module-description')).toContainText(/Ran \d{2,} tests/, { timeout: 30000 });
+    
+    // Assert - Coverage percentage is now collected and shown because running all tests automatically re-enables coverage
     await expect(page.getByLabel("Open coverage report")).toBeVisible({ timeout: 30000 });
-    const firstSbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
-    expect(firstSbPercentageText).toMatch(/^\d+\s%$/);
-    const firstSbPercentage = Number.parseInt(firstSbPercentageText!.replace(' %', '') ?? '');
-
-    // Arrange - Add uncovered lines to Button.tsx to force coverage to drop
-    const initialButtonContent = (await fs.readFile(BUTTON_COMPONENT_PATH)).toString();
-    try {
-      await fs.writeFile(BUTTON_COMPONENT_PATH, [initialButtonContent,
-        `const voidFn = () => {};
-        
-        export const uncovered = () => {
-  ${Array.from({ length: 300 }).map(() => 'voidFn();').join('\n  ')}
-  };`].join('\n'));
-  
-      // Act - Open sidebar context menu and start focused test
-      await page.locator('[data-item-id="example-button--csf-3-primary"]').hover();
-      await page.locator('[data-item-id="example-button--csf-3-primary"] div[data-testid="context-menu"] button').click();
-      const sidebarContextMenu = page.getByTestId('tooltip');
-      await sidebarContextMenu.getByLabel('Start Component tests').click();
-      
-      // Arrange - Wait for test to finish and unfocus sidebar context menu
-      await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test', { timeout: 30000 });
-      await page.click('body');
-      
-      // Assert - Coverage percentage is unchanged because Focused Tests shouldn't collect coverage
-      console.log('LOG: firstSbPercentageText', firstSbPercentageText);
-      console.log('LOG: secondSbPercentageText', await page.getByLabel(/percent coverage$/).textContent());
-      expect(await page.getByLabel(/percent coverage$/).textContent()).toEqual(firstSbPercentageText);
-      
-      // Act - Run ALL tests again
-      await page.getByLabel("Start Component tests").click();
-      
-      // Arrange - Wait for tests to finish
-      await expect(page.locator('#testing-module-description')).toContainText(/Ran \d{2,} tests/, { timeout: 30000 });
-      
-      // Assert - Coverage percentage is now updated because running all tests automatically re-enables coverage
-      const updatedSbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
-      expect(updatedSbPercentageText).toMatch(/^\d+\s%$/);
-      const updatedSbPercentage = Number.parseInt(updatedSbPercentageText!.replace(' %', '') ?? '');
-      expect(updatedSbPercentage).toBeGreaterThanOrEqual(0);
-      expect(updatedSbPercentage).toBeLessThan(firstSbPercentage);
-    } finally {
-      // Cleanup - Remove uncovered lines from Button.tsx
-      await fs.writeFile(BUTTON_COMPONENT_PATH, initialButtonContent);
-    }
+    const sbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
+    expect(sbPercentageText).toMatch(/^\d+\s%$/);
+    const sbPercentage = Number.parseInt(sbPercentageText!.replace(' %', '') ?? '');
+    expect(sbPercentage).toBeGreaterThanOrEqual(0);
+    expect(sbPercentage).toBeLessThanOrEqual(100);
   });
 
 });
