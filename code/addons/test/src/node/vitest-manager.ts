@@ -119,9 +119,10 @@ export class VitestManager {
   private updateLastChanged(filepath: string) {
     const projects = this.vitest!.getModuleProjects(filepath);
     projects.forEach(({ server, browser }) => {
-      const serverMods = server.moduleGraph.getModulesByFile(filepath);
-      serverMods?.forEach((mod) => server.moduleGraph.invalidateModule(mod));
-
+      if (server) {
+        const serverMods = server.moduleGraph.getModulesByFile(filepath);
+        serverMods?.forEach((mod) => server.moduleGraph.invalidateModule(mod));
+      }
       if (browser) {
         const browserMods = browser.vite.moduleGraph.getModulesByFile(filepath);
         browserMods?.forEach((mod) => browser.vite.moduleGraph.invalidateModule(mod));
