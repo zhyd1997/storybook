@@ -25,6 +25,9 @@ const setForceFailureFlag = async (value: boolean) => {
 
   // Write the updated content back to the file asynchronously
   await fs.writeFile(TEST_STORY_PATH, updatedContent);
+
+  // the file change causes a HMR event, which causes a browser reload,and that can take a few seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 };
 
 test.describe("component testing", () => {
