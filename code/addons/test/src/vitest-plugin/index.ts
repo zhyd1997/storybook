@@ -13,8 +13,10 @@ import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
 
 import { join, resolve } from 'pathe';
+import picocolors from 'picocolors';
 import sirv from 'sirv';
 import { convertPathToPattern } from 'tinyglobby';
+import { dedent } from 'ts-dedent';
 
 import type { InternalOptions, UserOptions } from './types';
 
@@ -130,11 +132,21 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
       config.test ??= {};
 
-      config.test.include ??= [];
-      config.test.include.push(...storiesFiles.map((path) => convertPathToPattern(path)));
+      if (config.test.include?.length > 0) {
+        console.warn(
+          picocolors.yellow(dedent`
+            Warning: Starting in Storybook 8.5.0-alpha.18, the "test.include" option in Vitest is discouraged in favor of just using the "stories" field in your Storybook configuration.
 
-      config.test.exclude ??= [];
-      config.test.exclude.push('**/*.mdx');
+            The values you passed to "test.include" will be ignored, please remove them from your Vitest configuration where the Storybook plugin is applied.
+            
+            More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#indexing-behavior-of-storybookexperimental-addon-test-is-changed
+          `)
+        );
+      }
+
+      config.test.include = storiesFiles
+        .filter((path) => !path.endsWith('.mdx'))
+        .map((path) => convertPathToPattern(path));
 
       config.test.env ??= {};
       config.test.env = {
