@@ -34,6 +34,8 @@ export class VitestManager {
 
   vitestStartupCounter = 0;
 
+  vitestRestartPromise: Promise<void> | null = null;
+
   storyCountForCurrentRun: number = 0;
 
   constructor(private testManager: TestManager) {}
@@ -99,6 +101,21 @@ export class VitestManager {
     }
   }
 
+  async restartVitest({ watchMode, coverage }: { watchMode: boolean; coverage: boolean }) {
+    await this.vitestRestartPromise;
+    this.vitestRestartPromise = new Promise(async (resolve, reject) => {
+      try {
+        await this.vitest?.runningPromise;
+        await this.closeVitest();
+        await this.startVitest({ watchMode, coverage });
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
+    return this.vitestRestartPromise;
+  }
+
   private updateLastChanged(filepath: string) {
     const projects = this.vitest!.getModuleProjects(filepath);
     projects.forEach(({ server, browser }) => {
@@ -148,6 +165,8 @@ export class VitestManager {
   async runTests(requestPayload: TestingModuleRunRequestPayload<Config>) {
     if (!this.vitest) {
       await this.startVitest();
+    } else {
+      await this.vitestRestartPromise;
     }
 
     this.resetTestNamePattern();
