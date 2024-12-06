@@ -12,9 +12,8 @@ import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
 
-// eslint-disable-next-line depend/ban-dependencies
-import { escape } from 'glob';
 import { join, resolve } from 'pathe';
+import { convertPathToPattern } from 'tinyglobby';
 
 import type { InternalOptions, UserOptions } from './types';
 
@@ -34,7 +33,7 @@ const extractTagsFromPreview = async (configDir: string) => {
   return previewConfig.getFieldValue(['tags']) ?? [];
 };
 
-export const storybookTest = (options?: UserOptions): Plugin => {
+export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
   const finalOptions = {
     ...defaultOptions,
     ...options,
@@ -67,7 +66,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
   const configDir = finalOptions.configDir;
 
-  const presetPromise = experimental_loadStorybook({
+  const storybookOptions = await experimental_loadStorybook({
     configDir,
     packageJson: {},
   });
@@ -76,7 +75,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
     async transformIndexHtml(html) {
-      const { presets } = await presetPromise;
+      const { presets } = storybookOptions;
 
       const headHtmlSnippet = await presets.apply<string | undefined>('previewHead');
       const bodyHtmlSnippet = await presets.apply<string | undefined>('previewBody');
@@ -97,7 +96,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         });
       }
 
-      const { presets } = await presetPromise;
+      const { presets } = storybookOptions;
 
       const workingDir = process.cwd();
       const directories = {
@@ -137,11 +136,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
       config.test ??= {};
 
       config.test.include ??= [];
-      config.test.include.push(
-        // Escape magic characters in paths because they shouldn't be treated as glob patterns
-        // Paths are resolved using `pathe` to convert Windows paths to POSIX paths first
-        ...storiesFiles.map((path) => escape(resolve(path)))
-      );
+      config.test.include.push(...storiesFiles.map((path) => convertPathToPattern(path)));
 
       config.test.exclude ??= [];
       config.test.exclude.push('**/*.mdx');
