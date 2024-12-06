@@ -121,7 +121,7 @@ addons.register(ADDON_ID, (api) => {
                             api.setSelectedPanel('storybook/a11y/panel');
                             api.togglePanel(true);
                           },
-                          // sidebarContextMenu: false, // TODO
+                          sidebarContextMenu: false,
                         }
                       : null,
                   ] as const;
