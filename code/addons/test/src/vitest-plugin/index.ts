@@ -34,7 +34,7 @@ const extractTagsFromPreview = async (configDir: string) => {
   return previewConfig.getFieldValue(['tags']) ?? [];
 };
 
-export const storybookTest = (options?: UserOptions): Plugin => {
+export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
   const finalOptions = {
     ...defaultOptions,
     ...options,
@@ -67,7 +67,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
 
   const configDir = finalOptions.configDir;
 
-  const presetPromise = experimental_loadStorybook({
+  const storybookOptions = await experimental_loadStorybook({
     configDir,
     packageJson: {},
   });
@@ -76,7 +76,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
     async transformIndexHtml(html) {
-      const { presets } = await presetPromise;
+      const { presets } = storybookOptions;
 
       const headHtmlSnippet = await presets.apply<string | undefined>('previewHead');
       const bodyHtmlSnippet = await presets.apply<string | undefined>('previewBody');
@@ -97,7 +97,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
         });
       }
 
-      const { presets } = await presetPromise;
+      const { presets } = storybookOptions;
 
       const workingDir = process.cwd();
       const directories = {
