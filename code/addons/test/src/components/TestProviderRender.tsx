@@ -100,9 +100,11 @@ export const TestProviderRender: FC<
     }
 
     return state.details?.testResults?.flatMap((result) =>
-      result.results.map((r) => r.reports.find((report) => report.type))
+      result.results
+        .filter((it) => !entryId || it.storyId === entryId || it.storyId.startsWith(`${entryId}-`))
+        .map((r) => r.reports.find((report) => report.type === 'a11y'))
     );
-  }, [isA11yAddon, state.details?.testResults]);
+  }, [isA11yAddon, state.details?.testResults, entryId]);
 
   const a11yStatus = useMemo<'positive' | 'warning' | 'negative' | 'unknown'>(() => {
     if (!isA11yAddon || config.a11y === false) {
