@@ -150,5 +150,6 @@ export const killTestRunner = () => {
     child.kill();
     child = null;
   }
+  ready = false;
   eventQueue.length = 0;
 };
