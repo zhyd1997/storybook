@@ -71,11 +71,11 @@ export default async function postInstall(options: PostinstallOptions) {
           type: 'confirm',
           name: 'migrateToExperimentalNextjsVite',
           message: dedent`
-        The addon requires the use of @storybook/experimental-nextjs-vite to work with Next.js.
-        https://storybook.js.org/docs/writing-tests/test-addon#install-and-set-up
+            The addon requires the use of @storybook/experimental-nextjs-vite to work with Next.js.
+            https://storybook.js.org/docs/writing-tests/test-addon#install-and-set-up
 
-        Do you want to migrate?
-      `,
+            Do you want to migrate?
+          `,
           initial: true,
         });
 
@@ -84,7 +84,7 @@ export default async function postInstall(options: PostinstallOptions) {
         '@storybook/experimental-nextjs-vite',
       ]);
 
-      await packageManager.removeDependencies({}, ['@storybook/next']);
+      await packageManager.removeDependencies({}, ['@storybook/nextjs']);
 
       const mainJsPath = serverResolve(resolve(options.configDir, 'main')) as string;
       const config = await readConfig(mainJsPath);
@@ -93,7 +93,7 @@ export default async function postInstall(options: PostinstallOptions) {
 
       traverse(node, {
         StringLiteral(path) {
-          if (path.node.value === '@storybook/next') {
+          if (path.node.value === '@storybook/nextjs') {
             path.node.value = '@storybook/experimental-nextjs-vite';
           }
         },
@@ -204,13 +204,10 @@ export default async function postInstall(options: PostinstallOptions) {
   }
 
   const addonInteractionsName = '@storybook/addon-interactions';
-  const interactionsAddon = info.addons.find((addon: string | { name: string }) => {
-    // account for addons as objects, as well as addons with PnP paths
-    const addonName = typeof addon === 'string' ? addon : addon.name;
-    return addonName.includes(addonInteractionsName);
-  });
 
-  if (!!interactionsAddon) {
+  console.log({ yes: options.yes, hasAddonInteractions: info.hasAddonInteractions });
+
+  if (info.hasAddonInteractions) {
     let shouldUninstall = options.yes;
     if (!options.yes) {
       printInfo(
@@ -223,12 +220,14 @@ export default async function postInstall(options: PostinstallOptions) {
         `
       );
 
-      const response = await prompts({
-        type: 'confirm',
-        name: 'shouldUninstall',
-        message: `Would you like me to remove and unregister ${addonInteractionsName}? Press N to abort the entire installation.`,
-        initial: true,
-      });
+      const response = process.env.CI
+        ? { shouldUninstall: true }
+        : await prompts({
+            type: 'confirm',
+            name: 'shouldUninstall',
+            message: `Would you like me to remove and unregister ${addonInteractionsName}? Press N to abort the entire installation.`,
+            initial: true,
+          });
 
       shouldUninstall = response.shouldUninstall;
     }
@@ -247,10 +246,9 @@ export default async function postInstall(options: PostinstallOptions) {
         ],
         {
           shell: true,
+          stdio: 'inherit',
         }
       );
-    } else {
-      return;
     }
   }
 
@@ -545,6 +543,8 @@ async function getStorybookInfo({ configDir, packageManager: pkgMgr }: Postinsta
     isCritical: true,
   });
 
+  const hasAddonInteractions = !!(await presets.apply('ADDON_INTERACTIONS_IN_USE', false));
+
   const core = await presets.apply('core', {});
 
   const { builder, renderer } = core;
@@ -572,6 +572,6 @@ async function getStorybookInfo({ configDir, packageManager: pkgMgr }: Postinsta
     frameworkPackageName,
     builderPackageName,
     rendererPackageName,
-    addons: config.addons,
+    hasAddonInteractions,
   };
 }
