@@ -836,27 +836,27 @@ workflows:
           requires:
             - unit-tests
       - create-sandboxes:
-          parallelism: 15
+          parallelism: 16
           requires:
             - build
       - build-sandboxes:
-          parallelism: 15
+          parallelism: 16
           requires:
             - create-sandboxes
       - chromatic-sandboxes:
-          parallelism: 12
+          parallelism: 13
           requires:
             - build-sandboxes
       - e2e-production:
-          parallelism: 10
+          parallelism: 11
           requires:
             - build-sandboxes
       - e2e-dev:
-          parallelism: 2
+          parallelism: 1
           requires:
             - create-sandboxes
       - test-runner-production:
-          parallelism: 10
+          parallelism: 11
           requires:
             - build-sandboxes
       - vitest-integration:
@@ -912,27 +912,27 @@ workflows:
           requires:
             - unit-tests
       - create-sandboxes:
-          parallelism: 21
+          parallelism: 22
           requires:
             - build
       - build-sandboxes:
-          parallelism: 21
+          parallelism: 22
           requires:
             - create-sandboxes
       - chromatic-sandboxes:
-          parallelism: 18
+          parallelism: 19
           requires:
             - build-sandboxes
       - e2e-production:
-          parallelism: 16
+          parallelism: 17
           requires:
             - build-sandboxes
       - e2e-dev:
-          parallelism: 2
+          parallelism: 1
           requires:
             - create-sandboxes
       - test-runner-production:
-          parallelism: 16
+          parallelism: 17
           requires:
             - build-sandboxes
       - vitest-integration:
@@ -986,30 +986,30 @@ workflows:
           requires:
             - build
       - create-sandboxes:
-          parallelism: 39
+          parallelism: 40
           requires:
             - build
       # - smoke-test-sandboxes: # disabled for now
       #     requires:
       #       - create-sandboxes
       - build-sandboxes:
-          parallelism: 39
+          parallelism: 40
           requires:
             - create-sandboxes
       - chromatic-sandboxes:
-          parallelism: 36
+          parallelism: 37
           requires:
             - build-sandboxes
       - e2e-production:
-          parallelism: 34
+          parallelism: 35
           requires:
             - build-sandboxes
       - e2e-dev:
-          parallelism: 2
+          parallelism: 1
           requires:
             - create-sandboxes
       - test-runner-production:
-          parallelism: 34
+          parallelism: 35
           requires:
             - build-sandboxes
       - vitest-integration:
