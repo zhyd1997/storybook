@@ -63,17 +63,21 @@ export default async function postInstall(options: PostinstallOptions) {
   const hasCustomWebpackConfig = !!config.getFieldNode(['webpackFinal']);
 
   if (info.frameworkPackageName === '@storybook/nextjs' && !hasCustomWebpackConfig) {
-    const out = await prompts({
-      type: 'confirm',
-      name: 'migrateToExperimentalNextjsVite',
-      message: dedent`
+    const out = process.env.CI
+      ? {
+          migrateToExperimentalNextjsVite: true,
+        }
+      : await prompts({
+          type: 'confirm',
+          name: 'migrateToExperimentalNextjsVite',
+          message: dedent`
         The addon requires the use of @storybook/experimental-nextjs-vite to work with Next.js.
         https://storybook.js.org/docs/writing-tests/test-addon#install-and-set-up
 
         Do you want to migrate?
       `,
-      initial: true,
-    });
+          initial: true,
+        });
 
     if (out.migrateToExperimentalNextjsVite) {
       await packageManager.addDependencies({ installAsDevDependencies: true }, [
