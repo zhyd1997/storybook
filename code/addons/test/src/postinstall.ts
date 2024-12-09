@@ -57,11 +57,21 @@ export default async function postInstall(options: PostinstallOptions) {
   // if Vitest is installed, we use the same version to keep consistency across Vitest packages
   const vitestVersionToInstall = vitestVersionSpecifier ?? 'latest';
 
-  if (info.frameworkPackageName === '@storybook/nextjs') {
+  const mainJsPath = serverResolve(resolve(options.configDir, 'main')) as string;
+  const config = await readConfig(mainJsPath);
+
+  const hasCustomWebpackConfig = !!config.getFieldNode(['webpackFinal']);
+
+  if (info.frameworkPackageName === '@storybook/nextjs' && !hasCustomWebpackConfig) {
     const out = await prompts({
       type: 'confirm',
       name: 'migrateToExperimentalNextjsVite',
-      message: `To use this addon, you should migrate to use @storybook/experimental-nextjs-vite, do you want to migrate?`,
+      message: dedent`
+        The addon requires the use of @storybook/experimental-nextjs-vite to work with Next.js.
+        https://storybook.js.org/docs/writing-tests/test-addon#install-and-set-up
+
+        Do you want to migrate?
+      `,
       initial: true,
     });
 
@@ -72,9 +82,7 @@ export default async function postInstall(options: PostinstallOptions) {
 
       await packageManager.removeDependencies({}, ['@storybook/next']);
 
-      // update the storybook main.ts config file
       const mainJsPath = serverResolve(resolve(options.configDir, 'main')) as string;
-
       const config = await readConfig(mainJsPath);
 
       const node = config.getFieldNode(['framework']);
@@ -113,6 +121,10 @@ export default async function postInstall(options: PostinstallOptions) {
 
   const prerequisiteCheck = async () => {
     const reasons = [];
+
+    if (hasCustomWebpackConfig) {
+      reasons.push('• The addon can not be used with a custom Webpack configuration.');
+    }
 
     if (
       info.frameworkPackageName !== '@storybook/nextjs' &&
