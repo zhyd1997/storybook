@@ -96,7 +96,7 @@ addons.register(ADDON_ID, (api) => {
                       data: { testRunId },
                       onClick: openTestsPanel,
                       sidebarContextMenu: false,
-                    } as API_StatusObject,
+                    } satisfies API_StatusObject,
                   ])
               )
             )
@@ -108,12 +108,12 @@ addons.register(ADDON_ID, (api) => {
               update.details.testResults.flatMap((testResult) =>
                 testResult.results
                   .filter(({ storyId }) => storyId)
-                  .map(({ storyId, status, testRunId, reports, ...rest }) => {
+                  .map(({ storyId, testRunId, reports }) => {
                     const a11yReport = reports.find((r: any) => r.type === 'a11y');
                     return [
                       storyId,
                       a11yReport
-                        ? {
+                        ? ({
                             title: 'Accessibility tests',
                             description: '',
                             status: statusMap[a11yReport.status],
@@ -123,9 +123,9 @@ addons.register(ADDON_ID, (api) => {
                               api.togglePanel(true);
                             },
                             sidebarContextMenu: false,
-                          }
+                          } satisfies API_StatusObject)
                         : null,
-                    ] as const;
+                    ];
                   })
               )
             )
