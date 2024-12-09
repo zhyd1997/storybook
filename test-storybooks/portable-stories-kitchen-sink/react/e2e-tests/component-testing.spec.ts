@@ -73,7 +73,7 @@ test.describe("component testing", () => {
 
     await expect(testingModuleDescription).toContainText('Not run');
 
-    const runTestsButton = await page.getByLabel('Start component tests')
+    const runTestsButton = await page.getByLabel('Start Component tests')
     await runTestsButton.click();
 
     await expect(testingModuleDescription).toContainText('Testing', { timeout: 60000 });
