@@ -88,8 +88,10 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
     async transformIndexHtml(html) {
       const { presets } = storybookOptions;
 
-      const headHtmlSnippet = await presets.apply<string | undefined>('previewHead');
-      const bodyHtmlSnippet = await presets.apply<string | undefined>('previewBody');
+      const [headHtmlSnippet, bodyHtmlSnippet] = await Promise.all([
+        presets.apply('previewHead'),
+        presets.apply('previewBody'),
+      ]);
 
       return html
         .replace('</head>', `${headHtmlSnippet ?? ''}</head>`)
