@@ -202,8 +202,6 @@ export default async function postInstall(options: PostinstallOptions) {
 
   const addonInteractionsName = '@storybook/addon-interactions';
 
-  console.log({ yes: options.yes, hasAddonInteractions: info.hasAddonInteractions });
-
   if (info.hasAddonInteractions) {
     let shouldUninstall = options.yes;
     if (!options.yes) {

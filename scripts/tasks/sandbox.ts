@@ -74,7 +74,12 @@ export const sandbox: Task = {
       //   extraDeps.push('@testing-library/angular', '@analogjs/vitest-angular');
       // }
 
-      options.addon = [...options.addon, '@storybook/experimental-addon-test'];
+      console.log(options.addon);
+
+      options.addon = [
+        ...options.addon.filter((a) => !a.includes('interactions')),
+        '@storybook/experimental-addon-test',
+      ];
     }
 
     let startTime = now();
