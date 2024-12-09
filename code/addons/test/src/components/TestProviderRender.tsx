@@ -11,6 +11,7 @@ import type { API } from 'storybook/internal/manager-api';
 import { styled, useTheme } from 'storybook/internal/theming';
 
 import {
+  AccessibilityIcon,
   EditIcon,
   EyeIcon,
   PlayHollowIcon,
