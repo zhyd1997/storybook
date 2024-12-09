@@ -28,7 +28,7 @@ const statusMap: Record<TestStatus, API_StatusValue> = {
 addons.register(ADDON_ID, (api) => {
   const storybookBuilder = (globalThis as any).STORYBOOK_BUILDER || '';
   if (storybookBuilder.includes('vite')) {
-    const openAddonPanel = () => {
+    const openTestsPanel = () => {
       api.setSelectedPanel(PANEL_ID);
       api.togglePanel(true);
     };
@@ -93,7 +93,7 @@ addons.register(ADDON_ID, (api) => {
                         ? rest.failureMessages.join('\n')
                         : '',
                     data: { testRunId },
-                    onClick: openAddonPanel,
+                    onClick: openTestsPanel,
                     sidebarContextMenu: false,
                   } as API_StatusObject,
                 ])

@@ -10,7 +10,6 @@ import type { API } from 'storybook/internal/manager-api';
 import { styled, useTheme } from 'storybook/internal/theming';
 
 import {
-  AccessibilityIcon,
   EditIcon,
   EyeIcon,
   PlayHollowIcon,
@@ -22,7 +21,7 @@ import {
 import { isEqual } from 'es-toolkit';
 import { debounce } from 'es-toolkit/compat';
 
-import { type Config, type Details } from '../constants';
+import { type Config, type Details, PANEL_ID } from '../constants';
 import { type TestStatus } from '../node/reporter';
 import { Description } from './Description';
 import { TestStatusIcon } from './TestStatusIcon';
@@ -102,6 +101,12 @@ export const TestProviderRender: FC<
     .sort((a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status));
 
   const status = (state.failed ? 'failed' : results[0]?.status) || 'unknown';
+
+  const openTestsPanel = (id: string) => {
+    api.selectStory(id);
+    api.setSelectedPanel(PANEL_ID);
+    api.togglePanel(true);
+  };
 
   return (
     <Container {...props}>
@@ -188,6 +193,11 @@ export const TestProviderRender: FC<
         <Extras>
           <ListItem
             title="Component tests"
+            onClick={
+              (status === 'failed' || status === 'warning') && results[0]
+                ? () => openTestsPanel(results[0].storyId)
+                : null
+            }
             icon={
               state.crashed ? (
                 <TestStatusIcon status="critical" aria-label="status: crashed" />
