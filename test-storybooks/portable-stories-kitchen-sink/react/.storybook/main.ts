@@ -19,5 +19,6 @@ const config: StorybookConfig = {
       border: 1px solid red;
     }
   </style>`,
+  staticDirs: [{ from: './test-static-dirs', to:'test-static-dirs' }],
 };
 export default config;

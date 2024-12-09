@@ -74,3 +74,11 @@ export const PreviewHeadTest: Story = {
     expect(styles.borderColor).toBe('rgb(255, 0, 0)');
   }
 };
+
+export const StaticDirTest: Story = {
+  play: async () => {
+    const path = '/test-static-dirs/static.js';
+    const { staticFunction } = await import(/* @vite-ignore */path);
+    expect(staticFunction()).toBe(true);
+  }
+}
