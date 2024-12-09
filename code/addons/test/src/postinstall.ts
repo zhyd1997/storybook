@@ -63,7 +63,7 @@ export default async function postInstall(options: PostinstallOptions) {
   const hasCustomWebpackConfig = !!config.getFieldNode(['webpackFinal']);
 
   if (info.frameworkPackageName === '@storybook/nextjs' && !hasCustomWebpackConfig) {
-    const out = process.env.CI
+    const out = options.yes
       ? {
           migrateToExperimentalNextjsVite: true,
         }
@@ -85,9 +85,6 @@ export default async function postInstall(options: PostinstallOptions) {
       ]);
 
       await packageManager.removeDependencies({}, ['@storybook/nextjs']);
-
-      const mainJsPath = serverResolve(resolve(options.configDir, 'main')) as string;
-      const config = await readConfig(mainJsPath);
 
       const node = config.getFieldNode(['framework']);
 
@@ -220,14 +217,12 @@ export default async function postInstall(options: PostinstallOptions) {
         `
       );
 
-      const response = process.env.CI
-        ? { shouldUninstall: true }
-        : await prompts({
-            type: 'confirm',
-            name: 'shouldUninstall',
-            message: `Would you like me to remove and unregister ${addonInteractionsName}? Press N to abort the entire installation.`,
-            initial: true,
-          });
+      const response = await prompts({
+        type: 'confirm',
+        name: 'shouldUninstall',
+        message: `Would you like me to remove and unregister ${addonInteractionsName}? Press N to abort the entire installation.`,
+        initial: true,
+      });
 
       shouldUninstall = response.shouldUninstall;
     }
