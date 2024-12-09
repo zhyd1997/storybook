@@ -1,10 +1,8 @@
 <h1>Migration</h1>
 
 - [From version 8.4.x to 8.5.x](#from-version-84x-to-85x)
-  <<<<<<< HEAD
-  - # [Added source code panel to docs](#added-source-code-panel-to-docs)
+  - [Added source code panel to docs](#added-source-code-panel-to-docs)
   - [Indexing behavior of @storybook/experimental-addon-test is changed](#indexing-behavior-of-storybookexperimental-addon-test-is-changed)
-    > > > > > > > next
 - [From version 8.2.x to 8.3.x](#from-version-82x-to-83x)
   - [Removed `experimental_SIDEBAR_BOTTOM` and deprecated `experimental_SIDEBAR_TOP` addon types](#removed-experimental_sidebar_bottom-and-deprecated-experimental_sidebar_top-addon-types)
   - [New parameters format for addon backgrounds](#new-parameters-format-for-addon-backgrounds)
