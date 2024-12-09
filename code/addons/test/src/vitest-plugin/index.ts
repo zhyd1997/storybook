@@ -178,7 +178,7 @@ export const storybookTest = (options?: UserOptions): Plugin => {
           getInitialGlobals: () => {
             const envConfig = JSON.parse(process.env.VITEST_STORYBOOK_CONFIG ?? '{}');
 
-            const isA11yEnabled = envConfig.a11y ?? true;
+            const isA11yEnabled = process.env.VITEST_STORYBOOK ? (envConfig.a11y ?? false) : true;
 
             return {
               a11y: {
