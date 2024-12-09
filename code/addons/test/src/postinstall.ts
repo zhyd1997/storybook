@@ -206,7 +206,7 @@ export default async function postInstall(options: PostinstallOptions) {
 
         Adding ${picocolors.bold(colors.pink(`@storybook/experimental-nextjs-vite/vite-plugin`))} so you can use it with Vitest.
 
-        More info about the plugin at: ${picocolors.cyan(`https://github.com/storybookjs/vite-plugin-storybook-nextjs`)}
+        More info about the plugin at ${picocolors.cyan(`https://github.com/storybookjs/vite-plugin-storybook-nextjs`)}
       `
     );
     try {
@@ -228,7 +228,7 @@ export default async function postInstall(options: PostinstallOptions) {
         You don't seem to have a coverage reporter installed. Vitest needs either V8 or Istanbul to generate coverage reports.
 
         Adding ${picocolors.bold(colors.pink(`@vitest/coverage-v8`))} to enable coverage reporting.
-        If you prefer Istanbul, you can remove ${picocolors.bold(colors.pink(`@vitest/coverage-v8`))} and install ${picocolors.bold(colors.pink(`@vitest/coverage-istanbul`))} instead.
+        Read more about Vitest coverage providers at ${picocolors.cyan(`https://vitest.dev/guide/coverage.html#coverage-providers`)}
       `
     );
     dependencies.push(`@vitest/coverage-v8`); // Version specifier is added below
