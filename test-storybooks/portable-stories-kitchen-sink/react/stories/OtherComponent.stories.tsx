@@ -1,10 +1,5 @@
 import { Meta, type StoryObj } from '@storybook/react'
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __vitest_browser__: boolean;
-}
-
 const Component = () => <button>test</button>
 
 const meta = {
