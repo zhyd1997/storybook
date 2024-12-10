@@ -82,3 +82,11 @@ export const StaticDirTest: Story = {
     expect(staticFunction()).toBe(true);
   }
 }
+
+export const ViteFinalTest: Story = {
+  play: async () => {
+    // @ts-expect-error TS doesn't know about the alias
+    const { aliasedFunction } = await import('test-alias');
+    expect(aliasedFunction()).toBe(true);
+  }
+}
