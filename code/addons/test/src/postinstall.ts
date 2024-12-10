@@ -2,7 +2,6 @@ import { existsSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import { writeFile } from 'node:fs/promises';
 
-import type { types } from 'storybook/internal/babel';
 import { traverse } from 'storybook/internal/babel';
 import {
   JsPackageManagerFactory,
@@ -11,6 +10,7 @@ import {
   loadMainConfig,
   serverResolve,
   validateFrameworkName,
+  versions,
 } from 'storybook/internal/common';
 import { readConfig, writeConfig } from 'storybook/internal/csf-tools';
 import { colors, logger } from 'storybook/internal/node-logger';
@@ -84,9 +84,8 @@ export default async function postInstall(options: PostinstallOptions) {
         });
 
     if (out.migrateToExperimentalNextjsVite) {
-      console.log('running migrateToExperimentalNextjsVite');
       await packageManager.addDependencies({ installAsDevDependencies: true }, [
-        '@storybook/experimental-nextjs-vite',
+        `@storybook/experimental-nextjs-vite@${versions['@storybook/experimental-nextjs-vite']}`,
       ]);
 
       await packageManager.removeDependencies({}, ['@storybook/nextjs']);
