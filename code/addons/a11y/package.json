@@ -38,7 +38,8 @@
     },
     "./manager": "./dist/manager.js",
     "./register": "./dist/manager.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./postinstall": "./dist/postinstall.js"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -87,6 +88,9 @@
     ],
     "previewEntries": [
       "./src/preview.tsx"
+    ],
+    "nodeEntries": [
+      "./src/postinstall.ts"
     ]
   },
   "gitHead": "e6a7fd8a655c69780bc20b9749c2699e44beae16",
