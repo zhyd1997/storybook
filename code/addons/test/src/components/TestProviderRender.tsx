@@ -1,11 +1,12 @@
-import React, { type ComponentProps, type FC, useCallback, useRef, useState } from 'react';
+import React, { type ComponentProps, type FC, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Button, ListItem } from 'storybook/internal/components';
+import { Button, ListItem, ProgressSpinner } from 'storybook/internal/components';
 import {
   TESTING_MODULE_CONFIG_CHANGE,
   type TestProviderConfig,
   type TestProviderState,
 } from 'storybook/internal/core-events';
+import { addons } from 'storybook/internal/manager-api';
 import type { API } from 'storybook/internal/manager-api';
 import { styled, useTheme } from 'storybook/internal/theming';
 
@@ -16,12 +17,14 @@ import {
   PlayHollowIcon,
   PointerHandIcon,
   ShieldIcon,
-  StopAltHollowIcon,
+  StopAltIcon,
 } from '@storybook/icons';
 
 import { isEqual } from 'es-toolkit';
 import { debounce } from 'es-toolkit/compat';
 
+// Relatively importing from a11y to get the ADDON_ID
+import { ADDON_ID as A11Y_ADDON_ID } from '../../../a11y/src/constants';
 import { type Config, type Details } from '../constants';
 import { type TestStatus } from '../node/reporter';
 import { Description } from './Description';
@@ -63,6 +66,14 @@ const Checkbox = styled.input({
   },
 });
 
+const Progress = styled(ProgressSpinner)({
+  margin: 2,
+});
+
+const StopIcon = styled(StopAltIcon)({
+  width: 10,
+});
+
 const statusOrder: TestStatus[] = ['failed', 'warning', 'pending', 'passed', 'skipped'];
 const statusMap: Record<TestStatus, ComponentProps<typeof TestStatusIcon>['status']> = {
   failed: 'negative',
@@ -83,11 +94,50 @@ export const TestProviderRender: FC<
   const theme = useTheme();
   const coverageSummary = state.details?.coverageSummary;
 
+  const isA11yAddon = addons.experimental_getRegisteredAddons().includes(A11Y_ADDON_ID);
+
   const [config, updateConfig] = useConfig(
     api,
     state.id,
     state.config || { a11y: false, coverage: false }
   );
+
+  const a11yResults = useMemo(() => {
+    if (!isA11yAddon) {
+      return [];
+    }
+
+    return state.details?.testResults?.flatMap((result) =>
+      result.results
+        .filter((r) => !entryId || r.storyId === entryId || r.storyId?.startsWith(`${entryId}-`))
+        .map((r) => r.reports.find((report) => report.type === 'a11y'))
+    );
+  }, [isA11yAddon, state.details?.testResults, entryId]);
+
+  const a11yStatus = useMemo<'positive' | 'warning' | 'negative' | 'unknown'>(() => {
+    if (!isA11yAddon || config.a11y === false) {
+      return 'unknown';
+    }
+
+    if (!a11yResults) {
+      return 'unknown';
+    }
+
+    const failed = a11yResults.some((result) => result?.status === 'failed');
+    const warning = a11yResults.some((result) => result?.status === 'warning');
+
+    if (failed) {
+      return 'negative';
+    } else if (warning) {
+      return 'warning';
+    }
+
+    return 'positive';
+  }, [a11yResults, isA11yAddon, config.a11y]);
+
+  const a11yNotPassedAmount = a11yResults?.filter(
+    (result) => result?.status === 'failed' || result?.status === 'warning'
+  ).length;
 
   const storyId = entryId?.includes('--') ? entryId : undefined;
   const results = (state.details?.testResults || [])
@@ -140,11 +190,13 @@ export const TestProviderRender: FC<
                 <Button
                   aria-label={`Stop ${state.name}`}
                   variant="ghost"
-                  padding="small"
+                  padding="none"
                   onClick={() => api.cancelTestProvider(state.id)}
                   disabled={state.cancelling}
                 >
-                  <StopAltHollowIcon />
+                  <Progress percentage={state.progress?.percentageCompleted}>
+                    <StopIcon />
+                  </Progress>
                 </Button>
               ) : (
                 <Button
@@ -183,6 +235,20 @@ export const TestProviderRender: FC<
               />
             }
           />
+          {isA11yAddon && (
+            <ListItem
+              as="label"
+              title="Accessibility"
+              icon={<AccessibilityIcon color={theme.textMutedColor} />}
+              right={
+                <Checkbox
+                  type="checkbox"
+                  checked={config.a11y}
+                  onChange={() => updateConfig({ a11y: !config.a11y })}
+                />
+              }
+            />
+          )}
         </Extras>
       ) : (
         <Extras>
@@ -222,6 +288,13 @@ export const TestProviderRender: FC<
             <ListItem
               title="Coverage"
               icon={<TestStatusIcon status="unknown" aria-label={`status: unknown`} />}
+            />
+          )}
+          {isA11yAddon && (
+            <ListItem
+              title="Accessibility"
+              icon={<TestStatusIcon status={a11yStatus} aria-label={`status: ${a11yStatus}`} />}
+              right={a11yNotPassedAmount || null}
             />
           )}
         </Extras>

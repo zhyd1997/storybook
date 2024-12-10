@@ -15,7 +15,7 @@ import {
 } from 'storybook/internal/core-server';
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
-import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
+import type { Presets } from 'storybook/internal/types';
 
 import { join, resolve } from 'pathe';
 import picocolors from 'picocolors';
@@ -23,6 +23,7 @@ import sirv from 'sirv';
 import { convertPathToPattern } from 'tinyglobby';
 import { dedent } from 'ts-dedent';
 
+import { TestManager } from '../node/test-manager';
 import type { InternalOptions, UserOptions } from './types';
 
 const WORKING_DIR = process.cwd();
@@ -43,11 +44,31 @@ const extractTagsFromPreview = async (configDir: string) => {
   return previewConfig.getFieldValue(['tags']) ?? [];
 };
 
+const getStoryGlobsAndFiles = async (
+  presets: Presets,
+  directories: { configDir: string; workingDir: string }
+) => {
+  const stories = await presets.apply('stories', []);
+  const docs = await presets.apply('docs', {});
+  const indexers = await presets.apply('experimental_indexers', []);
+  console.log('LOG: ', { docs });
+  const generator = new StoryIndexGenerator(normalizeStories(stories, directories), {
+    ...directories,
+    indexers,
+    docs,
+  });
+  await generator.initialize();
+  return {
+    storiesGlobs: stories,
+    storiesFiles: generator.storyFileNames(),
+  };
+};
+
 export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
   const finalOptions = {
     ...defaultOptions,
     ...options,
-    configDir: options.configDir
+    configDir: options?.configDir
       ? resolve(WORKING_DIR, options.configDir)
       : defaultOptions.configDir,
     tags: {
@@ -75,25 +96,6 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
     packageJson: {},
   });
 
-  const getStoryGlobsAndFiles = async (): Promise<{
-    storiesGlobs: StoriesEntry[];
-    storiesFiles: string[];
-  }> => {
-    const stories = await presets.apply('stories');
-    const docs = await presets.apply('docs');
-    const indexers = await presets.apply('experimental_indexers', []);
-    const generator = new StoryIndexGenerator(normalizeStories(storiesGlobs, directories), {
-      ...directories,
-      indexers,
-      docs,
-    });
-    await generator.initialize();
-    return {
-      storiesGlobs: stories,
-      storiesFiles: generator.storyFileNames(),
-    };
-  };
-
   const [
     { storiesGlobs, storiesFiles },
     framework,
@@ -102,7 +104,7 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
     staticDirs,
     previewLevelTags,
   ] = await Promise.all([
-    getStoryGlobsAndFiles(),
+    getStoryGlobsAndFiles(presets, directories),
     presets.apply('framework', undefined),
     presets.apply('env', {}),
     presets.apply('viteFinal', {}),
@@ -161,6 +163,9 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
             ...storybookEnv,
             // To be accessed by the setup file
             __STORYBOOK_URL__: finalOptions.storybookUrl,
+            // We signal the test runner that we are not running it via Storybook
+            // We are overriding the environment variable to 'true' if vitest runs via @storybook/addon-test's backend
+            VITEST_STORYBOOK: 'false',
             __VITEST_INCLUDE_TAGS__: finalOptions.tags.include.join(','),
             __VITEST_EXCLUDE_TAGS__: finalOptions.tags.exclude.join(','),
             __VITEST_SKIP_TAGS__: finalOptions.tags.skip.join(','),
@@ -181,16 +186,31 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
               }
             : {}),
 
-          // if there is a test.browser config AND test.browser.screenshotFailures is not explicitly set, we set it to false
-          ...(inputConfig_DoNotMutate.test?.browser &&
-          inputConfig_DoNotMutate.test.browser.screenshotFailures === undefined
-            ? {
-                browser: {
-                  ...inputConfig_DoNotMutate.test?.browser,
+          browser: {
+            ...inputConfig_DoNotMutate.test?.browser,
+            commands: {
+              getInitialGlobals: () => {
+                const envConfig = JSON.parse(process.env.VITEST_STORYBOOK_CONFIG ?? '{}');
+
+                const isA11yEnabled = process.env.VITEST_STORYBOOK
+                  ? (envConfig.a11y ?? false)
+                  : true;
+
+                return {
+                  a11y: {
+                    manual: !isA11yEnabled,
+                  },
+                };
+              },
+            },
+            // if there is a test.browser config AND test.browser.screenshotFailures is not explicitly set, we set it to false
+            ...(inputConfig_DoNotMutate.test?.browser &&
+            inputConfig_DoNotMutate.test.browser.screenshotFailures === undefined
+              ? {
                   screenshotFailures: false,
-                },
-              }
-            : {}),
+                }
+              : {}),
+          },
         },
 
         envPrefix: Array.from(
@@ -220,6 +240,8 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
         },
 
         define: {
+          // polyfilling process.env.VITEST_STORYBOOK to 'false' in the browser
+          'process.env.VITEST_STORYBOOK': JSON.stringify('false'),
           ...(frameworkName?.includes('vue3')
             ? { __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false' }
             : {}),
