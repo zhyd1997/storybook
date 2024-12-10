@@ -79,11 +79,11 @@ export const ProgressSpinner = ({
       </Circle>
       {running && (
         <Circle size={size} width={width} xmlns={XMLNS} spinner>
-          <circle strokeDashoffset={Math.PI * (size - 2) * (1 - percentage / 100)} />
+          <circle strokeDashoffset={Math.PI * (size - Math.ceil(width)) * (1 - percentage / 100)} />
         </Circle>
       )}
       <Circle size={size} width={width} xmlns={XMLNS} progress>
-        <circle strokeDashoffset={Math.PI * (size - 2) * (1 - percentage / 100)} />
+        <circle strokeDashoffset={Math.PI * (size - Math.ceil(width)) * (1 - percentage / 100)} />
       </Circle>
     </Wrapper>
   ) : (
