@@ -23,7 +23,10 @@ import {
 import { isEqual } from 'es-toolkit';
 import { debounce } from 'es-toolkit/compat';
 
-import { ADDON_ID as A11Y_ADDON_ID } from '../../../a11y/src/constants';
+import {
+  ADDON_ID as A11Y_ADDON_ID,
+  PANEL_ID as A11y_ADDON_PANEL_ID,
+} from '../../../a11y/src/constants';
 import { type Config, type Details, PANEL_ID } from '../constants';
 import { type TestStatus } from '../node/reporter';
 import { Description } from './Description';
@@ -144,9 +147,9 @@ export const TestProviderRender: FC<
 
   const status = (state.failed ? 'failed' : results[0]?.status) || 'unknown';
 
-  const openTestsPanel = (id: string) => {
+  const openPanel = (id: string, panelId: string) => {
     api.selectStory(id);
-    api.setSelectedPanel(PANEL_ID);
+    api.setSelectedPanel(panelId);
     api.togglePanel(true);
   };
 
@@ -250,8 +253,8 @@ export const TestProviderRender: FC<
           <ListItem
             title="Component tests"
             onClick={
-              (status === 'failed' || status === 'warning') && results[0]
-                ? () => openTestsPanel(results[0].storyId)
+              (status === 'failed' || status === 'warning') && results.length === 1
+                ? () => openPanel(results[0].storyId, PANEL_ID)
                 : null
             }
             icon={
@@ -288,6 +291,11 @@ export const TestProviderRender: FC<
           {isA11yAddon && (
             <ListItem
               title="Accessibility"
+              onClick={
+                (a11yStatus === 'negative' || a11yStatus === 'warning') && results.length === 1
+                  ? () => openPanel(results[0].storyId, A11y_ADDON_PANEL_ID)
+                  : null
+              }
               icon={<TestStatusIcon status={a11yStatus} aria-label={`status: ${a11yStatus}`} />}
               right={a11yNotPassedAmount || null}
             />
