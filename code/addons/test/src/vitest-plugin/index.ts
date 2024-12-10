@@ -5,11 +5,14 @@ import type { ViteUserConfig } from 'vitest/config';
 
 import {
   getInterpretedFile,
-  loadAllPresets,
   normalizeStories,
   validateConfigurationFiles,
 } from 'storybook/internal/common';
-import { StoryIndexGenerator, mapStaticDir } from 'storybook/internal/core-server';
+import {
+  StoryIndexGenerator,
+  experimental_loadStorybook,
+  mapStaticDir,
+} from 'storybook/internal/core-server';
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { Presets } from 'storybook/internal/types';
@@ -87,10 +90,8 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
     workingDir: WORKING_DIR,
   };
 
-  const presets = await loadAllPresets({
+  const { presets } = await experimental_loadStorybook({
     configDir: finalOptions.configDir,
-    corePresets: [],
-    overridePresets: [],
     packageJson: {},
   });
 
@@ -113,6 +114,16 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
   return {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
+    async transformIndexHtml(html) {
+      const [headHtmlSnippet, bodyHtmlSnippet] = await Promise.all([
+        presets.apply('previewHead'),
+        presets.apply('previewBody'),
+      ]);
+
+      return html
+        .replace('</head>', `${headHtmlSnippet ?? ''}</head>`)
+        .replace('<body>', `<body>${bodyHtmlSnippet ?? ''}`);
+    },
     async config(inputConfig_DoNotMutate) {
       // ! We're not mutating the input config, instead we're returning a new partial config
       // ! see https://vite.dev/guide/api-plugin.html#config
