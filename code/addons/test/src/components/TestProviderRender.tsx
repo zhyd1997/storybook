@@ -109,7 +109,7 @@ export const TestProviderRender: FC<
 
     return state.details?.testResults?.flatMap((result) =>
       result.results
-        .filter((it) => !entryId || it.storyId === entryId || it.storyId.startsWith(`${entryId}-`))
+        .filter((r) => !entryId || r.storyId === entryId || r.storyId?.startsWith(`${entryId}-`))
         .map((r) => r.reports.find((report) => report.type === 'a11y'))
     );
   }, [isA11yAddon, state.details?.testResults, entryId]);
