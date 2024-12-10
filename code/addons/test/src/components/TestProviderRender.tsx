@@ -23,9 +23,11 @@ import {
 import { isEqual } from 'es-toolkit';
 import { debounce } from 'es-toolkit/compat';
 
-// Relatively importing from a11y to get the ADDON_ID
-import { ADDON_ID as A11Y_ADDON_ID } from '../../../a11y/src/constants';
-import { type Config, type Details } from '../constants';
+import {
+  ADDON_ID as A11Y_ADDON_ID,
+  PANEL_ID as A11y_ADDON_PANEL_ID,
+} from '../../../a11y/src/constants';
+import { type Config, type Details, PANEL_ID } from '../constants';
 import { type TestStatus } from '../node/reporter';
 import { Description } from './Description';
 import { TestStatusIcon } from './TestStatusIcon';
@@ -153,6 +155,12 @@ export const TestProviderRender: FC<
 
   const status = (state.failed ? 'failed' : results[0]?.status) || 'unknown';
 
+  const openPanel = (id: string, panelId: string) => {
+    api.selectStory(id);
+    api.setSelectedPanel(panelId);
+    api.togglePanel(true);
+  };
+
   return (
     <Container {...props}>
       <Heading>
@@ -254,6 +262,16 @@ export const TestProviderRender: FC<
         <Extras>
           <ListItem
             title="Component tests"
+            onClick={
+              (status === 'failed' || status === 'warning') && results.length
+                ? () => {
+                    const firstNotPassed = results.find(
+                      (r) => r.status === 'failed' || r.status === 'warning'
+                    );
+                    openPanel(firstNotPassed.storyId, PANEL_ID);
+                  }
+                : null
+            }
             icon={
               state.crashed ? (
                 <TestStatusIcon status="critical" aria-label="status: crashed" />
@@ -293,6 +311,20 @@ export const TestProviderRender: FC<
           {isA11yAddon && (
             <ListItem
               title="Accessibility"
+              onClick={
+                (a11yStatus === 'negative' || a11yStatus === 'warning') && a11yResults.length
+                  ? () => {
+                      const firstNotPassed = results.find((r) =>
+                        r.reports
+                          .filter((report) => report.type === 'a11y')
+                          .find(
+                            (report) => report.status === 'failed' || report.status === 'warning'
+                          )
+                      );
+                      openPanel(firstNotPassed.storyId, A11y_ADDON_PANEL_ID);
+                    }
+                  : null
+              }
               icon={<TestStatusIcon status={a11yStatus} aria-label={`status: ${a11yStatus}`} />}
               right={a11yNotPassedAmount || null}
             />
