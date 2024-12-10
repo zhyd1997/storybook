@@ -1,6 +1,6 @@
 import React, { type ComponentProps, type FC, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Button, ListItem } from 'storybook/internal/components';
+import { Button, ListItem, ProgressSpinner } from 'storybook/internal/components';
 import {
   TESTING_MODULE_CONFIG_CHANGE,
   type TestProviderConfig,
@@ -17,7 +17,7 @@ import {
   PlayHollowIcon,
   PointerHandIcon,
   ShieldIcon,
-  StopAltHollowIcon,
+  StopAltIcon,
 } from '@storybook/icons';
 
 import { isEqual } from 'es-toolkit';
@@ -64,6 +64,14 @@ const Checkbox = styled.input({
   '&:enabled': {
     cursor: 'pointer',
   },
+});
+
+const Progress = styled(ProgressSpinner)({
+  margin: 2,
+});
+
+const StopIcon = styled(StopAltIcon)({
+  width: 10,
 });
 
 const statusOrder: TestStatus[] = ['failed', 'warning', 'pending', 'passed', 'skipped'];
@@ -182,11 +190,13 @@ export const TestProviderRender: FC<
                 <Button
                   aria-label={`Stop ${state.name}`}
                   variant="ghost"
-                  padding="small"
+                  padding="none"
                   onClick={() => api.cancelTestProvider(state.id)}
                   disabled={state.cancelling}
                 >
-                  <StopAltHollowIcon />
+                  <Progress percentage={state.progress?.percentageCompleted}>
+                    <StopIcon />
+                  </Progress>
                 </Button>
               ) : (
                 <Button
