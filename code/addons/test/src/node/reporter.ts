@@ -167,7 +167,9 @@ export class StorybookReporter implements Reporter {
         finishedAt,
         percentageCompleted: finishedAt
           ? 100
-          : ((numPassedTests + numFailedTests) / numTotalTests) * 100,
+          : numTotalTests
+            ? ((numPassedTests + numFailedTests) / numTotalTests) * 100
+            : 0,
       } as TestingModuleProgressReportProgress,
       details: {
         testResults,
