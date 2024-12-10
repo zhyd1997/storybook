@@ -1,25 +1,35 @@
 /* eslint-disable no-underscore-dangle */
 import type { Plugin } from 'vitest/config';
 import { mergeConfig } from 'vitest/config';
+import type { ViteUserConfig } from 'vitest/config';
 
 import {
   getInterpretedFile,
   normalizeStories,
   validateConfigurationFiles,
 } from 'storybook/internal/common';
-import { StoryIndexGenerator, experimental_loadStorybook } from 'storybook/internal/core-server';
+import {
+  StoryIndexGenerator,
+  experimental_loadStorybook,
+  mapStaticDir,
+} from 'storybook/internal/core-server';
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
 import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
 
 import { join, resolve } from 'pathe';
+import picocolors from 'picocolors';
+import sirv from 'sirv';
 import { convertPathToPattern } from 'tinyglobby';
+import { dedent } from 'ts-dedent';
 
 import type { InternalOptions, UserOptions } from './types';
 
+const WORKING_DIR = process.cwd();
+
 const defaultOptions: UserOptions = {
   storybookScript: undefined,
-  configDir: undefined,
+  configDir: resolve(join(WORKING_DIR, '.storybook')),
   storybookUrl: 'http://localhost:6006',
 };
 
@@ -37,6 +47,9 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
   const finalOptions = {
     ...defaultOptions,
     ...options,
+    configDir: options.configDir
+      ? resolve(WORKING_DIR, options.configDir)
+      : defaultOptions.configDir,
     tags: {
       include: options?.tags?.include ?? ['test'],
       exclude: options?.tags?.exclude ?? [],
@@ -48,164 +61,208 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
     finalOptions.debug = true;
   }
 
-  const storybookUrl = finalOptions.storybookUrl || defaultOptions.storybookUrl;
-
   // To be accessed by the global setup file
-  process.env.__STORYBOOK_URL__ = storybookUrl;
+  process.env.__STORYBOOK_URL__ = finalOptions.storybookUrl;
   process.env.__STORYBOOK_SCRIPT__ = finalOptions.storybookScript;
 
-  if (!finalOptions.configDir) {
-    finalOptions.configDir = resolve(join(process.cwd(), '.storybook'));
-  } else {
-    finalOptions.configDir = resolve(process.cwd(), finalOptions.configDir);
-  }
+  const directories = {
+    configDir: finalOptions.configDir,
+    workingDir: WORKING_DIR,
+  };
 
-  let previewLevelTags: string[];
-  let storiesGlobs: StoriesEntry[];
-  let storiesFiles: string[];
-
-  const configDir = finalOptions.configDir;
-
-  const storybookOptions = await experimental_loadStorybook({
-    configDir,
+  const { presets } = await experimental_loadStorybook({
+    configDir: finalOptions.configDir,
     packageJson: {},
   });
+
+  const getStoryGlobsAndFiles = async (): Promise<{
+    storiesGlobs: StoriesEntry[];
+    storiesFiles: string[];
+  }> => {
+    const stories = await presets.apply('stories');
+    const docs = await presets.apply('docs');
+    const indexers = await presets.apply('experimental_indexers', []);
+    const generator = new StoryIndexGenerator(normalizeStories(storiesGlobs, directories), {
+      ...directories,
+      indexers,
+      docs,
+    });
+    await generator.initialize();
+    return {
+      storiesGlobs: stories,
+      storiesFiles: generator.storyFileNames(),
+    };
+  };
+
+  const [
+    { storiesGlobs, storiesFiles },
+    framework,
+    storybookEnv,
+    viteConfigFromStorybook,
+    staticDirs,
+    previewLevelTags,
+  ] = await Promise.all([
+    getStoryGlobsAndFiles(),
+    presets.apply('framework', undefined),
+    presets.apply('env', {}),
+    presets.apply('viteFinal', {}),
+    presets.apply('staticDirs', []),
+    extractTagsFromPreview(finalOptions.configDir),
+  ]);
 
   return {
     name: 'vite-plugin-storybook-test',
     enforce: 'pre',
     async transformIndexHtml(html) {
-      const { presets } = storybookOptions;
-
-      const headHtmlSnippet = await presets.apply<string | undefined>('previewHead');
-      const bodyHtmlSnippet = await presets.apply<string | undefined>('previewBody');
+      const [headHtmlSnippet, bodyHtmlSnippet] = await Promise.all([
+        presets.apply('previewHead'),
+        presets.apply('previewBody'),
+      ]);
 
       return html
         .replace('</head>', `${headHtmlSnippet ?? ''}</head>`)
         .replace('<body>', `<body>${bodyHtmlSnippet ?? ''}`);
     },
-    async config(input) {
-      let config = input;
-
+    async config(inputConfig_DoNotMutate) {
+      // ! We're not mutating the input config, instead we're returning a new partial config
+      // ! see https://vite.dev/guide/api-plugin.html#config
       try {
-        await validateConfigurationFiles(configDir);
+        await validateConfigurationFiles(finalOptions.configDir);
       } catch (err) {
         throw new MainFileMissingError({
-          location: configDir,
+          location: finalOptions.configDir,
           source: 'vitest',
         });
       }
 
-      const { presets } = storybookOptions;
-
-      const workingDir = process.cwd();
-      const directories = {
-        configDir,
-        workingDir,
-      };
-      storiesGlobs = await presets.apply('stories');
-      const indexers = await presets.apply('experimental_indexers', []);
-      const docsOptions = await presets.apply<DocsOptions>('docs', {});
-      const normalizedStories = normalizeStories(await storiesGlobs, directories);
-
-      const generator = new StoryIndexGenerator(normalizedStories, {
-        ...directories,
-        indexers: indexers,
-        docs: docsOptions,
-        workingDir,
-      });
-
-      await generator.initialize();
-
-      storiesFiles = generator.storyFileNames();
-
-      previewLevelTags = await extractTagsFromPreview(configDir);
-
-      const framework = await presets.apply('framework', undefined);
       const frameworkName = typeof framework === 'string' ? framework : framework.name;
-      const storybookEnv = await presets.apply('env', {});
 
       // If we end up needing to know if we are running in browser mode later
       // const isRunningInBrowserMode = config.plugins.find((plugin: Plugin) =>
       //   plugin.name?.startsWith('vitest:browser')
       // )
 
-      const viteConfigFromStorybook = await presets.apply('viteFinal', {});
-      config = mergeConfig(viteConfigFromStorybook, config);
+      const baseConfig: Omit<ViteUserConfig, 'plugins'> = {
+        test: {
+          setupFiles: [
+            '@storybook/experimental-addon-test/internal/setup-file',
+            // if the existing setupFiles is a string, we have to include it otherwise we're overwriting it
+            typeof inputConfig_DoNotMutate.test?.setupFiles === 'string' &&
+              inputConfig_DoNotMutate.test?.setupFiles,
+          ].filter(Boolean),
 
-      config.test ??= {};
+          ...(finalOptions.storybookScript
+            ? {
+                globalSetup: ['@storybook/experimental-addon-test/internal/global-setup'],
+              }
+            : {}),
 
-      config.test.include ??= [];
-      config.test.include.push(...storiesFiles.map((path) => convertPathToPattern(path)));
+          env: {
+            ...storybookEnv,
+            // To be accessed by the setup file
+            __STORYBOOK_URL__: finalOptions.storybookUrl,
+            __VITEST_INCLUDE_TAGS__: finalOptions.tags.include.join(','),
+            __VITEST_EXCLUDE_TAGS__: finalOptions.tags.exclude.join(','),
+            __VITEST_SKIP_TAGS__: finalOptions.tags.skip.join(','),
+          },
 
-      config.test.exclude ??= [];
-      config.test.exclude.push('**/*.mdx');
+          include: storiesFiles
+            .filter((path) => !path.endsWith('.mdx'))
+            .map((path) => convertPathToPattern(path)),
 
-      config.test.env ??= {};
-      config.test.env = {
-        ...storybookEnv,
-        ...config.test.env,
-        // To be accessed by the setup file
-        __STORYBOOK_URL__: storybookUrl,
-        __VITEST_INCLUDE_TAGS__: finalOptions.tags.include.join(','),
-        __VITEST_EXCLUDE_TAGS__: finalOptions.tags.exclude.join(','),
-        __VITEST_SKIP_TAGS__: finalOptions.tags.skip.join(','),
+          // if the existing deps.inline is true, we keep it as-is, because it will inline everything
+          ...(inputConfig_DoNotMutate.test?.server?.deps?.inline !== true
+            ? {
+                server: {
+                  deps: {
+                    inline: ['@storybook/experimental-addon-test'],
+                  },
+                },
+              }
+            : {}),
+
+          // if there is a test.browser config AND test.browser.screenshotFailures is not explicitly set, we set it to false
+          ...(inputConfig_DoNotMutate.test?.browser &&
+          inputConfig_DoNotMutate.test.browser.screenshotFailures === undefined
+            ? {
+                browser: {
+                  ...inputConfig_DoNotMutate.test?.browser,
+                  screenshotFailures: false,
+                },
+              }
+            : {}),
+        },
+
+        envPrefix: Array.from(
+          new Set([...(inputConfig_DoNotMutate.envPrefix || []), 'STORYBOOK_', 'VITE_'])
+        ),
+
+        resolve: {
+          conditions: [
+            'storybook',
+            'stories',
+            'test',
+            // copying straight from https://github.com/vitejs/vite/blob/main/packages/vite/src/node/constants.ts#L60
+            // to avoid having to maintain Vite as a dependency just for this
+            'module',
+            'browser',
+            'development|production',
+          ],
+        },
+
+        optimizeDeps: {
+          include: [
+            '@storybook/experimental-addon-test/**',
+            ...(frameworkName?.includes('react') || frameworkName?.includes('nextjs')
+              ? ['react-dom/test-utils']
+              : []),
+          ],
+        },
+
+        define: {
+          ...(frameworkName?.includes('vue3')
+            ? { __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false' }
+            : {}),
+        },
       };
 
-      config.envPrefix = Array.from(new Set([...(config.envPrefix || []), 'STORYBOOK_', 'VITE_']));
-
-      if (config.test.browser) {
-        config.test.browser.screenshotFailures ??= false;
-      }
-
-      // copying straight from https://github.com/vitejs/vite/blob/main/packages/vite/src/node/constants.ts#L60
-      // to avoid having to maintain Vite as a dependency just for this
-      const viteDefaultClientConditions = ['module', 'browser', 'development|production'];
-
-      config.resolve ??= {};
-      config.resolve.conditions ??= [];
-      config.resolve.conditions.push(
-        'storybook',
-        'stories',
-        'test',
-        ...viteDefaultClientConditions
+      // Merge config from storybook with the plugin config
+      const config: Omit<ViteUserConfig, 'plugins'> = mergeConfig(
+        baseConfig,
+        viteConfigFromStorybook
       );
 
-      config.test.setupFiles ??= [];
-      if (typeof config.test.setupFiles === 'string') {
-        config.test.setupFiles = [config.test.setupFiles];
-      }
-      config.test.setupFiles.push('@storybook/experimental-addon-test/internal/setup-file');
+      // alert the user of problems
+      if (inputConfig_DoNotMutate.test.include?.length > 0) {
+        console.warn(
+          picocolors.yellow(dedent`
+            Warning: Starting in Storybook 8.5.0-alpha.18, the "test.include" option in Vitest is discouraged in favor of just using the "stories" field in your Storybook configuration.
 
-      // when a Storybook script is provided, we spawn Storybook for the user when in watch mode
-      if (finalOptions.storybookScript) {
-        config.test.globalSetup = config.test.globalSetup ?? [];
-        if (typeof config.test.globalSetup === 'string') {
-          config.test.globalSetup = [config.test.globalSetup];
+            The values you passed to "test.include" will be ignored, please remove them from your Vitest configuration where the Storybook plugin is applied.
+            
+            More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#indexing-behavior-of-storybookexperimental-addon-test-is-changed
+          `)
+        );
+      }
+
+      // return the new config, it will be deep-merged by vite
+      return config;
+    },
+    async configureServer(server) {
+      for (const staticDir of staticDirs) {
+        try {
+          const { staticPath, targetEndpoint } = mapStaticDir(staticDir, directories.configDir);
+          server.middlewares.use(
+            targetEndpoint,
+            sirv(staticPath, {
+              dev: true,
+              etag: true,
+              extensions: [],
+            })
+          );
+        } catch (e) {
+          console.warn(e);
         }
-        config.test.globalSetup.push('@storybook/experimental-addon-test/internal/global-setup');
-      }
-
-      config.test.server ??= {};
-      config.test.server.deps ??= {};
-      config.test.server.deps.inline ??= [];
-      if (Array.isArray(config.test.server.deps.inline)) {
-        config.test.server.deps.inline.push('@storybook/experimental-addon-test');
-      }
-
-      config.optimizeDeps ??= {};
-      config.optimizeDeps = {
-        ...config.optimizeDeps,
-        include: [...(config.optimizeDeps.include ?? []), '@storybook/experimental-addon-test/**'],
-      };
-
-      if (frameworkName?.includes('react') || frameworkName?.includes('nextjs')) {
-        config.optimizeDeps.include.push('react-dom/test-utils');
-      }
-
-      if (frameworkName?.includes('vue3')) {
-        config.define ??= {};
-        config.define.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = 'false';
       }
     },
     async transform(code, id) {
