@@ -26,9 +26,13 @@ import { dedent } from 'ts-dedent';
 
 import { type PostinstallOptions } from '../../../lib/cli-storybook/src/add';
 import { printError, printInfo, printSuccess, step } from './postinstall-logger';
+import { getAddonNames } from './utils';
 
 const ADDON_NAME = '@storybook/experimental-addon-test' as const;
 const EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx', '.cts', '.mts', '.cjs', '.mjs'] as const;
+
+const addonInteractionsName = '@storybook/addon-interactions';
+const addonA11yName = '@storybook/addon-a11y';
 
 const findFile = async (basename: string, extraExtensions: string[] = []) =>
   findUp([...EXTENSIONS, ...extraExtensions].map((ext) => basename + ext));
@@ -200,8 +204,6 @@ export default async function postInstall(options: PostinstallOptions) {
     return;
   }
 
-  const addonInteractionsName = '@storybook/addon-interactions';
-
   if (info.hasAddonInteractions) {
     let shouldUninstall = options.yes;
     if (!options.yes) {
@@ -317,19 +319,36 @@ export default async function postInstall(options: PostinstallOptions) {
   logger.plain(colors.gray(`  ${vitestSetupFile}`));
 
   const previewExists = EXTENSIONS.map((ext) => resolve(options.configDir, `preview${ext}`)).some(
-    (config) => existsSync(config)
+    existsSync
   );
+
+  const a11yAddon = info.addons.find((addon) => addon.includes(addonA11yName));
+
+  const imports = [
+    `import { beforeAll } from 'vitest';`,
+    `import { setProjectAnnotations } from '${annotationsImport}';`,
+  ];
+
+  const projectAnnotations = [];
+
+  if (a11yAddon) {
+    imports.push(`import * as a11yAddonAnnotations from '@storybook/addon-a11y/preview';`);
+    projectAnnotations.push('a11yAddonAnnotations');
+  }
+
+  if (previewExists) {
+    imports.push(`import * as projectAnnotations from './preview';`);
+    projectAnnotations.push('projectAnnotations');
+  }
 
   await writeFile(
     vitestSetupFile,
     dedent`
-      import { beforeAll } from 'vitest';
-      import { setProjectAnnotations } from '${annotationsImport}';
-      ${previewExists ? `import * as projectAnnotations from './preview';` : ''}
+      ${imports.join('\n')}
 
       // This is an important step to apply the right configuration when testing your stories.
       // More info at: https://storybook.js.org/docs/api/portable-stories/portable-stories-vitest#setprojectannotations
-      const project = setProjectAnnotations(${previewExists ? '[projectAnnotations]' : '[]'});
+      const project = setProjectAnnotations([${projectAnnotations.join(', ')}]);
 
       beforeAll(project.beforeAll);
     `
@@ -566,5 +585,6 @@ async function getStorybookInfo({ configDir, packageManager: pkgMgr }: Postinsta
     builderPackageName,
     rendererPackageName,
     hasAddonInteractions,
+    addons: getAddonNames(config),
   };
 }

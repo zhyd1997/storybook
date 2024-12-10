@@ -74,11 +74,10 @@ export const sandbox: Task = {
       //   extraDeps.push('@testing-library/angular', '@analogjs/vitest-angular');
       // }
 
-      console.log(options.addon);
-
       options.addon = [
-        ...options.addon.filter((a) => !a.includes('interactions')),
+        ...options.addon,
         '@storybook/experimental-addon-test',
+        '@storybook/addon-a11y',
       ];
     }
 
