@@ -253,8 +253,13 @@ export const TestProviderRender: FC<
           <ListItem
             title="Component tests"
             onClick={
-              (status === 'failed' || status === 'warning') && results.length === 1
-                ? () => openPanel(results[0].storyId, PANEL_ID)
+              (status === 'failed' || status === 'warning') && results.length
+                ? () => {
+                    const firstNotPassed = results.find(
+                      (r) => r.status === 'failed' || r.status === 'warning'
+                    );
+                    openPanel(firstNotPassed.storyId, PANEL_ID);
+                  }
                 : null
             }
             icon={
@@ -292,8 +297,17 @@ export const TestProviderRender: FC<
             <ListItem
               title="Accessibility"
               onClick={
-                (a11yStatus === 'negative' || a11yStatus === 'warning') && results.length === 1
-                  ? () => openPanel(results[0].storyId, A11y_ADDON_PANEL_ID)
+                (a11yStatus === 'negative' || a11yStatus === 'warning') && a11yResults.length
+                  ? () => {
+                      const firstNotPassed = results.find((r) =>
+                        r.reports
+                          .filter((report) => report.type === 'a11y')
+                          .find(
+                            (report) => report.status === 'failed' || report.status === 'warning'
+                          )
+                      );
+                      openPanel(firstNotPassed.storyId, A11y_ADDON_PANEL_ID);
+                    }
                   : null
               }
               icon={<TestStatusIcon status={a11yStatus} aria-label={`status: ${a11yStatus}`} />}
