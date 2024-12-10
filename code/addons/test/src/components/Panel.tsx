@@ -114,6 +114,7 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
   // local state
   const [scrollTarget, setScrollTarget] = useState<HTMLElement | undefined>(undefined);
   const [collapsed, setCollapsed] = useState<Set<Call['id']>>(new Set());
+  const [hasResultMismatch, setResultMismatch] = useState(false);
 
   const {
     controlStates = INITIAL_CONTROL_STATES,
@@ -252,22 +253,29 @@ export const Panel = memo<{ storyId: string }>(function PanelMemoized({ storyId 
     interactions.some((v) => v.status === CallStates.ERROR);
 
   const storyStatus = storyStatuses[storyId]?.[TEST_PROVIDER_ID];
+  const storyTestStatus = storyStatus?.status;
 
-  const browserTestStatus = React.useMemo<CallStates | null>(() => {
+  const browserTestStatus = useMemo<CallStates | null>(() => {
     if (!isPlaying && (interactions.length > 0 || hasException)) {
       return hasException ? CallStates.ERROR : CallStates.DONE;
     }
     return isPlaying ? CallStates.ACTIVE : null;
   }, [isPlaying, interactions, hasException]);
 
-  const hasResultMismatch = React.useMemo(() => {
-    return (
-      browserTestStatus !== null &&
-      browserTestStatus !== CallStates.ACTIVE &&
-      storyStatus?.status !== undefined &&
-      statusMap[browserTestStatus] !== storyStatus.status
-    );
-  }, [browserTestStatus, storyStatus]);
+  useEffect(() => {
+    const isMismatch =
+      browserTestStatus &&
+      storyTestStatus &&
+      storyTestStatus !== 'pending' &&
+      storyTestStatus !== statusMap[browserTestStatus];
+
+    if (isMismatch) {
+      const timeout = setTimeout(() => setResultMismatch(true), 2000);
+      return () => clearTimeout(timeout);
+    } else {
+      setResultMismatch(false);
+    }
+  }, [browserTestStatus, storyTestStatus]);
 
   if (isErrored) {
     return <Fragment key="component-tests" />;
