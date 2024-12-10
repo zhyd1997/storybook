@@ -1866,7 +1866,7 @@ __metadata:
 
 "@storybook/experimental-addon-test@file:../../../code/addons/test::locator=portable-stories-react%40workspace%3A.":
   version: 8.5.0-alpha.19
-  resolution: "@storybook/experimental-addon-test@file:../../../code/addons/test#../../../code/addons/test::hash=ddcffb&locator=portable-stories-react%40workspace%3A."
+  resolution: "@storybook/experimental-addon-test@file:../../../code/addons/test#../../../code/addons/test::hash=23a556&locator=portable-stories-react%40workspace%3A."
   dependencies:
     "@storybook/csf": "npm:0.1.12"
     "@storybook/global": "npm:^5.0.0"
@@ -1889,7 +1889,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10/49c5969a6a4571df4aa7758b1d8f9335cc8b74bf410c5a151c3a64ea69faa5129c8b3122bc50fe2f1b32c12ea0be45c7de2422b54bcfe8cb0e34668ef79bfa86
+  checksum: 10/5f3656017435bf80f6e50ee40991424321e723f21692ddaaa1aea408054106eb0f69ceed2dc55d9fc2c2bf2c1f9bd2574827b37c42e580af436fd535657103c1
   languageName: node
   linkType: hard
 

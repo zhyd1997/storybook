@@ -51,7 +51,6 @@ const getStoryGlobsAndFiles = async (
   const stories = await presets.apply('stories', []);
   const docs = await presets.apply('docs', {});
   const indexers = await presets.apply('experimental_indexers', []);
-  console.log('LOG: ', { docs });
   const generator = new StoryIndexGenerator(normalizeStories(stories, directories), {
     ...directories,
     indexers,

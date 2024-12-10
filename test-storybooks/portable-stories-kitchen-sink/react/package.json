@@ -13,7 +13,8 @@
     "playwright-e2e": "playwright test -c playwright-e2e.config.ts",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "vitest": "echo 'not running'"
+    "vitest": "echo 'not running'",
+    "vitest-skip-fail-on-purpose": "SKIP_FAIL_ON_PURPOSE=true vitest run"
   },
   "resolutions": {
     "@playwright/test": "1.48.1",
