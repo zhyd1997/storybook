@@ -84,15 +84,15 @@ export default async function postInstall(options: PostinstallOptions) {
         });
 
     if (out.migrateToExperimentalNextjsVite) {
+      console.log('running migrateToExperimentalNextjsVite');
       await packageManager.addDependencies({ installAsDevDependencies: true }, [
         '@storybook/experimental-nextjs-vite',
       ]);
 
       await packageManager.removeDependencies({}, ['@storybook/nextjs']);
 
-      const node = config.getFieldNode(['framework']);
-
-      traverse(node, {
+      // eslint-disable-next-line no-underscore-dangle
+      traverse(config._ast, {
         StringLiteral(path) {
           if (path.node.value === '@storybook/nextjs') {
             path.node.value = '@storybook/experimental-nextjs-vite';
@@ -100,11 +100,10 @@ export default async function postInstall(options: PostinstallOptions) {
         },
       });
 
-      config.setFieldNode(['framework'], node as types.Expression);
-
       await writeConfig(config, mainJsPath);
 
       info.frameworkPackageName = '@storybook/experimental-nextjs-vite';
+      info.builderPackageName = '@storybook/builder-vite';
     }
   }
 
@@ -122,6 +121,7 @@ export default async function postInstall(options: PostinstallOptions) {
         )
       ? info.rendererPackageName
       : null;
+
   const isRendererSupported = !!annotationsImport;
 
   const prerequisiteCheck = async () => {
