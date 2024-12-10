@@ -1,14 +1,12 @@
-import { JsPackageManagerFactory } from 'storybook/internal/common';
+import { spawn } from 'child_process';
 
-import { type PostinstallOptions } from '../../../lib/cli-storybook/src/add';
-
-export default async function postInstall(options: PostinstallOptions) {
-  const packageManager = JsPackageManagerFactory.getPackageManager({
-    force: options.packageManager,
-  });
-
-  await packageManager.executeCommand({
-    command: 'npx',
-    args: ['storybook', 'automigrate', 'addonA11yAddonTest'],
+export default async function postInstall() {
+  await new Promise<void>((resolve) => {
+    const child = spawn('npx', ['storybook', 'automigrate', 'addonA11yAddonTest'], {
+      stdio: 'inherit',
+    });
+    child.on('close', (code) => {
+      resolve();
+    });
   });
 }
