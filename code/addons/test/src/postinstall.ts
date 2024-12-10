@@ -526,7 +526,7 @@ const getVitestPluginInfo = (framework: string) => {
     frameworkPluginCall = 'storybookReactNativeWeb()';
   }
 
-  // spaces for file identation
+  // spaces for file indentation
   frameworkPluginImport = `\n${frameworkPluginImport}`;
   frameworkPluginDocs = frameworkPluginDocs ? `\n    ${frameworkPluginDocs}` : '';
   frameworkPluginCall = frameworkPluginCall ? `\n    ${frameworkPluginCall},` : '';
