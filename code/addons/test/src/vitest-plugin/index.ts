@@ -12,7 +12,7 @@ import {
 import { StoryIndexGenerator, mapStaticDir } from 'storybook/internal/core-server';
 import { readConfig, vitestTransform } from 'storybook/internal/csf-tools';
 import { MainFileMissingError } from 'storybook/internal/server-errors';
-import type { DocsOptions, StoriesEntry } from 'storybook/internal/types';
+import type { Presets } from 'storybook/internal/types';
 
 import { join, resolve } from 'pathe';
 import picocolors from 'picocolors';
@@ -40,11 +40,31 @@ const extractTagsFromPreview = async (configDir: string) => {
   return previewConfig.getFieldValue(['tags']) ?? [];
 };
 
+const getStoryGlobsAndFiles = async (
+  presets: Presets,
+  directories: { configDir: string; workingDir: string }
+) => {
+  const stories = await presets.apply('stories', []);
+  const docs = await presets.apply('docs', {});
+  const indexers = await presets.apply('experimental_indexers', []);
+  console.log('LOG: ', { docs });
+  const generator = new StoryIndexGenerator(normalizeStories(stories, directories), {
+    ...directories,
+    indexers,
+    docs,
+  });
+  await generator.initialize();
+  return {
+    storiesGlobs: stories,
+    storiesFiles: generator.storyFileNames(),
+  };
+};
+
 export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
   const finalOptions = {
     ...defaultOptions,
     ...options,
-    configDir: options.configDir
+    configDir: options?.configDir
       ? resolve(WORKING_DIR, options.configDir)
       : defaultOptions.configDir,
     tags: {
@@ -74,25 +94,6 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
     packageJson: {},
   });
 
-  const getStoryGlobsAndFiles = async (): Promise<{
-    storiesGlobs: StoriesEntry[];
-    storiesFiles: string[];
-  }> => {
-    const stories = await presets.apply('stories');
-    const docs = await presets.apply('docs');
-    const indexers = await presets.apply('experimental_indexers', []);
-    const generator = new StoryIndexGenerator(normalizeStories(storiesGlobs, directories), {
-      ...directories,
-      indexers,
-      docs,
-    });
-    await generator.initialize();
-    return {
-      storiesGlobs: stories,
-      storiesFiles: generator.storyFileNames(),
-    };
-  };
-
   const [
     { storiesGlobs, storiesFiles },
     framework,
@@ -101,7 +102,7 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
     staticDirs,
     previewLevelTags,
   ] = await Promise.all([
-    getStoryGlobsAndFiles(),
+    getStoryGlobsAndFiles(presets, directories),
     presets.apply('framework', undefined),
     presets.apply('env', {}),
     presets.apply('viteFinal', {}),
