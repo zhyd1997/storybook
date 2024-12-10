@@ -39,22 +39,19 @@ export class TestManager {
     this.vitestManager.startVitest().then(() => options.onReady?.());
   }
 
-  async restartVitest({ coverage }: { coverage: boolean }) {
-    await this.vitestManager.vitest?.runningPromise;
-    await this.vitestManager.closeVitest();
-    await this.vitestManager.startVitest({ coverage });
-  }
-
-  async handleConfigChange(
-    payload: TestingModuleConfigChangePayload<{ coverage: boolean; a11y: boolean }>
-  ) {
+  async handleConfigChange(payload: TestingModuleConfigChangePayload<Config>) {
     if (payload.providerId !== TEST_PROVIDER_ID) {
       return;
     }
+
+    process.env.VITEST_STORYBOOK_CONFIG = JSON.stringify(payload.config);
+
     if (this.coverage !== payload.config.coverage) {
       this.coverage = payload.config.coverage;
       try {
-        await this.restartVitest({ coverage: this.coverage });
+        await this.vitestManager.restartVitest({
+          coverage: this.coverage,
+        });
       } catch (e) {
         const isV8 = e.message?.includes('@vitest/coverage-v8');
         const isIstanbul = e.message?.includes('@vitest/coverage-istanbul');
@@ -68,22 +65,31 @@ export class TestManager {
     }
   }
 
-  async handleWatchModeRequest(payload: TestingModuleWatchModeRequestPayload) {
+  async handleWatchModeRequest(payload: TestingModuleWatchModeRequestPayload<Config>) {
     if (payload.providerId !== TEST_PROVIDER_ID) {
       return;
     }
     this.watchMode = payload.watchMode;
 
-    try {
-      if (payload.watchMode && this.coverage) {
-        // if watch mode is toggled on and coverage is already enabled, restart vitest without coverage to automatically disable it
-        await this.restartVitest({ coverage: false });
-      } else if (!payload.watchMode && this.coverage) {
-        // if watch mode is toggled off and coverage is already enabled, restart vitest with coverage to automatically re-enable it
-        await this.restartVitest({ coverage: this.coverage });
+    if (payload.config) {
+      this.handleConfigChange({
+        providerId: payload.providerId,
+        config: payload.config,
+      });
+    }
+
+    if (this.coverage) {
+      try {
+        if (payload.watchMode) {
+          // if watch mode is toggled on and coverage is already enabled, restart vitest without coverage to automatically disable it
+          await this.vitestManager.restartVitest({ coverage: false });
+        } else {
+          // if watch mode is toggled off and coverage is already enabled, restart vitest with coverage to automatically re-enable it
+          await this.vitestManager.restartVitest({ coverage: this.coverage });
+        }
+      } catch (e) {
+        this.reportFatalError('Failed to change watch mode while coverage was enabled', e);
       }
-    } catch (e) {
-      this.reportFatalError('Failed to change watch mode', e);
     }
   }
 
@@ -92,8 +98,12 @@ export class TestManager {
       if (payload.providerId !== TEST_PROVIDER_ID) {
         return;
       }
-      if (payload.config && this.coverage !== payload.config.coverage) {
-        this.coverage = payload.config.coverage;
+
+      if (payload.config) {
+        this.handleConfigChange({
+          providerId: payload.providerId,
+          config: payload.config,
+        });
       }
 
       /*
@@ -103,16 +113,18 @@ export class TestManager {
       const temporarilyDisableCoverage =
         this.coverage && !this.watchMode && (payload.storyIds ?? []).length > 0;
       if (temporarilyDisableCoverage) {
-        await this.restartVitest({
+        await this.vitestManager.restartVitest({
           coverage: false,
         });
+      } else {
+        await this.vitestManager.vitestRestartPromise;
       }
 
       await this.vitestManager.runTests(payload);
 
       if (temporarilyDisableCoverage) {
         // Re-enable coverage if it was temporarily disabled because of a subset of stories was run
-        await this.restartVitest({ coverage: this.coverage });
+        await this.vitestManager.restartVitest({ coverage: this.coverage });
       }
     } catch (e) {
       this.reportFatalError('Failed to run tests', e);
