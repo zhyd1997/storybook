@@ -1,5 +1,6 @@
 import type { PostinstallOptions } from '@storybook/cli/src/add';
 
+// eslint-disable-next-line depend/ban-dependencies
 import { execa } from 'execa';
 
 const $ = execa({
