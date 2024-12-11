@@ -1,12 +1,13 @@
-import { spawn } from 'child_process';
+// eslint-disable-next-line depend/ban-dependencies
+import { execa } from 'execa';
+
+const $ = execa({
+  preferLocal: true,
+  stdio: 'inherit',
+  // we stream the stderr to the console
+  reject: false,
+});
 
 export default async function postInstall() {
-  await new Promise<void>((resolve) => {
-    const child = spawn('npx', ['storybook', 'automigrate', 'addonA11yAddonTest'], {
-      stdio: 'inherit',
-    });
-    child.on('close', (code) => {
-      resolve();
-    });
-  });
+  await $`storybook automigrate addonA11yAddonTest`;
 }
