@@ -158,7 +158,7 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
 
           ...(finalOptions.storybookScript
             ? {
-                globalSetup: [join(packageDir, './dist/vitest-plugin/global-setup.mjs')],
+                globalSetup: [join(packageDir, 'dist/vitest-plugin/global-setup.mjs')],
               }
             : {}),
 
