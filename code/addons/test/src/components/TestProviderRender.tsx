@@ -111,6 +111,7 @@ export const TestProviderRender: FC<
 
     return state.details?.testResults?.flatMap((result) =>
       result.results
+        .filter(Boolean)
         .filter((r) => !entryId || r.storyId === entryId || r.storyId?.startsWith(`${entryId}-`))
         .map((r) => r.reports.find((report) => report.type === 'a11y'))
     );
