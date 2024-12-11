@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 
 import type {
   CoverageOptions,
@@ -29,6 +30,8 @@ type TagsFilter = {
   skip: string[];
 };
 
+const packageDir = dirname(require.resolve('@storybook/experimental-addon-test/package.json'));
+
 export class VitestManager {
   vitest: Vitest | null = null;
 
@@ -44,7 +47,7 @@ export class VitestManager {
     const { createVitest } = await import('vitest/node');
 
     const storybookCoverageReporter: [string, StorybookCoverageReporterOptions] = [
-      '@storybook/experimental-addon-test/internal/coverage-reporter',
+      join(packageDir, 'dist/node/coverage-reporter.js'),
       {
         testManager: this.testManager,
         coverageOptions: this.vitest?.config?.coverage as ResolvedCoverageOptions<'v8'>,
