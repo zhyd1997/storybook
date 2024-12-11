@@ -1,5 +1,4 @@
 import { existsSync } from 'node:fs';
-import { dirname, join } from 'node:path';
 
 import type {
   CoverageOptions,
@@ -15,7 +14,7 @@ import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-eve
 
 import type { DocsIndexEntry, StoryIndex, StoryIndexEntry } from '@storybook/types';
 
-import path, { normalize } from 'pathe';
+import path, { dirname, join, normalize } from 'pathe';
 import slash from 'slash';
 
 import { COVERAGE_DIRECTORY, type Config } from '../constants';
