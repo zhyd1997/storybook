@@ -1,4 +1,5 @@
-// eslint-disable-next-line depend/ban-dependencies
+import type { PostinstallOptions } from '@storybook/cli/src/add';
+
 import { execa } from 'execa';
 
 const $ = execa({
@@ -8,6 +9,6 @@ const $ = execa({
   reject: false,
 });
 
-export default async function postInstall() {
-  await $`storybook automigrate addonA11yAddonTest`;
+export default async function postinstall(options: PostinstallOptions) {
+  await $`storybook automigrate addonA11yAddonTest ${options.yes ? '--yes' : ''}`;
 }
