@@ -31,8 +31,7 @@ import {
   MissingStoryFromCsfFileError,
 } from '@storybook/core/preview-errors';
 
-import mapValues from 'lodash/mapValues.js';
-import pick from 'lodash/pick.js';
+import { mapValues, omitBy, pick, toMerged } from 'es-toolkit';
 import memoize from 'memoizerific';
 
 import { HooksContext } from '../addons';
@@ -46,6 +45,14 @@ import {
   prepareStory,
   processCSFFile,
 } from './csf';
+import { ReporterAPI } from './reporter-api';
+
+export function picky<T extends Record<string, any>, K extends keyof T>(
+  obj: T,
+  keys: K[]
+): Partial<Pick<T, K>> {
+  return omitBy(pick(obj, keys), (v) => v === undefined);
+}
 
 // TODO -- what are reasonable values for these?
 const CSF_CACHE_SIZE = 1000;
@@ -247,12 +254,14 @@ export class StoryStore<TRenderer extends Renderer> {
   getStoryContext(story: PreparedStory<TRenderer>, { forceInitialArgs = false } = {}) {
     const userGlobals = this.userGlobals.get();
     const { initialGlobals } = this.userGlobals;
+    const reporting = new ReporterAPI();
     return prepareContext({
       ...story,
       args: forceInitialArgs ? story.initialArgs : this.args.get(story.id),
       initialGlobals,
       globalTypes: this.projectAnnotations.globalTypes,
       userGlobals,
+      reporting,
       globals: {
         ...userGlobals,
         ...story.storyGlobals,
@@ -354,7 +363,7 @@ export class StoryStore<TRenderer extends Renderer> {
     const stories: Record<StoryId, V3CompatIndexEntry> = mapValues(value.stories, (story) => {
       const { importPath } = this.storyIndex.entries[story.id];
       return {
-        ...pick(story, ['id', 'name', 'title']),
+        ...picky(story, ['id', 'name', 'title']),
         importPath,
         // These 3 fields were going to be dropped in v7, but instead we will keep them for the
         // 7.x cycle so that v7 Storybooks can be composed successfully in v6 Storybook.
@@ -362,10 +371,10 @@ export class StoryStore<TRenderer extends Renderer> {
         kind: story.title,
         story: story.name,
         parameters: {
-          ...pick(story.parameters, allowedParameters),
+          ...picky(story.parameters, allowedParameters),
           fileName: importPath,
         },
-      };
+      } as V3CompatIndexEntry;
     });
 
     return {
