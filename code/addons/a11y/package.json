@@ -1,6 +1,6 @@
 {
   "name": "@storybook/addon-a11y",
-  "version": "8.5.0-alpha.18",
+  "version": "8.5.0-alpha.20",
   "description": "Test component compliance with web accessibility standards",
   "keywords": [
     "a11y",
@@ -43,6 +43,16 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts"
+      ],
+      "preview": [
+        "dist/preview.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist/**/*",
     "README.md",
