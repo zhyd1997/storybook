@@ -14,9 +14,6 @@ export default defineWorkspace([
     test: {
       name: "storybook",
       pool: "threads",
-      include: [
-        "stories/*.stories.?(c|m)[jt]s?(x)",
-      ],
       deps: {
         optimizer: {
           web: { 
