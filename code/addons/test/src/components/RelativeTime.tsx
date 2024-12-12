@@ -1,19 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 
 export function getRelativeTimeString(date: Date): string {
-  const delta = Math.round((Date.now() - date.getTime()) / 1000);
-  if (delta < 60) {
+  const seconds = Math.round((Date.now() - date.getTime()) / 1000);
+  if (seconds < 60) {
     return 'just now';
   }
-  if (delta < 60 * 60) {
-    const minutes = Math.floor(delta / 60);
+
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) {
     return minutes === 1 ? 'a minute ago' : `${minutes} minutes ago`;
   }
-  if (delta < 60 * 60 * 24) {
-    const hours = Math.floor(delta / 60 / 60);
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) {
     return hours === 1 ? 'an hour ago' : `${hours} hours ago`;
   }
-  const days = Math.floor(delta / 60 / 60 / 24);
+
+  const days = Math.floor(hours / 24);
   return days === 1 ? 'yesterday' : `${days} days ago`;
 }
 
