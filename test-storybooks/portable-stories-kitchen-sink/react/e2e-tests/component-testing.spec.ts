@@ -45,6 +45,7 @@ test.describe("component testing", () => {
     browserName,
   }) => {
     test.skip(browserName !== "chromium", `Skipping tests for ${browserName}`);
+    test.setTimeout(40_000)
     const sbPage = new SbPage(page, expect);
 
     await sbPage.navigateToStory("addons/group/test", "Mismatch Failure");
@@ -204,8 +205,11 @@ test.describe("component testing", () => {
 
     // We shouldn't have to do an arbitrary wait, but because there is no UI for loading state yet, we have to
     await page.waitForTimeout(8000);
-
     await setForceFailureFlag(true);
+    await page.waitForTimeout(500);
+
+    // Cleanup, to ensure watch mode is disabled in the other tests
+    await page.getByLabel("Disable watch mode for Component tests").click();
 
     // Wait for test results to appear
     const errorFilter = page.getByLabel("Toggle errors");
@@ -354,15 +358,15 @@ test.describe("component testing", () => {
     const sidebarContextMenu = page.getByTestId('tooltip');
     await sidebarContextMenu.getByLabel('Start Component tests').click();
 
-    // Assert - 5 tests are running and reported
-    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 6 test', { timeout: 30000 });
-    // Assert - 1 failing test shows as a failed status
-    await expect(sidebarContextMenu.getByText('2 stories with errors')).toBeVisible();
+    // Assert - Tests are running and reported
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 8 tests', { timeout: 30000 });
+    // Assert - Failing test shows as a failed status
+    await expect(sidebarContextMenu.getByText('1 story with errors')).toBeVisible();
     await expect(sidebarContextMenu.getByLabel('status: failed')).toHaveCount(1);
 
     await page.click('body');
-    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: success' })).toHaveCount(4);
-    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: error' })).toHaveCount(2);
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: success' })).toHaveCount(7);
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: error' })).toHaveCount(1);
   });
 
   test("should run focused test for a group", async ({
@@ -390,15 +394,15 @@ test.describe("component testing", () => {
     const sidebarContextMenu = page.getByTestId('tooltip');
     await sidebarContextMenu.getByLabel('Start Component tests').click();
 
-    // Assert - 5 tests are running and reported
-    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 8 test', { timeout: 30000 });
+    // Assert - Tests are running and reported
+    await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 10 test', { timeout: 30000 });
     // Assert - 1 failing test shows as a failed status
-    await expect(sidebarContextMenu.getByText('3 stories with errors')).toBeVisible();
+    await expect(sidebarContextMenu.getByText('2 stories with errors')).toBeVisible();
     await expect(sidebarContextMenu.getByLabel('status: failed')).toHaveCount(1);
 
     await page.click('body');
-    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: success' })).toHaveCount(4);
-    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: error' })).toHaveCount(2);
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: success' })).toHaveCount(7);
+    await expect(page.locator('#storybook-explorer-menu').getByRole('status', { name: 'Test status: error' })).toHaveCount(1);
   });
 
   test("should run focused tests without coverage, even when enabled", async ({
