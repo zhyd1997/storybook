@@ -435,7 +435,9 @@ If you wish to disable this panel globally, add the following line to your `.sto
 ```js
 export default {
   parameters: {
-    docsSourcePanel: { disable: true },
+    docs: {
+      codePanel: false,
+    },
   },
 };
 ```

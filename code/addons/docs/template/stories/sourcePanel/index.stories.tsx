@@ -3,13 +3,21 @@ export default {
   tags: ['autodocs'],
   parameters: {
     chromatic: { disable: true },
-    docsSourcePanel: { disable: true },
+    docs: {
+      codePanel: false,
+    },
   },
 };
 
 export const One = { args: { label: 'One' } };
+
 export const Two = { args: { label: 'Two' } };
+
 export const WithSource = {
   args: { label: 'Three' },
-  parameters: { docsSourcePanel: { disable: false } },
+  parameters: {
+    docs: {
+      codePanel: true,
+    },
+  },
 };
