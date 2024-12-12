@@ -1,40 +1,35 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export function getRelativeTimeString(date: Date): string {
-  const seconds = Math.round((Date.now() - date.getTime()) / 1000);
+export const RelativeTime = ({ timestamp }: { timestamp?: number }) => {
+  const [timeAgo, setTimeAgo] = useState(null);
+
+  useEffect(() => {
+    if (timestamp) {
+      setTimeAgo(Date.now() - timestamp);
+      const interval = setInterval(() => setTimeAgo(Date.now() - timestamp), 10000);
+      return () => clearInterval(interval);
+    }
+  }, [timestamp]);
+
+  if (timeAgo === null) {
+    return null;
+  }
+
+  const seconds = Math.round(timeAgo / 1000);
   if (seconds < 60) {
-    return 'just now';
+    return `just now`;
   }
 
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) {
-    return minutes === 1 ? 'a minute ago' : `${minutes} minutes ago`;
+    return minutes === 1 ? `a minute ago` : `${minutes} minutes ago`;
   }
 
   const hours = Math.floor(minutes / 60);
   if (hours < 24) {
-    return hours === 1 ? 'an hour ago' : `${hours} hours ago`;
+    return hours === 1 ? `an hour ago` : `${hours} hours ago`;
   }
 
   const days = Math.floor(hours / 24);
-  return days === 1 ? 'yesterday' : `${days} days ago`;
-}
-
-export const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: number }) => {
-  const [relativeTimeString, setRelativeTimeString] = useState(null);
-  const updateRelativeTimeString = useCallback(
-    () => timestamp && setRelativeTimeString(getRelativeTimeString(timestamp)),
-    [timestamp]
-  );
-
-  useEffect(() => {
-    updateRelativeTimeString();
-    const interval = setInterval(updateRelativeTimeString, 10000);
-    return () => clearInterval(interval);
-  }, [updateRelativeTimeString]);
-
-  return (
-    relativeTimeString &&
-    `Ran ${testCount} ${testCount === 1 ? 'test' : 'tests'} ${relativeTimeString}`
-  );
+  return days === 1 ? `yesterday` : `${days} days ago`;
 };

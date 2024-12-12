@@ -4,9 +4,6 @@ import { RelativeTime } from './RelativeTime';
 
 const meta = {
   component: RelativeTime,
-  args: {
-    testCount: 42,
-  },
 } satisfies Meta<typeof RelativeTime>;
 
 export default meta;
@@ -15,36 +12,36 @@ type Story = StoryObj<typeof meta>;
 
 export const JustNow: Story = {
   args: {
-    timestamp: new Date(),
+    timestamp: Date.now() - 1000 * 10,
   },
 };
 
-export const SecondsAgo: Story = {
+export const AMinuteAgo: Story = {
   args: {
-    timestamp: new Date(Date.now() - 1000 * 15),
+    timestamp: Date.now() - 1000 * 60,
   },
 };
 
 export const MinutesAgo: Story = {
   args: {
-    timestamp: new Date(Date.now() - 1000 * 60 * 2),
+    timestamp: Date.now() - 1000 * 60 * 2,
   },
 };
 
 export const HoursAgo: Story = {
   args: {
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3),
+    timestamp: Date.now() - 1000 * 60 * 60 * 3,
   },
 };
 
 export const Yesterday: Story = {
   args: {
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
+    timestamp: Date.now() - 1000 * 60 * 60 * 24,
   },
 };
 
 export const DaysAgo: Story = {
   args: {
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3),
+    timestamp: Date.now() - 1000 * 60 * 60 * 24 * 3,
   },
 };
