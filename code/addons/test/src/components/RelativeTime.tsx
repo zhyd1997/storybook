@@ -1,38 +1,34 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export function getRelativeTimeString(date: Date): string {
-  const delta = Math.round((date.getTime() - Date.now()) / 1000);
-  const cutoffs = [60, 3600, 86400, 86400 * 7, 86400 * 30, 86400 * 365, Infinity];
-  const units: Intl.RelativeTimeFormatUnit[] = [
-    'second',
-    'minute',
-    'hour',
-    'day',
-    'week',
-    'month',
-    'year',
-  ];
-
-  const unitIndex = cutoffs.findIndex((cutoff) => cutoff > Math.abs(delta));
-  const divisor = unitIndex ? cutoffs[unitIndex - 1] : 1;
-  const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
-  return rtf.format(Math.floor(delta / divisor), units[unitIndex]);
+  const delta = Math.round((Date.now() - date.getTime()) / 1000);
+  if (delta < 60) {
+    return 'just now';
+  }
+  if (delta < 60 * 60) {
+    const minutes = Math.floor(delta / 60);
+    return minutes === 1 ? 'a minute ago' : `${minutes} minutes ago`;
+  }
+  if (delta < 60 * 60 * 24) {
+    const hours = Math.floor(delta / 60 / 60);
+    return hours === 1 ? 'an hour ago' : `${hours} hours ago`;
+  }
+  const days = Math.floor(delta / 60 / 60 / 24);
+  return days === 1 ? 'yesterday' : `${days} days ago`;
 }
 
 export const RelativeTime = ({ timestamp, testCount }: { timestamp: Date; testCount: number }) => {
   const [relativeTimeString, setRelativeTimeString] = useState(null);
+  const updateRelativeTimeString = useCallback(
+    () => timestamp && setRelativeTimeString(getRelativeTimeString(timestamp)),
+    [timestamp]
+  );
 
   useEffect(() => {
-    if (timestamp) {
-      setRelativeTimeString(getRelativeTimeString(timestamp).replace(/^now$/, 'just now'));
-
-      const interval = setInterval(() => {
-        setRelativeTimeString(getRelativeTimeString(timestamp).replace(/^now$/, 'just now'));
-      }, 10000);
-
-      return () => clearInterval(interval);
-    }
-  }, [timestamp]);
+    updateRelativeTimeString();
+    const interval = setInterval(updateRelativeTimeString, 10000);
+    return () => clearInterval(interval);
+  }, [updateRelativeTimeString]);
 
   return (
     relativeTimeString &&
