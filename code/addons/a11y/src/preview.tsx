@@ -41,7 +41,7 @@ export const experimental_afterEach: AfterEach<any> = async ({
           type: 'a11y',
           version: 1,
           result: result,
-          status: hasViolations ? 'warning' : 'passed',
+          status: hasViolations ? 'failed' : 'passed',
         });
 
         /**
