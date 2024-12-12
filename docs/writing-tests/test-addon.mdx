@@ -227,7 +227,6 @@ Other addons, such as [a11y](./accessibility-testing.mdx#test-addon-integration)
 
 To run tests for a specific story or group of stories, press the menu button (three dots) that appears on hover of a sidebar item. You can then select the test type you want to run.
 
-[TK: Screenshot of story sidebar item with open menu]
 ![Screenshot of story sidebar item with open menu](../_assets/writing-tests/addon-test-sidebar-item-menu.png)
 
 After running your tests, you will now see status indicators on stories and components for their pass, fail, or error state. You can press on the menu button when hovering a story to see the test results for that story. Selecting a result in the menu will navigate you to that story and open the appropriate debugging panel. For example, if a component test fails, you can jump straight to the failure in the Component tests addon panel. That panel provides an interactive debugger for your component test, allowing you to step through each simulated behavior or assertion.
@@ -339,14 +338,12 @@ The tests run by the addon can be configured in two ways. You can toggle which t
 
 In addition to component tests, the Test addon supports multiple types of tests, depending on which other addons you are using in your project. Some test types, like [visual tests](./visual-testing.mdx), are run independently. Others, like [accessibility](./accessibility-testing.mdx), must be run alongside component tests. For these dependent test types, you can toggle them on or off in the test module by pressing the edit button (pencil icon) and checking or unchecking the test types you want to run.
 
-[TK - Test module edit mode with only coverage]
-![Screenshot of test module, expanded, edit mode, coverage is checked](../_assets/writing-tests/addon-test-module-expanded-edit-coverage.png)
+![Screenshot of test module, expanded, edit mode, everything is checked](../_assets/writing-tests/addon-test-module-edit.png)
 
 Note that you may not have all of the test types pictured, depending on which addons you have installed.
 
 You can also access edit mode in the sidebar item menu for a story or group of stories:
 
-[TK - Sidebar item menu with edit mode]
 ![Screenshot of story sidebar item with open menu, edit mode](../_assets/writing-tests/addon-test-sidebar-item-menu-edit.png)
 
 Note that toggling test types in the menu's edit mode affects all tests, not only those for the selected story or group of stories. It is intended as a convenience for quickly toggling test types on or off.

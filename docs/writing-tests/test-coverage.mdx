@@ -17,14 +17,13 @@ Coverage tests examine the instrumented code against a set of industry-accepted 
 
 When you run component tests with the [Test addon](./test-addon.mdx), which is powered by [Vitest](https://vitest.dev), it can generate a coverage report. The result is summarized in the testing module, showing the percentage of statements covered by your tested stories.
 
-[TK - Coverage result]
-![Screenshot of test module, expanded, showing coverage result](../_assets/writing-tests/addon-test-coverage-result.png)
+![Screenshot of test module, expanded, showing coverage result](../_assets/writing-tests/addon-test-module-coverage-summary.png)
 
 ### Set up
 
 Coverage is included in the Test addon and, when enabled, will be calculated when running component tests for your project. To enable coverage, press the edit button (pencil icon) in the testing module and toggle coverage on:
 
-![Screenshot of test module, expanded, showing coverage toggle](../_assets/writing-tests/addon-test-coverage-toggle.png)
+![Screenshot of test module, expanded, showing coverage toggle](../_assets/writing-tests/addon-test-module-edit-coverage.png)
 
 Before coverage can be calculated, you may be prompted to install a support package corresponding to your [coverage provider](#coverage-provider):
 
@@ -95,7 +94,6 @@ npx vitest --coverage
 
 Coverage is also available through Vitest's [IDE integrations](https://vitest.dev/guide/ide.html). You can calculate and display coverage results directly in your editor.
 
-[TK - Screenshot of coverage in VSCode]
 ![Screenshot of test coverage in VSCode](../_assets/writing-tests/vitest-plugin-vscode-coverage.png)
 
 <Callout variant="info">
@@ -155,8 +153,7 @@ Both coverage providers support [watermarks](https://vitest.dev/config/#coverage
 
 In the testing module, the coverage summary will show the percentage of statements covered by your tested stories, as well as whether the coverage meets the watermarks. Below the low watermark, the icon will be red, between the low and high watermarks, it will be orange, and above the high watermark, it will be green.
 
-[TK - Coverage result]
-![Screenshot of test module, expanded, showing coverage result](../_assets/writing-tests/addon-test-coverage-result.png)
+![Screenshot of test module, expanded, showing coverage result](../_assets/writing-tests/addon-test-module-coverage-summary.png)
 
 To configure the watermarks, you can adjust the Vitest config:
 
