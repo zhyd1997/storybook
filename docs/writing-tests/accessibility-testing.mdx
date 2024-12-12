@@ -155,20 +155,11 @@ You can use tags to progressively work toward a more accessible UI by enabling a
 
 1. Pick a good starting point (we recommend something like Button, for its simplicity and likelihood of being used within other components) and re-include it in the accessibility tests.
 
-   ```ts title="Button.stories.ts"
-   // Replace your-renderer with the renderer you are using (e.g., react, vue3)
-   import { Meta } from '@storybook/your-renderer';
+   {/* prettier-ignore-start */}
 
-   import { Button } from './Button';
-   
-   const meta = {
-     component: Button,
-     // 👇 Re-apply the a11ytest tag for this component's stories
-     tags: ['a11ytest'],
-   };
-  
-   export default preview;
-   ```
+   <CodeSnippets path="addon-a11y-meta-tag.md" />
+
+   {/* prettier-ignore-end */}
 
 1. Pick another component and repeat the process until you've covered all your components and you're an accessibility hero!
 

@@ -22,19 +22,18 @@ When you run component tests with the [Test addon](./test-addon.mdx), which is p
 
 ### Set up
 
-Coverage is included in the Test addon and, when enabled, will be calculated when running component tests for your project. To enable coverage, press on the edit icon in the testing module and toggle coverage on:
+Coverage is included in the Test addon and, when enabled, will be calculated when running component tests for your project. To enable coverage, press the edit button (pencil icon) in the testing module and toggle coverage on:
 
 ![Screenshot of test module, expanded, showing coverage toggle](../_assets/writing-tests/addon-test-coverage-toggle.png)
 
 Before coverage can be calculated, you may be prompted to install a support package corresponding to your [coverage provider](#coverage-provider):
 
-```sh
-# For v8
-npm i -D @vitest/coverage-v8
 
-# For istanbul
-npm i -D @vitest/coverage-istanbul
-```
+{/* prettier-ignore-start */}
+
+<CodeSnippets path="vitest-plugin-install-coverage-support-packages.md" />
+
+{/* prettier-ignore-end */}
 
 ### Usage
 
@@ -72,10 +71,11 @@ Assuming you run your tests with a package script like this:
 
 Then you can generate a coverage report with:
 
-{/* TODO: Snippetize */}
-```sh
-npm run test-storybook -- --coverage
-```
+{/* prettier-ignore-start */}
+
+<CodeSnippets path="vitest-plugin-run-with-coverage.md" />
+
+{/* prettier-ignore-end */}
 
 The coverage report will be saved to the [configured coverage reports directory](https://vitest.dev/config/#coverage-reportsdirectory) (`./coverage`, by default) in your project.
 
@@ -119,7 +119,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
       - name: Install dependencies
         run: yarn
       - name: Run Storybook tests
@@ -143,7 +143,7 @@ export default defineConfig({
     // ...
     coverage: {
       // ...
-      provider: 'instanbul', // 'v8' is the default
+      provider: 'istanbul', // 'v8' is the default
     },
   },
 });
@@ -153,7 +153,7 @@ export default defineConfig({
 
 Both coverage providers support [watermarks](https://vitest.dev/config/#coverage-watermarks), which are threshold values for coverage. The low watermark is the minimum coverage required to pass the test, and the high watermark is the minimum coverage required to be considered good. A coverage percentage between the low and high watermarks will be considered acceptable but not ideal.
 
-In the testing module, the coverage summary will show the percentage of statements covered by your tested stories, as well as whether the coverage meets the watermarks. Below the low watermark, the icon will be red, between the low and high watermarks, it will be yellow, and above the high watermark, it will be green.
+In the testing module, the coverage summary will show the percentage of statements covered by your tested stories, as well as whether the coverage meets the watermarks. Below the low watermark, the icon will be red, between the low and high watermarks, it will be orange, and above the high watermark, it will be green.
 
 [TK - Coverage result]
 ![Screenshot of test module, expanded, showing coverage result](../_assets/writing-tests/addon-test-coverage-result.png)
@@ -201,13 +201,13 @@ Until Vitest 2.2.0 is released, the generated coverage report will include the s
 import { coverageConfigDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  // ... rest of your config
+  // ...
   test: {
     coverage: {
       // 👇 Add this
       exclude: [
          ...coverageConfigDefaults.exclude,
-         // This pattern must align with the `stories` property of your `.storybook/main.js` config
+         // This pattern must align with the `stories` property of your `.storybook/main.ts` config
          '**/*.stories.*', '**/*.story.*', '**/stories.*', '**/story.*'
        ], 
     }

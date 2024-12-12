@@ -27,7 +27,9 @@ Storybook's Test addon allows you to test your components directly inside Storyb
 
 If your project is using other testing addons, such as the [Visual tests addon](./visual-testing.mdx) or the [Accessibility addon](./accessibility-testing.mdx), you can run those tests alongside your component tests.
 
-When tests are run for a story, the status is shown in the sidebar. You can filter it down to only show failures and failing status indicators open a menu to debug the failure. You can also run tests in watch mode, which will automatically re-run tests when you make changes to your components or stories.
+When tests are run for a story, the status is shown in the sidebar. The sidebar can be filtered to only show failing stories, and you can press the menu button on a failing story to see debugging options.
+
+You can also run tests in watch mode, which will automatically re-run tests when you make changes to your components or stories. To activate, press the watch mode toggle (the eye icon) in the test module.
 
 <Video src="../_assets/writing-tests/addon-test-overview.mp4" />
 
@@ -197,7 +199,9 @@ When the addon is set up automatically, it will create or adjust your Vitest con
 
 ## Usage
 
-There are multiple ways to run tests using the addon:
+There are multiple ways to run tests using the addon.
+
+We recommend (and configure, by default) running Vitest in [browser mode](https://vitest.dev/guide/browser/), using [Playwright's](https://playwright.dev) Chromium browser. Browser mode ensures your components are tested in a real browser environment, which is more accurate than simulations like JSDom or HappyDom. This is especially important for testing components that rely on browser APIs or features.
 
 ### Storybook UI
 
@@ -221,14 +225,12 @@ Other addons, such as [a11y](./accessibility-testing.mdx#test-addon-integration)
 
 </Callout>
 
-To run tests for a specific story or group of stories, press the menu button that appears on hover of a sidebar item. You can then select the test type you want to run.
+To run tests for a specific story or group of stories, press the menu button (three dots) that appears on hover of a sidebar item. You can then select the test type you want to run.
 
 [TK: Screenshot of story sidebar item with open menu]
 ![Screenshot of story sidebar item with open menu](../_assets/writing-tests/addon-test-sidebar-item-menu.png)
 
-After running your tests, you will now see status indicators on stories and components for their pass, fail, or error state. You can press on these indicators to see more details and jump straight to the failure in the Component tests addon panel. That panel provides an interactive debugger for your component test, allowing you to step through each simulated behavior or assertion.
-
-{/* TODO: 👆 Revise this to not be limited to Component tests */}
+After running your tests, you will now see status indicators on stories and components for their pass, fail, or error state. You can press on the menu button when hovering a story to see the test results for that story. Selecting a result in the menu will navigate you to that story and open the appropriate debugging panel. For example, if a component test fails, you can jump straight to the failure in the Component tests addon panel. That panel provides an interactive debugger for your component test, allowing you to step through each simulated behavior or assertion.
 
 <Callout variant="info" icon="ℹ️">
 
@@ -242,33 +244,22 @@ The test module will also show you the total number of tests run, the number of 
 
 ### CLI
 
-The plugin transforms your stories into real Vitest tests, so you run those tests just like you run any other Vitest tests in your project. Typically, you will have a `test` script in your `package.json` that runs your tests.
-
-If you don't already have a `test` script, you can add one that runs Vitest:
+You can also run tests using the Vitest CLI. We recommend adding a script to your `package.json` to make running tests easier. Here's an example of how to do that:
 
 ```json title="package.json"
 {
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "test-storybook": "vitest --project=storybook"
   }
 }
 ```
 
-If you already have a `test` script that runs something other than Vitest, you can either adjust it to run Vitest (as above) or add a new script that runs Vitest:
+In this example, we've added two scripts: `test` to run all tests in your project (you may already have this), and `test-storybook` to run only your Storybook tests. The `--project=storybook` flag tells Vitest to run the tests for the Storybook project.
 
-```json title="package.json"
-{
-  "scripts": {
-    "test-storybook": "vitest"
-  }
-}
-```
-
-When you run that script, the plugin will find and run your story-based tests alongside any other Vitest tests. Here's an example of running your tests (in [watch mode](https://vitest.dev/guide/cli.html#vitest-watch), by default) using the Vitest CLI:
+Then, run this command to run your tests (in [watch mode](https://vitest.dev/guide/cli.html#vitest-watch), by default) using the Vitest CLI:
 
 <CodeSnippets path="vitest-plugin-run-tests.md" />
-
-We recommend (and configure, by default) running Vitest in [browser mode](https://vitest.dev/guide/browser/), using [Playwright's](https://playwright.dev) Chromium browser. Browser mode ensures your components are tested in a real browser environment, which is more accurate than simulations like JSDom or HappyDom. This is especially important for testing components that rely on browser APIs or features.
 
 #### Debugging
 
@@ -346,15 +337,12 @@ The tests run by the addon can be configured in two ways. You can toggle which t
 
 ### Toggling test types
 
-You can toggle different testing types on or off in the test module. Press the edit icon to enter edit mode, then toggle the test types you want to run. You may only see a checkbox for coverage:
+In addition to component tests, the Test addon supports multiple types of tests, depending on which other addons you are using in your project. Some test types, like [visual tests](./visual-testing.mdx), are run independently. Others, like [accessibility](./accessibility-testing.mdx), must be run alongside component tests. For these dependent test types, you can toggle them on or off in the test module by pressing the edit button (pencil icon) and checking or unchecking the test types you want to run.
 
 [TK - Test module edit mode with only coverage]
 ![Screenshot of test module, expanded, edit mode, coverage is checked](../_assets/writing-tests/addon-test-module-expanded-edit-coverage.png)
 
-Or, if you have other testing addons installed (like the [Visual tests addon](./visual-testing.mdx) or the [Accessibility addon](./accessibility-testing.mdx)), you may see checkboxes for those test types as well:
-
-[TK - Test module edit mode with visual and a11y]
-![Screenshot of test module, expanded, edit mode, everything is checked](../_assets/writing-tests/addon-test-module-expanded-edit-all.png)
+Note that you may not have all of the test types pictured, depending on which addons you have installed.
 
 You can also access edit mode in the sidebar item menu for a story or group of stories:
 
@@ -470,7 +458,7 @@ For more, see [Vitest's guide on using browser mode effectively](https://vitest.
 
 We recommend running tests in a browser using Playwright, but you can use WebDriverIO instead. To do so, you need to adjust the [browser provider in the Vitest configuration file](https://vitest.dev/config/#browser-provider).
 
-### How do I use a browser other than Chromium
+### How do I use a browser other than Chromium?
 
 We recommend using Chromium, because it is most likely to best match the experience of a majority of your users. However, you can use other browsers by adjusting the [browser name in the Vitest configuration file](https://vitest.dev/config/#browser-name). Note that [Playwright and WebDriverIO support different browsers](https://vitest.dev/guide/browser/#browser-option-types).
 
@@ -478,11 +466,13 @@ We recommend using Chromium, because it is most likely to best match the experie
 
 By default, the export name of a story is mapped to the test name. To create a more descriptive test description, you can provide a `name` property for the story. This allows you to include spaces, brackets, or other special characters.
 
-```js title="Example.stories.ts"
+```js title="Example.stories.js|ts"
 export const Story = {
   name: 'custom, descriptive name'
 };
 ```
+
+<If renderer="react">
 
 ### How do I fix the `m.createRoot is not a function` error?
 
@@ -500,6 +490,8 @@ export default defineConfig({
   },
 });
 ```
+
+</If>
 
 ## API
 
