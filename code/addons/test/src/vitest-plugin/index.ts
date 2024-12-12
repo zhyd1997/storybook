@@ -1,4 +1,6 @@
 /* eslint-disable no-underscore-dangle */
+import { dirname } from 'node:path';
+
 import type { Plugin } from 'vitest/config';
 import { mergeConfig } from 'vitest/config';
 import type { ViteUserConfig } from 'vitest/config';
@@ -23,7 +25,6 @@ import sirv from 'sirv';
 import { convertPathToPattern } from 'tinyglobby';
 import { dedent } from 'ts-dedent';
 
-import { TestManager } from '../node/test-manager';
 import type { InternalOptions, UserOptions } from './types';
 
 const WORKING_DIR = process.cwd();
@@ -62,6 +63,8 @@ const getStoryGlobsAndFiles = async (
     storiesFiles: generator.storyFileNames(),
   };
 };
+
+const packageDir = dirname(require.resolve('@storybook/experimental-addon-test/package.json'));
 
 export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
   const finalOptions = {
@@ -143,18 +146,22 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
       //   plugin.name?.startsWith('vitest:browser')
       // )
 
+      // We signal the test runner that we are not running it via Storybook
+      // We are overriding the environment variable to 'true' if vitest runs via @storybook/addon-test's backend
+      const vitestStorybook = process.env.VITEST_STORYBOOK ?? 'false';
+
       const baseConfig: Omit<ViteUserConfig, 'plugins'> = {
         test: {
           setupFiles: [
-            '@storybook/experimental-addon-test/internal/setup-file',
+            join(packageDir, 'dist/vitest-plugin/setup-file.mjs'),
             // if the existing setupFiles is a string, we have to include it otherwise we're overwriting it
             typeof inputConfig_DoNotMutate.test?.setupFiles === 'string' &&
               inputConfig_DoNotMutate.test?.setupFiles,
-          ].filter(Boolean),
+          ].filter(Boolean) as string[],
 
           ...(finalOptions.storybookScript
             ? {
-                globalSetup: ['@storybook/experimental-addon-test/internal/global-setup'],
+                globalSetup: [join(packageDir, 'dist/vitest-plugin/global-setup.mjs')],
               }
             : {}),
 
@@ -162,9 +169,8 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
             ...storybookEnv,
             // To be accessed by the setup file
             __STORYBOOK_URL__: finalOptions.storybookUrl,
-            // We signal the test runner that we are not running it via Storybook
-            // We are overriding the environment variable to 'true' if vitest runs via @storybook/addon-test's backend
-            VITEST_STORYBOOK: 'false',
+
+            VITEST_STORYBOOK: vitestStorybook,
             __VITEST_INCLUDE_TAGS__: finalOptions.tags.include.join(','),
             __VITEST_EXCLUDE_TAGS__: finalOptions.tags.exclude.join(','),
             __VITEST_SKIP_TAGS__: finalOptions.tags.skip.join(','),
@@ -239,8 +245,6 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
         },
 
         define: {
-          // polyfilling process.env.VITEST_STORYBOOK to 'false' in the browser
-          'process.env.VITEST_STORYBOOK': JSON.stringify('false'),
           ...(frameworkName?.includes('vue3')
             ? { __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false' }
             : {}),
