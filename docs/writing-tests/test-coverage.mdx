@@ -38,7 +38,7 @@ npm i -D @vitest/coverage-istanbul
 
 ### Usage
 
-Because coverage is built-in to Storybook Test, you can use it everywhere you run your tests.
+Because coverage is built into the Test addon, you can use it everywhere you run your tests.
 
 #### Storybook UI
 
@@ -51,7 +51,7 @@ Additionally, the full coverage report will be served at the `/coverage/index.ht
 It's important to understand that the coverage reported in the Storybook UI has three important limitations:
 
 1. Coverage is calculated using the stories you've written, not the entire codebase. In other words, it will not include any other Vitest tests.
-2. Coverage can only be calculated for all stories in your project, not an individual story or a group of stories.
+2. Coverage can only be calculated for all stories in your project, not for an individual story or a group of stories.
 3. Coverage is not calculated while watch mode is activated. When coverage is enabled, enabling watch mode will disable coverage.
 
 </Callout>
@@ -193,7 +193,7 @@ When calculating coverage in the Storybook UI, the following options are always 
 
 ### Troubleshooting
 
-#### Excluding stories from coverage report
+#### Excluding stories from the coverage report
 
 Until Vitest 2.2.0 is released, the generated coverage report will include the stories files themselves. This is misleading and they should be excluded. To do this, you can add the following to your Vitest config:
 
