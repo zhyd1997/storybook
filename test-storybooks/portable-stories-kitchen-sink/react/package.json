@@ -12,7 +12,7 @@
     "playwright-ct": "playwright test -c playwright-ct.config.ts",
     "playwright-e2e": "playwright test -c playwright-e2e.config.ts",
     "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "NODE_OPTIONS=\"--preserve-symlinks --preserve-symlinks-main\" storybook dev -p 6006",
     "vitest": "echo 'not running'",
     "vitest-skip-fail-on-purpose": "SKIP_FAIL_ON_PURPOSE=true vitest run"
   },
