@@ -68,4 +68,7 @@ function withGlobalActEnvironment(actImplementation: (callback: () => void) => P
   };
 }
 
-export const act = withGlobalActEnvironment(reactAct);
+export const act =
+  process.env.NODE_ENV === 'production'
+    ? (cb: (...args: any[]) => any) => cb()
+    : withGlobalActEnvironment(reactAct);
