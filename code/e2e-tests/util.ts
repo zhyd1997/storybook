@@ -112,6 +112,10 @@ export class SbPage {
     const storyLoadingPage = root.locator('.sb-preparing-story');
     await docsLoadingPage.waitFor({ state: 'hidden' });
     await storyLoadingPage.waitFor({ state: 'hidden' });
+    await this.page.waitForFunction(() => {
+      const storybookRoot = document.querySelector('#storybook-root');
+      return storybookRoot && storybookRoot.children.length > 0;
+    });
   }
 
   previewIframe() {
