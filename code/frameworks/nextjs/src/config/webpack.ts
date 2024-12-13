@@ -71,5 +71,5 @@ const setupRuntimeConfig = async (
 
   // Load DefinePlugin with a dynamic import to ensure that Next.js can first
   // replace webpack with its own internal instance, and we get that here.
-  baseConfig.plugins?.push(new (await import('webpack')).DefinePlugin(definePluginConfig));
+  baseConfig.plugins?.push(new (await import('webpack')).default.DefinePlugin(definePluginConfig));
 };
