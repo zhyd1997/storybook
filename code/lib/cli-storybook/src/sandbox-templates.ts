@@ -172,7 +172,6 @@ const baseTemplates = {
       extraDependencies: ['server-only', 'prop-types'],
     },
     skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
-    inDevelopment: true,
   },
   'nextjs/default-ts': {
     name: 'Next.js Latest (Webpack | TypeScript)',
@@ -208,10 +207,33 @@ const baseTemplates = {
     },
     skipTasks: ['e2e-tests-dev', 'bench', 'vitest-integration'],
   },
-  'experimental-nextjs-vite/default-ts': {
+  'experimental-nextjs-vite/14-ts': {
     name: 'Next.js Latest (Vite | TypeScript)',
     script:
       'npx create-next-app@^14 {{beforeDir}} --eslint --tailwind --app --import-alias="@/*" --src-dir',
+    expected: {
+      framework: '@storybook/experimental-nextjs-vite',
+      renderer: '@storybook/react',
+      builder: '@storybook/builder-vite',
+    },
+    modifications: {
+      mainConfig: {
+        framework: '@storybook/experimental-nextjs-vite',
+        features: { experimentalRSC: true },
+      },
+      extraDependencies: [
+        'server-only',
+        '@storybook/experimental-nextjs-vite',
+        'vite',
+        'prop-types',
+      ],
+    },
+    skipTasks: ['e2e-tests-dev', 'bench'],
+  },
+  'experimental-nextjs-vite/default-ts': {
+    name: 'Next.js Latest (Vite | TypeScript)',
+    script:
+      'npx create-next-app {{beforeDir}} --eslint --tailwind --app --import-alias="@/*" --src-dir',
     expected: {
       framework: '@storybook/experimental-nextjs-vite',
       renderer: '@storybook/react',
@@ -782,7 +804,8 @@ export const allTemplates: Record<TemplateKey, Template> = {
 };
 
 export const normal: TemplateKey[] = [
-  'cra/default-ts',
+  // TODO: Add this back once we resolve the React 19 issues
+  // 'cra/default-ts',
   'react-vite/default-ts',
   'angular-cli/default-ts',
   'vue3-vite/default-ts',
@@ -812,7 +835,8 @@ export const merged: TemplateKey[] = [
 export const daily: TemplateKey[] = [
   ...merged,
   'angular-cli/prerelease',
-  'cra/default-js',
+  // TODO: Add this back once we resolve the React 19 issues
+  // 'cra/default-js',
   'react-vite/default-js',
   'react-vite/prerelease-ts',
   'react-webpack/prerelease-ts',

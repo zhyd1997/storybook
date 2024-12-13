@@ -28,6 +28,9 @@ const setForceFailureFlag = async (value: boolean) => {
 
   // Write the updated content back to the file asynchronously
   await fs.writeFile(testStoryPath, updatedContent);
+
+  // the file change causes a HMR event, which causes a browser reload,and that can take a few seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 };
 
 test.describe("component testing", () => {
@@ -49,11 +52,14 @@ test.describe("component testing", () => {
 
     await sbPage.navigateToStory("addons/test", "Mismatch Failure");
 
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
     // For whatever reason, sometimes it takes longer for the story to load
     const storyElement = sbPage
       .getCanvasBodyElement()
       .getByRole("button", { name: "test" });
-    await expect(storyElement).toBeVisible({ timeout: 10000 });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
 
     await sbPage.viewAddonPanel("Component tests");
 
@@ -65,13 +71,12 @@ test.describe("component testing", () => {
     if ((await testStoryElement.getAttribute("aria-expanded")) !== "true") {
       testStoryElement.click();
     }
-    
-    const testingModuleDescription = await page.locator('[data-module-id="storybook/test/test-provider"]').locator('#testing-module-description');
+
+    const testingModuleDescription = await page.locator('#testing-module-description');
 
     await expect(testingModuleDescription).toContainText('Not run');
 
-    const runTestsButton = await page.getByLabel('Start component tests')
-
+    const runTestsButton = await page.getByLabel('Start Component tests')
     await runTestsButton.click();
 
     await expect(testingModuleDescription).toContainText('Testing', { timeout: 60000 });
@@ -91,7 +96,7 @@ test.describe("component testing", () => {
       "Test status: success"
     );
     await expect(sbPage.panelContent()).toContainText(
-      /This component test passed in CLI, but the tests failed in this browser./
+      /This component test passed in the CLI, but the tests failed in this browser/
     );
 
     // Assert discrepancy: CLI fail + Browser pass
@@ -104,7 +109,7 @@ test.describe("component testing", () => {
       "Test status: error"
     );
     await expect(sbPage.panelContent()).toContainText(
-      /This component test passed in this browser, but the tests failed in CLI/
+      /This component test passed in this browser, but the tests failed in the CLI/
     );
   });
 
@@ -117,34 +122,35 @@ test.describe("component testing", () => {
 
     const sbPage = new SbPage(page, expect);
     await sbPage.navigateToStory("addons/test", "Expected Failure");
-    
+
+    const expandButton = page.getByLabel('Expand testing module')
+    await expandButton.click();
+
     // For whatever reason, sometimes it takes longer for the story to load
     const storyElement = sbPage
       .getCanvasBodyElement()
       .getByRole("button", { name: "test" });
-    await expect(storyElement).toBeVisible({ timeout: 10000 });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
 
-    await expect(page.locator('#testing-module-title')).toHaveText('Component tests');
+    await expect(page.locator('#testing-module-title')).toHaveText('Run local tests');
 
-    const testingModuleDescription = await page.locator('[data-module-id="storybook/test/test-provider"]').locator('#testing-module-description');
+    const testingModuleDescription = await page.locator('#testing-module-description');
 
     await expect(testingModuleDescription).toContainText('Not run');
 
-    const runTestsButton = await page.getByLabel('Start component tests')
+    const runTestsButton = await page.getByLabel('Start Component Tests')
     const watchModeButton = await page.getByLabel('Enable watch mode for Component tests')
     await expect(runTestsButton).toBeEnabled();
     await expect(watchModeButton).toBeEnabled();
 
     await runTestsButton.click();
-
-    await expect(runTestsButton).toBeDisabled();
     await expect(watchModeButton).toBeDisabled();
 
     await expect(testingModuleDescription).toContainText('Testing');
 
     // Wait for test results to appear
     await expect(testingModuleDescription).toHaveText(/Ran \d+ tests/, { timeout: 30000 });
-    
+
     await expect(runTestsButton).toBeEnabled();
     await expect(watchModeButton).toBeEnabled();
 
@@ -188,11 +194,14 @@ test.describe("component testing", () => {
     const sbPage = new SbPage(page, expect);
     await sbPage.navigateToStory("addons/test", "Expected Failure");
 
+    const expandButton = await page.getByLabel('Expand testing module')
+    await expandButton.click();
+
     // For whatever reason, sometimes it takes longer for the story to load
     const storyElement = sbPage
       .getCanvasBodyElement()
       .getByRole("button", { name: "test" });
-    await expect(storyElement).toBeVisible({ timeout: 10000 });
+    await expect(storyElement).toBeVisible({ timeout: 30000 });
 
     await page.getByLabel("Enable watch mode for Component tests").click();
 
