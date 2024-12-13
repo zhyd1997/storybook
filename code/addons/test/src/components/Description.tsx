@@ -61,7 +61,7 @@ export function Description({ state, ...props }: DescriptionProps) {
   } else if (state.progress?.finishedAt) {
     description = (
       <>
-        Ran {state.progress.numTotalTests} ${state.progress.numTotalTests === 1 ? 'test' : 'tests'}{' '}
+        Ran {state.progress.numTotalTests} {state.progress.numTotalTests === 1 ? 'test' : 'tests'}{' '}
         <RelativeTime timestamp={state.progress.finishedAt} />
       </>
     );
