@@ -63,6 +63,7 @@ const setupRuntimeConfig = async (
       serverRuntimeConfig: {},
       publicRuntimeConfig: nextConfig.publicRuntimeConfig,
     }),
+    'process.env.NODE_ENV': JSON.stringify('development'),
   };
 
   const newNextLinkBehavior = (nextConfig.experimental as any)?.newNextLinkBehavior;

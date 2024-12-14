@@ -43,5 +43,10 @@ export const viteFinal: StorybookConfigVite['viteFinal'] = async (config, option
   const nextDir = nextConfigPath ? path.dirname(nextConfigPath) : undefined;
   plugins.push(vitePluginStorybookNextjs({ dir: nextDir }));
 
+  reactConfig.define = {
+    ...reactConfig.define,
+    'process.env.NODE_ENV': JSON.stringify('development'),
+  };
+
   return reactConfig;
 };

@@ -51,5 +51,10 @@ export const viteFinal: NonNullable<StorybookConfig['viteFinal']> = async (confi
     );
   }
 
+  config.define = {
+    ...config.define,
+    'process.env.NODE_ENV': JSON.stringify('development'),
+  };
+
   return config;
 };
