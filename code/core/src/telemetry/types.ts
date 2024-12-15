@@ -59,6 +59,7 @@ export type StorybookMetadata = {
     version: string;
   };
   testPackages?: Record<string, string | undefined>;
+  hasRouterPackage?: boolean;
   hasStorybookEslint?: boolean;
   hasStaticDirs?: boolean;
   hasCustomWebpack?: boolean;

@@ -13,6 +13,7 @@ import { findPackage } from 'fd-package-json';
 
 import { getChromaticVersionSpecifier } from './get-chromatic-version';
 import { getFrameworkInfo } from './get-framework-info';
+import { getHasRouterPackage } from './get-has-router-package';
 import { getMonorepoType } from './get-monorepo-type';
 import { getPortableStoriesFileCount } from './get-portable-stories-usage';
 import { getActualPackageVersion, getActualPackageVersions } from './package-json';
@@ -99,6 +100,8 @@ export const computeStorybookMetadata = async ({
       testPackageDeps.map(async (dep) => [dep, (await getActualPackageVersion(dep))?.version])
     )
   );
+
+  metadata.hasRouterPackage = getHasRouterPackage(packageJson);
 
   const monorepoType = getMonorepoType();
   if (monorepoType) {
