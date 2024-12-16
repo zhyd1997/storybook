@@ -1,7 +1,5 @@
-// eslint-disable-next-line depend/ban-dependencies
-import { execaCommand } from 'execa';
-
 import { createFileSystemCache, resolvePathInStorybookCache } from '../common';
+import { execCommandCountLines } from './exec-command-count-lines';
 
 const cache = createFileSystemCache({
   basePath: resolvePathInStorybookCache('portable-stories'),
@@ -11,12 +9,7 @@ const cache = createFileSystemCache({
 
 export const getPortableStoriesFileCountUncached = async (path?: string) => {
   const command = `git grep -l composeStor` + (path ? ` -- ${path}` : '');
-  const { stdout } = await execaCommand(command, {
-    cwd: process.cwd(),
-    shell: true,
-  });
-
-  return stdout.split('\n').filter(Boolean).length;
+  return execCommandCountLines(command);
 };
 
 const CACHE_KEY = 'portableStories';
