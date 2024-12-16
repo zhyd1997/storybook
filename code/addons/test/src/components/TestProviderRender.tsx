@@ -166,7 +166,14 @@ export const TestProviderRender: FC<
       ? null
       : a11yResults?.filter((result) => !result).length;
 
+  const a11ySkippedLabel = a11ySkippedAmount
+    ? a11ySkippedAmount === 1 && isStoryEntry
+      ? '(skipped)'
+      : `(${a11ySkippedAmount} skipped)`
+    : '';
+
   const storyId = isStoryEntry ? entryId : undefined;
+
   const results = (state.details?.testResults || [])
     .flatMap((test) => {
       if (!entryId) {
@@ -334,11 +341,7 @@ export const TestProviderRender: FC<
           )}
           {isA11yAddon && (
             <ListItem
-              title={
-                <ItemTitle enabled={config.a11y}>
-                  Accessibility {a11ySkippedAmount ? `(${a11ySkippedAmount} skipped)` : ''}
-                </ItemTitle>
-              }
+              title={<ItemTitle enabled={config.a11y}>Accessibility {a11ySkippedLabel}</ItemTitle>}
               onClick={
                 (a11yStatus === 'negative' || a11yStatus === 'warning') && a11yResults.length
                   ? () => {
