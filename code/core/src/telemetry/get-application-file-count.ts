@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { execCommandCountLines } from './exec-command-count-lines';
 import { runTelemetryOperation } from './run-telemetry-operation';
 
@@ -12,7 +14,7 @@ export const getApplicationFilesCountUncached = async (basePath: string) => {
   ]);
 
   const globs = bothCasesNameMatches.flatMap((match) =>
-    extensions.map((extension) => `"${basePath}*${match}*.${extension}"`)
+    extensions.map((extension) => `"${basePath}${sep}*${match}*.${extension}"`)
   );
 
   try {
