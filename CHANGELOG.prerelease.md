@@ -1,3 +1,8 @@
+## 8.5.0-beta.0
+
+- Automigration: Improve setup file transformation and version range handling for a11y migration - [#30060](https://github.com/storybookjs/storybook/pull/30060), thanks @valentinpalkovic!
+- Next.js: Support v15.1.1 - [#30068](https://github.com/storybookjs/storybook/pull/30068), thanks @valentinpalkovic!
+
 ## 8.5.0-alpha.22
 
 - Addon Docs: Dynamically import rehype - [#29544](https://github.com/storybookjs/storybook/pull/29544), thanks @valentinpalkovic!
