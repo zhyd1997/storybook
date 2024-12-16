@@ -136,12 +136,14 @@ export const TestProviderRender: FC<
       return 'unknown';
     }
 
-    if (!a11yResults) {
+    const definedA11yResults = a11yResults?.filter(Boolean) ?? [];
+
+    if (!definedA11yResults || definedA11yResults.length === 0) {
       return 'unknown';
     }
 
-    const failed = a11yResults.some((result) => result?.status === 'failed');
-    const warning = a11yResults.some((result) => result?.status === 'warning');
+    const failed = definedA11yResults.some((result) => result?.status === 'failed');
+    const warning = definedA11yResults.some((result) => result?.status === 'warning');
 
     if (failed) {
       return 'negative';
@@ -152,9 +154,15 @@ export const TestProviderRender: FC<
     return 'positive';
   }, [state.running, isA11yAddon, config.a11y, a11yResults]);
 
-  const a11yNotPassedAmount = a11yResults?.filter(
-    (result) => result?.status === 'failed' || result?.status === 'warning'
-  ).length;
+  const a11yNotPassedAmount = state.config?.a11y
+    ? a11yResults?.filter((result) => result?.status === 'failed' || result?.status === 'warning')
+        .length
+    : undefined;
+
+  const a11ySkippedAmount =
+    state.running || !state?.details.config?.a11y || !state.config.a11y
+      ? null
+      : a11yResults?.filter((result) => !result).length;
 
   const storyId = entryId?.includes('--') ? entryId : undefined;
   const results = (state.details?.testResults || [])
@@ -324,7 +332,11 @@ export const TestProviderRender: FC<
           )}
           {isA11yAddon && (
             <ListItem
-              title={<ItemTitle enabled={config.a11y}>Accessibility</ItemTitle>}
+              title={
+                <ItemTitle enabled={config.a11y}>
+                  Accessibility {a11ySkippedAmount ? `(${a11ySkippedAmount} skipped)` : ''}
+                </ItemTitle>
+              }
               onClick={
                 (a11yStatus === 'negative' || a11yStatus === 'warning') && a11yResults.length
                   ? () => {
