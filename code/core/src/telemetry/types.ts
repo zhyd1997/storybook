@@ -70,6 +70,7 @@ export type StorybookMetadata = {
     usesGlobals?: boolean;
   };
   portableStoriesFileCount?: number;
+  applicationFileCount?: number;
 };
 
 export interface Payload {

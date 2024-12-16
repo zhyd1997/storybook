@@ -1,30 +1,18 @@
-import { createFileSystemCache, resolvePathInStorybookCache } from '../common';
 import { execCommandCountLines } from './exec-command-count-lines';
-
-const cache = createFileSystemCache({
-  basePath: resolvePathInStorybookCache('portable-stories'),
-  ns: 'storybook',
-  ttl: 24 * 60 * 60 * 1000, // 24h
-});
+import { runTelemetryOperation } from './run-telemetry-operation';
 
 export const getPortableStoriesFileCountUncached = async (path?: string) => {
-  const command = `git grep -l composeStor` + (path ? ` -- ${path}` : '');
-  return execCommandCountLines(command);
+  try {
+    const command = `git grep -l composeStor` + (path ? ` -- ${path}` : '');
+    return await execCommandCountLines(command);
+  } catch (err: any) {
+    // exit code 1 if no matches are found
+    return err.exitCode === 1 ? 0 : undefined;
+  }
 };
 
-const CACHE_KEY = 'portableStories';
 export const getPortableStoriesFileCount = async (path?: string) => {
-  let cached = await cache.get(CACHE_KEY);
-  if (!cached) {
-    try {
-      const count = await getPortableStoriesFileCountUncached();
-      cached = { count };
-      await cache.set(CACHE_KEY, cached);
-    } catch (err: any) {
-      // exit code 1 if no matches are found
-      const count = err.exitCode === 1 ? 0 : null;
-      cached = { count };
-    }
-  }
-  return cached.count;
+  return runTelemetryOperation('portableStories', async () =>
+    getPortableStoriesFileCountUncached(path)
+  );
 };

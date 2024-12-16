@@ -16,8 +16,8 @@ export async function execCommandCountLines(
 ) {
   const process = execaCommand(command, { shell: true, buffer: false, ...options });
   if (!process.stdout) {
-    // Return null rather than throwing an error
-    return null;
+    // Return undefined rather than throwing an error
+    return undefined;
   }
 
   let lineCount = 0;
