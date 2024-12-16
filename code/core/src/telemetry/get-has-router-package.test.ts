@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { getHasRouterPackage } from './get-has-router-package';
 
-it('returns true if there is a routing package in package.json', async () => {
+it('returns true if there is a routing package in package.json', () => {
   expect(
     getHasRouterPackage({
       dependencies: {
@@ -14,7 +14,7 @@ it('returns true if there is a routing package in package.json', async () => {
   ).toBe(true);
 });
 
-it('returns false if there is a routing package in package.json dependenices', async () => {
+it('returns false if there is a routing package in package.json dependencies', () => {
   expect(
     getHasRouterPackage({
       dependencies: {

@@ -16,7 +16,10 @@ export const runTelemetryOperation = async <T>(cacheKey: string, operation: () =
   let cached = await cache.get<T>(cacheKey);
   if (cached === undefined) {
     cached = await operation();
-    await cache.set(cacheKey, cached);
+    // Undefined indicates an error, setting isn't really valuable.
+    if (cached !== undefined) {
+      await cache.set(cacheKey, cached);
+    }
   }
   return cached;
 };
