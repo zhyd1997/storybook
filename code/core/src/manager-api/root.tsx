@@ -41,7 +41,7 @@ import {
   STORY_CHANGED,
 } from '@storybook/core/core-events';
 
-import { mergeWith } from 'es-toolkit';
+import { isEqual } from 'es-toolkit';
 
 import { createContext } from './context';
 import getInitialState from './initial-state';
@@ -218,14 +218,17 @@ class ManagerProvider extends Component<ManagerProviderProps, State> {
     return null!;
   }
 
-  shouldComponentUpdate(nextProps: ManagerProviderProps, nextState: State): boolean {
-    const prevState = this.state;
+  shouldComponentUpdate(
+    nextProps: ManagerProviderProps,
+    { addons: _, ...nextState }: State
+  ): boolean {
     const prevProps = this.props;
+    const { addons: __, ...prevState } = this.state;
 
-    if (prevState !== nextState) {
+    if (prevProps.path !== nextProps.path) {
       return true;
     }
-    if (prevProps.path !== nextProps.path) {
+    if (!isEqual(prevState, nextState)) {
       return true;
     }
     return false;
