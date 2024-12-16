@@ -52,6 +52,10 @@ const baseState: TestProviderState<Details, Config> = {
     coverage: false,
   },
   details: {
+    config: {
+      a11y: false,
+      coverage: false,
+    },
     testResults: [
       {
         endTime: 0,
@@ -141,6 +145,10 @@ export const WithCoverageNegative: Story = {
       ...config,
       ...baseState,
       details: {
+        config: {
+          a11y: false,
+          coverage: true,
+        },
         testResults: [],
         coverageSummary: {
           percentage: 20,
