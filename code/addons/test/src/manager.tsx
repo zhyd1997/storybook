@@ -79,7 +79,8 @@ addons.register(ADDON_ID, (api) => {
           details: { ...state.details, ...update.details },
         };
 
-        if (update.config?.coverage === false) {
+        if ((!state.running && update.running) || (!state.watching && update.watching)) {
+          // Clear coverage data when starting test run or enabling watch mode
           delete updated.details.coverageSummary;
         }
 
