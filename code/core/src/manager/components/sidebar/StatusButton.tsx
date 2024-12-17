@@ -34,9 +34,6 @@ export const StatusButton = styled(IconButton)<{
 }>(
   withStatusColor,
   ({ theme, height, width }) => ({
-    position: 'absolute',
-    right: 0,
-    top: 0,
     transition: 'none',
     display: 'inline-flex',
     alignItems: 'center',

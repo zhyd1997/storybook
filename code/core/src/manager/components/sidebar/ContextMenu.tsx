@@ -2,6 +2,7 @@ import type { ComponentProps, FC, SyntheticEvent } from 'react';
 import React, { useMemo, useState } from 'react';
 
 import { TooltipLinkList, WithTooltip } from '@storybook/core/components';
+import { styled } from '@storybook/core/theming';
 import { type API_HashEntry, Addon_TypesEnum } from '@storybook/core/types';
 import { EllipsisIcon } from '@storybook/icons';
 
@@ -17,6 +18,11 @@ const empty = {
   onMouseEnter: () => {},
   node: null,
 };
+
+const PositionedWithTooltip = styled(WithTooltip)({
+  position: 'absolute',
+  right: 0,
+});
 
 export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
   const [hoverCount, setHoverCount] = useState(0);
@@ -63,7 +69,7 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
     return {
       onMouseEnter: handlers.onMouseEnter,
       node: isRendered ? (
-        <WithTooltip
+        <PositionedWithTooltip
           data-displayed={isOpen ? 'on' : 'off'}
           closeOnOutsideClick
           placement="bottom-end"
@@ -80,7 +86,7 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
           <StatusButton type="button" status={'pending'}>
             <EllipsisIcon />
           </StatusButton>
-        </WithTooltip>
+        </PositionedWithTooltip>
       ) : null,
     };
   }, [context, handlers, isOpen, isRendered, links]);
