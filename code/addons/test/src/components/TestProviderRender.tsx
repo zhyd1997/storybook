@@ -316,7 +316,7 @@ export const TestProviderRender: FC<
                   aria-label={`status: ${coverageSummary.status}`}
                 />
               }
-              right={`${coverageSummary.percentage}%`}
+              right={coverageSummary.percentage ? `${coverageSummary.percentage}%` : null}
             />
           ) : (
             <ListItem
