@@ -52,7 +52,7 @@ export class VitestManager {
       join(packageDir, 'dist/node/coverage-reporter.js'),
       {
         testManager: this.testManager,
-        coverageOptions: this.vitest?.config?.coverage as ResolvedCoverageOptions<'v8'>,
+        coverageOptions: this.vitest?.config?.coverage as ResolvedCoverageOptions<'v8'> | undefined,
       },
     ];
     const coverageOptions = (
