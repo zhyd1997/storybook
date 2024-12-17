@@ -196,12 +196,6 @@ const StatusIconMap = {
   unknown: null,
 };
 
-const PositionedStatusButton = styled(StatusButton)({
-  position: 'absolute',
-  right: 0,
-  top: 0,
-});
-
 export const ContextMenu = {
   ListItem,
 };
@@ -340,7 +334,7 @@ const Node = React.memo<NodeProps>(function Node({
         )}
         {contextMenu.node}
         {icon ? (
-          <PositionedStatusButton
+          <StatusButton
             aria-label={`Test status: ${statusValue}`}
             role="status"
             type="button"
@@ -348,7 +342,7 @@ const Node = React.memo<NodeProps>(function Node({
             selectedItem={isSelected}
           >
             {icon}
-          </PositionedStatusButton>
+          </StatusButton>
         ) : null}
       </LeafNodeStyleWrapper>
     );
@@ -442,11 +436,11 @@ const Node = React.memo<NodeProps>(function Node({
         </BranchNode>
         {contextMenu.node}
         {['error', 'warn'].includes(itemStatus) && (
-          <PositionedStatusButton type="button" status={itemStatus}>
+          <StatusButton type="button" status={itemStatus}>
             <svg key="icon" viewBox="0 0 6 6" width="6" height="6" type="dot">
               <UseSymbol type="dot" />
             </svg>
-          </PositionedStatusButton>
+          </StatusButton>
         )}
       </LeafNodeStyleWrapper>
     );

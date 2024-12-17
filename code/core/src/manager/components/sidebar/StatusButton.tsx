@@ -40,8 +40,6 @@ export const StatusButton = styled(IconButton)<{
     justifyContent: 'center',
     width: width || 28,
     height: height || 28,
-    background: 'var(--tree-node-background-hover)',
-    boxShadow: '0 0 5px 5px var(--tree-node-background-hover)',
 
     '&:hover': {
       color: theme.color.secondary,

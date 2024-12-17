@@ -24,6 +24,11 @@ const PositionedWithTooltip = styled(WithTooltip)({
   right: 0,
 });
 
+const FloatingStatusButton = styled(StatusButton)({
+  background: 'var(--tree-node-background-hover)',
+  boxShadow: '0 0 5px 5px var(--tree-node-background-hover)',
+});
+
 export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) => {
   const [hoverCount, setHoverCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -83,9 +88,9 @@ export const useContextMenu = (context: API_HashEntry, links: Link[], api: API) 
           }}
           tooltip={<LiveContextMenu context={context} links={links} />}
         >
-          <StatusButton type="button" status={'pending'}>
+          <FloatingStatusButton type="button" status={'pending'}>
             <EllipsisIcon />
-          </StatusButton>
+          </FloatingStatusButton>
         </PositionedWithTooltip>
       ) : null,
     };
