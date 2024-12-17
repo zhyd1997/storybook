@@ -100,7 +100,7 @@ export class VitestManager {
           e?.message === "Cannot read properties of undefined (reading 'name')")
       ) {
         const coveragePackage = isIstanbul ? 'coverage-istanbul' : 'coverage-v8';
-        message += `\n\nPlease install the @vitest/${coveragePackage} package to run with coverage\n`;
+        message += `\n\nPlease install the @vitest/${coveragePackage} package to collect coverage\n`;
       }
       this.testManager.reportFatalError(message, e);
       return;
