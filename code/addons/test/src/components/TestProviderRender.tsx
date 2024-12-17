@@ -309,6 +309,7 @@ export const TestProviderRender: FC<
               href={'/coverage/index.html'}
               // @ts-expect-error ListItem doesn't include all anchor attributes in types, but it is an achor element
               target="_blank"
+              aria-label="Open coverage report"
               icon={
                 <TestStatusIcon
                   percentage={coverageSummary.percentage}
@@ -316,7 +317,13 @@ export const TestProviderRender: FC<
                   aria-label={`status: ${coverageSummary.status}`}
                 />
               }
-              right={coverageSummary.percentage ? `${coverageSummary.percentage}%` : null}
+              right={
+                coverageSummary.percentage ? (
+                  <span aria-label={`${coverageSummary.percentage} percent coverage`}>
+                    {coverageSummary.percentage} %
+                  </span>
+                ) : null
+              }
             />
           ) : (
             <ListItem
