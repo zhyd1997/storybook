@@ -316,9 +316,9 @@ export const TestProviderRender: FC<
                 />
               }
               right={
-                <span aria-label={`${coverageSummary.percentage} percent coverage`}>
+                coverageSummary.percentage ? <span aria-label={`${coverageSummary.percentage} percent coverage`}>
                   {coverageSummary.percentage} %
-                </span>
+                </span> : null
               }
             />
           ) : (
