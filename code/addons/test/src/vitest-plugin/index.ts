@@ -116,7 +116,6 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
 
   return {
     name: 'vite-plugin-storybook-test',
-    enforce: 'pre',
     async transformIndexHtml(html) {
       const [headHtmlSnippet, bodyHtmlSnippet] = await Promise.all([
         presets.apply('previewHead'),
