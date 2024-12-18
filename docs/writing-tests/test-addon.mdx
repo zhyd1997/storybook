@@ -96,7 +96,9 @@ Some Storybook frameworks require additional setup to enable the framework's fea
     viteConfig,
     defineConfig({
       plugins: [
-        storybookTest(),
+        storybookTest({
+          // ...
+        }),
         storybookNextJsPlugin(), // 👈 Apply the framework plugin here
       ],
       // ...
@@ -119,7 +121,9 @@ Some Storybook frameworks require additional setup to enable the framework's fea
     viteConfig,
     defineConfig({
       plugins: [
-        storybookTest(),
+        storybookTest({
+          // ...
+        }),
         storybookVuePlugin(), // 👈 Apply the framework plugin here
       ],
       // ...
@@ -142,7 +146,9 @@ Some Storybook frameworks require additional setup to enable the framework's fea
     viteConfig,
     defineConfig({
       plugins: [
-        storybookTest(),
+        storybookTest({
+          // ...
+        }),
         storybookSveltekitPlugin(), // 👈 Apply the framework plugin here
       ],
       // ...
@@ -313,6 +319,7 @@ export default defineWorkspace([
     {
       plugins: [
         storybookTest({
+          // ...
           storybookScript: 'yarn storybook --ci',
           storybookUrl: process.env.SB_URL
         }),
