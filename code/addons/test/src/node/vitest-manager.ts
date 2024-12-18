@@ -52,7 +52,7 @@ export class VitestManager {
       join(packageDir, 'dist/node/coverage-reporter.js'),
       {
         testManager: this.testManager,
-        coverageOptions: this.vitest?.config?.coverage as ResolvedCoverageOptions<'v8'>,
+        coverageOptions: this.vitest?.config?.coverage as ResolvedCoverageOptions<'v8'> | undefined,
       },
     ];
     const coverageOptions = (
@@ -89,15 +89,21 @@ export class VitestManager {
     try {
       await this.vitest.init();
     } catch (e) {
+      let message = 'Failed to initialize Vitest';
       const isV8 = e.message?.includes('@vitest/coverage-v8');
       const isIstanbul = e.message?.includes('@vitest/coverage-istanbul');
 
-      if (e.message?.includes('Error: Failed to load url') && (isIstanbul || isV8)) {
+      if (
+        (e.message?.includes('Failed to load url') && (isIstanbul || isV8)) ||
+        // Vitest will sometimes not throw the correct missing-package-detection error, so we have to check for this as well
+        (e instanceof TypeError &&
+          e?.message === "Cannot read properties of undefined (reading 'name')")
+      ) {
         const coveragePackage = isIstanbul ? 'coverage-istanbul' : 'coverage-v8';
-        e.message = `Please install the @vitest/${coveragePackage} package to run with coverage`;
+        message += `\n\nPlease install the @vitest/${coveragePackage} package to collect coverage\n`;
       }
-
-      this.testManager.reportFatalError('Failed to init Vitest', e);
+      this.testManager.reportFatalError(message, e);
+      return;
     }
 
     await this.setupWatchers();
