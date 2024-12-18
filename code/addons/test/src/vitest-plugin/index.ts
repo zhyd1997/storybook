@@ -243,7 +243,9 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
 
         optimizeDeps: {
           include: [
-            '@storybook/experimental-addon-test/**',
+            '@storybook/experimental-addon-test/internal/setup-file',
+            '@storybook/experimental-addon-test/internal/global-setup',
+            '@storybook/experimental-addon-test/internal/test-utils',
             ...(frameworkName?.includes('react') || frameworkName?.includes('nextjs')
               ? ['react-dom/test-utils']
               : []),
