@@ -206,17 +206,19 @@ export const TestProviderRender: FC<
         </Info>
 
         <Actions>
-          <Button
-            aria-label={`${isEditing ? 'Close' : 'Open'} settings for ${state.name}`}
-            variant="ghost"
-            padding="small"
-            active={isEditing}
-            disabled={state.running && !isEditing}
-            onClick={() => setIsEditing(!isEditing)}
-          >
-            <EditIcon />
-          </Button>
-          {state.watchable && !entryId && (
+          {!entryId && (
+            <Button
+              aria-label={`${isEditing ? 'Close' : 'Open'} settings for ${state.name}`}
+              variant="ghost"
+              padding="small"
+              active={isEditing}
+              disabled={state.running && !isEditing}
+              onClick={() => setIsEditing(!isEditing)}
+            >
+              <EditIcon />
+            </Button>
+          )}
+          {!entryId && state.watchable && (
             <Button
               aria-label={`${state.watching ? 'Disable' : 'Enable'} watch mode for ${state.name}`}
               variant="ghost"
