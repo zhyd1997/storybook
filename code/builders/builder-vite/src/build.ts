@@ -20,6 +20,9 @@ export async function build(options: Options) {
 
   const config = await commonConfig(options, 'build');
   config.build = mergeConfig(config, {
+    define: {
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    },
     build: {
       outDir: options.outputDir,
       emptyOutDir: false, // do not clean before running Vite build - Storybook has already added assets in there!
@@ -35,7 +38,15 @@ export async function build(options: Options) {
           }
         : {}),
     },
-  }).build;
+  } as InlineConfig).build;
+
+  if (options.features?.developmentModeForBuild) {
+    config.build = mergeConfig(config.build ?? {}, {
+      define: {
+        'process.env.NODE_ENV': JSON.stringify('development'),
+      },
+    } as InlineConfig);
+  }
 
   const finalConfig = await presets.apply('viteFinal', config, options);
 
