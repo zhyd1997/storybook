@@ -5,6 +5,7 @@ import { SbPage } from './util';
 
 const storybookUrl = process.env.STORYBOOK_URL || 'http://localhost:8001';
 const templateName = process.env.STORYBOOK_TEMPLATE_NAME || '';
+const type = process.env.STORYBOOK_TYPE || 'dev';
 
 const supportsOnboarding =
   templateName.includes('react') ||
@@ -13,6 +14,7 @@ const supportsOnboarding =
   templateName.includes('next');
 
 test.describe('addon-onboarding', () => {
+  test.skip(type === 'build', `Skipping addon tests for production Storybooks`);
   test.skip(
     !supportsOnboarding,
     `Skipping ${templateName}, which does not have addon-onboarding set up.`
