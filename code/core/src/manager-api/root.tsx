@@ -218,20 +218,10 @@ class ManagerProvider extends Component<ManagerProviderProps, State> {
     return null!;
   }
 
-  shouldComponentUpdate(
-    nextProps: ManagerProviderProps,
-    { addons: _, ...nextState }: State
-  ): boolean {
+  shouldComponentUpdate(nextProps: ManagerProviderProps, nextState: State): boolean {
     const prevProps = this.props;
-    const { addons: __, ...prevState } = this.state;
-
-    if (prevProps.path !== nextProps.path) {
-      return true;
-    }
-    if (!isEqual(prevState, nextState)) {
-      return true;
-    }
-    return false;
+    const prevState = this.state;
+    return prevProps.path !== nextProps.path || !isEqual(prevState, nextState);
   }
 
   initModules = () => {
