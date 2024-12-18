@@ -89,7 +89,7 @@ export const install: Task['run'] = async ({ sandboxDir, key }, { link, dryRun, 
       dryRun,
       debug,
     });
-    await addWorkaroundResolutions({ cwd, dryRun, debug });
+    await addWorkaroundResolutions({ cwd, dryRun, debug, key });
   } else {
     // We need to add package resolutions to ensure that we only ever install the latest version
     // of any storybook packages as verdaccio is not able to both proxy to npm and publish over
@@ -110,7 +110,7 @@ export const install: Task['run'] = async ({ sandboxDir, key }, { link, dryRun, 
       'vue3-vite/default-js',
       'vue3-vite/default-ts',
     ];
-    if (sandboxesNeedingWorkarounds.includes(key)) {
+    if (sandboxesNeedingWorkarounds.includes(key) || key.includes('vite')) {
       await addWorkaroundResolutions({ cwd, dryRun, debug });
     }
 
@@ -439,6 +439,7 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     dedent`import { beforeAll } from 'vitest'
     import { setProjectAnnotations } from '${storybookPackage}'
     import * as rendererDocsAnnotations from '${template.expected.renderer}/dist/entry-preview-docs.mjs'
+    import * as addonA11yAnnotations from '@storybook/addon-a11y/preview'
     import * as addonActionsAnnotations from '@storybook/addon-actions/preview'
     import * as addonTestAnnotations from '@storybook/experimental-addon-test/preview'
     import '../src/stories/components'
@@ -448,13 +449,14 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
     ${isVue ? 'import * as vueAnnotations from "../src/stories/renderers/vue3/preview.js"' : ''}
 
     const annotations = setProjectAnnotations([
+      ${isVue ? 'vueAnnotations,' : ''}
       rendererDocsAnnotations,
-      projectAnnotations,
       coreAnnotations,
       toolbarAnnotations,
       addonActionsAnnotations,
       addonTestAnnotations,
-      ${isVue ? 'vueAnnotations,' : ''}
+      addonA11yAnnotations,
+      projectAnnotations,
     ])
 
     beforeAll(annotations.beforeAll)`
@@ -498,14 +500,11 @@ export async function setupVitest(details: TemplateDetails, options: PassedOptio
           test: {
             name: "storybook",
             pool: "threads",
-            include: [
-              "src/**/*.{story,stories}.?(c|m)[jt]s?(x)",
-              "template-stories/**/*.{story,stories}.?(c|m)[jt]s?(x)",
-            ],
             exclude: [
               ...defaultExclude,
               // TODO: investigate TypeError: Cannot read properties of null (reading 'useContext')
               "**/*argtypes*",
+              ${template.expected.renderer === '@storybook/svelte' ? '"**/*.stories.svelte",' : ''}
             ],
             /**
              * TODO: Either fix or acknowledge limitation of:
@@ -810,7 +809,7 @@ export const extendPreview: Task['run'] = async ({ template, sandboxDir }) => {
   const previewConfig = await readConfig({ cwd: sandboxDir, fileName: 'preview' });
 
   if (template.expected.builder.includes('vite')) {
-    previewConfig.setFieldValue(['tags'], ['vitest']);
+    previewConfig.setFieldValue(['tags'], ['vitest', '!a11ytest']);
   }
 
   await writeConfig(previewConfig);
