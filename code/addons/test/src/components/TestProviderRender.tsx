@@ -76,6 +76,16 @@ const StopIcon = styled(StopAltIcon)({
   width: 10,
 });
 
+const ItemTitle = styled.span<{ enabled?: boolean }>(
+  ({ enabled, theme }) =>
+    !enabled && {
+      color: theme.textMutedColor,
+      '&:after': {
+        content: '" (disabled)"',
+      },
+    }
+);
+
 const statusOrder: TestStatus[] = ['failed', 'warning', 'pending', 'passed', 'skipped'];
 const statusMap: Record<TestStatus, ComponentProps<typeof TestStatusIcon>['status']> = {
   failed: 'negative',
@@ -104,6 +114,8 @@ export const TestProviderRender: FC<
     state.config || { a11y: false, coverage: false }
   );
 
+  const isStoryEntry = entryId?.includes('--') ?? false;
+
   const a11yResults = useMemo(() => {
     if (!isA11yAddon) {
       return [];
@@ -111,12 +123,17 @@ export const TestProviderRender: FC<
 
     return state.details?.testResults?.flatMap((result) =>
       result.results
+        .filter(Boolean)
         .filter((r) => !entryId || r.storyId === entryId || r.storyId?.startsWith(`${entryId}-`))
         .map((r) => r.reports.find((report) => report.type === 'a11y'))
     );
   }, [isA11yAddon, state.details?.testResults, entryId]);
 
   const a11yStatus = useMemo<'positive' | 'warning' | 'negative' | 'unknown'>(() => {
+    if (state.running) {
+      return 'unknown';
+    }
+
     if (!isA11yAddon || config.a11y === false) {
       return 'unknown';
     }
@@ -135,13 +152,13 @@ export const TestProviderRender: FC<
     }
 
     return 'positive';
-  }, [a11yResults, isA11yAddon, config.a11y]);
+  }, [state.running, isA11yAddon, config.a11y, a11yResults]);
 
   const a11yNotPassedAmount = a11yResults?.filter(
     (result) => result?.status === 'failed' || result?.status === 'warning'
   ).length;
 
-  const storyId = entryId?.includes('--') ? entryId : undefined;
+  const storyId = isStoryEntry ? entryId : undefined;
   const results = (state.details?.testResults || [])
     .flatMap((test) => {
       if (!entryId) {
@@ -153,7 +170,11 @@ export const TestProviderRender: FC<
     })
     .sort((a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status));
 
-  const status = (state.failed ? 'failed' : results[0]?.status) || 'unknown';
+  const status = state.running
+    ? 'unknown'
+    : state.failed
+      ? 'failed'
+      : (results[0]?.status ?? 'unknown');
 
   const openPanel = (id: string, panelId: string) => {
     api.selectStory(id);
@@ -232,7 +253,7 @@ export const TestProviderRender: FC<
           />
           <ListItem
             as="label"
-            title="Coverage"
+            title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
             icon={<ShieldIcon color={theme.textMutedColor} />}
             right={
               <Checkbox
@@ -246,7 +267,7 @@ export const TestProviderRender: FC<
           {isA11yAddon && (
             <ListItem
               as="label"
-              title="Accessibility"
+              title={<ItemTitle enabled={config.a11y}>Accessibility</ItemTitle>}
               icon={<AccessibilityIcon color={theme.textMutedColor} />}
               right={
                 <Checkbox
@@ -284,10 +305,11 @@ export const TestProviderRender: FC<
           />
           {coverageSummary ? (
             <ListItem
-              title="Coverage"
+              title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
               href={'/coverage/index.html'}
               // @ts-expect-error ListItem doesn't include all anchor attributes in types, but it is an achor element
               target="_blank"
+              aria-label="Open coverage report"
               icon={
                 <TestStatusIcon
                   percentage={coverageSummary.percentage}
@@ -295,17 +317,23 @@ export const TestProviderRender: FC<
                   aria-label={`status: ${coverageSummary.status}`}
                 />
               }
-              right={`${coverageSummary.percentage}%`}
+              right={
+                coverageSummary.percentage ? (
+                  <span aria-label={`${coverageSummary.percentage} percent coverage`}>
+                    {coverageSummary.percentage} %
+                  </span>
+                ) : null
+              }
             />
           ) : (
             <ListItem
-              title="Coverage"
+              title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
               icon={<TestStatusIcon status="unknown" aria-label={`status: unknown`} />}
             />
           )}
           {isA11yAddon && (
             <ListItem
-              title="Accessibility"
+              title={<ItemTitle enabled={config.a11y}>Accessibility</ItemTitle>}
               onClick={
                 (a11yStatus === 'negative' || a11yStatus === 'warning') && a11yResults.length
                   ? () => {
@@ -321,7 +349,7 @@ export const TestProviderRender: FC<
                   : null
               }
               icon={<TestStatusIcon status={a11yStatus} aria-label={`status: ${a11yStatus}`} />}
-              right={a11yNotPassedAmount || null}
+              right={isStoryEntry ? null : a11yNotPassedAmount || null}
             />
           )}
         </Extras>
