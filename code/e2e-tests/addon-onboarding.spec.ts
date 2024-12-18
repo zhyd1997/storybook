@@ -17,7 +17,7 @@ test.describe('addon-onboarding', () => {
     !supportsOnboarding,
     `Skipping ${templateName}, which does not have addon-onboarding set up.`
   );
-  test('should load the onboarding screen', async ({ page }) => {
+  test('the onboarding flow', async ({ page }) => {
     await page.goto(`${storybookUrl}/?path=/onboarding`);
     const sbPage = new SbPage(page, expect);
     await sbPage.waitUntilLoaded();
