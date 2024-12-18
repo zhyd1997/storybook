@@ -46,6 +46,8 @@ export class TestManager {
       return;
     }
 
+    const previousConfig = this.config;
+
     this.config = {
       ...this.config,
       ...payload.config,
@@ -53,7 +55,7 @@ export class TestManager {
 
     process.env.VITEST_STORYBOOK_CONFIG = JSON.stringify(payload.config);
 
-    if (this.config.coverage !== payload.config.coverage) {
+    if (previousConfig.coverage !== payload.config.coverage) {
       try {
         await this.vitestManager.restartVitest({
           coverage: this.config.coverage,
