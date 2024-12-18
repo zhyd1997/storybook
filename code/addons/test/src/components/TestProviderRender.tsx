@@ -114,6 +114,8 @@ export const TestProviderRender: FC<
     state.config || { a11y: false, coverage: false }
   );
 
+  const isStoryEntry = entryId?.includes('--') ?? false;
+
   const a11yResults = useMemo(() => {
     if (!isA11yAddon) {
       return [];
@@ -136,12 +138,14 @@ export const TestProviderRender: FC<
       return 'unknown';
     }
 
-    if (!a11yResults) {
+    const definedA11yResults = a11yResults?.filter(Boolean) ?? [];
+
+    if (!definedA11yResults || definedA11yResults.length === 0) {
       return 'unknown';
     }
 
-    const failed = a11yResults.some((result) => result?.status === 'failed');
-    const warning = a11yResults.some((result) => result?.status === 'warning');
+    const failed = definedA11yResults.some((result) => result?.status === 'failed');
+    const warning = definedA11yResults.some((result) => result?.status === 'warning');
 
     if (failed) {
       return 'negative';
@@ -152,11 +156,24 @@ export const TestProviderRender: FC<
     return 'positive';
   }, [state.running, isA11yAddon, config.a11y, a11yResults]);
 
-  const a11yNotPassedAmount = a11yResults?.filter(
-    (result) => result?.status === 'failed' || result?.status === 'warning'
-  ).length;
+  const a11yNotPassedAmount = state.config?.a11y
+    ? a11yResults?.filter((result) => result?.status === 'failed' || result?.status === 'warning')
+        .length
+    : undefined;
 
-  const storyId = entryId?.includes('--') ? entryId : undefined;
+  const a11ySkippedAmount =
+    state.running || !state?.details.config?.a11y || !state.config.a11y
+      ? null
+      : a11yResults?.filter((result) => !result).length;
+
+  const a11ySkippedLabel = a11ySkippedAmount
+    ? a11ySkippedAmount === 1 && isStoryEntry
+      ? '(skipped)'
+      : `(${a11ySkippedAmount} skipped)`
+    : '';
+
+  const storyId = isStoryEntry ? entryId : undefined;
+
   const results = (state.details?.testResults || [])
     .flatMap((test) => {
       if (!entryId) {
@@ -307,6 +324,7 @@ export const TestProviderRender: FC<
               href={'/coverage/index.html'}
               // @ts-expect-error ListItem doesn't include all anchor attributes in types, but it is an achor element
               target="_blank"
+              aria-label="Open coverage report"
               icon={
                 <TestStatusIcon
                   percentage={coverageSummary.percentage}
@@ -314,7 +332,13 @@ export const TestProviderRender: FC<
                   aria-label={`status: ${coverageSummary.status}`}
                 />
               }
-              right={`${coverageSummary.percentage}%`}
+              right={
+                coverageSummary.percentage ? (
+                  <span aria-label={`${coverageSummary.percentage} percent coverage`}>
+                    {coverageSummary.percentage} %
+                  </span>
+                ) : null
+              }
             />
           ) : (
             <ListItem
@@ -324,7 +348,7 @@ export const TestProviderRender: FC<
           )}
           {isA11yAddon && (
             <ListItem
-              title={<ItemTitle enabled={config.a11y}>Accessibility</ItemTitle>}
+              title={<ItemTitle enabled={config.a11y}>Accessibility {a11ySkippedLabel}</ItemTitle>}
               onClick={
                 (a11yStatus === 'negative' || a11yStatus === 'warning') && a11yResults.length
                   ? () => {
@@ -340,7 +364,7 @@ export const TestProviderRender: FC<
                   : null
               }
               icon={<TestStatusIcon status={a11yStatus} aria-label={`status: ${a11yStatus}`} />}
-              right={a11yNotPassedAmount || null}
+              right={isStoryEntry ? null : a11yNotPassedAmount || null}
             />
           )}
         </Extras>
