@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 
 import { styled } from 'storybook/internal/theming';
 
-import ReactConfetti from 'react-confetti';
+import { ReactConfetti } from 'react-confetti/src/ReactConfetti';
 
 interface ConfettiProps extends Omit<React.ComponentProps<typeof ReactConfetti>, 'drawShape'> {
   top?: number;
