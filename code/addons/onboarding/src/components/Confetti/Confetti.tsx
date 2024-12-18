@@ -1,7 +1,18 @@
 import React, { type ComponentProps, useEffect } from 'react';
 import { useState } from 'react';
 
+import { styled } from 'storybook/internal/theming';
+
 import ReactConfetti from 'react-confetti-boom';
+
+const Wrapper = styled.div({
+  zIndex: 9999,
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  bottom: 0,
+  right: 0,
+});
 
 export function Confetti({
   timeToFade = 5000,
@@ -21,13 +32,15 @@ export function Confetti({
   }, [timeToFade]);
 
   return (
-    <ReactConfetti
-      mode="fall"
-      colors={colors}
-      shapeSize={14}
-      particleCount={particleCount}
-      fadeOutHeight={10}
-      {...confettiProps}
-    />
+    <Wrapper>
+      <ReactConfetti
+        mode="fall"
+        colors={colors}
+        shapeSize={14}
+        particleCount={particleCount}
+        fadeOutHeight={10}
+        {...confettiProps}
+      />
+    </Wrapper>
   );
 }
