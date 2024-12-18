@@ -105,11 +105,11 @@ export const LeafNodeStyleWrapper = styled.div(({ theme }) => ({
   },
 
   '& [data-displayed="on"] + *': {
-    display: 'none',
+    visibility: 'hidden',
   },
 
   '&:hover [data-displayed="off"] + *': {
-    display: 'none',
+    visibility: 'hidden',
   },
 
   '&[data-selected="true"]': {
