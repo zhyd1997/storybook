@@ -66,7 +66,7 @@ const getStoryGlobsAndFiles = async (
 
 const PACKAGE_DIR = dirname(require.resolve('@storybook/experimental-addon-test/package.json'));
 
-export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
+export const storybookTest = async (options?: UserOptions): Promise<Plugin[]> => {
   const finalOptions = {
     ...defaultOptions,
     ...options,
@@ -109,12 +109,14 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
     getStoryGlobsAndFiles(presets, directories),
     presets.apply('framework', undefined),
     presets.apply('env', {}),
-    presets.apply('viteFinal', {}),
+    presets.apply<{ plugins?: Plugin[] }>('viteFinal', {}),
     presets.apply('staticDirs', []),
     extractTagsFromPreview(finalOptions.configDir),
   ]);
 
-  return {
+  const plugins = [...viteConfigFromStorybook.plugins].filter(Boolean) as Plugin[];
+
+  plugins.push({
     name: 'vite-plugin-storybook-test',
     async transformIndexHtml(html) {
       const [headHtmlSnippet, bodyHtmlSnippet] = await Promise.all([
@@ -318,7 +320,9 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
         });
       }
     },
-  };
+  });
+
+  return plugins;
 };
 
 export default storybookTest;
