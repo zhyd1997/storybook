@@ -5742,7 +5742,7 @@ __metadata:
     "@storybook/react": "workspace:*"
     framer-motion: "npm:^11.0.3"
     react: "npm:^18.2.0"
-    react-confetti: "npm:^6.1.0"
+    react-confetti-boom: "npm:^1.1.0"
     react-dom: "npm:^18.2.0"
     react-joyride: "npm:^2.8.2"
     react-use-measure: "npm:^2.1.1"
@@ -24164,6 +24164,16 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: 10c0/48eb73cf71e10841c2a61b6b06ab81da9fffa9876134c239bfdebcf348ce2a47e56b146338e35dfb03512c85966bfc9a53844fc56bc50154e71f8daee59ff6f0
+  languageName: node
+  linkType: hard
+
+"react-confetti-boom@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "react-confetti-boom@npm:1.1.0"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/76faf3e5cc3284b7dc0297ab7189ff92bbf74379a9478096bc8c8d7b16a82badea74c2e57f7313cd2a55ccf3c8dc50d51165fbf00c9fee5b9ed241369812d686
   languageName: node
   linkType: hard
 
