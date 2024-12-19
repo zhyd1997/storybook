@@ -37,14 +37,20 @@ export async function build(options: Options) {
     },
   } as InlineConfig).build;
 
-  if (options.features?.developmentModeForBuild) {
-    config.define = {
-      ...config.define,
-      'process.env.NODE_ENV': JSON.stringify('development'),
-    };
-  }
+  const finalConfig = (await presets.apply('viteFinal', config, options)) as InlineConfig;
 
-  const finalConfig = await presets.apply('viteFinal', config, options);
+  if (options.features?.developmentModeForBuild) {
+    finalConfig.plugins?.push({
+      name: 'storybook:define-env',
+      config: () => {
+        return {
+          define: {
+            'process.env.NODE_ENV': JSON.stringify('development'),
+          },
+        };
+      },
+    });
+  }
 
   const turbosnapPluginName = 'rollup-plugin-turbosnap';
   const hasTurbosnapPlugin =
