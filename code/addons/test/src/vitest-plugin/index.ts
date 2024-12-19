@@ -24,7 +24,10 @@ import picocolors from 'picocolors';
 import sirv from 'sirv';
 import { convertPathToPattern } from 'tinyglobby';
 import { dedent } from 'ts-dedent';
+import type { PluginOption } from 'vite';
 
+// ! Relative import to prebundle it without needing to depend on the Vite builder
+import { withoutVitePlugins } from '../../../../builders/builder-vite/src/utils/without-vite-plugins';
 import type { InternalOptions, UserOptions } from './types';
 
 const WORKING_DIR = process.cwd();
@@ -114,7 +117,18 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin[]> =>
     extractTagsFromPreview(finalOptions.configDir),
   ]);
 
-  const plugins = [...(viteConfigFromStorybook.plugins ?? [])];
+  // filter out plugins that we know are unnecesary for tests, eg. docgen plugins
+  const plugins = (await withoutVitePlugins(
+    (viteConfigFromStorybook.plugins as unknown as PluginOption[]) ?? [],
+    [
+      'storybook:package-deduplication',
+      'storybook:mdx-plugin',
+      'storybook:react-docgen-plugin',
+      'storybook:svelte-docgen-plugin',
+      'storybook:vue-component-meta-plugin',
+      'storybook:vue-docgen-plugin',
+    ]
+  )) as unknown as Plugin[];
 
   plugins.push({
     name: 'vite-plugin-storybook-test',
