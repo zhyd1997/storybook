@@ -268,19 +268,6 @@ export const TestProviderRender: FC<
             icon={<PointerHandIcon color={theme.textMutedColor} />}
             right={<Checkbox type="checkbox" checked disabled />}
           />
-          <ListItem
-            as="label"
-            title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
-            icon={<ShieldIcon color={theme.textMutedColor} />}
-            right={
-              <Checkbox
-                type="checkbox"
-                checked={state.watching ? false : config.coverage}
-                disabled={state.watching}
-                onChange={() => updateConfig({ coverage: !config.coverage })}
-              />
-            }
-          />
           {isA11yAddon && (
             <ListItem
               as="label"
@@ -291,6 +278,21 @@ export const TestProviderRender: FC<
                   type="checkbox"
                   checked={config.a11y}
                   onChange={() => updateConfig({ a11y: !config.a11y })}
+                />
+              }
+            />
+          )}
+          {!entryId && (
+            <ListItem
+              as="label"
+              title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
+              icon={<ShieldIcon color={theme.textMutedColor} />}
+              right={
+                <Checkbox
+                  type="checkbox"
+                  checked={state.watching ? false : config.coverage}
+                  disabled={state.watching}
+                  onChange={() => updateConfig({ coverage: !config.coverage })}
                 />
               }
             />
@@ -320,34 +322,6 @@ export const TestProviderRender: FC<
               )
             }
           />
-          {coverageSummary ? (
-            <ListItem
-              title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
-              href={'/coverage/index.html'}
-              // @ts-expect-error ListItem doesn't include all anchor attributes in types, but it is an achor element
-              target="_blank"
-              aria-label="Open coverage report"
-              icon={
-                <TestStatusIcon
-                  percentage={coverageSummary.percentage}
-                  status={coverageSummary.status}
-                  aria-label={`status: ${coverageSummary.status}`}
-                />
-              }
-              right={
-                coverageSummary.percentage ? (
-                  <span aria-label={`${coverageSummary.percentage} percent coverage`}>
-                    {coverageSummary.percentage} %
-                  </span>
-                ) : null
-              }
-            />
-          ) : (
-            <ListItem
-              title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
-              icon={<TestStatusIcon status="unknown" aria-label={`status: unknown`} />}
-            />
-          )}
           {isA11yAddon && (
             <ListItem
               title={<ItemTitle enabled={config.a11y}>Accessibility {a11ySkippedLabel}</ItemTitle>}
@@ -368,6 +342,38 @@ export const TestProviderRender: FC<
               icon={<TestStatusIcon status={a11yStatus} aria-label={`status: ${a11yStatus}`} />}
               right={isStoryEntry ? null : a11yNotPassedAmount || null}
             />
+          )}
+          {!entryId && (
+            <>
+              {coverageSummary ? (
+                <ListItem
+                  title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
+                  href={'/coverage/index.html'}
+                  // @ts-expect-error ListItem doesn't include all anchor attributes in types, but it is an achor element
+                  target="_blank"
+                  aria-label="Open coverage report"
+                  icon={
+                    <TestStatusIcon
+                      percentage={coverageSummary.percentage}
+                      status={coverageSummary.status}
+                      aria-label={`status: ${coverageSummary.status}`}
+                    />
+                  }
+                  right={
+                    coverageSummary.percentage ? (
+                      <span aria-label={`${coverageSummary.percentage} percent coverage`}>
+                        {coverageSummary.percentage} %
+                      </span>
+                    ) : null
+                  }
+                />
+              ) : (
+                <ListItem
+                  title={<ItemTitle enabled={config.coverage}>Coverage</ItemTitle>}
+                  icon={<TestStatusIcon status="unknown" aria-label={`status: unknown`} />}
+                />
+              )}
+            </>
           )}
         </Extras>
       )}
