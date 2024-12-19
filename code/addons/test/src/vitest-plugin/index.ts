@@ -114,7 +114,7 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin[]> =>
     extractTagsFromPreview(finalOptions.configDir),
   ]);
 
-  const plugins = [...viteConfigFromStorybook.plugins].filter(Boolean) as Plugin[];
+  const plugins = [...(viteConfigFromStorybook.plugins ?? [])];
 
   plugins.push({
     name: 'vite-plugin-storybook-test',
