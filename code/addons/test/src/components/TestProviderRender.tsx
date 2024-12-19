@@ -1,6 +1,12 @@
 import React, { type ComponentProps, type FC, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Button, ListItem, ProgressSpinner } from 'storybook/internal/components';
+import {
+  Button,
+  ListItem,
+  ProgressSpinner,
+  TooltipNote,
+  WithTooltip,
+} from 'storybook/internal/components';
 import {
   TESTING_MODULE_CONFIG_CHANGE,
   type TestProviderConfig,
@@ -207,53 +213,77 @@ export const TestProviderRender: FC<
 
         <Actions>
           {!entryId && (
-            <Button
-              aria-label={`${isEditing ? 'Close' : 'Open'} settings for ${state.name}`}
-              variant="ghost"
-              padding="small"
-              active={isEditing}
-              disabled={state.running && !isEditing}
-              onClick={() => setIsEditing(!isEditing)}
+            <WithTooltip
+              hasChrome={false}
+              trigger="hover"
+              tooltip={<TooltipNote note={`${isEditing ? 'Hide' : 'Show'} settings`} />}
             >
-              <EditIcon />
-            </Button>
+              <Button
+                aria-label={`${isEditing ? 'Hide' : 'Show'} settings`}
+                variant="ghost"
+                padding="small"
+                active={isEditing}
+                disabled={state.running && !isEditing}
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                <EditIcon />
+              </Button>
+            </WithTooltip>
           )}
           {!entryId && state.watchable && (
-            <Button
-              aria-label={`${state.watching ? 'Disable' : 'Enable'} watch mode for ${state.name}`}
-              variant="ghost"
-              padding="small"
-              active={state.watching}
-              onClick={() => api.setTestProviderWatchMode(state.id, !state.watching)}
-              disabled={state.running || isEditing}
+            <WithTooltip
+              hasChrome={false}
+              trigger="hover"
+              tooltip={<TooltipNote note={`${state.watching ? 'Disable' : 'Enable'} watch mode`} />}
             >
-              <EyeIcon />
-            </Button>
+              <Button
+                aria-label={`${state.watching ? 'Disable' : 'Enable'} watch mode`}
+                variant="ghost"
+                padding="small"
+                active={state.watching}
+                onClick={() => api.setTestProviderWatchMode(state.id, !state.watching)}
+                disabled={state.running || isEditing}
+              >
+                <EyeIcon />
+              </Button>
+            </WithTooltip>
           )}
           {state.runnable && (
             <>
               {state.running && state.cancellable ? (
-                <Button
-                  aria-label={`Stop ${state.name}`}
-                  variant="ghost"
-                  padding="none"
-                  onClick={() => api.cancelTestProvider(state.id)}
-                  disabled={state.cancelling}
+                <WithTooltip
+                  hasChrome={false}
+                  trigger="hover"
+                  tooltip={<TooltipNote note="Stop test run" />}
                 >
-                  <Progress percentage={state.progress?.percentageCompleted}>
-                    <StopIcon />
-                  </Progress>
-                </Button>
+                  <Button
+                    aria-label="Stop test run"
+                    variant="ghost"
+                    padding="none"
+                    onClick={() => api.cancelTestProvider(state.id)}
+                    disabled={state.cancelling}
+                  >
+                    <Progress percentage={state.progress?.percentageCompleted}>
+                      <StopIcon />
+                    </Progress>
+                  </Button>
+                </WithTooltip>
               ) : (
-                <Button
-                  aria-label={`Start ${state.name}`}
-                  variant="ghost"
-                  padding="small"
-                  onClick={() => api.runTestProvider(state.id, { entryId })}
-                  disabled={state.running || isEditing}
+                <WithTooltip
+                  hasChrome={false}
+                  trigger="hover"
+                  tooltip={<TooltipNote note="Start test run" />}
                 >
-                  <PlayHollowIcon />
-                </Button>
+                  <Button
+                    aria-label="Start test run"
+                    variant="ghost"
+                    padding="small"
+                    onClick={() => api.runTestProvider(state.id, { entryId })}
+                    disabled={state.running || isEditing}
+                  >
+                    <PlayHollowIcon />
+                  </Button>
+                </WithTooltip>
               )}
             </>
           )}
