@@ -37,7 +37,6 @@ import { type Config, type Details, PANEL_ID } from '../constants';
 import { type TestStatus } from '../node/reporter';
 import { Description } from './Description';
 import { TestStatusIcon } from './TestStatusIcon';
-import { Title } from './Title';
 
 const Container = styled.div({
   display: 'flex',
@@ -57,6 +56,12 @@ const Info = styled.div({
   marginLeft: 6,
   minWidth: 0,
 });
+
+const Title = styled.div<{ crashed?: boolean }>(({ crashed, theme }) => ({
+  fontSize: theme.typography.size.s1,
+  fontWeight: crashed ? 'bold' : 'normal',
+  color: crashed ? theme.color.negativeText : theme.color.defaultText,
+}));
 
 const Actions = styled.div({
   display: 'flex',
@@ -98,7 +103,7 @@ const statusMap: Record<TestStatus, ComponentProps<typeof TestStatusIcon>['statu
   warning: 'warning',
   passed: 'positive',
   skipped: 'unknown',
-  pending: 'unknown',
+  pending: 'pending',
 };
 
 export const TestProviderRender: FC<
@@ -191,11 +196,7 @@ export const TestProviderRender: FC<
     })
     .sort((a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status));
 
-  const status = state.running
-    ? 'unknown'
-    : state.failed
-      ? 'failed'
-      : (results[0]?.status ?? 'unknown');
+  const status = results[0]?.status ?? (state.running ? 'pending' : 'unknown');
 
   const openPanel = (id: string, panelId: string) => {
     api.selectStory(id);
@@ -207,8 +208,15 @@ export const TestProviderRender: FC<
     <Container {...props}>
       <Heading>
         <Info>
-          <Title id="testing-module-title" state={state} />
-          <Description id="testing-module-description" state={state} />
+          <Title id="testing-module-title" crashed={state.crashed}>
+            {state.crashed ? 'Local tests failed' : 'Run local tests'}
+          </Title>
+          <Description
+            id="testing-module-description"
+            state={state}
+            entryId={entryId}
+            results={results}
+          />
         </Info>
 
         <Actions>
