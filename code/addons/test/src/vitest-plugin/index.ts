@@ -131,7 +131,7 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin[]> =>
     ]
   )) as unknown as Plugin[];
 
-  plugins.push({
+  const storybookTestPlugin: Plugin = {
     name: 'vite-plugin-storybook-test',
     async transformIndexHtml(html) {
       const [headHtmlSnippet, bodyHtmlSnippet] = await Promise.all([
@@ -335,8 +335,9 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin[]> =>
         });
       }
     },
-  });
+  };
 
+  plugins.push(storybookTestPlugin);
   return plugins;
 };
 
