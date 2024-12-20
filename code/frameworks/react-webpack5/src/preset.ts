@@ -34,7 +34,7 @@ export const webpack: StorybookConfig['webpack'] = async (config) => {
     '@storybook/react': getAbsolutePath('@storybook/react'),
   };
   config.plugins = [
-    // @ts-expect-error TODO
+    // @ts-expect-error Ignore this error, because in the `webpack` preset the user actually hasn't defined a config yet.
     ...config.plugins,
     new WebpackDefinePlugin({
       NODE_ENV: JSON.stringify('development'),
