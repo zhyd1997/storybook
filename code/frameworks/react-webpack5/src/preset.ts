@@ -26,19 +26,23 @@ export const core: PresetProperty<'core'> = async (config, options) => {
   };
 };
 
-export const webpack: StorybookConfig['webpack'] = async (config) => {
+export const webpack: StorybookConfig['webpack'] = async (config, options) => {
   config.resolve = config.resolve || {};
 
   config.resolve.alias = {
     ...config.resolve?.alias,
     '@storybook/react': getAbsolutePath('@storybook/react'),
   };
-  config.plugins = [
-    // @ts-expect-error Ignore this error, because in the `webpack` preset the user actually hasn't defined a config yet.
-    ...config.plugins,
-    new WebpackDefinePlugin({
-      NODE_ENV: JSON.stringify('development'),
-    }),
-  ];
+
+  if (options.features?.developmentModeForBuild) {
+    config.plugins = [
+      // @ts-expect-error Ignore this error, because in the `webpack` preset the user actually hasn't defined a config yet.
+      ...config.plugins,
+      new WebpackDefinePlugin({
+        NODE_ENV: JSON.stringify('development'),
+      }),
+    ];
+  }
+
   return config;
 };
