@@ -237,6 +237,26 @@ If you enabled the experimental test addon (i.e.,`@storybook/experimental-addon-
 
 </If>
 
+<If renderer={['react']}>
+
+### The a11y addon panel does not show violations, although I know there are some
+
+Modern React components often use asynchronous techniques like Suspense or React Server Components (RSC) to handle complex data fetching and rendering. These components don’t immediately render their final UI state. Storybook doesn’t inherently know when an async component has fully rendered. As a result, the a11y addon sometimes run too early, before the component finishes rendering, leading to false negatives (no reported violations even if they exist).
+
+To address this issue, we have introduced a feature flag: developmentModeForBuild. This feature flag allows you to set process.env.NODE_ENV to development in built Storybooks, enabling development-related optimizations that are typically disabled in production builds. By enabling this feature flag, you can ensure that React’s act utility is used, which helps ensure that all updates related to a test are processed and applied before making assertions.
+
+#### How to enable the feature flag
+
+To enable this feature flag, add the following configuration to your .storybook/main.<js|ts> file:
+
+{/* prettier-ignore-start */}
+
+<CodeSnippets path="main-config-features-development-mode-for-build.md" />
+
+{/* prettier-ignore-end */}
+
+</If>
+
 **Learn about other UI tests**
 
 * [Component tests](./component-testing.mdx) for user behavior simulation
