@@ -1,4 +1,4 @@
-import { rendererPackages } from '@storybook/core/common';
+import { rendererPackages } from 'storybook/internal/common';
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import * as jscodeshift from 'jscodeshift';
