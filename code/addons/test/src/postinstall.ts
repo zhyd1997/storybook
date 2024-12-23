@@ -25,6 +25,7 @@ import { coerce, satisfies } from 'semver';
 import { dedent } from 'ts-dedent';
 
 import { type PostinstallOptions } from '../../../lib/cli-storybook/src/add';
+import { SUPPORTED_FRAMEWORKS, SUPPORTED_RENDERERS } from './constants';
 import { printError, printInfo, printSuccess, step } from './postinstall-logger';
 import { getAddonNames } from './utils';
 
@@ -106,18 +107,11 @@ export default async function postInstall(options: PostinstallOptions) {
     }
   }
 
-  const annotationsImport = [
-    '@storybook/nextjs',
-    '@storybook/experimental-nextjs-vite',
-    '@storybook/sveltekit',
-  ].includes(info.frameworkPackageName)
+  const annotationsImport = SUPPORTED_FRAMEWORKS.includes(info.frameworkPackageName)
     ? info.frameworkPackageName === '@storybook/nextjs'
       ? '@storybook/experimental-nextjs-vite'
       : info.frameworkPackageName
-    : info.rendererPackageName &&
-        ['@storybook/react', '@storybook/svelte', '@storybook/vue3'].includes(
-          info.rendererPackageName
-        )
+    : info.rendererPackageName && SUPPORTED_RENDERERS.includes(info.rendererPackageName)
       ? info.rendererPackageName
       : null;
 
