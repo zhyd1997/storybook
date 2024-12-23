@@ -74,7 +74,7 @@ test.describe("component testing", () => {
 
     await expect(testingModuleDescription).toContainText('Not run');
 
-    const runTestsButton = await page.getByLabel('Start Component tests')
+    const runTestsButton = await page.getByLabel('Start test run')
     await runTestsButton.click();
 
     await expect(testingModuleDescription).toContainText('Testing', { timeout: 60000 });
@@ -136,7 +136,7 @@ test.describe("component testing", () => {
 
     await expect(testingModuleDescription).toContainText('Not run');
 
-    const runTestsButton = await page.getByLabel('Start Component Tests')
+    const runTestsButton = await page.getByLabel('Start test run')
     const watchModeButton = await page.getByLabel('Enable watch mode')
     await expect(runTestsButton).toBeEnabled();
     await expect(watchModeButton).toBeEnabled();
@@ -272,7 +272,7 @@ test.describe("component testing", () => {
     // Wait for Vitest to have (re)started
     await page.waitForTimeout(2000);
 
-    await page.getByLabel("Start Component tests").click();
+    await page.getByLabel("Start test run").click();
 
     // Assert - Coverage report is collected and shown
     await expect(page.getByLabel("Open coverage report")).toBeVisible({ timeout: 30000 });
@@ -324,7 +324,7 @@ test.describe("component testing", () => {
     await page.locator('[data-item-id="addons-group-test--expected-failure"]').hover();
     await page.locator('[data-item-id="addons-group-test--expected-failure"] div[data-testid="context-menu"] button').click();
     const sidebarContextMenu = page.getByTestId('tooltip');
-    await sidebarContextMenu.getByLabel('Start Component tests').click();
+    await sidebarContextMenu.getByLabel('Start test run').click();
 
     // Assert - Only one test is running and reported
     await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test', { timeout: 30000 });
@@ -356,7 +356,7 @@ test.describe("component testing", () => {
     await page.locator('[data-item-id="addons-group-test"]').hover();
     await page.locator('[data-item-id="addons-group-test"] div[data-testid="context-menu"] button').click();
     const sidebarContextMenu = page.getByTestId('tooltip');
-    await sidebarContextMenu.getByLabel('Start Component tests').click();
+    await sidebarContextMenu.getByLabel('Start test run').click();
 
     // Assert - Tests are running and reported
     await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 8 tests', { timeout: 30000 });
@@ -392,7 +392,7 @@ test.describe("component testing", () => {
     await page.locator('[data-item-id="addons-group"]').hover();
     await page.locator('[data-item-id="addons-group"] div[data-testid="context-menu"] button').click();
     const sidebarContextMenu = page.getByTestId('tooltip');
-    await sidebarContextMenu.getByLabel('Start Component tests').click();
+    await sidebarContextMenu.getByLabel('Start test run').click();
 
     // Assert - Tests are running and reported
     await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 10 test', { timeout: 30000 });
@@ -436,7 +436,7 @@ test.describe("component testing", () => {
     await page.locator('[data-item-id="example-button--csf-3-primary"]').hover();
     await page.locator('[data-item-id="example-button--csf-3-primary"] div[data-testid="context-menu"] button').click();
     const sidebarContextMenu = page.getByTestId('tooltip');
-    await sidebarContextMenu.getByLabel('Start Component tests').click();
+    await sidebarContextMenu.getByLabel('Start test run').click();
 
     // Arrange - Wait for test to finish and unfocus sidebar context menu
     await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test', { timeout: 30000 });
@@ -446,7 +446,7 @@ test.describe("component testing", () => {
     await expect(page.getByLabel("Open coverage report")).not.toBeVisible();
 
     // Act - Run ALL tests
-    await page.getByLabel("Start Component tests").click();
+    await page.getByLabel("Start test run").click();
 
     // Arrange - Wait for tests to finish
     await expect(page.locator('#testing-module-description')).toContainText(/Ran \d{2,} tests/, { timeout: 30000 });
