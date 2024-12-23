@@ -137,7 +137,7 @@ test.describe("component testing", () => {
     await expect(testingModuleDescription).toContainText('Not run');
 
     const runTestsButton = await page.getByLabel('Start Component Tests')
-    const watchModeButton = await page.getByLabel('Enable watch mode for Component tests')
+    const watchModeButton = await page.getByLabel('Enable watch mode')
     await expect(runTestsButton).toBeEnabled();
     await expect(watchModeButton).toBeEnabled();
 
@@ -201,7 +201,7 @@ test.describe("component testing", () => {
       .getByRole("button", { name: "test" });
     await expect(storyElement).toBeVisible({ timeout: 30000 });
 
-    await page.getByLabel("Enable watch mode for Component tests").click();
+    await page.getByLabel("Enable watch mode").click();
 
     // We shouldn't have to do an arbitrary wait, but because there is no UI for loading state yet, we have to
     await page.waitForTimeout(8000);
@@ -209,7 +209,7 @@ test.describe("component testing", () => {
     await page.waitForTimeout(500);
 
     // Cleanup, to ensure watch mode is disabled in the other tests
-    await page.getByLabel("Disable watch mode for Component tests").click();
+    await page.getByLabel("Disable watch mode").click();
 
     // Wait for test results to appear
     const errorFilter = page.getByLabel("Toggle errors");
@@ -265,10 +265,10 @@ test.describe("component testing", () => {
     await expect(page.getByLabel("Open coverage report")).toHaveCount(0);
 
     // Act - Enable coverage and run tests
-    await page.getByLabel("Open settings for Component tests").click();
+    await page.getByLabel("Show settings").click();
     await page.getByLabel("Coverage").click();
     await expect(page.getByText("Settings updated")).toBeVisible({ timeout: 3000 });
-    await page.getByLabel("Close settings for Component tests").click();
+    await page.getByLabel("Hide settings").click();
     // Wait for Vitest to have (re)started
     await page.waitForTimeout(2000);
 
@@ -296,7 +296,7 @@ test.describe("component testing", () => {
     // Cleanup - Disable coverage again
     await page.goBack();
     await expandButton.click();
-    await page.getByLabel("Open settings for Component tests").click();
+    await page.getByLabel("Show settings").click();
     await page.getByLabel("Coverage").click();
     await expect(page.getByText("Settings updated")).toBeVisible({ timeout: 3000 });
   });
@@ -425,10 +425,10 @@ test.describe("component testing", () => {
     await expect(storyElement).toBeVisible({ timeout: 30000 });
 
     // Act - Enable coverage
-    await page.getByLabel("Open settings for Component tests").click();
+    await page.getByLabel("Show settings").click();
     await page.getByLabel("Coverage").click();
     await expect(page.getByText("Settings updated")).toBeVisible({ timeout: 3000 });
-    await page.getByLabel("Close settings for Component tests").click();
+    await page.getByLabel("Hide settings").click();
     // Wait for Vitest to have (re)started
     await page.waitForTimeout(2000);
 
@@ -437,20 +437,20 @@ test.describe("component testing", () => {
     await page.locator('[data-item-id="example-button--csf-3-primary"] div[data-testid="context-menu"] button').click();
     const sidebarContextMenu = page.getByTestId('tooltip');
     await sidebarContextMenu.getByLabel('Start Component tests').click();
-    
+
     // Arrange - Wait for test to finish and unfocus sidebar context menu
     await expect(sidebarContextMenu.locator('#testing-module-description')).toContainText('Ran 1 test', { timeout: 30000 });
     await page.click('body');
-    
+
     // Assert - Coverage is not shown because Focused Tests shouldn't collect coverage
     await expect(page.getByLabel("Open coverage report")).not.toBeVisible();
-    
+
     // Act - Run ALL tests
     await page.getByLabel("Start Component tests").click();
-    
+
     // Arrange - Wait for tests to finish
     await expect(page.locator('#testing-module-description')).toContainText(/Ran \d{2,} tests/, { timeout: 30000 });
-    
+
     // Assert - Coverage percentage is now collected and shown because running all tests automatically re-enables coverage
     await expect(page.getByLabel("Open coverage report")).toBeVisible({ timeout: 30000 });
     const sbPercentageText = await page.getByLabel(/percent coverage$/).textContent();
