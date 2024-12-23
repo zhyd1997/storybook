@@ -177,14 +177,14 @@ export default async function postInstall(options: PostinstallOptions) {
         reasons.push(
           dedent`
             Please check the documentation for more information about its requirements and installation:
-            ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/vitest-plugin`)}
+            ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/test-addon`)}
           `
         );
       } else {
         reasons.push(
           dedent`
             Fear not, however, you can follow the manual installation process instead at:
-            ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/vitest-plugin#manual`)}
+            ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/test-addon#manual-setup`)}
           `
         );
       }
@@ -308,7 +308,7 @@ export default async function postInstall(options: PostinstallOptions) {
         ${colors.gray(vitestSetupFile)}
 
         Please refer to the documentation to complete the setup manually:
-        ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/vitest-plugin#manual`)}
+        ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/test-addon#manual-setup`)}
       `
     );
     logger.line(1);
@@ -368,7 +368,7 @@ export default async function postInstall(options: PostinstallOptions) {
         your existing workspace file automatically, you must do it yourself. This was the last step.
 
         Please refer to the documentation to complete the setup manually:
-        ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/vitest-plugin#manual`)}
+        ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/test-addon#manual-setup`)}
       `
     );
     logger.line(1);
@@ -390,7 +390,7 @@ export default async function postInstall(options: PostinstallOptions) {
           your existing workspace file automatically, you must do it yourself. This was the last step.
 
           Please refer to the documentation to complete the setup manually:
-          ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/vitest-plugin#manual`)}
+          ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/test-addon#manual-setup`)}
         `
       );
       logger.line(1);
@@ -416,14 +416,14 @@ export default async function postInstall(options: PostinstallOptions) {
         import { defineWorkspace } from 'vitest/config';
         import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';${vitestInfo.frameworkPluginImport}
 
-        // More info at: https://storybook.js.org/docs/writing-tests/vitest-plugin
+        // More info at: https://storybook.js.org/docs/writing-tests/test-addon
         export default defineWorkspace([
           '${relative(dirname(browserWorkspaceFile), rootConfig)}',
           {
             extends: '${viteConfigFile ? relative(dirname(browserWorkspaceFile), viteConfigFile) : ''}',
             plugins: [
               // The plugin will run tests for the stories defined in your Storybook config
-              // See options at: https://storybook.js.org/docs/writing-tests/vitest-plugin#storybooktest
+              // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
               storybookTest({ configDir: '${options.configDir}' }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
             ],
             test: {
@@ -456,11 +456,11 @@ export default async function postInstall(options: PostinstallOptions) {
         import { defineConfig } from 'vitest/config';
         import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';${vitestInfo.frameworkPluginImport}
 
-        // More info at: https://storybook.js.org/docs/writing-tests/vitest-plugin
+        // More info at: https://storybook.js.org/docs/writing-tests/test-addon
         export default defineConfig({
           plugins: [
             // The plugin will run tests for the stories defined in your Storybook config
-            // See options at: https://storybook.js.org/docs/writing-tests/vitest-plugin#storybooktest
+            // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
             storybookTest({ configDir: '${options.configDir}' }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
           ],
           test: {
@@ -490,7 +490,7 @@ export default async function postInstall(options: PostinstallOptions) {
       • When using the Vitest extension in your editor, all of your stories will be shown as tests!
 
       Check the documentation for more information about its features and options at:
-      ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/vitest-plugin`)}
+      ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/test-addon`)}
     `
   );
   logger.line(1);
