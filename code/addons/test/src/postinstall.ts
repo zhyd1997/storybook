@@ -377,7 +377,7 @@ export default async function postInstall(options: PostinstallOptions) {
         '🚨 Oh no!',
         dedent`
           You seem to have an existing test configuration in your Vite config file:
-          ${colors.gray(vitestWorkspaceFile || '')}
+          ${colors.gray(viteConfigFile || '')}
 
           I was able to configure most of the addon but could not safely extend
           your existing workspace file automatically, you must do it yourself. This was the last step.
