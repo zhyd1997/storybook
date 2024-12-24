@@ -34,6 +34,7 @@ import { testRunnerBuild } from './tasks/test-runner-build';
 import { testRunnerDev } from './tasks/test-runner-dev';
 import { vitestTests } from './tasks/vitest-test';
 import { CODE_DIRECTORY, JUNIT_DIRECTORY, SANDBOX_DIRECTORY } from './utils/constants';
+import { findMostMatchText } from './utils/diff';
 import type { OptionValues } from './utils/options';
 import { createOptions, getCommand, getOptionsOrPrompt } from './utils/options';
 
@@ -351,6 +352,19 @@ async function run() {
   const { junit, startFrom, ...optionValues } = allOptionValues;
   const taskKey = optionValues.task;
 
+  if (!(taskKey in tasks)) {
+    const matchText = findMostMatchText(Object.keys(tasks), taskKey);
+
+    if (matchText) {
+      console.log(
+        `${picocolors.red('Error')}: ${picocolors.cyan(
+          taskKey
+        )} is not a valid task name, Did you mean ${picocolors.cyan(matchText)}?`
+      );
+    }
+    process.exit(1);
+  }
+
   const finalTask = tasks[taskKey];
   const { template: templateKey } = optionValues;
   const template = TEMPLATES[templateKey];
@@ -484,7 +498,7 @@ async function run() {
       } catch (err) {
         invariant(err instanceof Error);
         logger.error(
-          `Error running task ${picocolors.bold(getTaskKey(task))} for ${picocolors.bgMagenta(picocolors.bold(details.key))}:`
+          `Error running task ${picocolors.bold(getTaskKey(task))} for ${picocolors.bgCyan(picocolors.white(details.key))}:`
         );
         logger.error(JSON.stringify(err, null, 2));
 
