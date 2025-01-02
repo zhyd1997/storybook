@@ -451,14 +451,25 @@ export const TestProviderRender: FC<TestProviderRenderProps> = ({
 };
 
 function useConfig(api: API, providerId: string, initialConfig: Config) {
-  const [currentConfig, setConfig] = useState<Config>(initialConfig);
+  const updateTestProviderState = useCallback(
+    (config: Config) => {
+      api.updateTestProviderState(providerId, { config });
+      api.emit(TESTING_MODULE_CONFIG_CHANGE, { providerId, config });
+    },
+    [api, providerId]
+  );
+
+  const [currentConfig, setConfig] = useState<Config>(() => {
+    updateTestProviderState(initialConfig);
+    return initialConfig;
+  });
+
   const lastConfig = useRef(initialConfig);
 
   const saveConfig = useCallback(
     debounce((config: Config) => {
       if (!isEqual(config, lastConfig.current)) {
-        api.updateTestProviderState(providerId, { config });
-        api.emit(TESTING_MODULE_CONFIG_CHANGE, { providerId, config });
+        updateTestProviderState(config);
         lastConfig.current = config;
       }
     }, 500),
