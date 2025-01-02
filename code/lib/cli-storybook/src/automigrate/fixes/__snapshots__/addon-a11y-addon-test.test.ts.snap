@@ -1,11 +1,22 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`addonA11yAddonTest > prompt > should return auto prompt if transformedPreviewCode is defined and if transformedSetupCode is skipped 1`] = `
+"We have detected that you have @storybook/addon-a11y and @storybook/experimental-addon-test installed.
+
+@storybook/addon-a11y integrates now with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
+
+1) We have to update your .storybook/preview.js file to set up tags from @storybook/addon-a11y.
+
+For more information, please refer to the accessibility addon documentation: 
+https://storybook.js.org/docs/writing-tests/accessibility-testing#test-addon-integration"
+`;
+
 exports[`addonA11yAddonTest > prompt > should return auto prompt if transformedSetupCode is defined and if transformedPreviewCode is null 1`] = `
 "We have detected that you have @storybook/addon-a11y and @storybook/experimental-addon-test installed.
 
 @storybook/addon-a11y integrates now with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
 
-1) We have to update your .storybook/vitest.setup.ts to set up project annotations from @storybook/addon-a11y.
+1) We have to update your .storybook/vitest.setup.ts file to set up project annotations from @storybook/addon-a11y.
 
 2) We couldn't find or automatically update your .storybook/preview.<ts|js> in your project to smoothly set up tags from @storybook/addon-a11y. 
 Please manually update your .storybook/preview.<ts|js> file to include the following:
@@ -14,6 +25,17 @@ export default {
 ...
 + tags: ["a11ytest"],
 }
+
+For more information, please refer to the accessibility addon documentation: 
+https://storybook.js.org/docs/writing-tests/accessibility-testing#test-addon-integration"
+`;
+
+exports[`addonA11yAddonTest > prompt > should return auto prompt if transformedSetupCode is defined and if transformedPreviewCode is skipped 1`] = `
+"We have detected that you have @storybook/addon-a11y and @storybook/experimental-addon-test installed.
+
+@storybook/addon-a11y integrates now with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
+
+1) We have to update your .storybook/vitest.setup.ts file to set up project annotations from @storybook/addon-a11y.
 
 For more information, please refer to the accessibility addon documentation: 
 https://storybook.js.org/docs/writing-tests/accessibility-testing#test-addon-integration"
@@ -37,7 +59,7 @@ const annotations = setProjectAnnotations([
 
 beforeAll(annotations.beforeAll);
 
-2) We have to update your .storybook/vitest.setup.js to set up tags from @storybook/addon-a11y.
+2) We have to update your .storybook/preview.js file to set up tags from @storybook/addon-a11y.
 
 For more information, please refer to the accessibility addon documentation: 
 https://storybook.js.org/docs/writing-tests/accessibility-testing#test-addon-integration"

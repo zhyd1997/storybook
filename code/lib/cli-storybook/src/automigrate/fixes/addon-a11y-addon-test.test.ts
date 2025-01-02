@@ -153,6 +153,8 @@ describe('addonA11yAddonTest', () => {
         previewFile: null,
         transformedPreviewCode: null,
         transformedSetupCode: expect.any(String),
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: false,
       });
     });
 
@@ -187,6 +189,8 @@ describe('addonA11yAddonTest', () => {
         previewFile: path.join(configDir, 'preview.js'),
         transformedPreviewCode: expect.any(String),
         transformedSetupCode: null,
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: false,
       });
     });
 
@@ -221,6 +225,8 @@ describe('addonA11yAddonTest', () => {
         previewFile: null,
         transformedPreviewCode: null,
         transformedSetupCode: null,
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: false,
       });
     });
 
@@ -255,6 +261,93 @@ describe('addonA11yAddonTest', () => {
         previewFile: path.join(configDir, 'preview.js'),
         transformedPreviewCode: null,
         transformedSetupCode: null,
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: false,
+      });
+    });
+
+    it('should return skipPreviewTransformation=true if preview file has the necessary change', async () => {
+      vi.mocked(getAddonNames).mockReturnValue([
+        '@storybook/addon-a11y',
+        '@storybook/experimental-addon-test',
+      ]);
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(readFileSync).mockImplementation((p) => {
+        if (p.toString().includes('vitest.setup')) {
+          return `
+            import { beforeAll } from 'vitest';
+            import { setProjectAnnotations } from 'storybook';
+            import * as projectAnnotations from './preview';
+
+            const project = setProjectAnnotations([projectAnnotations]);
+
+            beforeAll(project.beforeAll);
+          `;
+        } else {
+          return `
+            export default {
+              tags: ['a11ytest'],
+            }
+          `;
+        }
+      });
+
+      const result = await addonA11yAddonTest.check({
+        mainConfig: {
+          framework: '@storybook/sveltekit',
+        },
+        configDir,
+      } as any);
+      expect(result).toEqual({
+        setupFile: path.join(configDir, 'vitest.setup.js'),
+        previewFile: path.join(configDir, 'preview.js'),
+        transformedPreviewCode: null,
+        transformedSetupCode: expect.any(String),
+        skipPreviewTransformation: true,
+        skipVitestSetupTransformation: false,
+      });
+    });
+
+    it('should return skipVitestSetupTransformation=true if setup file has the necessary change', async () => {
+      vi.mocked(getAddonNames).mockReturnValue([
+        '@storybook/addon-a11y',
+        '@storybook/experimental-addon-test',
+      ]);
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(readFileSync).mockImplementation((p) => {
+        if (p.toString().includes('vitest.setup')) {
+          return `
+            import * as a11yAddonAnnotations from "@storybook/addon-a11y/preview";
+            import { beforeAll } from 'vitest';
+            import { setProjectAnnotations } from 'storybook';
+            import * as projectAnnotations from './preview';
+
+            const project = setProjectAnnotations([a11yAddonAnnotations, projectAnnotations]);
+
+            beforeAll(project.beforeAll);
+          `;
+        } else {
+          return `
+            export default {
+              tags: [],
+            }
+          `;
+        }
+      });
+
+      const result = await addonA11yAddonTest.check({
+        mainConfig: {
+          framework: '@storybook/sveltekit',
+        },
+        configDir,
+      } as any);
+      expect(result).toEqual({
+        setupFile: path.join(configDir, 'vitest.setup.js'),
+        previewFile: path.join(configDir, 'preview.js'),
+        transformedPreviewCode: expect.any(String),
+        transformedSetupCode: null,
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: true,
       });
     });
   });
@@ -266,6 +359,8 @@ describe('addonA11yAddonTest', () => {
         transformedSetupCode: null,
         previewFile: null,
         transformedPreviewCode: null,
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: false,
       });
       expect(result).toMatchSnapshot();
     });
@@ -276,6 +371,8 @@ describe('addonA11yAddonTest', () => {
         transformedSetupCode: null,
         previewFile: 'preview.js',
         transformedPreviewCode: 'transformed code',
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: false,
       });
       expect(result).toMatchSnapshot();
     });
@@ -286,6 +383,32 @@ describe('addonA11yAddonTest', () => {
         transformedSetupCode: 'transformed code',
         previewFile: null,
         transformedPreviewCode: null,
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: false,
+      });
+      expect(result).toMatchSnapshot();
+    });
+
+    it('should return auto prompt if transformedSetupCode is defined and if transformedPreviewCode is skipped', () => {
+      const result = addonA11yAddonTest.prompt({
+        setupFile: 'vitest.setup.ts',
+        transformedSetupCode: 'transformed code',
+        previewFile: null,
+        transformedPreviewCode: null,
+        skipPreviewTransformation: true,
+        skipVitestSetupTransformation: false,
+      });
+      expect(result).toMatchSnapshot();
+    });
+
+    it('should return auto prompt if transformedPreviewCode is defined and if transformedSetupCode is skipped', () => {
+      const result = addonA11yAddonTest.prompt({
+        setupFile: null,
+        transformedSetupCode: null,
+        previewFile: 'preview.js',
+        transformedPreviewCode: 'transformed code',
+        skipPreviewTransformation: false,
+        skipVitestSetupTransformation: true,
       });
       expect(result).toMatchSnapshot();
     });

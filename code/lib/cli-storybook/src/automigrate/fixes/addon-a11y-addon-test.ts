@@ -35,6 +35,8 @@ interface AddonA11yAddonTestOptions {
   previewFile: string | null;
   transformedSetupCode: string | null;
   transformedPreviewCode: string | null;
+  skipVitestSetupTransformation: boolean;
+  skipPreviewTransformation: boolean;
 }
 
 /**
@@ -90,19 +92,23 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
         .map((ext) => path.join(configDir, `preview${ext}`))
         .find((filePath) => existsSync(filePath)) ?? null;
 
+    let skipVitestSetupTransformation = false;
+    let skipPreviewTransformation = false;
+
     if (vitestSetupFile && previewFile) {
       const vitestSetupSource = readFileSync(vitestSetupFile, 'utf8');
       const previewSetupSource = readFileSync(previewFile, 'utf8');
-      if (
-        vitestSetupSource.includes('@storybook/addon-a11y') &&
-        previewSetupSource.includes('a11ytest')
-      ) {
+
+      skipVitestSetupTransformation = vitestSetupSource.includes('@storybook/addon-a11y');
+      skipPreviewTransformation = previewSetupSource.includes('a11ytest');
+
+      if (skipVitestSetupTransformation && skipPreviewTransformation) {
         return null;
       }
     }
 
     const getTransformedSetupCode = () => {
-      if (!vitestSetupFile) {
+      if (!vitestSetupFile || skipVitestSetupTransformation) {
         return null;
       }
 
@@ -115,7 +121,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
     };
 
     const getTransformedPreviewCode = () => {
-      if (!previewFile) {
+      if (!previewFile || skipPreviewTransformation) {
         return null;
       }
 
@@ -132,10 +138,19 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
       previewFile: previewFile,
       transformedSetupCode: getTransformedSetupCode(),
       transformedPreviewCode: getTransformedPreviewCode(),
+      skipVitestSetupTransformation,
+      skipPreviewTransformation,
     };
   },
 
-  prompt({ setupFile, previewFile, transformedSetupCode, transformedPreviewCode }) {
+  prompt({
+    setupFile,
+    previewFile,
+    transformedSetupCode,
+    transformedPreviewCode,
+    skipPreviewTransformation,
+    skipVitestSetupTransformation,
+  }) {
     const introduction = dedent`
       We have detected that you have ${picocolors.magenta(`@storybook/addon-a11y`)} and ${picocolors.magenta(`@storybook/experimental-addon-test`)} installed.
 
@@ -146,45 +161,51 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
 
     let counter = 1;
 
-    if (transformedSetupCode === null) {
-      prompt.push(dedent`
-      ${counter++}) We couldn't find or automatically update your ${picocolors.cyan(`.storybook/vitest.setup.<ts|js>`)} in your project to smoothly set up project annotations from ${picocolors.magenta(`@storybook/addon-a11y`)}. 
-      Please manually update your ${picocolors.cyan(`vitest.setup.ts`)} file to include the following:
+    if (!skipVitestSetupTransformation) {
+      if (transformedSetupCode === null) {
+        prompt.push(dedent`
+          ${counter++}) We couldn't find or automatically update your ${picocolors.cyan(`.storybook/vitest.setup.<ts|js>`)} in your project to smoothly set up project annotations from ${picocolors.magenta(`@storybook/addon-a11y`)}. 
+          Please manually update your ${picocolors.cyan(`vitest.setup.ts`)} file to include the following:
 
-      ${picocolors.gray('...')}   
-      ${picocolors.green('+ import * as a11yAddonAnnotations from "@storybook/addon-a11y/preview";')}
+          ${picocolors.gray('...')}   
+          ${picocolors.green('+ import * as a11yAddonAnnotations from "@storybook/addon-a11y/preview";')}
 
-      ${picocolors.gray('const annotations = setProjectAnnotations([')}
-      ${picocolors.gray('  ...')}
-      ${picocolors.green('+ a11yAddonAnnotations,')}
-      ${picocolors.gray(']);')}
+          ${picocolors.gray('const annotations = setProjectAnnotations([')}
+          ${picocolors.gray('  ...')}
+          ${picocolors.green('+ a11yAddonAnnotations,')}
+          ${picocolors.gray(']);')}
 
-      ${picocolors.gray('beforeAll(annotations.beforeAll);')}
-      `);
-    } else {
-      const fileExtensionSetupFile = path.extname(setupFile!);
+          ${picocolors.gray('beforeAll(annotations.beforeAll);')}
+        `);
+      } else {
+        const fileExtensionSetupFile = path.extname(setupFile!);
 
-      prompt.push(
-        dedent`${counter++}) We have to update your ${picocolors.cyan(`.storybook/vitest.setup${fileExtensionSetupFile}`)} to set up project annotations from ${picocolors.magenta(`@storybook/addon-a11y`)}.`
-      );
+        prompt.push(
+          dedent`${counter++}) We have to update your ${picocolors.cyan(`.storybook/vitest.setup${fileExtensionSetupFile}`)} file to set up project annotations from ${picocolors.magenta(`@storybook/addon-a11y`)}.`
+        );
+      }
     }
 
-    if (transformedPreviewCode === null) {
-      prompt.push(dedent`
-      ${counter++}) We couldn't find or automatically update your ${picocolors.cyan(`.storybook/preview.<ts|js>`)} in your project to smoothly set up tags from ${picocolors.magenta(`@storybook/addon-a11y`)}. 
-      Please manually update your ${picocolors.cyan(`.storybook/preview.<ts|js>`)} file to include the following:
+    if (!skipPreviewTransformation) {
+      if (transformedPreviewCode === null) {
+        prompt.push(dedent`
+          ${counter++}) We couldn't find or automatically update your ${picocolors.cyan(`.storybook/preview.<ts|js>`)} in your project to smoothly set up tags from ${picocolors.magenta(`@storybook/addon-a11y`)}. 
+          Please manually update your ${picocolors.cyan(`.storybook/preview.<ts|js>`)} file to include the following:
 
-      ${picocolors.gray('export default {')}
-      ${picocolors.gray('...')}
-      ${picocolors.green('+ tags: ["a11ytest"],')}
-      ${picocolors.gray('}')}
-      `);
-    } else {
-      const fileExtensionPreviewFile = path.extname(previewFile!);
+          ${picocolors.gray('export default {')}
+          ${picocolors.gray('...')}
+          ${picocolors.green('+ tags: ["a11ytest"],')}
+          ${picocolors.gray('}')}
+        `);
+      } else {
+        const fileExtensionPreviewFile = path.extname(previewFile!);
 
-      prompt.push(
-        dedent`${counter++}) We have to update your ${picocolors.cyan(`.storybook/vitest.setup${fileExtensionPreviewFile}`)} to set up tags from ${picocolors.magenta(`@storybook/addon-a11y`)}.`
-      );
+        prompt.push(
+          dedent`
+            ${counter++}) We have to update your ${picocolors.cyan(`.storybook/preview${fileExtensionPreviewFile}`)} file to set up tags from ${picocolors.magenta(`@storybook/addon-a11y`)}.
+          `
+        );
+      }
     }
 
     if (transformedPreviewCode === null || transformedSetupCode === null) {
