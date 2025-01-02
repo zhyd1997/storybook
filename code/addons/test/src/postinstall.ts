@@ -345,7 +345,10 @@ export default async function postInstall(options: PostinstallOptions) {
 
   if (a11yAddon) {
     try {
-      await $`storybook automigrate addonA11yAddonTest ${options.yes ? '--yes' : ''}`;
+      logger.plain(`${step} Setting up ${addonA11yName} for @storybook/experimental-addon-test:`);
+      await $({
+        stdio: 'inherit',
+      })`storybook automigrate addonA11yAddonTest ${options.yes ? '--yes' : ''}`;
     } catch (e) {
       printError(
         '🚨 Oh no!',
