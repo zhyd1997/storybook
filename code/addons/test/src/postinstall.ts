@@ -350,7 +350,7 @@ export default async function postInstall(options: PostinstallOptions) {
       printError(
         '🚨 Oh no!',
         dedent`
-        We have detected that you have ${addonA11yName} installed but could not automatically set it up for @storybook/experimental-addon-test/vitest-plugin.
+        We have detected that you have ${addonA11yName} installed but could not automatically set it up for @storybook/experimental-addon-test.
 
         Please refer to the documentation to complete the setup manually:
         ${picocolors.cyan(`https://storybook.js.org/docs/writing-tests/accessibility-testing#test-addon-integration`)}

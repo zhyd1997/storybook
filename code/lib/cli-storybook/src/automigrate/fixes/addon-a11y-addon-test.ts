@@ -178,8 +178,8 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
 
     if (transformedPreviewCode === null || transformedSetupCode === null) {
       prompt.push(dedent`
-        For more information, please refer to the addon test documentation: 
-        ${picocolors.cyan('https://storybook.js.org/docs/writing-tests/addon-test')}
+        For more information, please refer to the accessibility addon documentation: 
+        ${picocolors.cyan('https://storybook.js.org/docs/writing-tests/accessibility-testing#test-addon-integration')}
       `);
     }
 
