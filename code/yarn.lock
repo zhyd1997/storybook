@@ -6792,6 +6792,7 @@ __metadata:
     "@types/babel-plugin-react-docgen": "npm:^4"
     "@types/escodegen": "npm:^0.0.6"
     "@types/estree": "npm:^0.0.51"
+    "@types/node": "npm:^22.0.0"
     "@types/semver": "npm:^7.3.4"
     acorn: "npm:^7.4.1"
     acorn-jsx: "npm:^5.3.1"
@@ -6809,7 +6810,6 @@ __metadata:
     type-fest: "npm:~2.19"
   peerDependencies:
     "@storybook/test": "workspace:*"
-    "@types/node": ^22.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     storybook: "workspace:^"
