@@ -15,7 +15,20 @@ import {
 import { getAddonNames, getFrameworkPackageName, getRendererName } from '../helpers/mainConfigFile';
 import type { Fix } from '../types';
 
-export const fileExtensions = ['.js', '.ts', '.cts', '.mts', '.cjs', '.mjs'] as const;
+export const fileExtensions = [
+  '.js',
+  '.ts',
+  '.cts',
+  '.mts',
+  '.cjs',
+  '.mjs',
+  '.jsx',
+  '.tsx',
+  '.ctsx',
+  '.mtsx',
+  '.cjsx',
+  '.mjsx',
+] as const;
 
 interface AddonA11yAddonTestOptions {
   setupFile: string | null;
@@ -62,8 +75,6 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
     ) {
       return null;
     }
-
-    console.log(hasA11yAddon, hasTestAddon, configDir);
 
     if (!hasA11yAddon || !hasTestAddon || !configDir) {
       return null;
