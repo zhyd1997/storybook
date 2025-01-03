@@ -51,6 +51,8 @@ export class VitestManager {
 
   runningPromise: Promise<any> | null = null;
 
+  isCancelling = false;
+
   constructor(private testManager: TestManager) {}
 
   async startVitest({ coverage = false } = {}) {
@@ -136,6 +138,7 @@ export class VitestManager {
 
   private getModulesByFilepath(file: string): Set<ModuleNode> {
     const set = this.vite.moduleGraph.getModulesByFile(file);
+    // @ts-expect-error ModuleNode from vite 4 is incompatible with ModuleNode from vite 3.
     return set || new Set<ModuleNode>();
   }
 
@@ -213,6 +216,7 @@ export class VitestManager {
   }
 
   async runFiles(specifications: TestSpecification[], allTestsRun?: boolean) {
+    this.isCancelling = false;
     const runTest: (
       specifications: TestSpecification[],
       allTestsRun?: boolean | undefined
@@ -278,8 +282,10 @@ export class VitestManager {
   }
 
   async cancelCurrentRun() {
+    this.isCancelling = true;
     await this.vitest?.cancelCurrentRun('keyboard-input');
     await this.runningPromise;
+    this.isCancelling = false;
   }
 
   async closeVitest() {
