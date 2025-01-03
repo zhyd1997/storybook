@@ -66,6 +66,15 @@ const getStoryGlobsAndFiles = async (
 
 const packageDir = dirname(require.resolve('@storybook/experimental-addon-test/package.json'));
 
+const isAddonA11yAvailable = () => {
+  try {
+    require.resolve('@storybook/addon-a11y');
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
   const finalOptions = {
     ...defaultOptions,
@@ -253,10 +262,14 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
         optimizeDeps: {
           include: [
             '@storybook/experimental-addon-test/**',
+            '@storybook/addon-a11y/**',
+            '@testing-library/jest-dom/vitest',
+            ...(isAddonA11yAvailable() ? ['@storybook/addon-a11y'] : []),
             ...(frameworkName?.includes('react') || frameworkName?.includes('nextjs')
-              ? ['react-dom/test-utils']
+              ? ['react-dom/test-utils', 'prop-types', 'react-dom/client']
               : []),
           ],
+          entries: storiesFiles.filter((path) => !path.endsWith('.mdx')),
         },
 
         define: {
