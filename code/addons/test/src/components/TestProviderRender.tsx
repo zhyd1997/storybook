@@ -382,7 +382,8 @@ export const TestProviderRender: FC<TestProviderRenderProps> = ({
             icon={
               state.crashed ? (
                 <TestStatusIcon status="critical" aria-label="status: crashed" />
-              ) : status === 'unknown' ? (
+              ) : // @ts-expect-error: TODO: Fix types
+              status === 'unknown' ? (
                 <TestStatusIcon status="unknown" aria-label="status: unknown" />
               ) : (
                 <TestStatusIcon status={statusMap[status]} aria-label={`status: ${status}`} />
