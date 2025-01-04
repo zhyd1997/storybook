@@ -107,6 +107,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
         configFile: false,
         presets: [
           [
+            // using this preset is what makes reanimated work with this setup (one of the plugins in there probably)
             'babel-preset-expo',
             {
               ...(pluginReactOptions.jsxImportSource
