@@ -86,6 +86,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
         ...pluginReactOptions.babel,
         babelrc: false,
         configFile: false,
+        // babel-plugin-react-native-web adds optimizations for react native web prod builds
         plugins: ['react-native-web', ...(pluginReactOptions.babel?.plugins || [])],
       },
     }),
@@ -120,6 +121,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
           ],
           ...(pluginReactOptions.babel?.presets || []),
         ],
+        // babel-plugin-react-native-web adds optimizations for react native web prod builds
         plugins: ['react-native-web', ...(pluginReactOptions.babel?.plugins || [])],
       },
     })
