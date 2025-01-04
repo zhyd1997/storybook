@@ -3,6 +3,7 @@ import { viteFinal as reactViteFinal } from '@storybook/react-vite/preset';
 import { esbuildFlowPlugin, flowPlugin } from '@bunchtogether/vite-plugin-flow';
 import react from '@vitejs/plugin-react';
 import type { InlineConfig, PluginOption } from 'vite';
+import babel from 'vite-plugin-babel';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 import type { FrameworkOptions, StorybookConfig } from './types';
@@ -19,6 +20,8 @@ export function reactNativeWeb(): PluginOption {
           _WORKLET: false,
           __DEV__: `${env.mode === 'development'}`,
           'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || env.mode),
+          // this is for the expo preset
+          'process.env.EXPO_OS': JSON.stringify('web'),
         },
         optimizeDeps: {
           include: [],
@@ -77,12 +80,47 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
       exclude: [/node_modules\/(?!react-native|@react-native)/],
     }),
     react({
-      babel: {
-        babelrc: false,
-        configFile: false,
-      },
       jsxRuntime: 'automatic',
       ...pluginReactOptions,
+      babel: {
+        ...pluginReactOptions.babel,
+        babelrc: false,
+        configFile: false,
+        plugins: ['react-native-web', ...(pluginReactOptions.babel?.plugins || [])],
+      },
+    }),
+
+    // we need to add this extra babel config because the react plugin doesn't allow
+    // for transpiling node_modules. However we keep the react plugin to get the fast refresh
+    // and other benefits
+    babel({
+      include: pluginReactOptions.include
+        ? pluginReactOptions.include
+        : [/node_modules\/(react-native|@react-native)/],
+      // gesture handler is already transpiled
+      exclude: pluginReactOptions.exclude
+        ? pluginReactOptions.exclude
+        : [/node_modules\/(react-native-gesture-handler)/],
+      babelConfig: {
+        ...pluginReactOptions.babel,
+        babelrc: false,
+        configFile: false,
+        presets: [
+          [
+            'babel-preset-expo',
+            {
+              ...(pluginReactOptions.jsxImportSource
+                ? { jsxImportSource: pluginReactOptions.jsxImportSource }
+                : {}),
+              ...(pluginReactOptions.jsxRuntime
+                ? { jsxRuntime: pluginReactOptions.jsxRuntime }
+                : {}),
+            },
+          ],
+          ...(pluginReactOptions.babel?.presets || []),
+        ],
+        plugins: ['react-native-web', ...(pluginReactOptions.babel?.plugins || [])],
+      },
     })
   );
 
