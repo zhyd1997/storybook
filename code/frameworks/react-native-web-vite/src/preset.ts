@@ -70,6 +70,8 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
   const { pluginReactOptions = {} } =
     await options.presets.apply<FrameworkOptions>('frameworkOptions');
 
+  const isDevelopment = options.configType !== 'PRODUCTION';
+
   const reactConfig = await reactViteFinal(config, options);
 
   const { plugins = [] } = reactConfig;
@@ -80,14 +82,12 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
       exclude: [/node_modules\/(?!react-native|@react-native)/],
     }),
     react({
-      jsxRuntime: 'automatic',
       ...pluginReactOptions,
+      jsxRuntime: pluginReactOptions.jsxRuntime || 'automatic',
       babel: {
-        ...pluginReactOptions.babel,
         babelrc: false,
         configFile: false,
-        // babel-plugin-react-native-web adds optimizations for react native web prod builds
-        plugins: ['react-native-web', ...(pluginReactOptions.babel?.plugins || [])],
+        ...pluginReactOptions.babel,
       },
     }),
 
@@ -95,34 +95,37 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
     // for transpiling node_modules. However we keep the react plugin to get the fast refresh
     // and other benefits
     babel({
-      include: pluginReactOptions.include
-        ? pluginReactOptions.include
-        : [/node_modules\/(react-native|@react-native)/],
+      include: pluginReactOptions.include || [/node_modules\/(react-native|@react-native)/],
       // gesture handler is already transpiled
-      exclude: pluginReactOptions.exclude
-        ? pluginReactOptions.exclude
-        : [/node_modules\/(react-native-gesture-handler)/],
+      exclude: pluginReactOptions.exclude,
       babelConfig: {
         ...pluginReactOptions.babel,
         babelrc: false,
         configFile: false,
         presets: [
           [
-            // using this preset is what makes reanimated work with this setup (one of the plugins in there probably)
-            'babel-preset-expo',
+            require('@babel/preset-react'),
             {
-              ...(pluginReactOptions.jsxImportSource
-                ? { jsxImportSource: pluginReactOptions.jsxImportSource }
-                : {}),
-              ...(pluginReactOptions.jsxRuntime
-                ? { jsxRuntime: pluginReactOptions.jsxRuntime }
-                : {}),
+              development: isDevelopment,
+              jsxRuntime: pluginReactOptions.jsxRuntime || 'automatic',
+              jsxImportSource: pluginReactOptions.jsxImportSource || 'react',
             },
           ],
           ...(pluginReactOptions.babel?.presets || []),
         ],
         // babel-plugin-react-native-web adds optimizations for react native web prod builds
-        plugins: ['react-native-web', ...(pluginReactOptions.babel?.plugins || [])],
+        plugins: [
+          [
+            // this is a fix for reanimated not working in production
+            require('@babel/plugin-transform-modules-commonjs'),
+            {
+              strict: false,
+              strictMode: false, // prevent "use strict" injections
+              allowTopLevelThis: true, // dont rewrite global `this` -> `undefined`
+            },
+          ],
+          ...(pluginReactOptions.babel?.plugins || []),
+        ],
       },
     })
   );
