@@ -96,7 +96,6 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
     // and other benefits
     babel({
       include: pluginReactOptions.include || [/node_modules\/(react-native|@react-native)/],
-      // gesture handler is already transpiled
       exclude: pluginReactOptions.exclude,
       babelConfig: {
         ...pluginReactOptions.babel,
@@ -104,6 +103,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
         configFile: false,
         presets: [
           [
+            // we use require instead of just the name to resolve the version of the plugin in our package.json
             require('@babel/preset-react'),
             {
               development: isDevelopment,
@@ -113,10 +113,10 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
           ],
           ...(pluginReactOptions.babel?.presets || []),
         ],
-        // babel-plugin-react-native-web adds optimizations for react native web prod builds
         plugins: [
           [
             // this is a fix for reanimated not working in production
+            // we use require instead of just the name to resolve the version of the plugin in our package.json
             require('@babel/plugin-transform-modules-commonjs'),
             {
               strict: false,
