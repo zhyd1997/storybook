@@ -65,7 +65,7 @@ export function reactNativeWeb(): PluginOption {
 export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) => {
   const { mergeConfig } = await import('vite');
 
-  const { pluginReactOptions = {} } =
+  const { pluginReactOptions = {}, pluginBabelOptions = {} } =
     await options.presets.apply<FrameworkOptions>('frameworkOptions');
 
   const isDevelopment = options.configType !== 'PRODUCTION';
@@ -95,10 +95,11 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
     // for transpiling node_modules. We need this because many react native packages are untranspiled.
     // However we keep the react plugin to get the fast refresh and the other stuff its doing
     babel({
-      include: pluginReactOptions.include || [/node_modules\/(react-native|@react-native)/],
-      exclude: pluginReactOptions.exclude,
+      ...pluginBabelOptions,
+      include: pluginBabelOptions.include || [/node_modules\/(react-native|@react-native)/],
+      exclude: pluginBabelOptions.exclude,
       babelConfig: {
-        ...pluginReactOptions.babel,
+        ...pluginBabelOptions.babelConfig,
         babelrc: false,
         configFile: false,
         presets: [
@@ -106,11 +107,11 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
             '@babel/preset-react',
             {
               development: isDevelopment,
-              jsxRuntime: pluginReactOptions.jsxRuntime || 'automatic',
-              jsxImportSource: pluginReactOptions.jsxImportSource || 'react',
+              jsxRuntime: pluginBabelOptions.jsxRuntime || 'automatic',
+              jsxImportSource: pluginBabelOptions.jsxImportSource || 'react',
             },
           ],
-          ...(pluginReactOptions.babel?.presets || []),
+          ...(pluginBabelOptions.babelConfig?.presets || []),
         ],
         plugins: [
           [
@@ -122,7 +123,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
               allowTopLevelThis: true, // dont rewrite global `this` -> `undefined`
             },
           ],
-          ...(pluginReactOptions.babel?.plugins || []),
+          ...(pluginBabelOptions.babelConfig?.plugins || []),
         ],
       },
     })
