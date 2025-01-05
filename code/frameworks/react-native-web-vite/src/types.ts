@@ -11,8 +11,11 @@ import type { BabelPluginOptions } from 'vite-plugin-babel';
 export type FrameworkOptions = FrameworkOptionsBase & {
   pluginReactOptions?: Omit<ReactOptions, 'babel'> & { babel?: BabelOptions };
   pluginBabelOptions?: BabelPluginOptions & {
-    jsxRuntime?: 'automatic' | 'classic';
-    jsxImportSource?: string;
+    presetReact?: {
+      [key: string]: any;
+      runtime?: 'automatic' | 'classic';
+      importSource?: string;
+    };
   };
 };
 
