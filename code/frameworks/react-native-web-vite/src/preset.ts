@@ -92,7 +92,8 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
     }),
 
     // we need to add this extra babel config because the react plugin doesn't allow
-    // for transpiling node_modules. We need this because many react native packages are untranspiled.
+    // for transpiling node_modules. We need this because many react native packages are un-transpiled.
+    // see this pr for more context: https://github.com/vitejs/vite-plugin-react/pull/306
     // However we keep the react plugin to get the fast refresh and the other stuff its doing
     babel({
       ...pluginBabelOptions,
@@ -107,8 +108,8 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
             '@babel/preset-react',
             {
               development: isDevelopment,
-              jsxRuntime: pluginBabelOptions.jsxRuntime || 'automatic',
-              jsxImportSource: pluginBabelOptions.jsxImportSource || 'react',
+              runtime: 'automatic',
+              ...(pluginBabelOptions.presetReact || {}),
             },
           ],
           ...(pluginBabelOptions.babelConfig?.presets || []),
