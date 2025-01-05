@@ -76,6 +76,8 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
 
   plugins.unshift(
     tsconfigPaths(),
+
+    // fix for react native packages shipping with flow types untranspiled
     flowPlugin({
       exclude: [/node_modules\/(?!react-native|@react-native)/],
     }),
@@ -90,8 +92,8 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
     }),
 
     // we need to add this extra babel config because the react plugin doesn't allow
-    // for transpiling node_modules. However we keep the react plugin to get the fast refresh
-    // and other benefits
+    // for transpiling node_modules. We need this because many react native packages are untranspiled.
+    // However we keep the react plugin to get the fast refresh and the other stuff its doing
     babel({
       include: pluginReactOptions.include || [/node_modules\/(react-native|@react-native)/],
       exclude: pluginReactOptions.exclude,
@@ -131,6 +133,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
   return mergeConfig(reactConfig, {
     optimizeDeps: {
       esbuildOptions: {
+        // fix for react native packages shipping with flow types untranspiled
         plugins: [esbuildFlowPlugin(new RegExp(/\.(flow|jsx?)$/), (_path: string) => 'jsx')],
       },
     },
