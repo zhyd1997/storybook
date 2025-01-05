@@ -20,8 +20,6 @@ export function reactNativeWeb(): PluginOption {
           _WORKLET: false,
           __DEV__: `${env.mode === 'development'}`,
           'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || env.mode),
-          // this is for the expo preset
-          'process.env.EXPO_OS': JSON.stringify('web'),
         },
         optimizeDeps: {
           include: [],
