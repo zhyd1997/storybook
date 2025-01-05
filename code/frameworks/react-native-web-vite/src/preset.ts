@@ -101,8 +101,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
         configFile: false,
         presets: [
           [
-            // we use require instead of just the name to resolve the version of the plugin in our package.json
-            require('@babel/preset-react'),
+            '@babel/preset-react',
             {
               development: isDevelopment,
               jsxRuntime: pluginReactOptions.jsxRuntime || 'automatic',
@@ -114,8 +113,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
         plugins: [
           [
             // this is a fix for reanimated not working in production
-            // we use require instead of just the name to resolve the version of the plugin in our package.json
-            require('@babel/plugin-transform-modules-commonjs'),
+            '@babel/plugin-transform-modules-commonjs',
             {
               strict: false,
               strictMode: false, // prevent "use strict" injections
