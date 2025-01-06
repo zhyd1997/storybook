@@ -150,8 +150,8 @@ export default async function postInstall(options: PostinstallOptions) {
 
     if (coercedMswVersion && !satisfies(coercedMswVersion, '>=2.0.0')) {
       reasons.push(dedent`
-        • Detected the package MSW installed at version ${picocolors.bold(coercedMswVersion.version)}. To avoid conflicts with Vitest's dependencies, MSW must be version 2.0.0 or later.  
-        Please update to a compatible version.
+        • The addon uses Vitest behind the scenes, which supports only version 2 and above of MSW. However, we have detected version ${picocolors.bold(coercedMswVersion.version)} in this project.
+        Please update the 'msw' package and try again.
       `);
     }
 
