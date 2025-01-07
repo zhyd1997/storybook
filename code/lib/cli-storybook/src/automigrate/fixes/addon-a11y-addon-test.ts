@@ -298,5 +298,5 @@ export function transformPreviewFile(source: string) {
   const comment = `${indentation}// a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run\n${indentation}// For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing`;
   lines.splice(tagsLineIndex, 0, comment);
 
-  return lines.join('\n');
+  return formatConfig(loadConfig(lines.join('\n')).parse());
 }
