@@ -23,7 +23,7 @@ Please manually update your .storybook/preview.<ts|js> file to include the follo
 
 export default {
 ...
-+ tags: ["a11ytest"],
++ tags: ["a11y-test"],
 }
 
 For more information, please refer to the accessibility addon documentation: 
@@ -88,7 +88,7 @@ Please manually update your .storybook/preview.<ts|js> file to include the follo
 
 export default {
 ...
-+ tags: ["a11ytest"],
++ tags: ["a11y-test"],
 }
 
 For more information, please refer to the accessibility addon documentation: 

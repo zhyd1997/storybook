@@ -100,7 +100,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
       const previewSetupSource = readFileSync(previewFile, 'utf8');
 
       skipVitestSetupTransformation = vitestSetupSource.includes('@storybook/addon-a11y');
-      skipPreviewTransformation = previewSetupSource.includes('a11ytest');
+      skipPreviewTransformation = previewSetupSource.includes('a11y-test');
 
       if (skipVitestSetupTransformation && skipPreviewTransformation) {
         return null;
@@ -194,7 +194,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
 
           ${picocolors.gray('export default {')}
           ${picocolors.gray('...')}
-          ${picocolors.green('+ tags: ["a11ytest"],')}
+          ${picocolors.green('+ tags: ["a11y-test"],')}
           ${picocolors.gray('}')}
         `);
       } else {
@@ -275,11 +275,11 @@ export function transformPreviewFile(source: string) {
   const tags = previewConfig.getFieldNode(['tags']);
   const tagsValue = previewConfig.getFieldValue(['tags']) ?? [];
 
-  if (tags && tagsValue && (tagsValue.includes('a11ytest') || tagsValue.includes('!a11ytest'))) {
+  if (tags && tagsValue && (tagsValue.includes('a11y-test') || tagsValue.includes('!a11y-test'))) {
     return source;
   }
 
-  previewConfig.setFieldValue(['tags'], [...tagsValue, 'a11ytest']);
+  previewConfig.setFieldValue(['tags'], [...tagsValue, 'a11y-test']);
 
   const formattedPreviewConfig = formatConfig(previewConfig);
   const lines = formattedPreviewConfig.split('\n');
@@ -295,7 +295,7 @@ export function transformPreviewFile(source: string) {
   const indentation = tagsLine?.match(/^\s*/)?.[0];
 
   // Add the comment with the same indentation level
-  const comment = `${indentation}// a11ytest tag controls whether accessibility tests are run as part of a standalone Vitest test run\n${indentation}// For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing`;
+  const comment = `${indentation}// a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run\n${indentation}// For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing`;
   lines.splice(tagsLineIndex, 0, comment);
 
   return lines.join('\n');

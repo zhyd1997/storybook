@@ -107,7 +107,7 @@ describe('addonA11yAddonTest', () => {
         } else {
           return `
             export default {
-              tags: ['a11ytest'],
+              tags: ['a11y-test'],
             }
           `;
         }
@@ -286,7 +286,7 @@ describe('addonA11yAddonTest', () => {
         } else {
           return `
             export default {
-              tags: ['a11ytest'],
+              tags: ['a11y-test'],
             }
           `;
         }
@@ -588,9 +588,9 @@ describe('addonA11yAddonTest', () => {
             },
           },
 
-          // a11ytest tag controls whether accessibility tests are run as part of a standalone Vitest test run
+          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ['a11ytest']
+          tags: ['a11y-test']
         };
   
         export default preview;
@@ -621,7 +621,7 @@ describe('addonA11yAddonTest', () => {
             },
           },
         }
-        export const tags = ["a11ytest"];
+        export const tags = ["a11y-test"];
       `;
 
       expect(transformed).toBe(expected);
@@ -651,9 +651,9 @@ describe('addonA11yAddonTest', () => {
         import type { Preview } from '@storybook/react';
   
         const preview: Preview = {
-          // a11ytest tag controls whether accessibility tests are run as part of a standalone Vitest test run
+          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ['existingTag', 'a11ytest'],
+          tags: ['existingTag', 'a11y-test'],
           parameters: {
             controls: {
               matchers: {
@@ -670,12 +670,12 @@ describe('addonA11yAddonTest', () => {
       expect(transformed).toBe(j(expected).toSource());
     });
 
-    it('should not add a11ytest if it already exists in the tags property', () => {
+    it('should not add a11y-test if it already exists in the tags property', () => {
       const source = `
         import type { Preview } from '@storybook/react';
   
         const preview: Preview = {
-          tags: ['a11ytest'],
+          tags: ['a11y-test'],
           parameters: {
             controls: {
               matchers: {
@@ -720,9 +720,9 @@ describe('addonA11yAddonTest', () => {
             },
           },
 
-          // a11ytest tag controls whether accessibility tests are run as part of a standalone Vitest test run
+          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ["a11ytest"]
+          tags: ["a11y-test"]
         };
       `;
 
@@ -747,9 +747,9 @@ describe('addonA11yAddonTest', () => {
       const transformed = transformPreviewFile(source);
       const expected = `
         export default {
-          // a11ytest tag controls whether accessibility tests are run as part of a standalone Vitest test run
+          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ['existingTag', 'a11ytest'],
+          tags: ['existingTag', 'a11y-test'],
           parameters: {
             controls: {
               matchers: {

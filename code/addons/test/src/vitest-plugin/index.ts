@@ -217,7 +217,7 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
                   ? (envConfig.a11y ?? false)
                   : false;
 
-                return shouldSetTag ? ['a11ytest'] : [];
+                return shouldSetTag ? ['a11y-test'] : [];
               },
             },
             // if there is a test.browser config AND test.browser.screenshotFailures is not explicitly set, we set it to false

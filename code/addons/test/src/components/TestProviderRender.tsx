@@ -139,7 +139,7 @@ export const TestProviderRender: FC<TestProviderRenderProps> = ({
       return acc;
     }, new Set<Tag>());
 
-    if (allTags.has('a11ytest')) {
+    if (allTags.has('a11y-test')) {
       return true;
     }
 
