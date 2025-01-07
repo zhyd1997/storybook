@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { formatConfig, loadConfig } from '@storybook/core/csf-tools';
+
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import * as jscodeshift from 'jscodeshift';
 import path from 'path';
@@ -596,7 +598,7 @@ describe('addonA11yAddonTest', () => {
         export default preview;
       `;
 
-      expect(transformed).toBe(expected);
+      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
     });
 
     it('should add a new tags property if it does not exist and a default export does not exist', () => {
@@ -624,7 +626,7 @@ describe('addonA11yAddonTest', () => {
         export const tags = ["a11y-test"];
       `;
 
-      expect(transformed).toBe(expected);
+      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
     });
 
     it('should extend the existing tags property', () => {
@@ -667,11 +669,11 @@ describe('addonA11yAddonTest', () => {
         export default preview;
       `;
 
-      expect(transformed).toBe(j(expected).toSource());
+      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
     });
 
     it('should not add a11y-test if it already exists in the tags property', () => {
-      const source = `
+      const expected = `
         import type { Preview } from '@storybook/react';
   
         const preview: Preview = {
@@ -689,9 +691,9 @@ describe('addonA11yAddonTest', () => {
         export default preview;
       `;
 
-      const transformed = transformPreviewFile(source);
+      const transformed = transformPreviewFile(expected);
 
-      expect(transformed).toBe(source);
+      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
     });
 
     it('should handle the default export without type annotations', () => {
@@ -726,7 +728,7 @@ describe('addonA11yAddonTest', () => {
         };
       `;
 
-      expect(transformed).toBe(expected);
+      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
     });
 
     it('should extend the existing tags property without type annotations', () => {
@@ -761,7 +763,7 @@ describe('addonA11yAddonTest', () => {
         };
       `;
 
-      expect(transformed).toBe(expected);
+      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
     });
   });
 });
