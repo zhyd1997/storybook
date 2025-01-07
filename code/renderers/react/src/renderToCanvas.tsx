@@ -112,8 +112,8 @@ export async function renderToCanvas(
     processActQueue();
   });
 
-  return () => {
-    act(() => {
+  return async () => {
+    await act(() => {
       unmountElement(canvasElement);
     });
   };
