@@ -98,18 +98,18 @@ export async function renderToCanvas(
     unmountElement(canvasElement);
   }
 
-  await new Promise<void>((resolve, reject) => {
-    try {
-      actQueue.push(async () => {
+  await new Promise<void>(async (resolve, reject) => {
+    actQueue.push(async () => {
+      try {
         await act(async () => {
           await renderElement(element, canvasElement, storyContext?.parameters?.react?.rootOptions);
-          resolve();
         });
-      });
-      processActQueue();
-    } catch (e) {
-      reject(e);
-    }
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
+    processActQueue();
   });
 
   return () => {
