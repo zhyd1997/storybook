@@ -151,11 +151,23 @@
     ],
     "nodeEntries": [
       "./src/preset.ts",
-      "./src/vitest-plugin/index.ts",
-      "./src/vitest-plugin/global-setup.ts",
       "./src/postinstall.ts",
       "./src/node/vitest.ts",
-      "./src/node/coverage-reporter.ts"
+      "./src/node/coverage-reporter.ts",
+      {
+        "file": "./src/vitest-plugin/index.ts",
+        "formats": [
+          "cjs",
+          "esm"
+        ]
+      },
+      {
+        "file": "./src/vitest-plugin/global-setup.ts",
+        "formats": [
+          "cjs",
+          "esm"
+        ]
+      }
     ]
   },
   "storybook": {
