@@ -14,6 +14,7 @@ import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-eve
 
 import type { DocsIndexEntry, StoryIndex, StoryIndexEntry } from '@storybook/types';
 
+import { findUp } from 'find-up';
 import path, { dirname, join, normalize } from 'pathe';
 import slash from 'slash';
 
@@ -22,6 +23,8 @@ import { log } from '../logger';
 import type { StorybookCoverageReporterOptions } from './coverage-reporter';
 import { StorybookReporter } from './reporter';
 import type { TestManager } from './test-manager';
+
+const VITEST_CONFIG_FILE_EXTENSIONS = ['mts', 'mjs', 'cts', 'cjs', 'ts', 'tsx', 'js', 'jsx'];
 
 type TagsFilter = {
   include: string[];
@@ -68,7 +71,15 @@ export class VitestManager {
         : { enabled: false }
     ) as CoverageOptions;
 
+    const vitestWorkspaceConfig = await findUp([
+      'vitest.workspace.ts',
+      'vitest.workspace.js',
+      'vitest.workspace.json',
+      ...VITEST_CONFIG_FILE_EXTENSIONS.map((ext) => `vitest.config.${ext}`),
+    ]);
+
     this.vitest = await createVitest('test', {
+      root: vitestWorkspaceConfig ? dirname(vitestWorkspaceConfig) : process.cwd(),
       watch: true,
       passWithNoTests: false,
       // TODO:
