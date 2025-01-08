@@ -544,7 +544,7 @@ describe('addonA11yAddonTest', () => {
 
       const s = readFileSync(setupFile, 'utf8');
       const transformedCode = transformSetupFile(s);
-      expect(transformedCode).toMatchInlineSnapshot(`
+      expect(transformedCode).toMatchInlineSnapshot(dedent`
         "import * as a11yAddonAnnotations from "@storybook/addon-a11y/preview";
         import { beforeAll } from 'vitest';
         import { setProjectAnnotations } from 'storybook';
@@ -559,7 +559,7 @@ describe('addonA11yAddonTest', () => {
 
   describe('transformPreviewFile', () => {
     it('should add a new tags property if it does not exist', () => {
-      const source = `
+      const source = dedent`
         import type { Preview } from '@storybook/react';
   
         const preview: Preview = {
@@ -577,7 +577,7 @@ describe('addonA11yAddonTest', () => {
       `;
 
       const transformed = transformPreviewFile(source);
-      const expected = `
+      const expected = dedent`
         import type { Preview } from '@storybook/react';
   
         const preview: Preview = {
@@ -602,7 +602,7 @@ describe('addonA11yAddonTest', () => {
     });
 
     it('should add a new tags property if it does not exist and a default export does not exist', () => {
-      const source = `
+      const source = dedent`
         export const parameters = {
           controls: {
             matchers: {
@@ -614,7 +614,7 @@ describe('addonA11yAddonTest', () => {
       `;
 
       const transformed = transformPreviewFile(source);
-      const expected = `
+      const expected = dedent`
         export const parameters = {
           controls: {
             matchers: {
@@ -630,11 +630,11 @@ describe('addonA11yAddonTest', () => {
     });
 
     it('should extend the existing tags property', () => {
-      const source = `
-        import type { Preview } from '@storybook/react';
+      const source = dedent`
+        import type { Preview } from "@storybook/react";
   
         const preview: Preview = {
-          tags: ['existingTag'],
+          tags: ["existingTag"],
           parameters: {
             controls: {
               matchers: {
@@ -649,13 +649,13 @@ describe('addonA11yAddonTest', () => {
       `;
 
       const transformed = transformPreviewFile(source);
-      const expected = `
-        import type { Preview } from '@storybook/react';
+      const expected = dedent`
+        import type { Preview } from "@storybook/react";
   
         const preview: Preview = {
           // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ['existingTag', 'a11y-test'],
+          tags: ["existingTag", "a11y-test"],
           parameters: {
             controls: {
               matchers: {
@@ -673,11 +673,11 @@ describe('addonA11yAddonTest', () => {
     });
 
     it('should not add a11y-test if it already exists in the tags property', () => {
-      const expected = `
-        import type { Preview } from '@storybook/react';
+      const expected = dedent`
+        import type { Preview } from "@storybook/react";
   
         const preview: Preview = {
-          tags: ['a11y-test'],
+          tags: ["a11y-test"],
           parameters: {
             controls: {
               matchers: {
@@ -697,7 +697,7 @@ describe('addonA11yAddonTest', () => {
     });
 
     it('should handle the default export without type annotations', () => {
-      const source = `
+      const source = dedent`
         export default {
           parameters: {
             controls: {
@@ -711,7 +711,7 @@ describe('addonA11yAddonTest', () => {
       `;
 
       const transformed = transformPreviewFile(source);
-      const expected = `
+      const expected = dedent`
         export default {
           parameters: {
             controls: {
@@ -732,9 +732,9 @@ describe('addonA11yAddonTest', () => {
     });
 
     it('should extend the existing tags property without type annotations', () => {
-      const source = `
+      const source = dedent`
         export default {
-          tags: ['existingTag'],
+          tags: ["existingTag"],
           parameters: {
             controls: {
               matchers: {
@@ -747,11 +747,11 @@ describe('addonA11yAddonTest', () => {
       `;
 
       const transformed = transformPreviewFile(source);
-      const expected = `
+      const expected = dedent`
         export default {
           // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ['existingTag', 'a11y-test'],
+          tags: ["existingTag", "a11y-test"],
           parameters: {
             controls: {
               matchers: {
