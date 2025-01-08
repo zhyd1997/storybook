@@ -693,7 +693,7 @@ describe('addonA11yAddonTest', () => {
 
       const transformed = transformPreviewFile(expected);
 
-      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
+      expect(transformed).toBe(expected);
     });
 
     it('should handle the default export without type annotations', () => {
