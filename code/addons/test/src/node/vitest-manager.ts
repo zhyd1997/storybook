@@ -25,6 +25,7 @@ import { StorybookReporter } from './reporter';
 import type { TestManager } from './test-manager';
 
 const VITEST_CONFIG_FILE_EXTENSIONS = ['mts', 'mjs', 'cts', 'cjs', 'ts', 'tsx', 'js', 'jsx'];
+const VITEST_WORKSPACE_FILE_EXTENSION = ['ts', 'js', 'json'];
 
 type TagsFilter = {
   include: string[];
@@ -72,9 +73,7 @@ export class VitestManager {
     ) as CoverageOptions;
 
     const vitestWorkspaceConfig = await findUp([
-      'vitest.workspace.ts',
-      'vitest.workspace.js',
-      'vitest.workspace.json',
+      ...VITEST_WORKSPACE_FILE_EXTENSION.map((ext) => `vitest.workspace.${ext}`),
       ...VITEST_CONFIG_FILE_EXTENSIONS.map((ext) => `vitest.config.${ext}`),
     ]);
 
