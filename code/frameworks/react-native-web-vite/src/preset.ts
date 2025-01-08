@@ -3,6 +3,7 @@ import { viteFinal as reactViteFinal } from '@storybook/react-vite/preset';
 import { esbuildFlowPlugin, flowPlugin } from '@bunchtogether/vite-plugin-flow';
 import react from '@vitejs/plugin-react';
 import type { InlineConfig, PluginOption } from 'vite';
+import babel from 'vite-plugin-babel';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 import type { FrameworkOptions, StorybookConfig } from './types';
@@ -64,10 +65,12 @@ export function reactNativeWeb(): PluginOption {
 export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) => {
   const { mergeConfig } = await import('vite');
 
-  const { pluginReactOptions = {} } =
+  const { pluginReactOptions = {}, pluginBabelOptions = {} } =
     await options.presets.apply<FrameworkOptions>('frameworkOptions');
 
-  const { plugins = [], ...reactConfigWithoutPlugins } = await reactViteFinal(config, options);
+  const isDevelopment = options.configType !== 'PRODUCTION';
+
+  const reactConfig = await reactViteFinal(config, options);
 
   return mergeConfig(reactConfigWithoutPlugins, {
     plugins: [
@@ -88,6 +91,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config, options) =
     ],
     optimizeDeps: {
       esbuildOptions: {
+        // fix for react native packages shipping with flow types untranspiled
         plugins: [esbuildFlowPlugin(new RegExp(/\.(flow|jsx?)$/), (_path: string) => 'jsx')],
       },
     },

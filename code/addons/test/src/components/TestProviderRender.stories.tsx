@@ -43,7 +43,7 @@ const baseState: TestProviderState<Details, Config> = {
   cancellable: true,
   cancelling: false,
   crashed: false,
-  error: null,
+  error: undefined,
   failed: false,
   running: false,
   watching: false,
@@ -233,7 +233,7 @@ export const Editing: Story = {
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement);
 
-    screen.getByLabelText(/Open settings/).click();
+    screen.getByLabelText(/Show settings/).click();
   },
 };
 
