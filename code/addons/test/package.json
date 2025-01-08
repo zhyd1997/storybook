@@ -155,6 +155,12 @@
       "./src/node/vitest.ts",
       "./src/node/coverage-reporter.ts",
       {
+        "file": "./src/dummy.ts",
+        "formats": [
+          "esm"
+        ]
+      },
+      {
         "file": "./src/vitest-plugin/index.ts",
         "formats": [
           "cjs",
