@@ -592,7 +592,7 @@ describe('addonA11yAddonTest', () => {
 
           // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ['a11y-test']
+          tags: [/*'a11y-test'*/]
         };
   
         export default preview;
@@ -655,7 +655,7 @@ describe('addonA11yAddonTest', () => {
         const preview: Preview = {
           // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ["existingTag", "a11y-test"],
+          tags: ["existingTag"/*, "a11y-test"*/],
           parameters: {
             controls: {
               matchers: {
@@ -724,7 +724,7 @@ describe('addonA11yAddonTest', () => {
 
           // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ["a11y-test"]
+          tags: [/*"a11y-test"*/]
         };
       `;
 
@@ -751,7 +751,7 @@ describe('addonA11yAddonTest', () => {
         export default {
           // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
           // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ["existingTag", "a11y-test"],
+          tags: ["existingTag"/*, "a11y-test"*/],
           parameters: {
             controls: {
               matchers: {
