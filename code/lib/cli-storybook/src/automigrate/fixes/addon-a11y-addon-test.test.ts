@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { formatFileContent } from '@storybook/core/common';
+
 import { formatConfig, loadConfig } from '@storybook/core/csf-tools';
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';
@@ -558,7 +560,7 @@ describe('addonA11yAddonTest', () => {
   });
 
   describe('transformPreviewFile', () => {
-    it('should add a new tags property if it does not exist', () => {
+    it('should add a new tags property if it does not exist', async () => {
       const source = dedent`
         import type { Preview } from '@storybook/react';
   
@@ -576,7 +578,7 @@ describe('addonA11yAddonTest', () => {
         export default preview;
       `;
 
-      const transformed = transformPreviewFile(source);
+      const transformed = await transformPreviewFile(source, process.cwd());
       const expected = dedent`
         import type { Preview } from '@storybook/react';
   
@@ -598,10 +600,10 @@ describe('addonA11yAddonTest', () => {
         export default preview;
       `;
 
-      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
+      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
     });
 
-    it('should add a new tags property if it does not exist and a default export does not exist', () => {
+    it('should add a new tags property if it does not exist and a default export does not exist', async () => {
       const source = dedent`
         export const parameters = {
           controls: {
@@ -613,7 +615,7 @@ describe('addonA11yAddonTest', () => {
         }
       `;
 
-      const transformed = transformPreviewFile(source);
+      const transformed = await transformPreviewFile(source, process.cwd());
       const expected = dedent`
         export const parameters = {
           controls: {
@@ -626,10 +628,10 @@ describe('addonA11yAddonTest', () => {
         export const tags = ["a11y-test"];
       `;
 
-      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
+      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
     });
 
-    it('should extend the existing tags property', () => {
+    it('should extend the existing tags property', async () => {
       const source = dedent`
         import type { Preview } from "@storybook/react";
   
@@ -648,7 +650,7 @@ describe('addonA11yAddonTest', () => {
         export default preview;
       `;
 
-      const transformed = transformPreviewFile(source);
+      const transformed = await transformPreviewFile(source, process.cwd());
       const expected = dedent`
         import type { Preview } from "@storybook/react";
   
@@ -669,10 +671,10 @@ describe('addonA11yAddonTest', () => {
         export default preview;
       `;
 
-      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
+      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
     });
 
-    it('should not add a11y-test if it already exists in the tags property', () => {
+    it('should not add a11y-test if it already exists in the tags property', async () => {
       const expected = dedent`
         import type { Preview } from "@storybook/react";
   
@@ -691,12 +693,12 @@ describe('addonA11yAddonTest', () => {
         export default preview;
       `;
 
-      const transformed = transformPreviewFile(expected);
+      const transformed = await transformPreviewFile(expected, process.cwd());
 
-      expect(transformed).toBe(expected);
+      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
     });
 
-    it('should handle the default export without type annotations', () => {
+    it('should handle the default export without type annotations', async () => {
       const source = dedent`
         export default {
           parameters: {
@@ -710,7 +712,7 @@ describe('addonA11yAddonTest', () => {
         };
       `;
 
-      const transformed = transformPreviewFile(source);
+      const transformed = await transformPreviewFile(source, process.cwd());
       const expected = dedent`
         export default {
           parameters: {
@@ -728,10 +730,10 @@ describe('addonA11yAddonTest', () => {
         };
       `;
 
-      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
+      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
     });
 
-    it('should extend the existing tags property without type annotations', () => {
+    it('should extend the existing tags property without type annotations', async () => {
       const source = dedent`
         export default {
           tags: ["existingTag"],
@@ -746,7 +748,7 @@ describe('addonA11yAddonTest', () => {
         };
       `;
 
-      const transformed = transformPreviewFile(source);
+      const transformed = await transformPreviewFile(source, process.cwd());
       const expected = dedent`
         export default {
           // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
@@ -763,7 +765,7 @@ describe('addonA11yAddonTest', () => {
         };
       `;
 
-      expect(transformed).toBe(formatConfig(loadConfig(expected).parse()));
+      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
     });
   });
 });

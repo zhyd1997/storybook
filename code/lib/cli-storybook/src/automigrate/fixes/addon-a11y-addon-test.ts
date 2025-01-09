@@ -1,6 +1,4 @@
-import { EOL } from 'node:os';
-
-import { rendererPackages } from 'storybook/internal/common';
+import { formatFileContent, rendererPackages } from 'storybook/internal/common';
 import { formatConfig, loadConfig } from 'storybook/internal/csf-tools';
 
 import { type ArrayExpression } from '@babel/types';
@@ -123,14 +121,14 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
       }
     };
 
-    const getTransformedPreviewCode = () => {
+    const getTransformedPreviewCode = async () => {
       if (!previewFile || skipPreviewTransformation) {
         return null;
       }
 
       try {
         const previewSetupSource = readFileSync(previewFile, 'utf8');
-        return transformPreviewFile(previewSetupSource);
+        return await transformPreviewFile(previewSetupSource, previewFile);
       } catch (e) {
         return null;
       }
@@ -140,7 +138,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
       setupFile: vitestSetupFile,
       previewFile: previewFile,
       transformedSetupCode: getTransformedSetupCode(),
-      transformedPreviewCode: getTransformedPreviewCode(),
+      transformedPreviewCode: await getTransformedPreviewCode(),
       skipVitestSetupTransformation,
       skipPreviewTransformation,
     };
@@ -273,7 +271,7 @@ export function transformSetupFile(source: string) {
   return root.toSource();
 }
 
-export function transformPreviewFile(source: string) {
+export async function transformPreviewFile(source: string, filePath: string) {
   const previewConfig = loadConfig(source).parse();
   const tags = previewConfig.getFieldNode(['tags']);
   const tagsNode = previewConfig.getFieldNode(['tags']) as ArrayExpression;
@@ -327,5 +325,5 @@ export function transformPreviewFile(source: string) {
   const comment = `${indentation}// a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run\n${indentation}// For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing`;
   lines.splice(tagsLineIndex, 0, comment);
 
-  return lines.join(EOL);
+  return formatFileContent(filePath, lines.join('\n'));
 }
