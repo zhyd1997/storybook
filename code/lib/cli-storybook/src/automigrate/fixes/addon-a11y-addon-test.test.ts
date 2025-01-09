@@ -563,7 +563,7 @@ describe('addonA11yAddonTest', () => {
     it('should add a new tags property if it does not exist', async () => {
       const source = dedent`
         import type { Preview } from '@storybook/react';
-  
+
         const preview: Preview = {
           parameters: {
             controls: {
@@ -574,33 +574,13 @@ describe('addonA11yAddonTest', () => {
             },
           },
         };
-  
+
         export default preview;
       `;
 
       const transformed = await transformPreviewFile(source, process.cwd());
-      const expected = dedent`
-        import type { Preview } from '@storybook/react';
-  
-        const preview: Preview = {
-          parameters: {
-            controls: {
-              matchers: {
-                color: /(background|color)$/i,
-                date: /Date$/i,
-              },
-            },
-          },
 
-          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
-          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: [/*'a11y-test'*/]
-        };
-  
-        export default preview;
-      `;
-
-      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
+      expect(transformed).toMatchSnapshot();
     });
 
     it('should add a new tags property if it does not exist and a default export does not exist', async () => {
@@ -616,25 +596,14 @@ describe('addonA11yAddonTest', () => {
       `;
 
       const transformed = await transformPreviewFile(source, process.cwd());
-      const expected = dedent`
-        export const parameters = {
-          controls: {
-            matchers: {
-              color: /(background|color)$/i,
-              date: /Date$/i,
-            },
-          },
-        }
-        export const tags = ["a11y-test"];
-      `;
 
-      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
+      expect(transformed).toMatchSnapshot();
     });
 
     it('should extend the existing tags property', async () => {
       const source = dedent`
         import type { Preview } from "@storybook/react";
-  
+
         const preview: Preview = {
           tags: ["existingTag"],
           parameters: {
@@ -646,38 +615,19 @@ describe('addonA11yAddonTest', () => {
             },
           },
         };
-  
+
         export default preview;
       `;
 
       const transformed = await transformPreviewFile(source, process.cwd());
-      const expected = dedent`
-        import type { Preview } from "@storybook/react";
-  
-        const preview: Preview = {
-          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
-          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ["existingTag"/*, "a11y-test"*/],
-          parameters: {
-            controls: {
-              matchers: {
-                color: /(background|color)$/i,
-                date: /Date$/i,
-              },
-            },
-          },
-        };
-  
-        export default preview;
-      `;
 
-      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
+      expect(transformed).toMatchSnapshot();
     });
 
     it('should not add a11y-test if it already exists in the tags property', async () => {
-      const expected = dedent`
+      const source = dedent`
         import type { Preview } from "@storybook/react";
-  
+
         const preview: Preview = {
           tags: ["a11y-test"],
           parameters: {
@@ -689,13 +639,13 @@ describe('addonA11yAddonTest', () => {
             },
           },
         };
-  
+
         export default preview;
       `;
 
-      const transformed = await transformPreviewFile(expected, process.cwd());
+      const transformed = await transformPreviewFile(source, process.cwd());
 
-      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
+      expect(transformed).toMatchSnapshot();
     });
 
     it('should handle the default export without type annotations', async () => {
@@ -713,24 +663,8 @@ describe('addonA11yAddonTest', () => {
       `;
 
       const transformed = await transformPreviewFile(source, process.cwd());
-      const expected = dedent`
-        export default {
-          parameters: {
-            controls: {
-              matchers: {
-                color: /(background|color)$/i,
-                date: /Date$/i,
-              },
-            },
-          },
 
-          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
-          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: [/*"a11y-test"*/]
-        };
-      `;
-
-      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
+      expect(transformed).toMatchSnapshot();
     });
 
     it('should extend the existing tags property without type annotations', async () => {
@@ -749,23 +683,8 @@ describe('addonA11yAddonTest', () => {
       `;
 
       const transformed = await transformPreviewFile(source, process.cwd());
-      const expected = dedent`
-        export default {
-          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
-          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
-          tags: ["existingTag"/*, "a11y-test"*/],
-          parameters: {
-            controls: {
-              matchers: {
-                color: /(background|color)$/i,
-                date: /Date$/i,
-              },
-            },
-          },
-        };
-      `;
 
-      expect(transformed).toBe(await formatFileContent(process.cwd(), expected));
+      expect(transformed).toMatchSnapshot();
     });
   });
 });
