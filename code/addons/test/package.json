@@ -153,12 +153,24 @@
     "nodeEntries": [
       "./src/preset.ts",
       "./src/postinstall.ts",
-      "./src/node/vitest.ts",
-      "./src/node/coverage-reporter.ts",
       {
         "file": "./src/dummy.ts",
         "formats": [
           "esm"
+        ]
+      },
+      {
+        "file": "./src/node/vitest.ts",
+        "formats": [
+          "esm",
+          "cjs"
+        ]
+      },
+      {
+        "file": "./src/node/coverage-reporter.ts",
+        "formats": [
+          "esm",
+          "cjs"
         ]
       },
       {
