@@ -23,7 +23,7 @@ Please manually update your .storybook/preview.<ts|js> file to include the follo
 
 export default {
 ...
-+ tags: ["a11ytest"],
++ tags: ["a11y-test"],
 }
 
 For more information, please refer to the accessibility addon documentation: 
@@ -88,9 +88,113 @@ Please manually update your .storybook/preview.<ts|js> file to include the follo
 
 export default {
 ...
-+ tags: ["a11ytest"],
++ tags: ["a11y-test"],
 }
 
 For more information, please refer to the accessibility addon documentation: 
 https://storybook.js.org/docs/writing-tests/accessibility-testing#test-addon-integration"
+`;
+
+exports[`addonA11yAddonTest > transformPreviewFile > should add a new tags property if it does not exist 1`] = `
+"import type { Preview } from '@storybook/react';
+
+const preview: Preview = {
+  parameters: {
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+  },
+
+  // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
+  // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
+  tags: [/*'a11y-test'*/]
+};
+
+export default preview;"
+`;
+
+exports[`addonA11yAddonTest > transformPreviewFile > should add a new tags property if it does not exist and a default export does not exist 1`] = `
+"export const parameters = {
+  controls: {
+    matchers: {
+      color: /(background|color)$/i,
+      date: /Date$/i,
+    },
+  },
+}
+export const tags = ["a11y-test"];"
+`;
+
+exports[`addonA11yAddonTest > transformPreviewFile > should extend the existing tags property 1`] = `
+"import type { Preview } from "@storybook/react";
+
+const preview: Preview = {
+  // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
+  // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
+  tags: ["existingTag"/*, "a11y-test"*/],
+  parameters: {
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+  },
+};
+
+export default preview;"
+`;
+
+exports[`addonA11yAddonTest > transformPreviewFile > should extend the existing tags property without type annotations 1`] = `
+"export default {
+  // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
+  // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
+  tags: ["existingTag"/*, "a11y-test"*/],
+  parameters: {
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+  },
+};"
+`;
+
+exports[`addonA11yAddonTest > transformPreviewFile > should handle the default export without type annotations 1`] = `
+"export default {
+  parameters: {
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+  },
+
+  // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
+  // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
+  tags: [/*"a11y-test"*/]
+};"
+`;
+
+exports[`addonA11yAddonTest > transformPreviewFile > should not add a11y-test if it already exists in the tags property 1`] = `
+"import type { Preview } from "@storybook/react";
+
+const preview: Preview = {
+  tags: ["a11y-test"],
+  parameters: {
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+  },
+};
+
+export default preview;"
 `;

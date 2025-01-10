@@ -1,6 +1,7 @@
-import { rendererPackages } from 'storybook/internal/common';
+import { formatFileContent, rendererPackages } from 'storybook/internal/common';
 import { formatConfig, loadConfig } from 'storybook/internal/csf-tools';
 
+import { type ArrayExpression } from '@babel/types';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import * as jscodeshift from 'jscodeshift';
 import path from 'path';
@@ -100,7 +101,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
       const previewSetupSource = readFileSync(previewFile, 'utf8');
 
       skipVitestSetupTransformation = vitestSetupSource.includes('@storybook/addon-a11y');
-      skipPreviewTransformation = previewSetupSource.includes('a11ytest');
+      skipPreviewTransformation = previewSetupSource.includes('a11y-test');
 
       if (skipVitestSetupTransformation && skipPreviewTransformation) {
         return null;
@@ -120,14 +121,14 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
       }
     };
 
-    const getTransformedPreviewCode = () => {
+    const getTransformedPreviewCode = async () => {
       if (!previewFile || skipPreviewTransformation) {
         return null;
       }
 
       try {
         const previewSetupSource = readFileSync(previewFile, 'utf8');
-        return transformPreviewFile(previewSetupSource);
+        return await transformPreviewFile(previewSetupSource, previewFile);
       } catch (e) {
         return null;
       }
@@ -137,7 +138,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
       setupFile: vitestSetupFile,
       previewFile: previewFile,
       transformedSetupCode: getTransformedSetupCode(),
-      transformedPreviewCode: getTransformedPreviewCode(),
+      transformedPreviewCode: await getTransformedPreviewCode(),
       skipVitestSetupTransformation,
       skipPreviewTransformation,
     };
@@ -194,7 +195,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
 
           ${picocolors.gray('export default {')}
           ${picocolors.gray('...')}
-          ${picocolors.green('+ tags: ["a11ytest"],')}
+          ${picocolors.green('+ tags: ["a11y-test"],')}
           ${picocolors.gray('}')}
         `);
       } else {
@@ -270,16 +271,41 @@ export function transformSetupFile(source: string) {
   return root.toSource();
 }
 
-export function transformPreviewFile(source: string) {
+export async function transformPreviewFile(source: string, filePath: string) {
   const previewConfig = loadConfig(source).parse();
   const tags = previewConfig.getFieldNode(['tags']);
+  const tagsNode = previewConfig.getFieldNode(['tags']) as ArrayExpression;
   const tagsValue = previewConfig.getFieldValue(['tags']) ?? [];
 
-  if (tags && tagsValue && (tagsValue.includes('a11ytest') || tagsValue.includes('!a11ytest'))) {
+  if (tags && tagsValue && (tagsValue.includes('a11y-test') || tagsValue.includes('!a11y-test'))) {
     return source;
   }
 
-  previewConfig.setFieldValue(['tags'], [...tagsValue, 'a11ytest']);
+  if (tagsNode) {
+    const tagsElementsLength = (tagsNode as ArrayExpression).elements.length;
+    const lastTagElement = tagsNode.elements[tagsElementsLength - 1];
+
+    if (lastTagElement) {
+      // t.addComment(lastTagElement, 'trailing', ", 'a11y-test'");
+      // @ts-expect-error The commented line above would be the proper way of how to add a trailing comment but it is not supported by recast.
+      // https://github.com/benjamn/recast/issues/572
+      lastTagElement.comments = [
+        {
+          type: 'CommentBlock',
+          leading: false,
+          trailing: true,
+          value: ', "a11y-test"',
+        },
+      ];
+      previewConfig.setFieldNode(['tags'], tagsNode);
+    }
+  } else {
+    // t.addComment(newTagsNode, 'inner', 'a11y-test');
+    // The commented line above would be the proper way of how to add a trailing comment but innercomments are not supported by recast.
+    // https://github.com/benjamn/recast/issues/1417
+    // This case will be handled later by parsing the source code and editing it later.
+    previewConfig.setFieldValue(['tags'], ['a11y-test']);
+  }
 
   const formattedPreviewConfig = formatConfig(previewConfig);
   const lines = formattedPreviewConfig.split('\n');
@@ -291,12 +317,13 @@ export function transformPreviewFile(source: string) {
   }
 
   // Determine the indentation level of the "tags" property
-  const tagsLine = lines[tagsLineIndex];
-  const indentation = tagsLine?.match(/^\s*/)?.[0];
+  lines[tagsLineIndex] = lines[tagsLineIndex].replace("['a11y-test']", "[/*'a11y-test'*/]");
+  lines[tagsLineIndex] = lines[tagsLineIndex].replace('["a11y-test"]', '[/*"a11y-test"*/]');
+  const indentation = lines[tagsLineIndex]?.match(/^\s*/)?.[0];
 
   // Add the comment with the same indentation level
-  const comment = `${indentation}// a11ytest tag controls whether accessibility tests are run as part of a standalone Vitest test run\n${indentation}// For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing`;
+  const comment = `${indentation}// a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run\n${indentation}// For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing`;
   lines.splice(tagsLineIndex, 0, comment);
 
-  return lines.join('\n');
+  return formatFileContent(filePath, lines.join('\n'));
 }
