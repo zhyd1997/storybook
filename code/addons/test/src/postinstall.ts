@@ -440,7 +440,7 @@ export default async function postInstall(options: PostinstallOptions) {
         headless: true,
         name: 'chromium',
         provider: 'playwright'
-      },
+      }
     `;
 
   if (isVitest3OrLater && fileExtension === 'ts' && !vitestShimFile) {
