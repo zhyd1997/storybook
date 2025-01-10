@@ -101,7 +101,7 @@ describe('prettier (babel)', () => {
     await expect(result).resolves.toBe(input);
   });
 
-  it('handles single line', () => {
+  it('handles single line', async () => {
     const input = 'console.log("hello world")';
     const result = formatter('angular', input);
 
