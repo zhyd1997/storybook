@@ -132,18 +132,7 @@ export const TestProviderRender: FC<TestProviderRenderProps> = ({
       return false;
     }
 
-    const allTags = Object.values(internalIndex.entries).reduce((acc, entry) => {
-      entry.tags?.forEach((tag: Tag) => {
-        acc.add(tag);
-      });
-      return acc;
-    }, new Set<Tag>());
-
-    if (allTags.has('a11y-test')) {
-      return true;
-    }
-
-    return false;
+    return Object.values(internalIndex.entries).some((entry) => entry.tags?.includes('a11y-test'));
   }, [isA11yAddon, storybookState.internal_index]);
 
   const [config, updateConfig] = useConfig(
