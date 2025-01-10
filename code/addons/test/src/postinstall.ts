@@ -6,6 +6,7 @@ import { traverse } from 'storybook/internal/babel';
 import {
   JsPackageManagerFactory,
   extractProperFrameworkName,
+  formatFileContent,
   loadAllPresets,
   loadMainConfig,
   serverResolve,
@@ -461,7 +462,9 @@ export default async function postInstall(options: PostinstallOptions) {
 
     await writeFile(
       browserWorkspaceFile,
-      dedent`
+      await formatFileContent(
+        browserWorkspaceFile,
+        dedent`
         import { defineWorkspace } from 'vitest/config';
         import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';${vitestInfo.frameworkPluginImport}
         import path from 'node:path';
@@ -489,6 +492,7 @@ export default async function postInstall(options: PostinstallOptions) {
           },
         ]);
       `.replace(/\s+extends: '',/, '')
+      )
     );
   } else {
     // If there's no existing Vitest/Vite config, we create a new Vitest config file.
