@@ -68,6 +68,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*",
+    "!dist/dummy.*",
     "README.md",
     "*.mjs",
     "*.js",
@@ -99,7 +100,7 @@
     "ansi-to-html": "^0.7.2",
     "boxen": "^8.0.1",
     "es-toolkit": "^1.22.0",
-    "execa": "^9.5.2",
+    "execa": "^8.0.1",
     "find-up": "^7.0.0",
     "formik": "^2.2.9",
     "istanbul-lib-report": "^3.0.1",
@@ -151,11 +152,41 @@
     ],
     "nodeEntries": [
       "./src/preset.ts",
-      "./src/vitest-plugin/index.ts",
-      "./src/vitest-plugin/global-setup.ts",
       "./src/postinstall.ts",
-      "./src/node/vitest.ts",
-      "./src/node/coverage-reporter.ts"
+      {
+        "file": "./src/dummy.ts",
+        "formats": [
+          "esm"
+        ]
+      },
+      {
+        "file": "./src/node/vitest.ts",
+        "formats": [
+          "esm",
+          "cjs"
+        ]
+      },
+      {
+        "file": "./src/node/coverage-reporter.ts",
+        "formats": [
+          "esm",
+          "cjs"
+        ]
+      },
+      {
+        "file": "./src/vitest-plugin/index.ts",
+        "formats": [
+          "cjs",
+          "esm"
+        ]
+      },
+      {
+        "file": "./src/vitest-plugin/global-setup.ts",
+        "formats": [
+          "cjs",
+          "esm"
+        ]
+      }
     ]
   },
   "storybook": {

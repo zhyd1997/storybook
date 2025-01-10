@@ -25,10 +25,6 @@ export const fileExtensions = [
   '.mjs',
   '.jsx',
   '.tsx',
-  '.ctsx',
-  '.mtsx',
-  '.cjsx',
-  '.mjsx',
 ] as const;
 
 interface AddonA11yAddonTestOptions {

@@ -1,4 +1,12 @@
-import React, { type ComponentProps, type FC, useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  type ComponentProps,
+  type FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Button,
@@ -132,18 +140,7 @@ export const TestProviderRender: FC<TestProviderRenderProps> = ({
       return false;
     }
 
-    const allTags = Object.values(internalIndex.entries).reduce((acc, entry) => {
-      entry.tags?.forEach((tag: Tag) => {
-        acc.add(tag);
-      });
-      return acc;
-    }, new Set<Tag>());
-
-    if (allTags.has('a11y-test')) {
-      return true;
-    }
-
-    return false;
+    return Object.values(internalIndex.entries).some((entry) => entry.tags?.includes('a11y-test'));
   }, [isA11yAddon, storybookState.internal_index]);
 
   const [config, updateConfig] = useConfig(
@@ -460,10 +457,7 @@ function useConfig(api: API, providerId: string, initialConfig: Config) {
     [api, providerId]
   );
 
-  const [currentConfig, setConfig] = useState<Config>(() => {
-    updateTestProviderState(initialConfig);
-    return initialConfig;
-  });
+  const [currentConfig, setConfig] = useState<Config>(initialConfig);
 
   const lastConfig = useRef(initialConfig);
 
@@ -487,6 +481,10 @@ function useConfig(api: API, providerId: string, initialConfig: Config) {
     },
     [saveConfig]
   );
+
+  useEffect(() => {
+    updateTestProviderState(initialConfig);
+  }, []);
 
   return [currentConfig, updateConfig] as const;
 }
