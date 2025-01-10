@@ -262,14 +262,12 @@ export const storybookTest = async (options?: UserOptions): Promise<Plugin> => {
         optimizeDeps: {
           include: [
             '@storybook/experimental-addon-test/**',
-            '@storybook/addon-a11y/**',
-            '@testing-library/jest-dom/vitest',
             ...(isAddonA11yAvailable() ? ['@storybook/addon-a11y'] : []),
+
             ...(frameworkName?.includes('react') || frameworkName?.includes('nextjs')
-              ? ['react-dom/test-utils', 'prop-types', 'react-dom/client']
+              ? ['react-dom/test-utils']
               : []),
           ],
-          entries: storiesFiles.filter((path) => !path.endsWith('.mdx')),
         },
 
         define: {
