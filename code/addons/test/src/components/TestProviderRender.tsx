@@ -1,4 +1,12 @@
-import React, { type ComponentProps, type FC, useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  type ComponentProps,
+  type FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Button,
@@ -449,10 +457,7 @@ function useConfig(api: API, providerId: string, initialConfig: Config) {
     [api, providerId]
   );
 
-  const [currentConfig, setConfig] = useState<Config>(() => {
-    updateTestProviderState(initialConfig);
-    return initialConfig;
-  });
+  const [currentConfig, setConfig] = useState<Config>(initialConfig);
 
   const lastConfig = useRef(initialConfig);
 
@@ -476,6 +481,10 @@ function useConfig(api: API, providerId: string, initialConfig: Config) {
     },
     [saveConfig]
   );
+
+  useEffect(() => {
+    updateTestProviderState(initialConfig);
+  }, []);
 
   return [currentConfig, updateConfig] as const;
 }
