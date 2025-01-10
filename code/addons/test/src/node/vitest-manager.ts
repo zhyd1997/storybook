@@ -146,18 +146,6 @@ export class VitestManager {
     return this.vitestRestartPromise;
   }
 
-  private getModulesByFilepath(file: string): Set<ModuleNode> {
-    const set = this.vite.moduleGraph.getModulesByFile(file);
-    // @ts-expect-error ModuleNode from vite 4 is incompatible with ModuleNode from vite 3.
-    return set || new Set<ModuleNode>();
-  }
-
-  private getModuleProjects(filepath: string) {
-    return this.vitest!.projects.filter((project) => {
-      return this.getModulesByFilepath(filepath).size;
-    });
-  }
-
   private setGlobalTestNamePattern(pattern: string | RegExp) {
     if (isVitest3OrLater) {
       this.vitest!.setGlobalTestNamePattern(pattern);
