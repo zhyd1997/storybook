@@ -453,6 +453,8 @@ export default async function postInstall(options: PostinstallOptions) {
     // If there's an existing config, we create a workspace file so we can run Storybook tests alongside.
     const extension = extname(rootConfig);
     const browserWorkspaceFile = resolve(dirname(rootConfig), `vitest.workspace${extension}`);
+    // to be set in vitest config
+    const vitestSetupFilePath = relative(dirname(browserWorkspaceFile), vitestSetupFile);
 
     logger.line(1);
     logger.plain(`${step} Creating a Vitest project workspace file:`);
@@ -485,7 +487,7 @@ export default async function postInstall(options: PostinstallOptions) {
             test: {
               name: 'storybook',
               browser: ${browserConfig},
-              setupFiles: ['./.storybook/vitest.setup.ts'],
+              setupFiles: ['${vitestSetupFilePath}'],
             },
           },
         ]);
