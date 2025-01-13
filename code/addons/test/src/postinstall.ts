@@ -238,8 +238,6 @@ export default async function postInstall(options: PostinstallOptions) {
     }
   }
 
-  const vitestInfo = getVitestPluginInfo(info.frameworkPackageName);
-
   if (info.frameworkPackageName === '@storybook/nextjs') {
     printInfo(
       '🍿 Just so you know...',
@@ -466,7 +464,7 @@ export default async function postInstall(options: PostinstallOptions) {
         browserWorkspaceFile,
         dedent`
         import { defineWorkspace } from 'vitest/config';
-        import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';${vitestInfo.frameworkPluginImport}
+        import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
         import path from 'node:path';
         import { fileURLToPath } from 'node:url';
 
@@ -482,7 +480,7 @@ export default async function postInstall(options: PostinstallOptions) {
             plugins: [
               // The plugin will run tests for the stories defined in your Storybook config
               // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
-              storybookTest({ configDir: path.join(dirname, '${options.configDir}') }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
+              storybookTest({ configDir: path.join(dirname, '${options.configDir}') })
             ],
             test: {
               name: 'storybook',
@@ -508,7 +506,7 @@ export default async function postInstall(options: PostinstallOptions) {
       newVitestConfigFile,
       dedent`
         import { defineConfig } from 'vitest/config';
-        import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';${vitestInfo.frameworkPluginImport}
+        import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
         import path from 'node:path';
         import { fileURLToPath } from 'node:url';
 
@@ -521,7 +519,7 @@ export default async function postInstall(options: PostinstallOptions) {
           plugins: [
             // The plugin will run tests for the stories defined in your Storybook config
             // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
-            storybookTest({ configDir: path.join(dirname, '${options.configDir}') }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
+            storybookTest({ configDir: path.join(dirname, '${options.configDir}') })
           ],
           test: {
             name: 'storybook',
@@ -550,45 +548,6 @@ export default async function postInstall(options: PostinstallOptions) {
   );
   logger.line(1);
 }
-
-const getVitestPluginInfo = (framework: string) => {
-  let frameworkPluginImport = '';
-  let frameworkPluginCall = '';
-  let frameworkPluginDocs = '';
-
-  if (framework === '@storybook/nextjs' || framework === '@storybook/experimental-nextjs-vite') {
-    frameworkPluginImport =
-      "import { storybookNextJsPlugin } from '@storybook/experimental-nextjs-vite/vite-plugin';";
-    frameworkPluginDocs =
-      '// More info at: https://github.com/storybookjs/vite-plugin-storybook-nextjs';
-    frameworkPluginCall = 'storybookNextJsPlugin()';
-  }
-
-  if (framework === '@storybook/sveltekit') {
-    frameworkPluginImport =
-      "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite-plugin';";
-    frameworkPluginCall = 'storybookSveltekitPlugin()';
-  }
-
-  if (framework === '@storybook/vue3-vite') {
-    frameworkPluginImport =
-      "import { storybookVuePlugin } from '@storybook/vue3-vite/vite-plugin';";
-    frameworkPluginCall = 'storybookVuePlugin()';
-  }
-
-  if (framework === '@storybook/react-native-web-vite') {
-    frameworkPluginImport =
-      "import { storybookReactNativeWeb } from '@storybook/react-native-web-vite/vite-plugin';";
-    frameworkPluginCall = 'storybookReactNativeWeb()';
-  }
-
-  // spaces for file indentation
-  frameworkPluginImport = `\n${frameworkPluginImport}`;
-  frameworkPluginDocs = frameworkPluginDocs ? `\n    ${frameworkPluginDocs}` : '';
-  frameworkPluginCall = frameworkPluginCall ? `\n    ${frameworkPluginCall},` : '';
-
-  return { frameworkPluginImport, frameworkPluginCall, frameworkPluginDocs };
-};
 
 async function getStorybookInfo({ configDir, packageManager: pkgMgr }: PostinstallOptions) {
   const packageManager = JsPackageManagerFactory.getPackageManager({ force: pkgMgr });

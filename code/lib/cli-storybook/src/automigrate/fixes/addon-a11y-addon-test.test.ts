@@ -369,9 +369,9 @@ describe('addonA11yAddonTest', () => {
       expect(result).toMatchInlineSnapshot(`
         "We have detected that you have @storybook/addon-a11y and @storybook/experimental-addon-test installed.
 
-        @storybook/addon-a11y integrates now with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
+        @storybook/addon-a11y now integrates with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
 
-        1) We couldn't find or automatically update your .storybook/vitest.setup.<ts|js> in your project to smoothly set up project annotations from @storybook/addon-a11y. 
+        1) We couldn't find or automatically update .storybook/vitest.setup.<ts|js> in your project to smoothly set up project annotations from @storybook/addon-a11y. 
         Please manually update your vitest.setup.ts file to include the following:
 
         ...   
@@ -409,9 +409,9 @@ describe('addonA11yAddonTest', () => {
       expect(result).toMatchInlineSnapshot(`
         "We have detected that you have @storybook/addon-a11y and @storybook/experimental-addon-test installed.
 
-        @storybook/addon-a11y integrates now with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
+        @storybook/addon-a11y now integrates with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
 
-        1) We couldn't find or automatically update your .storybook/vitest.setup.<ts|js> in your project to smoothly set up project annotations from @storybook/addon-a11y. 
+        1) We couldn't find or automatically update .storybook/vitest.setup.<ts|js> in your project to smoothly set up project annotations from @storybook/addon-a11y. 
         Please manually update your vitest.setup.ts file to include the following:
 
         ...   
@@ -443,7 +443,7 @@ describe('addonA11yAddonTest', () => {
       expect(result).toMatchInlineSnapshot(`
         "We have detected that you have @storybook/addon-a11y and @storybook/experimental-addon-test installed.
 
-        @storybook/addon-a11y integrates now with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
+        @storybook/addon-a11y now integrates with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
 
         1) We have to update your .storybook/vitest.setup.ts file to set up project annotations from @storybook/addon-a11y.
 
@@ -472,7 +472,7 @@ describe('addonA11yAddonTest', () => {
       expect(result).toMatchInlineSnapshot(`
         "We have detected that you have @storybook/addon-a11y and @storybook/experimental-addon-test installed.
 
-        @storybook/addon-a11y integrates now with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
+        @storybook/addon-a11y now integrates with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
 
         1) We have to update your .storybook/vitest.setup.ts file to set up project annotations from @storybook/addon-a11y.
 
@@ -493,7 +493,7 @@ describe('addonA11yAddonTest', () => {
       expect(result).toMatchInlineSnapshot(`
         "We have detected that you have @storybook/addon-a11y and @storybook/experimental-addon-test installed.
 
-        @storybook/addon-a11y integrates now with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
+        @storybook/addon-a11y now integrates with @storybook/experimental-addon-test to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
 
         1) We have to update your .storybook/preview.js file to set up tags from @storybook/addon-a11y.
 
@@ -678,8 +678,8 @@ describe('addonA11yAddonTest', () => {
             },
           },
 
-          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
-          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
+          // The \`a11y-test\` tag controls whether accessibility tests are run as part of a standalone Vitest test run
+          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing#configure-accessibility-tests-with-the-test-addon
           tags: [/*'a11y-test'*/]
         };
 
@@ -739,8 +739,8 @@ describe('addonA11yAddonTest', () => {
         "import type { Preview } from "@storybook/react";
 
         const preview: Preview = {
-          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
-          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
+          // The \`a11y-test\` tag controls whether accessibility tests are run as part of a standalone Vitest test run
+          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing#configure-accessibility-tests-with-the-test-addon
           tags: ["existingTag"/*, "a11y-test"*/],
           parameters: {
             controls: {
@@ -823,8 +823,8 @@ describe('addonA11yAddonTest', () => {
             },
           },
 
-          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
-          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
+          // The \`a11y-test\` tag controls whether accessibility tests are run as part of a standalone Vitest test run
+          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing#configure-accessibility-tests-with-the-test-addon
           tags: [/*"a11y-test"*/]
         };"
       `);
@@ -849,8 +849,8 @@ describe('addonA11yAddonTest', () => {
 
       expect(transformed).toMatchInlineSnapshot(`
         "export default {
-          // a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run
-          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing
+          // The \`a11y-test\` tag controls whether accessibility tests are run as part of a standalone Vitest test run
+          // For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing#configure-accessibility-tests-with-the-test-addon
           tags: ["existingTag"/*, "a11y-test"*/],
           parameters: {
             controls: {
