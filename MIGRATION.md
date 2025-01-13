@@ -4,6 +4,7 @@
   - [Introducing features.developmentModeForBuild](#introducing-featuresdevelopmentmodeforbuild)
   - [Added source code panel to docs](#added-source-code-panel-to-docs)
   - [Addon-a11y: Component test integration](#addon-a11y-component-test-integration)
+  - [Addon-a11y: Changing the default element selector](#addon-a11y-changing-the-default-element-selector)
   - [Addon-a11y: Deprecated `parameters.a11y.manual`](#addon-a11y-deprecated-parametersa11ymanual)
   - [Addon-test: You should no longer copy the content of `viteFinal` to your configuration](#addon-test-you-should-no-longer-copy-the-content-of-vitefinal-to-your-configuration)
   - [Addon-test: Indexing behavior of @storybook/experimental-addon-test is changed](#addon-test-indexing-behavior-of-storybookexperimental-addon-test-is-changed)
@@ -482,11 +483,24 @@ const annotations = setProjectAnnotations([
 beforeAll(annotations.beforeAll);
 ```
 
+### Addon-a11y: Changing the default element selector
+
+In Storybook 8.5, we changed the default element selector used by the Accessibility addon from `#storybook-root` to `body`. This change was made to align with the default element selector used by the Test addon when running accessibility tests via Vitest. Additionally, Tooltips or Popovers that are rendered outside the `#storybook-root` element will now be included in the accessibility tests per default allowing for a more comprehensive test coverage. If you want to fall back to the previous behavior, you can set the `a11y.element` parameter in your `.storybook/preview.<ts|js>` configuration:
+
+```diff
+// .storybook/preview.js
+export const parameters = {
+  a11y: {
++    element: '#storybook-root',
+  },
+};
+```
+
 ### Addon-a11y: Deprecated `parameters.a11y.manual`
 
 We have deprecated `parameters.a11y.manual` in 8.5. Please use `globals.a11y.manual` instead.
 
-### Addon-test: You should no longer copy the content of `viteFinal` to your configuration 
+### Addon-test: You should no longer copy the content of `viteFinal` to your configuration
 
 In version 8.4 of `@storybook/experimental-addon-test`, it was required to copy any custom configuration you had in `viteFinal` in `main.ts`, to the Vitest Storybook project. This is no longer necessary, as the Storybook Test plugin will automatically include your `viteFinal` configuration. You should remove any configurations you might already have in `viteFinal` to remove duplicates.
 
