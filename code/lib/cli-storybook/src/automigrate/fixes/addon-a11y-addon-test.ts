@@ -151,7 +151,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
     const introduction = dedent`
       We have detected that you have ${picocolors.magenta(`@storybook/addon-a11y`)} and ${picocolors.magenta(`@storybook/experimental-addon-test`)} installed.
 
-      ${picocolors.magenta(`@storybook/addon-a11y`)} integrates now with ${picocolors.magenta(`@storybook/experimental-addon-test`)} to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
+      ${picocolors.magenta(`@storybook/addon-a11y`)} now integrates with ${picocolors.magenta(`@storybook/experimental-addon-test`)} to provide automatic accessibility checks for your stories, powered by Axe and Vitest.
     `;
 
     const prompt = [introduction];
@@ -161,7 +161,7 @@ export const addonA11yAddonTest: Fix<AddonA11yAddonTestOptions> = {
     if (!skipVitestSetupTransformation) {
       if (transformedSetupCode === null) {
         prompt.push(dedent`
-          ${counter++}) We couldn't find or automatically update your ${picocolors.cyan(`.storybook/vitest.setup.<ts|js>`)} in your project to smoothly set up project annotations from ${picocolors.magenta(`@storybook/addon-a11y`)}. 
+          ${counter++}) We couldn't find or automatically update ${picocolors.cyan(`.storybook/vitest.setup.<ts|js>`)} in your project to smoothly set up project annotations from ${picocolors.magenta(`@storybook/addon-a11y`)}. 
           Please manually update your ${picocolors.cyan(`vitest.setup.ts`)} file to include the following:
 
           ${picocolors.gray('...')}   
@@ -318,7 +318,7 @@ export async function transformPreviewFile(source: string, filePath: string) {
   const indentation = lines[tagsLineIndex]?.match(/^\s*/)?.[0];
 
   // Add the comment with the same indentation level
-  const comment = `${indentation}// a11y-test tag controls whether accessibility tests are run as part of a standalone Vitest test run\n${indentation}// For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing`;
+  const comment = `${indentation}// The \`a11y-test\` tag controls whether accessibility tests are run as part of a standalone Vitest test run\n${indentation}// For more information please visit: https://storybook.js.org/docs/writing-tests/accessibility-testing#configure-accessibility-tests-with-the-test-addon`;
   lines.splice(tagsLineIndex, 0, comment);
 
   return formatFileContent(filePath, lines.join('\n'));
