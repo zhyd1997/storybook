@@ -145,6 +145,16 @@ export default async function postInstall(options: PostinstallOptions) {
       `);
     }
 
+    const mswVersionSpecifier = await packageManager.getInstalledVersion('msw');
+    const coercedMswVersion = mswVersionSpecifier ? coerce(mswVersionSpecifier) : null;
+
+    if (coercedMswVersion && !satisfies(coercedMswVersion, '>=2.0.0')) {
+      reasons.push(dedent`
+        • The addon uses Vitest behind the scenes, which supports only version 2 and above of MSW. However, we have detected version ${picocolors.bold(coercedMswVersion.version)} in this project.
+        Please update the 'msw' package and try again.
+      `);
+    }
+
     if (info.frameworkPackageName === '@storybook/nextjs') {
       const nextVersion = await packageManager.getInstalledVersion('next');
       if (!nextVersion) {
@@ -159,6 +169,7 @@ export default async function postInstall(options: PostinstallOptions) {
       reasons.unshift(
         `Storybook Test's automated setup failed due to the following package incompatibilities:`
       );
+      reasons.push('--------------------------------');
       reasons.push(
         dedent`
           You can fix these issues and rerun the command to reinstall. If you wish to roll back the installation, remove ${picocolors.bold(colors.pink(ADDON_NAME))} from the "addons" array
@@ -225,8 +236,6 @@ export default async function postInstall(options: PostinstallOptions) {
       })`storybook remove ${addonInteractionsName} --package-manager ${options.packageManager} --config-dir ${options.configDir}`;
     }
   }
-
-  const vitestInfo = getVitestPluginInfo(info.frameworkPackageName);
 
   if (info.frameworkPackageName === '@storybook/nextjs') {
     printInfo(
@@ -407,7 +416,13 @@ export default async function postInstall(options: PostinstallOptions) {
       browserWorkspaceFile,
       dedent`
         import { defineWorkspace } from 'vitest/config';
-        import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';${vitestInfo.frameworkPluginImport}
+        import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
+        import path from 'node:path';
+        import { fileURLToPath } from 'node:url';
+
+        const dirname = typeof __dirname !== 'undefined'
+          ? __dirname
+          : path.dirname(fileURLToPath(import.meta.url));
 
         // More info at: https://storybook.js.org/docs/writing-tests/test-addon
         export default defineWorkspace([
@@ -417,7 +432,7 @@ export default async function postInstall(options: PostinstallOptions) {
             plugins: [
               // The plugin will run tests for the stories defined in your Storybook config
               // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
-              storybookTest({ configDir: '${options.configDir}' }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
+              storybookTest({ configDir: path.join(dirname, '${options.configDir}') })
             ],
             test: {
               name: 'storybook',
@@ -447,14 +462,20 @@ export default async function postInstall(options: PostinstallOptions) {
       newVitestConfigFile,
       dedent`
         import { defineConfig } from 'vitest/config';
-        import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';${vitestInfo.frameworkPluginImport}
+        import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
+        import path from 'node:path';
+        import { fileURLToPath } from 'node:url';
+
+        const dirname = typeof __dirname !== 'undefined'
+          ? __dirname
+          : path.dirname(fileURLToPath(import.meta.url));
 
         // More info at: https://storybook.js.org/docs/writing-tests/test-addon
         export default defineConfig({
           plugins: [
             // The plugin will run tests for the stories defined in your Storybook config
             // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
-            storybookTest({ configDir: '${options.configDir}' }),${vitestInfo.frameworkPluginDocs + vitestInfo.frameworkPluginCall}
+            storybookTest({ configDir: path.join(dirname, '${options.configDir}') })
           ],
           test: {
             name: 'storybook',
@@ -488,45 +509,6 @@ export default async function postInstall(options: PostinstallOptions) {
   );
   logger.line(1);
 }
-
-const getVitestPluginInfo = (framework: string) => {
-  let frameworkPluginImport = '';
-  let frameworkPluginCall = '';
-  let frameworkPluginDocs = '';
-
-  if (framework === '@storybook/nextjs' || framework === '@storybook/experimental-nextjs-vite') {
-    frameworkPluginImport =
-      "import { storybookNextJsPlugin } from '@storybook/experimental-nextjs-vite/vite-plugin';";
-    frameworkPluginDocs =
-      '// More info at: https://github.com/storybookjs/vite-plugin-storybook-nextjs';
-    frameworkPluginCall = 'storybookNextJsPlugin()';
-  }
-
-  if (framework === '@storybook/sveltekit') {
-    frameworkPluginImport =
-      "import { storybookSveltekitPlugin } from '@storybook/sveltekit/vite-plugin';";
-    frameworkPluginCall = 'storybookSveltekitPlugin()';
-  }
-
-  if (framework === '@storybook/vue3-vite') {
-    frameworkPluginImport =
-      "import { storybookVuePlugin } from '@storybook/vue3-vite/vite-plugin';";
-    frameworkPluginCall = 'storybookVuePlugin()';
-  }
-
-  if (framework === '@storybook/react-native-web-vite') {
-    frameworkPluginImport =
-      "import { storybookReactNativeWeb } from '@storybook/react-native-web-vite/vite-plugin';";
-    frameworkPluginCall = 'storybookReactNativeWeb()';
-  }
-
-  // spaces for file indentation
-  frameworkPluginImport = `\n${frameworkPluginImport}`;
-  frameworkPluginDocs = frameworkPluginDocs ? `\n    ${frameworkPluginDocs}` : '';
-  frameworkPluginCall = frameworkPluginCall ? `\n    ${frameworkPluginCall},` : '';
-
-  return { frameworkPluginImport, frameworkPluginCall, frameworkPluginDocs };
-};
 
 async function getStorybookInfo({ configDir, packageManager: pkgMgr }: PostinstallOptions) {
   const packageManager = JsPackageManagerFactory.getPackageManager({ force: pkgMgr });
