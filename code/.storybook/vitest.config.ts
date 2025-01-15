@@ -47,14 +47,10 @@ export default mergeConfig(
       testNamePattern: /^(?!.*(UseState)).*$/,
       browser: {
         enabled: true,
+        name: 'chromium',
         provider: 'playwright',
         headless: true,
         screenshotFailures: false,
-        instances: [
-          {
-            browser: 'chromium',
-          },
-        ],
       },
       setupFiles: ['./storybook.setup.ts'],
       environment: 'happy-dom',

@@ -421,27 +421,6 @@ export default async function postInstall(options: PostinstallOptions) {
 
   const isVitest3OrLater = !!(coercedVitestVersion && satisfies(coercedVitestVersion, '>=3.0.0'));
 
-  const browserConfig = isVitest3OrLater
-    ? dedent`
-      {
-        enabled: true,
-        headless: true,
-        provider: 'playwright'
-        instances: [
-          {
-            browser: 'chromium',
-          }
-        ]
-      }`
-    : dedent`
-      {
-        enabled: true,
-        headless: true,
-        name: 'chromium',
-        provider: 'playwright'
-      }
-    `;
-
   if (isVitest3OrLater && fileExtension === 'ts' && !vitestShimFile) {
     await writeFile(
       'vitest.shims.d.ts',
@@ -486,7 +465,12 @@ export default async function postInstall(options: PostinstallOptions) {
             ],
             test: {
               name: 'storybook',
-              browser: ${browserConfig},
+              browser: {
+                enabled: true,
+                headless: true,
+                name: 'chromium',
+                provider: 'playwright',
+              },
               setupFiles: ['${vitestSetupFilePath}'],
             },
           },
@@ -525,7 +509,12 @@ export default async function postInstall(options: PostinstallOptions) {
           ],
           test: {
             name: 'storybook',
-            browser: ${browserConfig},
+            browser: {
+              enabled: true,
+              headless: true,
+              name: 'chromium',
+              provider: 'playwright',
+            },
             setupFiles: ['${vitestSetupFilePath}'],
           },
         });
