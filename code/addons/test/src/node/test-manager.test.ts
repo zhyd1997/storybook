@@ -86,7 +86,7 @@ const options: ConstructorParameters<typeof TestManager>[1] = {
   onReady: vi.fn(),
 };
 
-describe('TestManager', { timeout: 2000 }, () => {
+describe('TestManager', () => {
   it('should create a vitest instance', async () => {
     new TestManager(mockChannel, options);
     await new Promise((r) => setTimeout(r, 1000));
