@@ -9,7 +9,7 @@ import type {
   Vitest,
   WorkspaceProject,
 } from 'vitest/node';
-import { version as vitestVersion } from 'vitest/node';
+import * as vitestNode from 'vitest/node';
 
 import { resolvePathInStorybookCache } from 'storybook/internal/common';
 import type { TestingModuleRunRequestPayload } from 'storybook/internal/core-events';
@@ -20,7 +20,6 @@ import { findUp } from 'find-up';
 import path, { dirname, join, normalize } from 'pathe';
 import { satisfies } from 'semver';
 import slash from 'slash';
-import type { ModuleNode } from 'vite';
 
 import { COVERAGE_DIRECTORY, type Config } from '../constants';
 import { log } from '../logger';
@@ -39,7 +38,10 @@ type TagsFilter = {
 
 const packageDir = dirname(require.resolve('@storybook/experimental-addon-test/package.json'));
 
-const isVitest3OrLater = satisfies(vitestVersion, '>=3.0.0-beta.3', { includePrerelease: true });
+const vitestVersion = vitestNode.version;
+const isVitest3OrLater = vitestVersion
+  ? satisfies(vitestVersion, '>=3.0.0-beta.3', { includePrerelease: true })
+  : false;
 
 // We have to tell Vitest that it runs as part of Storybook
 process.env.VITEST_STORYBOOK = 'true';

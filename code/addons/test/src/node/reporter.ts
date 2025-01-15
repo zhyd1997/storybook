@@ -1,6 +1,6 @@
 import type { TaskState } from 'vitest';
 import type { Vitest } from 'vitest/node';
-import { version as vitestVersion } from 'vitest/node';
+import * as vitestNode from 'vitest/node';
 import { type Reporter } from 'vitest/reporters';
 
 import type {
@@ -55,7 +55,11 @@ const statusMap: Record<TaskState, TestStatus> = {
   queued: 'pending',
 };
 
-const isVitest3OrLater = satisfies(vitestVersion, '>=3.0.0-beta.3', { includePrerelease: true });
+const vitestVersion = vitestNode.version;
+
+const isVitest3OrLater = vitestVersion
+  ? satisfies(vitestVersion, '>=3.0.0-beta.3', { includePrerelease: true })
+  : false;
 
 export class StorybookReporter implements Reporter {
   testStatusData: API_StatusUpdate = {};
