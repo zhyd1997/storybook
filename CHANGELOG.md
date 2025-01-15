@@ -1,3 +1,9 @@
+## 8.5.0
+
+- Addon A11y: Don't set a11y tag as comment in automigrations - [#30257](https://github.com/storybookjs/storybook/pull/30257), thanks @valentinpalkovic!
+- Addon Test: Add Vitest 3 support - [#30181](https://github.com/storybookjs/storybook/pull/30181), thanks @valentinpalkovic!
+- Interactions: Correctly load preset when absolute paths are used - [#30264](https://github.com/storybookjs/storybook/pull/30264), thanks @JReinhold!
+
 ## 8.4.7
 
 - Telemetry: Improve anonymous id calculation - [#29736](https://github.com/storybookjs/storybook/pull/29736), thanks @tmeasday!
