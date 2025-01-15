@@ -165,8 +165,8 @@ export class VitestManager {
 
   private updateLastChanged(filepath: string) {
     if (isVitest3OrLater) {
-      const serverMods = this.vite.moduleGraph.getModulesByFile(filepath);
-      serverMods?.forEach((mod) => this.vite.moduleGraph.invalidateModule(mod));
+      const serverMods = this.vite?.moduleGraph.getModulesByFile(filepath);
+      serverMods?.forEach((mod) => this.vite?.moduleGraph.invalidateModule(mod));
     } else {
       const projects = this.vitest!.getModuleProjects(filepath);
       projects.forEach(({ server, browser }) => {
@@ -217,7 +217,7 @@ export class VitestManager {
 
   private get vite() {
     // TODO: vitest.server is a Vitest < 3.0.0 API. Remove as soon as we don't support < 3.0.0 anymore.
-    return isVitest3OrLater ? this.vitest!.vite : this.vitest!.server;
+    return isVitest3OrLater ? this.vitest?.vite : this.vitest?.server;
   }
 
   async runFiles(specifications: TestSpecification[], allTestsRun?: boolean) {
@@ -403,7 +403,7 @@ export class VitestManager {
   async registerVitestConfigListener() {
     this.vite?.watcher.on('change', async (file) => {
       file = normalize(file);
-      const isConfig = file === this.vitest?.server.config.configFile;
+      const isConfig = file === this.vite?.config.configFile;
       if (isConfig) {
         log('Restarting Vitest due to config change');
         await this.closeVitest();
