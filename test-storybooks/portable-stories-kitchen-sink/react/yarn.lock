@@ -2120,11 +2120,11 @@ __metadata:
   linkType: soft
 
 "@storybook/components@file:../../../code/deprecated/components::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-beta.8
-  resolution: "@storybook/components@file:../../../code/deprecated/components#../../../code/deprecated/components::hash=4a52d2&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-beta.11
+  resolution: "@storybook/components@file:../../../code/deprecated/components#../../../code/deprecated/components::hash=7b0247&locator=portable-stories-react%40workspace%3A."
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/af420ec9ea9f51225d70e4a84d1d7d48449c207c486b5f34c324c40495328820d57e24a21950ea4b6643c757a055aa375deecb6a77e066bc5f7facabe5d24e87
+  checksum: 10/d2f8b311aa24459c689b8dd6f876a6fae7537911bd1ff59c0e3928fb615ae5b1e6c464fe20503f9e580aa9117d3ab1a7b3d1782db8241e35d17a1531755b020e
   languageName: node
   linkType: hard
 
@@ -2180,8 +2180,8 @@ __metadata:
   linkType: hard
 
 "@storybook/experimental-addon-test@file:../../../code/addons/test::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-beta.8
-  resolution: "@storybook/experimental-addon-test@file:../../../code/addons/test#../../../code/addons/test::hash=71b8aa&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-beta.11
+  resolution: "@storybook/experimental-addon-test@file:../../../code/addons/test#../../../code/addons/test::hash=0f53ce&locator=portable-stories-react%40workspace%3A."
   dependencies:
     "@storybook/csf": "npm:0.1.12"
     "@storybook/global": "npm:^5.0.0"
@@ -2203,7 +2203,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10/e37e1725d2522dfde9fa57b9cc4a3d086ee2d26b4c44a834d8420fa1b81a9bfd193224780bf38cb47989aca26b6f6bf9d279f6e82350552f41f5bbae34c2b1ea
+  checksum: 10/44c755e64aeec90f8c53901e6bdba09953adce94d71a18aad172284002484ec56f6bbd8103f5b11fdd477aff9e2faeb60c48eee85db434ea75592b281028e8a8
   languageName: node
   linkType: hard
 
@@ -2236,20 +2236,20 @@ __metadata:
   linkType: soft
 
 "@storybook/manager-api@file:../../../code/deprecated/manager-api::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-beta.8
-  resolution: "@storybook/manager-api@file:../../../code/deprecated/manager-api#../../../code/deprecated/manager-api::hash=05608a&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-beta.11
+  resolution: "@storybook/manager-api@file:../../../code/deprecated/manager-api#../../../code/deprecated/manager-api::hash=73df19&locator=portable-stories-react%40workspace%3A."
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/79c475f7c411d8e4a85343cad808bfb2d4260d3ffdfa9ea159aaf778a92c113204483422fa72708e023ee9c22dae2a556bf2ef9b933bd001d458771af6d2bfbd
+  checksum: 10/6b3926aa6fad621e67202ee553e50ae9a03b8ec256163dc7f3de391af64cfe0d88c5e615336394d5f0d1085a9e11993765fd4005ce3b523b8569d6c8e3588a2c
   languageName: node
   linkType: hard
 
 "@storybook/preview-api@file:../../../code/deprecated/preview-api::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-beta.8
-  resolution: "@storybook/preview-api@file:../../../code/deprecated/preview-api#../../../code/deprecated/preview-api::hash=17a978&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-beta.11
+  resolution: "@storybook/preview-api@file:../../../code/deprecated/preview-api#../../../code/deprecated/preview-api::hash=e1cf3a&locator=portable-stories-react%40workspace%3A."
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/e1bebec64ef84aec6efc74a6f86f7959c3c29b2a5e6b020871fe75a3354adfcfa333b8fd4c4c97374b20761027f283bed1ef9542b4e18f6ceab7bf50b5f478ca
+  checksum: 10/bc8e1cda20129a3feaa87abf27c6360dded64584d387921fecbb10aa84ab6bc5b842ab2c2ec096d291720c1295e536c3fcb6178681ca2d5cf1c34f862adff681
   languageName: node
   linkType: hard
 
@@ -2330,11 +2330,11 @@ __metadata:
   linkType: soft
 
 "@storybook/theming@file:../../../code/deprecated/theming::locator=portable-stories-react%40workspace%3A.":
-  version: 8.5.0-beta.8
-  resolution: "@storybook/theming@file:../../../code/deprecated/theming#../../../code/deprecated/theming::hash=eeee98&locator=portable-stories-react%40workspace%3A."
+  version: 8.5.0-beta.11
+  resolution: "@storybook/theming@file:../../../code/deprecated/theming#../../../code/deprecated/theming::hash=fee948&locator=portable-stories-react%40workspace%3A."
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/35e1071e0e61527ef543c5a47b43648cf54341ac959ed6155dcb18f96b5228a5c179415ba438cd29bbcd26bb7154f6e4aadcab543308fe3f71113f1946d2a55a
+  checksum: 10/a43ace51fe11a53e985da6dabfaa498350012830a5933f6cdcd7cb58a2bceead7d35b5ecf2d719a7787f4516117d7b52f3b802b555a3910aadaccba7d6ddca62
   languageName: node
   linkType: hard
 

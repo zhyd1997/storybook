@@ -29,9 +29,6 @@ const config: StorybookConfig = {
         ...config.optimizeDeps,
         include: [
           ...(config.optimizeDeps?.include || []),
-          "react-dom/test-utils",
-          "@storybook/react/**",
-          "@storybook/experimental-addon-test/preview",
         ],
       },
       resolve: {
