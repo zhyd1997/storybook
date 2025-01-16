@@ -17,14 +17,14 @@ module.exports = {
       ImportDeclaration: (node) => {
         const fileName = context.getPhysicalFilename();
         const isInCLI = !!fileName.includes(path.join('code', 'lib', 'cli') + path.sep);
-        const isInCodeod = !!fileName.includes(path.join('code', 'lib', 'codemod'));
+        const isInCodemod = !!fileName.includes(path.join('code', 'lib', 'codemod'));
         const isInCore = !!fileName.includes(path.join('code', 'core'));
 
         if (
           node.source.value.startsWith('@storybook/core/') &&
           !isInCLI &&
           !isInCore &&
-          !isInCodeod
+          !isInCodemod
         ) {
           const newPath = node.source.value
             .replace('@storybook/core', 'storybook/internal')
