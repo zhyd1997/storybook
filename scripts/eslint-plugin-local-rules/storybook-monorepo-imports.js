@@ -16,7 +16,7 @@ module.exports = {
     return {
       ImportDeclaration: (node) => {
         const fileName = context.getPhysicalFilename();
-        const isInCLI = !!fileName.includes(path.join('code', 'lib', 'cli'));
+        const isInCLI = !!fileName.endsWith(path.join('code', 'lib', 'cli'));
         const isInCodeod = !!fileName.includes(path.join('code', 'lib', 'codemod'));
         const isInCore = !!fileName.includes(path.join('code', 'core'));
 
