@@ -104,7 +104,6 @@ export default events;
 // This is the preferred method
 export const {
   CHANNEL_WS_DISCONNECT,
-  CHANNEL_WS_CONNECT,
   CHANNEL_CREATED,
   CONFIG_ERROR,
   CREATE_NEW_STORYFILE_REQUEST,
