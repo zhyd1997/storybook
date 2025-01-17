@@ -14,6 +14,12 @@ type StoryRenderInfo = {
   moduleMetadataSnapshot: string;
 };
 
+declare global {
+  const STORYBOOK_ANGULAR_OPTIONS: {
+    experimentalZoneless: boolean;
+  };
+}
+
 const applicationRefs = new Map<HTMLElement, ApplicationRef>();
 
 /**
@@ -112,28 +118,25 @@ export abstract class AbstractRenderer {
       analyzedMetadata,
     });
 
-    // TODO
-    const hasExperimentalZoneless = true;
-    let experimentalZonelessProvider: () => EnvironmentProviders | null = null;
+    const providers = [
+      storyPropsProvider(newStoryProps$),
+      ...analyzedMetadata.applicationProviders,
+      ...(storyFnAngular.applicationConfig?.providers ?? []),
+    ];
 
-    if (hasExperimentalZoneless) {
-      try {
-        const { provideExperimentalZonelessChangeDetection } = await import('@angular/core');
-        experimentalZonelessProvider = provideExperimentalZonelessChangeDetection;
-      } catch (error) {
+    if (STORYBOOK_ANGULAR_OPTIONS?.experimentalZoneless) {
+      const { provideExperimentalZonelessChangeDetection } = await import('@angular/core');
+      if (!provideExperimentalZonelessChangeDetection) {
         throw new Error('Experimental zoneless change detection requires Angular 18 or higher');
+      } else {
+        providers.unshift(provideExperimentalZonelessChangeDetection());
       }
     }
 
     const applicationRef = await queueBootstrapping(() => {
       return bootstrapApplication(application, {
         ...storyFnAngular.applicationConfig,
-        providers: [
-          experimentalZonelessProvider(),
-          storyPropsProvider(newStoryProps$),
-          ...analyzedMetadata.applicationProviders,
-          ...(storyFnAngular.applicationConfig?.providers ?? []),
-        ],
+        providers,
       });
     });
 
