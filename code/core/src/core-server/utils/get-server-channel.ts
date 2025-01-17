@@ -1,5 +1,5 @@
 import type { ChannelHandler } from '@storybook/core/channels';
-import { Channel } from '@storybook/core/channels';
+import { Channel, HEARTBEAT_INTERVAL } from '@storybook/core/channels';
 
 import { isJSON, parse, stringify } from 'telejson';
 import WebSocket, { WebSocketServer } from 'ws';
@@ -59,7 +59,7 @@ export class ServerChannelTransport {
         this.isAlive = false;
         this.send({ type: 'ping' });
       });
-    }, 15000);
+    }, HEARTBEAT_INTERVAL);
 
     this.socket.on('close', function close() {
       clearInterval(interval);

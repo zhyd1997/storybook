@@ -17,6 +17,9 @@ interface WebsocketTransportArgs extends Partial<Config> {
   onError: OnError;
 }
 
+export const HEARTBEAT_INTERVAL = 15000;
+export const HEARTBEAT_MAX_LATENCY = 5000;
+
 export class WebsocketTransport implements ChannelTransport {
   private buffer: string[] = [];
 
@@ -35,7 +38,7 @@ export class WebsocketTransport implements ChannelTransport {
 
     this.pingTimeout = setTimeout(() => {
       this.socket.close(3008, 'timeout');
-    }, 15000 + 1000);
+    }, HEARTBEAT_INTERVAL + HEARTBEAT_MAX_LATENCY);
   }
 
   constructor({ url, onError, page }: WebsocketTransportArgs) {
