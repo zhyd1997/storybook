@@ -1,4 +1,4 @@
-import { ApplicationRef, NgModule, EnvironmentProviders } from '@angular/core';
+import { ApplicationRef, NgModule } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { stringify } from 'telejson';
