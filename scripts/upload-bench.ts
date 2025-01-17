@@ -1,7 +1,8 @@
-import { join } from 'path';
 import { BigQuery } from '@google-cloud/bigquery';
-
+// eslint-disable-next-line depend/ban-dependencies
 import { execaCommand } from 'execa';
+import { join } from 'path';
+
 import type { BenchResults } from './bench/types';
 import { loadBench } from './bench/utils';
 import { SANDBOX_DIRECTORY } from './utils/constants';
@@ -89,8 +90,8 @@ const uploadBench = async () => {
       console.log('skip uploading results to github');
       return;
     }
-    const [[base]]: any[] = await appTable.query({
-      query: `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch=@baseBranch AND label=@templateKey ORDER BY timestamp DESC LIMIT 1;`,
+    const [base]: any[] = await appTable.query({
+      query: `SELECT * FROM \`storybook-benchmark.benchmark_results.bench2\` WHERE branch=@baseBranch AND label=@templateKey ORDER BY timestamp DESC LIMIT 20;`,
       params: { baseBranch, templateKey },
     });
 
@@ -101,7 +102,7 @@ const uploadBench = async () => {
             owner: 'storybookjs',
             repo: 'storybook',
             issueNumber: prNumber,
-            base: { ...defaults, ...base },
+            base: base.map((b: any) => ({ ...defaults, ...b })),
             head: row,
           }),
         })

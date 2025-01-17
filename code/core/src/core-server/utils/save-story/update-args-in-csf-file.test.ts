@@ -1,12 +1,15 @@
 /* eslint-disable no-underscore-dangle */
-import { describe, test, expect } from 'vitest';
-import { readCsf, printCsf } from '@storybook/core/csf-tools';
-
-import { updateArgsInCsfFile } from './update-args-in-csf-file';
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+
+import { describe, expect, test } from 'vitest';
+
+import { printCsf, readCsf } from '@storybook/core/csf-tools';
+
 import { format } from 'prettier';
+
 import { getDiff } from './getDiff';
+import { updateArgsInCsfFile } from './update-args-in-csf-file';
 
 const makeTitle = (userTitle: string) => userTitle;
 
@@ -100,9 +103,9 @@ describe('success', () => {
     const names = Object.keys(parsed._stories);
     const nodes = names.map((name) => CSF.getStoryExport(name));
 
-    nodes.forEach((node) => {
-      expect(() => updateArgsInCsfFile(node, newArgs)).rejects.toThrowError();
-    });
+    for (const node of nodes) {
+      await expect(() => updateArgsInCsfFile(node, newArgs)).rejects.toThrowError();
+    }
   });
   test('CSF Variances', async () => {
     const newArgs = { bordered: true, initial: 'test1' };

@@ -1,11 +1,14 @@
 /* eslint-disable no-underscore-dangle */
-import { describe, test, expect } from 'vitest';
-import { readCsf, printCsf } from '@storybook/core/csf-tools';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+import { describe, expect, test } from 'vitest';
+
+import { printCsf, readCsf } from '@storybook/core/csf-tools';
+
+import { format } from 'prettier';
 
 import { duplicateStoryWithNewName } from './duplicate-story-with-new-name';
-import { readFile } from 'fs/promises';
-import { join } from 'node:path';
-import { format } from 'prettier';
 import { getDiff } from './getDiff';
 
 const makeTitle = (userTitle: string) => userTitle;
@@ -80,9 +83,9 @@ describe('success', () => {
     const parsed = CSF.parse();
     const names = Object.keys(parsed._stories);
 
-    names.forEach((name) => {
-      expect(() => duplicateStoryWithNewName(parsed, name, name + 'Duplicated')).toThrow();
-    });
+    for (const name of names) {
+      await expect(() => duplicateStoryWithNewName(parsed, name, name + 'Duplicated')).toThrow();
+    }
   });
   test('Typescript Constructs', async () => {
     const before = await format(await readFile(FILES.typescriptConstructs, 'utf-8'), {

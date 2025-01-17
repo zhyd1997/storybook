@@ -1,21 +1,13 @@
-import {
-  ApplicationRef,
-  enableProdMode,
-  NgModule,
-  Provider,
-  EnvironmentProviders,
-} from '@angular/core';
+import { ApplicationRef, NgModule, EnvironmentProviders } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-
 import { BehaviorSubject, Subject } from 'rxjs';
 import { stringify } from 'telejson';
 
 import { ICollection, StoryFnAngularReturnType } from '../types';
 import { getApplication } from './StorybookModule';
 import { storyPropsProvider } from './StorybookProvider';
-import { PropertyExtractor } from './utils/PropertyExtractor';
 import { queueBootstrapping } from './utils/BootstrapQueue';
-import { AngularJSON } from '../../../../../../code/lib/cli/src/generators/ANGULAR/helpers';
+import { PropertyExtractor } from './utils/PropertyExtractor';
 
 type StoryRenderInfo = {
   storyFnAngular: StoryFnAngularReturnType;
@@ -27,15 +19,13 @@ const applicationRefs = new Map<HTMLElement, ApplicationRef>();
 /**
  * Attribute name for the story UID that may be written to the targetDOMNode.
  *
- * If a target DOM node has a story UID attribute, it will be used as part of
- * the selector for the Angular component.
+ * If a target DOM node has a story UID attribute, it will be used as part of the selector for the
+ * Angular component.
  */
 export const STORY_UID_ATTRIBUTE = 'data-sb-story-uid';
 
 export abstract class AbstractRenderer {
-  /**
-   * Wait and destroy the platform
-   */
+  /** Wait and destroy the platform */
   public static resetApplications(domNode?: HTMLElement) {
     applicationRefs.forEach((appRef, appDOMNode) => {
       if (!appRef.destroyed && (!domNode || appDOMNode === domNode)) {
@@ -56,8 +46,12 @@ export abstract class AbstractRenderer {
    *
    * @param storyFnAngular {StoryFnAngularReturnType}
    * @param forced {boolean} If :
-   * - true render will only use the StoryFn `props' in storyProps observable that will update sotry's component/template properties. Improves performance without reloading the whole module&component if props changes
-   * - false fully recharges or initializes angular module & component
+   *
+   *   - True render will only use the StoryFn `props' in storyProps observable that will update sotry's
+   *       component/template properties. Improves performance without reloading the whole
+   *       module&component if props changes
+   *   - False fully recharges or initializes angular module & component
+   *
    * @param component {Component}
    */
   public async render({
@@ -102,7 +96,9 @@ export abstract class AbstractRenderer {
 
     const analyzedMetadata = new PropertyExtractor(storyFnAngular.moduleMetadata, component);
 
-    const storyUid = targetDOMNode.getAttribute(STORY_UID_ATTRIBUTE);
+    const storyUid = this.generateStoryUIdFromRawStoryUid(
+      targetDOMNode.getAttribute(STORY_UID_ATTRIBUTE)
+    );
     const componentSelector = storyUid !== null ? `${targetSelector}[${storyUid}]` : targetSelector;
     if (storyUid !== null) {
       const element = targetDOMNode.querySelector(targetSelector);
@@ -116,15 +112,11 @@ export abstract class AbstractRenderer {
       analyzedMetadata,
     });
 
-    const angularJSON = new AngularJSON();
-    const projectRoot = angularJSON.rootProject;
-    const hasZoneJS = !!projectRoot.architect.build.options.polyfills?.includes('zone.js');
-    const hasExperimentalZoneless =
-      !!projectRoot.architect.storybook?.options.experimentalZoneless ||
-      !!projectRoot.architect['build-storybook']?.options.experimentalZoneless;
+    // TODO
+    const hasExperimentalZoneless = true;
     let experimentalZonelessProvider: () => EnvironmentProviders | null = null;
 
-    if (!hasZoneJS && hasExperimentalZoneless) {
+    if (hasExperimentalZoneless) {
       try {
         const { provideExperimentalZonelessChangeDetection } = await import('@angular/core');
         experimentalZonelessProvider = provideExperimentalZonelessChangeDetection;
@@ -149,16 +141,17 @@ export abstract class AbstractRenderer {
   }
 
   /**
-   * Only ASCII alphanumerics can be used as HTML tag name.
-   * https://html.spec.whatwg.org/#elements-2
+   * Only ASCII alphanumerics can be used as HTML tag name. https://html.spec.whatwg.org/#elements-2
    *
    * Therefore, stories break when non-ASCII alphanumerics are included in target selector.
    * https://github.com/storybookjs/storybook/issues/15147
    *
-   * This method returns storyId when it doesn't contain any non-ASCII alphanumerics.
-   * Otherwise, it generates a valid HTML tag name from storyId by removing non-ASCII alphanumerics from storyId, prefixing "sb-", and suffixing "-component"
-   * @protected
+   * This method returns storyId when it doesn't contain any non-ASCII alphanumerics. Otherwise, it
+   * generates a valid HTML tag name from storyId by removing non-ASCII alphanumerics from storyId,
+   * prefixing "sb-", and suffixing "-component"
+   *
    * @memberof AbstractRenderer
+   * @protected
    */
   protected generateTargetSelectorFromStoryId(id: string) {
     const invalidHtmlTag = /[^A-Za-z0-9-]/g;
@@ -167,8 +160,27 @@ export abstract class AbstractRenderer {
   }
 
   /**
-   * Adds DOM element that angular will use as bootstrap component.
+   * Angular is unable to handle components that have selectors with accented attributes.
+   *
+   * Therefore, stories break when meta's title contains accents.
+   * https://github.com/storybookjs/storybook/issues/29132
+   *
+   * This method filters accents from a given raw id. For example, this method converts
+   * 'Example/Button with an "é" accent' into 'Example/Button with an "e" accent'.
+   *
+   * @memberof AbstractRenderer
+   * @protected
    */
+  protected generateStoryUIdFromRawStoryUid(rawStoryUid: string | null) {
+    if (rawStoryUid === null) {
+      return rawStoryUid;
+    }
+
+    const accentCharacters = /[\u0300-\u036f]/g;
+    return rawStoryUid.normalize('NFD').replace(accentCharacters, '');
+  }
+
+  /** Adds DOM element that angular will use as bootstrap component. */
   protected initAngularRootElement(targetDOMNode: HTMLElement, targetSelector: string) {
     targetDOMNode.innerHTML = '';
     targetDOMNode.appendChild(document.createElement(targetSelector));
