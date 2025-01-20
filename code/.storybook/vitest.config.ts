@@ -48,6 +48,11 @@ export default mergeConfig(
       browser: {
         enabled: true,
         provider: 'playwright',
+        instances: [
+          {
+            browser: 'chromium',
+          },
+        ],
         headless: true,
         screenshotFailures: false,
         instances: [
