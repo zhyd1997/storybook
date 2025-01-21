@@ -55,11 +55,6 @@ export default mergeConfig(
         ],
         headless: true,
         screenshotFailures: false,
-        instances: [
-          {
-            browser: 'chromium',
-          },
-        ],
       },
       setupFiles: ['./storybook.setup.ts'],
       environment: 'happy-dom',
