@@ -23,7 +23,7 @@ export default {
 };
 
 export const Text = {
-  args: {},
+  args: {/* ... */},
 };
 ```
 
@@ -69,7 +69,7 @@ export default {
 };
 
 export const Text = {
-  args: {},
+  args: {/* ... */},
 };
 ```
 
@@ -115,7 +115,7 @@ export default {
 };
 
 export const Text = {
-  args: {},
+  args: {/* ... */},
 };
 ```
 
@@ -132,7 +132,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Text: Story = {
-  args: {},
+  args: {/* ... */},
 };
 ```
 
@@ -149,7 +149,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Text: Story = {
-  args: {},
+  args: {/* ... */},
 };
 ```
 
@@ -219,7 +219,7 @@ export default {
 };
 
 export const Text = {
-  args: {},
+  args: {/* ... */},
 };
 ```
 
