@@ -423,22 +423,21 @@ export default async function postInstall(options: PostinstallOptions) {
 
   const browserConfig = isVitest3OrLater
     ? `{
-      enabled: true,
-      headless: true,
-      provider: 'playwright',
-      instances: [
-        {
-          browser: 'chromium',
-        }
-      ]
-    }`
+        enabled: true,
+        headless: true,
+        provider: 'playwright',
+        instances: [
+          {
+            browser: 'chromium',
+          }
+        ]
+      }`
     : `{
-      enabled: true,
-      headless: true,
-      name: 'chromium',
-      provider: 'playwright'
-    }
-    `;
+        enabled: true,
+        headless: true,
+        name: 'chromium',
+        provider: 'playwright'
+      }`;
 
   if (isVitest3OrLater && fileExtension === 'ts' && !vitestShimFile) {
     await writeFile(
