@@ -25,10 +25,10 @@ export default {
 };
 
 export const Simple = {
-  decorators: [...],
+  decorators: [],
   name: 'So simple!',
-  parameters: {...},
-}
+  parameters: {},
+};
 ```
 
 ```ts filename="MyComponent.stories.ts|tsx" renderer="common" language="ts-4-9"

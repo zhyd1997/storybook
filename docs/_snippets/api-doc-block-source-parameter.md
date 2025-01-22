@@ -19,8 +19,14 @@ export const Basic: Story = {
 };
 ```
 
-```js filename="Button.stories.js|jsx" renderer="common" language="js"
-export const Basic {
+```js filename="Button.stories.js|jsx" renderer="common" language="js" tabTitle="CSF 3"
+const meta = {
+  component: Button,
+};
+
+export default meta;
+
+export const Basic = {
   parameters: {
     docs: {
       source: { language: 'jsx' },
@@ -29,7 +35,7 @@ export const Basic {
 };
 ```
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9"
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9" tabTitle="CSF 3"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
 
@@ -51,7 +57,7 @@ export const Basic: Story = {
 };
 ```
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts"
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts" tabTitle="CSF 3"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
 
@@ -106,4 +112,54 @@ export const Basic: Story = {
     },
   },
 };
+```
+
+```ts filename="Button.stories.ts|tsx" renderer="react" language="ts" tabTitle="CSF 4 (experimental)"
+import config from '#.storybook/preview';
+
+import { Button } from './Button';
+
+const meta = config.meta({
+  component: Button,
+});
+
+export const Basic = meta.story({
+  parameters: {
+    docs: {
+      source: { language: 'tsx' },
+    },
+  },
+});
+```
+
+<!-- js & ts-4-9 (when applicable) still needed while providing both CSF 3 & 4 -->
+
+```js filename="Button.stories.js|jsx" renderer="react" language="js" tabTitle="CSF 4 (experimental)"
+export const Basic = {
+  parameters: {
+    docs: {
+      source: { language: 'jsx' },
+    },
+  },
+};
+```
+
+<!-- js & ts-4-9 (when applicable) still needed while providing both CSF 3 & 4 -->
+
+```ts filename="Button.stories.ts|tsx" renderer="react" language="ts-4-9" tabTitle="CSF 4 (experimental)"
+import config from '#.storybook/preview';
+
+import { Button } from './Button';
+
+const meta = config.meta({
+  component: Button,
+});
+
+export const Basic = meta.story({
+  parameters: {
+    docs: {
+      source: { language: 'tsx' },
+    },
+  },
+});
 ```
