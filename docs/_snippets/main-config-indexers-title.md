@@ -6,7 +6,8 @@ const combosIndexer = {
     const title = fileName.match(/\/(.*)\.stories/)[1];
 
     // Read file and generate entries ...
-    const entries = [];
+    let entries = [];
+    // Read file and generate entries...
 
     return entries.map((entry) => ({
       type: 'story',
