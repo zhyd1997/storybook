@@ -19,7 +19,7 @@ export const Basic: Story = {
 };
 ```
 
-```js filename="Button.stories.js|jsx" renderer="common" language="js" tabTitle="CSF 3"
+```js filename="Button.stories.js|jsx" renderer="common" language="js"
 export const Basic = {
   parameters: {
     docs: {
@@ -29,7 +29,7 @@ export const Basic = {
 };
 ```
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9" tabTitle="CSF 3"
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts-4-9"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
 
@@ -51,7 +51,7 @@ export const Basic: Story = {
 };
 ```
 
-```ts filename="Button.stories.ts|tsx" renderer="common" language="ts" tabTitle="CSF 3"
+```ts filename="Button.stories.ts|tsx" renderer="common" language="ts"
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/your-framework';
 

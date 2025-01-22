@@ -15,7 +15,7 @@ const meta: Meta<Button> = {
 export default meta;
 ```
 
-```js filename="Button.stories.js" renderer="common" language="js" tabTitle="CSF 3"
+```js filename="Button.stories.js" renderer="common" language="js"
 import { action } from '@storybook/addon-actions';
 
 import Button from './Button';
@@ -47,7 +47,7 @@ const meta = {
 export default meta;
 ```
 
-```ts filename="Button.stories.ts" renderer="common" language="ts" tabTitle="CSF 3"
+```ts filename="Button.stories.ts" renderer="common" language="ts"
 // Replace your-framework with the name of your framework
 import type { Meta } from '@storybook/your-framework';
 import { action } from '@storybook/addon-actions';
