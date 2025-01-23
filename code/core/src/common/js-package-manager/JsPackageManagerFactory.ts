@@ -80,7 +80,10 @@ export class JsPackageManagerFactory {
       return new NPMProxy({ cwd });
     }
 
-    if (hasBunCommand && (closestLockfile === BUN_LOCKFILE || closestLockfile === BUN_LOCKFILE_BINARY)) {
+    if (
+      hasBunCommand &&
+      (closestLockfile === BUN_LOCKFILE || closestLockfile === BUN_LOCKFILE_BINARY)
+    ) {
       return new BUNProxy({ cwd });
     }
 
